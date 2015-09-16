@@ -18,4 +18,6 @@ public interface OrderService {
 	public void insertOrder(Order order);
 	
 	public void updateOrder(Order order);
+	
+	public List<Order> findLike(Order order);
 }

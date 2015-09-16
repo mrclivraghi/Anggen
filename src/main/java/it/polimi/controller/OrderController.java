@@ -24,11 +24,25 @@ public class OrderController {
 	@Autowired
 	OrderService orderService;
 	
+	
+	@RequestMapping(method=RequestMethod.GET)
+	public String manage()
+	{
+		return "order";
+	}
+	
 	@RequestMapping(value="/all",method=RequestMethod.GET)
 	@ResponseBody
-	public List<Order> hello ()
+	public List<Order> getAll ()
 	{
 		return orderService.findAll();
+	}
+	
+	@RequestMapping(value="/search",method=RequestMethod.POST)
+	@ResponseBody
+	public List<Order> search (@RequestBody Order order)
+	{
+		return orderService.findLike(order);
 	}
 	
 	@RequestMapping(value="/{orderId}",method=RequestMethod.GET)
@@ -40,13 +54,13 @@ public class OrderController {
 	
 	@RequestMapping(value="/{orderId}",method=RequestMethod.DELETE)
 	@ResponseBody
-	public String deleteOrderById(@PathVariable String orderId)
+	public ResponseEntity deleteOrderById(@PathVariable String orderId)
 	{
 		orderService.deleteOrderById(Long.valueOf(orderId));
-		return "deleted";
+		return ResponseEntity.ok().build();
 	}
 	
-	@RequestMapping(value="/insert",method=RequestMethod.PUT)
+	@RequestMapping(method=RequestMethod.PUT)
 	@ResponseBody
 	public ResponseEntity insertOrder(@RequestBody Order order)
 	{
@@ -54,7 +68,7 @@ public class OrderController {
 		return ResponseEntity.ok().build();
 	}
 	
-	@RequestMapping(value="/update",method=RequestMethod.POST)
+	@RequestMapping(method=RequestMethod.POST)
 	@ResponseBody
 	public Order updateOrder(@RequestBody Order order)
 	{

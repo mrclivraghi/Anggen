@@ -57,4 +57,9 @@ public class OrderServiceImpl implements OrderService{
 		orderRepository.save(order);
 	}
 
+	@Override
+	public List<Order> findLike(Order order) {
+		return orderRepository.findByOrderIdAndNameAndTimeslotDate(order.getOrderId(), order.getName(), order.getTimeslotDate());
+	}
+
 }

@@ -1,7 +1,7 @@
 package it.polimi.model;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.sql.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
@@ -17,15 +18,14 @@ import org.hibernate.validator.constraints.NotBlank;
 public class Order {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name ="order_id")
 	private Long orderId;
 	
-	@NotBlank
 	private String name;
 	
-	// Social network the photo comes from
 	@Column(name="timeslot_date")
+	@Type(type="date")
 	private Date timeslotDate;
 
 	public Order()

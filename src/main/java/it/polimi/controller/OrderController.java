@@ -1,5 +1,6 @@
 package it.polimi.controller;
 
+import java.sql.Date;
 import java.util.List;
 
 import javax.xml.ws.Response;
@@ -33,23 +34,23 @@ public class OrderController {
 	
 	@RequestMapping(value="/all",method=RequestMethod.GET)
 	@ResponseBody
-	public List<Order> getAll ()
+	public ResponseEntity getAll ()
 	{
-		return orderService.findAll();
+		return ResponseEntity.ok().body(orderService.findAll());
 	}
 	
 	@RequestMapping(value="/search",method=RequestMethod.POST)
 	@ResponseBody
-	public List<Order> search (@RequestBody Order order)
+	public ResponseEntity search (@RequestBody Order order)
 	{
-		return orderService.findLike(order);
+		return ResponseEntity.ok().body(orderService.findLike(order));
 	}
 	
 	@RequestMapping(value="/{orderId}",method=RequestMethod.GET)
 	@ResponseBody
-	public Order getOrderById(@PathVariable String orderId)
+	public ResponseEntity getOrderById(@PathVariable String orderId)
 	{
-		return orderService.findByOrderId(Long.valueOf(orderId));
+		return ResponseEntity.ok().body(orderService.findByOrderId(Long.valueOf(orderId)));
 	}
 	
 	@RequestMapping(value="/{orderId}",method=RequestMethod.DELETE)
@@ -65,15 +66,15 @@ public class OrderController {
 	public ResponseEntity insertOrder(@RequestBody Order order)
 	{
 		orderService.insertOrder(order);
-		return ResponseEntity.ok().build();
+		return ResponseEntity.ok().body(order);
 	}
 	
 	@RequestMapping(method=RequestMethod.POST)
 	@ResponseBody
-	public Order updateOrder(@RequestBody Order order)
+	public ResponseEntity updateOrder(@RequestBody Order order)
 	{
 		orderService.updateOrder(order);
-		return order;
+		return ResponseEntity.ok().body(order);
 	}
 	
 	

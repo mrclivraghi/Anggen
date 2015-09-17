@@ -25,6 +25,16 @@
 					this.orderList[i]=tempOrder;
 				}
 			};
+			this.resetForm = function (order) {
+				this.orderForm.orderId= (order==null || order== undefined )? "" : order.orderId;
+				this.orderForm.name=(order==null || order== undefined )? "" : order.name;
+				this.orderForm.timeslotDate=(order==null || order== undefined )? "" : order.timeslotDate;
+			};
+			this.addOrder= function(order) {
+					this.orderList.push(order);
+					this.resetForm(order);
+			};
+			
 		})
 		.controller("orderController",
 			function($scope,orderService) {
@@ -32,20 +42,35 @@
 		}		
 		)
 		.controller("orderRetrieveController", function ($scope,$http,orderService) {
-			 $scope.search = function() {
+			
+			
+			
+			
+			$scope.reset = function ()
+			{
+				orderService.resetForm();
+			};
+			
+			$scope.search = function() {
 					$http.post("../order/search",orderService.orderForm)
 						.success( function(data) {
 					orderService.setOrderList(data);
 				})
 				.error(function() { alert("error");});
 			};
-			$scope.insert = function() {
+			
+			$scope.insert = function() 
+			{
 				$http.put("../order/",orderService.orderForm)
-					.success( function(data) {
-				$scope.search();
-			})
-			.error(function() { alert("error");});
-		};
+					.success( function(data) 
+							{
+								orderService.addOrder(data);
+							})
+					.error(function() 
+							{ 
+								alert("error");
+							});
+			};
 		
 		$scope.update = function() {
 			$http.post("../order/",orderService.orderForm)
@@ -57,8 +82,9 @@
 	
 	$scope.del = function() {
 		var url="../order/"+orderService.orderForm.orderId;
-		$http.delete(url)
+		$http["delete"](url)
 			.success( function(data) {
+				orderService.resetForm();
 				$scope.search();
 	})
 	.error(function() { alert("error");});
@@ -66,9 +92,16 @@
 	
 	
 		})
-		.controller("orderListController", function($scope,orderService)
+		.controller("orderListController", function($scope,orderService,dateFilter)
 				{
-					$scope.orderList=orderService.orderList;	
+					$scope.orderList=orderService.orderList;
+					
+					$scope.refreshForm = function (index) 
+					{
+						var date= new Date(orderService.orderList[index].timeslotDate);
+							orderService.orderList[index].timeslotDate= new Date(date.getFullYear(),date.getMonth(),date.getDate());//dateFilter(date,"dd/MM/yyyy");
+							orderService.resetForm(orderService.orderList[index]);
+					};
 				})
 		;
 		
@@ -78,19 +111,22 @@
 <body>
 <div ng-app="orderApp">
 		<div ng-controller="orderController"> <!-- definisco il controller -->
-			<p>OrderId: <input type="text" ng-model="orderForm.orderId"></p> <!-- definisco gli attr. del model -->
+			<p>OrderId: <input type="text" ng-model="orderForm.orderId" readonly></p> <!-- definisco gli attr. del model -->
 			<p>Name: <input type="text" ng-model="orderForm.name"></p>
-			<p>Timeslot date: <input type="text" ng-model="orderForm.timeslotDate"></p>
+			<p>Timeslot date: <input type="date" ng-model="orderForm.timeslotDate"
+			placeholder="dd-MM-yyyy"
+			></p>
 		</div>
 		<div ng-controller="orderRetrieveController">
 		<button  ng-click="search()">Search</button>
 		<button ng-click="insert()">Insert</button>
 		<button ng-click="update()">Update</button>
 		<button ng-click="del()">Delete</button>
+		<button ng-click="reset()">Reset</button>
 		</div>
 		<div ng-controller="orderListController">
 			<ul>
-				<li ng-repeat="order in orderList">{{index}} {{order.orderId}} {{order.name}} {{order.timeslotDate | date: 'dd-MM-yyyy'}}</li>
+				<li ng-repeat="order in orderList" ><p ng-click="refreshForm($index)">{{$index}} {{order.orderId}} {{order.name}} {{order.timeslotDate | date: 'dd-MM-yyyy'}}</p></li>
 			</ul>
 		</div>
 	</div>

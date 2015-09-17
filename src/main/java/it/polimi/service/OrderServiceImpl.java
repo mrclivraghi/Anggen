@@ -2,9 +2,10 @@ package it.polimi.service;
 
 import it.polimi.model.Order;
 import it.polimi.repository.OrderRepository;
+import it.polimi.utils.Utility;
 
+import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -22,11 +23,6 @@ public class OrderServiceImpl implements OrderService{
 	@Override
 	public Order findByOrderId(Long orderId) {
 		return orderRepository.findByOrderId(orderId);
-	}
-
-	@Override
-	public List<Order> findByTimeslotDate(Date timeslotDate) {
-		return orderRepository.findByTimeslotDate(timeslotDate);
 	}
 
 	@Override
@@ -59,7 +55,7 @@ public class OrderServiceImpl implements OrderService{
 
 	@Override
 	public List<Order> findLike(Order order) {
-		return orderRepository.findByOrderIdAndNameAndTimeslotDate(order.getOrderId(), order.getName(), order.getTimeslotDate());
+		return orderRepository.findByOrderIdAndNameAndTimeslotDate(order.getOrderId(), order.getName(), Utility.formatDate(order.getTimeslotDate()));
 	}
 
 }

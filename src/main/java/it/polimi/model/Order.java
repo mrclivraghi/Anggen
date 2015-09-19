@@ -5,9 +5,11 @@ import java.sql.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
@@ -28,6 +30,10 @@ public class Order {
 	@Type(type="date")
 	private Date timeslotDate;
 
+	@OneToOne
+	@Type(type="it.polimi.model.Person")
+	private Person person;
+	
 	public Order()
 	{
 		
@@ -55,5 +61,11 @@ public class Order {
 
 	public void setTimeslotDate(Date timeslotDate) {
 		this.timeslotDate = timeslotDate;
+	}
+	public Person getPerson() {
+		return person;
+	}
+	public void setPerson(Person person) {
+		this.person = person;
 	}
 }

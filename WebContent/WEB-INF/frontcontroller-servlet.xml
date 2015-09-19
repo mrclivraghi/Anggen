@@ -26,6 +26,9 @@
         <property name="basename" value="classpath:validationMessages" />
     </bean>
 -->	
+<mvc:resources mapping="/resources/**" location="/resources/theme/"  
+	cache-period="31556926"/>
+	
 <mvc:annotation-driven>
     <mvc:message-converters>
         <bean class="org.springframework.http.converter.StringHttpMessageConverter"/>

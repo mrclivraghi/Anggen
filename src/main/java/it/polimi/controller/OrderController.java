@@ -32,13 +32,7 @@ public class OrderController {
 		return "order";
 	}
 	
-	@RequestMapping(value="/all",method=RequestMethod.GET)
-	@ResponseBody
-	public ResponseEntity getAll ()
-	{
-		return ResponseEntity.ok().body(orderService.findAll());
-	}
-	
+
 	@RequestMapping(value="/search",method=RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity search (@RequestBody Order order)

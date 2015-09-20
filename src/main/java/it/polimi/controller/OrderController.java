@@ -59,16 +59,16 @@ public class OrderController {
 	@ResponseBody
 	public ResponseEntity insertOrder(@RequestBody Order order)
 	{
-		orderService.insertOrder(order);
-		return ResponseEntity.ok().body(order);
+		Order insertedOrder=orderService.insertOrder(order);
+		return ResponseEntity.ok().body(insertedOrder);
 	}
 	
 	@RequestMapping(method=RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity updateOrder(@RequestBody Order order)
 	{
-		orderService.updateOrder(order);
-		return ResponseEntity.ok().body(order);
+		Order updatedOrder=orderService.updateOrder(order);
+		return ResponseEntity.ok().body(updatedOrder);
 	}
 	
 	

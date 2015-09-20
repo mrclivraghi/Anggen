@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -31,6 +33,7 @@ public class Order {
 	private Date timeslotDate;
 
 	@OneToOne
+	@Cascade({CascadeType.ALL})
 	@Type(type="it.polimi.model.Person")
 	private Person person;
 	

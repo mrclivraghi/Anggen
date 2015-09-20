@@ -42,9 +42,6 @@
 		)
 		.controller("orderRetrieveController", function ($scope,$http,orderService) {
 			
-			
-			
-			
 			$scope.reset = function ()
 			{
 				orderService.resetForm();
@@ -104,7 +101,14 @@
 					
 					$scope.showPersonDetail = function(index)
 					{
-						personService.person=$scope.orderList[index].person;
+						$scope.refreshForm(index);
+						personService.parentIndex=index;
+						if ($scope.orderList[index].person!=null)
+						{
+							personService.personForm=$scope.orderList[index].person;
+						}
+						else
+							personService.personForm= new Object();
 						personService.showEntity=true;
 					};
 					
@@ -112,26 +116,74 @@
 				.service("personService", function()
 						{
 							this.showEntity=false;
-							this.person= null;
+							this.personForm= null;
+							this.setPersonForm = function (newPerson)
+							{
+								this.personForm = newPerson;
+							};
 							
 						})
-				.controller("personRetrieveController",function($scope,personService)
+				.controller("personController",function($scope,$http,personService,orderService)
 				{
-					$scope.person=personService.person;
+					$scope.personForm=personService.personForm;
 					$scope.showEntity= function ()
 					{
-						$scope.person=personService.person;
+						$scope.personForm=personService.personForm;
 						return personService.showEntity;
 					};
 					$scope.closeEntity= function ()
 					{
 						personService.showEntity=false;
 					};
-				}
-				)
-		;
-		
-		
+					
+					$scope.updateParent = function(toDo)
+					{
+						
+						$http.post("../order/",orderService.orderForm)
+						.success(
+								function(data) {
+									//alert(data.person.personId);
+									orderService.orderList[personService.parentIndex]=data;
+									orderService.orderForm=data;
+									personService.personForm=orderService.orderForm.person;
+									if (toDo!=null)
+										toDo();
+								}).error(function() {
+									alert("error");
+							});
+					};
+					
+					$scope.insert= function()
+					{
+						orderService.orderForm.person = personService.personForm;
+						$scope.updateParent();
+					};
+					$scope.update= function()
+					{
+						orderService.orderForm.person = personService.personForm;
+						$scope.updateParent();
+					};
+					$scope.del= function()
+					{
+							url = "../person/"+ personService.personForm.personId;
+							personService.personForm = null;
+							orderService.orderForm.person = null;
+							deleteEntity= function() {
+								$http["delete"](url)
+								.success(
+									function(data) {
+										personService.showEntity=false;
+										
+									}).error(function() {
+										alert("error");
+								}); 
+							};
+							$scope.updateParent(deleteEntity);
+
+							/* delete even the entity or just the link? */
+							
+					};
+				});
 		</script>
 </head>
 <body>
@@ -154,13 +206,27 @@
 			<ul>
 				<li ng-repeat="order in orderList" ><p ng-click="refreshForm($index)">{{$index}} {{order.orderId}} {{order.name}} {{order.timeslotDate | date: 'dd-MM-yyyy'}} 
 				<div ng-click="showPersonDetail($index)">
-				{{order.person.personId}}
+				<div ng-show="order.person!=null">
+					{{order.person.personId}}
+				</div>
+				<div ng-show="order.person==null">
+					Add Person
+				</div>
 				</div>
 				</p></li>
 			</ul>
 		</div>
-		<div ng-controller="personRetrieveController" ng-show="showEntity()">
-			{{person.personId}}-{{person.firstName}}-{{person.lastName}} <button ng-click="closeEntity()">X</button>
+		<div ng-controller="personController" ng-show="showEntity()">
+			<button ng-click="closeEntity()">X</button><br/>
+			<p>personId: <input type="text" ng-model="personForm.personId" readonly></p> <!-- definisco gli attr. del model -->
+			<p>first Name: <input type="text" ng-model="personForm.firstName"></p>
+			<p>last name: <input type="text" ng-model="personForm.lastName"></p>
+			
+			<button ng-click="insert()">Insert</button>
+			<button ng-click="update()">Update</button>
+			<button ng-click="del()">Delete</button>
+			
+			
 		</div>
 	</div>
 </body>

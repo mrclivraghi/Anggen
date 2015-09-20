@@ -12,9 +12,9 @@ public interface OrderService {
 	
 	public void deleteOrderById(Long orderId);
 	
-	public void insertOrder(Order order);
+	public Order insertOrder(Order order);
 	
-	public void updateOrder(Order order);
+	public Order updateOrder(Order order);
 	
 	public List<Order> findLike(Order order);
 }

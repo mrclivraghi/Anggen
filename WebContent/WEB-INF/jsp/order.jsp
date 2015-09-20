@@ -4,230 +4,294 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>No Scope Controller</title>
-		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
-		<script type="text/javascript">
-		angular.module("orderApp",[])
-		.service("orderService", function(){
-			this.orderList=[];
-			this.orderForm= new Object();//{orderId: -1, name: "nome", timeslotDate: Date.now()};
-			this.setOrderList= function(data) {
-				 while (this.orderList.length>0)
-					this.orderList.pop();
-				for (i=0; i<data.length; i++)
-				{
-					var tempOrder= new Object();
-					tempOrder.orderId=data[i].orderId;
-					tempOrder.name=data[i].name;
-					tempOrder.timeslotDate=data[i].timeslotDate;
-					tempOrder.person=data[i].person;
-					this.orderList[i]=tempOrder;
-				}
-			};
-			this.resetForm = function (order) {
-				this.orderForm.orderId= (order==null || order== undefined )? "" : order.orderId;
-				this.orderForm.name=(order==null || order== undefined )? "" : order.name;
-				this.orderForm.timeslotDate=(order==null || order== undefined )? "" : order.timeslotDate;
-			};
-			this.addOrder= function(order) {
-					this.orderList.push(order);
-					this.resetForm(order);
-			};
-			
-		})
-		.controller("orderController",
-			function($scope,orderService) {
-				$scope.orderForm=orderService.orderForm;
-		}		
-		)
-		.controller("orderRetrieveController", function ($scope,$http,orderService) {
-			
-			$scope.reset = function ()
-			{
-				orderService.resetForm();
-			};
-			
-			$scope.search = function() {
-					$http.post("../order/search",orderService.orderForm)
-						.success( function(data) {
-					orderService.setOrderList(data);
-				})
-				.error(function() { alert("error");});
-			};
-			
-			$scope.insert = function() 
-			{
-				$http.put("../order/",orderService.orderForm)
-					.success( function(data) 
-							{
-								orderService.addOrder(data);
-							})
-					.error(function() 
-							{ 
-								alert("error");
-							});
-			};
-		
-		$scope.update = function() {
-			$http.post("../order/",orderService.orderForm)
-				.success( function(data) {
-					$scope.search();
-		})
-		.error(function() { alert("error");});
+<title>Order</title>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.24/angular.min.js"></script>
+<script type="text/javascript">
+angular.module("orderApp",[])
+.service("orderService", function()
+{
+	this.entityList =		null;
+	this.selectedEntity= 	new Object();
+	this.addEntity=function (entity)
+	{
+		this.entityList.push(entity);
+	};
+	this.setEntityList= function(entityList)
+	{ 
+		this.entityList=entityList;
 	};
 	
-	$scope.del = function() {
-		var url="../order/"+orderService.orderForm.orderId;
-		$http["delete"](url)
-			.success( function(data) {
-				orderService.resetForm();
-				$scope.search();
-	})
-	.error(function() { alert("error");});
-};
+	//search just in case of the father
+	this.searchBean = 		new Object();
+	this.resetSearchBean= function()
+	{
+		this.searchBean.orderId="";
+		this.searchBean.name="";
+		this.searchBean.timeslotDate="";
+	};
+	
+	this.setSelectedEntity= function (entity)
+	{ ///TODO FIELD MGMT
+		this.selectedEntity = new Object();
+		this.selectedEntity.orderId=entity.orderId;
+		this.selectedEntity.name=entity.name;
+		var date= new Date(entity.timeslotDate);
+		this.selectedEntity.timeslotDate= new Date(date.getFullYear(),date.getMonth(),date.getDate());
+		this.selectedEntity.person=entity.person;
+		if (entity.person!=undefined && entity.person!=null)
+			{
+			this.selectedEntity.person.personId=entity.person.personId;
+			}
+	};
+	
+})
+.service("personService",function()
+{
+	this.entityList =		null;
+	this.selectedEntity= 	null;
+	this.addEntity=function (entity)
+	{
+		this.entityList.push(entity);
+	};
+	this.setEntityList= function(entityList)
+	{ 
+		this.entityList=entityList;
+	};
+	
+	this.setSelectedEntity= function(entity)
+	{ //TODO FIELD MGMT
+		if (this.selectedEntity==null)
+			this.selectedEntity = new Object();
+		if (entity!=null)
+		{
+				this.selectedEntity.personId=entity.personId;
+				this.selectedEntity.firstName=entity.firstName;
+				this.selectedEntity.lastName=entity.lastName;
+				var date= new Date(entity.birthDate);
+				this.selectedEntity.birthDate= new Date(date.getFullYear(),date.getMonth(),date.getDate());
+		}
+	};
+	
+
+})
+.service("placeService", function()
+{
+	this.entityList =		null;
+	this.selectedEntity= 	null;
+	this.addEntity=function (entity)
+	{
+		this.entityList.push(entity);
+	};
+	this.setEntityList= function(entityList)
+	{ 
+		this.entityList=entityList;
+	};
+	
+})
+.controller("orderController",function($scope,$http,orderService,personService,placeService)
+{
+	//search var
+	$scope.searchBean=orderService.searchBean;
+	
+	$scope.showEntityList=false;
+	$scope.entityList=orderService.entityList;
+	$scope.selectedEntity=	null;
 	
 	
-		})
-		.controller("orderListController", function($scope,orderService,dateFilter,personService)
+	//search function
+	$scope.reset = function()
+	{
+		orderService.resetSearchBean();
+	}
+	
+	$scope.showEntityDetail= function(index)
+	{
+		orderService.setSelectedEntity($scope.entityList[index]);
+		$scope.selectedEntity=orderService.selectedEntity;
+	};
+	
+	$scope.addNew= function()
+	{
+		$scope.selectedEntity= new Object();
+	};
+	
+	//REST
+	//search function
+	$scope.search=function()
+	{
+		$scope.selectedEntity=null;
+		$http.post("../order/search",orderService.searchBean)
+					.success( function(entityList) {
+							orderService.setEntityList(entityList);
+							$scope.showEntityList=true;
+							$scope.entityList=orderService.entityList;
+					})
+					.error(function() {
+							alert("error");
+					});
+	};
+	$scope.insert=function()
+	{
+		$http.put("../order/",$scope.selectedEntity)
+				.success( function(data) 
 				{
-					$scope.orderList=orderService.orderList;
-					
-					$scope.refreshForm = function (index) 
-					{
-						var date= new Date(orderService.orderList[index].timeslotDate);
-							orderService.orderList[index].timeslotDate= new Date(date.getFullYear(),date.getMonth(),date.getDate());//dateFilter(date,"dd/MM/yyyy");
-							orderService.resetForm(orderService.orderList[index]);
-					};
-					
-					$scope.showPersonDetail = function(index)
-					{
-						$scope.refreshForm(index);
-						personService.parentIndex=index;
-						if ($scope.orderList[index].person!=null)
-						{
-							personService.personForm=$scope.orderList[index].person;
-						}
-						else
-							personService.personForm= new Object();
-						personService.showEntity=true;
-					};
+					$scope.search();
 					
 				})
-				.service("personService", function()
-						{
-							this.showEntity=false;
-							this.personForm= null;
-							this.setPersonForm = function (newPerson)
-							{
-								this.personForm = newPerson;
-							};
-							
-						})
-				.controller("personController",function($scope,$http,personService,orderService)
-				{
-					$scope.personForm=personService.personForm;
-					$scope.showEntity= function ()
-					{
-						$scope.personForm=personService.personForm;
-						return personService.showEntity;
-					};
-					$scope.closeEntity= function ()
-					{
-						personService.showEntity=false;
-					};
-					
-					$scope.updateParent = function(toDo)
-					{
-						
-						$http.post("../order/",orderService.orderForm)
-						.success(
-								function(data) {
-									//alert(data.person.personId);
-									orderService.orderList[personService.parentIndex]=data;
-									orderService.orderForm=data;
-									personService.personForm=orderService.orderForm.person;
-									if (toDo!=null)
-										toDo();
-								}).error(function() {
-									alert("error");
-							});
-					};
-					
-					$scope.insert= function()
-					{
-						orderService.orderForm.person = personService.personForm;
-						$scope.updateParent();
-					};
-					$scope.update= function()
-					{
-						orderService.orderForm.person = personService.personForm;
-						$scope.updateParent();
-					};
-					$scope.del= function()
-					{
-							url = "../person/"+ personService.personForm.personId;
-							personService.personForm = null;
-							orderService.orderForm.person = null;
-							deleteEntity= function() {
-								$http["delete"](url)
-								.success(
-									function(data) {
-										personService.showEntity=false;
-										
-									}).error(function() {
-										alert("error");
-								}); 
-							};
-							$scope.updateParent(deleteEntity);
-
-							/* delete even the entity or just the link? */
-							
-					};
+				.error(function() 
+				{ 
+					alert("error");
 				});
-		</script>
+	};
+	$scope.update=function()
+	{
+		$http.post("../order/",$scope.selectedEntity)
+				.success( function(data) {
+					$scope.search();
+				})
+				.error(function() { 
+					alert("error");
+				});
+	};
+	$scope.del=function()
+	{
+		var url="../order/"+$scope.selectedEntity.orderId;
+		$http["delete"](url)
+				.success( function(data) {
+					$scope.reset();
+					$scope.search();
+				})
+				.error(function() { 
+					alert("error");
+				});
+	};
+	//manage relationships
+	$scope.showPersonDetail= function()
+	{
+		personService.setSelectedEntity($scope.selectedEntity.person);
+	};
+	$scope.checkPersonDetail = function()
+	{
+		alert("service:"+personService.selectedEntity.personId+"-controller:"+$scope.selectedEntity.personId);
+	}
+})
+.controller("personController",function($scope,$http,orderService,personService)
+{
+	$scope.selectedEntity= personService.selectedEntity;
+	
+	//standard
+	$scope.updateParent = function(toDo)
+	{
+		$http.post("../order/",orderService.selectedEntity)
+		.success(
+				function(data) {
+					//alert(data.person.personId);
+					 orderService.entityList[personService.parentIndex]=data;
+					orderService.setSelectedEntity(data);
+					personService.selectedEntity=null;
+					if (toDo!=null)
+						toDo(); 
+					while ($scope.$$phase) {}
+							$scope.$digest();
+				}).error(function() {
+					alert("error");
+				
+				}
+			
+		);
+	};
+	$scope.showEntity= function ()
+	{
+		$scope.selectedEntity=personService.selectedEntity;
+		return $scope.selectedEntity!=null;
+	};
+	
+	$scope.insert = function()
+	{
+		orderService.selectedEntity.person=personService.selectedEntity;
+		$scope.updateParent();
+	};
+	
+	$scope.update= function()
+	{
+		orderService.selectedEntity.person=personService.selectedEntity;
+		$scope.updateParent();
+	};
+	
+	$scope.del=function()
+	{
+		orderService.selectedEntity.person=null;
+		$scope.updateParent();
+	};
+
+})
+.controller("placeController",function($scope,$http,orderService)
+{
+
+
+});
+
+</script>
 </head>
-<body>
-<div ng-app="orderApp">
-		<div ng-controller="orderController"> <!-- definisco il controller -->
-			<p>OrderId: <input type="text" ng-model="orderForm.orderId" readonly></p> <!-- definisco gli attr. del model -->
-			<p>Name: <input type="text" ng-model="orderForm.name"></p>
-			<p>Timeslot date: <input type="date" ng-model="orderForm.timeslotDate"
-			placeholder="dd-MM-yyyy"
-			></p>
+<body ng-app="orderApp">
+	<!-- ORDER	 -->
+	<div ng-controller="orderController">
+		<div id="orderSearchBean">
+			<p>Name <input type="text" ng-model="searchBean.name"></p>
+			<p>TimeslotDate <input type="date" ng-model="searchBean.timeslotDate"></p>
+			<button ng-click="addNew()">Add new</button><button ng-click="search()">Find</button><button ng-click="reset()">Reset</button>
 		</div>
-		<div ng-controller="orderRetrieveController">
-		<button  ng-click="search()">Search</button>
-		<button ng-click="insert()">Insert</button>
-		<button ng-click="update()">Update</button>
-		<button ng-click="del()">Delete</button>
-		<button ng-click="reset()">Reset</button>
-		</div>
-		<div ng-controller="orderListController">
+		<div id="orderList" ng-if="entityList!=null">LISTA
 			<ul>
-				<li ng-repeat="order in orderList" ><p ng-click="refreshForm($index)">{{$index}} {{order.orderId}} {{order.name}} {{order.timeslotDate | date: 'dd-MM-yyyy'}} 
-				<div ng-click="showPersonDetail($index)">
-				<div ng-show="order.person!=null">
-					{{order.person.personId}}
-				</div>
-				<div ng-show="order.person==null">
-					Add Person
-				</div>
-				</div>
-				</p></li>
+				<li ng-repeat="entity in entityList"  ng-click="showEntityDetail($index)">
+					{{$index}}-{{entity.orderId}}--{{entity.name}}--{{entity.timeslotDate | date: 'dd-MM-yyyy'}}
+				</li>
 			</ul>
 		</div>
-		<div ng-controller="personController" ng-show="showEntity()">
-			<button ng-click="closeEntity()">X</button><br/>
-			<p>personId: <input type="text" ng-model="personForm.personId" readonly></p> <!-- definisco gli attr. del model -->
-			<p>first Name: <input type="text" ng-model="personForm.firstName"></p>
-			<p>last name: <input type="text" ng-model="personForm.lastName"></p>
-			
-			<button ng-click="insert()">Insert</button>
-			<button ng-click="update()">Update</button>
-			<button ng-click="del()">Delete</button>
+		<div id="orderDetail" ng-if="selectedEntity!=null">DETAIL
+			<p>OrderId <input type="text" ng-model="selectedEntity.orderId"></p>
+			<p>Name <input type="text" ng-model="selectedEntity.name"></p>
+			<p>TimeslotDate <input type="date" ng-model="selectedEntity.timeslotDate"></p>
+			<p ng-click="showPersonDetail()" ng-if="selectedEntity.person!=null">Person {{selectedEntity.person.personId}}</p>
+			<p ng-click="showPersonDetail()" ng-if="selectedEntity.person==null">Add new person {{selectedEntity.person}}
+			<button ng-click="checkPersonDetail()">check</button>
+			</p>
 			
 			
 		</div>
+		<div id="orderActionButton" ng-if="selectedEntity!=null">ACTION BUTTON
+			<button ng-click="insert()" ng-if="selectedEntity.orderId==undefined">Insert</button>
+			<button ng-click="update()" ng-if="selectedEntity.orderId>0">Update</button>
+			<button ng-click="del()" ng-if="selectedEntity.orderId>0">Delete</button>
+		</div>
+	</div>
+	
+	<!-- PERSON -->
+	<div ng-controller="personController">
+		<div id="personSearchBean" ng-if="false"> <!--  TODO DYNAMIC -->
+			<p>Name <input type="text" ng-model="searchBean.name"></p>
+			<p>TimeslotDate <input type="date" ng-model="searchBean.timeslotDate"></p>
+			<button ng-click="addNew()">Add new</button><button ng-click="search()">Find</button><button ng-click="reset()">Reset</button>
+		</div>
+		<div id="personList" ng-if="entityList!=null">LISTA
+			<ul>
+				<li ng-repeat="entity in entityList"  ng-click="showEntityDetail($index)">
+					{{$index}}-{{entity.orderId}}--{{entity.name}}--{{entity.timeslotDate | date: 'dd-MM-yyyy'}}
+				</li>
+			</ul>
+		</div>
+		<div id="personDetail" ng-if="showEntity()">DETAIL PERSON
+			<p>PersonId <input type="text" ng-model="selectedEntity.personId"></p>
+			<p>FirstName <input type="text" ng-model="selectedEntity.firstName"></p>
+			<p>LastName <input type="text" ng-model="selectedEntity.lastName"></p>
+			<p>Birth Date <input type="date" ng-model="selectedEntity.birthDate"></p>
+		</div>
+		<div id="personActionButton" ng-if="showEntity()">ACTION BUTTON
+			<button ng-click="insert()" ng-if="selectedEntity.personId==undefined">Insert</button>
+			<button ng-click="update()" ng-if="selectedEntity.personId>0">Update</button>
+			<button ng-click="del()" ng-if="selectedEntity.personId>0">Delete</button>
+		</div>
+		
 	</div>
 </body>
 </html>

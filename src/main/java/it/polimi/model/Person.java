@@ -27,10 +27,6 @@ public class Person {
 	
 	private String lastName;
 	
-	@OneToOne
-	@Type(type="it.polimi.model.Order")
-	private Order order;
-	
 	@Column(name="birth_date")
 	@Type(type="date")
 	private Date birthDate;
@@ -72,12 +68,5 @@ public class Person {
 		this.birthDate = birthDate;
 	}
 
-	public Order getOrder() {
-		return order;
-	}
-
-	public void setOrder(Order order) {
-		this.order = order;
-	}
 	
 }

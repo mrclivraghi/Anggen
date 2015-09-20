@@ -20,7 +20,7 @@
 					tempOrder.orderId=data[i].orderId;
 					tempOrder.name=data[i].name;
 					tempOrder.timeslotDate=data[i].timeslotDate;
-					temoOrder.person=data[i].person;
+					tempOrder.person=data[i].person;
 					this.orderList[i]=tempOrder;
 				}
 			};
@@ -91,7 +91,7 @@
 	
 	
 		})
-		.controller("orderListController", function($scope,orderService,dateFilter)
+		.controller("orderListController", function($scope,orderService,dateFilter,personService)
 				{
 					$scope.orderList=orderService.orderList;
 					
@@ -101,7 +101,34 @@
 							orderService.orderList[index].timeslotDate= new Date(date.getFullYear(),date.getMonth(),date.getDate());//dateFilter(date,"dd/MM/yyyy");
 							orderService.resetForm(orderService.orderList[index]);
 					};
+					
+					$scope.showPersonDetail = function(index)
+					{
+						personService.person=$scope.orderList[index].person;
+						personService.showEntity=true;
+					};
+					
 				})
+				.service("personService", function()
+						{
+							this.showEntity=false;
+							this.person= null;
+							
+						})
+				.controller("personRetrieveController",function($scope,personService)
+				{
+					$scope.person=personService.person;
+					$scope.showEntity= function ()
+					{
+						$scope.person=personService.person;
+						return personService.showEntity;
+					};
+					$scope.closeEntity= function ()
+					{
+						personService.showEntity=false;
+					};
+				}
+				)
 		;
 		
 		
@@ -125,8 +152,15 @@
 		</div>
 		<div ng-controller="orderListController">
 			<ul>
-				<li ng-repeat="order in orderList" ><p ng-click="refreshForm($index)">{{$index}} {{order.orderId}} {{order.name}} {{order.timeslotDate | date: 'dd-MM-yyyy'}}</p></li>
+				<li ng-repeat="order in orderList" ><p ng-click="refreshForm($index)">{{$index}} {{order.orderId}} {{order.name}} {{order.timeslotDate | date: 'dd-MM-yyyy'}} 
+				<div ng-click="showPersonDetail($index)">
+				{{order.person.personId}}
+				</div>
+				</p></li>
 			</ul>
+		</div>
+		<div ng-controller="personRetrieveController" ng-show="showEntity()">
+			{{person.personId}}-{{person.firstName}}-{{person.lastName}} <button ng-click="closeEntity()">X</button>
 		</div>
 	</div>
 </body>

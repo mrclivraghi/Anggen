@@ -173,9 +173,9 @@ public class Generator {
 			findLike.param(classClass, lowerClass);
 			JMethod deleteById = myClass.method(JMod.PUBLIC, void.class, "deleteById");
 			deleteById.param(keyClass, lowerClass+"Id");
-			JMethod insert= myClass.method(JMod.PUBLIC, void.class, "insert");
+			JMethod insert= myClass.method(JMod.PUBLIC, classClass, "insert");
 			insert.param(classClass, lowerClass);
-			JMethod update= myClass.method(JMod.PUBLIC, void.class, "update");
+			JMethod update= myClass.method(JMod.PUBLIC, classClass, "update");
 			update.param(classClass, lowerClass);
 			
 			
@@ -213,13 +213,13 @@ public class Generator {
 			findByIdBlock.directStatement("return "+lowerClass+"Repository.findBy"+className+"Id("+lowerClass+"Id);");
 			//findByIdBlock._return(findByIdExpression);
 			
-			
+			//search
 			JMethod findLike=myClass.method(JMod.PUBLIC, listClass, "find");
 			findLike.annotate(Override.class);
 			findLike.param(classClass, lowerClass);
 			JBlock findLikeBlock= findLike.body();
 			findLikeBlock.directStatement("return "+lowerClass+"Repository."+searchMethod+"("+getAllParam(fields, className)+");");
-			
+			//delete
 			JMethod deleteById = myClass.method(JMod.PUBLIC, void.class, "deleteById");
 			deleteById.annotate(Override.class);
 			deleteById.param(keyClass, lowerClass+"Id");
@@ -227,20 +227,18 @@ public class Generator {
 			deleteBlock.directStatement(""+lowerClass+"Repository.delete("+lowerClass+"Id);");
 			deleteBlock.directStatement("return;");
 			
-			
-			JMethod insert= myClass.method(JMod.PUBLIC, void.class, "insert");
+			//insert
+			JMethod insert= myClass.method(JMod.PUBLIC, classClass, "insert");
 			insert.annotate(Override.class);
 			insert.param(classClass, lowerClass);
 			JBlock insertBlock= insert.body();
-			insertBlock.directStatement(""+lowerClass+"Repository.save("+lowerClass+");");
-			insertBlock.directStatement("return;");
-			
-			JMethod update= myClass.method(JMod.PUBLIC, void.class, "update");
+			insertBlock.directStatement("return "+lowerClass+"Repository.save("+lowerClass+");");
+			//update
+			JMethod update= myClass.method(JMod.PUBLIC, classClass, "update");
 			update.annotate(Override.class);
 			update.param(classClass, lowerClass);
 			JBlock updateBlock= update.body();
-			updateBlock.directStatement(""+lowerClass+"Repository.save("+lowerClass+");");
-			updateBlock.directStatement("return;");
+			updateBlock.directStatement("return "+lowerClass+"Repository.save("+lowerClass+");");
 			
 			
 		} catch (JClassAlreadyExistsException e) {
@@ -324,8 +322,8 @@ public class Generator {
 			orderParam= insert.param(classClass,lowerClass+"");
 			orderParam.annotate(RequestBody.class);
 			JBlock insertBlock= insert.body();
-			insertBlock.directStatement(lowerClass+"Service.insert("+lowerClass+");");
-			insertBlock.directStatement("return "+response+".body("+lowerClass+");");
+			insertBlock.directStatement(className+" insertedEntity="+lowerClass+"Service.insert("+lowerClass+");");
+			insertBlock.directStatement("return "+response+".body(insertedEntity);");
 			//UpdateOrder
 			JMethod update = myClass.method(JMod.PUBLIC, ResponseEntity.class, "update"+className+"");
 			update.annotate(ResponseBody.class);
@@ -334,8 +332,8 @@ public class Generator {
 			orderParam= update.param(classClass,lowerClass+"");
 			orderParam.annotate(RequestBody.class);
 			JBlock updateBlock= update.body();
-			updateBlock.directStatement(lowerClass+"Service.update("+lowerClass+");");
-			updateBlock.directStatement("return "+response+".body("+lowerClass+");");
+			updateBlock.directStatement(className+" updatedEntity="+lowerClass+"Service.update("+lowerClass+");");
+			updateBlock.directStatement("return "+response+".body(updatedEntity);");
 			
 			
 			

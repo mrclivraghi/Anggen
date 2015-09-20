@@ -2,6 +2,7 @@ package it.polimi.model;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -36,6 +38,12 @@ public class Order {
 	@Cascade({CascadeType.ALL})
 	@Type(type="it.polimi.model.Person")
 	private Person person;
+	
+	
+	@OneToMany(mappedBy="order",fetch=FetchType.EAGER)
+	@Cascade({CascadeType.ALL})
+	@Type(type="it.polimi.model.Place")
+	private List<Place> placeList;
 	
 	public Order()
 	{
@@ -70,5 +78,11 @@ public class Order {
 	}
 	public void setPerson(Person person) {
 		this.person = person;
+	}
+	public List<Place> getPlaceList() {
+		return placeList;
+	}
+	public void setPlaceList(List<Place> placeList) {
+		this.placeList = placeList;
 	}
 }

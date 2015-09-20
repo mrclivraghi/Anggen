@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Order</title>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.24/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
 <script type="text/javascript">
 angular.module("orderApp",[])
 .service("orderService", function()
@@ -106,6 +106,7 @@ angular.module("orderApp",[])
 	
 	$scope.showEntityDetail= function(index)
 	{
+		orderService.indexSelected=index;
 		orderService.setSelectedEntity($scope.entityList[index]);
 		$scope.selectedEntity=orderService.selectedEntity;
 	};
@@ -183,22 +184,25 @@ angular.module("orderApp",[])
 	$scope.updateParent = function(toDo)
 	{
 		$http.post("../order/",orderService.selectedEntity)
-		.success(
+			.then(
 				function(data) {
 					//alert(data.person.personId);
-					 orderService.entityList[personService.parentIndex]=data;
+					orderService.entityList[orderService.indexSelected]=data;
 					orderService.setSelectedEntity(data);
 					personService.selectedEntity=null;
+					$scope.selectedEntity=null;
 					if (toDo!=null)
 						toDo(); 
-					while ($scope.$$phase) {}
-							$scope.$digest();
-				}).error(function() {
+					if (!$scope.$$phase)
+						$rootScope.$digest();
+				}
+			,function(error) {
 					alert("error");
 				
-				}
+				});
+					
 			
-		);
+		
 	};
 	$scope.showEntity= function ()
 	{

@@ -1,8 +1,14 @@
 package it.polimi.utils;
 
 import it.polimi.model.Order;
+import it.polimi.model.Person;
+import it.polimi.model.Place;
 import it.polimi.repository.OrderRepository;
+import it.polimi.repository.PersonRepository;
+import it.polimi.repository.PlaceRepository;
 import it.polimi.service.OrderService;
+import it.polimi.service.PersonService;
+import it.polimi.service.PlaceService;
 
 import java.io.File;
 import java.sql.Date;
@@ -99,7 +105,7 @@ public class Generator {
 				if (field.getFieldClass()==String.class)
 				{
 					query= query+" (:"+field.getName()+" is null or :"+field.getName()+"='' or cast(:"+field.getName()+" as string)="+alias+"."+field.getName()+") and";
-				} else
+				} else// manage custom entity
 					query=query+" (:"+field.getName()+" is null or cast(:"+field.getName()+" as string)=cast("+alias+"."+field.getName()+" as string)) and";
 					
 			}
@@ -358,19 +364,18 @@ public class Generator {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		List<Field> fields = new ArrayList<Field>();
-		fields.add(new Field("personId",Long.class));
-		fields.add(new Field("firstName",String.class));
-		fields.add(new Field("lastName",String.class));
-		fields.add(new Field("birthDate",Date.class));
-		String nameEntity="Person";
+		fields.add(new Field("placeId",Long.class));
+		fields.add(new Field("description",String.class));
+		fields.add(new Field("order",Order.class));
+		String nameEntity="Place";
 		File file = new File(""); 
 		directory = file.getAbsolutePath()+"\\src\\main\\java";
-		//Generator.generateServiceInterface(nameEntity, Person.class, Long.class);
-		//String searchMethod=Generator.generateRepository(nameEntity, Person.class, fields);
-		String searchMethod="findByPersonIdAndFirstNameAndLastNameAndBirthDate";
+		//Generator.generateServiceInterface(nameEntity, Place.class, Long.class);
+		//String searchMethod=Generator.generateRepository(nameEntity, Place.class, fields);
+		String searchMethod="findByPlaceIdAndDescriptionAndOrder";
 		System.out.println(searchMethod);
-		//Generator.generateServiceImpl(nameEntity, Person.class, Long.class,fields,PersonService.class,PersonRepository.class,searchMethod);
-		//Generator.generateController(nameEntity, Person.class, Long.class, PersonService.class);
+		Generator.generateServiceImpl(nameEntity, Place.class, Long.class,fields,PlaceService.class,PlaceRepository.class,searchMethod);
+		Generator.generateController(nameEntity, Place.class, Long.class, PlaceService.class);
 	}
 
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import javax.xml.ws.Response;
 
 import it.polimi.model.Order;
+import it.polimi.model.Place;
 import it.polimi.service.OrderService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,8 @@ public class OrderController {
 	@ResponseBody
 	public ResponseEntity search (@RequestBody Order order)
 	{
-		return ResponseEntity.ok().body(orderService.findLike(order));
+		List<Order> orderList=orderService.findLike(order);
+		return ResponseEntity.ok().body(orderList);
 	}
 	
 	@RequestMapping(value="/{orderId}",method=RequestMethod.GET)

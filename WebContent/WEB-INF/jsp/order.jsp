@@ -50,11 +50,11 @@ angular.module("orderApp",[])
 		if (entity.person!=undefined && entity.person!=null)
 		{	
 			this.selectedEntity.person.personId=entity.person.personId;
-		}
+		} // else	this.selectedEntity.person={};
 		this.selectedEntity.placeList=entity.placeList;
 		if (entity.placeList!=undefined && entity.placeList!=null)
 		{	//fill the list
-			this.selectedEntity.person.personId=entity.person.personId;
+			this.selectedEntity.placeList=entity.placeList;
 		} else
 			entity.placeList=[];
 	};
@@ -199,9 +199,11 @@ angular.module("orderApp",[])
 		personService.setSelectedEntity(orderService.selectedEntity.person);
 		personService.selectedEntity.show=true;
 	};
-	$scope.showPlaceDetail=function()
+	$scope.showPlaceDetail=function(index)
 	{
 		placeService.selectedEntity.show=true;
+		if (index!=null)
+				placeService.setSelectedEntity(orderService.selectedEntity.placeList[index]);
 	}
 	$scope.checkPersonDetail = function()
 	{
@@ -250,6 +252,7 @@ angular.module("orderApp",[])
 	
 	$scope.update= function()
 	{
+		
 		personService.selectedEntity.show=false;
 		orderService.selectedEntity.person=personService.selectedEntity;
 		$scope.updateParent();
@@ -257,6 +260,7 @@ angular.module("orderApp",[])
 	
 	$scope.del=function()
 	{
+		
 		personService.setSelectedEntity(null);
 		orderService.selectedEntity.person=null;
 		$scope.updateParent();
@@ -300,9 +304,15 @@ angular.module("orderApp",[])
 		orderService.selectedEntity.placeList.push(placeService.selectedEntity);
 		$scope.updateParent();
 	};
-	
+	//TODO manage update well....
 	$scope.update= function()
 	{
+		//TODO rimuovo dalla lista il vecchio entity e piazzo il nuovo
+		for (i=0; i<orderService.selectedEntity.placeList.length; i++)
+			{
+				if (orderService.selectedEntity.placeList[i].placeId==placeService.selectedEntity.placeId)
+					orderService.selectedEntity.placeList.splice(i,1);
+			}
 		placeService.selectedEntity.show=false;
 		//change in add palce to manage null case
 		orderService.selectedEntity.placeList.push(placeService.selectedEntity);
@@ -311,8 +321,12 @@ angular.module("orderApp",[])
 	
 	$scope.del=function()
 	{
-		//TODO
-		//orderService.selectedEntity.placeList.pop();
+		//TODO rimuovo dalla lista il vecchio entity e piazzo il nuovo
+		for (i=0; i<orderService.selectedEntity.placeList.length; i++)
+			{
+				if (orderService.selectedEntity.placeList[i].placeId==placeService.selectedEntity.placeId)
+					orderService.selectedEntity.placeList.splice(i,1);
+			}
 		placeService.setSelectedEntity(null);
 		$scope.updateParent();
 	};
@@ -348,7 +362,7 @@ angular.module("orderApp",[])
 			</p>
 			<div ng-if="selectedEntity.placeList.length>0">
 				<ul>
-					<li ng-repeat="entity in selectedEntity.placeList" ng-click="showPlaceDetail(index)">{{$index}}--{{entity.placeId}}--{{entity.description}}</li>
+					<li ng-repeat="entity in selectedEntity.placeList" ng-click="showPlaceDetail($index)">{{$index}}--{{entity.placeId}}--{{entity.description}}</li>
 				</ul>
 			</div>
 			

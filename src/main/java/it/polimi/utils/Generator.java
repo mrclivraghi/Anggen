@@ -60,10 +60,12 @@ public class Generator {
 	public static class Field{
 		private String name;
 		private Class fieldClass;
-		public Field(String name, Class fieldClass)
+		private JClass compositeClass;
+		public Field(String name, Class fieldClass, JClass compositeClass)
 		{
 			this.name=name;
 			this.fieldClass=fieldClass;
+			this.setCompositeClass(compositeClass);
 		}
 		public String getName() {
 			return name;
@@ -76,6 +78,12 @@ public class Generator {
 		}
 		public void setFieldClass(Class fieldClass) {
 			this.fieldClass = fieldClass;
+		}
+		public JClass getCompositeClass() {
+			return compositeClass;
+		}
+		public void setCompositeClass(JClass compositeClass) {
+			this.compositeClass = compositeClass;
 		}
 	}
 	
@@ -105,8 +113,21 @@ public class Generator {
 				if (field.getFieldClass()==String.class)
 				{
 					query= query+" (:"+field.getName()+" is null or :"+field.getName()+"='' or cast(:"+field.getName()+" as string)="+alias+"."+field.getName()+") and";
-				} else// manage custom entity
-					query=query+" (:"+field.getName()+" is null or cast(:"+field.getName()+" as string)=cast("+alias+"."+field.getName()+" as string)) and";
+				} else
+				{
+					if (field.getFieldClass()==List.class)
+					{
+						query=query+" (:"+field.getName()+" is null or :"+field.getName()+" in elements("+alias+"."+field.getName()+")) and";
+					}else
+					{
+						if (field.getFieldClass()==Object.class)
+						{
+							query=query+" (:"+field.getName()+" is null :"+field.getName()+"="+alias+"."+field.getName()+") and";
+						}else
+							query=query+" (:"+field.getName()+" is null or cast(:"+field.getName()+" as string)=cast("+alias+"."+field.getName()+" as string)) and";
+					}
+						
+				}
 					
 			}
 		}
@@ -363,19 +384,29 @@ public class Generator {
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		JCodeModel	codeModel = new JCodeModel();
+		JClass placeListClass = codeModel.ref(List.class).narrow(Place.class);
+		JClass personClass= codeModel.ref(Person.class);
+
+		System.out.println(personClass.fullName()+"-"+personClass.name());
+		
+		System.out.println(placeListClass.fullName()+"-"+placeListClass.name());
 		List<Field> fields = new ArrayList<Field>();
-		fields.add(new Field("placeId",Long.class));
-		fields.add(new Field("description",String.class));
-		fields.add(new Field("order",Order.class));
+		
+		fields.add(new Field("order",Long.class,null));
+		fields.add(new Field("name",String.class,null));
+		fields.add(new Field("timeslotDate",Date.class,null));
+		fields.add(new Field("person",Person.class,null));
+		fields.add(new Field("placeList",null,placeListClass));
 		String nameEntity="Place";
 		File file = new File(""); 
 		directory = file.getAbsolutePath()+"\\src\\main\\java";
 		//Generator.generateServiceInterface(nameEntity, Place.class, Long.class);
-		//String searchMethod=Generator.generateRepository(nameEntity, Place.class, fields);
-		String searchMethod="findByPlaceIdAndDescriptionAndOrder";
-		System.out.println(searchMethod);
-		Generator.generateServiceImpl(nameEntity, Place.class, Long.class,fields,PlaceService.class,PlaceRepository.class,searchMethod);
-		Generator.generateController(nameEntity, Place.class, Long.class, PlaceService.class);
+		//String searchMethod=Generator.generateRepository(nameEntity, Order.class, fields);
+		//String searchMethod="findByPlaceIdAndDescriptionAndOrder";
+		//System.out.println(searchMethod);
+		//Generator.generateServiceImpl(nameEntity, Place.class, Long.class,fields,PlaceService.class,PlaceRepository.class,searchMethod);
+		//Generator.generateController(nameEntity, Place.class, Long.class, PlaceService.class);
 	}
 
 }

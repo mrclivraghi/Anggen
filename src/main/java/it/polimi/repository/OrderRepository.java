@@ -6,6 +6,8 @@ import java.util.List;
 import javax.persistence.Temporal;
 
 import it.polimi.model.Order;
+import it.polimi.model.Person;
+import it.polimi.model.Place;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -22,6 +24,9 @@ public interface OrderRepository extends CrudRepository<Order, Long> {
 	@Query("select o from Order o where "
 			+ "(:orderId is null or cast(o.orderId as string)=cast(:orderId as string)) "
 			+ "and (:name is null or :name='' or o.name=cast(:name as string)) "
-			+ "and (:timeslotDate is null or cast(o.timeslotDate as string)=cast(:timeslotDate as string))")
-	List<Order> findByOrderIdAndNameAndTimeslotDate(@Param("orderId") Long orderId, @Param("name")String name,@Param("timeslotDate") String timeslotDate);
+			+ "and (:timeslotDate is null or cast(o.timeslotDate as string)=cast(:timeslotDate as string)) "
+			+ " and (o.person=:person or :person is null) "
+			+ " and (:place in elements(o.placeList) or :place is null) ")
+	List<Order> findByOrderIdAndNameAndTimeslotDate(@Param("orderId") Long orderId, @Param("name")String name,
+			@Param("timeslotDate") String timeslotDate, @Param("person") Person person, @Param("place") Place place );
 }

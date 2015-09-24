@@ -36,12 +36,32 @@ angular.module("orderApp",[])
 	};
 	
 	this.setSelectedEntity= function (entity)
-	{ ///TODO FIELD MGMT
+	{ // to do field mgmt
 		if (entity==null) 
 		{
 			entity={};
 			this.selectedEntity.show=false;
-		}
+		} //else
+		
+			var keyList=Object.keys(entity);
+		for (i=0; i<keyList.length; i++)
+		{
+			var val=keyList[i];
+			this.selectedEntity[val]=entity[val];
+			if (val!=undefined)
+				{
+			  //check list
+			  if (val.toLowerCase().indexOf("list")>-1 && (entity[val]==null || entity[val]==undefined) && typeof entity[val] == "object")
+				  this.selectedEntity[val]=[];
+			  //check date
+			  if (val.toLowerCase().indexOf("date")>-1 && typeof val == "string")
+			  {
+				  	var date= new Date(entity[val]);
+				  	this.selectedEntity[val]= new Date(date.getFullYear(),date.getMonth(),date.getDate());
+			  }
+				}
+			  
+		}/*
 		this.selectedEntity.orderId=entity.orderId;
 		this.selectedEntity.name=entity.name;
 		var date= new Date(entity.timeslotDate);
@@ -56,7 +76,7 @@ angular.module("orderApp",[])
 		{	//fill the list
 			this.selectedEntity.placeList=entity.placeList;
 		} else
-			entity.placeList=[];
+			this.selectedEntity.placeList=[]; */
 	};
 	
 })
@@ -129,7 +149,10 @@ angular.module("orderApp",[])
 	//search function
 	$scope.reset = function()
 	{
-		orderService.reset();
+		orderService.resetSearchBean();
+		orderService.selectedEntity.show=false;
+		personService.selectedEntity.show=false;
+		placeService.selectedEntity.show=false;
 	}
 	
 	$scope.showEntityDetail= function(index)
@@ -141,7 +164,11 @@ angular.module("orderApp",[])
 	
 	$scope.addNew= function()
 	{
+		orderService.setSelectedEntity(null);
 		orderService.selectedEntity.show=true;
+		personService.selectedEntity.show=false;
+		placeService.selectedEntity.show=false;
+		
 	};
 	
 	//REST
@@ -173,6 +200,8 @@ angular.module("orderApp",[])
 	};
 	$scope.update=function()
 	{
+		placeService.selectedEntity.show=false;
+		personService.selectedEntity.show=false;
 		$http.post("../order/",orderService.selectedEntity)
 				.success( function(data) {
 					$scope.search();
@@ -193,7 +222,7 @@ angular.module("orderApp",[])
 					alert("error");
 				});
 	};
-	//manage relationships
+	//relationships
 	$scope.showPersonDetail= function()
 	{
 		personService.setSelectedEntity(orderService.selectedEntity.person);
@@ -205,10 +234,7 @@ angular.module("orderApp",[])
 		if (index!=null)
 				placeService.setSelectedEntity(orderService.selectedEntity.placeList[index]);
 	}
-	$scope.checkPersonDetail = function()
-	{
-		alert("service:"+personService.selectedEntity.personId+"-controller:"+$scope.selectedEntity.personId);
-	}
+	
 })
 .controller("personController",function($scope,$http,orderService,personService)
 {
@@ -224,8 +250,6 @@ angular.module("orderApp",[])
 					if (response.status==200)
 						{
 						
-					//orderService.entityList[orderService.indexSelected]=data;
-					//data=JSON.parse(data);
 					orderService.setSelectedEntity(response.data);
 					if (toDo!=null)
 						toDo(); 
@@ -282,9 +306,8 @@ angular.module("orderApp",[])
 					if (response.status==200)
 						{
 						
-					//orderService.entityList[orderService.indexSelected]=data;
-					//data=JSON.parse(data);
 					orderService.setSelectedEntity(response.data);
+					placeService.setSelectedEntity(null);
 					if (toDo!=null)
 						toDo(); 
 					if (!$scope.$$phase)
@@ -304,24 +327,20 @@ angular.module("orderApp",[])
 		orderService.selectedEntity.placeList.push(placeService.selectedEntity);
 		$scope.updateParent();
 	};
-	//TODO manage update well....
 	$scope.update= function()
 	{
-		//TODO rimuovo dalla lista il vecchio entity e piazzo il nuovo
 		for (i=0; i<orderService.selectedEntity.placeList.length; i++)
 			{
 				if (orderService.selectedEntity.placeList[i].placeId==placeService.selectedEntity.placeId)
 					orderService.selectedEntity.placeList.splice(i,1);
 			}
 		placeService.selectedEntity.show=false;
-		//change in add palce to manage null case
 		orderService.selectedEntity.placeList.push(placeService.selectedEntity);
 		$scope.updateParent();
 	};
 	
 	$scope.del=function()
 	{
-		//TODO rimuovo dalla lista il vecchio entity e piazzo il nuovo
 		for (i=0; i<orderService.selectedEntity.placeList.length; i++)
 			{
 				if (orderService.selectedEntity.placeList[i].placeId==placeService.selectedEntity.placeId)
@@ -365,9 +384,6 @@ angular.module("orderApp",[])
 					<li ng-repeat="entity in selectedEntity.placeList" ng-click="showPlaceDetail($index)">{{$index}}--{{entity.placeId}}--{{entity.description}}</li>
 				</ul>
 			</div>
-			
-			
-			
 		</div>
 		<div id="orderActionButton" ng-if="selectedEntity.show">ACTION BUTTON
 			<button ng-click="insert()" ng-if="selectedEntity.orderId==undefined">Insert</button>
@@ -378,7 +394,7 @@ angular.module("orderApp",[])
 	
 	<!-- PERSON -->
 	<div ng-controller="personController">
-		<div id="personSearchBean" ng-if="false"> <!--  TODO DYNAMIC -->
+		<div id="personSearchBean" ng-if="false"> 
 			<p>Name <input type="text" ng-model="searchBean.name"></p>
 			<p>TimeslotDate <input type="date" ng-model="searchBean.timeslotDate"></p>
 			<button ng-click="addNew()">Add new</button><button ng-click="search()">Find</button><button ng-click="reset()">Reset</button>
@@ -405,7 +421,7 @@ angular.module("orderApp",[])
 	
 	<!-- PLACE -->
 	<div ng-controller="placeController">
-		<div id="placeSearchBean" ng-if="false"> <!--  TODO DYNAMIC -->
+		<div id="placeSearchBean" ng-if="false">
 			<p>Name <input type="text" ng-model="searchBean.name"></p>
 			<p>TimeslotDate <input type="date" ng-model="searchBean.timeslotDate"></p>
 			<button ng-click="addNew()">Add new</button><button ng-click="search()">Find</button><button ng-click="reset()">Reset</button>

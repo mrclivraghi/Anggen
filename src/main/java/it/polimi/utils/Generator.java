@@ -3,7 +3,7 @@ package it.polimi.utils;
 import it.polimi.model.Order;
 import it.polimi.model.Person;
 import it.polimi.model.Place;
-import it.polimi.repository.OrderRepository;
+import it.polimi.repository.OrderRepositoryOLD;
 import it.polimi.repository.PersonRepository;
 import it.polimi.repository.PlaceRepository;
 import it.polimi.service.OrderService;
@@ -115,16 +115,20 @@ public class Generator {
 					query= query+" (:"+field.getName()+" is null or :"+field.getName()+"='' or cast(:"+field.getName()+" as string)="+alias+"."+field.getName()+") and";
 				} else
 				{
-					if (field.getFieldClass()==List.class)
+					if (field.getCompositeClass()==null)
 					{
-						query=query+" (:"+field.getName()+" is null or :"+field.getName()+" in elements("+alias+"."+field.getName()+")) and";
-					}else
-					{
-						if (field.getFieldClass()==Object.class)
+						query=query+" (:"+field.getName()+" is null or cast(:"+field.getName()+" as string)=cast("+alias+"."+field.getName()+" as string)) and";
+						
+					} else
+					{ // Entity or entity list!!!
+						if (field.getCompositeClass().fullName().contains("java.util.List"))
 						{
-							query=query+" (:"+field.getName()+" is null :"+field.getName()+"="+alias+"."+field.getName()+") and";
+							query=query+" (:"+field.getName()+" is null or :"+field.getName()+" in elements("+alias+"."+field.getName()+")) and";
 						}else
-							query=query+" (:"+field.getName()+" is null or cast(:"+field.getName()+" as string)=cast("+alias+"."+field.getName()+" as string)) and";
+						{
+								query=query+" (:"+field.getName()+" is null :"+field.getName()+"="+alias+"."+field.getName()+") and";
+						}
+
 					}
 						
 				}
@@ -162,7 +166,10 @@ public class Generator {
 			for (Field field: fields)
 			{
 				JMethod method=myClass.method(JMod.PUBLIC, classClass, "findBy"+field.getName().replaceFirst(field.getName().substring(0, 1), field.getName().substring(0, 1).toUpperCase()));
-				method.param(field.getFieldClass()==Date.class ? String.class : field.getFieldClass(), field.getName());
+				//if (field.getCompositeClass()==null)
+					method.param(field.getFieldClass()==Date.class ? String.class : field.getFieldClass(), field.getName());
+				//else
+					//method.param(field.getCompositeClass(), field.getName());
 				searchMethod=searchMethod+getFirstUpper(field.getName())+"And";
 			}
 			searchMethod=searchMethod.substring(0,searchMethod.length()-3);
@@ -387,24 +394,25 @@ public class Generator {
 		JCodeModel	codeModel = new JCodeModel();
 		JClass placeListClass = codeModel.ref(List.class).narrow(Place.class);
 		JClass personClass= codeModel.ref(Person.class);
+		
 
 		System.out.println(personClass.fullName()+"-"+personClass.name());
 		
 		System.out.println(placeListClass.fullName()+"-"+placeListClass.name());
 		List<Field> fields = new ArrayList<Field>();
 		
-		fields.add(new Field("order",Long.class,null));
+		fields.add(new Field("orderId",Long.class,null));
 		fields.add(new Field("name",String.class,null));
 		fields.add(new Field("timeslotDate",Date.class,null));
-		fields.add(new Field("person",Person.class,null));
-		fields.add(new Field("placeList",null,placeListClass));
-		String nameEntity="Place";
+		fields.add(new Field("person",Person.class,personClass));
+		fields.add(new Field("placeList",Place.class,placeListClass));
+		String nameEntity="Order";
 		File file = new File(""); 
 		directory = file.getAbsolutePath()+"\\src\\main\\java";
 		//Generator.generateServiceInterface(nameEntity, Place.class, Long.class);
-		//String searchMethod=Generator.generateRepository(nameEntity, Order.class, fields);
+		String searchMethod=Generator.generateRepository(nameEntity, Order.class, fields);
 		//String searchMethod="findByPlaceIdAndDescriptionAndOrder";
-		//System.out.println(searchMethod);
+		System.out.println(searchMethod);
 		//Generator.generateServiceImpl(nameEntity, Place.class, Long.class,fields,PlaceService.class,PlaceRepository.class,searchMethod);
 		//Generator.generateController(nameEntity, Place.class, Long.class, PlaceService.class);
 	}

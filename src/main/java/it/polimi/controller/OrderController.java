@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping(value="/order")
 
-public class OrderControllerOLD {
+public class OrderController {
 	
 	@Autowired
 	OrderService orderService;

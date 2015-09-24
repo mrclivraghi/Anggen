@@ -69,7 +69,7 @@ public class OrderServiceImpl implements OrderService{
 
 	@Override
 	public List<Order> findLike(Order order) {
-		return orderRepository.findByOrderIdAndNameAndTimeslotDate(order.getOrderId(), order.getName(), Utility.formatDate(order.getTimeslotDate()),null,null);
+		return orderRepository.findByOrderIdAndNameAndTimeslotDateAndPersonAndPlaceList(order.getOrderId(), order.getName(), Utility.formatDate(order.getTimeslotDate()),null,null);
 	}
 
 }

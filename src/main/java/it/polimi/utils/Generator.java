@@ -13,9 +13,13 @@ import java.io.File;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+
+import javax.persistence.Entity;
 
 import org.hibernate.internal.jaxb.mapping.hbm.JaxbParamElement;
 import org.hibernate.metamodel.domain.JavaType;
+import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -43,6 +47,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,36 +60,7 @@ import antlr.JavaCodeGenerator;
 public class Generator {
 
 	private static String directory;
-	
-	public static class Field{
-		private String name;
-		private Class fieldClass;
-		private JClass compositeClass;
-		public Field(String name, Class fieldClass, JClass compositeClass)
-		{
-			this.name=name;
-			this.fieldClass=fieldClass;
-			this.setCompositeClass(compositeClass);
-		}
-		public String getName() {
-			return name;
-		}
-		public void setName(String name) {
-			this.name = name;
-		}
-		public Class getFieldClass() {
-			return fieldClass;
-		}
-		public void setFieldClass(Class fieldClass) {
-			this.fieldClass = fieldClass;
-		}
-		public JClass getCompositeClass() {
-			return compositeClass;
-		}
-		public void setCompositeClass(JClass compositeClass) {
-			this.compositeClass = compositeClass;
-		}
-	}
+	public static final Class keyClass=Long.class;
 	
 	public static String getFirstLower(String string)
 	{
@@ -122,10 +98,10 @@ public class Generator {
 					{ // Entity or entity list!!!
 						if (field.getCompositeClass().fullName().contains("java.util.List"))
 						{
-							query=query+" (:"+field.getName()+" is null or :"+field.getName()+" in elements("+alias+"."+field.getName()+")) and";
-						}else
+							query=query+" (:"+field.getName()+" in elements("+alias+"."+field.getName()+"List)  or :"+field.getName()+" is null) and";
+							}else
 						{
-								query=query+" (:"+field.getName()+" is null :"+field.getName()+"="+alias+"."+field.getName()+") and";
+								query=query+" (:"+field.getName()+"="+alias+"."+field.getName()+" or :"+field.getName()+" is null) and";
 						}
 
 					}
@@ -147,13 +123,20 @@ public class Generator {
 			{
 				string=string+"Utility.formatDate("+getFirstLower(className)+".get"+getFirstUpper(field.getName())+"()),";
 			}else
-			string=string+getFirstLower(className)+".get"+getFirstUpper(field.getName())+"(),";
+			{
+				if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List"))
+					string=string+getFirstLower(className)+".get"+getFirstUpper(field.getName())+"List()==null? null :"+getFirstLower(className)+".get"+getFirstUpper(field.getName())+"List().get(0),";
+				else
+					string=string+getFirstLower(className)+".get"+getFirstUpper(field.getName())+"(),";
+			}
 		}
 		return string.substring(0, string.length()-1);
 	}
 	
-	public static String generateRepository(String className,Class classClass, List<Field> fields){
+	public static String generateRepository(Class classClass, List<Field> fields){
+		String className=getFirstLower(classClass.getName());
 		JCodeModel	codeModel = new JCodeModel();
+		
 		JDefinedClass myClass= null;
 		String searchMethod="";
 		try {
@@ -161,18 +144,21 @@ public class Generator {
 			JClass extendedClass = codeModel.ref(CrudRepository.class).narrow(classClass,Long.class);
 			myClass._extends(extendedClass);
 			myClass.annotate(Repository.class);
+			JClass listClass=codeModel.ref(List.class).narrow(classClass);
 			searchMethod="findBy";
 			for (Field field: fields)
 			{
-				JMethod method=myClass.method(JMod.PUBLIC, classClass, "findBy"+field.getName().replaceFirst(field.getName().substring(0, 1), field.getName().substring(0, 1).toUpperCase()));
-				//if (field.getCompositeClass()==null)
+				if (field.getCompositeClass()==null)
+				{
+					JMethod method=myClass.method(JMod.PUBLIC, listClass, "findBy"+field.getName().replaceFirst(field.getName().substring(0, 1), field.getName().substring(0, 1).toUpperCase()));
+					//if (field.getCompositeClass()==null)
 					method.param(field.getFieldClass()==Date.class ? String.class : field.getFieldClass(), field.getName());
-				//else
+					//else
 					//method.param(field.getCompositeClass(), field.getName());
+				}
 				searchMethod=searchMethod+getFirstUpper(field.getName())+"And";
 			}
 			searchMethod=searchMethod.substring(0,searchMethod.length()-3);
-			JClass listClass=codeModel.ref(List.class).narrow(classClass);
 			JMethod method=myClass.method(JMod.PUBLIC, listClass, searchMethod);
 			String alias=className.substring(0, 1).toLowerCase();
 			String query=getSearchQuery(alias, className, method, fields);
@@ -191,15 +177,15 @@ public class Generator {
 		return searchMethod;
 	}
 	
-	public static void generateServiceInterface(String className, Class classClass, Class keyClass)
+	public static void generateServiceInterface(Class classClass)
 	{
-
+		String className=getFirstLower(classClass.getName());
 		JCodeModel	codeModel = new JCodeModel();
 		JDefinedClass myClass= null;
 		try {
 			myClass = codeModel._class("it.polimi.service."+className+"Service", ClassType.INTERFACE);
 			JClass listClass = codeModel.ref(List.class).narrow(classClass);
-			JMethod findById = myClass.method(JMod.PUBLIC, classClass, "findById");
+			JMethod findById = myClass.method(JMod.PUBLIC, listClass, "findById");
 			String lowerClass= className.replaceFirst(className.substring(0, 1), className.substring(0, 1).toLowerCase());
 			findById.param(keyClass,lowerClass+"Id");
 			JMethod findLike=myClass.method(JMod.PUBLIC, listClass, "find");
@@ -210,8 +196,6 @@ public class Generator {
 			insert.param(classClass, lowerClass);
 			JMethod update= myClass.method(JMod.PUBLIC, classClass, "update");
 			update.param(classClass, lowerClass);
-			
-			
 		} catch (JClassAlreadyExistsException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -225,9 +209,9 @@ public class Generator {
 	}
 	
 	
-	public static void generateServiceImpl(String className, Class classClass, Class keyClass,List<Field> fields,Class interfaceClass,Class repositoryClass,String searchMethod)
+	public static void generateServiceImpl(Class classClass,List<Field> fields,Class interfaceClass,Class repositoryClass,String searchMethod)
 	{
-	
+		String className=getFirstLower(classClass.getName());
 		JCodeModel	codeModel = new JCodeModel();
 		JDefinedClass myClass= null;
 		try {
@@ -238,8 +222,17 @@ public class Generator {
 			String lowerClass= className.replaceFirst(className.substring(0, 1), className.substring(0, 1).toLowerCase());
 			JVar repository = myClass.field(JMod.PUBLIC, repositoryClass, lowerClass+"Repository");
 			repository.annotate(Autowired.class);
+			for (Field field: fields)
+			{
+				if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List") && field.getRepositoryClass()!=null)
+				{
+					JVar fieldListRepository = myClass.field(JMod.PUBLIC, field.getRepositoryClass(), field.getName()+"Repository");
+					fieldListRepository.annotate(Autowired.class);
+				}
+			}
 			
-			JMethod findById = myClass.method(JMod.PUBLIC, classClass, "findById");
+			
+			JMethod findById = myClass.method(JMod.PUBLIC, listClass, "findById");
 			findById.annotate(Override.class);
 			findById.param(keyClass,lowerClass+"Id");
 			JBlock findByIdBlock= findById.body();
@@ -269,26 +262,50 @@ public class Generator {
 			//update
 			JMethod update= myClass.method(JMod.PUBLIC, classClass, "update");
 			update.annotate(Override.class);
+			update.annotate(Transactional.class);
 			update.param(classClass, lowerClass);
 			JBlock updateBlock= update.body();
-			updateBlock.directStatement("return "+lowerClass+"Repository.save("+lowerClass+");");
-			
+			/*
+			 * Order returnedOrder=orderRepository.save(order);
+		if (order.getPlaceList()!=null)
+		for (Place place: order.getPlaceList())
+		{
+			place.setOrder(order);
+			placeRepository.save(place);
+		}
+		return returnedOrder;
+			 */
+			updateBlock.directStatement(className+" returned"+className+"="+lowerClass+"Repository.save("+lowerClass+");");
+			for (Field field: fields)
+			{
+				if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List"))
+				{
+					updateBlock.directStatement("if ("+lowerClass+".getPlaceList()!=null)");
+					updateBlock.directStatement("for ("+getFirstUpper(field.getName())+" "+field.getName()+": "+lowerClass+".get"+getFirstUpper(field.getName())+"List())");
+					updateBlock.directStatement("{");
+					updateBlock.directStatement(field.getName()+".set"+className+"("+lowerClass+");");
+					updateBlock.directStatement(field.getName()+"Repository.save("+field.getName()+");");
+					updateBlock.directStatement("}");
+					/**/
+				}
+			}
+			updateBlock.directStatement("return returned"+className+";");
 			
 		} catch (JClassAlreadyExistsException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		try {
-			   codeModel.build(new File (directory));
+			   codeModel.build(new File(directory));
 			} catch (Exception ex) {
 			   ex.printStackTrace();
 			}
 	
 	}
 
-	public static void generateController(String className, Class classClass, Class keyClass,Class serviceClass)
+	public static void generateController(Class classClass,Class serviceClass)
 	{
-	
+		String className=getFirstLower(classClass.getName());
 		JCodeModel	codeModel = new JCodeModel();
 		JDefinedClass myClass= null;
 		String response="ResponseEntity.ok()";
@@ -388,32 +405,62 @@ public class Generator {
 		HTMLCodeGenerator codeGenerator = new HTMLCodeGenerator();
 	}
 	
+	
+	public static void generateRESTClasses(Class modelClass,List<Class> dependencyClass)
+	{
+		String searchMethod="";
+		try {
+			if (ReflectionManager.hasList(modelClass.newInstance()))
+			{
+				dependencyClass.add(modelClass);
+				return;
+			}
+		} catch (InstantiationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IllegalAccessException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		Generator.generateServiceInterface(modelClass);
+		List<Field> fieldList=null;
+		try {
+			fieldList = ReflectionManager.generateField(modelClass.newInstance());
+			searchMethod=Generator.generateRepository(Order.class, fieldList);
+			//String searchMethod="findByOrderIdAndNameAndTimeslotDateAndPersonAndPlace";
+			//System.out.println(searchMethod);
+			Class repositoryClass=Class.forName(modelClass.getName().replace(".model.", ".repository.")+"Repository");
+			Class serviceClass=Class.forName(modelClass.getName().replace(".model.", ".service.")+"Service");
+			Generator.generateServiceImpl( modelClass, fieldList,serviceClass,repositoryClass,searchMethod);
+			Generator.generateController(modelClass, serviceClass);
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		JCodeModel	codeModel = new JCodeModel();
-		JClass placeListClass = codeModel.ref(List.class).narrow(Place.class);
-		JClass personClass= codeModel.ref(Person.class);
-		
 
-		System.out.println(personClass.fullName()+"-"+personClass.name());
-		
-		System.out.println(placeListClass.fullName()+"-"+placeListClass.name());
-		List<Field> fields = new ArrayList<Field>();
-		
-		fields.add(new Field("orderId",Long.class,null));
-		fields.add(new Field("name",String.class,null));
-		fields.add(new Field("timeslotDate",Date.class,null));
-		fields.add(new Field("person",Person.class,personClass));
-		fields.add(new Field("placeList",Place.class,placeListClass));
-		String nameEntity="Order";
+		Reflections reflections = new Reflections("it.polimi.model");
+		Set<Class<?>> allClasses = reflections.getTypesAnnotatedWith(Entity.class);
+		List<Class> dependencyClass = new ArrayList<Class>();
 		File file = new File(""); 
 		directory = file.getAbsolutePath()+"\\src\\main\\java";
-		//Generator.generateServiceInterface(nameEntity, Place.class, Long.class);
-		String searchMethod=Generator.generateRepository(nameEntity, Order.class, fields);
-		//String searchMethod="findByPlaceIdAndDescriptionAndOrder";
-		System.out.println(searchMethod);
-		//Generator.generateServiceImpl(nameEntity, Place.class, Long.class,fields,PlaceService.class,PlaceRepository.class,searchMethod);
-		//Generator.generateController(nameEntity, Place.class, Long.class, PlaceService.class);
+		for (Class modelClass: allClasses)
+		{
+			generateRESTClasses(modelClass, dependencyClass);
+		}
+		for (Class modelClass:dependencyClass)
+		{
+			generateRESTClasses(modelClass, dependencyClass);
+		}
+		
 	}
 
 }

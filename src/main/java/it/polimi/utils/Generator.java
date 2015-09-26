@@ -3,13 +3,11 @@ package it.polimi.utils;
 import it.polimi.model.Order;
 import it.polimi.model.Person;
 import it.polimi.model.Place;
-import it.polimi.repository.PersonRepository;
-import it.polimi.repository.PlaceRepository;
-import it.polimi.service.OrderService;
-import it.polimi.service.PersonService;
-import it.polimi.service.PlaceService;
 
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -140,7 +138,7 @@ public class Generator {
 		JDefinedClass myClass= null;
 		String searchMethod="";
 		try {
-			myClass = codeModel._class("it.polimi.repository."+className+"Repository", ClassType.INTERFACE);
+			myClass = codeModel._class(""+className.replace(".model.", ".repository.")+"Repository", ClassType.INTERFACE);
 			JClass extendedClass = codeModel.ref(CrudRepository.class).narrow(classClass,Long.class);
 			myClass._extends(extendedClass);
 			myClass.annotate(Repository.class);
@@ -178,24 +176,24 @@ public class Generator {
 	}
 	
 	public static void generateServiceInterface(Class classClass)
-	{
-		String className=getFirstLower(classClass.getName());
+	{String className=Generator.getFirstLower(classClass.getName());
 		JCodeModel	codeModel = new JCodeModel();
 		JDefinedClass myClass= null;
 		try {
-			myClass = codeModel._class("it.polimi.service."+className+"Service", ClassType.INTERFACE);
+			myClass = codeModel._class(""+className.replace(".model.", ".service.")+"Service", ClassType.INTERFACE);
+			className=ReflectionManager.parseName(classClass.getName());
 			JClass listClass = codeModel.ref(List.class).narrow(classClass);
 			JMethod findById = myClass.method(JMod.PUBLIC, listClass, "findById");
 			String lowerClass= className.replaceFirst(className.substring(0, 1), className.substring(0, 1).toLowerCase());
-			findById.param(keyClass,lowerClass+"Id");
+			findById.param(keyClass,className+"Id");
 			JMethod findLike=myClass.method(JMod.PUBLIC, listClass, "find");
-			findLike.param(classClass, lowerClass);
+			findLike.param(classClass, className);
 			JMethod deleteById = myClass.method(JMod.PUBLIC, void.class, "deleteById");
-			deleteById.param(keyClass, lowerClass+"Id");
+			deleteById.param(keyClass, className+"Id");
 			JMethod insert= myClass.method(JMod.PUBLIC, classClass, "insert");
-			insert.param(classClass, lowerClass);
+			insert.param(classClass, className);
 			JMethod update= myClass.method(JMod.PUBLIC, classClass, "update");
-			update.param(classClass, lowerClass);
+			update.param(classClass, className);
 		} catch (JClassAlreadyExistsException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -211,11 +209,13 @@ public class Generator {
 	
 	public static void generateServiceImpl(Class classClass,List<Field> fields,Class interfaceClass,Class repositoryClass,String searchMethod)
 	{
-		String className=getFirstLower(classClass.getName());
+		String className=Generator.getFirstLower(classClass.getName());
 		JCodeModel	codeModel = new JCodeModel();
 		JDefinedClass myClass= null;
 		try {
-			myClass = codeModel._class("it.polimi.service."+className+"ServiceImpl", ClassType.CLASS);
+			myClass = codeModel._class(""+className.replace(".model.", ".service.")+"ServiceImpl", ClassType.CLASS);
+			className=ReflectionManager.parseName(classClass.getName());
+			className=ReflectionManager.parseName(classClass.getName());
 			myClass._implements(interfaceClass);
 			myClass.annotate(Service.class);
 			JClass listClass = codeModel.ref(List.class).narrow(classClass);
@@ -236,7 +236,7 @@ public class Generator {
 			findById.annotate(Override.class);
 			findById.param(keyClass,lowerClass+"Id");
 			JBlock findByIdBlock= findById.body();
-			findByIdBlock.directStatement("return "+lowerClass+"Repository.findBy"+className+"Id("+lowerClass+"Id);");
+			findByIdBlock.directStatement("return "+lowerClass+"Repository.findBy"+Generator.getFirstUpper(className)+"Id("+lowerClass+"Id);");
 			//findByIdBlock._return(findByIdExpression);
 			
 			//search
@@ -275,7 +275,7 @@ public class Generator {
 		}
 		return returnedOrder;
 			 */
-			updateBlock.directStatement(className+" returned"+className+"="+lowerClass+"Repository.save("+lowerClass+");");
+			updateBlock.directStatement(Generator.getFirstUpper(className)+" returned"+className+"="+lowerClass+"Repository.save("+lowerClass+");");
 			for (Field field: fields)
 			{
 				if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List"))
@@ -283,7 +283,7 @@ public class Generator {
 					updateBlock.directStatement("if ("+lowerClass+".getPlaceList()!=null)");
 					updateBlock.directStatement("for ("+getFirstUpper(field.getName())+" "+field.getName()+": "+lowerClass+".get"+getFirstUpper(field.getName())+"List())");
 					updateBlock.directStatement("{");
-					updateBlock.directStatement(field.getName()+".set"+className+"("+lowerClass+");");
+					updateBlock.directStatement(field.getName()+".set"+Generator.getFirstUpper(className)+"("+lowerClass+");");
 					updateBlock.directStatement(field.getName()+"Repository.save("+field.getName()+");");
 					updateBlock.directStatement("}");
 					/**/
@@ -305,13 +305,14 @@ public class Generator {
 
 	public static void generateController(Class classClass,Class serviceClass)
 	{
-		String className=getFirstLower(classClass.getName());
+		String className=Generator.getFirstLower(classClass.getName());
 		JCodeModel	codeModel = new JCodeModel();
 		JDefinedClass myClass= null;
 		String response="ResponseEntity.ok()";
 		
 		try {
-			myClass = codeModel._class("it.polimi.controller."+className+"Controller", ClassType.CLASS);
+			myClass = codeModel._class(""+className.replace(".model.", ".controller.")+"Controller", ClassType.CLASS);
+			className=ReflectionManager.parseName(classClass.getName());
 			JClass listClass = codeModel.ref(List.class).narrow(classClass);
 			String lowerClass= className.replaceFirst(className.substring(0, 1), className.substring(0, 1).toLowerCase());
 			myClass.annotate(Controller.class);
@@ -337,8 +338,8 @@ public class Generator {
 			JVar orderParam= search.param(classClass,lowerClass);
 			orderParam.annotate(RequestBody.class);
 			JBlock searchBlock= search.body();
-			searchBlock.directStatement("List<"+className+"> "+lowerClass+"List="+lowerClass+"Service.find("+lowerClass+");");
-			searchBlock.directStatement("return "+response+".body("+lowerClass+"List));");
+			searchBlock.directStatement("List<"+Generator.getFirstUpper(className)+"> "+lowerClass+"List="+lowerClass+"Service.find("+lowerClass+");");
+			searchBlock.directStatement("return "+response+".body("+lowerClass+"List);");
 			//findByIdBlock._return(findByIdExpression);
 			
 			//getOrderById  
@@ -374,7 +375,7 @@ public class Generator {
 			orderParam.annotate(RequestBody.class);
 			JBlock insertBlock= insert.body();
 			
-			insertBlock.directStatement(className+" inserted"+className+"="+lowerClass+"Service.insert("+lowerClass+");");
+			insertBlock.directStatement(Generator.getFirstUpper(className)+" inserted"+className+"="+lowerClass+"Service.insert("+lowerClass+");");
 			insertBlock.directStatement("return "+response+".body(inserted"+className+");");
 			//UpdateOrder
 			JMethod update = myClass.method(JMod.PUBLIC, ResponseEntity.class, "update"+className+"");
@@ -384,7 +385,7 @@ public class Generator {
 			orderParam= update.param(classClass,lowerClass+"");
 			orderParam.annotate(RequestBody.class);
 			JBlock updateBlock= update.body();
-			updateBlock.directStatement(className+" updated"+className+"="+lowerClass+"Service.update("+lowerClass+");");
+			updateBlock.directStatement(Generator.getFirstUpper(className)+" updated"+className+"="+lowerClass+"Service.update("+lowerClass+");");
 			updateBlock.directStatement("return "+response+".body(updated"+className+");");
 			
 			
@@ -408,12 +409,14 @@ public class Generator {
 	}
 	
 	
-	public static void generateRESTClasses(Class modelClass,List<Class> dependencyClass)
+	public static void generateRESTClasses(Class modelClass,List<Class> dependencyClass, Boolean jumpDependency)
 	{
+		System.out.println("working for "+modelClass.getName());
 		String searchMethod="";
 		try {
-			if (ReflectionManager.hasList(modelClass.newInstance()))
+			if (jumpDependency && ReflectionManager.hasList(modelClass.newInstance()))
 			{
+				System.out.println(modelClass.getName()+" has list. pass away.");
 				dependencyClass.add(modelClass);
 				return;
 			}
@@ -428,11 +431,46 @@ public class Generator {
 		List<Field> fieldList=null;
 		try {
 			fieldList = ReflectionManager.generateField(modelClass.newInstance());
-			searchMethod=Generator.generateRepository(Order.class, fieldList);
+			searchMethod=Generator.generateRepository(modelClass, fieldList);
 			//String searchMethod="findByOrderIdAndNameAndTimeslotDateAndPersonAndPlace";
 			//System.out.println(searchMethod);
-			Class repositoryClass=Class.forName(modelClass.getName().replace(".model.", ".repository.")+"Repository");
-			Class serviceClass=Class.forName(modelClass.getName().replace(".model.", ".service.")+"Service");
+			//Class repositoryClass=Class.forName(modelClass.getName().replace(".model.", ".repository.")+"Repository");
+			String filePath=modelClass.getName().replace(".model.", ".repository.");
+			filePath=filePath.replace(".", "\\");
+			File fileRepository = new File(directory+"\\"+filePath+"Repository.java");
+			File fileService = new File(directory+"\\"+filePath.replace("repository", "service")+"Service.java");
+			File testFile= new File(directory+"\\"+"it\\polimi\\utils\\Field.java");
+			Class repositoryClass=null;
+			Class serviceClass=null;
+			if (fileRepository.exists())
+			{
+				System.out.println("esiste!");
+				URLClassLoader classLoader=null;
+				URL urlRepository=null;
+				try {
+					urlRepository=fileRepository.toURL();
+				} catch (MalformedURLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				try {
+					classLoader= URLClassLoader.newInstance(new URL[] {fileRepository.toURL(),testFile.toURL()});
+				} catch (MalformedURLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				Class test=classLoader.loadClass("it.polimi.utils.Field");
+
+				repositoryClass=Class.forName(modelClass.getName().replace(".model.", ".repository.")+"Repository", true, classLoader);
+				serviceClass=Class.forName(modelClass.getName().replace(".model.", ".service.")+"Service", true, classLoader);
+				
+			}
+			else
+				System.out.println(fileRepository.getAbsolutePath()+" does not exists!");
+			//repositoryClass=ClassLoader.getSystemClassLoader().loadClass(modelClass.getName().replace(".model.", ".repository.")+"Repository");
+			
+			//Class serviceClass=Class.forName(modelClass.getName().replace(".model.", ".service.")+"Service");
 			Generator.generateServiceImpl( modelClass, fieldList,serviceClass,repositoryClass,searchMethod);
 			Generator.generateController(modelClass, serviceClass);
 		} catch (InstantiationException e) {
@@ -456,11 +494,11 @@ public class Generator {
 		directory = file.getAbsolutePath()+"\\src\\main\\java";
 		for (Class modelClass: allClasses)
 		{
-			generateRESTClasses(modelClass, dependencyClass);
+			generateRESTClasses(modelClass, dependencyClass,true);
 		}
 		for (Class modelClass:dependencyClass)
 		{
-			generateRESTClasses(modelClass, dependencyClass);
+			generateRESTClasses(modelClass, dependencyClass,false);
 		}
 		
 	}

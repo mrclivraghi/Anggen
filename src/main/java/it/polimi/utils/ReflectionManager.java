@@ -24,6 +24,16 @@ public class ReflectionManager {
 		return false;
 	}
 	
+	
+	public static String parseName(String fieldName)
+	{// it.polimi.model.Person
+		while (fieldName.indexOf(".")>-1)
+			fieldName=fieldName.substring(fieldName.indexOf(".")+1,fieldName.length());
+		if (fieldName.indexOf("List")==fieldName.length()-4)
+			fieldName=fieldName.substring(0,fieldName.length()-4);
+		return Generator.getFirstLower(fieldName);
+		
+	}
 	public static List<Field> generateField(Object obj)
 	{
 		java.lang.reflect.Field[] fields=obj.getClass().getDeclaredFields();
@@ -61,7 +71,7 @@ public class ReflectionManager {
 					fieldClass=field.getType();
 				}
 			}
-			Field myField= new Field(field.getName(), fieldClass, jClass, repositoryClass);
+			Field myField= new Field(parseName(field.getName()), fieldClass, jClass, repositoryClass);
 			fieldList.add(myField);
 		}
 		return fieldList;

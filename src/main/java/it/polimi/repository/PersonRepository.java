@@ -14,15 +14,15 @@ public interface PersonRepository
 {
 
 
-    public Person findByPersonId(Long personId);
+    public List<Person> findByPersonId(Long personId);
 
-    public Person findByFirstName(String firstName);
+    public List<Person> findByFirstName(String firstName);
 
-    public Person findByLastName(String lastName);
+    public List<Person> findByLastName(String lastName);
 
-    public Person findByBirthDate(String birthDate);
+    public List<Person> findByBirthDate(String birthDate);
 
-    @Query("select p from Person p where  (:personId is null or cast(:personId as string)=cast(p.personId as string)) and (:firstName is null or :firstName='' or cast(:firstName as string)=p.firstName) and (:lastName is null or :lastName='' or cast(:lastName as string)=p.lastName) and (:birthDate is null or cast(:birthDate as string)=cast(p.birthDate as string)) ")
+    @Query("select i from it.polimi.model.Person i where  (:personId is null or cast(:personId as string)=cast(i.personId as string)) and (:firstName is null or :firstName='' or cast(:firstName as string)=i.firstName) and (:lastName is null or :lastName='' or cast(:lastName as string)=i.lastName) and (:birthDate is null or cast(:birthDate as string)=cast(i.birthDate as string)) ")
     public List<Person> findByPersonIdAndFirstNameAndLastNameAndBirthDate(
         @Param("personId")
         Long personId,

@@ -15,17 +15,17 @@ public interface PlaceRepository
 {
 
 
-    public Place findByPlaceId(Long placeId);
+    public List<Place> findByPlaceId(Long placeId);
 
-    public Place findByDescription(String description);
+    public List<Place> findByDescription(String description);
 
-    public Place findByOrder(Order order);
-
-    @Query("select p from Place p where  (:placeId is null or cast(:placeId as string)=cast(p.placeId as string)) and (:description is null or :description='' or cast(:description as string)=p.description)") 
-    public List<Place> findByPlaceIdAndDescription(
+    @Query("select i from it.polimi.model.Place i where  (:placeId is null or cast(:placeId as string)=cast(i.placeId as string)) and (:description is null or :description='' or cast(:description as string)=i.description) and (:order=i.order or :order is null) ")
+    public List<Place> findByPlaceIdAndDescriptionAndOrder(
         @Param("placeId")
         Long placeId,
         @Param("description")
-        String description);
+        String description,
+        @Param("order")
+        Order order);
 
 }

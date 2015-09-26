@@ -7,7 +7,7 @@ import it.polimi.model.Place;
 public interface PlaceService {
 
 
-    public Place findById(Long placeId);
+    public List<Place> findById(Long placeId);
 
     public List<Place> find(Place place);
 

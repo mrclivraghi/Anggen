@@ -7,7 +7,7 @@ import it.polimi.model.Person;
 public interface PersonService {
 
 
-    public Person findById(Long personId);
+    public List<Person> findById(Long personId);
 
     public List<Person> find(Person person);
 

@@ -6,6 +6,7 @@ import it.polimi.model.Place;
 import it.polimi.repository.PlaceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class PlaceServiceImpl
@@ -16,13 +17,13 @@ public class PlaceServiceImpl
     public PlaceRepository placeRepository;
 
     @Override
-    public Place findById(Long placeId) {
+    public List<Place> findById(Long placeId) {
         return placeRepository.findByPlaceId(placeId);
     }
 
     @Override
     public List<Place> find(Place place) {
-        return placeRepository.findByPlaceIdAndDescription(place.getPlaceId(),place.getDescription());
+        return placeRepository.findByPlaceIdAndDescriptionAndOrder(place.getPlaceId(),place.getDescription(),place.getOrder());
     }
 
     @Override
@@ -37,8 +38,10 @@ public class PlaceServiceImpl
     }
 
     @Override
+    @Transactional
     public Place update(Place place) {
-        return placeRepository.save(place);
+        Place returnedplace=placeRepository.save(place);
+        return returnedplace;
     }
 
 }

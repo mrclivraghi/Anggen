@@ -2,13 +2,11 @@
 package it.polimi.service;
 
 import java.util.List;
-
 import it.polimi.model.Person;
 import it.polimi.repository.PersonRepository;
-import it.polimi.utils.Utility;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class PersonServiceImpl
@@ -19,13 +17,13 @@ public class PersonServiceImpl
     public PersonRepository personRepository;
 
     @Override
-    public Person findById(Long personId) {
+    public List<Person> findById(Long personId) {
         return personRepository.findByPersonId(personId);
     }
 
     @Override
     public List<Person> find(Person person) {
-        return personRepository.findByPersonIdAndFirstNameAndLastNameAndBirthDate(person.getPersonId(),person.getFirstName(),person.getLastName(),Utility.formatDate(person.getBirthDate()));
+        return personRepository.findByPersonIdAndFirstNameAndLastNameAndBirthDate(person.getPersonId(),person.getFirstName(),person.getLastName(),it.polimi.utils.Utility.formatDate(person.getBirthDate()));
     }
 
     @Override
@@ -40,8 +38,10 @@ public class PersonServiceImpl
     }
 
     @Override
+    @Transactional
     public Person update(Person person) {
-        return personRepository.save(person);
+        Person returnedperson=personRepository.save(person);
+        return returnedperson;
     }
 
 }

@@ -16,21 +16,14 @@ public interface OrderRepository
 {
 
 
-    public Order findByOrderId(Long orderId);
+    public List<Order> findByOrderId(Long orderId);
 
-    public Order findByName(String name);
+    public List<Order> findByName(String name);
 
-    public Order findByTimeslotDate(String timeslotDate);
+    public List<Order> findByTimeslotDate(String timeslotDate);
 
-    public Order findByPerson(Person person);
-
-    public Order findByPlaceList(Place placeList);
-
-    @Query("select o from Order o where  (:orderId is null or cast(:orderId as string)=cast(o.orderId as string)) "
-    		+ "and (:name is null or :name='' or cast(:name as string)=o.name) and "
-    		+ "(:timeslotDate is null or cast(:timeslotDate as string)=cast(o.timeslotDate as string)) "
-    		+ "and (:person is null :person=o.person) and (:placeList is null or :placeList in elements(o.placeList)) ")
-    public List<Order> findByOrderIdAndNameAndTimeslotDateAndPersonAndPlaceList(
+    @Query("select i from it.polimi.model.Order i where  (:orderId is null or cast(:orderId as string)=cast(i.orderId as string)) and (:name is null or :name='' or cast(:name as string)=i.name) and (:timeslotDate is null or cast(:timeslotDate as string)=cast(i.timeslotDate as string)) and (:person=i.person or :person is null) and (:place in elements(i.placeList)  or :place is null) ")
+    public List<Order> findByOrderIdAndNameAndTimeslotDateAndPersonAndPlace(
         @Param("orderId")
         Long orderId,
         @Param("name")
@@ -39,7 +32,7 @@ public interface OrderRepository
         String timeslotDate,
         @Param("person")
         Person person,
-        @Param("placeList")
-        Place placeList);
+        @Param("place")
+        Place place);
 
 }

@@ -1,6 +1,7 @@
 
 package it.polimi.controller;
 
+import java.util.List;
 import it.polimi.model.Person;
 import it.polimi.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,12 +30,14 @@ public class PersonController {
     public ResponseEntity search(
         @RequestBody
         Person person) {
-        return ResponseEntity.ok().body(personService.find(person));
+        List<Person> personList;
+        personList=personService.find(person);
+        return ResponseEntity.ok().body(personList);
     }
 
     @ResponseBody
     @RequestMapping(value = "/{personId}", method = RequestMethod.GET)
-    public ResponseEntity getPersonById(
+    public ResponseEntity getpersonById(
         @PathVariable
         String personId) {
         return ResponseEntity.ok().body(personService.findById(Long.valueOf(personId)));
@@ -42,7 +45,7 @@ public class PersonController {
 
     @ResponseBody
     @RequestMapping(value = "/{personId}", method = RequestMethod.DELETE)
-    public ResponseEntity deletePersonById(
+    public ResponseEntity deletepersonById(
         @PathVariable
         String personId) {
         personService.deleteById(Long.valueOf(personId));
@@ -51,20 +54,20 @@ public class PersonController {
 
     @ResponseBody
     @RequestMapping(method = RequestMethod.PUT)
-    public ResponseEntity insertPerson(
+    public ResponseEntity insertperson(
         @RequestBody
         Person person) {
-        Person insertedEntity=personService.insert(person);
-        return ResponseEntity.ok().body(insertedEntity);
+        Person insertedperson=personService.insert(person);
+        return ResponseEntity.ok().body(insertedperson);
     }
 
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity updatePerson(
+    public ResponseEntity updateperson(
         @RequestBody
         Person person) {
-        Person updatedEntity=personService.update(person);
-        return ResponseEntity.ok().body(updatedEntity);
+        Person updatedperson=personService.update(person);
+        return ResponseEntity.ok().body(updatedperson);
     }
 
 }

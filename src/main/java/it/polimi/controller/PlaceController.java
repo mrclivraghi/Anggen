@@ -1,6 +1,7 @@
 
 package it.polimi.controller;
 
+import java.util.List;
 import it.polimi.model.Place;
 import it.polimi.service.PlaceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,12 +30,14 @@ public class PlaceController {
     public ResponseEntity search(
         @RequestBody
         Place place) {
-         return ResponseEntity.ok().body(placeService.find(place));
+        List<Place> placeList;
+        placeList=placeService.find(place);
+        return ResponseEntity.ok().body(placeList);
     }
 
     @ResponseBody
     @RequestMapping(value = "/{placeId}", method = RequestMethod.GET)
-    public ResponseEntity getPlaceById(
+    public ResponseEntity getplaceById(
         @PathVariable
         String placeId) {
         return ResponseEntity.ok().body(placeService.findById(Long.valueOf(placeId)));
@@ -42,7 +45,7 @@ public class PlaceController {
 
     @ResponseBody
     @RequestMapping(value = "/{placeId}", method = RequestMethod.DELETE)
-    public ResponseEntity deletePlaceById(
+    public ResponseEntity deleteplaceById(
         @PathVariable
         String placeId) {
         placeService.deleteById(Long.valueOf(placeId));
@@ -51,20 +54,20 @@ public class PlaceController {
 
     @ResponseBody
     @RequestMapping(method = RequestMethod.PUT)
-    public ResponseEntity insertPlace(
+    public ResponseEntity insertplace(
         @RequestBody
         Place place) {
-        Place insertedEntity=placeService.insert(place);
-        return ResponseEntity.ok().body(insertedEntity);
+        Place insertedplace=placeService.insert(place);
+        return ResponseEntity.ok().body(insertedplace);
     }
 
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity updatePlace(
+    public ResponseEntity updateplace(
         @RequestBody
         Place place) {
-        Place updatedEntity=placeService.update(place);
-        return ResponseEntity.ok().body(updatedEntity);
+        Place updatedplace=placeService.update(place);
+        return ResponseEntity.ok().body(updatedplace);
     }
 
 }

@@ -337,10 +337,11 @@ public class Generator {
 			JVar orderParam= search.param(classClass,lowerClass);
 			orderParam.annotate(RequestBody.class);
 			JBlock searchBlock= search.body();
-			searchBlock.directStatement("return "+response+".body("+lowerClass+"Service.find("+lowerClass+"));");
+			searchBlock.directStatement("List<"+className+"> "+lowerClass+"List="+lowerClass+"Service.find("+lowerClass+");");
+			searchBlock.directStatement("return "+response+".body("+lowerClass+"List));");
 			//findByIdBlock._return(findByIdExpression);
 			
-			//getOrderById  -- TODO
+			//getOrderById  
 			JMethod getById=myClass.method(JMod.PUBLIC, ResponseEntity.class, "get"+className+"ById");
 			getById.annotate(ResponseBody.class);
 			JAnnotationUse requestMappingGetById = getById.annotate(RequestMapping.class);
@@ -372,8 +373,9 @@ public class Generator {
 			orderParam= insert.param(classClass,lowerClass+"");
 			orderParam.annotate(RequestBody.class);
 			JBlock insertBlock= insert.body();
-			insertBlock.directStatement(className+" insertedEntity="+lowerClass+"Service.insert("+lowerClass+");");
-			insertBlock.directStatement("return "+response+".body(insertedEntity);");
+			
+			insertBlock.directStatement(className+" inserted"+className+"="+lowerClass+"Service.insert("+lowerClass+");");
+			insertBlock.directStatement("return "+response+".body(inserted"+className+");");
 			//UpdateOrder
 			JMethod update = myClass.method(JMod.PUBLIC, ResponseEntity.class, "update"+className+"");
 			update.annotate(ResponseBody.class);
@@ -382,8 +384,8 @@ public class Generator {
 			orderParam= update.param(classClass,lowerClass+"");
 			orderParam.annotate(RequestBody.class);
 			JBlock updateBlock= update.body();
-			updateBlock.directStatement(className+" updatedEntity="+lowerClass+"Service.update("+lowerClass+");");
-			updateBlock.directStatement("return "+response+".body(updatedEntity);");
+			updateBlock.directStatement(className+" updated"+className+"="+lowerClass+"Service.update("+lowerClass+");");
+			updateBlock.directStatement("return "+response+".body(updated"+className+");");
 			
 			
 			

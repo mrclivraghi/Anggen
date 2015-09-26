@@ -92,6 +92,7 @@ public class JsGenerator {
 	
 	private void changeChildrenVisibility(StringBuilder stringBuilder,Boolean show)
 	{
+		if (childrenList!=null && childrenList.size()>0)
 		for (Field field: childrenList)
 		{
 			stringBuilder.append(field.getName()+"Service.selectedEntity.show="+show.toString()+";");
@@ -210,9 +211,7 @@ public class JsGenerator {
 		sb.append("{\n");
 		if (isParent)
 		{
-			sb.append("placeService.selectedEntity.show=false;\n");
-			sb.append("personService.selectedEntity.show=false;\n");
-
+			changeChildrenVisibility(sb, false);
 			sb.append("$http.post(\"../"+entityName+"/\","+entityName+"Service.selectedEntity)\n");
 			sb.append(".success( function(data) {\n");
 			sb.append("$scope.search();\n");

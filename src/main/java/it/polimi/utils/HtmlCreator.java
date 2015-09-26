@@ -55,7 +55,7 @@ public class HtmlCreator {
 	private String buildJS()
 	{
 		StringBuilder buildJS= new StringBuilder();
-		buildJS.append("angular.module(\"orderApp\",[])\n");
+		buildJS.append("angular.module(\""+entityName+"App\",[])\n");
 		List<JsGenerator> jsGeneratorList= new ArrayList<JsGenerator>();
 		jsGeneratorList.add(new JsGenerator(entityName, true,childrenField,null,null));
 		buildJS.append(jsGeneratorList.get(0).generateService());
@@ -118,7 +118,7 @@ public class HtmlCreator {
 		try {
 			System.out.println("Written "+myJsp.getAbsolutePath());
 			writer = new PrintWriter(myJsp, "UTF-8");
-			writer.write(html.toString());
+			writer.write(html.toHtml());
 			writer.close();
 		} catch (FileNotFoundException | UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block

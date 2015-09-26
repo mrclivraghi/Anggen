@@ -119,7 +119,7 @@ public class Generator {
 		{
 			if (field.getFieldClass()==Date.class)
 			{
-				string=string+"Utility.formatDate("+getFirstLower(className)+".get"+getFirstUpper(field.getName())+"()),";
+				string=string+"it.polimi.utils.Utility.formatDate("+getFirstLower(className)+".get"+getFirstUpper(field.getName())+"()),";
 			}else
 			{
 				if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List"))
@@ -281,6 +281,9 @@ public class Generator {
 				if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List"))
 				{
 					updateBlock.directStatement("if ("+lowerClass+".getPlaceList()!=null)");
+					
+					//TODO TRY _for!!!
+					
 					updateBlock.directStatement("for ("+getFirstUpper(field.getName())+" "+field.getName()+": "+lowerClass+".get"+getFirstUpper(field.getName())+"List())");
 					updateBlock.directStatement("{");
 					updateBlock.directStatement(field.getName()+".set"+Generator.getFirstUpper(className)+"("+lowerClass+");");
@@ -338,7 +341,9 @@ public class Generator {
 			JVar orderParam= search.param(classClass,lowerClass);
 			orderParam.annotate(RequestBody.class);
 			JBlock searchBlock= search.body();
-			searchBlock.directStatement("List<"+Generator.getFirstUpper(className)+"> "+lowerClass+"List="+lowerClass+"Service.find("+lowerClass+");");
+			JVar entityList= searchBlock.decl(listClass, lowerClass+"List");
+			//searchBlock.de
+			searchBlock.directStatement(""+lowerClass+"List="+lowerClass+"Service.find("+lowerClass+");");
 			searchBlock.directStatement("return "+response+".body("+lowerClass+"List);");
 			//findByIdBlock._return(findByIdExpression);
 			

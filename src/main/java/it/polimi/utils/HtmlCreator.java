@@ -1,6 +1,7 @@
 package it.polimi.utils;
 
-import it.polimi.utils.Generator.Field;
+
+import it.polimi.model.Order;
 
 import java.io.IOException;
 import java.io.ObjectInputStream.GetField;
@@ -15,48 +16,25 @@ import org.rendersnake.StringResource;
 
 public class HtmlCreator {
 
-	public static void renderItem(HtmlCanvas html,String entityName,List<Field> fields)
+	public static HtmlCreator htmlCreator;
+	
+	private List<Field> fieldList;
+	
+	private List<Field> childrenField;
+	
+	private String entityName;
+	
+	public static HtmlCreator getInstance()
 	{
-		StringBuilder itemContent= new StringBuilder();
-		itemContent.append("{{$index}} \n");
-		for (Field field : fields)
-		{
-			itemContent.append("{{"+Generator.getFirstLower(entityName)+"."+Generator.getFirstLower(field.getName())+"");
-			if (field.getFieldClass()==Date.class)
-			{ // set filter for each class type
-				itemContent.append(" | date: 'dd-MM-yyyy'");
-			}
-			itemContent.append("}}\n");
-		}
-		try {
-			html.content(itemContent.toString());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		if (htmlCreator==null)
+			htmlCreator= new HtmlCreator();
+		return htmlCreator;
 	}
-
-	public static void renderForm(HtmlCanvas html,String entityName,List<Field> fields)
-	{ // TODO mgmt readonly on p key
-		for (Field field: fields)
-		{
-			try {
-				String type= field.getFieldClass()==Date.class ? "date" : "text";
-				String fieldForm=Generator.getFirstLower(entityName)+"Form."+Generator.getFirstLower(field.getName());
-				html.p()
-					.content(field.getName())
-					.input((new HtmlAttributes()).add("type", type).add("ng-model", fieldForm));
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
-
-	public static String setTempEntityForm(String entityName,List<Field> fields)
+	
+	private String setTempEntityForm()
 	{
 		StringBuilder sb = new StringBuilder();
-		for (Field field: fields)
+		for (Field field: fieldList)
 		{
 			sb.append("temp"+Generator.getFirstUpper(entityName)+"."+Generator.getFirstLower(field.getName())+"=data[i]."+Generator.getFirstLower(field.getName())+";\n");
 		}
@@ -64,140 +42,65 @@ public class HtmlCreator {
 		return sb.toString();
 	}
 	
-	public static String resetEntityForm(String entityName,List<Field> fields)
+	private String buildJS()
 	{
-		StringBuilder sb = new StringBuilder();
-		for (Field field: fields)
+		StringBuilder buildJS= new StringBuilder();
+		buildJS.append("angular.module(\"orderApp\",[])\n");
+		List<JsGenerator> jsGeneratorList= new ArrayList<JsGenerator>();
+		jsGeneratorList.add(new JsGenerator(entityName, true,childrenField,null,null));
+		buildJS.append(jsGeneratorList.get(0).generateService());
+		for (Field field: childrenField)
 		{
-			sb.append("this."+Generator.getFirstLower(entityName)+"Form."+Generator.getFirstLower(field.getName())+"= ("+Generator.getFirstLower(entityName)+"==null || "+Generator.getFirstLower(entityName)+"== undefined )? \"\" : "+Generator.getFirstLower(entityName)+"."+Generator.getFirstLower(field.getName())+";\n");
+			jsGeneratorList.add(new JsGenerator(field.getName(), false,null,field.getCompositeClass(),entityName));
+			buildJS.append(jsGeneratorList.get(jsGeneratorList.size()-1).generateService());
 		}
-		
-		return sb.toString();
+		for (JsGenerator jsGenerator: jsGeneratorList)
+		{
+			buildJS.append(jsGenerator.generateController());
+		}
+		buildJS.append(";");
+		return buildJS.toString();
 	}
 	
-	
-	public static String refreshEntityForm(String entityName,List<Field> fields)
+	private void generateJSP(Class entityClass)
 	{
-		StringBuilder sb = new StringBuilder();
-		for (Field field: fields)
-		{
-			if (field.getFieldClass()==Date.class)
+		entityName=ReflectionManager.parseName(entityClass.getName());
+		childrenField= new ArrayList<Field>();
+		try {
+			fieldList=ReflectionManager.generateField(entityClass.newInstance());
+			if (fieldList==null) return;
+			for (Field field: fieldList)
 			{
-				sb.append("date= new Date("+Generator.getFirstLower(entityName)+"Service."+Generator.getFirstLower(entityName)+"List[index]."+Generator.getFirstLower(field.getName())+");\n");
-				sb.append(""+Generator.getFirstLower(entityName)+"Service."+Generator.getFirstLower(entityName)+"List[index]."+Generator.getFirstLower(field.getName())+"= new Date(date.getFullYear(),date.getMonth(),date.getDate());\n");
+				if (field.getCompositeClass()!=null)
+					childrenField.add(field);
 			}
+		} catch (InstantiationException | IllegalAccessException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
-		sb.append(""+Generator.getFirstLower(entityName)+"Service.resetForm("+Generator.getFirstLower(entityName)+"Service."+Generator.getFirstLower(entityName)+"List[index]);\n");
-		return sb.toString();
-	}
-	
-	public static String generateJS(String entityName, List<Field> fields)
-	{
-		StringBuilder sb = new StringBuilder();
-		//service
-		sb.append("\nangular.module(\""+Generator.getFirstLower(entityName)+"App\",[])\n")
-		.append(".service(\""+Generator.getFirstLower(entityName)+"Service\", function(){\n")
-		.append("this."+Generator.getFirstLower(entityName)+"List=[];\n")
-		.append("this."+Generator.getFirstLower(entityName)+"Form= new Object();\n")
-		.append("this.set"+Generator.getFirstUpper(entityName)+"List= function(data) {\n")
-		.append("while (this."+Generator.getFirstLower(entityName)+"List.length>0)\n")
-		.append("this."+Generator.getFirstLower(entityName)+"List.pop();\n")
-		.append("for (i=0; i<data.length; i++)\n")
-		.append("{\n")
-		.append("var temp"+Generator.getFirstUpper(entityName)+"= new Object();\n")
-		//manage fields
-		.append(setTempEntityForm(entityName, fields))
-		.append("this."+Generator.getFirstLower(entityName)+"List[i]=temp"+Generator.getFirstUpper(entityName)+";\n")
-		.append("}\n")
-		.append("};\n")
-		.append("this.resetForm = function ("+Generator.getFirstLower(entityName)+") {\n")
-		//manage fields
-		.append(resetEntityForm(entityName, fields))
-		.append("};\n")
-		.append("this.add"+Generator.getFirstUpper(entityName)+"= function("+Generator.getFirstLower(entityName)+") {\n")
-		.append("this."+Generator.getFirstLower(entityName)+"List.push("+Generator.getFirstLower(entityName)+");\n")
-		.append("this.resetForm("+Generator.getFirstLower(entityName)+");\n")
-		.append("};\n")
-		.append("})\n")
-		//ordercontroller
-		.append(".controller(\""+Generator.getFirstLower(entityName)+"Controller\",\n")
-		.append("function($scope,"+Generator.getFirstLower(entityName)+"Service) {\n")
-		.append("$scope."+Generator.getFirstLower(entityName)+"Form="+Generator.getFirstLower(entityName)+"Service."+Generator.getFirstLower(entityName)+"Form;\n")
-		.append("}\n")
-		.append(")\n")
-		// order retrieve controller
-		.append(".controller(\""+Generator.getFirstLower(entityName)+"RetrieveController\", function ($scope,$http,"+Generator.getFirstLower(entityName)+"Service) {\n")
-		.append("$scope.reset = function ()\n")
-		.append("{\n")
-		.append(""+Generator.getFirstLower(entityName)+"Service.resetForm();\n")
-		.append("};\n")
-		.append("$scope.search = function() {\n")
-		.append("$http.post(\"../"+Generator.getFirstLower(entityName)+"/search\","+Generator.getFirstLower(entityName)+"Service."+Generator.getFirstLower(entityName)+"Form)\n")
-		.append(".success( function(data) {\n")
-		.append(""+Generator.getFirstLower(entityName)+"Service.set"+Generator.getFirstUpper(entityName)+"List(data);\n")
-		.append("})\n")
-		.append(".error(function() { alert(\"error\");});\n")
-		.append("};\n")
-		.append("$scope.insert = function() \n")
-		.append("{\n")
-		.append("$http.put(\"../"+Generator.getFirstLower(entityName)+"/\","+Generator.getFirstLower(entityName)+"Service."+Generator.getFirstLower(entityName)+"Form)\n")
-		.append(".success( function(data) \n")
-		.append("{\n")
-		.append(""+Generator.getFirstLower(entityName)+"Service.add"+Generator.getFirstUpper(entityName)+"(data);\n")
-		.append("})\n")
-		.append(".error(function() \n")
-		.append("{ \n")
-		.append("alert(\"error\");\n")
-		.append("});\n")
-		.append("};\n")
-		.append("$scope.update = function() {\n")
-		.append("$http.post(\"../"+Generator.getFirstLower(entityName)+"/\","+Generator.getFirstLower(entityName)+"Service."+Generator.getFirstLower(entityName)+"Form)\n")
-		.append(".success( function(data) {\n")
-		.append("$scope.search();\n")
-		.append("	})\n")
-		.append(".error(function() { alert(\"error\");});\n")
-		.append("};\n")
-		.append("$scope.del = function() {\n")
-		.append("var url=\"../"+Generator.getFirstLower(entityName)+"/\"+"+Generator.getFirstLower(entityName)+"Service."+Generator.getFirstLower(entityName)+"Form."+Generator.getFirstLower(entityName)+"Id;\n")
-		.append("$http[\"delete\"](url)\n")
-		.append(".success( function(data) {\n")
-		.append(""+Generator.getFirstLower(entityName)+"Service.resetForm();\n")
-		.append("$scope.search();\n")
-		.append("})\n")
-		.append(".error(function() { alert(\"error\");});\n")
-		.append("};\n")
-		.append("})\n")
-		//order list controller
-		.append(".controller(\""+Generator.getFirstLower(entityName)+"ListController\", function($scope,"+Generator.getFirstLower(entityName)+"Service,dateFilter)\n")
-		.append("{\n")
-		.append("$scope."+Generator.getFirstLower(entityName)+"List="+Generator.getFirstLower(entityName)+"Service."+Generator.getFirstLower(entityName)+"List;\n")
-		.append("$scope.refreshForm = function (index) \n")
-		.append("{\n")
-		//manage fields
-		.append(refreshEntityForm(entityName, fields))
-		.append("};\n")
-		.append("});\n");
-		return sb.toString();
-	}
-	
-	
-	
-	public static void generateJSP(String entityName,List<Field> fields)
-	{
 		HtmlCanvas html = new HtmlCanvas();
 		HtmlAttributes htmlAttributes= new HtmlAttributes();
+		
 		try {
 			html
 					.head()
 						.title().content("test order")
 						.macros().javascript("https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js")
-						.script().content(generateJS(entityName,fields),false)
+						.script().content(buildJS(),false)
 					._head()
-					.body()
-					.div(htmlAttributes.add("ng-app", Generator.getFirstLower(entityName)+"App"))
+					.body(htmlAttributes.add("ng-app", Generator.getFirstLower(entityName)+"App"));
+					HtmlGenerator htmlGenerator= new HtmlGenerator(entityClass, true);
+					htmlGenerator.generateEntityView(html);
+					for (Field field : childrenField)
+					{
+						HtmlGenerator childrenHtmlGenerator = new HtmlGenerator(field.getFieldClass(), false);
+						childrenHtmlGenerator.generateEntityView(html);
+						//generateEntityView(html, false,field.getName());
+					}
+					html._div()._body();
 					//ordercontroller
-					.div((new HtmlAttributes()).add("ng-controller", Generator.getFirstLower(entityName)+"Controller"));
-					renderForm(html, entityName, fields);
+				/*	.div((new HtmlAttributes()).add("ng-controller", Generator.getFirstLower(entityName)+"Controller"));
+					renderForm(html);
 					html._div()
 					//orderRetrieveController
 					.div((new HtmlAttributes()).add("ng-controller", Generator.getFirstLower(entityName)+"RetrieveController"))
@@ -230,7 +133,7 @@ public class HtmlCreator {
 						.li((new HtmlAttributes()).add("ng-repeat", Generator.getFirstLower(entityName)+" in "+Generator.getFirstLower(entityName)+"List"))
 							.p((new HtmlAttributes()).add("ng-click", "refreshForm($index)"));
 					
-					renderItem(html,entityName,fields);
+					renderItem(html);
 					
 							//._p()
 						html._li()
@@ -239,7 +142,7 @@ public class HtmlCreator {
 					._div()
 					._div()
 					._body()
-					;
+					;*/
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -250,6 +153,8 @@ public class HtmlCreator {
 		
 	}
 
+	
+
 	public static void main(String[] args)
 	{
 		/*List<Field> fields = new ArrayList<Field>();
@@ -258,13 +163,8 @@ public class HtmlCreator {
 		fields.add(new Field("timeslotDate",Date.class));
 		String nameEntity="OrderTest";
 	*/	
-		List<Field> fields = new ArrayList<Field>();
-		fields.add(new Field("personId",Long.class));
-		fields.add(new Field("firstName",String.class));
-		fields.add(new Field("lastName",String.class));
-		fields.add(new Field("birthDate",Date.class));
-		String nameEntity="Person";
-		generateJSP(nameEntity,fields);
+		
+		HtmlCreator.getInstance().generateJSP(Order.class);
 		//System.out.println(StringResource.get("orderApp.js"));
 	}
 

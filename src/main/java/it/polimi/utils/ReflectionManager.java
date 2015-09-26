@@ -100,6 +100,24 @@ public class ReflectionManager {
 		return hasList;
 	}
 	
+	public static List<Class> getChildrenClasses(Class myClass)
+	{
+		List<Class> classList= new ArrayList<Class>();
+		try {
+			List<Field> fieldList= generateField(myClass.newInstance());
+			for (Field field: fieldList)
+			{
+				if (field.getCompositeClass()!=null)
+					classList.add(field.getFieldClass());
+			}
+		} catch (InstantiationException | IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return classList;
+	}
 	public static void main(String[] args)
 	{
 		List<Field> fieldList=ReflectionManager.generateField(new Order());

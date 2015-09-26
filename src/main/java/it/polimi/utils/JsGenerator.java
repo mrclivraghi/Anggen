@@ -273,7 +273,6 @@ public class JsGenerator {
 			sb.append("$scope.updateParent();\n");
 		}
 		sb.append("};");
-		//relationships JUST FOR PARENT TODO MGMT
 		if (isParent)
 		{
 			for (Field field: childrenList)

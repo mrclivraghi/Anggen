@@ -3,12 +3,20 @@ package it.polimi.utils;
 
 import it.polimi.model.Order;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream.GetField;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
+import javax.persistence.Entity;
+
+import org.reflections.Reflections;
 import org.rendersnake.HtmlAttributes;
 import org.rendersnake.HtmlCanvas;
 import org.rendersnake.Renderable;
@@ -23,6 +31,8 @@ public class HtmlCreator {
 	private List<Field> childrenField;
 	
 	private String entityName;
+
+	public static String directory;
 	
 	public static HtmlCreator getInstance()
 	{
@@ -97,59 +107,24 @@ public class HtmlCreator {
 						childrenHtmlGenerator.generateEntityView(html);
 						//generateEntityView(html, false,field.getName());
 					}
-					html._div()._body();
-					//ordercontroller
-				/*	.div((new HtmlAttributes()).add("ng-controller", Generator.getFirstLower(entityName)+"Controller"));
-					renderForm(html);
-					html._div()
-					//orderRetrieveController
-					.div((new HtmlAttributes()).add("ng-controller", Generator.getFirstLower(entityName)+"RetrieveController"))
-						.button((new HtmlAttributes()).add("ng-click", "search()"))
-						.content("search")
-					._div()
-					.div((new HtmlAttributes()).add("ng-controller", Generator.getFirstLower(entityName)+"RetrieveController"))
-						.button((new HtmlAttributes()).add("ng-click", "insert()"))
-						.content("insert")
-						//._button()
-					._div()
-					.div((new HtmlAttributes()).add("ng-controller", Generator.getFirstLower(entityName)+"RetrieveController"))
-						.button((new HtmlAttributes()).add("ng-click", "update()"))
-						.content("update")
-						//._button()
-					._div()
-					.div((new HtmlAttributes()).add("ng-controller", Generator.getFirstLower(entityName)+"RetrieveController"))
-						.button((new HtmlAttributes()).add("ng-click", "del()"))
-						.content("del")
-						//._button()
-					._div()
-					.div((new HtmlAttributes()).add("ng-controller", Generator.getFirstLower(entityName)+"RetrieveController"))
-						.button((new HtmlAttributes()).add("ng-click", "reset()"))
-						.content("reset")
-						//._button()
-					._div()
-					//orderListcontroller
-					.div((new HtmlAttributes()).add("ng-controller", Generator.getFirstLower(entityName)+"ListController"))
-					.ul()
-						.li((new HtmlAttributes()).add("ng-repeat", Generator.getFirstLower(entityName)+" in "+Generator.getFirstLower(entityName)+"List"))
-							.p((new HtmlAttributes()).add("ng-click", "refreshForm($index)"));
-					
-					renderItem(html);
-					
-							//._p()
-						html._li()
-					._ul()
-					
-					._div()
-					._div()
-					._body()
-					;*/
+					html._body();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		
-		System.out.println(html.toHtml());
+		File myJsp=new File(directory+ReflectionManager.parseName(entityClass.getName())+".jsp");
+		PrintWriter writer;
+		try {
+			System.out.println("Written "+myJsp.getAbsolutePath());
+			writer = new PrintWriter(myJsp, "UTF-8");
+			writer.write(html.toString());
+			writer.close();
+		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//System.out.println(html.toHtml());
 		
 	}
 
@@ -157,14 +132,15 @@ public class HtmlCreator {
 
 	public static void main(String[] args)
 	{
-		/*List<Field> fields = new ArrayList<Field>();
-		fields.add(new Field("orderTestId",Long.class));
-		fields.add(new Field("name",String.class));
-		fields.add(new Field("timeslotDate",Date.class));
-		String nameEntity="OrderTest";
-	*/	
-		
-		HtmlCreator.getInstance().generateJSP(Order.class);
+		Reflections reflections = new Reflections("it.polimi.model");
+		Set<Class<?>> allClasses = reflections.getTypesAnnotatedWith(Entity.class);
+		List<Class> dependencyClass = new ArrayList<Class>();
+		File file = new File(""); 
+		directory = file.getAbsolutePath()+"\\WebContent\\WEB-INF\\jsp\\";
+		for (Class modelClass: allClasses)
+		{
+			HtmlCreator.getInstance().generateJSP(modelClass);
+		}
 		//System.out.println(StringResource.get("orderApp.js"));
 	}
 

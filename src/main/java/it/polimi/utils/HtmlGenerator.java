@@ -87,8 +87,9 @@ public class HtmlGenerator {
 						html.div((new HtmlAttributes()).add("ng-if", "selectedEntity."+field.getName()+"List.length>0"))
 						.ul()
 						.li((new HtmlAttributes()).add("ng-repeat", "entity in selectedEntity."+field.getName()+"List").add("ng-click", "show"+Generator.getFirstUpper(field.getName())+"Detail($index)"));
+						//TODO mgmt field of children class....
 						html.content("{{$index}}--{{entity."+field.getName()+"Id}}--{{entity.description}}");
-						html._ul();
+						html._ul()._div();
 					}else
 					{//entity
 						html.p((new HtmlAttributes()).add("ng-click", "show"+Generator.getFirstUpper(field.getName())+"Detail()").add("ng-if", "selectedEntity."+field.getName()+"==null"))

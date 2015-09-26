@@ -276,19 +276,21 @@ public class JsGenerator {
 		//relationships JUST FOR PARENT TODO MGMT
 		if (isParent)
 		{
-			sb.append("$scope.showPersonDetail= function()");
-			sb.append("{");
-			sb.append("personService.setSelectedEntity("+entityName+"Service.selectedEntity.person);");
-			sb.append("personService.selectedEntity.show=true;");
-			sb.append("};");
-			sb.append("$scope.showPlaceDetail=function(index)");
-			sb.append("{");
-			sb.append("placeService.selectedEntity.show=true;");
-			sb.append("if (index!=null)");
-			sb.append("placeService.setSelectedEntity("+entityName+"Service.selectedEntity.placeList[index]);");
-			sb.append("}");
+			for (Field field: childrenList)
+			{
+				sb.append("$scope.show"+Generator.getFirstUpper(field.getName())+"Detail= function(index)\n");
+				sb.append("{\n");
+				sb.append("if (index!=null)\n");
+				sb.append(field.getName()+"Service.setSelectedEntity("+entityName+"Service.selectedEntity."+field.getName()+"List[index]);\n");
+				sb.append("else \n");
+				sb.append(field.getName()+"Service.setSelectedEntity("+entityName+"Service.selectedEntity."+field.getName()+"); \n");
+				sb.append(field.getName()+"Service.selectedEntity.show=true;\n");
+				sb.append("};\n");
+				
+			}
+
 		}
-		sb.append("})");
+		sb.append("})\n");
 		return sb.toString();
 	}
 	/*

@@ -31,6 +31,7 @@ import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JExpr;
 import com.sun.codemodel.JExpression;
+import com.sun.codemodel.JForEach;
 import com.sun.codemodel.JForLoop;
 import com.sun.codemodel.JMethod;
 import com.sun.codemodel.JMod;
@@ -265,37 +266,22 @@ public class Generator {
 			update.annotate(Transactional.class);
 			update.param(classClass, lowerClass);
 			JBlock updateBlock= update.body();
-			/*
-			 * Order returnedOrder=orderRepository.save(order);
-		if (order.getPlaceList()!=null)
-		for (Place place: order.getPlaceList())
-		{
-			place.setOrder(order);
-			placeRepository.save(place);
-		}
-		return returnedOrder;
-			 */
 			updateBlock.directStatement(Generator.getFirstUpper(className)+" returned"+className+"="+lowerClass+"Repository.save("+lowerClass+");");
 			for (Field field: fields)
 			{
 				if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List"))
 				{
 					updateBlock.directStatement("if ("+lowerClass+".getPlaceList()!=null)");
-					
-					//TODO TRY _for!!!
-					
-					updateBlock.directStatement("for ("+getFirstUpper(field.getName())+" "+field.getName()+": "+lowerClass+".get"+getFirstUpper(field.getName())+"List())");
+					updateBlock.directStatement("for ("+(field.getFieldClass().getName())+" "+field.getName()+": "+lowerClass+".get"+getFirstUpper(field.getName())+"List())");
 					updateBlock.directStatement("{");
 					updateBlock.directStatement(field.getName()+".set"+Generator.getFirstUpper(className)+"("+lowerClass+");");
 					updateBlock.directStatement(field.getName()+"Repository.save("+field.getName()+");");
 					updateBlock.directStatement("}");
-					/**/
 				}
 			}
 			updateBlock.directStatement("return returned"+className+";");
 			
 		} catch (JClassAlreadyExistsException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		try {

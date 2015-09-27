@@ -11,10 +11,13 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Type;
 
 import com.fasterxml.jackson.annotation.JacksonAnnotation;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name="place", schema="ebsn")
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="placeId")
 public class Place {
 	
 	@Id
@@ -25,7 +28,6 @@ public class Place {
 	private String description;
 	
 	@ManyToOne()
-	@JsonIgnore
 	private Order order;
 
 	public Long getPlaceId() {

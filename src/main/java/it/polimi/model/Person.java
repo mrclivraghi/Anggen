@@ -14,8 +14,12 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 @Entity
 @Table(name="person", schema="ebsn")
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="personId")
 public class Person {
 
 	@Id

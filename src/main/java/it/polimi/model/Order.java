@@ -20,8 +20,12 @@ import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 @Entity
 @Table(name="order", schema="ebsn")
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="orderId")
 public class Order {
 
 	@Id

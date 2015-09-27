@@ -72,10 +72,14 @@ public class HtmlGenerator {
 		{
 			if (ReflectionManager.isKnownClass(field.getFieldClass()))
 			{
+				String readOnly="false";
+				if (field.getName().contains(entityName+"Id"))
+					readOnly="true";
+				
 				String type= (field.getFieldClass()==Date.class ? "date" : "text");
 				html.p()
 				.content(field.getName())
-				.input((new HtmlAttributes()).add("type", type).add("ng-model", "selectedEntity."+field.getName()));
+				.input((new HtmlAttributes()).add("type", type).add("ng-model", "selectedEntity."+field.getName()).add("ng-readonly", readOnly));
 			} else
 				//TODO block after 2°level improve?
 				if (field.getCompositeClass()!=null  && isParent)
@@ -119,11 +123,15 @@ public class HtmlGenerator {
 			if (field.getCompositeClass()==null)
 			{
 				try {
-					String type= field.getFieldClass()==java.sql.Date.class ? "date" : "text";
+					String readOnly="false";
+					if (field.getName().contains(baseEntity+"Id"))
+						readOnly="true";
+					String type= (field.getFieldClass()==java.sql.Date.class || field.getFieldClass()==java.util.Date.class) ? "date" : "text";
 					String fieldForm=baseEntity+"."+Generator.getFirstLower(field.getName());
 					html.p()
 					.content(field.getName())
-					.input((new HtmlAttributes()).add("type", type).add("ng-model", fieldForm));
+					.input((new HtmlAttributes()).add("type", type).add("ng-model", fieldForm).add("ng-readonly",readOnly));
+						
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

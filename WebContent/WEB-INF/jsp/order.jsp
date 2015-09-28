@@ -7,8 +7,10 @@
 			.module("orderApp", [])
 			.service(
 					"orderService",
-					function($http) {
+					function($http) { //MODIFICA
 						this.entityList = [];
+						this.childrenList={};
+						
 						this.selectedEntity = {
 							show : false
 						};
@@ -18,8 +20,10 @@
 						this.setEntityList = function(entityList) {
 							while (this.entityList.length > 0)
 								this.entityList.pop();
-							for (i = 0; i < entityList.length; i++)
-								this.entityList.push(entityList[i]);
+							//MODIFICA
+							if (entityList!=null)
+								for (i = 0; i < entityList.length; i++)
+									this.entityList.push(entityList[i]);
 						};
 						this.searchBean = new Object();
 						this.resetSearchBean = function() {
@@ -54,6 +58,8 @@
 								}
 							}
 						};
+						
+						
 					})
 			.service(
 					"personService",
@@ -150,12 +156,14 @@
 						$scope.searchBean = orderService.searchBean;
 						$scope.entityList = orderService.entityList;
 						$scope.selectedEntity = orderService.selectedEntity;
+						$scope.childrenList = orderService.childrenList;
 						$scope.reset = function() {
 							orderService.resetSearchBean();
-							$scope.init();
 							orderService.selectedEntity.show = false;
 							personService.selectedEntity.show = false;
 							placeService.selectedEntity.show = false;
+							//MODIFICA
+							orderService.setEntityList(null);
 						}
 						$scope.showEntityDetail = function(index) {
 							orderService.indexSelected = index;
@@ -173,7 +181,6 @@
 						$scope.search = function() {
 							orderService.selectedEntity.show = false;
 							//MODIFICA
-							delete orderService.searchBean.personList;
 							orderService.searchBean.placeList=[];
 							orderService.searchBean.placeList.push(orderService.searchBean.place);
 							delete orderService.searchBean.place;
@@ -234,7 +241,8 @@
 							placeService.selectedEntity.show = true;
 						};
 						
-										//MODIFICA
+						
+						//MODIFICA
 						$scope.init=function()
 						{
 							$http
@@ -242,7 +250,7 @@
 									{})
 							.success(
 									function(entityList) {
-										orderService.searchBean.personList=entityList;
+										orderService.childrenList.personList=entityList;
 									}).error(function() {
 								alert("error");
 							});
@@ -251,13 +259,15 @@
 									{})
 							.success(
 									function(entityList) {
-										orderService.searchBean.placeList=entityList;
+										orderService.childrenList.placeList=entityList;
 									}).error(function() {
 								alert("error");
 							});
 							
 							
 						};
+						
+						//MODIFICA
 						$scope.init();
 					})
 			.controller(
@@ -438,11 +448,11 @@
 			<!-- TODO mgmt -->
 			<p>person</p>
 			<select ng-model="searchBean.person.personId"
-					ng-options="person.personId as person.firstName+' '+person.lastName for person in searchBean.personList">
+					ng-options="person.personId as person.firstName+' '+person.lastName for person in childrenList.personList">
 			</select>
 			<p>place</p>
 			<select ng-model="searchBean.place.placeId"
-					ng-options="place.placeId as place.description for place in searchBean.placeList">
+					ng-options="place.placeId as place.description for place in childrenList.placeList">
 			</select>
 			
 			<input type="date" ng-model="searchBean.timeslotDate"

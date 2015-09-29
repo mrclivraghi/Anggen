@@ -1,9 +1,5 @@
 package it.polimi.utils;
 
-import it.polimi.model.Order;
-import it.polimi.model.Person;
-import it.polimi.model.Place;
-
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -15,8 +11,6 @@ import java.util.Set;
 
 import javax.persistence.Entity;
 
-import org.hibernate.internal.jaxb.mapping.hbm.JaxbParamElement;
-import org.hibernate.metamodel.domain.JavaType;
 import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Query;
@@ -29,18 +23,10 @@ import com.sun.codemodel.JClass;
 import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JDefinedClass;
-import com.sun.codemodel.JExpr;
-import com.sun.codemodel.JExpression;
-import com.sun.codemodel.JForEach;
-import com.sun.codemodel.JForLoop;
 import com.sun.codemodel.JMethod;
 import com.sun.codemodel.JMod;
-import com.sun.codemodel.JPrimitiveType;
-import com.sun.codemodel.JType;
-import com.sun.codemodel.JTypeVar;
 import com.sun.codemodel.JVar;
 
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -54,7 +40,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import antlr.HTMLCodeGenerator;
-import antlr.JavaCodeGenerator;
 
 public class Generator {
 
@@ -266,12 +251,12 @@ public class Generator {
 			update.annotate(Transactional.class);
 			update.param(classClass, lowerClass);
 			JBlock updateBlock= update.body();
-			updateBlock.directStatement(Generator.getFirstUpper(className)+" returned"+className+"="+lowerClass+"Repository.save("+lowerClass+");");
+			updateBlock.directStatement(Generator.getFirstUpper(className)+" returned"+getFirstUpper(className)+"="+lowerClass+"Repository.save("+lowerClass+");");
 			for (Field field: fields)
 			{
 				if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List"))
 				{
-					updateBlock.directStatement("if ("+lowerClass+".getPlaceList()!=null)");
+					updateBlock.directStatement("if ("+lowerClass+".get"+getFirstUpper(field.getName())+"List()!=null)");
 					updateBlock.directStatement("for ("+(field.getFieldClass().getName())+" "+field.getName()+": "+lowerClass+".get"+getFirstUpper(field.getName())+"List())");
 					updateBlock.directStatement("{");
 					updateBlock.directStatement(field.getName()+".set"+Generator.getFirstUpper(className)+"("+lowerClass+");");
@@ -279,7 +264,7 @@ public class Generator {
 					updateBlock.directStatement("}");
 				}
 			}
-			updateBlock.directStatement("return returned"+className+";");
+			updateBlock.directStatement("return returned"+getFirstLower(className)+";");
 			
 		} catch (JClassAlreadyExistsException e) {
 			e.printStackTrace();

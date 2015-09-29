@@ -1,8 +1,8 @@
 package it.polimi.utils;
 
-import it.polimi.model.Order;
-import it.polimi.model.Person;
-import it.polimi.model.Place;
+import it.polimi.oldmodel.Order;
+import it.polimi.oldmodel.Person;
+import it.polimi.oldmodel.Place;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -21,6 +21,7 @@ public class ReflectionManager {
 		if (myClass==String.class) return true;
 		if (myClass==Date.class) return true;
 		if (myClass==java.sql.Date.class) return true;
+		if (myClass==Integer.class) return true;
 		
 		return false;
 	}
@@ -30,7 +31,7 @@ public class ReflectionManager {
 	{
 		while (fieldName.indexOf(".")>-1)
 			fieldName=fieldName.substring(fieldName.indexOf(".")+1,fieldName.length());
-		if (fieldName.indexOf("List")==fieldName.length()-4)
+		if (fieldName.indexOf("List")==fieldName.length()-4 && fieldName.length()>3)
 			fieldName=fieldName.substring(0,fieldName.length()-4);
 		return Generator.getFirstLower(fieldName);
 		

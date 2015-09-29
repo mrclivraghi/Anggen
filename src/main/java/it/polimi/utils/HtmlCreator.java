@@ -1,12 +1,9 @@
 package it.polimi.utils;
 
 
-import it.polimi.model.Order;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.ObjectInputStream.GetField;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.sql.Date;
@@ -19,8 +16,6 @@ import javax.persistence.Entity;
 import org.reflections.Reflections;
 import org.rendersnake.HtmlAttributes;
 import org.rendersnake.HtmlCanvas;
-import org.rendersnake.Renderable;
-import org.rendersnake.StringResource;
 
 public class HtmlCreator {
 

@@ -8,7 +8,7 @@
   	<properties>
 		<org.springframework.version>4.1.6.RELEASE</org.springframework.version>
 		<org.hibernate-entitymanager.version>4.3.10.Final</org.hibernate-entitymanager.version>
-		<postgres.version>9.4-1201-jdbc41</postgres.version>
+		<postgres.version>9.4-1203-jdbc42</postgres.version>
 
 	</properties>
 

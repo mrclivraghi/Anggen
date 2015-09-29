@@ -1,6 +1,7 @@
 package it.polimi.utils;
 
 import it.polimi.model.Order;
+import it.polimi.model.Person;
 import it.polimi.model.Place;
 
 import java.lang.reflect.ParameterizedType;
@@ -26,7 +27,7 @@ public class ReflectionManager {
 	
 	
 	public static String parseName(String fieldName)
-	{// it.polimi.model.Person
+	{
 		while (fieldName.indexOf(".")>-1)
 			fieldName=fieldName.substring(fieldName.indexOf(".")+1,fieldName.length());
 		if (fieldName.indexOf("List")==fieldName.length()-4)
@@ -118,10 +119,43 @@ public class ReflectionManager {
 		
 		return classList;
 	}
+	
+	public static String getDescriptionField(Class myClass)
+	{
+		String descriptionFields="";
+		String entity=parseName(myClass.getName());
+		List<Field> fieldList = null;
+		try {
+			fieldList = generateField(myClass.newInstance());
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		for (Field field: fieldList)
+		{
+			if (field.getFieldClass()==String.class)
+			{
+				descriptionFields=descriptionFields+" "+entity+"."+field.getName()+"+' '+";
+			}
+		}
+		descriptionFields=descriptionFields.substring(0, descriptionFields.length()-5);
+		return descriptionFields;
+	}
+	
+	
 	public static void main(String[] args)
 	{
 		List<Field> fieldList=ReflectionManager.generateField(new Order());
 		for (Field field: fieldList)
 			System.out.println(field.getName()+"-"+field.getFieldClass()+"-"+(field.getCompositeClass()==null ? "" : field.getCompositeClass().fullName())+"-"+(field.getRepositoryClass()==null ? "" : field.getRepositoryClass().getName()));//+field.getCompositeClass().toString()+"-"+field.getRepositoryClass().toString());
+		
+		System.out.println("descriptionFields");
+		System.out.println(getDescriptionField(Order.class));
+		System.out.println(getDescriptionField(Place.class));
+		System.out.println(getDescriptionField(Person.class));
+		
 	}
 }

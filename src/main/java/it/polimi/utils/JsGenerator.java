@@ -35,6 +35,7 @@ public class JsGenerator {
 		.append("{\n")
 		.append("this.entityList =		[];\n")
 		.append("this.selectedEntity= 	{show: false};\n")
+		.append("this.childrenList=[]; \n")
 		.append("this.addEntity=function (entity)\n")
 		.append("{\n")
 		.append("this.entityList.push(entity);\n")
@@ -43,10 +44,10 @@ public class JsGenerator {
 		.append("{ \n")
 		.append("while (this.entityList.length>0)\n")
 		.append("this.entityList.pop();\n")
+		.append("if (entityList!=null)\n")
 		.append("for (i=0; i<entityList.length; i++)\n")
 		.append("this.entityList.push(entityList[i]);\n")
 		.append("};\n");
-		//search just in case of the father
 		if (isParent)
 		{
 			sb.append("this.searchBean = 		new Object();\n")
@@ -110,12 +111,14 @@ public class JsGenerator {
 		sb.append("$scope.entityList="+entityName+"Service.entityList;\n");
 		sb.append("$scope.selectedEntity="+entityName+"Service.selectedEntity;\n");
 
-
+		sb.append("$scope.childrenList="+entityName+"Service.childrenList; \n");
 		//search function
 		sb.append("$scope.reset = function()\n");
 		sb.append("{\n");
 		sb.append(""+entityName+"Service.resetSearchBean();\n");
+		sb.append(""+entityName+"Service.setSelectedEntity(null);\n");
 		sb.append(""+entityName+"Service.selectedEntity.show=false;\n");
+		sb.append(""+entityName+"Service.setEntityList(null); \n");
 		if (isParent)
 			changeChildrenVisibility(sb, false);
 		sb.append("}\n");
@@ -167,6 +170,16 @@ public class JsGenerator {
 		sb.append("$scope.search=function()\n");
 		sb.append("{\n");
 		sb.append(""+entityName+"Service.selectedEntity.show=false;\n");
+		if (childrenList!=null)
+		for (Field field: childrenList)
+		{
+			if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List"))
+			{
+				sb.append(""+entityName+"Service.searchBean."+field.getName()+"List=[];\n");
+				sb.append(""+entityName+"Service.searchBean."+field.getName()+"List.push("+entityName+"Service.searchBean."+field.getName()+");\n");
+				sb.append("delete "+entityName+"Service.searchBean."+field.getName()+"; \n");
+			}
+		}
 		sb.append("$http.post(\"../"+entityName+"/search\","+entityName+"Service.searchBean)\n");
 		sb.append(".success( function(entityList) {\n");
 		sb.append(""+entityName+"Service.setEntityList(entityList);\n");
@@ -287,8 +300,31 @@ public class JsGenerator {
 				sb.append("};\n");
 				
 			}
+			//INIT CHILDREN LIST
+			sb.append("$scope.init=function()\n")
+			.append("{\n");
+			if (childrenList!=null)
+			for (Field field: childrenList)
+			{
 
+				sb.append("$http");
+				sb.append(".post(\"../"+field.getName()+"/search\",");
+				sb.append("{})");
+				sb.append(".success(");
+				sb.append("function(entityList) {");
+				sb.append(""+entityName+"Service.childrenList."+field.getName()+"List=entityList;");
+				sb.append("}).error(function() {");
+				sb.append("alert(\"error\");");
+				sb.append("});");
+			}
+			
+			sb.append("}; \n");
+			sb.append("$scope.init();\n");
+			
+			
 		}
+		
+		
 		sb.append("})\n");
 		return sb.toString();
 	}

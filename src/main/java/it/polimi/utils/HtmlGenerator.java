@@ -14,6 +14,7 @@ public class HtmlGenerator {
 	
 	List<Field> fieldList;
 	
+	
 	public HtmlGenerator(Class myClass,Boolean isParent)
 	{
 		this.entityName=ReflectionManager.parseName(myClass.getName());
@@ -117,7 +118,7 @@ public class HtmlGenerator {
 	}
 
 	private void renderForm(HtmlCanvas html,String baseEntity)
-	{ // TODO mgmt readonly on p key
+	{ 
 		for (Field field: fieldList)
 		{
 			if (field.getCompositeClass()==null)
@@ -136,6 +137,28 @@ public class HtmlGenerator {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+			} else
+			{
+			/*	<!-- TODO mgmt -->
+				<p>person</p>
+				<select ng-model="searchBean.person.personId"
+						ng-options="person.personId as person.firstName+' '+person.lastName for person in childrenList.personList">
+				</select>
+				<p>place</p>
+				<select ng-model="searchBean.place.placeId"
+						ng-options="place.placeId as place.description for place in childrenList.placeList">
+				</select>*/
+				try {
+					html.p()
+					.content(field.getName());
+					html.select((new HtmlAttributes()).add("ng-model", "searchBean."+field.getName()+"."+field.getName()+"Id")
+							.add("ng-options", field.getName()+"."+field.getName()+"Id as "+ReflectionManager.getDescriptionField(field.getFieldClass())+" for "+field.getName()+" in childrenList."+field.getName()+"List").enctype("UTF-8"))
+							._select();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 			}
 		}
 	}

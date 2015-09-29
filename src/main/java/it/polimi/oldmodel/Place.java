@@ -1,4 +1,4 @@
-package it.polimi.model;
+package it.polimi.oldmodel;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

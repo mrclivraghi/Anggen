@@ -8,23 +8,21 @@ import org.rendersnake.HtmlAttributes;
 import org.rendersnake.HtmlCanvas;
 
 public class HtmlGenerator {
-	String entityName;
 	
-	Boolean isParent;
+	private String entityName;
 	
-	List<Field> fieldList;
+	private Boolean isParent;
 	
+	private List<Field> fieldList;
+	
+	private ReflectionManager reflectionManager;
 	
 	public HtmlGenerator(Class myClass,Boolean isParent)
 	{
-		this.entityName=ReflectionManager.parseName(myClass.getName());
+		this.reflectionManager= new ReflectionManager(myClass);
+		this.entityName=reflectionManager.parseName();
 		this.isParent=isParent;
-		try {
-			fieldList= ReflectionManager.generateField(myClass.newInstance());
-		} catch (InstantiationException | IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		fieldList= reflectionManager.generateField();
 	}
 	
 	public void generateEntityView(HtmlCanvas html) throws IOException {
@@ -71,7 +69,7 @@ public class HtmlGenerator {
 	private void renderDetail(HtmlCanvas html) throws IOException {
 		for (Field field: fieldList)
 		{
-			if (ReflectionManager.isKnownClass(field.getFieldClass()))
+			if (reflectionManager.isKnownClass(field.getFieldClass()))
 			{
 				String readOnly="false";
 				if (field.getName().contains(entityName+"Id"))
@@ -152,7 +150,7 @@ public class HtmlGenerator {
 					html.p()
 					.content(field.getName());
 					html.select((new HtmlAttributes()).add("ng-model", "searchBean."+field.getName()+"."+field.getName()+"Id")
-							.add("ng-options", field.getName()+"."+field.getName()+"Id as "+ReflectionManager.getDescriptionField(field.getFieldClass())+" for "+field.getName()+" in childrenList."+field.getName()+"List").enctype("UTF-8"))
+							.add("ng-options", field.getName()+"."+field.getName()+"Id as "+reflectionManager.getDescriptionField(field.getFieldClass())+" for "+field.getName()+" in childrenList."+field.getName()+"List").enctype("UTF-8"))
 							._select();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block

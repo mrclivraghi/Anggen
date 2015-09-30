@@ -43,8 +43,36 @@ import antlr.HTMLCodeGenerator;
 
 public class Generator {
 
-	private static String directory;
-	public static final Class keyClass=Long.class;
+	private String directory;
+
+	private Class classClass;
+	
+	private String className;
+	
+	private String fullClassName;
+	
+	private String alias;
+	
+	private List<Field> fields;
+	
+	private Class keyClass;
+	
+	private ReflectionManager reflectionManager;
+	
+	public Generator(Class classClass)
+	{
+		this.classClass=classClass;
+		this.fullClassName=Generator.getFirstLower(classClass.getName());
+		File file = new File(""); 
+		this.directory = file.getAbsolutePath()+"\\src\\main\\java";
+		reflectionManager= new ReflectionManager(classClass);
+		this.className=reflectionManager.parseName();
+		this.alias=this.className.substring(0,1);
+		this.fields=reflectionManager.generateField();
+		keyClass= reflectionManager.getKeyClass();
+		
+	}
+	
 	
 	public static String getFirstLower(String string)
 	{
@@ -56,7 +84,7 @@ public class Generator {
 		return string.replaceFirst(string.substring(0, 1), string.substring(0, 1).toUpperCase());
 	}
 	
-	public static String getSearchQuery(String alias,String className,JMethod method, List<Field> fields)
+	public String getSearchQuery(JMethod method)
 	{
 		String query="select "+alias+" from "+className+" "+alias+ " where ";
 		for (Field field: fields)
@@ -98,7 +126,7 @@ public class Generator {
 		return query;
 	}
 	
-	public static String getAllParam(List<Field> fields, String className)
+	public String getAllParam()
 	{
 		String string="";
 		for (Field field: fields)
@@ -117,14 +145,12 @@ public class Generator {
 		return string.substring(0, string.length()-1);
 	}
 	
-	public static String generateRepository(Class classClass, List<Field> fields){
-		String className=getFirstLower(classClass.getName());
+	public String generateRepository(){
 		JCodeModel	codeModel = new JCodeModel();
-		
 		JDefinedClass myClass= null;
 		String searchMethod="";
 		try {
-			myClass = codeModel._class(""+className.replace(".model.", ".repository.")+"Repository", ClassType.INTERFACE);
+			myClass = codeModel._class(""+fullClassName.replace(".model.", ".repository.")+"Repository", ClassType.INTERFACE);
 			JClass extendedClass = codeModel.ref(CrudRepository.class).narrow(classClass,Long.class);
 			myClass._extends(extendedClass);
 			myClass.annotate(Repository.class);
@@ -145,7 +171,7 @@ public class Generator {
 			searchMethod=searchMethod.substring(0,searchMethod.length()-3);
 			JMethod method=myClass.method(JMod.PUBLIC, listClass, searchMethod);
 			String alias=className.substring(0, 1).toLowerCase();
-			String query=getSearchQuery(alias, className, method, fields);
+			String query=getSearchQuery(method);
 			JAnnotationUse annotationQuery= method.annotate(Query.class);
 			annotationQuery.param("value", query);
 			
@@ -161,13 +187,13 @@ public class Generator {
 		return searchMethod;
 	}
 	
-	public static void generateServiceInterface(Class classClass)
-	{String className=Generator.getFirstLower(classClass.getName());
+	public void generateServiceInterface()
+	{
 		JCodeModel	codeModel = new JCodeModel();
 		JDefinedClass myClass= null;
 		try {
-			myClass = codeModel._class(""+className.replace(".model.", ".service.")+"Service", ClassType.INTERFACE);
-			className=ReflectionManager.parseName(classClass.getName());
+			myClass = codeModel._class(""+fullClassName.replace(".model.", ".service.")+"Service", ClassType.INTERFACE);
+			className=reflectionManager.parseName();
 			JClass listClass = codeModel.ref(List.class).narrow(classClass);
 			JMethod findById = myClass.method(JMod.PUBLIC, listClass, "findById");
 			String lowerClass= className.replaceFirst(className.substring(0, 1), className.substring(0, 1).toLowerCase());
@@ -193,15 +219,13 @@ public class Generator {
 	}
 	
 	
-	public static void generateServiceImpl(Class classClass,List<Field> fields,Class interfaceClass,Class repositoryClass,String searchMethod)
+	public void generateServiceImpl(Class interfaceClass,Class repositoryClass,String searchMethod)
 	{
-		String className=Generator.getFirstLower(classClass.getName());
 		JCodeModel	codeModel = new JCodeModel();
 		JDefinedClass myClass= null;
 		try {
-			myClass = codeModel._class(""+className.replace(".model.", ".service.")+"ServiceImpl", ClassType.CLASS);
-			className=ReflectionManager.parseName(classClass.getName());
-			className=ReflectionManager.parseName(classClass.getName());
+			myClass = codeModel._class(""+fullClassName.replace(".model.", ".service.")+"ServiceImpl", ClassType.CLASS);
+			className=reflectionManager.parseName();
 			myClass._implements(interfaceClass);
 			myClass.annotate(Service.class);
 			JClass listClass = codeModel.ref(List.class).narrow(classClass);
@@ -230,7 +254,7 @@ public class Generator {
 			findLike.annotate(Override.class);
 			findLike.param(classClass, lowerClass);
 			JBlock findLikeBlock= findLike.body();
-			findLikeBlock.directStatement("return "+lowerClass+"Repository."+searchMethod+"("+getAllParam(fields, className)+");");
+			findLikeBlock.directStatement("return "+lowerClass+"Repository."+searchMethod+"("+getAllParam()+");");
 			//delete
 			JMethod deleteById = myClass.method(JMod.PUBLIC, void.class, "deleteById");
 			deleteById.annotate(Override.class);
@@ -277,16 +301,15 @@ public class Generator {
 	
 	}
 
-	public static void generateController(Class classClass,Class serviceClass)
+	public void generateController(Class serviceClass)
 	{
-		String className=Generator.getFirstLower(classClass.getName());
 		JCodeModel	codeModel = new JCodeModel();
 		JDefinedClass myClass= null;
 		String response="ResponseEntity.ok()";
 		
 		try {
-			myClass = codeModel._class(""+className.replace(".model.", ".controller.")+"Controller", ClassType.CLASS);
-			className=ReflectionManager.parseName(classClass.getName());
+			myClass = codeModel._class(""+fullClassName.replace(".model.", ".controller.")+"Controller", ClassType.CLASS);
+			className=reflectionManager.parseName();
 			JClass listClass = codeModel.ref(List.class).narrow(classClass);
 			String lowerClass= className.replaceFirst(className.substring(0, 1), className.substring(0, 1).toLowerCase());
 			myClass.annotate(Controller.class);
@@ -379,39 +402,25 @@ public class Generator {
 	}
 
 	
-	public static void generateJSP()
+	public void generateRESTClasses(List<Class> dependencyClass, Boolean jumpDependency)
 	{
-		HTMLCodeGenerator codeGenerator = new HTMLCodeGenerator();
-	}
-	
-	
-	public static void generateRESTClasses(Class modelClass,List<Class> dependencyClass, Boolean jumpDependency)
-	{
-		System.out.println("working for "+modelClass.getName());
+		System.out.println("working for "+classClass.getName());
 		String searchMethod="";
-		try {
-			if (jumpDependency && ReflectionManager.hasList(modelClass.newInstance()))
-			{
-				System.out.println(modelClass.getName()+" has list. pass away.");
-				dependencyClass.add(modelClass);
-				return;
-			}
-		} catch (InstantiationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IllegalAccessException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		if (jumpDependency && reflectionManager.hasList())
+		{
+			System.out.println(classClass.getName()+" has list. pass away.");
+			dependencyClass.add(classClass);
+			return;
 		}
-		Generator.generateServiceInterface(modelClass);
+		generateServiceInterface();
 		List<Field> fieldList=null;
 		try {
-			fieldList = ReflectionManager.generateField(modelClass.newInstance());
-			searchMethod=Generator.generateRepository(modelClass, fieldList);
+			fieldList = reflectionManager.generateField();
+			searchMethod=generateRepository();
 			//String searchMethod="findByOrderIdAndNameAndTimeslotDateAndPersonAndPlace";
 			//System.out.println(searchMethod);
 			//Class repositoryClass=Class.forName(modelClass.getName().replace(".model.", ".repository.")+"Repository");
-			String filePath=modelClass.getName().replace(".model.", ".repository.");
+			String filePath=classClass.getName().replace(".model.", ".repository.");
 			filePath=filePath.replace(".", "\\");
 			File fileRepository = new File(directory+"\\"+filePath+"Repository.java");
 			File fileService = new File(directory+"\\"+filePath.replace("repository", "service")+"Service.java");
@@ -438,8 +447,8 @@ public class Generator {
 				}
 				Class test=classLoader.loadClass("it.polimi.utils.Field");
 
-				repositoryClass=Class.forName(modelClass.getName().replace(".model.", ".repository.")+"Repository", true, classLoader);
-				serviceClass=Class.forName(modelClass.getName().replace(".model.", ".service.")+"Service", true, classLoader);
+				repositoryClass=Class.forName(classClass.getName().replace(".model.", ".repository.")+"Repository", true, classLoader);
+				serviceClass=Class.forName(classClass.getName().replace(".model.", ".service.")+"Service", true, classLoader);
 				
 			}
 			else
@@ -447,14 +456,8 @@ public class Generator {
 			//repositoryClass=ClassLoader.getSystemClassLoader().loadClass(modelClass.getName().replace(".model.", ".repository.")+"Repository");
 			
 			//Class serviceClass=Class.forName(modelClass.getName().replace(".model.", ".service.")+"Service");
-			Generator.generateServiceImpl( modelClass, fieldList,serviceClass,repositoryClass,searchMethod);
-			Generator.generateController(modelClass, serviceClass);
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			generateServiceImpl(serviceClass,repositoryClass,searchMethod);
+			generateController(serviceClass);
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -466,15 +469,16 @@ public class Generator {
 		Reflections reflections = new Reflections("it.polimi.model");
 		Set<Class<?>> allClasses = reflections.getTypesAnnotatedWith(Entity.class);
 		List<Class> dependencyClass = new ArrayList<Class>();
-		File file = new File(""); 
-		directory = file.getAbsolutePath()+"\\src\\main\\java";
+		
 		for (Class modelClass: allClasses)
 		{
-			generateRESTClasses(modelClass, dependencyClass,true);
+			Generator generator = new Generator(modelClass);
+			generator.generateRESTClasses(dependencyClass,true);
 		}
 		for (Class modelClass:dependencyClass)
 		{
-			generateRESTClasses(modelClass, dependencyClass,false);
+			Generator generator = new Generator(modelClass);
+			generator.generateRESTClasses(dependencyClass,false);
 		}
 		
 	}

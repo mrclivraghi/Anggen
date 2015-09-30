@@ -19,8 +19,6 @@ import org.rendersnake.HtmlCanvas;
 
 public class HtmlCreator {
 
-	public static HtmlCreator htmlCreator;
-	
 	private List<Field> fieldList;
 	
 	private List<Field> childrenField;
@@ -29,11 +27,16 @@ public class HtmlCreator {
 
 	public static String directory;
 	
-	public static HtmlCreator getInstance()
+	private ReflectionManager reflectionManager;
+	
+	private Class classClass;
+	
+	public HtmlCreator(Class classClass)
 	{
-		if (htmlCreator==null)
-			htmlCreator= new HtmlCreator();
-		return htmlCreator;
+		this.classClass=classClass;
+		this.reflectionManager = new ReflectionManager(classClass);
+		this.entityName=reflectionManager.parseName();
+		this.fieldList=reflectionManager.generateField();
 	}
 	
 	private String setTempEntityForm()
@@ -67,21 +70,14 @@ public class HtmlCreator {
 		return buildJS.toString();
 	}
 	
-	private void generateJSP(Class entityClass)
+	private void generateJSP() throws IllegalAccessException
 	{
-		entityName=ReflectionManager.parseName(entityClass.getName());
 		childrenField= new ArrayList<Field>();
-		try {
-			fieldList=ReflectionManager.generateField(entityClass.newInstance());
-			if (fieldList==null) return;
-			for (Field field: fieldList)
-			{
-				if (field.getCompositeClass()!=null)
-					childrenField.add(field);
-			}
-		} catch (InstantiationException | IllegalAccessException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		if (fieldList==null) return;
+		for (Field field: fieldList)
+		{
+			if (field.getCompositeClass()!=null)
+				childrenField.add(field);
 		}
 		HtmlCanvas html = new HtmlCanvas();
 		HtmlAttributes htmlAttributes= new HtmlAttributes();
@@ -94,7 +90,7 @@ public class HtmlCreator {
 						.script().content(buildJS(),false)
 					._head()
 					.body(htmlAttributes.add("ng-app", Generator.getFirstLower(entityName)+"App"));
-					HtmlGenerator htmlGenerator= new HtmlGenerator(entityClass, true);
+					HtmlGenerator htmlGenerator= new HtmlGenerator(classClass, true);
 					htmlGenerator.generateEntityView(html);
 					for (Field field : childrenField)
 					{
@@ -108,7 +104,7 @@ public class HtmlCreator {
 			e.printStackTrace();
 		}
 		
-		File myJsp=new File(directory+ReflectionManager.parseName(entityClass.getName())+".jsp");
+		File myJsp=new File(directory+reflectionManager.parseName(classClass.getName())+".jsp");
 		PrintWriter writer;
 		try {
 			System.out.println("Written "+myJsp.getAbsolutePath());
@@ -134,7 +130,13 @@ public class HtmlCreator {
 		directory = file.getAbsolutePath()+"\\WebContent\\WEB-INF\\jsp\\";
 		for (Class modelClass: allClasses)
 		{
-			HtmlCreator.getInstance().generateJSP(modelClass);
+			HtmlCreator htmlCreator = new HtmlCreator(modelClass);
+			try {
+				htmlCreator.generateJSP();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		//System.out.println(StringResource.get("orderApp.js"));
 	}

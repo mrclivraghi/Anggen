@@ -1,17 +1,43 @@
 package it.polimi.utils;
 
+import it.polimi.model.Order;
+
+import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.data.annotation.Id;
+
 import com.sun.codemodel.JClass;
 import com.sun.codemodel.JCodeModel;
 
 public class ReflectionManager {
+	
+	private Class classClass;
+	
+	private Object obj;
 
-	public static Boolean isKnownClass(Class myClass)
+	
+	public ReflectionManager(Class myClass)
+	{
+		this.classClass=myClass;
+		try {
+			this.obj=this.classClass.newInstance();
+		} catch (InstantiationException | IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public Boolean isKnownClass()
+	{
+		return isKnownClass(classClass);
+	}
+	
+	public Boolean isKnownClass(Class myClass)
 	{
 		if (myClass==Long.class) return true;
 		if (myClass==String.class) return true;
@@ -22,8 +48,12 @@ public class ReflectionManager {
 		return false;
 	}
 	
+	public String parseName()
+	{
+		return parseName(classClass.getName());
+	}
 	
-	public static String parseName(String fieldName)
+	public String parseName(String fieldName)
 	{
 		while (fieldName.indexOf(".")>-1)
 			fieldName=fieldName.substring(fieldName.indexOf(".")+1,fieldName.length());
@@ -32,7 +62,7 @@ public class ReflectionManager {
 		return Generator.getFirstLower(fieldName);
 		
 	}
-	public static List<Field> generateField(Object obj)
+	public List<Field> generateField()
 	{
 		java.lang.reflect.Field[] fields=obj.getClass().getDeclaredFields();
 		
@@ -75,7 +105,7 @@ public class ReflectionManager {
 		return fieldList;
 	}
 	
-	public static Boolean hasList(Object obj)
+	public Boolean hasList()
 	{
 		Boolean hasList=false;
 
@@ -98,39 +128,32 @@ public class ReflectionManager {
 		return hasList;
 	}
 	
-	public static List<Class> getChildrenClasses(Class myClass)
+	public List<Class> getChildrenClasses()
 	{
 		List<Class> classList= new ArrayList<Class>();
-		try {
-			List<Field> fieldList= generateField(myClass.newInstance());
-			for (Field field: fieldList)
-			{
-				if (field.getCompositeClass()!=null)
-					classList.add(field.getFieldClass());
-			}
-		} catch (InstantiationException | IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		List<Field> fieldList= generateField();
+		for (Field field: fieldList)
+		{
+			if (field.getCompositeClass()!=null)
+				classList.add(field.getFieldClass());
 		}
 		
 		
 		return classList;
 	}
 	
-	public static String getDescriptionField(Class myClass)
+	
+	public String getDescriptionField()
+	{
+		return getDescriptionField(classClass);
+	}
+	
+	public String getDescriptionField(Class classClass)
 	{
 		String descriptionFields="";
-		String entity=parseName(myClass.getName());
+		String entity=parseName(classClass.getName());
 		List<Field> fieldList = null;
-		try {
-			fieldList = generateField(myClass.newInstance());
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		fieldList = generateField();
 		for (Field field: fieldList)
 		{
 			if (field.getFieldClass()==String.class)
@@ -143,10 +166,30 @@ public class ReflectionManager {
 	}
 	
 	
+	public Class getKeyClass()
+	{
+		
+		java.lang.reflect.Field[] fields=obj.getClass().getDeclaredFields();
+		
+		for (java.lang.reflect.Field field : fields)
+		{
+			Annotation[] annotationList = field.getAnnotations();
+			for (int i=0; i<annotationList.length; i++)
+			{
+				if (annotationList[i].annotationType()==javax.persistence.Id.class)
+					return field.getType();
+			}
+		}
+		return null;
+			
+	}
+	
+	
 	public static void main(String[] args)
 	{
-		/*List<Field> fieldList=ReflectionManager.generateField(new Order());
-		for (Field field: fieldList)
+		ReflectionManager reflectionManager= new ReflectionManager(Order.class);
+		List<Field> fieldList=reflectionManager.generateField();
+		/*for (Field field: fieldList)
 			System.out.println(field.getName()+"-"+field.getFieldClass()+"-"+(field.getCompositeClass()==null ? "" : field.getCompositeClass().fullName())+"-"+(field.getRepositoryClass()==null ? "" : field.getRepositoryClass().getName()));//+field.getCompositeClass().toString()+"-"+field.getRepositoryClass().toString());
 		
 		System.out.println("descriptionFields");
@@ -154,5 +197,7 @@ public class ReflectionManager {
 		System.out.println(getDescriptionField(Place.class));
 		System.out.println(getDescriptionField(Person.class));
 		*/
+		
+		
 	}
 }

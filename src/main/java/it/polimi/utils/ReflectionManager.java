@@ -1,9 +1,5 @@
 package it.polimi.utils;
 
-import it.polimi.oldmodel.Order;
-import it.polimi.oldmodel.Person;
-import it.polimi.oldmodel.Place;
-
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -149,7 +145,7 @@ public class ReflectionManager {
 	
 	public static void main(String[] args)
 	{
-		List<Field> fieldList=ReflectionManager.generateField(new Order());
+		/*List<Field> fieldList=ReflectionManager.generateField(new Order());
 		for (Field field: fieldList)
 			System.out.println(field.getName()+"-"+field.getFieldClass()+"-"+(field.getCompositeClass()==null ? "" : field.getCompositeClass().fullName())+"-"+(field.getRepositoryClass()==null ? "" : field.getRepositoryClass().getName()));//+field.getCompositeClass().toString()+"-"+field.getRepositoryClass().toString());
 		
@@ -157,6 +153,6 @@ public class ReflectionManager {
 		System.out.println(getDescriptionField(Order.class));
 		System.out.println(getDescriptionField(Place.class));
 		System.out.println(getDescriptionField(Person.class));
-		
+		*/
 	}
 }

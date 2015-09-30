@@ -264,7 +264,7 @@ public class Generator {
 					updateBlock.directStatement("}");
 				}
 			}
-			updateBlock.directStatement("return returned"+getFirstLower(className)+";");
+			updateBlock.directStatement("return returned"+getFirstUpper(className)+";");
 			
 		} catch (JClassAlreadyExistsException e) {
 			e.printStackTrace();

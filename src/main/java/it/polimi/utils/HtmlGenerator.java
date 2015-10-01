@@ -25,7 +25,7 @@ public class HtmlGenerator {
 		this.reflectionManager= new ReflectionManager(myClass);
 		this.entityName=reflectionManager.parseName();
 		this.isParent=isParent;
-		fieldList= reflectionManager.generateField();
+		fieldList= reflectionManager.getFieldList();
 		this.parentClass=parentClass;
 		this.parentClass.add(myClass);
 	}

@@ -68,7 +68,7 @@ public class Generator {
 		reflectionManager= new ReflectionManager(classClass);
 		this.className=reflectionManager.parseName();
 		this.alias=this.className.substring(0,1);
-		this.fields=reflectionManager.generateField();
+		this.fields=reflectionManager.getFieldList();
 		keyClass= reflectionManager.getKeyClass();
 		
 	}
@@ -415,7 +415,7 @@ public class Generator {
 		generateServiceInterface();
 		List<Field> fieldList=null;
 		try {
-			fieldList = reflectionManager.generateField();
+			fieldList = reflectionManager.getFieldList();
 			searchMethod=generateRepository();
 			//String searchMethod="findByOrderIdAndNameAndTimeslotDateAndPersonAndPlace";
 			//System.out.println(searchMethod);

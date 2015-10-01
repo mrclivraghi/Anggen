@@ -37,7 +37,7 @@ public class HtmlCreator {
 		this.classClass=classClass;
 		this.reflectionManager = new ReflectionManager(classClass);
 		this.entityName=reflectionManager.parseName();
-		this.fieldList=reflectionManager.generateField();
+		this.fieldList=reflectionManager.getFieldList();
 	}
 	
 	private String setTempEntityForm()
@@ -59,7 +59,7 @@ public class HtmlCreator {
 			if (field.getCompositeClass()!=null && !parentClassList.contains(field.getFieldClass()))
 			{
 				ReflectionManager reflectionManager = new ReflectionManager(field.getFieldClass());
-				List<Field> childrenList= reflectionManager.getChildrenField();
+				List<Field> childrenList= reflectionManager.getChildrenFieldList();
 				JsGenerator jsGenerator = new JsGenerator(field.getName(), false, childrenList, field.getCompositeClass(), entityName);
 				sb.append(jsGenerator.generateService());
 				jsGeneratorList.add(jsGenerator);

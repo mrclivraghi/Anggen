@@ -53,19 +53,19 @@ public class ReflectionManager {
 		return parseName(classClass.getName());
 	}
 	
-	public String parseName(String fieldName)
+	public String parseName(String name)
 	{
-		while (fieldName.indexOf(".")>-1)
-			fieldName=fieldName.substring(fieldName.indexOf(".")+1,fieldName.length());
-		if (fieldName.indexOf("List")==fieldName.length()-4 && fieldName.length()>3)
-			fieldName=fieldName.substring(0,fieldName.length()-4);
-		return Generator.getFirstLower(fieldName);
+		while (name.indexOf(".")>-1)
+			name=name.substring(name.indexOf(".")+1,name.length());
+		if (name.indexOf("List")==name.length()-4 && name.length()>3)
+			name=name.substring(0,name.length()-4);
+		return Generator.getFirstLower(name);
 		
 	}
 	
-	public List<Field> getChildrenField()
+	public List<Field> getChildrenFieldList()
 	{
-		List<Field> fieldList= generateField();
+		List<Field> fieldList= getFieldList();
 		List<Field> childrenList = new ArrayList<Field>();
 		for (Field field: fieldList)
 		{
@@ -78,7 +78,7 @@ public class ReflectionManager {
 	}
 	
 	
-	public List<Field> generateField()
+	public List<Field> getFieldList()
 	{
 		java.lang.reflect.Field[] fields=obj.getClass().getDeclaredFields();
 		
@@ -147,7 +147,7 @@ public class ReflectionManager {
 	public List<Class> getChildrenClasses()
 	{
 		List<Class> classList= new ArrayList<Class>();
-		List<Field> fieldList= generateField();
+		List<Field> fieldList= getFieldList();
 		for (Field field: fieldList)
 		{
 			if (field.getCompositeClass()!=null)
@@ -172,9 +172,9 @@ public class ReflectionManager {
 		if (classClass!=this.classClass)
 		{
 			ReflectionManager reflectionManager= new ReflectionManager(classClass);
-			fieldList= reflectionManager.generateField();
+			fieldList= reflectionManager.getFieldList();
 		} else
-			fieldList = generateField();
+			fieldList = getFieldList();
 		for (Field field: fieldList)
 		{
 			if (field.getFieldClass()==String.class)
@@ -209,7 +209,7 @@ public class ReflectionManager {
 	public static void main(String[] args)
 	{
 		ReflectionManager reflectionManager= new ReflectionManager(Order.class);
-		List<Field> fieldList=reflectionManager.generateField();
+		List<Field> fieldList=reflectionManager.getFieldList();
 		/*for (Field field: fieldList)
 			System.out.println(field.getName()+"-"+field.getFieldClass()+"-"+(field.getCompositeClass()==null ? "" : field.getCompositeClass().fullName())+"-"+(field.getRepositoryClass()==null ? "" : field.getRepositoryClass().getName()));//+field.getCompositeClass().toString()+"-"+field.getRepositoryClass().toString());
 		

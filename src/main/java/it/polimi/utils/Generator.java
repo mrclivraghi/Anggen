@@ -86,7 +86,7 @@ public class Generator {
 	
 	public String getSearchQuery(JMethod method)
 	{
-		String query="select "+alias+" from "+className+" "+alias+ " where ";
+		String query="select "+alias+" from "+getFirstUpper(className)+" "+alias+ " where ";
 		for (Field field: fields)
 		{
 			JVar param = method.param(field.getFieldClass()==Date.class ? String.class : field.getFieldClass(), field.getName());
@@ -276,7 +276,7 @@ public class Generator {
 			update.param(classClass, lowerClass);
 			JBlock updateBlock= update.body();
 			updateBlock.directStatement(Generator.getFirstUpper(className)+" returned"+getFirstUpper(className)+"="+lowerClass+"Repository.save("+lowerClass+");");
-			for (Field field: fields)
+			/*for (Field field: fields)
 			{
 				if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List"))
 				{
@@ -287,7 +287,7 @@ public class Generator {
 					updateBlock.directStatement(field.getName()+"Repository.save("+field.getName()+");");
 					updateBlock.directStatement("}");
 				}
-			}
+			}*/
 			updateBlock.directStatement("return returned"+getFirstUpper(className)+";");
 			
 		} catch (JClassAlreadyExistsException e) {
@@ -424,11 +424,11 @@ public class Generator {
 			filePath=filePath.replace(".", "\\");
 			File fileRepository = new File(directory+"\\"+filePath+"Repository.java");
 			File fileService = new File(directory+"\\"+filePath.replace("repository", "service")+"Service.java");
-			File testFile= new File(directory+"\\"+"it\\polimi\\utils\\Field.java");
 			Class repositoryClass=null;
 			Class serviceClass=null;
 			if (fileRepository.exists())
 			{
+				//TODO improve...
 				System.out.println("esiste!");
 				URLClassLoader classLoader=null;
 				URL urlRepository=null;
@@ -440,13 +440,11 @@ public class Generator {
 				}
 				
 				try {
-					classLoader= URLClassLoader.newInstance(new URL[] {fileRepository.toURL(),testFile.toURL()});
+					classLoader= URLClassLoader.newInstance(new URL[] {fileRepository.toURL()});
 				} catch (MalformedURLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				Class test=classLoader.loadClass("it.polimi.utils.Field");
-
 				repositoryClass=Class.forName(classClass.getName().replace(".model.", ".repository.")+"Repository", true, classLoader);
 				serviceClass=Class.forName(classClass.getName().replace(".model.", ".service.")+"Service", true, classLoader);
 				

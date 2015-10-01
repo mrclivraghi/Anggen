@@ -31,6 +31,7 @@ public class HtmlCreator {
 	
 	private Class classClass;
 	
+	
 	public HtmlCreator(Class classClass)
 	{
 		this.classClass=classClass;
@@ -50,6 +51,33 @@ public class HtmlCreator {
 		return sb.toString();
 	}
 	
+	private void generateChildrenJs(StringBuilder sb,List<JsGenerator> jsGeneratorList, List<Class> parentClassList)
+	{
+		if (fieldList==null) return;
+		for (Field field: fieldList)
+		{
+			if (field.getCompositeClass()!=null && !parentClassList.contains(field.getFieldClass()))
+			{
+				ReflectionManager reflectionManager = new ReflectionManager(field.getFieldClass());
+				List<Field> childrenList= reflectionManager.getChildrenField();
+				JsGenerator jsGenerator = new JsGenerator(field.getName(), false, childrenList, field.getCompositeClass(), entityName);
+				sb.append(jsGenerator.generateService());
+				jsGeneratorList.add(jsGenerator);
+			}
+		}
+		//vado in ricorsione
+		for (Field field: fieldList)
+		{
+			if (field.getCompositeClass()!=null && !parentClassList.contains(field.getFieldClass()))
+			{
+				HtmlCreator htmlCreator = new HtmlCreator(field.getFieldClass());
+				parentClassList.add(field.getFieldClass());
+				htmlCreator.generateChildrenJs(sb,jsGeneratorList, parentClassList);
+			}
+		}
+	}
+	
+	
 	private String buildJS()
 	{
 		StringBuilder buildJS= new StringBuilder();
@@ -57,11 +85,15 @@ public class HtmlCreator {
 		List<JsGenerator> jsGeneratorList= new ArrayList<JsGenerator>();
 		jsGeneratorList.add(new JsGenerator(entityName, true,childrenField,null,null));
 		buildJS.append(jsGeneratorList.get(0).generateService());
-		for (Field field: childrenField)
+		List<Class> parentClass= new ArrayList<Class>();
+		parentClass.add(classClass);
+		generateChildrenJs(buildJS,jsGeneratorList,parentClass);
+		/*for (Field field: childrenField)
 		{
 			jsGeneratorList.add(new JsGenerator(field.getName(), false,null,field.getCompositeClass(),entityName));
 			buildJS.append(jsGeneratorList.get(jsGeneratorList.size()-1).generateService());
-		}
+		}*/
+		
 		for (JsGenerator jsGenerator: jsGeneratorList)
 		{
 			buildJS.append(jsGenerator.generateController());
@@ -90,14 +122,14 @@ public class HtmlCreator {
 						.script().content(buildJS(),false)
 					._head()
 					.body(htmlAttributes.add("ng-app", Generator.getFirstLower(entityName)+"App"));
-					HtmlGenerator htmlGenerator= new HtmlGenerator(classClass, true);
+					HtmlGenerator htmlGenerator= new HtmlGenerator(classClass, true,new ArrayList<Class>());
 					htmlGenerator.generateEntityView(html);
-					for (Field field : childrenField)
+					/*for (Field field : childrenField)
 					{
 						HtmlGenerator childrenHtmlGenerator = new HtmlGenerator(field.getFieldClass(), false);
 						childrenHtmlGenerator.generateEntityView(html);
 						//generateEntityView(html, false,field.getName());
-					}
+					}*/
 					html._body();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

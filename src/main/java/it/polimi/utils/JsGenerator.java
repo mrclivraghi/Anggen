@@ -286,7 +286,7 @@ public class JsGenerator {
 			sb.append("$scope.updateParent();\n");
 		}
 		sb.append("};");
-		if (isParent)
+		//if (isParent)
 		{
 			for (Field field: childrenList)
 			{
@@ -423,7 +423,7 @@ public class JsGenerator {
 		if (parentEntityName!=null)
 			services=services+","+parentEntityName+"Service";
 		services=services+","+entityName+"Service";
-		if (isParent)
+		//if (isParent)
 		for (Field field: childrenList)
 		{
 			services=services+","+field.getName()+"Service";

@@ -1,6 +1,7 @@
 package it.polimi.utils;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -17,12 +18,16 @@ public class HtmlGenerator {
 	
 	private ReflectionManager reflectionManager;
 	
-	public HtmlGenerator(Class myClass,Boolean isParent)
+	private List<Class> parentClass;
+	
+	public HtmlGenerator(Class myClass,Boolean isParent, List<Class> parentClass)
 	{
 		this.reflectionManager= new ReflectionManager(myClass);
 		this.entityName=reflectionManager.parseName();
 		this.isParent=isParent;
 		fieldList= reflectionManager.generateField();
+		this.parentClass=parentClass;
+		this.parentClass.add(myClass);
 	}
 	
 	public void generateEntityView(HtmlCanvas html) throws IOException {
@@ -64,6 +69,15 @@ public class HtmlGenerator {
 				.content("Delete");
 		html._div();
 		html._div();
+		if (fieldList==null) return;
+		for (Field field: fieldList)
+		{
+			if (field.getCompositeClass()!=null && !parentClass.contains(field.getFieldClass()))
+			{ //children, generate everything if not parent!
+				HtmlGenerator htmlGenerator = new HtmlGenerator(field.getFieldClass(), false, parentClass);
+				htmlGenerator.generateEntityView(html);
+			}
+		}
 	}
 
 	private void renderDetail(HtmlCanvas html) throws IOException {
@@ -81,7 +95,7 @@ public class HtmlGenerator {
 				.input((new HtmlAttributes()).add("type", type).add("ng-model", "selectedEntity."+field.getName()).add("ng-readonly", readOnly));
 			} else
 				//TODO block after 2°level improve?
-				if (field.getCompositeClass()!=null  && isParent)
+				if (field.getCompositeClass()!=null  && !(parentClass.contains(field.getFieldClass())))
 				{ // entity or list!
 					if (field.getCompositeClass().fullName().contains("java.util.List"))
 					{ //list

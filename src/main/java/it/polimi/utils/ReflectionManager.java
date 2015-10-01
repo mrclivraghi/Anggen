@@ -1,6 +1,6 @@
 package it.polimi.utils;
 
-import it.polimi.model.Order;
+import it.polimi.oldmodel.Order;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
@@ -62,6 +62,22 @@ public class ReflectionManager {
 		return Generator.getFirstLower(fieldName);
 		
 	}
+	
+	public List<Field> getChildrenField()
+	{
+		List<Field> fieldList= generateField();
+		List<Field> childrenList = new ArrayList<Field>();
+		for (Field field: fieldList)
+		{
+			if (field.getCompositeClass()!=null)
+			{
+				childrenList.add(field);
+			}
+		}
+		return childrenList;
+	}
+	
+	
 	public List<Field> generateField()
 	{
 		java.lang.reflect.Field[] fields=obj.getClass().getDeclaredFields();
@@ -153,7 +169,12 @@ public class ReflectionManager {
 		String descriptionFields="";
 		String entity=parseName(classClass.getName());
 		List<Field> fieldList = null;
-		fieldList = generateField();
+		if (classClass!=this.classClass)
+		{
+			ReflectionManager reflectionManager= new ReflectionManager(classClass);
+			fieldList= reflectionManager.generateField();
+		} else
+			fieldList = generateField();
 		for (Field field: fieldList)
 		{
 			if (field.getFieldClass()==String.class)

@@ -1,32 +1,19 @@
-package it.polimi.utils;
+package it.polimi.generation;
+
+import it.polimi.utils.Field;
+import it.polimi.utils.ReflectionManager;
+import it.polimi.utils.Utility;
 
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
-import javax.persistence.Entity;
-
-import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-
-import com.sun.codemodel.ClassType;
-import com.sun.codemodel.JAnnotationUse;
-import com.sun.codemodel.JBlock;
-import com.sun.codemodel.JClass;
-import com.sun.codemodel.JClassAlreadyExistsException;
-import com.sun.codemodel.JCodeModel;
-import com.sun.codemodel.JDefinedClass;
-import com.sun.codemodel.JMethod;
-import com.sun.codemodel.JMod;
-import com.sun.codemodel.JVar;
-
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -39,10 +26,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import antlr.HTMLCodeGenerator;
+import com.sun.codemodel.ClassType;
+import com.sun.codemodel.JAnnotationUse;
+import com.sun.codemodel.JBlock;
+import com.sun.codemodel.JClass;
+import com.sun.codemodel.JClassAlreadyExistsException;
+import com.sun.codemodel.JCodeModel;
+import com.sun.codemodel.JDefinedClass;
+import com.sun.codemodel.JMethod;
+import com.sun.codemodel.JMod;
+import com.sun.codemodel.JVar;
 
-public class Generator {
-
+public class RestGenerator {
+	
+	
 	private String directory;
 
 	private Class classClass;
@@ -59,10 +56,11 @@ public class Generator {
 	
 	private ReflectionManager reflectionManager;
 	
-	public Generator(Class classClass)
+	
+	public RestGenerator(Class classClass)
 	{
 		this.classClass=classClass;
-		this.fullClassName=Generator.getFirstLower(classClass.getName());
+		this.fullClassName=Utility.getFirstLower(classClass.getName());
 		File file = new File(""); 
 		this.directory = file.getAbsolutePath()+"\\src\\main\\java";
 		reflectionManager= new ReflectionManager(classClass);
@@ -73,26 +71,15 @@ public class Generator {
 		
 	}
 	
-	
-	public static String getFirstLower(String string)
-	{
-		return string.replaceFirst(string.substring(0, 1), string.substring(0, 1).toLowerCase());
-	}
-	
-	public static String getFirstUpper(String string)
-	{
-		return string.replaceFirst(string.substring(0, 1), string.substring(0, 1).toUpperCase());
-	}
-	
 	public String getSearchQuery(JMethod method)
 	{
-		String query="select "+alias+" from "+getFirstUpper(className)+" "+alias+ " where ";
+		String query="select "+alias+" from "+Utility.getFirstUpper(className)+" "+alias+ " where ";
 		for (Field field: fields)
 		{
-			JVar param = method.param(field.getFieldClass()==Date.class ? String.class : field.getFieldClass(), field.getName());
+			JVar param = method.param(field.getFieldClass()==Date.class || field.getFieldClass()==java.util.Date.class? String.class : field.getFieldClass(), field.getName());
 			JAnnotationUse annotationParam= param.annotate(Param.class);
 			annotationParam.param("value", field.getName());
-			if (field.getFieldClass()==Date.class)
+			if (field.getFieldClass()==Date.class || field.getFieldClass()==java.util.Date.class)
 			{
 				query= query+" (:"+field.getName()+" is null or cast(:"+field.getName()+" as string)=cast("+alias+"."+field.getName()+" as string)) and";
 			} else
@@ -126,24 +113,67 @@ public class Generator {
 		return query;
 	}
 	
-	public String getAllParam()
+	
+	public void generateRESTClasses(List<Class> dependencyClass, Boolean jumpDependency)
 	{
-		String string="";
-		for (Field field: fields)
+		System.out.println("working for "+classClass.getName());
+		String searchMethod="";
+		if (jumpDependency && reflectionManager.hasList())
 		{
-			if (field.getFieldClass()==Date.class)
-			{
-				string=string+"it.polimi.utils.Utility.formatDate("+getFirstLower(className)+".get"+getFirstUpper(field.getName())+"()),";
-			}else
-			{
-				if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List"))
-					string=string+getFirstLower(className)+".get"+getFirstUpper(field.getName())+"List()==null? null :"+getFirstLower(className)+".get"+getFirstUpper(field.getName())+"List().get(0),";
-				else
-					string=string+getFirstLower(className)+".get"+getFirstUpper(field.getName())+"(),";
-			}
+			System.out.println(classClass.getName()+" has list. pass away.");
+			dependencyClass.add(classClass);
+			return;
 		}
-		return string.substring(0, string.length()-1);
+		generateServiceInterface();
+		List<Field> fieldList=null;
+		try {
+			fieldList = reflectionManager.getFieldList();
+			searchMethod=generateRepository();
+			//String searchMethod="findByOrderIdAndNameAndTimeslotDateAndPersonAndPlace";
+			//System.out.println(searchMethod);
+			//Class repositoryClass=Class.forName(modelClass.getName().replace(".model.", ".repository.")+"Repository");
+			String filePath=classClass.getName().replace(".model.", ".repository.");
+			filePath=filePath.replace(".", "\\");
+			File fileRepository = new File(directory+"\\"+filePath+"Repository.java");
+			File fileService = new File(directory+"\\"+filePath.replace("repository", "service")+"Service.java");
+			Class repositoryClass=null;
+			Class serviceClass=null;
+			if (fileRepository.exists())
+			{
+				//TODO improve...
+				System.out.println("esiste!");
+				URLClassLoader classLoader=null;
+				URL urlRepository=null;
+				try {
+					urlRepository=fileRepository.toURL();
+				} catch (MalformedURLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				try {
+					classLoader= URLClassLoader.newInstance(new URL[] {fileRepository.toURL()});
+				} catch (MalformedURLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				repositoryClass=Class.forName(classClass.getName().replace(".model.", ".repository.")+"Repository", true, classLoader);
+				serviceClass=Class.forName(classClass.getName().replace(".model.", ".service.")+"Service", true, classLoader);
+				
+			}
+			else
+				System.out.println(fileRepository.getAbsolutePath()+" does not exists!");
+			//repositoryClass=ClassLoader.getSystemClassLoader().loadClass(modelClass.getName().replace(".model.", ".repository.")+"Repository");
+			
+			//Class serviceClass=Class.forName(modelClass.getName().replace(".model.", ".service.")+"Service");
+			generateServiceImpl(serviceClass,repositoryClass,searchMethod);
+			generateController(serviceClass);
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
+	
 	
 	public String generateRepository(){
 		JCodeModel	codeModel = new JCodeModel();
@@ -162,11 +192,11 @@ public class Generator {
 				{
 					JMethod method=myClass.method(JMod.PUBLIC, listClass, "findBy"+field.getName().replaceFirst(field.getName().substring(0, 1), field.getName().substring(0, 1).toUpperCase()));
 					//if (field.getCompositeClass()==null)
-					method.param(field.getFieldClass()==Date.class ? String.class : field.getFieldClass(), field.getName());
+					method.param((field.getFieldClass()==Date.class || field.getFieldClass()==java.util.Date.class )? String.class : field.getFieldClass(), field.getName());
 					//else
 					//method.param(field.getCompositeClass(), field.getName());
 				}
-				searchMethod=searchMethod+getFirstUpper(field.getName())+"And";
+				searchMethod=searchMethod+Utility.getFirstUpper(field.getName())+"And";
 			}
 			searchMethod=searchMethod.substring(0,searchMethod.length()-3);
 			JMethod method=myClass.method(JMod.PUBLIC, listClass, searchMethod);
@@ -223,6 +253,7 @@ public class Generator {
 	{
 		JCodeModel	codeModel = new JCodeModel();
 		JDefinedClass myClass= null;
+		ReflectionManager reflectionManager = new ReflectionManager(classClass);
 		try {
 			myClass = codeModel._class(""+fullClassName.replace(".model.", ".service.")+"ServiceImpl", ClassType.CLASS);
 			className=reflectionManager.parseName();
@@ -246,7 +277,7 @@ public class Generator {
 			findById.annotate(Override.class);
 			findById.param(keyClass,lowerClass+"Id");
 			JBlock findByIdBlock= findById.body();
-			findByIdBlock.directStatement("return "+lowerClass+"Repository.findBy"+Generator.getFirstUpper(className)+"Id("+lowerClass+"Id);");
+			findByIdBlock.directStatement("return "+lowerClass+"Repository.findBy"+Utility.getFirstUpper(className)+"Id("+lowerClass+"Id);");
 			//findByIdBlock._return(findByIdExpression);
 			
 			//search
@@ -254,7 +285,7 @@ public class Generator {
 			findLike.annotate(Override.class);
 			findLike.param(classClass, lowerClass);
 			JBlock findLikeBlock= findLike.body();
-			findLikeBlock.directStatement("return "+lowerClass+"Repository."+searchMethod+"("+getAllParam()+");");
+			findLikeBlock.directStatement("return "+lowerClass+"Repository."+searchMethod+"("+reflectionManager.getAllParam()+");");
 			//delete
 			JMethod deleteById = myClass.method(JMod.PUBLIC, void.class, "deleteById");
 			deleteById.annotate(Override.class);
@@ -275,7 +306,7 @@ public class Generator {
 			update.annotate(Transactional.class);
 			update.param(classClass, lowerClass);
 			JBlock updateBlock= update.body();
-			updateBlock.directStatement(Generator.getFirstUpper(className)+" returned"+getFirstUpper(className)+"="+lowerClass+"Repository.save("+lowerClass+");");
+			updateBlock.directStatement(Utility.getFirstUpper(className)+" returned"+Utility.getFirstUpper(className)+"="+lowerClass+"Repository.save("+lowerClass+");");
 			/*for (Field field: fields)
 			{
 				if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List"))
@@ -288,7 +319,7 @@ public class Generator {
 					updateBlock.directStatement("}");
 				}
 			}*/
-			updateBlock.directStatement("return returned"+getFirstUpper(className)+";");
+			updateBlock.directStatement("return returned"+Utility.getFirstUpper(className)+";");
 			
 		} catch (JClassAlreadyExistsException e) {
 			e.printStackTrace();
@@ -357,7 +388,7 @@ public class Generator {
 			JMethod delete = myClass.method(JMod.PUBLIC, ResponseEntity.class, "delete"+className+"ById");
 			delete.annotate(ResponseBody.class);
 			JAnnotationUse requestMappingDelete = delete.annotate(RequestMapping.class);
-			requestMappingDelete.param("value", "/{"+getFirstLower(className)+"Id}");
+			requestMappingDelete.param("value", "/{"+Utility.getFirstLower(className)+"Id}");
 			requestMappingDelete.param("method",RequestMethod.DELETE);
 			orderParam= delete.param(String.class,lowerClass+"Id");
 			orderParam.annotate(PathVariable.class);
@@ -374,7 +405,7 @@ public class Generator {
 			orderParam.annotate(RequestBody.class);
 			JBlock insertBlock= insert.body();
 			
-			insertBlock.directStatement(Generator.getFirstUpper(className)+" inserted"+className+"="+lowerClass+"Service.insert("+lowerClass+");");
+			insertBlock.directStatement(Utility.getFirstUpper(className)+" inserted"+className+"="+lowerClass+"Service.insert("+lowerClass+");");
 			insertBlock.directStatement("return "+response+".body(inserted"+className+");");
 			//UpdateOrder
 			JMethod update = myClass.method(JMod.PUBLIC, ResponseEntity.class, "update"+className+"");
@@ -384,7 +415,7 @@ public class Generator {
 			orderParam= update.param(classClass,lowerClass+"");
 			orderParam.annotate(RequestBody.class);
 			JBlock updateBlock= update.body();
-			updateBlock.directStatement(Generator.getFirstUpper(className)+" updated"+className+"="+lowerClass+"Service.update("+lowerClass+");");
+			updateBlock.directStatement(Utility.getFirstUpper(className)+" updated"+className+"="+lowerClass+"Service.update("+lowerClass+");");
 			updateBlock.directStatement("return "+response+".body(updated"+className+");");
 			
 			
@@ -400,85 +431,4 @@ public class Generator {
 			}
 	
 	}
-
-	
-	public void generateRESTClasses(List<Class> dependencyClass, Boolean jumpDependency)
-	{
-		System.out.println("working for "+classClass.getName());
-		String searchMethod="";
-		if (jumpDependency && reflectionManager.hasList())
-		{
-			System.out.println(classClass.getName()+" has list. pass away.");
-			dependencyClass.add(classClass);
-			return;
-		}
-		generateServiceInterface();
-		List<Field> fieldList=null;
-		try {
-			fieldList = reflectionManager.getFieldList();
-			searchMethod=generateRepository();
-			//String searchMethod="findByOrderIdAndNameAndTimeslotDateAndPersonAndPlace";
-			//System.out.println(searchMethod);
-			//Class repositoryClass=Class.forName(modelClass.getName().replace(".model.", ".repository.")+"Repository");
-			String filePath=classClass.getName().replace(".model.", ".repository.");
-			filePath=filePath.replace(".", "\\");
-			File fileRepository = new File(directory+"\\"+filePath+"Repository.java");
-			File fileService = new File(directory+"\\"+filePath.replace("repository", "service")+"Service.java");
-			Class repositoryClass=null;
-			Class serviceClass=null;
-			if (fileRepository.exists())
-			{
-				//TODO improve...
-				System.out.println("esiste!");
-				URLClassLoader classLoader=null;
-				URL urlRepository=null;
-				try {
-					urlRepository=fileRepository.toURL();
-				} catch (MalformedURLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				
-				try {
-					classLoader= URLClassLoader.newInstance(new URL[] {fileRepository.toURL()});
-				} catch (MalformedURLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				repositoryClass=Class.forName(classClass.getName().replace(".model.", ".repository.")+"Repository", true, classLoader);
-				serviceClass=Class.forName(classClass.getName().replace(".model.", ".service.")+"Service", true, classLoader);
-				
-			}
-			else
-				System.out.println(fileRepository.getAbsolutePath()+" does not exists!");
-			//repositoryClass=ClassLoader.getSystemClassLoader().loadClass(modelClass.getName().replace(".model.", ".repository.")+"Repository");
-			
-			//Class serviceClass=Class.forName(modelClass.getName().replace(".model.", ".service.")+"Service");
-			generateServiceImpl(serviceClass,repositoryClass,searchMethod);
-			generateController(serviceClass);
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	public static void main(String[] args) {
-
-		Reflections reflections = new Reflections("it.polimi.model");
-		Set<Class<?>> allClasses = reflections.getTypesAnnotatedWith(Entity.class);
-		List<Class> dependencyClass = new ArrayList<Class>();
-		
-		for (Class modelClass: allClasses)
-		{
-			Generator generator = new Generator(modelClass);
-			generator.generateRESTClasses(dependencyClass,true);
-		}
-		for (Class modelClass:dependencyClass)
-		{
-			Generator generator = new Generator(modelClass);
-			generator.generateRESTClasses(dependencyClass,false);
-		}
-		
-	}
-
 }

@@ -1,15 +1,17 @@
-package it.polimi.utils;
+package it.polimi.generation;
+
+import it.polimi.utils.Field;
+import it.polimi.utils.ReflectionManager;
+import it.polimi.utils.Utility;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.rendersnake.HtmlAttributes;
 import org.rendersnake.HtmlCanvas;
 
-public class HtmlGenerator {
-	
+public class AngularGenerator {
 	private String entityName;
 	
 	private Boolean isParent;
@@ -20,14 +22,15 @@ public class HtmlGenerator {
 	
 	private List<Class> parentClass;
 	
-	public HtmlGenerator(Class myClass,Boolean isParent, List<Class> parentClass)
+	public AngularGenerator(Class myClass,Boolean isParent, List<Class> parentClass)
 	{
 		this.reflectionManager= new ReflectionManager(myClass);
 		this.entityName=reflectionManager.parseName();
 		this.isParent=isParent;
-		fieldList= reflectionManager.getFieldList();
+		this.fieldList= reflectionManager.getFieldList();
 		this.parentClass=parentClass;
-		this.parentClass.add(myClass);
+		if (this.parentClass!=null)
+			this.parentClass.add(myClass);
 	}
 	
 	public void generateEntityView(HtmlCanvas html) throws IOException {
@@ -74,8 +77,8 @@ public class HtmlGenerator {
 		{
 			if (field.getCompositeClass()!=null && !parentClass.contains(field.getFieldClass()))
 			{ //children, generate everything if not parent!
-				HtmlGenerator htmlGenerator = new HtmlGenerator(field.getFieldClass(), false, parentClass);
-				htmlGenerator.generateEntityView(html);
+				AngularGenerator angularGenerator = new AngularGenerator(field.getFieldClass(), false, parentClass);
+				angularGenerator.generateEntityView(html);
 			}
 		}
 	}
@@ -99,19 +102,21 @@ public class HtmlGenerator {
 				{ // entity or list!
 					if (field.getCompositeClass().fullName().contains("java.util.List"))
 					{ //list
-						html.p((new HtmlAttributes()).add("ng-click", "show"+Generator.getFirstUpper(field.getName())+"Detail()"))
+						html.p((new HtmlAttributes()).add("ng-click", "show"+Utility.getFirstUpper(field.getName())+"Detail()"))
 						.content("Add new "+field.getName());
 						html.div((new HtmlAttributes()).add("ng-if", "selectedEntity."+field.getName()+"List.length>0"))
 						.ul()
-						.li((new HtmlAttributes()).add("ng-repeat", "entity in selectedEntity."+field.getName()+"List").add("ng-click", "show"+Generator.getFirstUpper(field.getName())+"Detail($index)"));
-						//TODO mgmt field of children class....
-						html.content("{{$index}}--{{entity."+field.getName()+"Id}}--{{entity.description}}");
+						.li((new HtmlAttributes()).add("ng-repeat", "entity in selectedEntity."+field.getName()+"List").add("ng-click", "show"+Utility.getFirstUpper(field.getName())+"Detail($index)"));
+						AngularGenerator angularGenerator = new AngularGenerator(field.getFieldClass(), false, null);
+						angularGenerator.renderItem(html, field.getName());
+						//html.content("{{$index}}--{{entity."+field.getName()+"Id}}--{{entity.description}}");
+						
 						html._ul()._div();
 					}else
 					{//entity
-						html.p((new HtmlAttributes()).add("ng-click", "show"+Generator.getFirstUpper(field.getName())+"Detail()").add("ng-if", "selectedEntity."+field.getName()+"==null"))
+						html.p((new HtmlAttributes()).add("ng-click", "show"+Utility.getFirstUpper(field.getName())+"Detail()").add("ng-if", "selectedEntity."+field.getName()+"==null"))
 						.content("Add new "+field.getName());
-						html.p((new HtmlAttributes()).add("ng-click", "show"+Generator.getFirstUpper(field.getName())+"Detail()").add("ng-if", "selectedEntity."+field.getName()+"!=null"))
+						html.p((new HtmlAttributes()).add("ng-click", "show"+Utility.getFirstUpper(field.getName())+"Detail()").add("ng-if", "selectedEntity."+field.getName()+"!=null"))
 						.content(field.getName()+": {{selectedEntity."+field.getName()+"."+field.getName()+"Id}}");
 						
 						
@@ -140,7 +145,7 @@ public class HtmlGenerator {
 					if (field.getName().contains(baseEntity+"Id"))
 						readOnly="true";
 					String type= (field.getFieldClass()==java.sql.Date.class || field.getFieldClass()==java.util.Date.class) ? "date" : "text";
-					String fieldForm=baseEntity+"."+Generator.getFirstLower(field.getName());
+					String fieldForm=baseEntity+"."+Utility.getFirstLower(field.getName());
 					html.p()
 					.content(field.getName())
 					.input((new HtmlAttributes()).add("type", type).add("ng-model", fieldForm).add("ng-readonly",readOnly));

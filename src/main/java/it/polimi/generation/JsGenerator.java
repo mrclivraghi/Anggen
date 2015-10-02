@@ -1,10 +1,17 @@
-package it.polimi.utils;
+package it.polimi.generation;
 
+import it.polimi.utils.Field;
+import it.polimi.utils.ReflectionManager;
+import it.polimi.utils.Utility;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import com.sun.codemodel.JClass;
 
 public class JsGenerator {
+	
+	private Class classClass;
 	
 	private String entityName;
 	
@@ -16,12 +23,18 @@ public class JsGenerator {
 	
 	private Boolean entityList;
 	
-	public JsGenerator(String entityName,Boolean isParent,List<Field> childrenList,JClass compositeClass,String parentEntityName)
+	private List<Field> fieldList;
+	
+	
+	public JsGenerator(Class classClass,Boolean isParent,JClass compositeClass,String parentEntityName)
 	{
-		this.entityName=entityName;
+		this.classClass=classClass;
+		ReflectionManager reflectionManager = new ReflectionManager(classClass);
+		this.entityName=reflectionManager.parseName();
 		this.parentEntityName=parentEntityName;
 		this.isParent=isParent;
-		this.childrenList=childrenList;
+		this.fieldList=reflectionManager.getFieldList();
+		this.childrenList=reflectionManager.getChildrenFieldList();
 		if (compositeClass!=null && compositeClass.fullName().contains("java.util.List"))
 			entityList=true;
 		else
@@ -290,7 +303,7 @@ public class JsGenerator {
 		{
 			for (Field field: childrenList)
 			{
-				sb.append("$scope.show"+Generator.getFirstUpper(field.getName())+"Detail= function(index)\n");
+				sb.append("$scope.show"+Utility.getFirstUpper(field.getName())+"Detail= function(index)\n");
 				sb.append("{\n");
 				sb.append("if (index!=null)\n");
 				sb.append(field.getName()+"Service.setSelectedEntity("+entityName+"Service.selectedEntity."+field.getName()+"List[index]);\n");
@@ -430,4 +443,72 @@ public class JsGenerator {
 		}
 		return services;
 	}
+	
+	public String buildJS()
+	{
+		StringBuilder buildJS= new StringBuilder();
+		buildJS.append("angular.module(\""+entityName+"App\",[])\n");
+		List<JsGenerator> jsGeneratorList= new ArrayList<JsGenerator>();
+		jsGeneratorList.add(new JsGenerator(classClass, true,null,null));
+		buildJS.append(jsGeneratorList.get(0).generateService());
+		List<Class> parentClass= new ArrayList<Class>();
+		parentClass.add(classClass);
+		generateChildrenJs(buildJS,jsGeneratorList,parentClass);
+		/*for (Field field: childrenField)
+		{
+			jsGeneratorList.add(new JsGenerator(field.getName(), false,null,field.getCompositeClass(),entityName));
+			buildJS.append(jsGeneratorList.get(jsGeneratorList.size()-1).generateService());
+		}*/
+		
+		for (JsGenerator jsGenerator: jsGeneratorList)
+		{
+			buildJS.append(jsGenerator.generateController());
+		}
+		buildJS.append(";");
+		return buildJS.toString();
+	}
+	
+	
+	private void generateChildrenJs(StringBuilder sb,List<JsGenerator> jsGeneratorList, List<Class> parentClassList)
+	{
+		if (fieldList==null) return;
+		for (Field field: fieldList)
+		{
+			if (field.getCompositeClass()!=null && !parentClassList.contains(field.getFieldClass()))
+			{
+				ReflectionManager reflectionManager = new ReflectionManager(field.getFieldClass());
+				List<Field> childrenList= reflectionManager.getChildrenFieldList();
+				JsGenerator jsGenerator = new JsGenerator(field.getFieldClass(), false, field.getCompositeClass(), entityName);
+				sb.append(jsGenerator.generateService());
+				jsGeneratorList.add(jsGenerator);
+			}
+		}
+		//vado in ricorsione
+		for (Field field: fieldList)
+		{
+			if (field.getCompositeClass()!=null && !parentClassList.contains(field.getFieldClass()))
+			{
+				//HtmlCreator htmlCreator = new HtmlCreator(field.getFieldClass());
+				JsGenerator jsGenerator = new JsGenerator(field.getFieldClass(), false, field.getCompositeClass(), entityName);
+				parentClassList.add(field.getFieldClass());
+				jsGenerator.generateChildrenJs(sb,jsGeneratorList, parentClassList);
+			}
+		}
+	}
+	
+	
+
+	private String setTempEntityForm()
+	{
+		StringBuilder sb = new StringBuilder();
+		for (Field field: fieldList)
+		{
+			sb.append("temp"+Utility.getFirstUpper(entityName)+"."+Utility.getFirstLower(field.getName())+"=data[i]."+Utility.getFirstLower(field.getName())+";\n");
+		}
+		
+		return sb.toString();
+	}
+	
+
+	
 }

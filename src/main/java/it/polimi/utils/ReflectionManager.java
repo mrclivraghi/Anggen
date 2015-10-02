@@ -59,7 +59,7 @@ public class ReflectionManager {
 			name=name.substring(name.indexOf(".")+1,name.length());
 		if (name.indexOf("List")==name.length()-4 && name.length()>3)
 			name=name.substring(0,name.length()-4);
-		return Generator.getFirstLower(name);
+		return Utility.getFirstLower(name);
 		
 	}
 	
@@ -204,6 +204,29 @@ public class ReflectionManager {
 		return null;
 			
 	}
+	
+	
+	public String getAllParam()
+	{
+		String string="";
+		List<Field> fields = getFieldList();
+		String className = parseName();
+		for (Field field: fields)
+		{
+			if (field.getFieldClass()==Date.class || field.getFieldClass()==java.sql.Date.class)
+			{
+				string=string+"it.polimi.utils.Utility.formatDate("+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(field.getName())+"()),";
+			}else
+			{
+				if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List"))
+					string=string+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(field.getName())+"List()==null? null :"+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(field.getName())+"List().get(0),";
+				else
+					string=string+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(field.getName())+"(),";
+			}
+		}
+		return string.substring(0, string.length()-1);
+	}
+	
 	
 	
 	public static void main(String[] args)

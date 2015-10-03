@@ -1,6 +1,11 @@
 package it.polimi.utils;
 
-import it.polimi.oldmodel.Order;
+import it.polimi.model.Mountain;
+import it.polimi.model.Order;
+import it.polimi.model.Person;
+import it.polimi.model.Photo;
+import it.polimi.model.Place;
+import it.polimi.model.SeedQuery;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
@@ -159,6 +164,38 @@ public class ReflectionManager {
 	}
 	
 	
+	private static List<Class> getChildrenClassList(Class theClass,List<Class> parentClassList)
+	{
+		ReflectionManager reflectionManager = new ReflectionManager(theClass);
+		List<Class> returnedClassList = new ArrayList<Class>();
+		List<Class> childrenClassList = reflectionManager.getChildrenClasses();
+		if (childrenClassList.size()==0) return returnedClassList;
+		for (Class fieldClass : childrenClassList)
+		{
+			if (parentClassList.contains(fieldClass))
+			{}//childrenClassList.remove(fieldClass);
+			else
+			{
+				returnedClassList.add(fieldClass);
+				parentClassList.add(fieldClass);
+				returnedClassList.addAll(ReflectionManager.getChildrenClassList(fieldClass, parentClassList));
+			}
+		}
+		return returnedClassList;
+		
+		
+		
+	}
+	
+	public List<Class> getSubClassList()
+	{
+		List<Class> subClassList = null;
+		List<Class> parentClassList = new ArrayList<Class>();
+		parentClassList.add(classClass);
+		subClassList=ReflectionManager.getChildrenClassList(classClass,parentClassList);
+		return subClassList;
+	}
+	
 	public String getDescriptionField()
 	{
 		return getDescriptionField(classClass);
@@ -231,8 +268,12 @@ public class ReflectionManager {
 	
 	public static void main(String[] args)
 	{
-		ReflectionManager reflectionManager= new ReflectionManager(Order.class);
-		List<Field> fieldList=reflectionManager.getFieldList();
+		ReflectionManager reflectionManager= new ReflectionManager(Place.class);
+		List<Class> classList = reflectionManager.getSubClassList();
+		for (Class myClass : classList)
+		{
+			System.out.println(myClass.getName());
+		}
 		/*for (Field field: fieldList)
 			System.out.println(field.getName()+"-"+field.getFieldClass()+"-"+(field.getCompositeClass()==null ? "" : field.getCompositeClass().fullName())+"-"+(field.getRepositoryClass()==null ? "" : field.getRepositoryClass().getName()));//+field.getCompositeClass().toString()+"-"+field.getRepositoryClass().toString());
 		

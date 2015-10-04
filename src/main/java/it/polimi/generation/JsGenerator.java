@@ -1,5 +1,6 @@
 package it.polimi.generation;
 
+import it.polimi.utils.ClassDetail;
 import it.polimi.utils.Field;
 import it.polimi.utils.ReflectionManager;
 import it.polimi.utils.Utility;
@@ -25,6 +26,8 @@ public class JsGenerator {
 	
 	private List<Field> fieldList;
 	
+	private List<ClassDetail> descendantClassList;
+	
 	
 	public JsGenerator(Class classClass,Boolean isParent,JClass compositeClass,String parentEntityName)
 	{
@@ -35,6 +38,9 @@ public class JsGenerator {
 		this.isParent=isParent;
 		this.fieldList=reflectionManager.getFieldList();
 		this.childrenList=reflectionManager.getChildrenFieldList();
+		List<Class> parentClassList = new ArrayList<Class>();
+		parentClassList.add(classClass);
+		this.descendantClassList=reflectionManager.getDescendantClassList(classClass, parentClassList);
 		if (compositeClass!=null && compositeClass.fullName().contains("java.util.List"))
 			entityList=true;
 		else
@@ -106,11 +112,26 @@ public class JsGenerator {
 	
 	private void changeChildrenVisibility(StringBuilder stringBuilder,Boolean show)
 	{
-		if (childrenList!=null && childrenList.size()>0)
-		for (Field field: childrenList)
+		if (isParent)
 		{
-			stringBuilder.append(field.getName()+"Service.selectedEntity.show="+show.toString()+";");
+			if (descendantClassList!=null && descendantClassList.size()>0)
+			for (ClassDetail childrenClass: descendantClassList)
+			{
+				ReflectionManager reflectionManager = new ReflectionManager(childrenClass.getClassClass());
+				stringBuilder.append(reflectionManager.parseName()+"Service.selectedEntity.show="+show.toString()+";");
+			}
 		}
+		else
+		{
+			if (childrenList!=null && childrenList.size()>0)
+				for (Field field: childrenList)
+				{
+					ReflectionManager reflectionManager = new ReflectionManager(field.getFieldClass());
+					stringBuilder.append(reflectionManager.parseName()+"Service.selectedEntity.show="+show.toString()+";");
+				}
+
+		}
+		
 	}
 	
 	public String generateController()
@@ -432,14 +453,15 @@ public class JsGenerator {
 	 */
 
 	private String getServices() {
+		List<Class> parentClassList= new ArrayList<Class>();
+		parentClassList.add(classClass);
 		String services="";
-		if (parentEntityName!=null)
-			services=services+","+parentEntityName+"Service";
 		services=services+","+entityName+"Service";
-		//if (isParent)
-		for (Field field: childrenList)
+		for (ClassDetail classDetail : descendantClassList)
 		{
-			services=services+","+field.getName()+"Service";
+			ReflectionManager reflectionManager = new ReflectionManager(classDetail.getClassClass());
+			services=services+","+reflectionManager.parseName()+"Service";
+			
 		}
 		return services;
 	}
@@ -453,7 +475,15 @@ public class JsGenerator {
 		buildJS.append(jsGeneratorList.get(0).generateService());
 		List<Class> parentClass= new ArrayList<Class>();
 		parentClass.add(classClass);
-		generateChildrenJs(buildJS,jsGeneratorList,parentClass);
+		
+		List<ClassDetail> descendantClassList = ReflectionManager.getDescendantClassList(classClass, parentClass);
+		for (ClassDetail theClass : descendantClassList)
+		{
+			jsGeneratorList.add(new JsGenerator(theClass.getClassClass(),false,theClass.getCompositeClass(),entityName));
+			buildJS.append(jsGeneratorList.get(jsGeneratorList.size()-1).generateService());
+		}
+		 
+		//generateChildrenJs(buildJS,jsGeneratorList,parentClass);
 		/*for (Field field: childrenField)
 		{
 			jsGeneratorList.add(new JsGenerator(field.getName(), false,null,field.getCompositeClass(),entityName));

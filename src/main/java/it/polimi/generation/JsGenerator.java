@@ -227,6 +227,7 @@ public class JsGenerator {
 		//INSERT
 		sb.append("$scope.insert=function()\n");
 		sb.append("{\n");
+		sb.append("if (!$scope."+entityName+"DetailForm.$valid) return; \n");
 		if (isParent)
 		{
 			sb.append("$http.put(\"../"+entityName+"/\","+entityName+"Service.selectedEntity)\n");
@@ -256,6 +257,7 @@ public class JsGenerator {
 		//UPDATE
 		sb.append("$scope.update=function()\n");
 		sb.append("{\n");
+		sb.append("if (!$scope."+entityName+"DetailForm.$valid) return; \n");
 		if (isParent)
 		{
 			changeChildrenVisibility(sb, false);

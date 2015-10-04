@@ -71,7 +71,7 @@ public class AngularGenerator {
 		
 		html._li()._ul()._form();
 		//detail
-		html.form((new HtmlAttributes()).add("id", entityName+"DetailForm").add("name", entityName+"DetailForm").add("ng-if", "selectedEntity.show"))
+		html.form((new HtmlAttributes()).add("id", entityName+"DetailForm").add("name", entityName+"DetailForm").add("ng-show", "selectedEntity.show"))
 			.p().content("DETAIL");
 		renderDetail(html);
 		html._form();

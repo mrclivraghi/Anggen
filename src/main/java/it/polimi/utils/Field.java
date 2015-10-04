@@ -1,5 +1,8 @@
 package it.polimi.utils;
 
+import java.lang.annotation.Annotation;
+import java.util.List;
+
 import com.sun.codemodel.JClass;
 
 public class Field{
@@ -7,6 +10,8 @@ public class Field{
 	private Class fieldClass;
 	private JClass compositeClass;
 	private Class repositoryClass;
+	private Annotation[] annotationList;
+	
 	public Field(String name, Class fieldClass, JClass compositeClass,Class repositoryClass)
 	{
 		this.name=name;
@@ -38,5 +43,13 @@ public class Field{
 	}
 	public void setRepositoryClass(Class repositoryClass) {
 		this.repositoryClass = repositoryClass;
+	}
+
+	public Annotation[] getAnnotationList() {
+		return annotationList;
+	}
+
+	public void setAnnotationList(Annotation[] annotationList) {
+		this.annotationList = annotationList;
 	}
 }

@@ -121,6 +121,7 @@ public class ReflectionManager {
 				}
 			}
 			Field myField= new Field(parseName(field.getName()), fieldClass, jClass, repositoryClass);
+			myField.setAnnotationList(field.getAnnotations());
 			fieldList.add(myField);
 		}
 		return fieldList;
@@ -163,22 +164,25 @@ public class ReflectionManager {
 		return classList;
 	}
 	
-	
-	private static List<Class> getChildrenClassList(Class theClass,List<Class> parentClassList)
+	//recursive
+	public static List<ClassDetail> getDescendantClassList(Class theClass,List<Class> parentClassList)
 	{
 		ReflectionManager reflectionManager = new ReflectionManager(theClass);
-		List<Class> returnedClassList = new ArrayList<Class>();
-		List<Class> childrenClassList = reflectionManager.getChildrenClasses();
-		if (childrenClassList.size()==0) return returnedClassList;
-		for (Class fieldClass : childrenClassList)
+		List<ClassDetail> returnedClassList = new ArrayList<ClassDetail>();
+		List<Field> childrenFieldList = reflectionManager.getChildrenFieldList();
+		if (childrenFieldList.size()==0) return returnedClassList;
+		for (Field field : childrenFieldList)
 		{
-			if (parentClassList.contains(fieldClass))
+			if (parentClassList.contains(field.getFieldClass()))
 			{}//childrenClassList.remove(fieldClass);
 			else
 			{
-				returnedClassList.add(fieldClass);
-				parentClassList.add(fieldClass);
-				returnedClassList.addAll(ReflectionManager.getChildrenClassList(fieldClass, parentClassList));
+				ClassDetail classDetail = new ClassDetail();
+				classDetail.setClassClass(field.getFieldClass());
+				classDetail.setCompositeClass(field.getCompositeClass());
+				returnedClassList.add(classDetail);
+				parentClassList.add(field.getFieldClass());
+				returnedClassList.addAll(ReflectionManager.getDescendantClassList(field.getFieldClass(), parentClassList));
 			}
 		}
 		return returnedClassList;
@@ -187,12 +191,12 @@ public class ReflectionManager {
 		
 	}
 	
-	public List<Class> getSubClassList()
+	public List<ClassDetail> getSubClassList()
 	{
-		List<Class> subClassList = null;
+		List<ClassDetail> subClassList = null;
 		List<Class> parentClassList = new ArrayList<Class>();
 		parentClassList.add(classClass);
-		subClassList=ReflectionManager.getChildrenClassList(classClass,parentClassList);
+		subClassList=ReflectionManager.getDescendantClassList(classClass,parentClassList);
 		return subClassList;
 	}
 	
@@ -268,21 +272,12 @@ public class ReflectionManager {
 	
 	public static void main(String[] args)
 	{
-		ReflectionManager reflectionManager= new ReflectionManager(Place.class);
-		List<Class> classList = reflectionManager.getSubClassList();
-		for (Class myClass : classList)
+		ReflectionManager reflectionManager= new ReflectionManager(Mountain.class);
+		List<ClassDetail> classList = reflectionManager.getSubClassList();
+		for (ClassDetail myClass : classList)
 		{
-			System.out.println(myClass.getName());
+			System.out.println(myClass.getClassClass().getName()+"---"+myClass.getCompositeClass().fullName());
 		}
-		/*for (Field field: fieldList)
-			System.out.println(field.getName()+"-"+field.getFieldClass()+"-"+(field.getCompositeClass()==null ? "" : field.getCompositeClass().fullName())+"-"+(field.getRepositoryClass()==null ? "" : field.getRepositoryClass().getName()));//+field.getCompositeClass().toString()+"-"+field.getRepositoryClass().toString());
-		
-		System.out.println("descriptionFields");
-		System.out.println(getDescriptionField(Order.class));
-		System.out.println(getDescriptionField(Place.class));
-		System.out.println(getDescriptionField(Person.class));
-		*/
-		
-		
+	
 	}
 }

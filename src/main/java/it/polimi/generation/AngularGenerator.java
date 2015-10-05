@@ -11,6 +11,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -87,8 +88,9 @@ public class AngularGenerator {
 		html._div();
 		if (isParent)
 		{
-
+			ArrayList<Class> oldParentClassList = (ArrayList<Class>) ((ArrayList<Class>) parentClass).clone();
 			List<ClassDetail> descendantClassList = ReflectionManager.getDescendantClassList(classClass, parentClass);
+			parentClass=oldParentClassList;
 			if (descendantClassList==null || descendantClassList.size()==0) return;
 			for (ClassDetail theClass: descendantClassList)
 			{

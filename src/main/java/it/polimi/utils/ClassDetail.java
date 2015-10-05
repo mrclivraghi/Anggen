@@ -7,6 +7,8 @@ public class ClassDetail {
 	
 	private JClass compositeClass;
 	
+	private String parentName;
+	
 	public Class getClassClass() {
 		return classClass;
 	}
@@ -18,6 +20,12 @@ public class ClassDetail {
 	}
 	public void setCompositeClass(JClass compositeClass) {
 		this.compositeClass = compositeClass;
+	}
+	public String getParentName() {
+		return parentName;
+	}
+	public void setParentName(String parentName) {
+		this.parentName = parentName;
 	}
 	
 }

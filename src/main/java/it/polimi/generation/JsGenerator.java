@@ -481,7 +481,7 @@ public class JsGenerator {
 		List<ClassDetail> descendantClassList = ReflectionManager.getDescendantClassList(classClass, parentClass);
 		for (ClassDetail theClass : descendantClassList)
 		{
-			jsGeneratorList.add(new JsGenerator(theClass.getClassClass(),false,theClass.getCompositeClass(),entityName));
+			jsGeneratorList.add(new JsGenerator(theClass.getClassClass(),false,theClass.getCompositeClass(),theClass.getParentName()));
 			buildJS.append(jsGeneratorList.get(jsGeneratorList.size()-1).generateService());
 		}
 		 

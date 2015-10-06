@@ -341,6 +341,8 @@ public class RestGenerator {
 						updateBlock.directStatement("}");
 					}
 			}
+			
+			updateBlock.directStatement(" return returned"+className+";");
 				
 		} catch (JClassAlreadyExistsException e) {
 			e.printStackTrace();

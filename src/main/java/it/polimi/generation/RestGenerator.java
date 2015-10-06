@@ -195,6 +195,13 @@ public class RestGenerator {
 					method.param((field.getFieldClass()==Date.class || field.getFieldClass()==java.util.Date.class )? String.class : field.getFieldClass(), field.getName());
 					//else
 					//method.param(field.getCompositeClass(), field.getName());
+				} else
+				{
+					if (!field.getCompositeClass().fullName().contains("java.util.List"))
+					{ // find by entity
+						JMethod method= myClass.method(JMod.PUBLIC, listClass, "findBy"+Utility.getFirstUpper(field.getName()));
+						method.param(field.getFieldClass(), field.getName());
+					}
 				}
 				searchMethod=searchMethod+Utility.getFirstUpper(field.getName())+"And";
 			}

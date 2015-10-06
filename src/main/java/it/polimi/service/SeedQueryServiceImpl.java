@@ -2,9 +2,12 @@
 package it.polimi.service;
 
 import java.util.List;
+
+import it.polimi.model.Photo;
 import it.polimi.model.SeedQuery;
 import it.polimi.repository.PhotoRepository;
 import it.polimi.repository.SeedQueryRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +21,9 @@ public class SeedQueryServiceImpl
     public SeedQueryRepository seedQueryRepository;
     @Autowired
     public PhotoRepository photoRepository;
+    
+    
+   
 
     @Override
     public List<SeedQuery> findById(Long seedQueryId) {
@@ -43,7 +49,19 @@ public class SeedQueryServiceImpl
     @Override
     @Transactional
     public SeedQuery update(SeedQuery seedQuery) {
-        SeedQuery returnedSeedQuery=seedQueryRepository.save(seedQuery);
+    	if (seedQuery.getPhotoList()!=null)
+    	for (Photo photo: seedQuery.getPhotoList())
+    	{
+    		photo.setSeedQuery(seedQuery);
+    	}
+    	SeedQuery returnedSeedQuery=seedQueryRepository.save(seedQuery);
+    	if (seedQuery.getMountain()!=null)
+    	{
+    		List<SeedQuery> seedQueryList = seedQueryRepository.findByMountain( seedQuery.getMountain());
+    		if (!seedQueryList.contains(returnedSeedQuery))
+    			seedQueryList.add(returnedSeedQuery);
+    		returnedSeedQuery.getMountain().setSeedQueryList(seedQueryList);
+    	}
         return returnedSeedQuery;
     }
 

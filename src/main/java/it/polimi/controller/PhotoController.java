@@ -2,8 +2,11 @@
 package it.polimi.controller;
 
 import java.util.List;
+
 import it.polimi.model.Photo;
+import it.polimi.model.SeedQuery;
 import it.polimi.service.PhotoService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -32,6 +35,7 @@ public class PhotoController {
         Photo photo) {
         List<Photo> photoList;
         photoList=photoService.find(photo);
+        getRightMapping(photoList);
         return ResponseEntity.ok().body(photoList);
     }
 
@@ -40,7 +44,9 @@ public class PhotoController {
     public ResponseEntity getphotoById(
         @PathVariable
         String photoId) {
-        return ResponseEntity.ok().body(photoService.findById(Long.valueOf(photoId)));
+    	List<Photo> photoList = photoService.findById(Long.valueOf(photoId));
+    	getRightMapping(photoList);
+        return ResponseEntity.ok().body(photoList);
     }
 
     @ResponseBody
@@ -58,6 +64,7 @@ public class PhotoController {
         @RequestBody
         Photo photo) {
         Photo insertedphoto=photoService.insert(photo);
+        getRightMapping(insertedphoto);
         return ResponseEntity.ok().body(insertedphoto);
     }
 
@@ -67,7 +74,28 @@ public class PhotoController {
         @RequestBody
         Photo photo) {
         Photo updatedphoto=photoService.update(photo);
+        getRightMapping(updatedphoto);
         return ResponseEntity.ok().body(updatedphoto);
     }
+    
+    private List<Photo> getRightMapping(List<Photo> photoList)
+    {
+    	for (Photo photo: photoList)
+    	{
+    		getRightMapping(photo);
+    	}
+    	return photoList;
+    }
+    
+    private void getRightMapping(Photo photo)
+    {
+    	if (photo.getSeedQuery()!=null)
+    	{
+    		photo.getSeedQuery().setPhotoList(null);
+    		if (photo.getSeedQuery().getMountain()!=null)
+    			photo.getSeedQuery().getMountain().setSeedQueryList(null);
+    	}
+    }
+    
 
 }

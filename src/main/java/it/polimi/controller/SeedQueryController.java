@@ -2,8 +2,12 @@
 package it.polimi.controller;
 
 import java.util.List;
+
+import it.polimi.model.Mountain;
+import it.polimi.model.Photo;
 import it.polimi.model.SeedQuery;
 import it.polimi.service.SeedQueryService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -32,6 +36,7 @@ public class SeedQueryController {
         SeedQuery seedQuery) {
         List<SeedQuery> seedQueryList;
         seedQueryList=seedQueryService.find(seedQuery);
+        getRightMapping(seedQueryList);
         return ResponseEntity.ok().body(seedQueryList);
     }
 
@@ -40,7 +45,9 @@ public class SeedQueryController {
     public ResponseEntity getseedQueryById(
         @PathVariable
         String seedQueryId) {
-        return ResponseEntity.ok().body(seedQueryService.findById(Long.valueOf(seedQueryId)));
+    	List<SeedQuery> seedQueryList=seedQueryService.findById(Long.valueOf(seedQueryId));
+    	getRightMapping(seedQueryList);
+        return ResponseEntity.ok().body(seedQueryList);
     }
 
     @ResponseBody
@@ -58,6 +65,7 @@ public class SeedQueryController {
         @RequestBody
         SeedQuery seedQuery) {
         SeedQuery insertedseedQuery=seedQueryService.insert(seedQuery);
+        getRightMapping(insertedseedQuery);
         return ResponseEntity.ok().body(insertedseedQuery);
     }
 
@@ -67,7 +75,29 @@ public class SeedQueryController {
         @RequestBody
         SeedQuery seedQuery) {
         SeedQuery updatedseedQuery=seedQueryService.update(seedQuery);
+        getRightMapping(updatedseedQuery);
         return ResponseEntity.ok().body(updatedseedQuery);
     }
 
+    
+    private List<SeedQuery> getRightMapping(List<SeedQuery> seedQueryList)
+    {
+    	for (SeedQuery seedQuery: seedQueryList)
+    	{
+    		getRightMapping(seedQuery);
+    	}
+    	return seedQueryList;
+    }
+    
+    private void getRightMapping(SeedQuery seedQuery)
+    {
+    	if (seedQuery.getPhotoList()!=null)
+    	for (Photo photo : seedQuery.getPhotoList())
+    	{
+    		photo.setSeedQuery(null);
+    	}
+    	if (seedQuery.getMountain()!=null)
+    		seedQuery.getMountain().setSeedQueryList(null);
+    }
+    
 }

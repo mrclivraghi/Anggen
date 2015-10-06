@@ -37,7 +37,7 @@ public class SeedQuery {
 	private Integer status;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
-	@Cascade({CascadeType.ALL})
+	@Cascade({CascadeType.PERSIST})
 	@JoinColumn(name="mountain_id_mountain")
 	private Mountain mountain;
 	
@@ -45,7 +45,7 @@ public class SeedQuery {
 	@OneToMany(fetch=FetchType.EAGER)
 	@Cascade({CascadeType.ALL})
 	@Type(type="it.polimi.model.Photo")
-	@JoinColumn(name="photo_photo_id")
+	@JoinColumn(name="seedquery_id_seed_query")
 	private List<Photo> photoList;
 	
 

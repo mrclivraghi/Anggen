@@ -13,6 +13,8 @@ import java.net.URLClassLoader;
 import java.sql.Date;
 import java.util.List;
 
+import javax.persistence.ManyToOne;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -393,10 +395,12 @@ public class RestGenerator {
 			JVar entityList= searchBlock.decl(listClass, lowerClass+"List");
 			//searchBlock.de
 			searchBlock.directStatement(""+lowerClass+"List="+lowerClass+"Service.find("+lowerClass+");");
+			searchBlock.directStatement("getRightMapping("+lowerClass+"List);");
+			
 			searchBlock.directStatement("return "+response+".body("+lowerClass+"List);");
 			//findByIdBlock._return(findByIdExpression);
 			
-			//getOrderById  
+			//getById  
 			JMethod getById=myClass.method(JMod.PUBLIC, ResponseEntity.class, "get"+className+"ById");
 			getById.annotate(ResponseBody.class);
 			JAnnotationUse requestMappingGetById = getById.annotate(RequestMapping.class);
@@ -405,7 +409,9 @@ public class RestGenerator {
 			orderParam= getById.param(String.class,lowerClass+"Id");
 			orderParam.annotate(PathVariable.class);
 			JBlock getByIdBlock= getById.body();
-			getByIdBlock.directStatement("return "+response+".body("+lowerClass+"Service.findById(Long.valueOf("+lowerClass+"Id)));");
+			getByIdBlock.directStatement("List<"+Utility.getFirstUpper(className)+"> "+lowerClass+"List="+lowerClass+"Service.findById(Long.valueOf("+lowerClass+"Id));");
+			getByIdBlock.directStatement("getRightMapping("+lowerClass+"List);");
+			getByIdBlock.directStatement("return "+response+".body("+lowerClass+"List);");
 			//findByIdBlock._return(findByIdExpression);
 			
 			//deleteOrderById
@@ -430,6 +436,7 @@ public class RestGenerator {
 			JBlock insertBlock= insert.body();
 			
 			insertBlock.directStatement(Utility.getFirstUpper(className)+" inserted"+className+"="+lowerClass+"Service.insert("+lowerClass+");");
+			insertBlock.directStatement("getRightMapping(inserted"+className+");");
 			insertBlock.directStatement("return "+response+".body(inserted"+className+");");
 			//UpdateOrder
 			JMethod update = myClass.method(JMod.PUBLIC, ResponseEntity.class, "update"+className+"");
@@ -440,6 +447,7 @@ public class RestGenerator {
 			orderParam.annotate(RequestBody.class);
 			JBlock updateBlock= update.body();
 			updateBlock.directStatement(Utility.getFirstUpper(className)+" updated"+className+"="+lowerClass+"Service.update("+lowerClass+");");
+			updateBlock.directStatement("getRightMapping(updated"+className+");");
 			updateBlock.directStatement("return "+response+".body(updated"+className+");");
 			
 			//get Right Mapping -List
@@ -466,26 +474,7 @@ public class RestGenerator {
 			JMethod getRightMapping= myClass.method(JMod.PRIVATE, void.class, "getRightMapping");
 			getRightMapping.param(classClass, lowerClass);
 			JBlock getRightMappingBlock = getRightMapping.body();
-			for (Field field: fields)
-			{
-				if (field.getCompositeClass()!=null)
-				{
-					//TODO change with annotation
-					if (field.getCompositeClass().fullName().contains("java.util.List"))
-					{
-						getRightMappingBlock.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(field.getName())+"List()!=null)");
-						getRightMappingBlock.directStatement("for ("+field.getFieldClass().getName()+" "+Utility.getFirstLower(field.getName())+" : "+lowerClass+".get"+Utility.getFirstUpper(field.getName())+"List())");
-						getRightMappingBlock.directStatement("{");
-						getRightMappingBlock.directStatement(""+Utility.getFirstLower(field.getName())+".set"+Utility.getFirstUpper(lowerClass)+"(null);");
-						getRightMappingBlock.directStatement("}");
-						
-					}else
-					{
-						getRightMappingBlock.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(field.getName())+"()!=null)");
-						getRightMappingBlock.directStatement(""+lowerClass+".get"+Utility.getFirstUpper(field.getName())+"().set"+Utility.getFirstUpper(lowerClass)+"List(null);");
-					}
-				}
-			}
+			RestGenerator.generateRightMapping(classClass, getRightMappingBlock,null,null);
 			
 			
 		} catch (JClassAlreadyExistsException e) {
@@ -499,4 +488,45 @@ public class RestGenerator {
 			}
 	
 	}
+	
+	private static void generateRightMapping(Class theClass,JBlock block,Class parentClass,String entityName)
+	{
+		ReflectionManager reflectionManager = new ReflectionManager(theClass);
+		String lowerClass=entityName!=null? entityName:reflectionManager.parseName();
+		for (Field field: reflectionManager.getFieldList())
+		{
+			if (field.getCompositeClass()!=null && RestGenerator.isBackRelationship(field) && field.getFieldClass()!=parentClass)
+			{
+				//TODO change with annotation
+				if (field.getCompositeClass().fullName().contains("java.util.List"))
+				{
+					block.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(field.getName())+"List()!=null)");
+					block.directStatement("for ("+field.getFieldClass().getName()+" "+Utility.getFirstLower(field.getName())+" : "+lowerClass+".get"+Utility.getFirstUpper(field.getName())+"List())");
+					block.directStatement("{");
+					block.directStatement(""+Utility.getFirstLower(field.getName())+".set"+Utility.getFirstUpper(lowerClass)+"(null);");
+					RestGenerator.generateRightMapping(field.getFieldClass(), block,theClass,lowerClass+".get"+Utility.getFirstUpper(field.getName())+"List()");
+					block.directStatement("}");
+					
+				}else
+				{
+					block.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(field.getName())+"()!=null)");
+					block.directStatement(""+lowerClass+".get"+Utility.getFirstUpper(field.getName())+"().set"+Utility.getFirstUpper(reflectionManager.parseName())+"List(null);");
+					RestGenerator.generateRightMapping(field.getFieldClass(), block,theClass,lowerClass+".get"+Utility.getFirstUpper(field.getName())+"()");
+				}
+			}
+		}
+	}
+	
+	private static Boolean isBackRelationShip(Field field)
+	{
+		if (field.getAnnotationList()==null || field.getAnnotationList().length==0) return false;
+		for (int i=0; i<field.getAnnotationList().length; i++)
+		{
+			if (field.getAnnotationList()[i].annotationType()==ManyToOne.class)
+				return true;
+		}
+		
+		return false;
+	}
+	
 }

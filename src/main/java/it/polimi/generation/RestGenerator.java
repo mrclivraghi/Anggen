@@ -1,5 +1,6 @@
 package it.polimi.generation;
 
+import it.polimi.model.SeedQuery;
 import it.polimi.utils.Field;
 import it.polimi.utils.ReflectionManager;
 import it.polimi.utils.Utility;
@@ -313,21 +314,34 @@ public class RestGenerator {
 			update.annotate(Transactional.class);
 			update.param(classClass, lowerClass);
 			JBlock updateBlock= update.body();
-			updateBlock.directStatement(Utility.getFirstUpper(className)+" returned"+Utility.getFirstUpper(className)+"="+lowerClass+"Repository.save("+lowerClass+");");
-			/*for (Field field: fields)
+			for (Field field: fields)
 			{
-				if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List"))
+				if (field.getCompositeClass()!=null)
+				if (field.getCompositeClass().fullName().contains("java.util.List"))
 				{
-					updateBlock.directStatement("if ("+lowerClass+".get"+getFirstUpper(field.getName())+"List()!=null)");
-					updateBlock.directStatement("for ("+(field.getFieldClass().getName())+" "+field.getName()+": "+lowerClass+".get"+getFirstUpper(field.getName())+"List())");
+					updateBlock.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(field.getName())+"List()!=null)");
+					updateBlock.directStatement("for ("+(field.getFieldClass().getName())+" "+field.getName()+": "+lowerClass+".get"+Utility.getFirstUpper(field.getName())+"List())");
 					updateBlock.directStatement("{");
-					updateBlock.directStatement(field.getName()+".set"+Generator.getFirstUpper(className)+"("+lowerClass+");");
-					updateBlock.directStatement(field.getName()+"Repository.save("+field.getName()+");");
+					updateBlock.directStatement(field.getName()+".set"+Utility.getFirstUpper(className)+"("+lowerClass+");");
 					updateBlock.directStatement("}");
-				}
-			}*/
-			updateBlock.directStatement("return returned"+Utility.getFirstUpper(className)+";");
-			
+				} 
+			}
+			updateBlock.directStatement(Utility.getFirstUpper(className)+" returned"+Utility.getFirstUpper(className)+"="+lowerClass+"Repository.save("+lowerClass+");");
+			for (Field field: fields)
+			{
+				if (field.getCompositeClass()!=null)
+					if (!field.getCompositeClass().fullName().contains("java.util.List"))			
+					{
+						updateBlock.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(field.getName())+"()!=null)");
+						updateBlock.directStatement("{");
+						updateBlock.directStatement("List<"+className+"> seedQueryList = "+lowerClass+"Repository.findBy"+Utility.getFirstUpper(field.getName())+"( "+lowerClass+".get"+Utility.getFirstUpper(field.getName())+"());");
+						updateBlock.directStatement("if (!"+lowerClass+"List.contains(returned"+className+"))");
+						updateBlock.directStatement(""+lowerClass+"List.add(returned"+className+");");
+						updateBlock.directStatement("returned"+className+".get"+Utility.getFirstUpper(field.getName())+"().set"+className+"List("+lowerClass+"List);");
+						updateBlock.directStatement("}");
+					}
+			}
+				
 		} catch (JClassAlreadyExistsException e) {
 			e.printStackTrace();
 		}

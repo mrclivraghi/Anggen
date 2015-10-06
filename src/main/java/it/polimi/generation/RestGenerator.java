@@ -1,5 +1,6 @@
 package it.polimi.generation;
 
+import it.polimi.model.Photo;
 import it.polimi.model.SeedQuery;
 import it.polimi.utils.Field;
 import it.polimi.utils.ReflectionManager;
@@ -334,15 +335,15 @@ public class RestGenerator {
 					{
 						updateBlock.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(field.getName())+"()!=null)");
 						updateBlock.directStatement("{");
-						updateBlock.directStatement("List<"+className+"> seedQueryList = "+lowerClass+"Repository.findBy"+Utility.getFirstUpper(field.getName())+"( "+lowerClass+".get"+Utility.getFirstUpper(field.getName())+"());");
-						updateBlock.directStatement("if (!"+lowerClass+"List.contains(returned"+className+"))");
-						updateBlock.directStatement(""+lowerClass+"List.add(returned"+className+");");
-						updateBlock.directStatement("returned"+className+".get"+Utility.getFirstUpper(field.getName())+"().set"+className+"List("+lowerClass+"List);");
+						updateBlock.directStatement("List<"+Utility.getFirstUpper(className)+"> "+className+"List = "+lowerClass+"Repository.findBy"+Utility.getFirstUpper(field.getName())+"( "+lowerClass+".get"+Utility.getFirstUpper(field.getName())+"());");
+						updateBlock.directStatement("if (!"+lowerClass+"List.contains(returned"+Utility.getFirstUpper(className)+"))");
+						updateBlock.directStatement(""+lowerClass+"List.add(returned"+Utility.getFirstUpper(className)+");");
+						updateBlock.directStatement("returned"+Utility.getFirstUpper(className)+".get"+Utility.getFirstUpper(field.getName())+"().set"+Utility.getFirstUpper(className)+"List("+lowerClass+"List);");
 						updateBlock.directStatement("}");
 					}
 			}
 			
-			updateBlock.directStatement(" return returned"+className+";");
+			updateBlock.directStatement(" return returned"+Utility.getFirstUpper(className)+";");
 				
 		} catch (JClassAlreadyExistsException e) {
 			e.printStackTrace();
@@ -441,6 +442,50 @@ public class RestGenerator {
 			updateBlock.directStatement(Utility.getFirstUpper(className)+" updated"+className+"="+lowerClass+"Service.update("+lowerClass+");");
 			updateBlock.directStatement("return "+response+".body(updated"+className+");");
 			
+			//get Right Mapping -List
+			JMethod getRightMappingList = myClass.method(JMod.PRIVATE, listClass, "getRightMapping");
+			getRightMappingList.param(listClass, lowerClass+"List");
+			JBlock getRightMappingListBlock = getRightMappingList.body();
+			getRightMappingListBlock.directStatement("for ("+Utility.getFirstUpper(className)+" "+lowerClass+": "+lowerClass+"List)");
+			getRightMappingListBlock.directStatement("{");
+			getRightMappingListBlock.directStatement("getRightMapping("+lowerClass+");");
+			getRightMappingListBlock.directStatement("}");
+			getRightMappingListBlock.directStatement("return "+lowerClass+"List;");
+			/*
+			 *  private void getRightMapping(SeedQuery seedQuery)
+    {
+    	if (seedQuery.getPhotoList()!=null)
+    	for (Photo photo : seedQuery.getPhotoList())
+    	{
+    		photo.setSeedQuery(null);
+    	}
+    	if (seedQuery.getMountain()!=null)
+    		seedQuery.getMountain().setSeedQueryList(null);
+    }
+			 */
+			JMethod getRightMapping= myClass.method(JMod.PRIVATE, void.class, "getRightMapping");
+			getRightMapping.param(classClass, lowerClass);
+			JBlock getRightMappingBlock = getRightMapping.body();
+			for (Field field: fields)
+			{
+				if (field.getCompositeClass()!=null)
+				{
+					//TODO change with annotation
+					if (field.getCompositeClass().fullName().contains("java.util.List"))
+					{
+						getRightMappingBlock.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(field.getName())+"List()!=null)");
+						getRightMappingBlock.directStatement("for ("+field.getFieldClass().getName()+" "+Utility.getFirstLower(field.getName())+" : "+lowerClass+".get"+Utility.getFirstUpper(field.getName())+"List())");
+						getRightMappingBlock.directStatement("{");
+						getRightMappingBlock.directStatement(""+Utility.getFirstLower(field.getName())+".set"+Utility.getFirstUpper(lowerClass)+"(null);");
+						getRightMappingBlock.directStatement("}");
+						
+					}else
+					{
+						getRightMappingBlock.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(field.getName())+"()!=null)");
+						getRightMappingBlock.directStatement(""+lowerClass+".get"+Utility.getFirstUpper(field.getName())+"().set"+Utility.getFirstUpper(lowerClass)+"List(null);");
+					}
+				}
+			}
 			
 			
 		} catch (JClassAlreadyExistsException e) {

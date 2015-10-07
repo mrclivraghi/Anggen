@@ -2,11 +2,8 @@
 package it.polimi.controller;
 
 import java.util.List;
-
 import it.polimi.model.Photo;
-import it.polimi.model.SeedQuery;
 import it.polimi.service.PhotoService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -44,8 +41,8 @@ public class PhotoController {
     public ResponseEntity getphotoById(
         @PathVariable
         String photoId) {
-    	List<Photo> photoList = photoService.findById(Long.valueOf(photoId));
-    	getRightMapping(photoList);
+        List<Photo> photoList=photoService.findById(Long.valueOf(photoId));
+        getRightMapping(photoList);
         return ResponseEntity.ok().body(photoList);
     }
 
@@ -77,25 +74,30 @@ public class PhotoController {
         getRightMapping(updatedphoto);
         return ResponseEntity.ok().body(updatedphoto);
     }
-    
-    private List<Photo> getRightMapping(List<Photo> photoList)
-    {
-    	for (Photo photo: photoList)
-    	{
-    		getRightMapping(photo);
-    	}
-    	return photoList;
+
+    private List<Photo> getRightMapping(List<Photo> photoList) {
+        for (Photo photo: photoList)
+        {
+        getRightMapping(photo);
+        }
+        return photoList;
     }
-    
-    private void getRightMapping(Photo photo)
-    {
+
+    private void getRightMapping(Photo photo) {
     	if (photo.getSeedQuery()!=null)
     	{
-    		photo.getSeedQuery().setPhotoList(null);
     		if (photo.getSeedQuery().getMountain()!=null)
-    			photo.getSeedQuery().getMountain().setSeedQueryList(null);
+    		{
+    			if (photo.getSeedQuery().getMountain().getSeedQueryList()!=null)
+    			{
+    				photo.getSeedQuery().getMountain().setSeedQueryList(null);
+    			}
+    		}
+    		if (photo.getSeedQuery().getPhotoList()!=null)
+    		{
+    			photo.getSeedQuery().setPhotoList(null);
+    		}
     	}
     }
-    
 
 }

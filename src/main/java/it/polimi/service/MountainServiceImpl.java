@@ -2,13 +2,9 @@
 package it.polimi.service;
 
 import java.util.List;
-
 import it.polimi.model.Mountain;
-import it.polimi.model.Photo;
-import it.polimi.model.SeedQuery;
 import it.polimi.repository.MountainRepository;
 import it.polimi.repository.SeedQueryRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,21 +37,19 @@ public class MountainServiceImpl
 
     @Override
     public Mountain insert(Mountain mountain) {
-    	Mountain returnedMountain= mountainRepository.save(mountain);
-        return returnedMountain;
+        return mountainRepository.save(mountain);
     }
 
     @Override
     @Transactional
     public Mountain update(Mountain mountain) {
-    	if (mountain.getSeedQueryList()!=null)
-    		for (SeedQuery sq : mountain.getSeedQueryList())
-    		{
-    			sq.setMountain(mountain);
-    		}
+        if (mountain.getSeedQueryList()!=null)
+        for (it.polimi.model.SeedQuery seedQuery: mountain.getSeedQueryList())
+        {
+        seedQuery.setMountain(mountain);
+        }
         Mountain returnedMountain=mountainRepository.save(mountain);
-        return returnedMountain;
+         return returnedMountain;
     }
 
-    
 }

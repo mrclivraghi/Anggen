@@ -2,12 +2,8 @@
 package it.polimi.controller;
 
 import java.util.List;
-
 import it.polimi.model.Mountain;
-import it.polimi.model.Photo;
-import it.polimi.model.SeedQuery;
 import it.polimi.service.MountainService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -36,7 +32,7 @@ public class MountainController {
         Mountain mountain) {
         List<Mountain> mountainList;
         mountainList=mountainService.find(mountain);
-        mountainList=getRightMapping(mountainList);
+        getRightMapping(mountainList);
         return ResponseEntity.ok().body(mountainList);
     }
 
@@ -45,8 +41,8 @@ public class MountainController {
     public ResponseEntity getmountainById(
         @PathVariable
         String mountainId) {
-    	List<Mountain> mountainList= mountainService.findById(Long.valueOf(mountainId));
-    	mountainList=getRightMapping(mountainList);
+        List<Mountain> mountainList=mountainService.findById(Long.valueOf(mountainId));
+        getRightMapping(mountainList);
         return ResponseEntity.ok().body(mountainList);
     }
 
@@ -79,28 +75,37 @@ public class MountainController {
         return ResponseEntity.ok().body(updatedmountain);
     }
 
-    
-
-    private List<Mountain> getRightMapping(List<Mountain> mountainList)
-    {
-    	for (Mountain mountain: mountainList)
-    	{
-    		getRightMapping(mountain);
-    	}
-    	return mountainList;
+    private List<Mountain> getRightMapping(List<Mountain> mountainList) {
+        for (Mountain mountain: mountainList)
+        {
+        getRightMapping(mountain);
+        }
+        return mountainList;
     }
-    
-    private void getRightMapping(Mountain mountain)
-    {
+
+    private void getRightMapping(Mountain mountain) {
     	if (mountain.getSeedQueryList()!=null)
-    	for (SeedQuery seedQuery : mountain.getSeedQueryList())
     	{
-    		seedQuery.setMountain(null);
-    		if (seedQuery.getPhotoList()!=null)
-    		for (Photo photo: seedQuery.getPhotoList())
+    		for (it.polimi.model.SeedQuery seedQuery : mountain.getSeedQueryList())
     		{
-    			photo.setSeedQuery(null);
+    			if (seedQuery.getMountain()!=null)
+    			{
+    				//seedQuery.getMountain()
+    				seedQuery.setMountain(null);
+    			}
+    			if (seedQuery.getPhotoList()!=null)
+    			{
+    				for (it.polimi.model.Photo photo : seedQuery.getPhotoList())
+    				{
+    					if (photo.getSeedQuery()!=null)
+    					{
+    						//photo.getSeedQuery()
+    						photo.setSeedQuery(null);
+    					}
+    				}
+    			}
     		}
     	}
     }
+
 }

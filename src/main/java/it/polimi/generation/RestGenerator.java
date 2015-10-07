@@ -11,6 +11,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.ManyToOne;
@@ -474,7 +475,7 @@ public class RestGenerator {
 			JMethod getRightMapping= myClass.method(JMod.PRIVATE, void.class, "getRightMapping");
 			getRightMapping.param(classClass, lowerClass);
 			JBlock getRightMappingBlock = getRightMapping.body();
-			RestGenerator.generateRightMapping(classClass, getRightMappingBlock,null,null);
+			RestGenerator.generateRightMapping_v2(classClass, getRightMappingBlock,new ArrayList<Class>(),null);
 			
 			
 		} catch (JClassAlreadyExistsException e) {
@@ -487,6 +488,58 @@ public class RestGenerator {
 			   ex.printStackTrace();
 			}
 	
+	}
+	
+	private static void generateRightMapping_v2(Class theClass, JBlock block,List<Class> parentClass,String entityName)
+	{
+		ReflectionManager reflectionManager = new ReflectionManager(theClass);
+		parentClass.add(theClass);
+		String lowerClass=entityName!=null? entityName:reflectionManager.parseName();
+		for (Field field: reflectionManager.getChildrenFieldList())
+		{
+			//generate entity.getField() or entity.getfieldList(); 
+			String newEntityName= lowerClass;
+			if (field.getCompositeClass().fullName().contains("java.util.List"))
+				newEntityName=Utility.getFirstLower(field.getName());
+			else
+				newEntityName=newEntityName+".get"+Utility.getFirstUpper(field.getName())+"()";
+			ArrayList<Class> oldParentClassList = (ArrayList<Class>) ((ArrayList<Class>) parentClass).clone();
+			if (field.getCompositeClass().fullName().contains("java.util.List"))
+			{
+				block.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(field.getName())+"List()!=null)");
+				block.directStatement("{");
+				if (parentClass.contains(field.getFieldClass()))
+					block.directStatement(""+lowerClass+".set"+Utility.getFirstUpper(field.getName())+"List(null);");
+				else
+				{
+					block.directStatement("for ("+field.getFieldClass().getName()+" "+Utility.getFirstLower(field.getName())+" : "+lowerClass+".get"+Utility.getFirstUpper(field.getName())+"List())");
+					block.directStatement("{");
+					//block.directStatement(""+Utility.getFirstLower(field.getName())+".set"+Utility.getFirstUpper(lowerClass)+"(null);");
+					RestGenerator.generateRightMapping_v2(field.getFieldClass(), block,parentClass,newEntityName);
+					parentClass=oldParentClassList;
+					block.directStatement("}");
+				}
+				block.directStatement("}");
+			}else
+			{
+				block.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(field.getName())+"()!=null)");
+				block.directStatement("{");
+				
+				if (parentClass.contains(field.getFieldClass()))
+				{
+					block.directStatement("//"+newEntityName);
+					block.directStatement(""+lowerClass+".set"+Utility.getFirstUpper(field.getName())+"(null);");
+				}
+				else
+				{
+
+					RestGenerator.generateRightMapping_v2(field.getFieldClass(), block,parentClass,newEntityName);
+					parentClass=oldParentClassList;
+				}
+				block.directStatement("}");
+
+			}
+		}
 	}
 	
 	private static void generateRightMapping(Class theClass,JBlock block,Class parentClass,String entityName)
@@ -517,7 +570,7 @@ public class RestGenerator {
 		}
 	}
 	
-	private static Boolean isBackRelationShip(Field field)
+	private static Boolean isBackRelationship(Field field)
 	{
 		if (field.getAnnotationList()==null || field.getAnnotationList().length==0) return false;
 		for (int i=0; i<field.getAnnotationList().length; i++)

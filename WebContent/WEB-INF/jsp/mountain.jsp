@@ -1,10 +1,28 @@
+<!doctype html>
+<html>
 <head>
 <title>test order</title>
-<script type="text/javascript"
-	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+<link rel="styleSheet" href="../resources/general_theme/css/ui-grid.css" />
+
+ <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular-touch.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular-animate.js"></script>
+    <script src="http://ui-grid.info/docs/grunt-scripts/csv.js"></script>
+    <script src="http://ui-grid.info/docs/grunt-scripts/pdfmake.js"></script>
+    <script src="http://ui-grid.info/docs/grunt-scripts/vfs_fonts.js"></script>
+    <script src="../resources/general_theme/js/ui-grid.js"></script>
+    <link rel="stylesheet" href="../resources/general_theme/css/ui-grid.css" type="text/css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<script src="../resources/general_theme/js/ui-grid.js"></script>
+<style type="text/css">
+.myGrid {
+	width: 700px;
+	/*height: 180px;*/
+}
+</style>
 <script>
-	angular
-			.module("mountainApp", [])
+	var app=angular
+			.module("mountainApp", ['ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection'])
 			.service(
 					"mountainService",
 					function() {
@@ -152,7 +170,7 @@
 			.controller(
 					"mountainController",
 					function($scope, $http, mountainService, seedQueryService,
-							photoService) {
+							photoService,uiGridConstants) {
 						$scope.searchBean = mountainService.searchBean;
 						$scope.entityList = mountainService.entityList;
 						$scope.selectedEntity = mountainService.selectedEntity;
@@ -188,6 +206,7 @@
 							$http.post("../mountain/search",
 									mountainService.searchBean).success(
 									function(entityList) {
+										console.log(entityList);
 										mountainService
 												.setEntityList(entityList);
 									}).error(function() {
@@ -249,6 +268,22 @@
 									});
 						};
 						$scope.init();
+						
+						/*pagination */
+					$scope.gridOptions = {
+    enablePaginationControls: true,
+ 
+    paginationPageSizes: [2, 4, 6],
+    paginationPageSize: 2,
+    columnDefs: [
+      { name: 'mountainId' },
+      { name: 'name' },
+      { name: 'height' }
+    ],
+    data: mountainService.entityList
+    
+  };
+ 
 					})
 			.controller(
 					"seedQueryController",
@@ -528,14 +563,17 @@
 			<button ng-click="search()">Find</button>
 			<button ng-click="reset()">Reset</button>
 		</form>
-		<form id="mountainList" ng-if="entityList.length&gt;0" enctype="UTF-8">
+		<!-- <form id="mountainList" ng-if="entityList.length&gt;0" enctype="UTF-8"> -->
 			<p>LISTA</p>
-			<ul>
+			
+			<div ui-grid="gridOptions" ui-grid-pagination ui-grid-selection class="grid"></div>
+			
+			<!-- <ul>
 				<li ng-repeat="entity in entityList"
 					ng-click="showEntityDetail($index)"><p>{{$index}}
 						{{entity.mountainId}} {{entity.name}} {{entity.height}}</p></li>
-			</ul>
-		</form>
+			</ul> -->
+		<!-- </form> -->
 		<form id="mountainDetailForm" name="mountainDetailForm"
 			ng-show="selectedEntity.show">
 			<p>DETAIL</p>
@@ -657,4 +695,6 @@
 			<button ng-click="del()" ng-if="selectedEntity.photoId&gt;0">Delete</button>
 		</form>
 	</div>
+	
 </body>
+</html>

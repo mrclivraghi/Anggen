@@ -426,23 +426,26 @@ public class JsGenerator {
 		sb.setCharAt(sb.length()-2, ' ');
 		sb.append("]\n");
 
-		//if (isParent)
-		sb.append(",data: "+entityName+"Service.entityList\n");
+		if (isParent)
+			sb.append(",data: "+entityName+"Service.entityList\n");
+		else
+			sb.append(",data: $scope.selectedEntity."+entityName+"List\n");
 		sb.append(" };\n");
 
 		//on row selection
 		sb.append("$scope."+entityName+ (entityList? "List":"")+"GridOptions.onRegisterApi = function(gridApi){\n");
 		sb.append("gridApi.selection.on.rowSelectionChanged($scope,function(row){\n");
-		changeChildrenVisibility(sb, false);
+		if (isParent)
+			changeChildrenVisibility(sb, false);
 		sb.append(entityName+"Service\n");
 		sb.append(".setSelectedEntity(row.entity);\n");
 
-		for (Field field: fieldList)
+/*		for (Field field: fieldList)
 		{
 			if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List"))
 				sb.append("$scope."+field.getName()+"ListGridOptions.data="+entityName+"Service.selectedEntity."+field.getName()+"List; \n");
 		}
-
+*/
 		sb.append(entityName+"Service.selectedEntity.show = true;\n");
 		sb.append("});\n");
 		sb.append("  };\n");

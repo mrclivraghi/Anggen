@@ -383,7 +383,8 @@ public class JsGenerator {
 				}
 
 			sb.append("}; \n");
-			sb.append("$scope.init();\n");
+			if (isParent)
+				sb.append("$scope.init();\n");
 
 
 		}

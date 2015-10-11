@@ -53,7 +53,13 @@ public class JsGenerator {
 		sb.append(".service(\""+entityName+"Service\", function()\n")
 		.append("{\n")
 		.append("this.entityList =		[];\n")
-		.append("this.selectedEntity= 	{show: false};\n")
+		.append("this.selectedEntity= 	{show: false \n");
+		for (Field field: fieldList)
+		{
+			if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List"))
+				sb.append(","+field.getName()+"List: []");
+		}
+		sb.append("};\n")
 		.append("this.childrenList=[]; \n")
 		.append("this.addEntity=function (entity)\n")
 		.append("{\n")
@@ -79,32 +85,54 @@ public class JsGenerator {
 		}
 		sb.append("this.setSelectedEntity= function (entity)\n")
 		.append("{ \n")
-		.append("if (entity==null)\n") 
-		.append("{\n")
-		.append("entity={};\n")
-		.append("this.selectedEntity.show=false;\n")
+
+		.append("if (entity == null) {\n")
+		.append("entity = {};\n")
+		.append("this.selectedEntity.show = false;\n")
 		.append("} //else\n")
-		.append("var keyList=Object.keys(entity);\n")
-		.append("if (keyList.length==0)\n")
-		.append("keyList=Object.keys(this.selectedEntity);\n")
-		.append("for (i=0; i<keyList.length; i++)\n")
-		.append("{\n")
-		.append("var val=keyList[i];\n")
-		.append("this.selectedEntity[val]=entity[val];\n")
-		.append("if (val!=undefined)\n")
-		.append("{\n")
-		//check list\n")
-		.append("if (val.toLowerCase().indexOf(\"list\")>-1 && (entity[val]==null || entity[val]==undefined) && typeof entity[val] == \"object\")\n")
-		.append("this.selectedEntity[val]=[];\n")
-		//check date\n")
-		.append("if (val.toLowerCase().indexOf(\"date\")>-1 && typeof val == \"string\")\n")
-		.append("{\n")
-		.append("var date= new Date(entity[val]);\n")
-		.append("this.selectedEntity[val]= new Date(date.getFullYear(),date.getMonth(),date.getDate());\n")
+		.append("var keyList = Object.keys(entity);\n")
+		.append("if (keyList.length == 0)\n")
+		.append("keyList = Object.keys(this.selectedEntity);\n")
+		.append("for (i = 0; i < keyList.length; i++) {\n")
+		.append("var val = keyList[i];\n")
+		//TODO MODIFICA
+		.append("if (val != undefined) {\n")
+		.append("if (val.toLowerCase().indexOf(\"list\") > -1\n")
+		.append("&& typeof entity[val] == \"object\") {\n")
+
+		.append("if (entity[val] != null\n")
+		.append("&& entity[val] != undefined) {\n")
+		.append("while (this.selectedEntity[val].length > 0)\n")
+		.append("this.selectedEntity[val].pop();\n")
+		.append("if (entity[val] != null)\n")
+		.append("for (j = 0; j < entity[val].length; j++)\n")
+		.append("this.selectedEntity[val]\n")
+		.append(".push(entity[val][j]);\n")
+
 		.append("}\n")
+		.append("} else {\n")
+
+		.append("if (val.toLowerCase().indexOf(\"date\") > -1\n")
+		.append("&& typeof val == \"string\") {\n")
+		.append("var date = new Date(entity[val]);\n")
+		.append("this.selectedEntity[val] = new Date(\n")
+		.append("date.getFullYear(), date\n")
+		.append(".getMonth(), date\n")
+		.append(".getDate());\n")
+		.append("} else {\n")
+		.append("this.selectedEntity[val] = entity[val];\n")
 		.append("}\n")
+
 		.append("}\n")
+		.append("	}\n")
+
+		.append("}\n")
+
+
 		.append("};\n")
+
+
+
 		.append("})\n");
 
 		return sb.toString();
@@ -359,10 +387,26 @@ public class JsGenerator {
 
 
 		}
+		//pagination
+		if (isParent)
+			sb.append(getPagination());
+		for (Field field: childrenList)
+		{
+			if (field.getCompositeClass().fullName().contains("java.util.List"))
+			{
+				JsGenerator jsGenerator = new JsGenerator(field.getFieldClass(), false, field.getCompositeClass(), entityName);
+				sb.append(jsGenerator.getPagination());
+			}
+		}
+		sb.append("})\n");
+		return sb.toString();
+	}
 
+	public String getPagination()
+	{
+		StringBuilder sb = new StringBuilder();
 		//pagination options
-
-		sb.append("$scope.gridOptions = {\n");
+		sb.append("$scope."+entityName+ (entityList? "List":"")+"GridOptions = {\n");
 		sb.append("enablePaginationControls: true,\n");
 		sb.append("multiSelect: false,\n");
 		sb.append("enableSelectAll: false,\n");
@@ -374,120 +418,38 @@ public class JsGenerator {
 		{
 			if (field.getCompositeClass()== null )
 				sb.append("{ name: '"+field.getName()+"'},\n");
-			else if (!field.getCompositeClass().fullName().contains("java.util.List"))
+			else if (!field.getCompositeClass().fullName().contains("java.util.List") && isParent)
 			{
 				sb.append("{ name: '"+field.getName()+"."+field.getName()+"Id', displayName: '"+field.getName()+"'},\n");
 			}
 		}
 		sb.setCharAt(sb.length()-2, ' ');
-		sb.append("],\n");
+		sb.append("]\n");
 
-
-		sb.append("data: "+entityName+"Service.entityList\n");
+		//if (isParent)
+		sb.append(",data: "+entityName+"Service.entityList\n");
 		sb.append(" };\n");
 
 		//on row selection
-		sb.append("$scope.gridOptions.onRegisterApi = function(gridApi){\n");
+		sb.append("$scope."+entityName+ (entityList? "List":"")+"GridOptions.onRegisterApi = function(gridApi){\n");
 		sb.append("gridApi.selection.on.rowSelectionChanged($scope,function(row){\n");
 		changeChildrenVisibility(sb, false);
 		sb.append(entityName+"Service\n");
 		sb.append(".setSelectedEntity(row.entity);\n");
+
+		for (Field field: fieldList)
+		{
+			if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List"))
+				sb.append("$scope."+field.getName()+"ListGridOptions.data="+entityName+"Service.selectedEntity."+field.getName()+"List; \n");
+		}
+
 		sb.append(entityName+"Service.selectedEntity.show = true;\n");
 		sb.append("});\n");
 		sb.append("  };\n");
 
-		sb.append("})\n");
+
 		return sb.toString();
 	}
-	/*
-	 * 
-		StringBuilder sb = new StringBuilder();
-		//service
-		sb.append("\nangular.module(\""+Generator.getFirstLower(entityName)+"App\",[])\n")
-		.append(".service(\""+Generator.getFirstLower(entityName)+"Service\", function(){\n")
-		.append("this."+Generator.getFirstLower(entityName)+"List=[];\n")
-		.append("this."+Generator.getFirstLower(entityName)+"Form= new Object();\n")
-		.append("this.set"+Generator.getFirstUpper(entityName)+"List= function(data) {\n")
-		.append("while (this."+Generator.getFirstLower(entityName)+"List.length>0)\n")
-		.append("this."+Generator.getFirstLower(entityName)+"List.pop();\n")
-		.append("for (i=0; i<data.length; i++)\n")
-		.append("{\n")
-		.append("var temp"+Generator.getFirstUpper(entityName)+"= new Object();\n")
-		//manage fields
-		.append(setTempEntityForm())
-		.append("this."+Generator.getFirstLower(entityName)+"List[i]=temp"+Generator.getFirstUpper(entityName)+";\n")
-		.append("}\n")
-		.append("};\n")
-		.append("this.resetForm = function ("+Generator.getFirstLower(entityName)+") {\n")
-		//manage fields
-		.append(resetEntityForm())
-		.append("};\n")
-		.append("this.add"+Generator.getFirstUpper(entityName)+"= function("+Generator.getFirstLower(entityName)+") {\n")
-		.append("this."+Generator.getFirstLower(entityName)+"List.push("+Generator.getFirstLower(entityName)+");\n")
-		.append("this.resetForm("+Generator.getFirstLower(entityName)+");\n")
-		.append("};\n")
-		.append("})\n")
-		//ordercontroller
-		.append(".controller(\""+Generator.getFirstLower(entityName)+"Controller\",\n")
-		.append("function($scope,"+Generator.getFirstLower(entityName)+"Service) {\n")
-		.append("$scope."+Generator.getFirstLower(entityName)+"Form="+Generator.getFirstLower(entityName)+"Service."+Generator.getFirstLower(entityName)+"Form;\n")
-		.append("}\n")
-		.append(")\n")
-		// order retrieve controller
-		.append(".controller(\""+Generator.getFirstLower(entityName)+"RetrieveController\", function ($scope,$http,"+Generator.getFirstLower(entityName)+"Service) {\n")
-		.append("$scope.reset = function ()\n")
-		.append("{\n")
-		.append(""+Generator.getFirstLower(entityName)+"Service.resetForm();\n")
-		.append("};\n")
-		.append("$scope.search = function() {\n")
-		.append("$http.post(\"../"+Generator.getFirstLower(entityName)+"/search\","+Generator.getFirstLower(entityName)+"Service."+Generator.getFirstLower(entityName)+"Form)\n")
-		.append(".success( function(data) {\n")
-		.append(""+Generator.getFirstLower(entityName)+"Service.set"+Generator.getFirstUpper(entityName)+"List(data);\n")
-		.append("})\n")
-		.append(".error(function() { alert(\"error\");});\n")
-		.append("};\n")
-		.append("$scope.insert = function() \n")
-		.append("{\n")
-		.append("$http.put(\"../"+Generator.getFirstLower(entityName)+"/\","+Generator.getFirstLower(entityName)+"Service."+Generator.getFirstLower(entityName)+"Form)\n")
-		.append(".success( function(data) \n")
-		.append("{\n")
-		.append(""+Generator.getFirstLower(entityName)+"Service.add"+Generator.getFirstUpper(entityName)+"(data);\n")
-		.append("})\n")
-		.append(".error(function() \n")
-		.append("{ \n")
-		.append("alert(\"error\");\n")
-		.append("});\n")
-		.append("};\n")
-		.append("$scope.update = function() {\n")
-		.append("$http.post(\"../"+Generator.getFirstLower(entityName)+"/\","+Generator.getFirstLower(entityName)+"Service."+Generator.getFirstLower(entityName)+"Form)\n")
-		.append(".success( function(data) {\n")
-		.append("$scope.search();\n")
-		.append("	})\n")
-		.append(".error(function() { alert(\"error\");});\n")
-		.append("};\n")
-		.append("$scope.del = function() {\n")
-		.append("var url=\"../"+Generator.getFirstLower(entityName)+"/\"+"+Generator.getFirstLower(entityName)+"Service."+Generator.getFirstLower(entityName)+"Form."+Generator.getFirstLower(entityName)+"Id;\n")
-		.append("$http[\"delete\"](url)\n")
-		.append(".success( function(data) {\n")
-		.append(""+Generator.getFirstLower(entityName)+"Service.resetForm();\n")
-		.append("$scope.search();\n")
-		.append("})\n")
-		.append(".error(function() { alert(\"error\");});\n")
-		.append("};\n")
-		.append("})\n")
-		//order list controller
-		.append(".controller(\""+Generator.getFirstLower(entityName)+"ListController\", function($scope,"+Generator.getFirstLower(entityName)+"Service,dateFilter)\n")
-		.append("{\n")
-		.append("$scope."+Generator.getFirstLower(entityName)+"List="+Generator.getFirstLower(entityName)+"Service."+Generator.getFirstLower(entityName)+"List;\n")
-		.append("$scope.refreshForm = function (index) \n")
-		.append("{\n")
-		//manage fields
-		.append(refreshEntityForm())
-		.append("};\n")
-		.append("});\n");
-		return sb.toString();
-
-	 */
 
 	private String getServices() {
 		List<Class> parentClassList= new ArrayList<Class>();

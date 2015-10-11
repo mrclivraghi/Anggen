@@ -74,7 +74,7 @@ public class AngularGenerator {
 		*/
 		html.form((new HtmlAttributes()).add("id", entityName+"List").add("ng-if", "entityList.length>0").enctype("UTF-8"))
 		.p().content("LISTA")
-		.div((new HtmlAttributes()).add("ui-grid", "gridOptions").add("ui-grid-pagination", "").add("ui-grid-selection",""))
+		.div((new HtmlAttributes()).add("ui-grid", entityName+"GridOptions").add("ui-grid-pagination", "").add("ui-grid-selection",""))
 		._div()._form();
 		
 		
@@ -129,13 +129,13 @@ public class AngularGenerator {
 						html.p((new HtmlAttributes()).add("ng-click", "show"+Utility.getFirstUpper(field.getName())+"Detail()"))
 						.content("Add new "+field.getName());
 						html.div((new HtmlAttributes()).add("ng-if", "selectedEntity."+field.getName()+"List.length>0"))
-						.ul()
-						.li((new HtmlAttributes()).add("ng-repeat", "entity in selectedEntity."+field.getName()+"List").add("ng-click", "show"+Utility.getFirstUpper(field.getName())+"Detail($index)"));
-						AngularGenerator angularGenerator = new AngularGenerator(field.getFieldClass(), false, null);
-						angularGenerator.renderItem(html, "entity");
+										
+						.div((new HtmlAttributes()).add("ui-grid", field.getName()+"ListGridOptions").add("ui-grid-pagination", "").add("ui-grid-selection",""));
+						
+						
 						//html.content("{{$index}}--{{entity."+field.getName()+"Id}}--{{entity.description}}");
 						
-						html._ul()._div();
+						html._div()._div();
 					}else
 					{//entity
 						html.p((new HtmlAttributes()).add("ng-click", "show"+Utility.getFirstUpper(field.getName())+"Detail()").add("ng-if", "selectedEntity."+field.getName()+"==null"))

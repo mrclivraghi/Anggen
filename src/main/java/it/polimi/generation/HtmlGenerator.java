@@ -12,6 +12,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.rendersnake.DocType;
 import org.rendersnake.HtmlAttributes;
 import org.rendersnake.HtmlCanvas;
 
@@ -27,6 +28,8 @@ public class HtmlGenerator {
 	private ReflectionManager reflectionManager;
 	
 	private Class classClass;
+	
+	private DocType docType= DocType.HTML5;
 	
 	
 	public HtmlGenerator(Class classClass)
@@ -68,7 +71,9 @@ public class HtmlGenerator {
 		HtmlCanvas html = new HtmlCanvas();
 		HtmlAttributes htmlAttributes= new HtmlAttributes();
 		JsGenerator jsGenerator = new JsGenerator(classClass, true, null, null);
+		
 		try {
+			html.render(docType);
 			html.
 			html()
 					.head()

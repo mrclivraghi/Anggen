@@ -133,7 +133,8 @@ public class AngularGenerator {
 						//html.div((new HtmlAttributes()).add("class", style))
 						//.label((new HtmlAttributes()).add("for", field.getName()))
 						//.content(field.getName())
-						html.div((new HtmlAttributes()).add("class",""))
+						html._div();
+						html.div(CssGenerator.getPanelBody())
 						.label((new HtmlAttributes()).add("id", field.getName())).content(field.getName())
 						.button(CssGenerator.getButton("show"+Utility.getFirstUpper(field.getName())+"Detail"))
 						.content("Add new "+field.getName());
@@ -141,10 +142,10 @@ public class AngularGenerator {
 
 						.div((new HtmlAttributes()).add("style","top: 100px").add("ui-grid", field.getName()+"ListGridOptions").add("ui-grid-pagination", "").add("ui-grid-selection",""))
 						._div();
-
+						
 						//html.content("{{$index}}--{{entity."+field.getName()+"Id}}--{{entity.description}}");
-
 						html._div()._div();//._div();
+						html.div(CssGenerator.getPanelBody());
 					}else
 					{//entity
 						html.div((new HtmlAttributes()).add("class", style+" right-input"))

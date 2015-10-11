@@ -169,6 +169,8 @@ public class AngularGenerator {
 			renderValidator(html,field);
 		
 		}
+		html._div();
+		html.div(CssGenerator.getPanelBody());
 		html.div((new HtmlAttributes()).add("class", "pull-left"))
 		.form((new HtmlAttributes()).add("id", entityName+"ActionButton").add("ng-if", "selectedEntity.show"))
 		//.p().content("ACTION BUTTON")
@@ -311,6 +313,8 @@ public class AngularGenerator {
 
 				}
 			}
+			html._div();
+			html.div(CssGenerator.getPanelBody());
 			html.div((new HtmlAttributes()).add("class", "pull-left right-input"))
 			.button(CssGenerator.getButton("addNew"))
 			.content("Add new")

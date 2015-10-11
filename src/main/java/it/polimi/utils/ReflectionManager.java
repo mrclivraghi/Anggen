@@ -1,11 +1,11 @@
 package it.polimi.utils;
 
 import it.polimi.model.Mountain;
+import it.polimi.model.Order;
+import it.polimi.model.Person;
 import it.polimi.model.Photo;
+import it.polimi.model.Place;
 import it.polimi.model.SeedQuery;
-import it.polimi.oldmodel.Order;
-import it.polimi.oldmodel.Person;
-import it.polimi.oldmodel.Place;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;

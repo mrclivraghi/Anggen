@@ -63,14 +63,21 @@ public class AngularGenerator {
 			html._form();
 		}
 		//list
+		/*
 		html.form((new HtmlAttributes()).add("id", entityName+"List").add("ng-if", "entityList.length>0").enctype("UTF-8"))
 		.p().content("LISTA")
 		.ul()
 		.li((new HtmlAttributes()).add("ng-repeat", "entity in entityList").add("ng-click", "showEntityDetail($index)"))
 		.p();
 		renderItem(html,"entity");
-		
 		html._li()._ul()._form();
+		*/
+		html.form((new HtmlAttributes()).add("id", entityName+"List").add("ng-if", "entityList.length>0").enctype("UTF-8"))
+		.p().content("LISTA")
+		.div((new HtmlAttributes()).add("ui-grid", "gridOptions").add("ui-grid-pagination", "").add("ui-grid-selection",""))
+		._form();
+		
+		
 		//detail
 		html.form((new HtmlAttributes()).add("id", entityName+"DetailForm").add("name", entityName+"DetailForm").add("ng-show", "selectedEntity.show"))
 			.p().content("DETAIL");

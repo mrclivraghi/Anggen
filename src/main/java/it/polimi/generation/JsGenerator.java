@@ -11,24 +11,24 @@ import java.util.List;
 import com.sun.codemodel.JClass;
 
 public class JsGenerator {
-	
+
 	private Class classClass;
-	
+
 	private String entityName;
-	
+
 	private String parentEntityName;
-	
+
 	private Boolean isParent;
-	
+
 	private List<Field> childrenList;
-	
+
 	private Boolean entityList;
-	
+
 	private List<Field> fieldList;
-	
+
 	private List<ClassDetail> descendantClassList;
-	
-	
+
+
 	public JsGenerator(Class classClass,Boolean isParent,JClass compositeClass,String parentEntityName)
 	{
 		this.classClass=classClass;
@@ -46,7 +46,7 @@ public class JsGenerator {
 		else
 			entityList=false;
 	}
-	
+
 	public String generateService()
 	{
 		StringBuilder sb = new StringBuilder();
@@ -109,17 +109,17 @@ public class JsGenerator {
 
 		return sb.toString();
 	}
-	
+
 	private void changeChildrenVisibility(StringBuilder stringBuilder,Boolean show)
 	{
 		if (isParent)
 		{
 			if (descendantClassList!=null && descendantClassList.size()>0)
-			for (ClassDetail childrenClass: descendantClassList)
-			{
-				ReflectionManager reflectionManager = new ReflectionManager(childrenClass.getClassClass());
-				stringBuilder.append(reflectionManager.parseName()+"Service.selectedEntity.show="+show.toString()+";");
-			}
+				for (ClassDetail childrenClass: descendantClassList)
+				{
+					ReflectionManager reflectionManager = new ReflectionManager(childrenClass.getClassClass());
+					stringBuilder.append(reflectionManager.parseName()+"Service.selectedEntity.show="+show.toString()+";");
+				}
 		}
 		else
 		{
@@ -131,9 +131,9 @@ public class JsGenerator {
 				}
 
 		}
-		
+
 	}
-	
+
 	public String generateController()
 	{
 		StringBuilder sb = new StringBuilder();
@@ -157,7 +157,7 @@ public class JsGenerator {
 			changeChildrenVisibility(sb, false);
 		sb.append("}\n");
 
-		
+
 		/* UPDATE PARENT  */
 		if (!isParent)
 		{
@@ -193,7 +193,7 @@ public class JsGenerator {
 		sb.append("{\n");
 		sb.append(""+entityName+"Service.setSelectedEntity(null);\n");
 		sb.append(""+entityName+"Service.selectedEntity.show=true;\n");
-		
+
 		if (isParent)
 		{
 			changeChildrenVisibility(sb, false);
@@ -205,15 +205,15 @@ public class JsGenerator {
 		sb.append("{\n");
 		sb.append(""+entityName+"Service.selectedEntity.show=false;\n");
 		if (childrenList!=null)
-		for (Field field: childrenList)
-		{
-			if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List"))
+			for (Field field: childrenList)
 			{
-				sb.append(""+entityName+"Service.searchBean."+field.getName()+"List=[];\n");
-				sb.append(""+entityName+"Service.searchBean."+field.getName()+"List.push("+entityName+"Service.searchBean."+field.getName()+");\n");
-				sb.append("delete "+entityName+"Service.searchBean."+field.getName()+"; \n");
+				if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List"))
+				{
+					sb.append(""+entityName+"Service.searchBean."+field.getName()+"List=[];\n");
+					sb.append(""+entityName+"Service.searchBean."+field.getName()+"List.push("+entityName+"Service.searchBean."+field.getName()+");\n");
+					sb.append("delete "+entityName+"Service.searchBean."+field.getName()+"; \n");
+				}
 			}
-		}
 		sb.append("$http.post(\"../"+entityName+"/search\","+entityName+"Service.searchBean)\n");
 		sb.append(".success( function(entityList) {\n");
 		sb.append(""+entityName+"Service.setEntityList(entityList);\n");
@@ -223,7 +223,7 @@ public class JsGenerator {
 		sb.append("alert(\"error\");\n");
 		sb.append("})\n");
 		sb.append("};\n");
-		
+
 		//INSERT
 		sb.append("$scope.insert=function()\n");
 		sb.append("{\n");
@@ -244,14 +244,14 @@ public class JsGenerator {
 			if (entityList)
 			{
 				sb.append(parentEntityName+"Service.selectedEntity."+entityName+"List.push("+entityName+"Service.selectedEntity);\n\n");
-				
+
 			}else
 			{
 				sb.append(parentEntityName+"Service.selectedEntity."+entityName+"="+entityName+"Service.selectedEntity;\n\n");
 			}
-			
+
 			sb.append("$scope.updateParent();\n\n");
-			
+
 		}
 		sb.append("};\n");
 		//UPDATE
@@ -284,7 +284,7 @@ public class JsGenerator {
 			{
 				sb.append(parentEntityName+"Service.selectedEntity."+entityName+"="+entityName+"Service.selectedEntity;\n\n");
 			}
-			
+
 			sb.append("$scope.updateParent();\n");
 		}
 		sb.append("};\n");
@@ -317,7 +317,7 @@ public class JsGenerator {
 			{
 				sb.append(parentEntityName+"Service.selectedEntity."+entityName+"=null;");
 			}
-			
+
 			sb.append(entityName+"Service.setSelectedEntity(null);\n");
 			sb.append("$scope.updateParent();\n");
 		}
@@ -334,33 +334,47 @@ public class JsGenerator {
 				sb.append(field.getName()+"Service.setSelectedEntity("+entityName+"Service.selectedEntity."+field.getName()+"); \n");
 				sb.append(field.getName()+"Service.selectedEntity.show=true;\n");
 				sb.append("};\n");
-				
+
 			}
 			//INIT CHILDREN LIST
 			sb.append("$scope.init=function()\n")
 			.append("{\n");
 			if (childrenList!=null)
-			for (Field field: childrenList)
-			{
+				for (Field field: childrenList)
+				{
 
-				sb.append("$http");
-				sb.append(".post(\"../"+field.getName()+"/search\",");
-				sb.append("{})");
-				sb.append(".success(");
-				sb.append("function(entityList) {");
-				sb.append(""+entityName+"Service.childrenList."+field.getName()+"List=entityList;");
-				sb.append("}).error(function() {");
-				sb.append("alert(\"error\");");
-				sb.append("});");
-			}
-			
+					sb.append("$http\n");
+					sb.append(".post(\"../"+field.getName()+"/search\",\n");
+					sb.append("{})\n");
+					sb.append(".success(\n");
+					sb.append("function(entityList) {\n");
+					sb.append(""+entityName+"Service.childrenList."+field.getName()+"List=entityList;\n");
+					sb.append("}).error(function() {\n");
+					sb.append("alert(\"error\");\n");
+					sb.append("});\n");
+				}
+
 			sb.append("}; \n");
 			sb.append("$scope.init();\n");
-			
-			
+
+
 		}
-		
-		
+
+		//pagination options
+
+		sb.append("$scope.gridOptions = {\n");
+		sb.append("enablePaginationControls: true,\n");
+		sb.append("paginationPageSizes: [2, 4, 6],\n");
+		sb.append("paginationPageSize: 2,\n");
+		sb.append("columnDefs: [\n");
+		//generate dynamically
+		sb.append("{ name: 'mountainId' },\n");
+		sb.append("{ name: 'name' },\n");
+		sb.append("{ name: 'height' }\n");
+		sb.append("],\n");
+		sb.append("data: "+entityName+"Service.entityList\n");
+		sb.append(" };\n");
+
 		sb.append("})\n");
 		return sb.toString();
 	}
@@ -451,7 +465,7 @@ public class JsGenerator {
 		.append("};\n")
 		.append("});\n");
 		return sb.toString();
-	
+
 	 */
 
 	private String getServices() {
@@ -463,35 +477,27 @@ public class JsGenerator {
 		{
 			ReflectionManager reflectionManager = new ReflectionManager(classDetail.getClassClass());
 			services=services+","+reflectionManager.parseName()+"Service";
-			
+
 		}
 		return services;
 	}
-	
+
 	public String buildJS()
 	{
 		StringBuilder buildJS= new StringBuilder();
-		buildJS.append("angular.module(\""+entityName+"App\",[])\n");
+		buildJS.append("angular.module(\""+entityName+"App\",['ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection'])\n");
 		List<JsGenerator> jsGeneratorList= new ArrayList<JsGenerator>();
 		jsGeneratorList.add(new JsGenerator(classClass, true,null,null));
 		buildJS.append(jsGeneratorList.get(0).generateService());
 		List<Class> parentClass= new ArrayList<Class>();
 		parentClass.add(classClass);
-		
+
 		List<ClassDetail> descendantClassList = ReflectionManager.getDescendantClassList(classClass, parentClass);
 		for (ClassDetail theClass : descendantClassList)
 		{
 			jsGeneratorList.add(new JsGenerator(theClass.getClassClass(),false,theClass.getCompositeClass(),theClass.getParentName()));
 			buildJS.append(jsGeneratorList.get(jsGeneratorList.size()-1).generateService());
 		}
-		 
-		//generateChildrenJs(buildJS,jsGeneratorList,parentClass);
-		/*for (Field field: childrenField)
-		{
-			jsGeneratorList.add(new JsGenerator(field.getName(), false,null,field.getCompositeClass(),entityName));
-			buildJS.append(jsGeneratorList.get(jsGeneratorList.size()-1).generateService());
-		}*/
-		
 		for (JsGenerator jsGenerator: jsGeneratorList)
 		{
 			buildJS.append(jsGenerator.generateController());
@@ -499,8 +505,8 @@ public class JsGenerator {
 		buildJS.append(";");
 		return buildJS.toString();
 	}
-	
-	
+
+
 	private void generateChildrenJs(StringBuilder sb,List<JsGenerator> jsGeneratorList, List<Class> parentClassList)
 	{
 		if (fieldList==null) return;
@@ -527,8 +533,8 @@ public class JsGenerator {
 			}
 		}
 	}
-	
-	
+
+
 
 	private String setTempEntityForm()
 	{
@@ -537,10 +543,10 @@ public class JsGenerator {
 		{
 			sb.append("temp"+Utility.getFirstUpper(entityName)+"."+Utility.getFirstLower(field.getName())+"=data[i]."+Utility.getFirstLower(field.getName())+";\n");
 		}
-		
+
 		return sb.toString();
 	}
-	
 
-	
+
+
 }

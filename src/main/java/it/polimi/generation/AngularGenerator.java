@@ -75,7 +75,7 @@ public class AngularGenerator {
 		html.form((new HtmlAttributes()).add("id", entityName+"List").add("ng-if", "entityList.length>0").enctype("UTF-8"))
 		.p().content("LISTA")
 		.div((new HtmlAttributes()).add("ui-grid", "gridOptions").add("ui-grid-pagination", "").add("ui-grid-selection",""))
-		._form();
+		._div()._form();
 		
 		
 		//detail

@@ -55,8 +55,8 @@ public class HtmlGenerator {
 			.macros().javascript("http://ui-grid.info/release/ui-grid.js");
 			
 			//css
-			html.link((new HtmlAttributes()).add("src", "http://ui-grid.info/release/ui-grid.css"))
-			.link((new HtmlAttributes()).add("src", "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"));
+			html.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "http://ui-grid.info/release/ui-grid.css"))
+			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"));
 			
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -74,7 +74,7 @@ public class HtmlGenerator {
 					.head()
 						.title().content("test order");
 						
-						
+						includeScripts(html);
 						html.script().content(jsGenerator.buildJS(),false)
 					._head()
 					.body(htmlAttributes.add("ng-app", Utility.getFirstLower(entityName)+"App"));

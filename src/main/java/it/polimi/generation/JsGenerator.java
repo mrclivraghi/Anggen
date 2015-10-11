@@ -364,16 +364,37 @@ public class JsGenerator {
 
 		sb.append("$scope.gridOptions = {\n");
 		sb.append("enablePaginationControls: true,\n");
+		sb.append("multiSelect: false,\n");
+		sb.append("enableSelectAll: false,\n");
 		sb.append("paginationPageSizes: [2, 4, 6],\n");
 		sb.append("paginationPageSize: 2,\n");
-		sb.append("columnDefs: [\n");
 		//generate dynamically
-		sb.append("{ name: 'mountainId' },\n");
-		sb.append("{ name: 'name' },\n");
-		sb.append("{ name: 'height' }\n");
+		sb.append("columnDefs: [\n");
+		for (Field field: fieldList)
+		{
+			if (field.getCompositeClass()== null )
+				sb.append("{ name: '"+field.getName()+"'},\n");
+			else if (!field.getCompositeClass().fullName().contains("java.util.List"))
+			{
+				sb.append("{ name: '"+field.getName()+"."+field.getName()+"Id', displayName: '"+field.getName()+"'},\n");
+			}
+		}
+		sb.setCharAt(sb.length()-2, ' ');
 		sb.append("],\n");
+
+
 		sb.append("data: "+entityName+"Service.entityList\n");
 		sb.append(" };\n");
+
+		//on row selection
+		sb.append("$scope.gridOptions.onRegisterApi = function(gridApi){\n");
+		sb.append("gridApi.selection.on.rowSelectionChanged($scope,function(row){\n");
+		changeChildrenVisibility(sb, false);
+		sb.append(entityName+"Service\n");
+		sb.append(".setSelectedEntity(row.entity);\n");
+		sb.append(entityName+"Service.selectedEntity.show = true;\n");
+		sb.append("});\n");
+		sb.append("  };\n");
 
 		sb.append("})\n");
 		return sb.toString();

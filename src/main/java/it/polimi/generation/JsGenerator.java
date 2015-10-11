@@ -142,41 +142,41 @@ public class JsGenerator {
 		sb.append("};\n");
 		//insert
 		sb.append("this.insert = function() {\n");
-			sb.append("var promise= $http.put(\"../"+entityName+"/\",this.selectedEntity)\n");
-			sb.append(".then( function(response) \n");
-			sb.append("{\n");
-			sb.append("return response.data;\n");
-			sb.append("})\n");
-			sb.append(".catch(function() \n");
-			sb.append("{ \n");
-			sb.append("alert(\"error\");\n");
-			sb.append("});\n");
-			sb.append("return promise; \n");
-			sb.append("};\n");
+		sb.append("var promise= $http.put(\"../"+entityName+"/\",this.selectedEntity)\n");
+		sb.append(".then( function(response) \n");
+		sb.append("{\n");
+		sb.append("return response.data;\n");
+		sb.append("})\n");
+		sb.append(".catch(function() \n");
+		sb.append("{ \n");
+		sb.append("alert(\"error\");\n");
+		sb.append("});\n");
+		sb.append("return promise; \n");
+		sb.append("};\n");
 		//update
-			sb.append("this.update = function() {\n");
-			sb.append("var promise= $http.post(\"../"+entityName+"/\",this.selectedEntity)\n");
-			sb.append(".then( function(response) {\n");
-			sb.append("return response.data;\n");
-			sb.append("})\n");
-			sb.append(".catch(function() { \n");
-			sb.append("alert(\"error\");\n");
-			sb.append("});\n");
-			sb.append("return promise; \n");
-			sb.append("}\n");
+		sb.append("this.update = function() {\n");
+		sb.append("var promise= $http.post(\"../"+entityName+"/\",this.selectedEntity)\n");
+		sb.append(".then( function(response) {\n");
+		sb.append("return response.data;\n");
+		sb.append("})\n");
+		sb.append(".catch(function() { \n");
+		sb.append("alert(\"error\");\n");
+		sb.append("});\n");
+		sb.append("return promise; \n");
+		sb.append("}\n");
 		//delete
-			sb.append("this.del = function() {\n");
-			sb.append("var url=\"../"+entityName+"/selectedEntity."+entityName+"Id\";\n");
-			sb.append("var promise= $http[\"delete\"](url)\n");
-			sb.append(".then( function(response) {\n");
-			sb.append("return response.data;\n");
-			sb.append("})\n");
-			sb.append(".catch(function() {\n"); 
-			sb.append("alert(\"error\");\n");
-			sb.append("});\n");
-			sb.append("return promise; \n");
-			sb.append("}\n");
-	
+		sb.append("this.del = function() {\n");
+		sb.append("var url=\"../"+entityName+"/selectedEntity."+entityName+"Id\";\n");
+		sb.append("var promise= $http[\"delete\"](url)\n");
+		sb.append(".then( function(response) {\n");
+		sb.append("return response.data;\n");
+		sb.append("})\n");
+		sb.append(".catch(function() {\n"); 
+		sb.append("alert(\"error\");\n");
+		sb.append("});\n");
+		sb.append("return promise; \n");
+		sb.append("}\n");
+
 
 
 
@@ -238,7 +238,14 @@ public class JsGenerator {
 		{
 			sb.append("$scope.updateParent = function(toDo)\n");
 			sb.append("{\n");
-			sb.append("$http.post(\"../"+parentEntityName+"/\","+parentEntityName+"Service.selectedEntity)\n");
+
+			sb.append(parentEntityName+"Service.update().then(function(data) {\n");
+			sb.append(parentEntityName+"Service.setSelectedEntity(data);\n");
+			sb.append("if (toDo != null)\n");
+			sb.append("toDo();\n");
+			sb.append("});\n");
+
+			/*sb.append("$http.post(\"../"+parentEntityName+"/\","+parentEntityName+"Service.selectedEntity)\n");
 			sb.append(".then(\n");
 			sb.append("function(response) {\n");
 			sb.append("if (response.status==200)\n");
@@ -254,7 +261,7 @@ public class JsGenerator {
 			sb.append("}\n");
 			sb.append(",function(error) {\n");
 			sb.append("alert(\"error\");\n");
-			sb.append("});\n");
+			sb.append("});\n");*/
 			sb.append("};\n");
 		}
 		sb.append("$scope.showEntityDetail= function(index)\n");
@@ -289,11 +296,11 @@ public class JsGenerator {
 					sb.append("delete "+entityName+"Service.searchBean."+field.getName()+"; \n");
 				}
 			}
-		
+
 		sb.append(entityName+"Service.search().then(function(data) { \n");
 		sb.append(entityName+"Service.setEntityList(data);\n");
 		sb.append("});\n");
-		
+
 		sb.append("};\n");
 
 		//INSERT
@@ -471,12 +478,12 @@ public class JsGenerator {
 		sb.append(entityName+"Service\n");
 		sb.append(".setSelectedEntity(row.entity);\n");
 
-/*		for (Field field: fieldList)
+		/*		for (Field field: fieldList)
 		{
 			if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List"))
 				sb.append("$scope."+field.getName()+"ListGridOptions.data="+entityName+"Service.selectedEntity."+field.getName()+"List; \n");
 		}
-*/
+		 */
 		sb.append(entityName+"Service.selectedEntity.show = true;\n");
 		sb.append("});\n");
 		sb.append("  };\n");

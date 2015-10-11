@@ -24,17 +24,17 @@ import org.rendersnake.HtmlCanvas;
 
 public class AngularGenerator {
 	private String entityName;
-	
+
 	private Boolean isParent;
-	
+
 	private List<Field> fieldList;
-	
+
 	private ReflectionManager reflectionManager;
-	
+
 	private List<Class> parentClass;
-	
+
 	private Class classClass;
-	
+
 	public AngularGenerator(Class myClass,Boolean isParent, List<Class> parentClass)
 	{
 		this.reflectionManager= new ReflectionManager(myClass);
@@ -46,20 +46,16 @@ public class AngularGenerator {
 			this.parentClass.add(myClass);
 		this.classClass=myClass;
 	}
-	
+
+
+
 	public void generateEntityView(HtmlCanvas html) throws IOException {
 		html.div((new HtmlAttributes()).add("ng-controller", entityName+"Controller"));
 		//search bean
 		if (isParent)
 		{
 			html.form((new HtmlAttributes()).add("id", entityName+"SearchBean"));
-			renderForm(html,"searchBean");
-			html.button((new HtmlAttributes()).add("ng-click", "addNew()"))
-				.content("Add new")
-				.button((new HtmlAttributes()).add("ng-click", "search()"))
-				.content("Find")
-				.button((new HtmlAttributes()).add("ng-click", "reset()"))
-				.content("Reset");
+			renderSearchForm(html,"searchBean");
 			html._form();
 		}
 		//list
@@ -71,27 +67,26 @@ public class AngularGenerator {
 		.p();
 		renderItem(html,"entity");
 		html._li()._ul()._form();
-		*/
+		 */
 		html.form((new HtmlAttributes()).add("id", entityName+"List").add("ng-if", "entityList.length>0").enctype("UTF-8"))
-		.p().content("LISTA")
+		.div(CssGenerator.getPanel())
+		.div(CssGenerator.getPanelHeader())
+		.content("List")
+		.div(CssGenerator.getPanelBody())
+		
 		.div((new HtmlAttributes()).add("ui-grid", entityName+"GridOptions").add("ui-grid-pagination", "").add("ui-grid-selection",""))
-		._div()._form();
+		._div()
 		
-		
+		._div()
+		._div()
+		._form();
+
 		//detail
-		html.form((new HtmlAttributes()).add("id", entityName+"DetailForm").add("name", entityName+"DetailForm").add("ng-show", "selectedEntity.show"))
-			.p().content("DETAIL");
+		html.form((new HtmlAttributes()).add("id", entityName+"DetailForm").add("name", entityName+"DetailForm").add("ng-show", "selectedEntity.show"));
+		//.p().content("DETAIL");
 		renderDetail(html);
 		html._form();
-		html.form((new HtmlAttributes()).add("id", entityName+"ActionButton").add("ng-if", "selectedEntity.show"))
-		.p().content("ACTION BUTTON")
-			.button((new HtmlAttributes()).add("ng-click", "insert()").add("ng-if", "selectedEntity."+entityName+"Id==undefined"))
-				.content("Insert")
-				.button((new HtmlAttributes()).add("ng-click", "update()").add("ng-if", "selectedEntity."+entityName+"Id>0"))
-				.content("Update")
-				.button((new HtmlAttributes()).add("ng-click", "del()").add("ng-if", "selectedEntity."+entityName+"Id>0"))
-				.content("Delete");
-		html._form();
+	
 		html._div();
 		if (isParent)
 		{
@@ -108,47 +103,83 @@ public class AngularGenerator {
 	}
 
 	private void renderDetail(HtmlCanvas html) throws IOException {
+		html.div(CssGenerator.getPanel());
+		html.div(CssGenerator.getPanelHeader())
+		.content("Detail");
+		html.div(CssGenerator.getPanelBody());
+		String style="";
 		for (Field field: fieldList)
 		{
+			style= style.equals("pull-left")? "pull-right": "pull-left";
 			if (reflectionManager.isKnownClass(field.getFieldClass()))
 			{
 				String readOnly="false";
 				if (field.getName().contains(entityName+"Id"))
 					readOnly="true";
-				
+
 				String type= (field.getFieldClass()==Date.class ? "date" : "text");
-				html.p()
+				//html.p()
+				//.content(field.getName())
+				html.div((new HtmlAttributes()).add("class", style+" right-input"))
+				.label((new HtmlAttributes()).add("for", field.getName()))
 				.content(field.getName())
-				.input(getFieldHtmlAttributes(field,"selectedEntity",true));
+				.input(getFieldHtmlAttributes(field,"selectedEntity",true,""))
+				._div();
 			} else
-				//TODO block after 2°level improve?
 				if (field.getCompositeClass()!=null  && !(parentClass.contains(field.getFieldClass())))
 				{ // entity or list!
 					if (field.getCompositeClass().fullName().contains("java.util.List"))
 					{ //list
-						html.p((new HtmlAttributes()).add("ng-click", "show"+Utility.getFirstUpper(field.getName())+"Detail()"))
+						//html.div((new HtmlAttributes()).add("class", style))
+						//.label((new HtmlAttributes()).add("for", field.getName()))
+						//.content(field.getName())
+						html.div((new HtmlAttributes()).add("class",""))
+						.label((new HtmlAttributes()).add("id", field.getName())).content(field.getName())
+						.button(CssGenerator.getButton("show"+Utility.getFirstUpper(field.getName())+"Detail"))
 						.content("Add new "+field.getName());
-						html.div((new HtmlAttributes()).add("ng-if", "selectedEntity."+field.getName()+"List.length>0"))
-										
-						.div((new HtmlAttributes()).add("ui-grid", field.getName()+"ListGridOptions").add("ui-grid-pagination", "").add("ui-grid-selection",""));
-						
-						
+						html.div((new HtmlAttributes()).add("id",field.getName()).add("ng-if", "selectedEntity."+field.getName()+"List.length>0"))
+
+						.div((new HtmlAttributes()).add("style","top: 100px").add("ui-grid", field.getName()+"ListGridOptions").add("ui-grid-pagination", "").add("ui-grid-selection",""))
+						._div();
+
 						//html.content("{{$index}}--{{entity."+field.getName()+"Id}}--{{entity.description}}");
-						
-						html._div()._div();
+
+						html._div()._div();//._div();
 					}else
 					{//entity
-						html.p((new HtmlAttributes()).add("ng-click", "show"+Utility.getFirstUpper(field.getName())+"Detail()").add("ng-if", "selectedEntity."+field.getName()+"==null"))
+						html.div((new HtmlAttributes()).add("class", style+" right-input"))
+						.label((new HtmlAttributes()).add("id", field.getName())).content(field.getName())
+						.button(CssGenerator.getButton("show"+Utility.getFirstUpper(field.getName())+"Detail()").add("ng-if", "selectedEntity."+field.getName()+"==null"))
 						.content("Add new "+field.getName());
-						html.p((new HtmlAttributes()).add("ng-click", "show"+Utility.getFirstUpper(field.getName())+"Detail()").add("ng-if", "selectedEntity."+field.getName()+"!=null"))
-						.content(field.getName()+": {{selectedEntity."+field.getName()+"."+field.getName()+"Id}}");
-						
-						
+
+
+						//html.p((new HtmlAttributes()).add("ng-click", "show"+Utility.getFirstUpper(field.getName())+"Detail()").add("ng-if", "selectedEntity."+field.getName()+"==null"))
+						//.content("Add new "+field.getName());
+						html
+						.label((new HtmlAttributes()).add("for", field.getName()))
+						.content(field.getName())
+						.p((new HtmlAttributes()).add("ng-click", "show"+Utility.getFirstUpper(field.getName())+"Detail()").add("ng-if", "selectedEntity."+field.getName()+"!=null"))
+						.content(field.getName()+": {{selectedEntity."+field.getName()+"."+field.getName()+"Id}}")
+						._div();
+
+
 					}
 				}
 			renderValidator(html,field);
+		
 		}
-/*
+		html.div((new HtmlAttributes()).add("class", "pull-left"))
+		.form((new HtmlAttributes()).add("id", entityName+"ActionButton").add("ng-if", "selectedEntity.show"))
+		//.p().content("ACTION BUTTON")
+		.button(CssGenerator.getButton("insert").add("ng-if", "selectedEntity."+entityName+"Id==undefined"))
+		.content("Insert")
+		.button(CssGenerator.getButton("update").add("ng-if", "selectedEntity."+entityName+"Id>0"))
+		.content("Update")
+		.button(CssGenerator.getButton("del").add("ng-if", "selectedEntity."+entityName+"Id>0"))
+		.content("Delete");
+		html._form()._div();
+		html._div()._div();
+		/*
 		<p ng-click="showPlaceDetail()" >Add new place 
 		</p>
 		<div ng-if="selectedEntity.placeList.length>0">
@@ -156,7 +187,7 @@ public class AngularGenerator {
 				<li ng-repeat="entity in selectedEntity.placeList" ng-click="showPlaceDetail($index)">{{$index}}--{{entity.placeId}}--{{entity.description}}</li>
 			</ul>
 		</div>
-		*/
+		 */
 	}
 
 	/*
@@ -199,7 +230,7 @@ public class AngularGenerator {
 			}
 		}
 	}
-	
+
 	private void renderValidatorAttributes(HtmlAttributes htmlAttributes, Field field)
 	{
 		Annotation[] annotationList= field.getAnnotationList();
@@ -230,62 +261,71 @@ public class AngularGenerator {
 			}
 		}
 	}
-	
-	private HtmlAttributes getFieldHtmlAttributes(Field field,String baseEntity, Boolean validation)
+
+	private HtmlAttributes getFieldHtmlAttributes(Field field,String baseEntity, Boolean validation, String style)
 	{
 		String readOnly="false";
 		if (field.getName().contains(baseEntity+"Id"))
 			readOnly="true";
 		String type= (field.getFieldClass()==java.sql.Date.class || field.getFieldClass()==java.util.Date.class) ? "date" : "text";
 		String fieldForm=baseEntity+"."+Utility.getFirstLower(field.getName());
-		HtmlAttributes htmlAttributes = new HtmlAttributes();
+		HtmlAttributes htmlAttributes = CssGenerator.getInput(style);
 		htmlAttributes.add("type", type).add("ng-model", fieldForm).add("ng-readonly",readOnly).add("name",field.getName());
+		htmlAttributes.add("placeholder", field.getName());
+		htmlAttributes.add("id", field.getName());
 		if (validation)
 			renderValidatorAttributes(htmlAttributes,field);
 		return htmlAttributes;
 	}
-	
-	private void renderForm(HtmlCanvas html,String baseEntity)
+
+	private void renderSearchForm(HtmlCanvas html,String baseEntity)
 	{ 
-		for (Field field: fieldList)
-		{
-			if (field.getCompositeClass()==null)
+		try {
+			html.div(CssGenerator.getPanel());
+			html.div(CssGenerator.getPanelHeader())
+			.content("Search form");
+			html.div(CssGenerator.getPanelBody());
+			String style="";
+			for (Field field: fieldList)
 			{
-				try {
-						html.p()
-					.content(field.getName())
-					.input(getFieldHtmlAttributes(field,baseEntity,false));
-						
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			} else
-			{
-			/*	<!-- TODO mgmt -->
-				<p>person</p>
-				<select ng-model="searchBean.person.personId"
-						ng-options="person.personId as person.firstName+' '+person.lastName for person in childrenList.personList">
-				</select>
-				<p>place</p>
-				<select ng-model="searchBean.place.placeId"
-						ng-options="place.placeId as place.description for place in childrenList.placeList">
-				</select>*/
-				try {
-					html.p()
-					.content(field.getName());
-					html.select((new HtmlAttributes()).add("ng-model", "searchBean."+field.getName()+"."+field.getName()+"Id")
+				style= style.equals("pull-left")? "pull-right": "pull-left";
+				if (field.getCompositeClass()==null)
+				{
+
+					//.p()
+					//.content(field.getName())
+					html.div((new HtmlAttributes()).add("class", style+" right-input"))
+					.label((new HtmlAttributes()).add("id", field.getName())).content(field.getName())
+					.input(getFieldHtmlAttributes(field,baseEntity,false,"").add("id", field.getName()))._div();
+
+
+				} else
+				{
+					html.div((new HtmlAttributes()).add("class", style+" right-input"))
+					.label((new HtmlAttributes()).add("id", field.getName())).content(field.getName());
+					html.select(CssGenerator.getSelect("").add("ng-model", "searchBean."+field.getName()+"."+field.getName()+"Id")
+							.add("id", field.getName())
 							.add("ng-options", field.getName()+"."+field.getName()+"Id as "+reflectionManager.getDescriptionField(field.getFieldClass())+" for "+field.getName()+" in childrenList."+field.getName()+"List").enctype("UTF-8"))
-							._select();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+							._select()._div();
+
 				}
-				
 			}
+			html.div((new HtmlAttributes()).add("class", "pull-left right-input"))
+			.button(CssGenerator.getButton("addNew"))
+			.content("Add new")
+			.button(CssGenerator.getButton("search"))
+			.content("Find")
+			.button(CssGenerator.getButton("reset"))
+			.content("Reset")
+			._div();
+			html._div()._div();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
+	//useless
 	private void renderItem(HtmlCanvas html,String baseEntity)
 	{
 		StringBuilder itemContent= new StringBuilder();
@@ -300,7 +340,7 @@ public class AngularGenerator {
 					itemContent.append(" | date: 'dd-MM-yyyy'");
 				}
 				itemContent.append("}}\n");
-	
+
 			}
 		}
 		try {

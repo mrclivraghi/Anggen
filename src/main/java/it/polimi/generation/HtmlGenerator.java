@@ -41,17 +41,41 @@ public class HtmlGenerator {
 	}
 	
 	
+	private void includeScripts(HtmlCanvas html)
+	{
+		
+		try {
+			//js
+			html.macros().javascript("http://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.js")
+			.macros().javascript("http://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular-touch.js")
+			.macros().javascript("http://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular-animate.js")
+			.macros().javascript("http://ui-grid.info/docs/grunt-scripts/csv.js")
+			.macros().javascript("http://ui-grid.info/docs/grunt-scripts/pdfmake.js")
+			.macros().javascript("http://ui-grid.info/docs/grunt-scripts/vfs_fonts.js")
+			.macros().javascript("http://ui-grid.info/release/ui-grid.js");
+			
+			//css
+			html.link((new HtmlAttributes()).add("src", "http://ui-grid.info/release/ui-grid.css"))
+			.link((new HtmlAttributes()).add("src", "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"));
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public void generateJSP() throws IllegalAccessException
 	{
 		HtmlCanvas html = new HtmlCanvas();
 		HtmlAttributes htmlAttributes= new HtmlAttributes();
 		JsGenerator jsGenerator = new JsGenerator(classClass, true, null, null);
 		try {
-			html
+			html.
+			html()
 					.head()
-						.title().content("test order")
-						.macros().javascript("https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js")
-						.script().content(jsGenerator.buildJS(),false)
+						.title().content("test order");
+						
+						
+						html.script().content(jsGenerator.buildJS(),false)
 					._head()
 					.body(htmlAttributes.add("ng-app", Utility.getFirstLower(entityName)+"App"));
 					AngularGenerator angularGenerator= new AngularGenerator(classClass, true,new ArrayList<Class>());
@@ -62,7 +86,7 @@ public class HtmlGenerator {
 						childrenHtmlGenerator.generateEntityView(html);
 						//generateEntityView(html, false,field.getName());
 					}*/
-					html._body();
+					html._body()._html();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

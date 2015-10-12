@@ -71,7 +71,7 @@ public class AngularGenerator {
 		html.form((new HtmlAttributes()).add("id", entityName+"List").add("ng-if", "entityList.length>0").enctype("UTF-8"))
 		.div(CssGenerator.getPanel())
 		.div(CssGenerator.getPanelHeader())
-		.content("List")
+		.content("List "+entityName)
 		.div(CssGenerator.getPanelBody())
 		
 		.div((new HtmlAttributes()).add("ui-grid", entityName+"GridOptions").add("ui-grid-pagination", "").add("ui-grid-selection",""))
@@ -105,7 +105,7 @@ public class AngularGenerator {
 	private void renderDetail(HtmlCanvas html) throws IOException {
 		html.div(CssGenerator.getPanel());
 		html.div(CssGenerator.getPanelHeader())
-		.content("Detail");
+		.content("Detail "+entityName+" {{ selectedEntity."+entityName+"Id }}");
 		html.div(CssGenerator.getPanelBody());
 		String style="";
 		for (Field field: fieldList)
@@ -286,7 +286,7 @@ public class AngularGenerator {
 		try {
 			html.div(CssGenerator.getPanel());
 			html.div(CssGenerator.getPanelHeader())
-			.content("Search form");
+			.content("Search form "+entityName);
 			html.div(CssGenerator.getPanelBody());
 			String style="";
 			for (Field field: fieldList)

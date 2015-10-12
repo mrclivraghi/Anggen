@@ -6,6 +6,7 @@ import it.polimi.utils.ReflectionManager;
 import it.polimi.utils.Utility;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.sun.codemodel.JClass;
@@ -455,7 +456,12 @@ public class JsGenerator {
 		for (Field field: fieldList)
 		{
 			if (field.getCompositeClass()== null )
-				sb.append("{ name: '"+field.getName()+"'},\n");
+			{
+				if (field.getFieldClass()==Date.class || field.getFieldClass()==java.sql.Date.class)
+					sb.append("{ name: '"+field.getName()+"', cellFilter: \"date:\'dd-MM-yyyy\'\"},\n");
+				else
+					sb.append("{ name: '"+field.getName()+"'},\n");
+			}
 			else if (!field.getCompositeClass().fullName().contains("java.util.List") && isParent)
 			{
 				sb.append("{ name: '"+field.getName()+"."+field.getName()+"Id', displayName: '"+field.getName()+"'},\n");

@@ -218,7 +218,7 @@ public class JsGenerator {
 	{
 		StringBuilder sb = new StringBuilder();
 
-		sb.append(".controller(\""+entityName+"Controller\",function($scope,$http"+getServices()+")\n");
+		sb.append(".controller(\""+entityName+"Controller\",function($scope"+getServices()+")\n");
 		sb.append("{\n");
 		//search var
 		sb.append("$scope.searchBean="+entityName+"Service.searchBean;\n");

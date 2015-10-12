@@ -269,12 +269,12 @@ public class JsGenerator {
 			sb.append("});\n");*/
 			sb.append("};\n");
 		}
-		sb.append("$scope.showEntityDetail= function(index)\n");
+		/*sb.append("$scope.showEntityDetail= function(index)\n");
 		sb.append("{\n");
 		sb.append(""+entityName+"Service.indexSelected=index;\n");
 		sb.append(""+entityName+"Service.setSelectedEntity($scope.entityList[index]);\n");
 		sb.append(""+entityName+"Service.selectedEntity.show=true;\n");
-		sb.append("};\n");
+		sb.append("};\n");*/
 
 		sb.append("$scope.addNew= function()\n");
 		sb.append("{\n");

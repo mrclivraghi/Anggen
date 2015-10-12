@@ -516,21 +516,21 @@ public class JsGenerator {
 	{
 		StringBuilder buildJS= new StringBuilder();
 		buildJS.append("angular.module(\""+entityName+"App\",['ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection'])\n");
-		List<JsGenerator> jsGeneratorList= new ArrayList<JsGenerator>();
-		jsGeneratorList.add(new JsGenerator(classClass, true,null,null));
-		buildJS.append(jsGeneratorList.get(0).generateService());
+		JsGenerator jsGenerator = new JsGenerator(classClass, true,null,null);
+		buildJS.append(jsGenerator.generateService());
+		buildJS.append(jsGenerator.generateController());
+		
 		List<Class> parentClass= new ArrayList<Class>();
 		parentClass.add(classClass);
 
 		List<ClassDetail> descendantClassList = ReflectionManager.getDescendantClassList(classClass, parentClass);
 		for (ClassDetail theClass : descendantClassList)
 		{
-			jsGeneratorList.add(new JsGenerator(theClass.getClassClass(),false,theClass.getCompositeClass(),theClass.getParentName()));
-			buildJS.append(jsGeneratorList.get(jsGeneratorList.size()-1).generateService());
-		}
-		for (JsGenerator jsGenerator: jsGeneratorList)
-		{
+			jsGenerator = new JsGenerator(theClass.getClassClass(),false,theClass.getCompositeClass(),theClass.getParentName());
+			buildJS.append(jsGenerator.generateService());
 			buildJS.append(jsGenerator.generateController());
+			
+			
 		}
 		buildJS.append(";");
 		return buildJS.toString();

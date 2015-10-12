@@ -5,6 +5,10 @@ import it.polimi.utils.Field;
 import it.polimi.utils.ReflectionManager;
 import it.polimi.utils.Utility;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -515,7 +519,7 @@ public class JsGenerator {
 	public String buildJS()
 	{
 		StringBuilder buildJS= new StringBuilder();
-		buildJS.append("angular.module(\""+entityName+"App\",['ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection'])\n");
+		buildJS.append("var "+entityName+"App=angular.module(\""+entityName+"App\",['ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection'])\n");
 		JsGenerator jsGenerator = new JsGenerator(classClass, true,null,null);
 		buildJS.append(jsGenerator.generateService());
 		buildJS.append(jsGenerator.generateController());
@@ -575,6 +579,21 @@ public class JsGenerator {
 		}
 
 		return sb.toString();
+	}
+	
+	public void saveJsToFile(String directory)
+	{
+		File file = new File(directory+entityName+".js");
+		PrintWriter writer;
+		try {
+			writer = new PrintWriter(file, "UTF-8");
+			writer.write(buildJS());
+			writer.close();
+			System.out.println("written js file "+file.getAbsolutePath());
+		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 

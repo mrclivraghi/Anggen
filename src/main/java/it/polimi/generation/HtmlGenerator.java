@@ -23,7 +23,9 @@ public class HtmlGenerator {
 	
 	private String entityName;
 
-	public static String directory;
+	public static String directoryViewPages;
+	
+	public static String directoryAngularFiles;
 	
 	private ReflectionManager reflectionManager;
 	
@@ -40,7 +42,8 @@ public class HtmlGenerator {
 		this.fieldList=reflectionManager.getFieldList();
 		this.childrenField=reflectionManager.getChildrenFieldList();
 		File file = new File(""); 
-		directory = file.getAbsolutePath()+"\\WebContent\\WEB-INF\\jsp\\";
+		directoryViewPages = file.getAbsolutePath()+"\\WebContent\\WEB-INF\\jsp\\";
+		directoryAngularFiles=file.getAbsolutePath()+"\\src\\main\\webapp\\resources\\theme\\general_theme\\js\\angular\\";
 	}
 	
 	
@@ -55,7 +58,8 @@ public class HtmlGenerator {
 			.macros().javascript("http://ui-grid.info/docs/grunt-scripts/csv.js")
 			.macros().javascript("http://ui-grid.info/docs/grunt-scripts/pdfmake.js")
 			.macros().javascript("http://ui-grid.info/docs/grunt-scripts/vfs_fonts.js")
-			.macros().javascript("http://ui-grid.info/release/ui-grid.js");
+			.macros().javascript("http://ui-grid.info/release/ui-grid.js")
+			.macros().javascript("../resources/general_theme/js/angular/"+entityName+".js");
 			
 			//css
 			html.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "http://ui-grid.info/release/ui-grid.css"))
@@ -81,8 +85,11 @@ public class HtmlGenerator {
 						.title().content("test order");
 						
 						includeScripts(html);
-						html.script().content(jsGenerator.buildJS(),false)
-					._head()
+						
+						
+						jsGenerator.saveJsToFile(directoryAngularFiles);
+						//html.script().content(jsGenerator.buildJS(),false)
+					html._head()
 					.body(htmlAttributes.add("ng-app", Utility.getFirstLower(entityName)+"App"));
 					AngularGenerator angularGenerator= new AngularGenerator(classClass, true,new ArrayList<Class>());
 					angularGenerator.generateEntityView(html);
@@ -97,7 +104,7 @@ public class HtmlGenerator {
 			e.printStackTrace();
 		}
 		
-		File myJsp=new File(directory+reflectionManager.parseName(classClass.getName())+".jsp");
+		File myJsp=new File(directoryViewPages+reflectionManager.parseName(classClass.getName())+".jsp");
 		PrintWriter writer;
 		try {
 			System.out.println("Written "+myJsp.getAbsolutePath());

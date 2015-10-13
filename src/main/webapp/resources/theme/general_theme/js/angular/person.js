@@ -1,4 +1,4 @@
-var personApp=angular.module("personApp",['ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection'])
+var personApp=angular.module("personApp",['ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date'])
 .service("personService", function($http)
 {
 this.entityList =		[];
@@ -119,12 +119,6 @@ personService.setSelectedEntity(null);
 personService.selectedEntity.show=false;
 personService.setEntityList(null); 
 }
-$scope.showEntityDetail= function(index)
-{
-personService.indexSelected=index;
-personService.setSelectedEntity($scope.entityList[index]);
-personService.selectedEntity.show=true;
-};
 $scope.addNew= function()
 {
 personService.setSelectedEntity(null);

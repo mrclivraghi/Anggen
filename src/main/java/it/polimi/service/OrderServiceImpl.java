@@ -43,14 +43,20 @@ public class OrderServiceImpl
     @Override
     @Transactional
     public Order update(Order order) {
-    	if (order.getPlaceList()!=null)
-    		for (it.polimi.model.Place place: order.getPlaceList())
-    		{
-    			place.setOrder(order);
-    		}
-    	Order returnedOrder=orderRepository.save(order);
-    	
-    	return returnedOrder;
+        if (order.getPlaceList()!=null)
+        for (it.polimi.model.Place place: order.getPlaceList())
+        {
+        place.setOrder(order);
+        }
+        Order returnedOrder=orderRepository.save(order);
+        /*if (order.getPerson()!=null)
+        {
+        List<Order> orderList = orderRepository.findByPerson( order.getPerson());
+        if (!orderList.contains(returnedOrder))
+        orderList.add(returnedOrder);
+        returnedOrder.getPerson().setOrderList(orderList);
+        }*/
+         return returnedOrder;
     }
 
 }

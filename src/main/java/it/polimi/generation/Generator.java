@@ -16,7 +16,7 @@ public class Generator {
 		Reflections reflections = new Reflections("it.polimi.model");
 		Set<Class<?>> allClasses = reflections.getTypesAnnotatedWith(Entity.class);
 		List<Class> dependencyClass = new ArrayList<Class>();
-		/*
+		
 		for (Class modelClass: allClasses)
 		{
 			RestGenerator generator = new RestGenerator(modelClass);
@@ -27,7 +27,7 @@ public class Generator {
 			RestGenerator generator = new RestGenerator(modelClass);
 			generator.generateRESTClasses(dependencyClass,false);
 		}
-		*/
+		
 		
 		for (Class modelClass: allClasses)
 		{

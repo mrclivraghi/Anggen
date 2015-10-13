@@ -1,4 +1,4 @@
-var photoApp=angular.module("photoApp",['ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection'])
+var photoApp=angular.module("photoApp",['ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date'])
 .service("photoService", function($http)
 {
 this.entityList =		[];
@@ -119,12 +119,6 @@ photoService.setSelectedEntity(null);
 photoService.selectedEntity.show=false;
 photoService.setEntityList(null); 
 seedQueryService.selectedEntity.show=false;mountainService.selectedEntity.show=false;}
-$scope.showEntityDetail= function(index)
-{
-photoService.indexSelected=index;
-photoService.setSelectedEntity($scope.entityList[index]);
-photoService.selectedEntity.show=true;
-};
 $scope.addNew= function()
 {
 photoService.setSelectedEntity(null);
@@ -324,12 +318,6 @@ photoService.setSelectedEntity(data);
 if (toDo != null)
 toDo();
 });
-};
-$scope.showEntityDetail= function(index)
-{
-seedQueryService.indexSelected=index;
-seedQueryService.setSelectedEntity($scope.entityList[index]);
-seedQueryService.selectedEntity.show=true;
 };
 $scope.addNew= function()
 {
@@ -553,12 +541,6 @@ seedQueryService.setSelectedEntity(data);
 if (toDo != null)
 toDo();
 });
-};
-$scope.showEntityDetail= function(index)
-{
-mountainService.indexSelected=index;
-mountainService.setSelectedEntity($scope.entityList[index]);
-mountainService.selectedEntity.show=true;
 };
 $scope.addNew= function()
 {

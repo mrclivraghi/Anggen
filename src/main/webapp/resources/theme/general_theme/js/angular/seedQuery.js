@@ -1,4 +1,4 @@
-var seedQueryApp=angular.module("seedQueryApp",['ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection'])
+var seedQueryApp=angular.module("seedQueryApp",['ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date'])
 .service("seedQueryService", function($http)
 {
 this.entityList =		[];
@@ -119,12 +119,6 @@ seedQueryService.setSelectedEntity(null);
 seedQueryService.selectedEntity.show=false;
 seedQueryService.setEntityList(null); 
 mountainService.selectedEntity.show=false;photoService.selectedEntity.show=false;}
-$scope.showEntityDetail= function(index)
-{
-seedQueryService.indexSelected=index;
-seedQueryService.setSelectedEntity($scope.entityList[index]);
-seedQueryService.selectedEntity.show=true;
-};
 $scope.addNew= function()
 {
 seedQueryService.setSelectedEntity(null);
@@ -365,12 +359,6 @@ if (toDo != null)
 toDo();
 });
 };
-$scope.showEntityDetail= function(index)
-{
-mountainService.indexSelected=index;
-mountainService.setSelectedEntity($scope.entityList[index]);
-mountainService.selectedEntity.show=true;
-};
 $scope.addNew= function()
 {
 mountainService.setSelectedEntity(null);
@@ -572,12 +560,6 @@ seedQueryService.setSelectedEntity(data);
 if (toDo != null)
 toDo();
 });
-};
-$scope.showEntityDetail= function(index)
-{
-photoService.indexSelected=index;
-photoService.setSelectedEntity($scope.entityList[index]);
-photoService.selectedEntity.show=true;
 };
 $scope.addNew= function()
 {

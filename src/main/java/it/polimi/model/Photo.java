@@ -1,6 +1,7 @@
 package it.polimi.model;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -12,6 +13,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
@@ -42,12 +45,10 @@ public class Photo {
 	
 	private String social;
 	
-	public String getSocial() {
-		return social;
-	}
-
-
-	public Date date;
+	
+	@Column(name="date")
+	//@Temporal(TemporalType.TIMESTAMP)
+	private Date date;
 	
 	
 	private Integer status;
@@ -69,10 +70,6 @@ public class Photo {
 		return url;
 	}
 
-	public Date getDate() {
-		return date;
-	}
-
 	public void setUrl(String url) {
 		this.url = url;
 	}
@@ -88,9 +85,20 @@ public class Photo {
 		this.date = date;
 	}
 
+	public Date getDate()
+	{
+		return this.date;
+	}
+	
 	public void setSocial(String social) {
 		this.social = social;
 	}
+	
+	public String getSocial() {
+		return social;
+	}
+
+	
 	public Integer getStatus() {
 		return status;
 	}

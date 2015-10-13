@@ -1,4 +1,4 @@
-var orderApp=angular.module("orderApp",['ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection'])
+var orderApp=angular.module("orderApp",['ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date'])
 .service("orderService", function($http)
 {
 this.entityList =		[];
@@ -119,12 +119,6 @@ orderService.setSelectedEntity(null);
 orderService.selectedEntity.show=false;
 orderService.setEntityList(null); 
 personService.selectedEntity.show=false;placeService.selectedEntity.show=false;}
-$scope.showEntityDetail= function(index)
-{
-orderService.indexSelected=index;
-orderService.setSelectedEntity($scope.entityList[index]);
-orderService.selectedEntity.show=true;
-};
 $scope.addNew= function()
 {
 orderService.setSelectedEntity(null);
@@ -360,12 +354,6 @@ if (toDo != null)
 toDo();
 });
 };
-$scope.showEntityDetail= function(index)
-{
-personService.indexSelected=index;
-personService.setSelectedEntity($scope.entityList[index]);
-personService.selectedEntity.show=true;
-};
 $scope.addNew= function()
 {
 personService.setSelectedEntity(null);
@@ -527,12 +515,6 @@ orderService.setSelectedEntity(data);
 if (toDo != null)
 toDo();
 });
-};
-$scope.showEntityDetail= function(index)
-{
-placeService.indexSelected=index;
-placeService.setSelectedEntity($scope.entityList[index]);
-placeService.selectedEntity.show=true;
 };
 $scope.addNew= function()
 {

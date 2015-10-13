@@ -86,7 +86,7 @@ public class RestGenerator {
 			annotationParam.param("value", field.getName());
 			if (field.getFieldClass()==Date.class || field.getFieldClass()==java.util.Date.class)
 			{
-				query= query+" (:"+field.getName()+" is null or cast(:"+field.getName()+" as string)=cast("+alias+"."+field.getName()+" as string)) and";
+				query= query+" (:"+field.getName()+" is null or cast(:"+field.getName()+" as string)=cast(date("+alias+"."+field.getName()+") as string)) and";
 			} else
 			{
 				if (field.getFieldClass()==String.class)

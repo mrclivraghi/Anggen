@@ -270,12 +270,17 @@ public class AngularGenerator {
 		String readOnly="false";
 		if (field.getName().contains(baseEntity+"Id"))
 			readOnly="true";
-		String type= (field.getFieldClass()==java.sql.Date.class || field.getFieldClass()==java.util.Date.class) ? "date" : "text";
 		String fieldForm=baseEntity+"."+Utility.getFirstLower(field.getName());
 		HtmlAttributes htmlAttributes = CssGenerator.getInput(style);
-		htmlAttributes.add("type", type).add("ng-model", fieldForm).add("ng-readonly",readOnly).add("name",field.getName());
+		htmlAttributes.add("type", "text");
+		if (field.getFieldClass()==java.sql.Date.class || field.getFieldClass()==java.util.Date.class)
+		{
+			htmlAttributes.add("ui-date", "{ dateFormat: 'dd/mm/yy' }");
+			
+		}
+		htmlAttributes.add("ng-model", fieldForm).add("ng-readonly",readOnly).add("name",field.getName());
 		htmlAttributes.add("placeholder", field.getName());
-		htmlAttributes.add("id", field.getName());
+		htmlAttributes.add("id", entityName+"-"+field.getName());
 		if (validation)
 			renderValidatorAttributes(htmlAttributes,field);
 		return htmlAttributes;
@@ -299,7 +304,7 @@ public class AngularGenerator {
 					//.content(field.getName())
 					html.div((new HtmlAttributes()).add("class", style+" right-input"))
 					.label((new HtmlAttributes()).add("id", field.getName())).content(field.getName())
-					.input(getFieldHtmlAttributes(field,baseEntity,false,"").add("id", field.getName()))._div();
+					.input(getFieldHtmlAttributes(field,baseEntity,false,""))._div();
 
 
 				} else

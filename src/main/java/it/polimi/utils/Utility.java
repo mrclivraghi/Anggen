@@ -13,7 +13,8 @@ public class Utility {
 	public static String formatDate(java.util.Date date){
 		if (date==null) return null;
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		return simpleDateFormat.format(date);
+		String formattedDate=simpleDateFormat.format(date);
+		return formattedDate;
 	}
 	
 	public static String getFirstLower(String string)

@@ -279,7 +279,8 @@ public class AngularGenerator {
 			readOnly="true";
 		String fieldForm=baseEntity+"."+Utility.getFirstLower(field.getName());
 		HtmlAttributes htmlAttributes = CssGenerator.getInput(style);
-		htmlAttributes.add("type", "text");
+		String type= (field.getFieldClass()==Boolean.class) ? "checkbox" : "text";
+		htmlAttributes.add("type", type);
 		if (field.getFieldClass()==java.sql.Date.class || field.getFieldClass()==java.util.Date.class)
 		{
 			htmlAttributes.add("ui-date", "{ dateFormat: 'dd/mm/yy' }");

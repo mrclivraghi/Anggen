@@ -22,7 +22,7 @@ public interface PersonRepository
 
     public List<Person> findByBirthDate(String birthDate);
 
-    @Query("select p from Person p where  (:personId is null or cast(:personId as string)=cast(p.personId as string)) and (:firstName is null or :firstName='' or cast(:firstName as string)=p.firstName) and (:lastName is null or :lastName='' or cast(:lastName as string)=p.lastName) and (:birthDate is null or cast(:birthDate as string)=cast(p.birthDate as string)) ")
+    @Query("select p from Person p where  (:personId is null or cast(:personId as string)=cast(p.personId as string)) and (:firstName is null or :firstName='' or cast(:firstName as string)=p.firstName) and (:lastName is null or :lastName='' or cast(:lastName as string)=p.lastName) and (:birthDate is null or cast(:birthDate as string)=cast(date(p.birthDate) as string)) ")
     public List<Person> findByPersonIdAndFirstNameAndLastNameAndBirthDate(
         @Param("personId")
         Long personId,

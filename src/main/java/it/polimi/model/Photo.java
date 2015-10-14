@@ -1,7 +1,13 @@
 package it.polimi.model;
 
+import it.polimi.utils.CustomDateSerializer;
+import it.polimi.utils.CustomJsonDateDeserializer;
+
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -26,6 +32,12 @@ import org.hibernate.validator.constraints.NotBlank;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /* 
  * Photo element
@@ -34,7 +46,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Table(name="photo", schema="ebsn")
 public class Photo {
 
-	
+
 		//ATTRIBUTES
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -81,10 +93,12 @@ public class Photo {
 	public void setSeedQuery(SeedQuery seedQuery) {
 		this.seedQuery = seedQuery;
 	}
+	//@JsonDeserialize(using = CustomJsonDateDeserializer.class)
 	public void setDate(Date date) {
 		this.date = date;
 	}
-
+	
+	//@JsonSerialize(using = CustomDateSerializer.class)
 	public Date getDate()
 	{
 		return this.date;

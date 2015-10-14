@@ -65,7 +65,7 @@ var photoApp=angular.module("photoApp",['ngTouch', 'ui.grid', 'ui.grid.paginatio
 		.then( function(response) {
 			return response.data;
 		})
-		.error(function() {
+		.catch(function() {
 			alert("error");
 		});
 		return promise; 
@@ -76,7 +76,7 @@ var photoApp=angular.module("photoApp",['ngTouch', 'ui.grid', 'ui.grid.paginatio
 				{
 			return response.data;
 				})
-				.error(function() 
+				.catch(function() 
 						{ 
 					alert("error");
 						});
@@ -87,7 +87,7 @@ var photoApp=angular.module("photoApp",['ngTouch', 'ui.grid', 'ui.grid.paginatio
 		.then( function(response) {
 			return response.data;
 		})
-		.error(function() { 
+		.catch(function() { 
 			alert("error");
 		});
 		return promise; 
@@ -258,14 +258,14 @@ var photoApp=angular.module("photoApp",['ngTouch', 'ui.grid', 'ui.grid.paginatio
 						.then( function(response) {
 							return response.data;
 						})
-						.error(function() {
+						.catch(function() {
 							alert("error");
 						});
 						return promise; 
 					};
 					this.insert = function() {
 						var promise= $http.put("../seedQuery/",this.selectedEntity)
-						.then( function(response) 
+						.catch( function(response) 
 								{
 							return response.data;
 								})
@@ -277,7 +277,7 @@ var photoApp=angular.module("photoApp",['ngTouch', 'ui.grid', 'ui.grid.paginatio
 					};
 					this.update = function() {
 						var promise= $http.post("../seedQuery/",this.selectedEntity)
-						.then( function(response) {
+						.catch( function(response) {
 							return response.data;
 						})
 						.error(function() { 
@@ -291,7 +291,7 @@ var photoApp=angular.module("photoApp",['ngTouch', 'ui.grid', 'ui.grid.paginatio
 						.then( function(response) {
 							return response.data;
 						})
-						.error(function() {
+						.catch(function() {
 							alert("error");
 						});
 						return promise; 
@@ -481,7 +481,7 @@ var photoApp=angular.module("photoApp",['ngTouch', 'ui.grid', 'ui.grid.paginatio
 										.then( function(response) {
 											return response.data;
 										})
-										.error(function() {
+										.catch(function() {
 											alert("error");
 										});
 										return promise; 
@@ -492,7 +492,7 @@ var photoApp=angular.module("photoApp",['ngTouch', 'ui.grid', 'ui.grid.paginatio
 												{
 											return response.data;
 												})
-												.error(function() 
+												.catch(function() 
 														{ 
 													alert("error");
 														});
@@ -503,7 +503,7 @@ var photoApp=angular.module("photoApp",['ngTouch', 'ui.grid', 'ui.grid.paginatio
 										.then( function(response) {
 											return response.data;
 										})
-										.error(function() { 
+										.catch(function() { 
 											alert("error");
 										});
 										return promise; 
@@ -514,7 +514,7 @@ var photoApp=angular.module("photoApp",['ngTouch', 'ui.grid', 'ui.grid.paginatio
 										.then( function(response) {
 											return response.data;
 										})
-										.error(function() {
+										.catch(function() {
 											alert("error");
 										});
 										return promise; 

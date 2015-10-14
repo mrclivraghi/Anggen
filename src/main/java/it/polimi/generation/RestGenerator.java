@@ -1,7 +1,5 @@
 package it.polimi.generation;
 
-import it.polimi.model.Photo;
-import it.polimi.model.SeedQuery;
 import it.polimi.utils.Field;
 import it.polimi.utils.ReflectionManager;
 import it.polimi.utils.Utility;
@@ -186,7 +184,7 @@ public class RestGenerator {
 		String searchMethod="";
 		try {
 			myClass = codeModel._class(""+fullClassName.replace(".model.", ".repository.")+"Repository", ClassType.INTERFACE);
-			JClass extendedClass = codeModel.ref(CrudRepository.class).narrow(classClass,Long.class);
+			JClass extendedClass = codeModel.ref(CrudRepository.class).narrow(classClass,keyClass);
 			myClass._extends(extendedClass);
 			myClass.annotate(Repository.class);
 			JClass listClass=codeModel.ref(List.class).narrow(classClass);
@@ -410,7 +408,7 @@ public class RestGenerator {
 			orderParam= getById.param(String.class,lowerClass+"Id");
 			orderParam.annotate(PathVariable.class);
 			JBlock getByIdBlock= getById.body();
-			getByIdBlock.directStatement("List<"+Utility.getFirstUpper(className)+"> "+lowerClass+"List="+lowerClass+"Service.findById(Long.valueOf("+lowerClass+"Id));");
+			getByIdBlock.directStatement("List<"+Utility.getFirstUpper(className)+"> "+lowerClass+"List="+lowerClass+"Service.findById("+keyClass.getName()+".valueOf("+lowerClass+"Id));");
 			getByIdBlock.directStatement("getRightMapping("+lowerClass+"List);");
 			getByIdBlock.directStatement("return "+response+".body("+lowerClass+"List);");
 			//findByIdBlock._return(findByIdExpression);
@@ -424,7 +422,7 @@ public class RestGenerator {
 			orderParam= delete.param(String.class,lowerClass+"Id");
 			orderParam.annotate(PathVariable.class);
 			JBlock deleteBlock= delete.body();
-			deleteBlock.directStatement(lowerClass+"Service.deleteById(Long.valueOf("+lowerClass+"Id));");
+			deleteBlock.directStatement(lowerClass+"Service.deleteById("+keyClass.getName()+".valueOf("+lowerClass+"Id));");
 			deleteBlock.directStatement("return "+response+".build();");
 			
 			//InsertOrder

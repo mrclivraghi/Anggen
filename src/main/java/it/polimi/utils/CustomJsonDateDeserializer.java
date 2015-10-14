@@ -24,7 +24,14 @@ public class CustomJsonDateDeserializer extends JsonDeserializer<Date>
         try {
             return format.parse(date);
         } catch (ParseException e) {
-            throw new RuntimeException(e);
+        	format = new SimpleDateFormat("yyyy-MM-dd");
+            try {
+            	return format.parse(date);
+            } catch (ParseException e2)
+            {
+            	throw new RuntimeException(e2);
+            }
+            
         }
 
     }

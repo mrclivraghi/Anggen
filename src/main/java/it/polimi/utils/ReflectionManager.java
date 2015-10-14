@@ -1,15 +1,9 @@
 package it.polimi.utils;
 
-import it.polimi.model.Mountain;
-import it.polimi.model.Order;
-import it.polimi.model.Person;
-import it.polimi.model.Photo;
-import it.polimi.model.Place;
-import it.polimi.model.SeedQuery;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -49,6 +43,10 @@ public class ReflectionManager {
 		if (myClass==Date.class) return true;
 		if (myClass==java.sql.Date.class) return true;
 		if (myClass==Integer.class) return true;
+		if (myClass==int.class) return true;
+		if (myClass==double.class) return true;
+		if (myClass==BigDecimal.class) return true;
+		if (myClass==Boolean.class) return true;
 		
 		return false;
 	}
@@ -274,12 +272,12 @@ public class ReflectionManager {
 	
 	public static void main(String[] args)
 	{
-		ReflectionManager reflectionManager= new ReflectionManager(Mountain.class);
+		/*ReflectionManager reflectionManager= new ReflectionManager(Mountain.class);
 		List<ClassDetail> classList = reflectionManager.getSubClassList();
 		for (ClassDetail myClass : classList)
 		{
 			System.out.println(myClass.getClassClass().getName()+"---"+myClass.getCompositeClass().fullName());
-		}
+		}*/
 	
 	}
 }

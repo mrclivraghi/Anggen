@@ -1,6 +1,5 @@
 package it.polimi.generation;
 
-import it.polimi.model.Mountain;
 import it.polimi.utils.ClassDetail;
 import it.polimi.utils.Field;
 import it.polimi.utils.ReflectionManager;

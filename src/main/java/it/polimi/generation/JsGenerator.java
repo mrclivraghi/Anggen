@@ -102,7 +102,7 @@ public class JsGenerator {
 		.append("var val = keyList[i];\n")
 		.append("if (val != undefined) {\n")
 		.append("if (val.toLowerCase().indexOf(\"list\") > -1\n")
-		.append("&& typeof entity[val] == \"object\") {\n")
+		.append("&& (typeof entity[val] == \"object\" || typeof this.selectedEntity[val]==\"object\")) {\n")
 
 		.append("if (entity[val] != null\n")
 		.append("&& entity[val] != undefined) {\n")

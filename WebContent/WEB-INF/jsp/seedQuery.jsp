@@ -124,15 +124,13 @@
 					<div class="pull-right right-input">
 						<button ng-click="showMountainDetail()()" class="btn btn-default"
 							ng-if="selectedEntity.mountain==null">Add new mountain</button>
-							<select class="form-control "
-							aria-describedby="sizing-addon3"
+						<label for="mountain">mountain</label><select
+							class="form-control " aria-describedby="sizing-addon3"
 							ng-model="selectedEntity.mountain" id="mountain"
-							ng-options="mountain as  mountain.name+&#39; &#39;+ mountain.height for mountain in childrenList.mountainList track by mountain.mountainId "
+							ng-options="mountain as  mountain.name+&#39; &#39;+ mountain.height for mountain in childrenList.mountainList track by mountain.mountainId"
 							enctype="UTF-8"></select>
-						<label for="mountain">mountain</label>
-						  <button ng-click="showMountainDetail()()" class="btn btn-default"
-							id="mountain" ng-if="selectedEntity.mountain!=null">mountain:
-							{{selectedEntity.mountain.mountainId}}</button>
+						<button ng-click="showMountainDetail()" class="btn btn-default"
+							id="mountain" ng-if="selectedEntity.mountain!=null">Show Detail</button>
 					</div>
 				</div>
 				<div class="panel-body">

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
 						http://www.springframework.org/schema/beans/spring-beans.xsd
@@ -10,30 +9,50 @@
 				        http://www.springframework.org/schema/mvc
 				        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
-	<context:component-scan base-package="it.polimi.controller" annotation-config="true"/>
-	
-	
-	<mvc:view-controller path="/" view-name="index"/>	
-	
-	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
-		<property name="prefix" value="/WEB-INF/jsp/"/>
-		<property name="suffix" value=".jsp"/>
-	</bean>
-	
-<!--	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+	<context:component-scan base-package="it.polimi.controller"
+		annotation-config="true" />
 
-        <property name="basename" value="classpath:validationMessages" />
-    </bean>
--->	
-<mvc:resources mapping="/resources/**" location="/resources/theme/"  
-	cache-period="31556926"/>
-	
-<mvc:annotation-driven>
-    <mvc:message-converters>
-        <bean class="org.springframework.http.converter.StringHttpMessageConverter"/>
-        <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
-    </mvc:message-converters>
-</mvc:annotation-driven>
-	
+
+	<mvc:view-controller path="/" view-name="index" />
+
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView" />
+		<property name="prefix" value="/WEB-INF/jsp/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+
+
+
+	<!-- <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource"> 
+		<property name="basename" value="classpath:validationMessages" /> </bean> -->
+	<mvc:resources mapping="/resources/**" location="/resources/theme/"
+		cache-period="31556926" />
+
+
+	<bean id="objectMapper"
+		class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean">
+		<!-- Add deserializers that require autowiring -->
+		<property name="deserializersByType">
+			<map key-type="java.lang.Class">
+				<entry key="java.util.Date">
+					<bean class="it.polimi.utils.CustomJsonDateDeserializer" />
+				</entry>
+			</map>
+		</property>
+	</bean>
+	<mvc:annotation-driven>
+		<mvc:message-converters register-defaults="true">
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter" />
+
+
+			<!-- -->
+			<bean
+				class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+				<property name="objectMapper" ref="objectMapper" />
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+
 </beans>

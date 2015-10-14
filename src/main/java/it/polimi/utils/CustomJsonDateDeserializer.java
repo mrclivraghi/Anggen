@@ -29,7 +29,13 @@ public class CustomJsonDateDeserializer extends JsonDeserializer<Date>
             	return format.parse(date);
             } catch (ParseException e2)
             {
-            	throw new RuntimeException(e2);
+            	try
+            	{
+            		return new Date(Long.valueOf(date));
+            	}catch (Exception e3)
+            	{
+            		throw new RuntimeException(e3);
+            	}
             }
             
         }

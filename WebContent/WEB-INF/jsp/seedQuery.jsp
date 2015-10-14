@@ -126,8 +126,8 @@
 							ng-if="selectedEntity.mountain==null">Add new mountain</button>
 							<select class="form-control "
 							aria-describedby="sizing-addon3"
-							ng-model="selectedEntity.mountain" id="mountain"
-							ng-options="mountain as  mountain.name+&#39; &#39;+ mountain.height for mountain in childrenList.mountainList"
+							ng-model="selectedEntity.mountain.mountainId" id="mountain"
+							ng-options="mountain.mountainId as  mountain.name+&#39; &#39;+ mountain.height for mountain in childrenList.mountainList"
 							enctype="UTF-8"></select>
 						<label for="mountain">mountain</label>
 						<!--  <button ng-click="showMountainDetail()()" class="btn btn-default"

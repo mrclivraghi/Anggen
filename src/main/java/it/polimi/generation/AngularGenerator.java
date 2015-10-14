@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.text.html.HTML;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -276,6 +277,8 @@ public class AngularGenerator {
 		if (field.getFieldClass()==java.sql.Date.class || field.getFieldClass()==java.util.Date.class)
 		{
 			htmlAttributes.add("ui-date", "{ dateFormat: 'dd/mm/yy' }");
+			htmlAttributes.add("ui-date-format", "dd/mm/yy");
+
 			
 		}
 		htmlAttributes.add("ng-model", fieldForm).add("ng-readonly",readOnly).add("name",field.getName());

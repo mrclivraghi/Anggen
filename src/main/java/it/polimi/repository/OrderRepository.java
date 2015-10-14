@@ -24,7 +24,7 @@ public interface OrderRepository
 
     public List<Order> findByPerson(Person person);
 
-    @Query("select o from Order o where  (:orderId is null or cast(:orderId as string)=cast(o.orderId as string)) and (:name is null or :name='' or cast(:name as string)=o.name) and (:timeslotDate is null or cast(:timeslotDate as string)=cast(o.timeslotDate as string)) and (:person=o.person or :person is null) and (:place in elements(o.placeList)  or :place is null) ")
+    @Query("select o from Order o where  (:orderId is null or cast(:orderId as string)=cast(o.orderId as string)) and (:name is null or :name='' or cast(:name as string)=o.name) and (:timeslotDate is null or cast(:timeslotDate as string)=cast(date(o.timeslotDate) as string)) and (:person=o.person or :person is null) and (:place in elements(o.placeList)  or :place is null) ")
     public List<Order> findByOrderIdAndNameAndTimeslotDateAndPersonAndPlace(
         @Param("orderId")
         Long orderId,

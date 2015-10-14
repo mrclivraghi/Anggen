@@ -45,6 +45,7 @@ public class ReflectionManager {
 		if (myClass==Integer.class) return true;
 		if (myClass==int.class) return true;
 		if (myClass==double.class) return true;
+		if (myClass==Double.class) return true;
 		if (myClass==BigDecimal.class) return true;
 		if (myClass==Boolean.class) return true;
 		

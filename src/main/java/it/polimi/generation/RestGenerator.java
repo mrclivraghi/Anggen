@@ -473,6 +473,7 @@ public class RestGenerator {
 			JMethod getRightMapping= myClass.method(JMod.PRIVATE, void.class, "getRightMapping");
 			getRightMapping.param(classClass, lowerClass);
 			JBlock getRightMappingBlock = getRightMapping.body();
+			
 			RestGenerator.generateRightMapping_v2(classClass, getRightMappingBlock,new ArrayList<Class>(),null);
 			
 			
@@ -513,6 +514,7 @@ public class RestGenerator {
 					block.directStatement("for ("+field.getFieldClass().getName()+" "+Utility.getFirstLower(field.getName())+" : "+lowerClass+".get"+Utility.getFirstUpper(field.getName())+"List())");
 					block.directStatement("{");
 					//block.directStatement(""+Utility.getFirstLower(field.getName())+".set"+Utility.getFirstUpper(lowerClass)+"(null);");
+					if (!reflectionManager.isKnownClass(field.getFieldClass()))
 					RestGenerator.generateRightMapping_v2(field.getFieldClass(), block,parentClass,newEntityName);
 					parentClass=oldParentClassList;
 					block.directStatement("}");
@@ -531,7 +533,8 @@ public class RestGenerator {
 				else
 				{
 
-					RestGenerator.generateRightMapping_v2(field.getFieldClass(), block,parentClass,newEntityName);
+					if (!reflectionManager.isKnownClass(field.getFieldClass()))
+						RestGenerator.generateRightMapping_v2(field.getFieldClass(), block,parentClass,newEntityName);
 					parentClass=oldParentClassList;
 				}
 				block.directStatement("}");

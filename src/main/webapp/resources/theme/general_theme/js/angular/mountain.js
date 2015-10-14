@@ -20,9 +20,7 @@ this.entityList.push(entityList[i]);
 this.searchBean = 		new Object();
 this.resetSearchBean= function()
 {
-this.searchBean.orderId="";
-this.searchBean.name="";
-this.searchBean.timeslotDate="";
+this.searchBean={};
 };
 this.setSelectedEntity= function (entity)
 { 
@@ -31,6 +29,8 @@ entity = {};
 this.selectedEntity.show = false;
 } //else
 var keyList = Object.keys(entity);
+if (keyList.length == 0)
+keyList = Object.keys(this.selectedEntity);
 for (i = 0; i < keyList.length; i++) {
 var val = keyList[i];
 if (val != undefined) {
@@ -115,13 +115,14 @@ $scope.childrenList=mountainService.childrenList;
 $scope.reset = function()
 {
 mountainService.resetSearchBean();
-mountainService.setSelectedEntity(null);
+$scope.searchBean=mountainService.searchBean;mountainService.setSelectedEntity(null);
 mountainService.selectedEntity.show=false;
 mountainService.setEntityList(null); 
 seedQueryService.selectedEntity.show=false;photoService.selectedEntity.show=false;}
 $scope.addNew= function()
 {
 mountainService.setSelectedEntity(null);
+mountainService.setEntityList(null);
 mountainService.selectedEntity.show=true;
 seedQueryService.selectedEntity.show=false;photoService.selectedEntity.show=false;};
 		
@@ -241,6 +242,8 @@ entity = {};
 this.selectedEntity.show = false;
 } //else
 var keyList = Object.keys(entity);
+if (keyList.length == 0)
+keyList = Object.keys(this.selectedEntity);
 for (i = 0; i < keyList.length; i++) {
 var val = keyList[i];
 if (val != undefined) {
@@ -325,7 +328,7 @@ $scope.childrenList=seedQueryService.childrenList;
 $scope.reset = function()
 {
 seedQueryService.resetSearchBean();
-seedQueryService.setSelectedEntity(null);
+$scope.searchBean=seedQueryService.searchBean;seedQueryService.setSelectedEntity(null);
 seedQueryService.selectedEntity.show=false;
 seedQueryService.setEntityList(null); 
 }
@@ -340,6 +343,7 @@ toDo();
 $scope.addNew= function()
 {
 seedQueryService.setSelectedEntity(null);
+seedQueryService.setEntityList(null);
 seedQueryService.selectedEntity.show=true;
 };
 		
@@ -479,6 +483,8 @@ entity = {};
 this.selectedEntity.show = false;
 } //else
 var keyList = Object.keys(entity);
+if (keyList.length == 0)
+keyList = Object.keys(this.selectedEntity);
 for (i = 0; i < keyList.length; i++) {
 var val = keyList[i];
 if (val != undefined) {
@@ -563,7 +569,7 @@ $scope.childrenList=photoService.childrenList;
 $scope.reset = function()
 {
 photoService.resetSearchBean();
-photoService.setSelectedEntity(null);
+$scope.searchBean=photoService.searchBean;photoService.setSelectedEntity(null);
 photoService.selectedEntity.show=false;
 photoService.setEntityList(null); 
 }
@@ -578,6 +584,7 @@ toDo();
 $scope.addNew= function()
 {
 photoService.setSelectedEntity(null);
+photoService.setEntityList(null);
 photoService.selectedEntity.show=true;
 };
 		

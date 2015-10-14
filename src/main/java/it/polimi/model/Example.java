@@ -24,6 +24,8 @@ public class Example {
 	
 	private Long eta;
 	
+	private Boolean male;
+	
 	public Example()
 	{
 		
@@ -69,6 +71,20 @@ public class Example {
 	 */
 	public void setEta(Long eta) {
 		this.eta = eta;
+	}
+
+	/**
+	 * @return the male
+	 */
+	public Boolean getMale() {
+		return male;
+	}
+
+	/**
+	 * @param male the male to set
+	 */
+	public void setMale(Boolean male) {
+		this.male = male;
 	}
 	
 	

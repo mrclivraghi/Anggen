@@ -23,7 +23,7 @@ public class ExampleServiceImpl
 
     @Override
     public List<Example> find(Example example) {
-        return exampleRepository.findByExampleIdAndNameAndEta(example.getExampleId(),example.getName(),example.getEta());
+        return exampleRepository.findByExampleIdAndNameAndEtaAndMale(example.getExampleId(),example.getName(),example.getEta(),example.getMale());
     }
 
     @Override

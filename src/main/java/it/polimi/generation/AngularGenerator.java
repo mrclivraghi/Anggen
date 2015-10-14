@@ -150,7 +150,6 @@ public class AngularGenerator {
 					}else
 					{//entity
 						html.div((new HtmlAttributes()).add("class", style+" right-input"))
-						.label((new HtmlAttributes()).add("id", field.getName())).content(field.getName())
 						.button(CssGenerator.getButton("show"+Utility.getFirstUpper(field.getName())+"Detail()").add("ng-if", "selectedEntity."+field.getName()+"==null"))
 						.content("Add new "+field.getName());
 
@@ -160,7 +159,8 @@ public class AngularGenerator {
 						html
 						.label((new HtmlAttributes()).add("for", field.getName()))
 						.content(field.getName())
-						.p((new HtmlAttributes()).add("ng-click", "show"+Utility.getFirstUpper(field.getName())+"Detail()").add("ng-if", "selectedEntity."+field.getName()+"!=null"))
+						.button(CssGenerator.getButton("show"+Utility.getFirstUpper(field.getName())+"Detail()").add("id",field.getName()).add("ng-if", "selectedEntity."+field.getName()+"!=null"))
+						//.p((new HtmlAttributes()).add("ng-click", "show"+Utility.getFirstUpper(field.getName())+"Detail()").add("ng-if", "selectedEntity."+field.getName()+"!=null"))
 						.content(field.getName()+": {{selectedEntity."+field.getName()+"."+field.getName()+"Id}}")
 						._div();
 

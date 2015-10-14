@@ -96,8 +96,8 @@ public class JsGenerator {
 		.append("this.selectedEntity.show = false;\n")
 		.append("} //else\n")
 		.append("var keyList = Object.keys(entity);\n")
-		//.append("if (keyList.length == 0)\n")
-		//.append("keyList = Object.keys(this.selectedEntity);\n")
+		.append("if (keyList.length == 0)\n")
+		.append("keyList = Object.keys(this.selectedEntity);\n")
 		.append("for (i = 0; i < keyList.length; i++) {\n")
 		.append("var val = keyList[i];\n")
 		.append("if (val != undefined) {\n")
@@ -280,6 +280,7 @@ public class JsGenerator {
 		sb.append("$scope.addNew= function()\n");
 		sb.append("{\n");
 		sb.append(""+entityName+"Service.setSelectedEntity(null);\n");
+		sb.append(""+entityName+"Service.setEntityList(null);\n");
 		sb.append(""+entityName+"Service.selectedEntity.show=true;\n");
 
 		if (isParent)

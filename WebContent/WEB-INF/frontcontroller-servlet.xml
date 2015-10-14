@@ -41,9 +41,17 @@
 				</entry>
 			</map>
 		</property>
+		<property name="serializersByType">
+                        <map key-type="java.lang.Class">
+                        <entry key="java.util.Date">
+                            <bean class="it.polimi.utils.CustomDateSerializer"/>
+                            </entry>
+                        </map>
+                    </property>
+		
 	</bean>
 	<mvc:annotation-driven>
-		<mvc:message-converters register-defaults="true">
+		<mvc:message-converters register-defaults="false">
 			<bean class="org.springframework.http.converter.StringHttpMessageConverter" />
 
 

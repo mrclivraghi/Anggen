@@ -33,13 +33,13 @@ public  class CssGenerator {
 		return htmlAttributes;
 	}
 
-	public static CharactersWriteable getPanelHeader() {
+	public static HtmlAttributes getPanelHeader() {
 		HtmlAttributes htmlAttributes= new HtmlAttributes();
 		htmlAttributes.add("class", "panel-heading");
 		return htmlAttributes;
 	}
 	
-	public static CharactersWriteable getPanelBody() {
+	public static HtmlAttributes getPanelBody() {
 		HtmlAttributes htmlAttributes= new HtmlAttributes();
 		htmlAttributes.add("class", "panel-body");
 		return htmlAttributes;

@@ -121,11 +121,13 @@ public class AngularGenerator {
 				String type= (field.getFieldClass()==Date.class ? "date" : "text");
 				//html.p()
 				//.content(field.getName())
-				html.div((new HtmlAttributes()).add("class", style+" right-input"))
+				html.div((new HtmlAttributes()).add("class", style+" right-input").add("ng-class","{'has-error': !"+entityName+"DetailForm."+field.getName()+".$valid, 'has-success': "+entityName+"DetailForm."+field.getName()+".$valid}"))
 				.label((new HtmlAttributes()).add("for", field.getName()))
 				.content(field.getName())
-				.input(getFieldHtmlAttributes(field,"selectedEntity",true,""))
-				._div();
+				.input(getFieldHtmlAttributes(field,"selectedEntity",true,""));
+				renderValidator(html,field);
+				
+				html._div();
 			} else
 				if (field.getCompositeClass()!=null  && !(parentClass.contains(field.getFieldClass())))
 				{ // entity or list!
@@ -135,7 +137,7 @@ public class AngularGenerator {
 						//.label((new HtmlAttributes()).add("for", field.getName()))
 						//.content(field.getName())
 						html._div();
-						html.div(CssGenerator.getPanelBody())
+						html.div(CssGenerator.getPanelBody().add("ng-class","{'has-error': !"+entityName+"DetailForm."+field.getName()+".$valid, 'has-success': "+entityName+"DetailForm."+field.getName()+".$valid}"))
 						.label((new HtmlAttributes()).add("id", field.getName())).content(field.getName())
 						.button(CssGenerator.getButton("show"+Utility.getFirstUpper(field.getName())+"Detail"))
 						.content("Add new "+field.getName());
@@ -143,13 +145,13 @@ public class AngularGenerator {
 
 						.div((new HtmlAttributes()).add("style","top: 100px").add("ui-grid", field.getName()+"ListGridOptions").add("ui-grid-pagination", "").add("ui-grid-selection",""))
 						._div();
-						
+						renderValidator(html,field);
 						//html.content("{{$index}}--{{entity."+field.getName()+"Id}}--{{entity.description}}");
 						html._div()._div();//._div();
 						html.div(CssGenerator.getPanelBody());
 					}else
 					{//entity
-						html.div((new HtmlAttributes()).add("class", style+" right-input"))
+						html.div((new HtmlAttributes()).add("class", style+" right-input").add("ng-class","{'has-error': !"+entityName+"DetailForm."+field.getName()+".$valid, 'has-success': "+entityName+"DetailForm."+field.getName()+".$valid}"))
 						.button(CssGenerator.getButton("show"+Utility.getFirstUpper(field.getName())+"Detail()").add("ng-if", "selectedEntity."+field.getName()+"==null"))
 						.content("Add new "+field.getName());
 
@@ -165,13 +167,14 @@ public class AngularGenerator {
 							._select()
 						.button(CssGenerator.getButton("show"+Utility.getFirstUpper(field.getName())+"Detail").add("id",field.getName()).add("ng-if", "selectedEntity."+field.getName()+"!=null"))
 						//.p((new HtmlAttributes()).add("ng-click", "show"+Utility.getFirstUpper(field.getName())+"Detail()").add("ng-if", "selectedEntity."+field.getName()+"!=null"))
-						.content(field.getName()+": {{selectedEntity."+field.getName()+"."+field.getName()+"Id}}")
-						._div();
+						.content(field.getName()+": {{selectedEntity."+field.getName()+"."+field.getName()+"Id}}");
+						renderValidator(html,field);
+						html._div();
 
 
 					}
 				}
-			renderValidator(html,field);
+			
 		
 		}
 		html._div();
@@ -214,7 +217,7 @@ public class AngularGenerator {
 		{
 			if ((annotationList[i].annotationType()==NotNull.class || annotationList[i].annotationType()==NotBlank.class) && !required)
 			{
-				html.div((new HtmlAttributes()).add("ng-show", entityName+"DetailForm."+field.getName()+".$error.required"))
+				html.small((new HtmlAttributes()).add("class", "help-block").add("ng-show", entityName+"DetailForm."+field.getName()+".$error.required"))
 				.content(entityName+": "+field.getName()+" required");
 				required=true;
 			}else if (annotationList[i].annotationType()==Size.class)
@@ -225,7 +228,7 @@ public class AngularGenerator {
 						Object value;
 						try {
 							value = method.invoke(annotationList[i], (Object[])null);
-							html.div((new HtmlAttributes()).add("ng-show", entityName+"DetailForm."+field.getName()+".$error."+method.getName()+"length"));
+							html.small((new HtmlAttributes()).add("class", "help-block").add("ng-show", entityName+"DetailForm."+field.getName()+".$error."+method.getName()+"length"));
 							html.content(entityName+": "+field.getName()+" "+method.getName()+" "+value+" caratteri");
 						} catch (IllegalAccessException
 								| IllegalArgumentException

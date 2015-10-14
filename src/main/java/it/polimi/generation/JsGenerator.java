@@ -83,9 +83,9 @@ public class JsGenerator {
 			sb.append("this.searchBean = 		new Object();\n")
 			.append("this.resetSearchBean= function()\n")
 			.append("{\n")
-			.append("this.searchBean.orderId=\"\";\n")
-			.append("this.searchBean.name=\"\";\n")
-			.append("this.searchBean.timeslotDate=\"\";\n")
+			.append("this.searchBean={};\n")
+			//.append("this.searchBean.name=\"\";\n")
+			//.append("this.searchBean.timeslotDate=\"\";\n")
 			.append("};\n");
 		}
 		sb.append("this.setSelectedEntity= function (entity)\n")
@@ -230,6 +230,7 @@ public class JsGenerator {
 		sb.append("$scope.reset = function()\n");
 		sb.append("{\n");
 		sb.append(""+entityName+"Service.resetSearchBean();\n");
+		sb.append("$scope.searchBean="+entityName+"Service.searchBean;");
 		sb.append(""+entityName+"Service.setSelectedEntity(null);\n");
 		sb.append(""+entityName+"Service.selectedEntity.show=false;\n");
 		sb.append(""+entityName+"Service.setEntityList(null); \n");

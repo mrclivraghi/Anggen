@@ -165,7 +165,8 @@ paginationPageSize: 2,
 columnDefs: [
 { name: 'exampleId'},
 { name: 'name'},
-{ name: 'eta'} 
+{ name: 'eta'},
+{ name: 'male'} 
 ]
 ,data: exampleService.entityList
  };

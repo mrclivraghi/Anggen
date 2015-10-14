@@ -1,1 +1,148 @@
-<!DOCTYPE html><html><head><title>test order</title><script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script><script type="text/javascript" src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script><script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.js"></script><script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular-touch.js"></script><script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular-animate.js"></script><script type="text/javascript" src="http://ui-grid.info/docs/grunt-scripts/csv.js"></script><script type="text/javascript" src="http://ui-grid.info/docs/grunt-scripts/pdfmake.js"></script><script type="text/javascript" src="http://ui-grid.info/docs/grunt-scripts/vfs_fonts.js"></script><script type="text/javascript" src="http://ui-grid.info/release/ui-grid.js"></script><script type="text/javascript" src="../resources/general_theme/js/angular/example.js"></script><script type="text/javascript" src="../resources/general_theme/js/date.js"></script><link rel="stylesheet" href="http://ui-grid.info/release/ui-grid.css"/><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/><link rel="stylesheet" href="../resources/general_theme/css/main.css"/><link rel="stylesheet" href="../resources/general_theme/css/jquery-ui.css"/></head><body ng-app="exampleApp"><div ng-controller="exampleController"><form id="exampleSearchBean"><div class="panel panel-default default-panel"><div class="panel-heading">Search form example</div><div class="panel-body"><div class="pull-left right-input"><label id="exampleId">exampleId</label><input class="form-control " aria-describedby="sizing-addon3" type="text" ng-model="searchBean.exampleId" ng-readonly="false" name="exampleId" placeholder="exampleId" id="example-exampleId"/></div><div class="pull-right right-input"><label id="name">name</label><input class="form-control " aria-describedby="sizing-addon3" type="text" ng-model="searchBean.name" ng-readonly="false" name="name" placeholder="name" id="example-name"/></div><div class="pull-left right-input"><label id="eta">eta</label><input class="form-control " aria-describedby="sizing-addon3" type="text" ng-model="searchBean.eta" ng-readonly="false" name="eta" placeholder="eta" id="example-eta"/></div></div><div class="panel-body"><div class="pull-left right-input"><button ng-click="addNew()" class="btn btn-default">Add new</button><button ng-click="search()" class="btn btn-default">Find</button><button ng-click="reset()" class="btn btn-default">Reset</button></div></div></div></form><form id="exampleList" ng-if="entityList.length&gt;0" enctype="UTF-8"><div class="panel panel-default default-panel"><div class="panel-heading">List example</div><div class="panel-body"><div ui-grid="exampleGridOptions" ui-grid-pagination="" ui-grid-selection=""></div></div></div></form><form id="exampleDetailForm" name="exampleDetailForm" ng-show="selectedEntity.show"><div class="panel panel-default default-panel"><div class="panel-heading">Detail example {{ selectedEntity.exampleId }}</div><div class="panel-body"><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !exampleDetailForm.exampleId.$valid, &#39;has-success&#39;: exampleDetailForm.exampleId.$valid}"><label for="exampleId">exampleId</label><input class="form-control " aria-describedby="sizing-addon3" type="text" ng-model="selectedEntity.exampleId" ng-readonly="false" name="exampleId" placeholder="exampleId" id="example-exampleId"/></div><div class="pull-right right-input" ng-class="{&#39;has-error&#39;: !exampleDetailForm.name.$valid, &#39;has-success&#39;: exampleDetailForm.name.$valid}"><label for="name">name</label><input class="form-control " aria-describedby="sizing-addon3" type="text" ng-model="selectedEntity.name" ng-readonly="false" name="name" placeholder="name" id="example-name" ng-required="true" ng-minlength="3" ng-maxlength="20"/><small class="help-block" ng-show="exampleDetailForm.name.$error.required">example: name required</small><small class="help-block" ng-show="exampleDetailForm.name.$error.minlength">example: name min 3 caratteri</small><small class="help-block" ng-show="exampleDetailForm.name.$error.maxlength">example: name max 20 caratteri</small></div><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !exampleDetailForm.eta.$valid, &#39;has-success&#39;: exampleDetailForm.eta.$valid}"><label for="eta">eta</label><input class="form-control " aria-describedby="sizing-addon3" type="text" ng-model="selectedEntity.eta" ng-readonly="false" name="eta" placeholder="eta" id="example-eta"/></div></div><div class="panel-body"><div class="pull-left"><form id="exampleActionButton" ng-if="selectedEntity.show"><button ng-click="insert()" class="btn btn-default" ng-if="selectedEntity.exampleId==undefined">Insert</button><button ng-click="update()" class="btn btn-default" ng-if="selectedEntity.exampleId&gt;0">Update</button><button ng-click="del()" class="btn btn-default" ng-if="selectedEntity.exampleId&gt;0">Delete</button></form></div></div></div></form></div></body></html>
+<!DOCTYPE html>
+<html>
+<head>
+<title>test order</title>
+<script type="text/javascript"
+	src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script type="text/javascript"
+	src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script type="text/javascript"
+	src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.js"></script>
+<script type="text/javascript"
+	src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular-touch.js"></script>
+<script type="text/javascript"
+	src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular-animate.js"></script>
+<script type="text/javascript"
+	src="http://ui-grid.info/docs/grunt-scripts/csv.js"></script>
+<script type="text/javascript"
+	src="http://ui-grid.info/docs/grunt-scripts/pdfmake.js"></script>
+<script type="text/javascript"
+	src="http://ui-grid.info/docs/grunt-scripts/vfs_fonts.js"></script>
+<script type="text/javascript"
+	src="http://ui-grid.info/release/ui-grid.js"></script>
+<script type="text/javascript"
+	src="../resources/general_theme/js/angular/example.js"></script>
+<script type="text/javascript"
+	src="../resources/general_theme/js/date.js"></script>
+<link rel="stylesheet" href="http://ui-grid.info/release/ui-grid.css" />
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+<link rel="stylesheet" href="../resources/general_theme/css/main.css" />
+<link rel="stylesheet"
+	href="../resources/general_theme/css/jquery-ui.css" />
+</head>
+<body ng-app="exampleApp">
+	<div ng-controller="exampleController">
+		<form id="exampleSearchBean">
+			<div class="panel panel-default default-panel">
+				<div class="panel-heading">Search form example</div>
+				<div class="panel-body">
+					<div class="pull-left right-input">
+						<label id="exampleId">exampleId</label><input
+							class="form-control " aria-describedby="sizing-addon3"
+							type="text" ng-model="searchBean.exampleId" ng-readonly="false"
+							name="exampleId" placeholder="exampleId" id="example-exampleId" />
+					</div>
+					<div class="pull-right right-input">
+						<label id="name">name</label><input class="form-control "
+							aria-describedby="sizing-addon3" type="text"
+							ng-model="searchBean.name" ng-readonly="false" name="name"
+							placeholder="name" id="example-name" />
+					</div>
+					<div class="pull-left right-input">
+						<label id="eta">eta</label><input class="form-control "
+							aria-describedby="sizing-addon3" type="text"
+							ng-model="searchBean.eta" ng-readonly="false" name="eta"
+							placeholder="eta" id="example-eta" />
+					</div>
+					<div class="pull-right right-input">
+						<label id="male">male</label>
+						<input class="form-control "
+							aria-describedby="sizing-addon3" type="checkbox"
+							ng-model="searchBean.male" ng-readonly="false" name="male"
+							placeholder="male" id="example-male" />
+						<!-- <input class="form-control "
+							aria-describedby="sizing-addon3" type="text"
+							ng-model="searchBean.male" ng-readonly="false" name="male"
+							placeholder="male" id="example-male" />-->
+					</div>
+				</div>
+				<div class="panel-body">
+					<div class="pull-left right-input">
+						<button ng-click="addNew()" class="btn btn-default">Add
+							new</button>
+						<button ng-click="search()" class="btn btn-default">Find</button>
+						<button ng-click="reset()" class="btn btn-default">Reset</button>
+					</div>
+				</div>
+			</div>
+		</form>
+		<form id="exampleList" ng-if="entityList.length&gt;0" enctype="UTF-8">
+			<div class="panel panel-default default-panel">
+				<div class="panel-heading">List example</div>
+				<div class="panel-body">
+					<div ui-grid="exampleGridOptions" ui-grid-pagination=""
+						ui-grid-selection=""></div>
+				</div>
+			</div>
+		</form>
+		<form id="exampleDetailForm" name="exampleDetailForm"
+			ng-show="selectedEntity.show">
+			<div class="panel panel-default default-panel">
+				<div class="panel-heading">Detail example {{
+					selectedEntity.exampleId }}</div>
+				<div class="panel-body">
+					<div class="pull-left right-input"
+						ng-class="{&#39;has-error&#39;: !exampleDetailForm.exampleId.$valid, &#39;has-success&#39;: exampleDetailForm.exampleId.$valid}">
+						<label for="exampleId">exampleId</label><input
+							class="form-control " aria-describedby="sizing-addon3"
+							type="text" ng-model="selectedEntity.exampleId"
+							ng-readonly="false" name="exampleId" placeholder="exampleId"
+							id="example-exampleId" />
+					</div>
+					<div class="pull-right right-input"
+						ng-class="{&#39;has-error&#39;: !exampleDetailForm.name.$valid, &#39;has-success&#39;: exampleDetailForm.name.$valid}">
+						<label for="name">name</label><input class="form-control "
+							aria-describedby="sizing-addon3" type="text"
+							ng-model="selectedEntity.name" ng-readonly="false" name="name"
+							placeholder="name" id="example-name" ng-required="true"
+							ng-minlength="3" ng-maxlength="20" /><small class="help-block"
+							ng-show="exampleDetailForm.name.$error.required">example:
+							name required</small><small class="help-block"
+							ng-show="exampleDetailForm.name.$error.minlength">example:
+							name min 3 caratteri</small><small class="help-block"
+							ng-show="exampleDetailForm.name.$error.maxlength">example:
+							name max 20 caratteri</small>
+					</div>
+					<div class="pull-left right-input"
+						ng-class="{&#39;has-error&#39;: !exampleDetailForm.eta.$valid, &#39;has-success&#39;: exampleDetailForm.eta.$valid}">
+						<label for="eta">eta</label><input class="form-control "
+							aria-describedby="sizing-addon3" type="text"
+							ng-model="selectedEntity.eta" ng-readonly="false" name="eta"
+							placeholder="eta" id="example-eta" />
+					</div>
+					<div class="pull-right right-input"
+						ng-class="{&#39;has-error&#39;: !exampleDetailForm.male.$valid, &#39;has-success&#39;: exampleDetailForm.male.$valid}">
+						<label for="male">male</label><input class="form-control "
+							aria-describedby="sizing-addon3" type="checkbox"
+							ng-model="selectedEntity.male" ng-readonly="false" name="male"
+							placeholder="male" id="example-male" />
+					</div>
+				</div>
+				<div class="panel-body">
+					<div class="pull-left">
+						<form id="exampleActionButton" ng-if="selectedEntity.show">
+							<button ng-click="insert()" class="btn btn-default"
+								ng-if="selectedEntity.exampleId==undefined">Insert</button>
+							<button ng-click="update()" class="btn btn-default"
+								ng-if="selectedEntity.exampleId&gt;0">Update</button>
+							<button ng-click="del()" class="btn btn-default"
+								ng-if="selectedEntity.exampleId&gt;0">Delete</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</body>
+</html>

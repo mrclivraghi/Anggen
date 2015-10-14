@@ -28,7 +28,7 @@ public class Generator {
 			generator.generateRESTClasses(dependencyClass,false);
 		}
 		
-		/*
+		
 		for (Class modelClass: allClasses)
 		{
 			HtmlGenerator htmlGenerator = new HtmlGenerator(modelClass);
@@ -38,7 +38,7 @@ public class Generator {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}*/
+		}
 		
 	}
 

@@ -8,9 +8,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.data.jpa.repository.Temporal;
 
 @Entity
 public class Example {
@@ -29,9 +31,14 @@ public class Example {
 	
 	private Boolean male;
 	
+	@javax.persistence.Temporal(value=TemporalType.DATE)
 	private Date birthDate;
 	
-	private Timestamp birthTime;
+	@javax.persistence.Temporal(TemporalType.TIME)
+	private Date birthTime;
+	
+	@javax.persistence.Temporal(TemporalType.TIMESTAMP)
+	private Date birthDateTime;
 	
 	public Example()
 	{
@@ -111,15 +118,29 @@ public class Example {
 	/**
 	 * @return the birthTime
 	 */
-	public Timestamp getBirthTime() {
+	public Date getBirthTime() {
 		return birthTime;
 	}
 
 	/**
 	 * @param birthTime the birthTime to set
 	 */
-	public void setBirthTime(Timestamp birthTime) {
+	public void setBirthTime(Date birthTime) {
 		this.birthTime = birthTime;
+	}
+
+	/**
+	 * @return the birthDateTime
+	 */
+	public Date getBirthDateTime() {
+		return birthDateTime;
+	}
+
+	/**
+	 * @param birthDateTime the birthDateTime to set
+	 */
+	public void setBirthDateTime(Date birthDateTime) {
+		this.birthDateTime = birthDateTime;
 	}
 	
 	

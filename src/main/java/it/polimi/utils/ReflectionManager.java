@@ -1,6 +1,10 @@
 package it.polimi.utils;
 
+import it.polimi.model.Example;
+
 import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
@@ -8,6 +12,9 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.springframework.data.annotation.Id;
 
@@ -271,16 +278,61 @@ public class ReflectionManager {
 		return string.substring(0, string.length()-1);
 	}
 	
+	public static Boolean isDateField(Field field)
+	{
+		Annotation[] annotationList=field.getAnnotationList();
+		for (int i=0; i<annotationList.length;i++)
+		{
+			if (annotationList[i].annotationType()==Temporal.class)
+				return true;
+		}
+		if (field.getFieldClass()==Date.class || field.getFieldClass()==java.sql.Date.class || field.getFieldClass()==Timestamp.class)
+			return true;
+		return false;
+	}
 	
+	public static Boolean isTimeField(Field field)
+	{
+		if (!isDateField(field)) return false;
+		Annotation[] annotationList=field.getAnnotationList();
+		for (int i=0; i<annotationList.length;i++)
+		{
+			if (annotationList[i].annotationType()==Temporal.class)
+				{
+				
+				for (Method method : annotationList[i].annotationType().getDeclaredMethods()) {
+					if (method.getName().equals("value"))
+					{
+						Object value;
+							try {
+								value = method.invoke(annotationList[i], (Object[])null);
+								if (((TemporalType)value).name().equals("TIME"))
+									return true;
+							} catch (IllegalAccessException
+									| IllegalArgumentException
+									| InvocationTargetException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+					}
+				}
+		}
+		}
+		return false;
+	}
 	
 	public static void main(String[] args)
 	{
-		/*ReflectionManager reflectionManager= new ReflectionManager(Mountain.class);
+		ReflectionManager reflectionManager= new ReflectionManager(Example.class);
+		for (Field field: reflectionManager.getFieldList())
+		{
+			System.out.println(field.getName()+"-"+reflectionManager.isTimeField(field));
+		}
 		List<ClassDetail> classList = reflectionManager.getSubClassList();
 		for (ClassDetail myClass : classList)
 		{
 			System.out.println(myClass.getClassClass().getName()+"---"+myClass.getCompositeClass().fullName());
-		}*/
+		}
 	
 	}
 }

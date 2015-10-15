@@ -463,7 +463,7 @@ public class JsGenerator {
 		{
 			if (field.getCompositeClass()== null )
 			{
-				if (field.getFieldClass()==Date.class || field.getFieldClass()==java.sql.Date.class)
+				if (ReflectionManager.isDateField(field))
 					sb.append("{ name: '"+field.getName()+"', cellFilter: \"date:\'dd-MM-yyyy\'\"},\n");
 				else
 					sb.append("{ name: '"+field.getName()+"'},\n");

@@ -113,11 +113,10 @@ public class AngularGenerator {
 			style= style.equals("pull-left")? "pull-right": "pull-left";
 			if (reflectionManager.isKnownClass(field.getFieldClass()))
 			{
-				String readOnly="false";
+				/*String readOnly="false";
 				if (field.getName().contains(entityName+"Id"))
 					readOnly="true";
-
-				String type= (field.getFieldClass()==Date.class ? "date" : "text");
+*/
 				//html.p()
 				//.content(field.getName())
 				html.div((new HtmlAttributes()).add("class", style+" right-input").add("ng-class","{'has-error': !"+entityName+"DetailForm."+field.getName()+".$valid, 'has-success': "+entityName+"DetailForm."+field.getName()+".$valid}"))
@@ -281,7 +280,7 @@ public class AngularGenerator {
 		HtmlAttributes htmlAttributes = CssGenerator.getInput(style);
 		String type= (field.getFieldClass()==Boolean.class) ? "checkbox" : "text";
 		htmlAttributes.add("type", type);
-		if (field.getFieldClass()==java.sql.Date.class || field.getFieldClass()==java.util.Date.class)
+		if (reflectionManager.isDateField(field))
 		{
 			htmlAttributes.add("ui-date", "{ dateFormat: 'dd/mm/yy' }");
 		//	htmlAttributes.add("ui-date-format", "dd/mm/yy");
@@ -353,7 +352,7 @@ public class AngularGenerator {
 			if (field.getCompositeClass()==null)
 			{
 				itemContent.append("{{"+baseEntity+"."+field.getName()+"");
-				if (field.getFieldClass()==Date.class)
+				if (reflectionManager.isDateField(field))
 				{ // set filter for each class type
 					itemContent.append(" | date: 'dd-MM-yyyy'");
 				}

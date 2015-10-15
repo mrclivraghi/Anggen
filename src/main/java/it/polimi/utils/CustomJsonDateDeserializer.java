@@ -22,11 +22,17 @@ public class CustomJsonDateDeserializer extends JsonDeserializer<Date>
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         String date = jsonparser.getText();
         try {
-            return format.parse(date);
+            Date returnedDate=format.parse(date);
+            System.out.println(returnedDate.toString());
+            returnedDate.setDate(returnedDate.getDate()+1);
+            System.out.println(returnedDate.toString());
+            return returnedDate;
         } catch (ParseException e) {
         	format = new SimpleDateFormat("yyyy-MM-dd");
             try {
-            	return format.parse(date);
+            	  Date returnedDate=format.parse(date);
+                  returnedDate.setDate(returnedDate.getDate()+1);
+                  return returnedDate;
             } catch (ParseException e2)
             {
             	try

@@ -23,7 +23,7 @@ public class ExampleServiceImpl
 
     @Override
     public List<Example> find(Example example) {
-        return exampleRepository.findByExampleIdAndNameAndEtaAndMale(example.getExampleId(),example.getName(),example.getEta(),example.getMale());
+        return exampleRepository.findByExampleIdAndNameAndEtaAndMaleAndBirthDateAndBirthTime(example.getExampleId(),example.getName(),example.getEta(),example.getMale(),it.polimi.utils.Utility.formatDate(example.getBirthDate()),example.getBirthTime());
     }
 
     @Override

@@ -1,5 +1,8 @@
 package it.polimi.model;
 
+import java.sql.Timestamp;
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -25,6 +28,10 @@ public class Example {
 	private Long eta;
 	
 	private Boolean male;
+	
+	private Date birthDate;
+	
+	private Timestamp birthTime;
 	
 	public Example()
 	{
@@ -85,6 +92,34 @@ public class Example {
 	 */
 	public void setMale(Boolean male) {
 		this.male = male;
+	}
+
+	/**
+	 * @return the birthDate
+	 */
+	public Date getBirthDate() {
+		return birthDate;
+	}
+
+	/**
+	 * @param birthDate the birthDate to set
+	 */
+	public void setBirthDate(Date birthDate) {
+		this.birthDate = birthDate;
+	}
+
+	/**
+	 * @return the birthTime
+	 */
+	public Timestamp getBirthTime() {
+		return birthTime;
+	}
+
+	/**
+	 * @param birthTime the birthTime to set
+	 */
+	public void setBirthTime(Timestamp birthTime) {
+		this.birthTime = birthTime;
 	}
 	
 	

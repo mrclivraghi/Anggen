@@ -284,13 +284,11 @@ public class AngularGenerator {
 		if (field.getFieldClass()==java.sql.Date.class || field.getFieldClass()==java.util.Date.class)
 		{
 			htmlAttributes.add("ui-date", "{ dateFormat: 'dd/mm/yy' }");
-			htmlAttributes.add("ui-date-format", "dd/mm/yy");
-
-			
-		}
+		//	htmlAttributes.add("ui-date-format", "dd/mm/yy");
+		} else
+			htmlAttributes.add("id", entityName+"-"+field.getName());
 		htmlAttributes.add("ng-model", fieldForm).add("ng-readonly",readOnly).add("name",field.getName());
 		htmlAttributes.add("placeholder", field.getName());
-		htmlAttributes.add("id", entityName+"-"+field.getName());
 		if (validation)
 			renderValidatorAttributes(htmlAttributes,field);
 		return htmlAttributes;

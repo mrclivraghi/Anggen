@@ -4,6 +4,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -48,6 +49,7 @@ public class ReflectionManager {
 		if (myClass==Double.class) return true;
 		if (myClass==BigDecimal.class) return true;
 		if (myClass==Boolean.class) return true;
+		if (myClass==Timestamp.class) return true;
 		
 		return false;
 	}

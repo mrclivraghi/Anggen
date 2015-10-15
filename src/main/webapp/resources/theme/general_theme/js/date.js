@@ -45,6 +45,11 @@ angular.module('ui.date', [])
           var _onSelect = opts.onSelect || angular.noop;
           opts.onSelect = function (value, picker) {
             scope.$apply(function() {
+				//alert("click"+value);
+				//console.log(element);
+				//console.log(controller);
+				//scope.setMyDate(value);
+				//controller.setMyDate(value);
               controller.$setViewValue(value);
               _onSelect(value, picker);
               element.blur();
@@ -61,13 +66,16 @@ angular.module('ui.date', [])
           // Update the date picker when the model changes
           controller.$render = function () {
             var date = controller.$viewValue;
+			//console.log(date);
+			//alert(angular.isDate(date));
             if ( angular.isDefined(date) && date !== null && !angular.isDate(date) ) {
-              throw new Error('ng-Model value must be a Date object - currently it is a ' + typeof date + ' - use ui-date-format to convert it from a string');
+              //throw new Error('ng-Model value must be a Date object - currently it is a ' + typeof date + ' - use ui-date-format to convert it from a string');
             }
             element.datepicker("setDate", date);
           };
         }
         // If we don't destroy the old one it doesn't update properly when the config changes
+		console.log(element);
         element.datepicker('destroy');
         // Create the new datepicker widget
         element.datepicker(opts);

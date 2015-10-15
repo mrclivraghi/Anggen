@@ -7,63 +7,66 @@ this.selectedEntity= 	{show: false
 this.childrenList=[]; 
 this.addEntity=function (entity)
 {
-this.entityList.push(entity);
+	this.entityList.push(entity);
 };
 this.setEntityList= function(entityList)
 { 
-while (this.entityList.length>0)
-this.entityList.pop();
-if (entityList!=null)
-for (i=0; i<entityList.length; i++)
-this.entityList.push(entityList[i]);
+	while (this.entityList.length>0)
+		this.entityList.pop();
+	if (entityList!=null)
+		for (i=0; i<entityList.length; i++)
+			this.entityList.push(entityList[i]);
 };
 this.searchBean = 		new Object();
 this.resetSearchBean= function()
 {
-this.searchBean={};
+	this.searchBean={};
 };
 this.setSelectedEntity= function (entity)
 { 
-if (entity == null) {
-entity = {};
-this.selectedEntity.show = false;
-} //else
-var keyList = Object.keys(entity);
-if (keyList.length == 0)
-keyList = Object.keys(this.selectedEntity);
-for (i = 0; i < keyList.length; i++) {
-var val = keyList[i];
-if (val != undefined) {
-if (val.toLowerCase().indexOf("list") > -1
-&& (typeof entity[val] == "object" || typeof this.selectedEntity[val]=="object")) {
-if (entity[val] != null
-&& entity[val] != undefined) {
-if (this.selectedEntity[val]!=undefined)
-while (this.selectedEntity[val].length > 0)
-this.selectedEntity[val].pop();
-if (entity[val] != null)
-for (j = 0; j < entity[val].length; j++)
-this.selectedEntity[val]
-.push(entity[val][j]);
-}
-} else {
-if (val.toLowerCase().indexOf("date") > -1
-&& typeof val == "string") {
-var date = new Date(entity[val]);
-this.selectedEntity[val] = new Date(
-date.getFullYear(), date
-.getMonth(), date
-.getDate());
-} else {
-this.selectedEntity[val] = entity[val];
-}
-}
-	}
-};
+	console.log(entity);
+	if (entity == null) {
+		entity = {};
+		this.selectedEntity.show = false;
+	} //else
+	var keyList = Object.keys(entity);
+	if (keyList.length == 0)
+		keyList = Object.keys(this.selectedEntity);
+	for (i = 0; i < keyList.length; i++) {
+		var val = keyList[i];
+		if (val != undefined) {
+			if (val.toLowerCase().indexOf("list") > -1
+					&& (typeof entity[val] == "object" || typeof this.selectedEntity[val]=="object")) {
+				if (entity[val] != null
+						&& entity[val] != undefined) {
+					if (this.selectedEntity[val]!=undefined)
+						while (this.selectedEntity[val].length > 0)
+							this.selectedEntity[val].pop();
+					if (entity[val] != null)
+						for (j = 0; j < entity[val].length; j++)
+							this.selectedEntity[val]
+					.push(entity[val][j]);
+				}
+			} else {
+				/*if (val.toLowerCase().indexOf("date") > -1
+						&& typeof val == "string") {
+					var date = new Date(entity[val]);
+					this.selectedEntity[val] = new Date(
+							date.getFullYear(), date
+							.getMonth(), date
+							.getDate());
+				} else {
+					*/this.selectedEntity[val] = entity[val];
+				//}
+			}
+		}
+		
+	};
+	console.log(this.selectedEntity);
 };
 this.search = function() {
-this.setSelectedEntity(null);
-var promise= $http.post("../example/search",this.searchBean)
+	this.setSelectedEntity(null);
+	var promise= $http.post("../example/search",this.searchBean)
 .then( function(response) {
 return response.data;
 })
@@ -112,6 +115,11 @@ $scope.searchBean=exampleService.searchBean;
 $scope.entityList=exampleService.entityList;
 $scope.selectedEntity=exampleService.selectedEntity;
 $scope.childrenList=exampleService.childrenList; 
+$scope.refresh= function()
+{
+	console.log($scope.selectedEntity.birthDate);
+	console.log(exampleService.selectedEntity.birthDate);
+	};
 $scope.reset = function()
 {
 exampleService.resetSearchBean();
@@ -166,7 +174,9 @@ columnDefs: [
 { name: 'exampleId'},
 { name: 'name'},
 { name: 'eta'},
-{ name: 'male'} 
+{ name: 'male'},
+{ name: 'birthDate', cellFilter: "date:'dd-MM-yyyy'"},
+{ name: 'birthTime'} 
 ]
 ,data: exampleService.entityList
  };

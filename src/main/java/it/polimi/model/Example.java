@@ -1,13 +1,18 @@
 package it.polimi.model;
 
+import java.sql.Timestamp;
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.data.jpa.repository.Temporal;
 
 @Entity
 public class Example {
@@ -25,6 +30,15 @@ public class Example {
 	private Long eta;
 	
 	private Boolean male;
+	
+	@javax.persistence.Temporal(value=TemporalType.DATE)
+	private Date birthDate;
+	
+	@javax.persistence.Temporal(TemporalType.TIME)
+	private Date birthTime;
+	
+	@javax.persistence.Temporal(TemporalType.TIMESTAMP)
+	private Date birthDateTime;
 	
 	public Example()
 	{
@@ -85,6 +99,48 @@ public class Example {
 	 */
 	public void setMale(Boolean male) {
 		this.male = male;
+	}
+
+	/**
+	 * @return the birthDate
+	 */
+	public Date getBirthDate() {
+		return birthDate;
+	}
+
+	/**
+	 * @param birthDate the birthDate to set
+	 */
+	public void setBirthDate(Date birthDate) {
+		this.birthDate = birthDate;
+	}
+
+	/**
+	 * @return the birthTime
+	 */
+	public Date getBirthTime() {
+		return birthTime;
+	}
+
+	/**
+	 * @param birthTime the birthTime to set
+	 */
+	public void setBirthTime(Date birthTime) {
+		this.birthTime = birthTime;
+	}
+
+	/**
+	 * @return the birthDateTime
+	 */
+	public Date getBirthDateTime() {
+		return birthDateTime;
+	}
+
+	/**
+	 * @param birthDateTime the birthDateTime to set
+	 */
+	public void setBirthDateTime(Date birthDateTime) {
+		this.birthDateTime = birthDateTime;
 	}
 	
 	

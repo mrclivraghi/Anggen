@@ -117,7 +117,7 @@ public class JsGenerator {
 		.append("}\n")
 		.append("} else {\n")
 
-		.append("if (val.toLowerCase().indexOf(\"date\") > -1\n")
+	/*	.append("if (val.toLowerCase().indexOf(\"date\") > -1\n")
 		.append("&& typeof val == \"string\") {\n")
 		.append("var date = new Date(entity[val]);\n")
 		.append("this.selectedEntity[val] = new Date(\n")
@@ -125,8 +125,8 @@ public class JsGenerator {
 		.append(".getMonth(), date\n")
 		.append(".getDate());\n")
 		.append("} else {\n")
-		.append("this.selectedEntity[val] = entity[val];\n")
-		.append("}\n")
+		*/.append("this.selectedEntity[val] = entity[val];\n")
+		//.append("}\n")
 
 		.append("}\n")
 		.append("	}\n")

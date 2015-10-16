@@ -168,7 +168,7 @@ public class JsGenerator {
 		sb.append("}\n");
 		//delete
 		sb.append("this.del = function() {\n");
-		sb.append("var url=\"../"+entityName+"/selectedEntity."+entityName+"Id\";\n");
+		sb.append("var url=\"../"+entityName+"/\"+this.selectedEntity."+entityName+"Id;\n");
 		sb.append("var promise= $http[\"delete\"](url)\n");
 		sb.append(".then( function(response) {\n");
 		sb.append("return response.data;\n");

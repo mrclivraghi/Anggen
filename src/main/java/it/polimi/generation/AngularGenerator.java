@@ -113,10 +113,7 @@ public class AngularGenerator {
 			style= style.equals("pull-left")? "pull-right": "pull-left";
 			if (reflectionManager.isKnownClass(field.getFieldClass()))
 			{
-				/*String readOnly="false";
-				if (field.getName().contains(entityName+"Id"))
-					readOnly="true";
-*/
+				
 				//html.p()
 				//.content(field.getName())
 				html.div((new HtmlAttributes()).add("class", style+" right-input").add("ng-class","{'has-error': !"+entityName+"DetailForm."+field.getName()+".$valid, 'has-success': "+entityName+"DetailForm."+field.getName()+".$valid}"))
@@ -283,7 +280,7 @@ public class AngularGenerator {
 	private HtmlAttributes getFieldHtmlAttributes(Field field,String baseEntity, Boolean validation, String style)
 	{
 		String readOnly="false";
-		if (field.getName().contains(baseEntity+"Id"))
+		if (field.getName().equals(entityName+"Id")&&validation)
 			readOnly="true";
 		String fieldForm=baseEntity+"."+Utility.getFirstLower(field.getName());
 		HtmlAttributes htmlAttributes = CssGenerator.getInput(style);

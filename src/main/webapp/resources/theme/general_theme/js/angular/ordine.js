@@ -47,13 +47,10 @@ this.selectedEntity[val]
 .push(entity[val][j]);
 }
 } else {
-if (val.toLowerCase().indexOf("date") > -1
+if (val.toLowerCase().indexOf("time") > -1
 && typeof val == "string") {
 var date = new Date(entity[val]);
-this.selectedEntity[val] = new Date(
-date.getFullYear(), date
-.getMonth(), date
-.getDate());
+this.selectedEntity[val] = new Date(entity[val]);
 } else {
 this.selectedEntity[val] = entity[val];
 }
@@ -95,7 +92,7 @@ alert("error");
 return promise; 
 }
 this.del = function() {
-var url="../ordine/selectedEntity.ordineId";
+var url="../ordine/"+this.selectedEntity.ordineId;
 var promise= $http["delete"](url)
 .then( function(response) {
 return response.data;
@@ -369,13 +366,10 @@ this.selectedEntity[val]
 .push(entity[val][j]);
 }
 } else {
-if (val.toLowerCase().indexOf("date") > -1
+if (val.toLowerCase().indexOf("time") > -1
 && typeof val == "string") {
 var date = new Date(entity[val]);
-this.selectedEntity[val] = new Date(
-date.getFullYear(), date
-.getMonth(), date
-.getDate());
+this.selectedEntity[val] = new Date(entity[val]);
 } else {
 this.selectedEntity[val] = entity[val];
 }
@@ -417,7 +411,7 @@ alert("error");
 return promise; 
 }
 this.del = function() {
-var url="../collo/selectedEntity.colloId";
+var url="../collo/"+this.selectedEntity.colloId;
 var promise= $http["delete"](url)
 .then( function(response) {
 return response.data;
@@ -566,13 +560,10 @@ this.selectedEntity[val]
 .push(entity[val][j]);
 }
 } else {
-if (val.toLowerCase().indexOf("date") > -1
+if (val.toLowerCase().indexOf("time") > -1
 && typeof val == "string") {
 var date = new Date(entity[val]);
-this.selectedEntity[val] = new Date(
-date.getFullYear(), date
-.getMonth(), date
-.getDate());
+this.selectedEntity[val] = new Date(entity[val]);
 } else {
 this.selectedEntity[val] = entity[val];
 }
@@ -614,7 +605,7 @@ alert("error");
 return promise; 
 }
 this.del = function() {
-var url="../itemOrdine/selectedEntity.itemOrdineId";
+var url="../itemOrdine/"+this.selectedEntity.itemOrdineId;
 var promise= $http["delete"](url)
 .then( function(response) {
 return response.data;
@@ -812,13 +803,10 @@ this.selectedEntity[val]
 .push(entity[val][j]);
 }
 } else {
-if (val.toLowerCase().indexOf("date") > -1
+if (val.toLowerCase().indexOf("time") > -1
 && typeof val == "string") {
 var date = new Date(entity[val]);
-this.selectedEntity[val] = new Date(
-date.getFullYear(), date
-.getMonth(), date
-.getDate());
+this.selectedEntity[val] = new Date(entity[val]);
 } else {
 this.selectedEntity[val] = entity[val];
 }
@@ -860,7 +848,7 @@ alert("error");
 return promise; 
 }
 this.del = function() {
-var url="../itemOrdineCodice/selectedEntity.itemOrdineCodiceId";
+var url="../itemOrdineCodice/"+this.selectedEntity.itemOrdineCodiceId;
 var promise= $http["delete"](url)
 .then( function(response) {
 return response.data;

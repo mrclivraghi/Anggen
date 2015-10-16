@@ -92,7 +92,7 @@ alert("error");
 return promise; 
 }
 this.del = function() {
-var url="../example/selectedEntity.exampleId";
+var url="../example/"+this.selectedEntity.exampleId;
 var promise= $http["delete"](url)
 .then( function(response) {
 return response.data;

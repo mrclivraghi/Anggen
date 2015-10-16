@@ -85,7 +85,7 @@ public class RestGenerator {
 			if (ReflectionManager.isTimeField(field))
 			{
 				//(:birthTime is null or :birthTime=cast(date_trunc('seconds',e.birthTime) as string))
-				query= query + " (:"+field.getName()+" is null or :"+field.getName()+"=cast(date_trunc('seconds',e."+field.getName()+") as string)) and";
+				query= query + " (:"+field.getName()+" is null or cast(:"+field.getName()+" as string)=cast(date_trunc('seconds',e."+field.getName()+") as string)) and";
 			}
 			else
 			{

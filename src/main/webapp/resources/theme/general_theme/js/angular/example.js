@@ -47,7 +47,13 @@ this.selectedEntity[val]
 .push(entity[val][j]);
 }
 } else {
+if (val.toLowerCase().indexOf("time") > -1
+&& typeof val == "string") {
+var date = new Date(entity[val]);
+this.selectedEntity[val] = new Date(entity[val]);
+} else {
 this.selectedEntity[val] = entity[val];
+}
 }
 	}
 };
@@ -159,7 +165,7 @@ columnDefs: [
 { name: 'eta'},
 { name: 'male'},
 { name: 'birthDate', cellFilter: "date:'dd-MM-yyyy'"},
-{ name: 'birthTime', cellFilter: "date:'dd-MM-yyyy'"} 
+{ name: 'birthTime', cellFilter: "date:'HH:mm'"} 
 ]
 ,data: exampleService.entityList
  };

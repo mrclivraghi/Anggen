@@ -117,16 +117,13 @@ public class JsGenerator {
 		.append("}\n")
 		.append("} else {\n")
 
-	/*	.append("if (val.toLowerCase().indexOf(\"date\") > -1\n")
+		.append("if (val.toLowerCase().indexOf(\"time\") > -1\n")
 		.append("&& typeof val == \"string\") {\n")
 		.append("var date = new Date(entity[val]);\n")
-		.append("this.selectedEntity[val] = new Date(\n")
-		.append("date.getFullYear(), date\n")
-		.append(".getMonth(), date\n")
-		.append(".getDate());\n")
+		.append("this.selectedEntity[val] = new Date(entity[val]);\n")
 		.append("} else {\n")
-		*/.append("this.selectedEntity[val] = entity[val];\n")
-		//.append("}\n")
+		.append("this.selectedEntity[val] = entity[val];\n")
+		.append("}\n")
 
 		.append("}\n")
 		.append("	}\n")
@@ -463,10 +460,16 @@ public class JsGenerator {
 		{
 			if (field.getCompositeClass()== null )
 			{
-				if (ReflectionManager.isDateField(field))
-					sb.append("{ name: '"+field.getName()+"', cellFilter: \"date:\'dd-MM-yyyy\'\"},\n");
-				else
-					sb.append("{ name: '"+field.getName()+"'},\n");
+				if (ReflectionManager.isTimeField(field))
+				{
+					sb.append("{ name: '"+field.getName()+"', cellFilter: \"date:\'HH:mm\'\"},\n");
+				}else
+				{
+					if (ReflectionManager.isDateField(field))
+						sb.append("{ name: '"+field.getName()+"', cellFilter: \"date:\'dd-MM-yyyy\'\"},\n");
+					else
+						sb.append("{ name: '"+field.getName()+"'},\n");
+				}
 			}
 			else if (!field.getCompositeClass().fullName().contains("java.util.List") && isParent)
 			{

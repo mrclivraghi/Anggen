@@ -15,9 +15,9 @@ public class CustomTimeSerializer extends JsonSerializer<Time> {
     public void serialize(Time value, JsonGenerator gen, SerializerProvider arg2) throws 
         IOException, JsonProcessingException {      
 
-        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         String formattedTime = formatter.format(value);
-
+        
         gen.writeString(formattedTime);
 
     }

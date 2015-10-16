@@ -2,8 +2,11 @@
 package it.polimi.controller;
 
 import java.util.List;
+
 import it.polimi.model.Example;
+import it.polimi.repository.ExampleRepository;
 import it.polimi.service.ExampleService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -19,9 +22,17 @@ public class ExampleController {
 
     @Autowired
     public ExampleService exampleService;
+    
+    @Autowired
+    public ExampleRepository exampleRepository;
 
     @RequestMapping(method = RequestMethod.GET)
     public String manage() {
+    	
+    	 List<Example> exampleList;
+         exampleList=exampleRepository.findByBirthTime("21:57:00");
+    	
+    	System.out.println("SIZE  "+exampleList.size());
         return "example";
     }
 

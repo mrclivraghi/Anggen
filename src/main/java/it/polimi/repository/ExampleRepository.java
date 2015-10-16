@@ -27,13 +27,13 @@ public interface ExampleRepository
 
     public List<Example> findByBirthDate(String birthDate);
 
-    public List<Example> findByBirthTime(String birthTime);
+   // public List<Example> findByBirthTime(String birthTime);
 
     @Query("select e from Example e where  (:exampleId is null or cast(:exampleId as string)=cast(e.exampleId as string)) and (:name is null or :name='' or cast(:name as string)=e.name) and "
     		+ "(:eta is null or cast(:eta as string)=cast(e.eta as string)) and"
     		+ " (:male is null or cast(:male as string)=cast(e.male as string)) and "
     		+ "(:birthDate is null or cast(:birthDate as string)=cast(date(e.birthDate) as string)) and "
-    		+ "(:birthTime is null or cast(:birthTime as string)=cast(date_trunc('seconds',e.birthTime) as string)) ")
+    		+ "(:birthTime is null or :birthTime=cast(date_trunc('seconds',e.birthTime) as string)) ")
     public List<Example> findByExampleIdAndNameAndEtaAndMaleAndBirthDateAndBirthTime(
         @Param("exampleId")
         Integer exampleId,
@@ -47,5 +47,8 @@ public interface ExampleRepository
         String birthDate,
         @Param("birthTime")
         String birthTime);
+    
+    @Query("select e from Example e where (:birthTime is null or :birthTime=cast(date_trunc('seconds',e.birthTime) as string))")
+    public List<Example> findByBirthTime(@Param("birthTime") String birthTime);
 
 }

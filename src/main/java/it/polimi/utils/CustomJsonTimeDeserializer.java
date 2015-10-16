@@ -28,7 +28,18 @@ public class CustomJsonTimeDeserializer extends JsonDeserializer<Time>
             return returnedTime;
         } catch (ParseException e) {
         	
-            		throw new RuntimeException(e);
+					try {
+						SimpleDateFormat format2= new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+						Date date;
+						date = format2.parse(time);
+						Time returnedTime = new Time(date.getTime());
+						returnedTime.setHours(returnedTime.getHours()+1);
+						return returnedTime;
+					} catch (ParseException e1) {
+						// TODO Auto-generated catch block
+						throw new RuntimeException(e);
+					}
+        	
             
         }
 

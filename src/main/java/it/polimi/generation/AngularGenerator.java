@@ -110,6 +110,7 @@ public class AngularGenerator {
 		String style="";
 		for (Field field: fieldList)
 		{
+			if (ReflectionManager.hasIgnoreUpdate(field)) continue;
 			style= style.equals("pull-left")? "pull-right": "pull-left";
 			if (reflectionManager.isKnownClass(field.getFieldClass()))
 			{
@@ -317,6 +318,8 @@ public class AngularGenerator {
 			String style="";
 			for (Field field: fieldList)
 			{
+				if (ReflectionManager.hasIgnoreSearch(field)) 
+					continue;
 				style= style.equals("pull-left")? "pull-right": "pull-left";
 				if (field.getCompositeClass()==null)
 				{

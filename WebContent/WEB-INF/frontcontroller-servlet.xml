@@ -39,6 +39,9 @@
 				<entry key="java.util.Date">
 					<bean class="it.polimi.utils.CustomJsonDateDeserializer" />
 				</entry>
+			 <entry key="java.sql.Time">
+					<bean class="it.polimi.utils.CustomJsonTimeDeserializer"/>
+				</entry> 
 			</map>
 		</property>
 		<property name="serializersByType">
@@ -46,6 +49,9 @@
                         <entry key="java.util.Date">
                             <bean class="it.polimi.utils.CustomDateSerializer"/>
                             </entry>
+                            <entry key="java.sql.Time">
+					<bean class="it.polimi.utils.CustomTimeSerializer"/>
+				</entry>
                         </map>
                     </property>
 		

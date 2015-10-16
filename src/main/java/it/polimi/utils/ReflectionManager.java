@@ -8,6 +8,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -56,7 +57,7 @@ public class ReflectionManager {
 		if (myClass==Double.class) return true;
 		if (myClass==BigDecimal.class) return true;
 		if (myClass==Boolean.class) return true;
-		if (myClass==Timestamp.class) return true;
+		if (myClass==Time.class) return true;
 		
 		return false;
 	}
@@ -264,17 +265,23 @@ public class ReflectionManager {
 		String className = parseName();
 		for (Field field: fields)
 		{
-			if (field.getFieldClass()==Date.class || field.getFieldClass()==java.sql.Date.class)
+			if (ReflectionManager.isTimeField(field))
 			{
-				string=string+"it.polimi.utils.Utility.formatDate("+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(field.getName())+"()),";
-			}else
-			{
-				if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List"))
-					string=string+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(field.getName())+"List()==null? null :"+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(field.getName())+"List().get(0),";
-				else
-					string=string+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(field.getName())+"(),";
+				string=string+"it.polimi.utils.Utility.formatTime("+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(field.getName())+"()),";
 			}
-		}
+			else
+			{
+				if (ReflectionManager.isDateField(field))
+				{
+					string=string+"it.polimi.utils.Utility.formatDate("+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(field.getName())+"()),";
+				}else
+				{
+					if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List"))
+						string=string+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(field.getName())+"List()==null? null :"+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(field.getName())+"List().get(0),";
+					else
+						string=string+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(field.getName())+"(),";
+				}
+			}}
 		return string.substring(0, string.length()-1);
 	}
 	
@@ -286,7 +293,7 @@ public class ReflectionManager {
 			if (annotationList[i].annotationType()==Temporal.class)
 				return true;
 		}
-		if (field.getFieldClass()==Date.class || field.getFieldClass()==java.sql.Date.class || field.getFieldClass()==Timestamp.class)
+		if (field.getFieldClass()==Date.class || field.getFieldClass()==java.sql.Date.class || field.getFieldClass()==Time.class)
 			return true;
 		return false;
 	}
@@ -297,7 +304,7 @@ public class ReflectionManager {
 		Annotation[] annotationList=field.getAnnotationList();
 		for (int i=0; i<annotationList.length;i++)
 		{
-			if (annotationList[i].annotationType()==Temporal.class)
+		/*	if (annotationList[i].annotationType()==Temporal.class)
 				{
 				
 				for (Method method : annotationList[i].annotationType().getDeclaredMethods()) {
@@ -316,8 +323,9 @@ public class ReflectionManager {
 							}
 					}
 				}
+		}*/
 		}
-		}
+		if (field.getFieldClass()==Time.class) return true;
 		return false;
 	}
 	

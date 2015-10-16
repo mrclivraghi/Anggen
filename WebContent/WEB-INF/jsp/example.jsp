@@ -40,40 +40,40 @@
 					<div class="pull-left right-input">
 						<label id="exampleId">exampleId</label><input
 							class="form-control " aria-describedby="sizing-addon3"
-							type="text" ng-model="searchBean.exampleId" ng-readonly="false"
-							name="exampleId" placeholder="exampleId" id="example-exampleId" />
+							type="text" id="example-exampleId"
+							ng-model="searchBean.exampleId" ng-readonly="false"
+							name="exampleId" placeholder="exampleId" />
 					</div>
 					<div class="pull-right right-input">
 						<label id="name">name</label><input class="form-control "
-							aria-describedby="sizing-addon3" type="text"
+							aria-describedby="sizing-addon3" type="text" id="example-name"
 							ng-model="searchBean.name" ng-readonly="false" name="name"
-							placeholder="name" id="example-name" />
+							placeholder="name" />
 					</div>
 					<div class="pull-left right-input">
 						<label id="eta">eta</label><input class="form-control "
-							aria-describedby="sizing-addon3" type="text"
+							aria-describedby="sizing-addon3" type="text" id="example-eta"
 							ng-model="searchBean.eta" ng-readonly="false" name="eta"
-							placeholder="eta" id="example-eta" />
+							placeholder="eta" />
 					</div>
 					<div class="pull-right right-input">
 						<label id="male">male</label><input class="form-control "
 							aria-describedby="sizing-addon3" type="checkbox"
-							ng-model="searchBean.male" ng-readonly="false" name="male"
-							placeholder="male" id="example-male" />
+							id="example-male" ng-model="searchBean.male" ng-readonly="false"
+							name="male" placeholder="male" />
 					</div>
 					<div class="pull-left right-input">
 						<label id="birthDate">birthDate</label><input
 							class="form-control " aria-describedby="sizing-addon3"
 							type="text" ui-date="{ dateFormat: &#39;dd/mm/yy&#39; }"
-							ng-model="searchBean.birthDate"
-							ng-readonly="false" name="birthDate" placeholder="birthDate"
-							id="example-birthDate" />
+							ng-model="searchBean.birthDate" ng-readonly="false"
+							name="birthDate" placeholder="birthDate" />
 					</div>
 					<div class="pull-right right-input">
 						<label id="birthTime">birthTime</label><input
 							class="form-control " aria-describedby="sizing-addon3"
-							type="text" ng-model="searchBean.birthTime" ng-readonly="false"
-							name="birthTime" placeholder="birthTime" id="example-birthTime" />
+							type="time" placeholder="HH:mm" ng-model="searchBean.birthTime"
+							ng-readonly="false" name="birthTime" placeholder="birthTime" />
 					</div>
 				</div>
 				<div class="panel-body">
@@ -105,17 +105,17 @@
 						ng-class="{&#39;has-error&#39;: !exampleDetailForm.exampleId.$valid, &#39;has-success&#39;: exampleDetailForm.exampleId.$valid}">
 						<label for="exampleId">exampleId</label><input
 							class="form-control " aria-describedby="sizing-addon3"
-							type="text" ng-model="selectedEntity.exampleId"
-							ng-readonly="false" name="exampleId" placeholder="exampleId"
-							id="example-exampleId" />
+							type="text" id="example-exampleId"
+							ng-model="selectedEntity.exampleId" ng-readonly="false"
+							name="exampleId" placeholder="exampleId" />
 					</div>
 					<div class="pull-right right-input"
 						ng-class="{&#39;has-error&#39;: !exampleDetailForm.name.$valid, &#39;has-success&#39;: exampleDetailForm.name.$valid}">
 						<label for="name">name</label><input class="form-control "
-							aria-describedby="sizing-addon3" type="text"
+							aria-describedby="sizing-addon3" type="text" id="example-name"
 							ng-model="selectedEntity.name" ng-readonly="false" name="name"
-							placeholder="name" id="example-name" ng-required="true"
-							ng-minlength="3" ng-maxlength="20" /><small class="help-block"
+							placeholder="name" ng-required="true" ng-minlength="3"
+							ng-maxlength="20" /><small class="help-block"
 							ng-show="exampleDetailForm.name.$error.required">example:
 							name required</small><small class="help-block"
 							ng-show="exampleDetailForm.name.$error.minlength">example:
@@ -126,34 +126,32 @@
 					<div class="pull-left right-input"
 						ng-class="{&#39;has-error&#39;: !exampleDetailForm.eta.$valid, &#39;has-success&#39;: exampleDetailForm.eta.$valid}">
 						<label for="eta">eta</label><input class="form-control "
-							aria-describedby="sizing-addon3" type="text"
+							aria-describedby="sizing-addon3" type="text" id="example-eta"
 							ng-model="selectedEntity.eta" ng-readonly="false" name="eta"
-							placeholder="eta" id="example-eta" />
+							placeholder="eta" />
 					</div>
 					<div class="pull-right right-input"
 						ng-class="{&#39;has-error&#39;: !exampleDetailForm.male.$valid, &#39;has-success&#39;: exampleDetailForm.male.$valid}">
 						<label for="male">male</label><input class="form-control "
 							aria-describedby="sizing-addon3" type="checkbox"
-							ng-model="selectedEntity.male" ng-readonly="false" name="male"
-							placeholder="male" id="example-male" />
+							id="example-male" ng-model="selectedEntity.male"
+							ng-readonly="false" name="male" placeholder="male" />
 					</div>
-					<button ng-click="refresh()">aggiorna</button>
 					<div class="pull-left right-input"
 						ng-class="{&#39;has-error&#39;: !exampleDetailForm.birthDate.$valid, &#39;has-success&#39;: exampleDetailForm.birthDate.$valid}">
-						<label for="example-birthDate">birthDate</label><input
+						<label for="birthDate">birthDate</label><input
 							class="form-control " aria-describedby="sizing-addon3"
 							type="text" ui-date="{ dateFormat: &#39;dd/mm/yy&#39; }"
-							ng-model="selectedEntity.birthDate"
-							ng-readonly="false" name="birthDate" 
-							 />
+							ng-model="selectedEntity.birthDate" ng-readonly="false"
+							name="birthDate" placeholder="birthDate" />
 					</div>
 					<div class="pull-right right-input"
 						ng-class="{&#39;has-error&#39;: !exampleDetailForm.birthTime.$valid, &#39;has-success&#39;: exampleDetailForm.birthTime.$valid}">
 						<label for="birthTime">birthTime</label><input
 							class="form-control " aria-describedby="sizing-addon3"
-							type="text" ng-model="selectedEntity.birthTime"
-							ng-readonly="false" name="birthTime" placeholder="birthTime"
-							id="example-birthTime" />
+							type="time" placeholder="HH:mm"
+							ng-model="selectedEntity.birthTime" ng-readonly="false"
+							name="birthTime" placeholder="birthTime" />
 					</div>
 				</div>
 				<div class="panel-body">

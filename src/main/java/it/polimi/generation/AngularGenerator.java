@@ -271,6 +271,15 @@ public class AngularGenerator {
 		}
 	}
 
+	
+	private String getInputType(Field field)
+	{
+		if (field.getFieldClass()==Boolean.class) return "checkbox";
+		if (ReflectionManager.isTimeField(field)) return "time";
+		
+		return "text";
+	}
+	
 	private HtmlAttributes getFieldHtmlAttributes(Field field,String baseEntity, Boolean validation, String style)
 	{
 		String readOnly="false";
@@ -278,14 +287,22 @@ public class AngularGenerator {
 			readOnly="true";
 		String fieldForm=baseEntity+"."+Utility.getFirstLower(field.getName());
 		HtmlAttributes htmlAttributes = CssGenerator.getInput(style);
-		String type= (field.getFieldClass()==Boolean.class) ? "checkbox" : "text";
+		String type= getInputType(field);
 		htmlAttributes.add("type", type);
-		if (reflectionManager.isDateField(field))
+		if (ReflectionManager.isTimeField(field))
 		{
-			htmlAttributes.add("ui-date", "{ dateFormat: 'dd/mm/yy' }");
-		//	htmlAttributes.add("ui-date-format", "dd/mm/yy");
+			htmlAttributes.add("placeholder", "HH:mm");
 		} else
-			htmlAttributes.add("id", entityName+"-"+field.getName());
+		{
+			if (ReflectionManager.isDateField(field))
+			{
+				htmlAttributes.add("ui-date", "{ dateFormat: 'dd/mm/yy' }");
+				//	htmlAttributes.add("ui-date-format", "dd/mm/yy");
+			} else
+			{
+				htmlAttributes.add("id", entityName+"-"+field.getName());
+			}
+		}
 		htmlAttributes.add("ng-model", fieldForm).add("ng-readonly",readOnly).add("name",field.getName());
 		htmlAttributes.add("placeholder", field.getName());
 		if (validation)

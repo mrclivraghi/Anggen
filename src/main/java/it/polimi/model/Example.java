@@ -1,5 +1,6 @@
 package it.polimi.model;
 
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -34,11 +35,9 @@ public class Example {
 	@javax.persistence.Temporal(value=TemporalType.DATE)
 	private Date birthDate;
 	
-	@javax.persistence.Temporal(TemporalType.TIME)
-	private Date birthTime;
+	//@javax.persistence.Temporal(TemporalType.TIME)
+	private Time birthTime;
 	
-	@javax.persistence.Temporal(TemporalType.TIMESTAMP)
-	private Date birthDateTime;
 	
 	public Example()
 	{
@@ -118,32 +117,15 @@ public class Example {
 	/**
 	 * @return the birthTime
 	 */
-	public Date getBirthTime() {
+	public Time getBirthTime() {
 		return birthTime;
 	}
 
 	/**
 	 * @param birthTime the birthTime to set
 	 */
-	public void setBirthTime(Date birthTime) {
+	public void setBirthTime(Time birthTime) {
 		this.birthTime = birthTime;
 	}
 
-	/**
-	 * @return the birthDateTime
-	 */
-	public Date getBirthDateTime() {
-		return birthDateTime;
-	}
-
-	/**
-	 * @param birthDateTime the birthDateTime to set
-	 */
-	public void setBirthDateTime(Date birthDateTime) {
-		this.birthDateTime = birthDateTime;
-	}
-	
-	
-	
-	
 }

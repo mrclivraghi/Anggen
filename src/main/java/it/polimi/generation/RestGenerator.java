@@ -79,38 +79,45 @@ public class RestGenerator {
 		String query="select "+alias+" from "+Utility.getFirstUpper(className)+" "+alias+ " where ";
 		for (Field field: fields)
 		{
-			JVar param = method.param(field.getFieldClass()==Date.class || field.getFieldClass()==java.util.Date.class? String.class : field.getFieldClass(), field.getName());
+			JVar param = method.param(ReflectionManager.isDateField(field)? String.class : field.getFieldClass(), field.getName());
 			JAnnotationUse annotationParam= param.annotate(Param.class);
 			annotationParam.param("value", field.getName());
-			if (ReflectionManager.isDateField(field))
+			if (ReflectionManager.isTimeField(field))
 			{
-				query= query+" (:"+field.getName()+" is null or cast(:"+field.getName()+" as string)=cast(date("+alias+"."+field.getName()+") as string)) and";
-			} else
+				//(:birthTime is null or :birthTime=cast(date_trunc('seconds',e.birthTime) as string))
+				query= query + " (:"+field.getName()+" is null or :"+field.getName()+"=cast(date_trunc('seconds',e."+field.getName()+") as string)) and";
+			}
+			else
 			{
-				if (field.getFieldClass()==String.class)
+				if (ReflectionManager.isDateField(field))
 				{
-					query= query+" (:"+field.getName()+" is null or :"+field.getName()+"='' or cast(:"+field.getName()+" as string)="+alias+"."+field.getName()+") and";
+					query= query+" (:"+field.getName()+" is null or cast(:"+field.getName()+" as string)=cast(date("+alias+"."+field.getName()+") as string)) and";
 				} else
 				{
-					if (field.getCompositeClass()==null)
+					if (field.getFieldClass()==String.class)
 					{
-						query=query+" (:"+field.getName()+" is null or cast(:"+field.getName()+" as string)=cast("+alias+"."+field.getName()+" as string)) and";
-						
+						query= query+" (:"+field.getName()+" is null or :"+field.getName()+"='' or cast(:"+field.getName()+" as string)="+alias+"."+field.getName()+") and";
 					} else
-					{ // Entity or entity list!!!
-						if (field.getCompositeClass().fullName().contains("java.util.List"))
+					{
+						if (field.getCompositeClass()==null)
 						{
-							query=query+" (:"+field.getName()+" in elements("+alias+"."+field.getName()+"List)  or :"+field.getName()+" is null) and";
+							query=query+" (:"+field.getName()+" is null or cast(:"+field.getName()+" as string)=cast("+alias+"."+field.getName()+" as string)) and";
+
+						} else
+						{ // Entity or entity list!!!
+							if (field.getCompositeClass().fullName().contains("java.util.List"))
+							{
+								query=query+" (:"+field.getName()+" in elements("+alias+"."+field.getName()+"List)  or :"+field.getName()+" is null) and";
 							}else
-						{
+							{
 								query=query+" (:"+field.getName()+"="+alias+"."+field.getName()+" or :"+field.getName()+" is null) and";
+							}
+
 						}
 
 					}
-						
-				}
-					
-			}
+
+				}}
 		}
 		query=query.substring(0,query.length()-3);
 		return query;
@@ -195,7 +202,7 @@ public class RestGenerator {
 				{
 					JMethod method=myClass.method(JMod.PUBLIC, listClass, "findBy"+field.getName().replaceFirst(field.getName().substring(0, 1), field.getName().substring(0, 1).toUpperCase()));
 					//if (field.getCompositeClass()==null)
-					method.param((field.getFieldClass()==Date.class || field.getFieldClass()==java.util.Date.class )? String.class : field.getFieldClass(), field.getName());
+					method.param(ReflectionManager.isDateField(field)? String.class : field.getFieldClass(), field.getName());
 					//else
 					//method.param(field.getCompositeClass(), field.getName());
 				} else

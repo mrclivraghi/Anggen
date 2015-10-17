@@ -114,13 +114,16 @@ public class AngularGenerator {
 			style= style.equals("pull-left")? "pull-right": "pull-left";
 			if (field.getIsEnum())
 			{
-				html.div((new HtmlAttributes()).add("class", style+" right-input"))
+				html.div((new HtmlAttributes()).add("class", style+" right-input").add("ng-class","{'has-error': !"+entityName+"DetailForm."+field.getName()+".$valid, 'has-success': "+entityName+"DetailForm."+field.getName()+".$valid}"))
 				.label((new HtmlAttributes()).add("id", field.getName())).content(field.getName());
 				html.select(CssGenerator.getSelect("").add("ng-model", "selectedEntity."+field.getName())
 						.add("id", field.getName())
+						.add("name",field.getName())
 				.add("ng-options", field.getName()+ " as "+field.getName()+" for "+field.getName()+" in childrenList."+field.getName()+"List").enctype("UTF-8"));
 
-				html._select()._div();
+				html._select();
+				renderValidator(html, field);
+				html._div();
 
 			}
 			else

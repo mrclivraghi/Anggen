@@ -431,10 +431,10 @@ public class JsGenerator {
 						{
 							sb.append("\""+string+"\",");
 						}
+						sb.append("];\n");
 						
 					}
 				}
-				sb.append("];\n");
 			sb.append("}; \n");
 			if (isParent)
 				sb.append("$scope.init();\n");

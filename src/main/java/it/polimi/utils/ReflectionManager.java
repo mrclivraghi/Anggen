@@ -363,7 +363,10 @@ public class ReflectionManager {
 		ReflectionManager reflectionManager= new ReflectionManager(Example.class);
 		for (Field field: reflectionManager.getFieldList())
 		{
-			System.out.println(field.getName()+"-"+reflectionManager.isTimeField(field));
+			//System.out.println(field.getName()+"-"+reflectionManager.isTimeField(field));
+			Annotation[] list= field.getAnnotationList();
+			for (int i=0; i<list.length; i++)
+				System.out.println(field.getName()+"-"+list[i].annotationType().getName());
 		}
 		List<ClassDetail> classList = reflectionManager.getSubClassList();
 		for (ClassDetail myClass : classList)

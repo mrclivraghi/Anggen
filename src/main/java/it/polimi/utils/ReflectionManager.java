@@ -17,10 +17,14 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
+import javax.persistence.Entity;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.mapping.Array;
+import org.reflections.Reflections;
 import org.springframework.data.annotation.Id;
 
 import com.sun.codemodel.JClass;
@@ -378,6 +382,40 @@ public class ReflectionManager {
 		return false;
 	}
 	
+	public static List<String> getSubPackages(String mainPackage)
+	{
+		List<String> packageList= new ArrayList<String>();
+		Reflections reflections = new Reflections("it.polimi.model");
+		Set<Class<?>> allClasses = reflections.getTypesAnnotatedWith(Entity.class);
+		for (Class theClass: allClasses)
+		{
+			if (!packageList.contains(theClass.getPackage().getName()) && !theClass.getPackage().getName().equals(mainPackage))
+				packageList.add(theClass.getPackage().getName());
+		}
+		return packageList;
+	}
+	
+	public static List<String> getMainMenuItem(String mainPackage)
+	{
+		List<String> packageList= ReflectionManager.getSubPackages(mainPackage);
+		List<String> menuItemList= new ArrayList<String>();
+		ReflectionManager reflectionManager= new ReflectionManager(Object.class);
+		for (String myPackage: packageList)
+		{
+			menuItemList.add(reflectionManager.parseName(myPackage));
+		}
+		
+		return menuItemList;
+	}
+	
+	
+	public static Set<Class<?>> getClassInPackage(String thePackage)
+	{
+		Reflections reflections = new Reflections(thePackage);
+		Set<Class<?>> allClasses = reflections.getTypesAnnotatedWith(Entity.class);
+		return allClasses;
+	}
+	
 	public static void main(String[] args)
 	{
 		ReflectionManager reflectionManager= new ReflectionManager(Example.class);
@@ -387,7 +425,7 @@ public class ReflectionManager {
 			Annotation[] list= field.getAnnotationList();
 			for (int i=0; i<list.length; i++)
 				System.out.println(field.getName()+"-"+list[i].annotationType().getName());
-			System.out.println("isEnum: "+field.getIsEnum());
+			//System.out.println("isEnum: "+field.getIsEnum());
 			if (field.getEnumValuesList()!=null)
 			for (String string: field.getEnumValuesList())
 				System.out.println("ENUM VALUeS: "+string);
@@ -400,11 +438,9 @@ public class ReflectionManager {
 		
 		//reflectionManager= new ReflectionManager(Sex.class);
 		//List<Field> fieldList=reflectionManager.getFieldList();
-		java.lang.reflect.Field[] fields = Sex.class.getDeclaredFields();
 		//System.out.println(Sex.class.getEnumConstants());
-		System.out.println(Sex.class.getModifiers()+"-"+Example.class.getModifiers());
-		System.out.println(Example.class.isEnum());
 		Sex[] sec= Sex.class.getEnumConstants();
+		System.out.println("Package: "+Sex.class.getPackage().toString());
 		for (int i=0; i<sec.length; i++)
 			System.out.println("EC: "+sec[i].toString());
 		
@@ -412,7 +448,13 @@ public class ReflectionManager {
 		{
 			System.out.println(field.getName());
 		}*/ 
-	
+
+		//Reflections reflections = new Reflections("it.polimi.model");
+		List<String> subPackage= ReflectionManager.getMainMenuItem("it.polimi.model");
+		for (String string: subPackage)
+		{
+			System.out.println(string);
+		}
 	}
 
 	public static Class getRightParamClass(Field field) {

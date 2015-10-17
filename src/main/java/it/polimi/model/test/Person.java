@@ -1,4 +1,4 @@
-package it.polimi.old;
+package it.polimi.model.test;
 
 import java.math.BigDecimal;
 import java.sql.Date;

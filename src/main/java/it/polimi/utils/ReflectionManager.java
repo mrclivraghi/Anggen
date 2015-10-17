@@ -25,6 +25,7 @@ import org.springframework.data.annotation.Id;
 
 import com.sun.codemodel.JClass;
 import com.sun.codemodel.JCodeModel;
+import com.sun.codemodel.JType;
 
 public class ReflectionManager {
 	
@@ -282,23 +283,28 @@ public class ReflectionManager {
 		String className = parseName();
 		for (Field field: fields)
 		{
-			if (ReflectionManager.isTimeField(field))
+			if (field.getIsEnum())
 			{
-				string=string+"it.polimi.utils.Utility.formatTime("+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(field.getName())+"()),";
-			}
-			else
+				string=string+" ("+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(field.getName())+"()==null)? null : "+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(field.getName())+"().getValue(),";
+			}else
 			{
-				if (ReflectionManager.isDateField(field))
+				if (ReflectionManager.isTimeField(field))
 				{
-					string=string+"it.polimi.utils.Utility.formatDate("+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(field.getName())+"()),";
-				}else
-				{
-					if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List"))
-						string=string+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(field.getName())+"List()==null? null :"+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(field.getName())+"List().get(0),";
-					else
-						string=string+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(field.getName())+"(),";
+					string=string+"it.polimi.utils.Utility.formatTime("+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(field.getName())+"()),";
 				}
-			}}
+				else
+				{
+					if (ReflectionManager.isDateField(field))
+					{
+						string=string+"it.polimi.utils.Utility.formatDate("+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(field.getName())+"()),";
+					}else
+					{
+						if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List"))
+							string=string+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(field.getName())+"List()==null? null :"+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(field.getName())+"List().get(0),";
+						else
+							string=string+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(field.getName())+"(),";
+					}
+				}}}
 		return string.substring(0, string.length()-1);
 	}
 	
@@ -407,5 +413,15 @@ public class ReflectionManager {
 			System.out.println(field.getName());
 		}*/ 
 	
+	}
+
+	public static Class getRightParamClass(Field field) {
+		if (field.getIsEnum())
+			return Integer.class;
+		
+		if (ReflectionManager.isDateField(field))
+			return String.class;
+		
+		return field.getFieldClass();
 	}
 }

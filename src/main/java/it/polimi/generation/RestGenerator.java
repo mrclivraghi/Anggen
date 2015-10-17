@@ -79,7 +79,7 @@ public class RestGenerator {
 		String query="select "+alias+" from "+Utility.getFirstUpper(className)+" "+alias+ " where ";
 		for (Field field: fields)
 		{
-			JVar param = method.param(ReflectionManager.isDateField(field)? String.class : field.getFieldClass(), field.getName());
+			JVar param = method.param(ReflectionManager.getRightParamClass(field), field.getName());
 			JAnnotationUse annotationParam= param.annotate(Param.class);
 			annotationParam.param("value", field.getName());
 			if (ReflectionManager.isTimeField(field))
@@ -202,7 +202,7 @@ public class RestGenerator {
 				{
 					JMethod method=myClass.method(JMod.PUBLIC, listClass, "findBy"+field.getName().replaceFirst(field.getName().substring(0, 1), field.getName().substring(0, 1).toUpperCase()));
 					//if (field.getCompositeClass()==null)
-					method.param(ReflectionManager.isDateField(field)? String.class : field.getFieldClass(), field.getName());
+					method.param(ReflectionManager.getRightParamClass(field), field.getName());
 					//else
 					//method.param(field.getCompositeClass(), field.getName());
 				} else

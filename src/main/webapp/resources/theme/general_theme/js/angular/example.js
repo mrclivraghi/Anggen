@@ -151,6 +151,7 @@ $scope.search();
 });
 };$scope.init=function()
 {
+exampleService.childrenList.sexList=["MALE","FEMALE",];
 }; 
 $scope.init();
 $scope.exampleGridOptions = {
@@ -163,7 +164,8 @@ columnDefs: [
 { name: 'exampleId'},
 { name: 'name'},
 { name: 'birthDate', cellFilter: "date:'dd-MM-yyyy'"},
-{ name: 'birthTime', cellFilter: "date:'HH:mm'"} 
+{ name: 'birthTime', cellFilter: "date:'HH:mm'"},
+{ name: 'sex'} 
 ]
 ,data: exampleService.entityList
  };

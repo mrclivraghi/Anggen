@@ -64,7 +64,8 @@ public class HtmlGenerator {
 			.macros().javascript("http://ui-grid.info/release/ui-grid.js")
 			.macros().javascript("../resources/general_theme/js/angular/"+entityName+".js")
 			.macros().javascript("../resources/general_theme/js/date.js")
-			.macros().javascript("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js");
+			.macros().javascript("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js")
+			.macros().javascript("http://cdn.jsdelivr.net/alasql/0.2/alasql.min.js");
 			
 			
 			//css

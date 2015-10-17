@@ -69,7 +69,7 @@ public class AngularGenerator {
 		html._li()._ul()._form();
 		 */
 		HtmlCanvas downloadCanvas= new HtmlCanvas();
-		downloadCanvas.button(CssGenerator.getButton("","pull-right").add("style", "margin-top:-7px"))
+		downloadCanvas.button(CssGenerator.getButton("downloadEntityList","pull-right").add("style", "margin-top:-7px"))
 		.span((new HtmlAttributes()).add("class", "glyphicon glyphicon-download-alt").add("aria-hidden", "true"))
 		._span()
 		._button();

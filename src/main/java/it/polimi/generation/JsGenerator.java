@@ -452,6 +452,17 @@ public class JsGenerator {
 				sb.append(jsGenerator.getPagination());
 			}
 		}
+		sb.append("$scope.downloadEntityList=function()\n");
+		sb.append("{\n");
+		sb.append("var mystyle = {\n");
+		sb.append(" headers:true, \n");
+		sb.append("column: {style:{Font:{Bold:\"1\"}}}\n");
+		sb.append("};\n");
+
+		sb.append("alasql('SELECT * INTO XLSXML(\""+entityName+".xls\",?) FROM ?',[mystyle,$scope.entityList]);\n");
+
+		sb.append("};\n");
+
 		sb.append("})\n");
 		return sb.toString();
 	}

@@ -68,10 +68,17 @@ public class AngularGenerator {
 		renderItem(html,"entity");
 		html._li()._ul()._form();
 		 */
+		HtmlCanvas downloadCanvas= new HtmlCanvas();
+		downloadCanvas.button(CssGenerator.getButton("","pull-right").add("style", "margin-top:-7px"))
+		.span((new HtmlAttributes()).add("class", "glyphicon glyphicon-download-alt").add("aria-hidden", "true"))
+		._span()
+		._button();
+		
 		html.form((new HtmlAttributes()).add("id", entityName+"List").add("ng-if", "entityList.length>0").enctype("UTF-8"))
 		.div(CssGenerator.getPanel())
 		.div(CssGenerator.getPanelHeader())
-		.content("List "+entityName)
+		.content("List "+entityName+downloadCanvas.toHtml(),false)
+		
 		.div(CssGenerator.getPanelBody())
 		
 		.div((new HtmlAttributes()).add("ui-grid", entityName+"GridOptions").add("ui-grid-pagination", "").add("ui-grid-selection",""))

@@ -5,11 +5,19 @@ import org.rendersnake.internal.CharactersWriteable;
 
 public  class CssGenerator {
 	
+	
+
 	public static HtmlAttributes getButton(String function)
+	{
+		return CssGenerator.getButton(function, "");
+	}
+	
+	
+	public static HtmlAttributes getButton(String function,String otherClasses)
 	{
 		HtmlAttributes htmlAttributes= new HtmlAttributes();
 		htmlAttributes.add("ng-click", function+"()")
-		.add("class", "btn btn-default");
+		.add("class", "btn btn-default "+otherClasses);
 		return htmlAttributes;
 	}
 	

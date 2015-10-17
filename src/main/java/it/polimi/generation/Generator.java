@@ -54,7 +54,7 @@ public class Generator {
 				for (Class myClass: packageClassList)
 				{
 					// todo put link
-					html.li().a((new HtmlAttributes()).add("href", "#")).content(reflectionManager.parseName(myClass.getName()))._li();
+					html.li().a((new HtmlAttributes()).add("href", "../"+reflectionManager.parseName(myClass.getName())+"/")).content(reflectionManager.parseName(myClass.getName()))._li();
 				}
 				
 				html._ul();
@@ -65,7 +65,7 @@ public class Generator {
 			{
 				if (theClass.getPackage().getName().equals(modelPackage))
 				{
-					html.li().a((new HtmlAttributes()).add("href", "#")).content(reflectionManager.parseName(theClass.getName()))._li();
+					html.li().a((new HtmlAttributes()).add("href", "../"+reflectionManager.parseName(theClass.getName())+"/")).content(reflectionManager.parseName(theClass.getName()))._li();
 				}
 			}
 			html._ul()

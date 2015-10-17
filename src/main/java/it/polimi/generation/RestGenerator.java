@@ -1,7 +1,5 @@
 package it.polimi.generation;
 
-import it.polimi.model.Photo;
-import it.polimi.model.SeedQuery;
 import it.polimi.utils.Field;
 import it.polimi.utils.ReflectionManager;
 import it.polimi.utils.Utility;
@@ -81,38 +79,45 @@ public class RestGenerator {
 		String query="select "+alias+" from "+Utility.getFirstUpper(className)+" "+alias+ " where ";
 		for (Field field: fields)
 		{
-			JVar param = method.param(field.getFieldClass()==Date.class || field.getFieldClass()==java.util.Date.class? String.class : field.getFieldClass(), field.getName());
+			JVar param = method.param(ReflectionManager.getRightParamClass(field), field.getName());
 			JAnnotationUse annotationParam= param.annotate(Param.class);
 			annotationParam.param("value", field.getName());
-			if (field.getFieldClass()==Date.class || field.getFieldClass()==java.util.Date.class)
+			if (ReflectionManager.isTimeField(field))
 			{
-				query= query+" (:"+field.getName()+" is null or cast(:"+field.getName()+" as string)=cast(date("+alias+"."+field.getName()+") as string)) and";
-			} else
+				//(:birthTime is null or :birthTime=cast(date_trunc('seconds',e.birthTime) as string))
+				query= query + " (:"+field.getName()+" is null or cast(:"+field.getName()+" as string)=cast(date_trunc('seconds',e."+field.getName()+") as string)) and";
+			}
+			else
 			{
-				if (field.getFieldClass()==String.class)
+				if (ReflectionManager.isDateField(field))
 				{
-					query= query+" (:"+field.getName()+" is null or :"+field.getName()+"='' or cast(:"+field.getName()+" as string)="+alias+"."+field.getName()+") and";
+					query= query+" (:"+field.getName()+" is null or cast(:"+field.getName()+" as string)=cast(date("+alias+"."+field.getName()+") as string)) and";
 				} else
 				{
-					if (field.getCompositeClass()==null)
+					if (field.getFieldClass()==String.class)
 					{
-						query=query+" (:"+field.getName()+" is null or cast(:"+field.getName()+" as string)=cast("+alias+"."+field.getName()+" as string)) and";
-						
+						query= query+" (:"+field.getName()+" is null or :"+field.getName()+"='' or cast(:"+field.getName()+" as string)="+alias+"."+field.getName()+") and";
 					} else
-					{ // Entity or entity list!!!
-						if (field.getCompositeClass().fullName().contains("java.util.List"))
+					{
+						if (field.getCompositeClass()==null)
 						{
-							query=query+" (:"+field.getName()+" in elements("+alias+"."+field.getName()+"List)  or :"+field.getName()+" is null) and";
+							query=query+" (:"+field.getName()+" is null or cast(:"+field.getName()+" as string)=cast("+alias+"."+field.getName()+" as string)) and";
+
+						} else
+						{ // Entity or entity list!!!
+							if (field.getCompositeClass().fullName().contains("java.util.List"))
+							{
+								query=query+" (:"+field.getName()+" in elements("+alias+"."+field.getName()+"List)  or :"+field.getName()+" is null) and";
 							}else
-						{
+							{
 								query=query+" (:"+field.getName()+"="+alias+"."+field.getName()+" or :"+field.getName()+" is null) and";
+							}
+
 						}
 
 					}
-						
-				}
-					
-			}
+
+				}}
 		}
 		query=query.substring(0,query.length()-3);
 		return query;
@@ -186,7 +191,7 @@ public class RestGenerator {
 		String searchMethod="";
 		try {
 			myClass = codeModel._class(""+fullClassName.replace(".model.", ".repository.")+"Repository", ClassType.INTERFACE);
-			JClass extendedClass = codeModel.ref(CrudRepository.class).narrow(classClass,Long.class);
+			JClass extendedClass = codeModel.ref(CrudRepository.class).narrow(classClass,keyClass);
 			myClass._extends(extendedClass);
 			myClass.annotate(Repository.class);
 			JClass listClass=codeModel.ref(List.class).narrow(classClass);
@@ -197,7 +202,7 @@ public class RestGenerator {
 				{
 					JMethod method=myClass.method(JMod.PUBLIC, listClass, "findBy"+field.getName().replaceFirst(field.getName().substring(0, 1), field.getName().substring(0, 1).toUpperCase()));
 					//if (field.getCompositeClass()==null)
-					method.param((field.getFieldClass()==Date.class || field.getFieldClass()==java.util.Date.class )? String.class : field.getFieldClass(), field.getName());
+					method.param(ReflectionManager.getRightParamClass(field), field.getName());
 					//else
 					//method.param(field.getCompositeClass(), field.getName());
 				} else
@@ -410,7 +415,7 @@ public class RestGenerator {
 			orderParam= getById.param(String.class,lowerClass+"Id");
 			orderParam.annotate(PathVariable.class);
 			JBlock getByIdBlock= getById.body();
-			getByIdBlock.directStatement("List<"+Utility.getFirstUpper(className)+"> "+lowerClass+"List="+lowerClass+"Service.findById(Long.valueOf("+lowerClass+"Id));");
+			getByIdBlock.directStatement("List<"+Utility.getFirstUpper(className)+"> "+lowerClass+"List="+lowerClass+"Service.findById("+keyClass.getName()+".valueOf("+lowerClass+"Id));");
 			getByIdBlock.directStatement("getRightMapping("+lowerClass+"List);");
 			getByIdBlock.directStatement("return "+response+".body("+lowerClass+"List);");
 			//findByIdBlock._return(findByIdExpression);
@@ -424,7 +429,7 @@ public class RestGenerator {
 			orderParam= delete.param(String.class,lowerClass+"Id");
 			orderParam.annotate(PathVariable.class);
 			JBlock deleteBlock= delete.body();
-			deleteBlock.directStatement(lowerClass+"Service.deleteById(Long.valueOf("+lowerClass+"Id));");
+			deleteBlock.directStatement(lowerClass+"Service.deleteById("+keyClass.getName()+".valueOf("+lowerClass+"Id));");
 			deleteBlock.directStatement("return "+response+".build();");
 			
 			//InsertOrder
@@ -475,6 +480,7 @@ public class RestGenerator {
 			JMethod getRightMapping= myClass.method(JMod.PRIVATE, void.class, "getRightMapping");
 			getRightMapping.param(classClass, lowerClass);
 			JBlock getRightMappingBlock = getRightMapping.body();
+			
 			RestGenerator.generateRightMapping_v2(classClass, getRightMappingBlock,new ArrayList<Class>(),null);
 			
 			
@@ -515,6 +521,7 @@ public class RestGenerator {
 					block.directStatement("for ("+field.getFieldClass().getName()+" "+Utility.getFirstLower(field.getName())+" : "+lowerClass+".get"+Utility.getFirstUpper(field.getName())+"List())");
 					block.directStatement("{");
 					//block.directStatement(""+Utility.getFirstLower(field.getName())+".set"+Utility.getFirstUpper(lowerClass)+"(null);");
+					if (!reflectionManager.isKnownClass(field.getFieldClass()))
 					RestGenerator.generateRightMapping_v2(field.getFieldClass(), block,parentClass,newEntityName);
 					parentClass=oldParentClassList;
 					block.directStatement("}");
@@ -533,7 +540,8 @@ public class RestGenerator {
 				else
 				{
 
-					RestGenerator.generateRightMapping_v2(field.getFieldClass(), block,parentClass,newEntityName);
+					if (!reflectionManager.isKnownClass(field.getFieldClass()))
+						RestGenerator.generateRightMapping_v2(field.getFieldClass(), block,parentClass,newEntityName);
 					parentClass=oldParentClassList;
 				}
 				block.directStatement("}");

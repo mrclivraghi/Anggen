@@ -11,6 +11,8 @@ public class Field{
 	private JClass compositeClass;
 	private Class repositoryClass;
 	private Annotation[] annotationList;
+	private Boolean isEnum;
+	private List<String> enumValuesList;
 	
 	public Field(String name, Class fieldClass, JClass compositeClass,Class repositoryClass)
 	{
@@ -51,5 +53,33 @@ public class Field{
 
 	public void setAnnotationList(Annotation[] annotationList) {
 		this.annotationList = annotationList;
+	}
+
+	/**
+	 * @return the isEnum
+	 */
+	public Boolean getIsEnum() {
+		return isEnum;
+	}
+
+	/**
+	 * @param isEnum the isEnum to set
+	 */
+	public void setIsEnum(Boolean isEnum) {
+		this.isEnum = isEnum;
+	}
+
+	/**
+	 * @return the enumValuesList
+	 */
+	public List<String> getEnumValuesList() {
+		return enumValuesList;
+	}
+
+	/**
+	 * @param enumValuesList the enumValuesList to set
+	 */
+	public void setEnumValuesList(List<String> enumValuesList) {
+		this.enumValuesList = enumValuesList;
 	}
 }

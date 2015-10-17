@@ -83,9 +83,9 @@ public class JsGenerator {
 			sb.append("this.searchBean = 		new Object();\n")
 			.append("this.resetSearchBean= function()\n")
 			.append("{\n")
-			.append("this.searchBean.orderId=\"\";\n")
-			.append("this.searchBean.name=\"\";\n")
-			.append("this.searchBean.timeslotDate=\"\";\n")
+			.append("this.searchBean={};\n")
+			//.append("this.searchBean.name=\"\";\n")
+			//.append("this.searchBean.timeslotDate=\"\";\n")
 			.append("};\n");
 		}
 		sb.append("this.setSelectedEntity= function (entity)\n")
@@ -96,13 +96,13 @@ public class JsGenerator {
 		.append("this.selectedEntity.show = false;\n")
 		.append("} //else\n")
 		.append("var keyList = Object.keys(entity);\n")
-		//.append("if (keyList.length == 0)\n")
-		//.append("keyList = Object.keys(this.selectedEntity);\n")
+		.append("if (keyList.length == 0)\n")
+		.append("keyList = Object.keys(this.selectedEntity);\n")
 		.append("for (i = 0; i < keyList.length; i++) {\n")
 		.append("var val = keyList[i];\n")
 		.append("if (val != undefined) {\n")
 		.append("if (val.toLowerCase().indexOf(\"list\") > -1\n")
-		.append("&& typeof entity[val] == \"object\") {\n")
+		.append("&& (typeof entity[val] == \"object\" || typeof this.selectedEntity[val]==\"object\")) {\n")
 
 		.append("if (entity[val] != null\n")
 		.append("&& entity[val] != undefined) {\n")
@@ -117,13 +117,10 @@ public class JsGenerator {
 		.append("}\n")
 		.append("} else {\n")
 
-		.append("if (val.toLowerCase().indexOf(\"date\") > -1\n")
+		.append("if (val.toLowerCase().indexOf(\"time\") > -1\n")
 		.append("&& typeof val == \"string\") {\n")
 		.append("var date = new Date(entity[val]);\n")
-		.append("this.selectedEntity[val] = new Date(\n")
-		.append("date.getFullYear(), date\n")
-		.append(".getMonth(), date\n")
-		.append(".getDate());\n")
+		.append("this.selectedEntity[val] = new Date(entity[val]);\n")
 		.append("} else {\n")
 		.append("this.selectedEntity[val] = entity[val];\n")
 		.append("}\n")
@@ -171,7 +168,7 @@ public class JsGenerator {
 		sb.append("}\n");
 		//delete
 		sb.append("this.del = function() {\n");
-		sb.append("var url=\"../"+entityName+"/selectedEntity."+entityName+"Id\";\n");
+		sb.append("var url=\"../"+entityName+"/\"+this.selectedEntity."+entityName+"Id;\n");
 		sb.append("var promise= $http[\"delete\"](url)\n");
 		sb.append(".then( function(response) {\n");
 		sb.append("return response.data;\n");
@@ -230,6 +227,7 @@ public class JsGenerator {
 		sb.append("$scope.reset = function()\n");
 		sb.append("{\n");
 		sb.append(""+entityName+"Service.resetSearchBean();\n");
+		sb.append("$scope.searchBean="+entityName+"Service.searchBean;");
 		sb.append(""+entityName+"Service.setSelectedEntity(null);\n");
 		sb.append(""+entityName+"Service.selectedEntity.show=false;\n");
 		sb.append(""+entityName+"Service.setEntityList(null); \n");
@@ -279,6 +277,7 @@ public class JsGenerator {
 		sb.append("$scope.addNew= function()\n");
 		sb.append("{\n");
 		sb.append(""+entityName+"Service.setSelectedEntity(null);\n");
+		sb.append(""+entityName+"Service.setEntityList(null);\n");
 		sb.append(""+entityName+"Service.selectedEntity.show=true;\n");
 
 		if (isParent)
@@ -423,7 +422,19 @@ public class JsGenerator {
 					sb.append("alert(\"error\");\n");
 					sb.append("});\n");
 				}
-
+				for (Field field: fieldList)
+				{
+					if (field.getIsEnum())
+					{
+						sb.append(""+entityName+"Service.childrenList."+field.getName()+"List=[");
+						for (String string: field.getEnumValuesList())
+						{
+							sb.append("\""+string+"\",");
+						}
+						sb.append("];\n");
+						
+					}
+				}
 			sb.append("}; \n");
 			if (isParent)
 				sb.append("$scope.init();\n");
@@ -459,12 +470,19 @@ public class JsGenerator {
 		sb.append("columnDefs: [\n");
 		for (Field field: fieldList)
 		{
+			if (ReflectionManager.hasIgnoreTableList(field)) continue;
 			if (field.getCompositeClass()== null )
 			{
-				if (field.getFieldClass()==Date.class || field.getFieldClass()==java.sql.Date.class)
-					sb.append("{ name: '"+field.getName()+"', cellFilter: \"date:\'dd-MM-yyyy\'\"},\n");
-				else
-					sb.append("{ name: '"+field.getName()+"'},\n");
+				if (ReflectionManager.isTimeField(field))
+				{
+					sb.append("{ name: '"+field.getName()+"', cellFilter: \"date:\'HH:mm\'\"},\n");
+				}else
+				{
+					if (ReflectionManager.isDateField(field))
+						sb.append("{ name: '"+field.getName()+"', cellFilter: \"date:\'dd-MM-yyyy\'\"},\n");
+					else
+						sb.append("{ name: '"+field.getName()+"'},\n");
+				}
 			}
 			else if (!field.getCompositeClass().fullName().contains("java.util.List") && isParent)
 			{

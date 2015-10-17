@@ -20,9 +20,7 @@ this.entityList.push(entityList[i]);
 this.searchBean = 		new Object();
 this.resetSearchBean= function()
 {
-this.searchBean.orderId="";
-this.searchBean.name="";
-this.searchBean.timeslotDate="";
+this.searchBean={};
 };
 this.setSelectedEntity= function (entity)
 { 
@@ -31,11 +29,13 @@ entity = {};
 this.selectedEntity.show = false;
 } //else
 var keyList = Object.keys(entity);
+if (keyList.length == 0)
+keyList = Object.keys(this.selectedEntity);
 for (i = 0; i < keyList.length; i++) {
 var val = keyList[i];
 if (val != undefined) {
 if (val.toLowerCase().indexOf("list") > -1
-&& typeof entity[val] == "object") {
+&& (typeof entity[val] == "object" || typeof this.selectedEntity[val]=="object")) {
 if (entity[val] != null
 && entity[val] != undefined) {
 if (this.selectedEntity[val]!=undefined)
@@ -47,13 +47,10 @@ this.selectedEntity[val]
 .push(entity[val][j]);
 }
 } else {
-if (val.toLowerCase().indexOf("date") > -1
+if (val.toLowerCase().indexOf("time") > -1
 && typeof val == "string") {
 var date = new Date(entity[val]);
-this.selectedEntity[val] = new Date(
-date.getFullYear(), date
-.getMonth(), date
-.getDate());
+this.selectedEntity[val] = new Date(entity[val]);
 } else {
 this.selectedEntity[val] = entity[val];
 }
@@ -95,7 +92,7 @@ alert("error");
 return promise; 
 }
 this.del = function() {
-var url="../order/selectedEntity.orderId";
+var url="../order/"+this.selectedEntity.orderId;
 var promise= $http["delete"](url)
 .then( function(response) {
 return response.data;
@@ -115,13 +112,14 @@ $scope.childrenList=orderService.childrenList;
 $scope.reset = function()
 {
 orderService.resetSearchBean();
-orderService.setSelectedEntity(null);
+$scope.searchBean=orderService.searchBean;orderService.setSelectedEntity(null);
 orderService.selectedEntity.show=false;
 orderService.setEntityList(null); 
 personService.selectedEntity.show=false;placeService.selectedEntity.show=false;}
 $scope.addNew= function()
 {
 orderService.setSelectedEntity(null);
+orderService.setEntityList(null);
 orderService.selectedEntity.show=true;
 personService.selectedEntity.show=false;placeService.selectedEntity.show=false;};
 		
@@ -258,11 +256,13 @@ entity = {};
 this.selectedEntity.show = false;
 } //else
 var keyList = Object.keys(entity);
+if (keyList.length == 0)
+keyList = Object.keys(this.selectedEntity);
 for (i = 0; i < keyList.length; i++) {
 var val = keyList[i];
 if (val != undefined) {
 if (val.toLowerCase().indexOf("list") > -1
-&& typeof entity[val] == "object") {
+&& (typeof entity[val] == "object" || typeof this.selectedEntity[val]=="object")) {
 if (entity[val] != null
 && entity[val] != undefined) {
 if (this.selectedEntity[val]!=undefined)
@@ -274,13 +274,10 @@ this.selectedEntity[val]
 .push(entity[val][j]);
 }
 } else {
-if (val.toLowerCase().indexOf("date") > -1
+if (val.toLowerCase().indexOf("time") > -1
 && typeof val == "string") {
 var date = new Date(entity[val]);
-this.selectedEntity[val] = new Date(
-date.getFullYear(), date
-.getMonth(), date
-.getDate());
+this.selectedEntity[val] = new Date(entity[val]);
 } else {
 this.selectedEntity[val] = entity[val];
 }
@@ -322,7 +319,7 @@ alert("error");
 return promise; 
 }
 this.del = function() {
-var url="../person/selectedEntity.personId";
+var url="../person/"+this.selectedEntity.personId;
 var promise= $http["delete"](url)
 .then( function(response) {
 return response.data;
@@ -342,7 +339,7 @@ $scope.childrenList=personService.childrenList;
 $scope.reset = function()
 {
 personService.resetSearchBean();
-personService.setSelectedEntity(null);
+$scope.searchBean=personService.searchBean;personService.setSelectedEntity(null);
 personService.selectedEntity.show=false;
 personService.setEntityList(null); 
 }
@@ -357,6 +354,7 @@ toDo();
 $scope.addNew= function()
 {
 personService.setSelectedEntity(null);
+personService.setEntityList(null);
 personService.selectedEntity.show=true;
 };
 		
@@ -420,11 +418,13 @@ entity = {};
 this.selectedEntity.show = false;
 } //else
 var keyList = Object.keys(entity);
+if (keyList.length == 0)
+keyList = Object.keys(this.selectedEntity);
 for (i = 0; i < keyList.length; i++) {
 var val = keyList[i];
 if (val != undefined) {
 if (val.toLowerCase().indexOf("list") > -1
-&& typeof entity[val] == "object") {
+&& (typeof entity[val] == "object" || typeof this.selectedEntity[val]=="object")) {
 if (entity[val] != null
 && entity[val] != undefined) {
 if (this.selectedEntity[val]!=undefined)
@@ -436,13 +436,10 @@ this.selectedEntity[val]
 .push(entity[val][j]);
 }
 } else {
-if (val.toLowerCase().indexOf("date") > -1
+if (val.toLowerCase().indexOf("time") > -1
 && typeof val == "string") {
 var date = new Date(entity[val]);
-this.selectedEntity[val] = new Date(
-date.getFullYear(), date
-.getMonth(), date
-.getDate());
+this.selectedEntity[val] = new Date(entity[val]);
 } else {
 this.selectedEntity[val] = entity[val];
 }
@@ -484,7 +481,7 @@ alert("error");
 return promise; 
 }
 this.del = function() {
-var url="../place/selectedEntity.placeId";
+var url="../place/"+this.selectedEntity.placeId;
 var promise= $http["delete"](url)
 .then( function(response) {
 return response.data;
@@ -504,7 +501,7 @@ $scope.childrenList=placeService.childrenList;
 $scope.reset = function()
 {
 placeService.resetSearchBean();
-placeService.setSelectedEntity(null);
+$scope.searchBean=placeService.searchBean;placeService.setSelectedEntity(null);
 placeService.selectedEntity.show=false;
 placeService.setEntityList(null); 
 }
@@ -519,6 +516,7 @@ toDo();
 $scope.addNew= function()
 {
 placeService.setSelectedEntity(null);
+placeService.setEntityList(null);
 placeService.selectedEntity.show=true;
 };
 		

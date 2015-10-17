@@ -63,15 +63,16 @@ public class HtmlGenerator {
 			.macros().javascript("http://ui-grid.info/docs/grunt-scripts/vfs_fonts.js")
 			.macros().javascript("http://ui-grid.info/release/ui-grid.js")
 			.macros().javascript("../resources/general_theme/js/angular/"+entityName+".js")
-			.macros().javascript("../resources/general_theme/js/date.js");
-			
+			.macros().javascript("../resources/general_theme/js/date.js")
+			.macros().javascript("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js");
 			
 			
 			//css
 			html.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "http://ui-grid.info/release/ui-grid.css"))
 			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"))
 			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../resources/general_theme/css/main.css"))
-			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../resources/general_theme/css/jquery-ui.css"));
+			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../resources/general_theme/css/jquery-ui.css"))
+			.link((new HtmlAttributes()).add("rel","import").add("href", "../resources/general_theme/static/menu.html"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -105,6 +106,7 @@ public class HtmlGenerator {
 						childrenHtmlGenerator.generateEntityView(html);
 						//generateEntityView(html, false,field.getName());
 					}*/
+					html.script((new HtmlAttributes()).add("type", "text/javascript")).content("var content = document.querySelector('link[rel="+'"'+"import"+'"'+"]').import; \n $(\"body\").prepend(content.documentElement.getElementsByTagName(\"body\")[0]);",false);
 					html._body()._html();
 		} catch (IOException e) {
 			e.printStackTrace();

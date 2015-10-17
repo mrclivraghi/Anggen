@@ -1,4 +1,4 @@
-package it.polimi.old;
+package it.polimi.model.mountain;
 
 import it.polimi.utils.CustomJsonDateDeserializer;
 

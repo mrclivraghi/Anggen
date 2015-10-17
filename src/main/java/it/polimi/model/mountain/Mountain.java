@@ -1,4 +1,4 @@
-package it.polimi.old;
+package it.polimi.model.mountain;
 
 import java.math.BigDecimal;
 import java.util.Date;

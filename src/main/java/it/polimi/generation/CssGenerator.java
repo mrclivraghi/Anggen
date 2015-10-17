@@ -47,7 +47,7 @@ public  class CssGenerator {
 
 	public static HtmlAttributes getNav() {
 		HtmlAttributes htmlAttributes= new HtmlAttributes();
-		htmlAttributes.add("class", "nav bar navbar-default");
+		htmlAttributes.add("class", "navbar navbar-default");
 		return htmlAttributes;
 	}
 	

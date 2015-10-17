@@ -24,6 +24,8 @@
 	src="../resources/general_theme/js/angular/example.js"></script>
 <script type="text/javascript"
 	src="../resources/general_theme/js/date.js"></script>
+<script type="text/javascript"
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="http://ui-grid.info/release/ui-grid.css" />
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
@@ -32,6 +34,7 @@
 	href="../resources/general_theme/css/jquery-ui.css" />
 </head>
 <body ng-app="exampleApp">
+<%@include file="menu.html" %>
 	<div ng-controller="exampleController">
 		<form id="exampleSearchBean">
 			<div class="panel panel-default default-panel">

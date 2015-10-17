@@ -526,8 +526,12 @@ public class JsGenerator {
 		sb.append("gridApi.selection.on.rowSelectionChanged($scope,function(row){\n");
 		if (isParent)
 			changeChildrenVisibility(sb, false);
-		sb.append(entityName+"Service\n");
-		sb.append(".setSelectedEntity(row.entity);\n");
+		
+		
+		sb.append("if (row.isSelected)\n");
+		sb.append(entityName+"Service.setSelectedEntity(row.entity);\n");
+		sb.append("else \n");
+		sb.append(entityName+"Service.setSelectedEntity(null);\n");
 
 		/*		for (Field field: fieldList)
 		{
@@ -535,7 +539,7 @@ public class JsGenerator {
 				sb.append("$scope."+field.getName()+"ListGridOptions.data="+entityName+"Service.selectedEntity."+field.getName()+"List; \n");
 		}
 		 */
-		sb.append(entityName+"Service.selectedEntity.show = true;\n");
+		sb.append(entityName+"Service.selectedEntity.show = row.isSelected;\n");
 		sb.append("});\n");
 		sb.append("  };\n");
 

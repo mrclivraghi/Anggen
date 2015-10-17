@@ -45,7 +45,7 @@ public class Generator {
 			for (String myPackage: packageList)
 			{
 				html.li((new HtmlAttributes()).add("class", "dropdown"))
-				.a((new HtmlAttributes()).add("href", "#").add("class", "dropdown-toggle").add("data-toggle", "drop-down").add("role", "button").add("aria-haspopup", "true").add("aria-expanded", "false"))
+				.a((new HtmlAttributes()).add("href", "#").add("class", "dropdown-toggle").add("data-toggle", "dropdown").add("role", "button").add("aria-haspopup", "true").add("aria-expanded", "false"))
 				.span((new HtmlAttributes()).add("class", "caret"))
 				._span()
 				.content(reflectionManager.parseName(myPackage));
@@ -101,7 +101,7 @@ public class Generator {
 		Set<Class<?>> allClasses = reflections.getTypesAnnotatedWith(Entity.class);
 		List<Class> dependencyClass = new ArrayList<Class>();
 		
-		/*for (Class modelClass: allClasses)
+		for (Class modelClass: allClasses)
 		{
 			RestGenerator generator = new RestGenerator(modelClass);
 			generator.generateRESTClasses(dependencyClass,true);
@@ -121,7 +121,7 @@ public class Generator {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}*/
+		}
 		Generator.GenerateMenu();
 		
 	}

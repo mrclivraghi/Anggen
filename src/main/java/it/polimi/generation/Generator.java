@@ -78,7 +78,7 @@ public class Generator {
 		}
 		
 		File file = new File(""); 
-		String directoryViewPages = file.getAbsolutePath()+"\\WebContent\\WEB-INF\\jsp\\";
+		String directoryViewPages = file.getAbsolutePath()+"\\src\\main\\webapp\\resources\\theme\\general_theme\\static\\";
 		File menuFile=new File(directoryViewPages+"menu.html");
 		PrintWriter writer;
 		try {
@@ -101,7 +101,7 @@ public class Generator {
 		Set<Class<?>> allClasses = reflections.getTypesAnnotatedWith(Entity.class);
 		List<Class> dependencyClass = new ArrayList<Class>();
 		
-		for (Class modelClass: allClasses)
+	/*	for (Class modelClass: allClasses)
 		{
 			RestGenerator generator = new RestGenerator(modelClass);
 			generator.generateRESTClasses(dependencyClass,true);
@@ -111,7 +111,7 @@ public class Generator {
 			RestGenerator generator = new RestGenerator(modelClass);
 			generator.generateRESTClasses(dependencyClass,false);
 		}
-		
+		*/
 		for (Class modelClass: allClasses)
 		{
 			HtmlGenerator htmlGenerator = new HtmlGenerator(modelClass);

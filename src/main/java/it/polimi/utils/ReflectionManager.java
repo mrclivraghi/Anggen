@@ -1,6 +1,7 @@
 package it.polimi.utils;
 
 import it.polimi.model.Example;
+import it.polimi.model.Sex;
 import it.polimi.utils.annotation.IgnoreSearch;
 import it.polimi.utils.annotation.IgnoreTableList;
 import it.polimi.utils.annotation.IgnoreUpdate;
@@ -107,33 +108,46 @@ public class ReflectionManager {
 			Class fieldClass= null;
 			JClass jClass=null;
 			Class repositoryClass=null;
+			Boolean isEnum=field.getType().isEnum();
+			List<String> enumValuesList= new ArrayList<String>();
 			if (isKnownClass(field.getType()))
 				fieldClass=field.getType();
 			else
 			{
-				jClass=codeModel.ref(field.getType());
-				if (field.getType()==List.class)
-				{//entityList
-					Type type=field.getGenericType();
-					if (type instanceof ParameterizedType)
-					{
-						Type elementType= ((ParameterizedType)type).getActualTypeArguments()[0];
-						try {
-							fieldClass=Class.forName(elementType.getTypeName());
-							jClass=jClass.narrow(fieldClass);
-							repositoryClass=Class.forName(elementType.getTypeName().replace(".model.", ".repository.")+"Repository");
-						} catch (ClassNotFoundException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+				if (isEnum)
+				{
+					Object[] enumValues=field.getType().getEnumConstants();
+					for (int i=0; i<enumValues.length; i++)
+						enumValuesList.add(enumValues[i].toString());
+					
+				} else
+				{
+					jClass=codeModel.ref(field.getType());
+					if (field.getType()==List.class)
+					{//entityList
+						Type type=field.getGenericType();
+						if (type instanceof ParameterizedType)
+						{
+							Type elementType= ((ParameterizedType)type).getActualTypeArguments()[0];
+							try {
+								fieldClass=Class.forName(elementType.getTypeName());
+								jClass=jClass.narrow(fieldClass);
+								repositoryClass=Class.forName(elementType.getTypeName().replace(".model.", ".repository.")+"Repository");
+							} catch (ClassNotFoundException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 						}
+					}else
+					{//entity
+						fieldClass=field.getType();
 					}
-				}else
-				{//entity
-					fieldClass=field.getType();
 				}
 			}
 			Field myField= new Field(parseName(field.getName()), fieldClass, jClass, repositoryClass);
 			myField.setAnnotationList(field.getAnnotations());
+			myField.setIsEnum(isEnum);
+			myField.setEnumValuesList(enumValuesList);
 			fieldList.add(myField);
 		}
 		return fieldList;
@@ -367,12 +381,31 @@ public class ReflectionManager {
 			Annotation[] list= field.getAnnotationList();
 			for (int i=0; i<list.length; i++)
 				System.out.println(field.getName()+"-"+list[i].annotationType().getName());
+			System.out.println("isEnum: "+field.getIsEnum());
+			if (field.getEnumValuesList()!=null)
+			for (String string: field.getEnumValuesList())
+				System.out.println("ENUM VALUeS: "+string);
 		}
 		List<ClassDetail> classList = reflectionManager.getSubClassList();
 		for (ClassDetail myClass : classList)
 		{
 			System.out.println(myClass.getClassClass().getName()+"---"+myClass.getCompositeClass().fullName());
 		}
+		
+		//reflectionManager= new ReflectionManager(Sex.class);
+		//List<Field> fieldList=reflectionManager.getFieldList();
+		java.lang.reflect.Field[] fields = Sex.class.getDeclaredFields();
+		//System.out.println(Sex.class.getEnumConstants());
+		System.out.println(Sex.class.getModifiers()+"-"+Example.class.getModifiers());
+		System.out.println(Example.class.isEnum());
+		Sex[] sec= Sex.class.getEnumConstants();
+		for (int i=0; i<sec.length; i++)
+			System.out.println("EC: "+sec[i].toString());
+		
+		/*for (java.lang.reflect.Field field : fields)
+		{
+			System.out.println(field.getName());
+		}*/ 
 	
 	}
 }

@@ -162,8 +162,6 @@ paginationPageSize: 2,
 columnDefs: [
 { name: 'exampleId'},
 { name: 'name'},
-{ name: 'eta'},
-{ name: 'male'},
 { name: 'birthDate', cellFilter: "date:'dd-MM-yyyy'"},
 { name: 'birthTime', cellFilter: "date:'HH:mm'"} 
 ]

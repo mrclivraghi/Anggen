@@ -1,6 +1,9 @@
 package it.polimi.utils;
 
 import it.polimi.model.Example;
+import it.polimi.utils.annotation.IgnoreSearch;
+import it.polimi.utils.annotation.IgnoreTableList;
+import it.polimi.utils.annotation.IgnoreUpdate;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
@@ -329,12 +332,41 @@ public class ReflectionManager {
 		return false;
 	}
 	
+	public static Boolean hasIgnoreSearch(Field field)
+	{
+		return hasIgnoreAnnotation(field, IgnoreSearch.class);
+	}
+	
+	public static Boolean hasIgnoreUpdate(Field field)
+	{
+		return hasIgnoreAnnotation(field, IgnoreUpdate.class);
+	}
+	
+	public static Boolean hasIgnoreTableList(Field field)
+	{
+		return hasIgnoreAnnotation(field, IgnoreTableList.class);
+	}
+	
+	private static Boolean hasIgnoreAnnotation(Field field,Class ignoreAnnotationClass)
+	{
+		Annotation[] annotationList= field.getAnnotationList();
+		for (int i=0; i<annotationList.length; i++)
+		{
+			if (annotationList[i].annotationType()==ignoreAnnotationClass)
+				return true;
+		}
+		return false;
+	}
+	
 	public static void main(String[] args)
 	{
 		ReflectionManager reflectionManager= new ReflectionManager(Example.class);
 		for (Field field: reflectionManager.getFieldList())
 		{
-			System.out.println(field.getName()+"-"+reflectionManager.isTimeField(field));
+			//System.out.println(field.getName()+"-"+reflectionManager.isTimeField(field));
+			Annotation[] list= field.getAnnotationList();
+			for (int i=0; i<list.length; i++)
+				System.out.println(field.getName()+"-"+list[i].annotationType().getName());
 		}
 		List<ClassDetail> classList = reflectionManager.getSubClassList();
 		for (ClassDetail myClass : classList)

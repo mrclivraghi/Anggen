@@ -1,5 +1,9 @@
 package it.polimi.model;
 
+import it.polimi.utils.annotation.IgnoreSearch;
+import it.polimi.utils.annotation.IgnoreTableList;
+import it.polimi.utils.annotation.IgnoreUpdate;
+
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -21,21 +25,25 @@ public class Example {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="id_example", unique=true, nullable=false)
+	@IgnoreUpdate
 	private Integer exampleId;
 	
 	@NotBlank
 	@Size(min=3, max=20)
+	@IgnoreSearch
 	private String name;
 	
-	
+	@IgnoreTableList
 	private Long eta;
 	
+	@IgnoreTableList
 	private Boolean male;
 	
 	@javax.persistence.Temporal(value=TemporalType.DATE)
 	private Date birthDate;
 	
 	//@javax.persistence.Temporal(TemporalType.TIME)
+	@IgnoreSearch
 	private Time birthTime;
 	
 	

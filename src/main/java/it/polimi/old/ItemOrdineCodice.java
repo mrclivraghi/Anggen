@@ -1,4 +1,4 @@
-package it.polimi.model;
+package it.polimi.old;
 
 import java.io.Serializable;
 import java.sql.Timestamp;

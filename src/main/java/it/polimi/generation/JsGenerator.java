@@ -458,6 +458,7 @@ public class JsGenerator {
 		sb.append("columnDefs: [\n");
 		for (Field field: fieldList)
 		{
+			if (ReflectionManager.hasIgnoreTableList(field)) continue;
 			if (field.getCompositeClass()== null )
 			{
 				if (ReflectionManager.isTimeField(field))

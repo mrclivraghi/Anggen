@@ -110,13 +110,14 @@ public class AngularGenerator {
 		String style="";
 		for (Field field: fieldList)
 		{
+			if (ReflectionManager.hasIgnoreUpdate(field)) continue;
 			style= style.equals("pull-left")? "pull-right": "pull-left";
 			if (reflectionManager.isKnownClass(field.getFieldClass()))
 			{
 				
 				//html.p()
 				//.content(field.getName())
-				html.div((new HtmlAttributes()).add("class", style+" right-input").add("ng-class","{'has-error': !"+entityName+"DetailForm."+field.getName()+".$valid, 'has-success': "+entityName+"DetailForm."+field.getName()+".$valid}"))
+				html.div((new HtmlAttributes()).add("class", style+" right-input").add("ng-class","{'has-error': !"+entityName+"DetailForm."+field.getName()+".$valid, 'has-success': "+entityName+"DetailForm."+field.getName()+".$valid}").add("style","height: 59px;"))
 				.label((new HtmlAttributes()).add("for", field.getName()))
 				.content(field.getName())
 				.input(getFieldHtmlAttributes(field,"selectedEntity",true,""));
@@ -317,13 +318,15 @@ public class AngularGenerator {
 			String style="";
 			for (Field field: fieldList)
 			{
+				if (ReflectionManager.hasIgnoreSearch(field)) 
+					continue;
 				style= style.equals("pull-left")? "pull-right": "pull-left";
 				if (field.getCompositeClass()==null)
 				{
 
 					//.p()
 					//.content(field.getName())
-					html.div((new HtmlAttributes()).add("class", style+" right-input"))
+					html.div((new HtmlAttributes()).add("class", style+" right-input").add("style","height: 59px;"))
 					.label((new HtmlAttributes()).add("id", field.getName())).content(field.getName())
 					.input(getFieldHtmlAttributes(field,baseEntity,false,""))._div();
 

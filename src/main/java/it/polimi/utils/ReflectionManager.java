@@ -2,6 +2,7 @@ package it.polimi.utils;
 
 import it.polimi.model.Example;
 import it.polimi.model.Sex;
+import it.polimi.utils.annotation.ExcelExport;
 import it.polimi.utils.annotation.IgnoreSearch;
 import it.polimi.utils.annotation.IgnoreTableList;
 import it.polimi.utils.annotation.IgnoreUpdate;
@@ -359,6 +360,11 @@ public class ReflectionManager {
 	public static Boolean hasIgnoreSearch(Field field)
 	{
 		return hasIgnoreAnnotation(field, IgnoreSearch.class);
+	}
+	
+	public static Boolean hasExcelExport(Field field)
+	{
+		return hasIgnoreAnnotation(field, ExcelExport.class);
 	}
 	
 	public static Boolean hasIgnoreUpdate(Field field)

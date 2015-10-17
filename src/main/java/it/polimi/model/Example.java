@@ -1,5 +1,6 @@
 package it.polimi.model;
 
+import it.polimi.utils.annotation.ExcelExport;
 import it.polimi.utils.annotation.IgnoreSearch;
 import it.polimi.utils.annotation.IgnoreTableList;
 import it.polimi.utils.annotation.IgnoreUpdate;
@@ -26,14 +27,17 @@ public class Example {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="id_example", unique=true, nullable=false)
 	@IgnoreUpdate
+	@ExcelExport
 	private Integer exampleId;
 	
 	@NotBlank
 	@Size(min=3, max=20)
 	@IgnoreSearch
+	@ExcelExport
 	private String name;
 	
 	@IgnoreTableList
+	@ExcelExport
 	private Long eta;
 	
 	@IgnoreTableList

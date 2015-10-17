@@ -458,8 +458,20 @@ public class JsGenerator {
 		sb.append(" headers:true, \n");
 		sb.append("column: {style:{Font:{Bold:\"1\"}}}\n");
 		sb.append("};\n");
-
-		sb.append("alasql('SELECT * INTO XLSXML(\""+entityName+".xls\",?) FROM ?',[mystyle,$scope.entityList]);\n");
+		
+		String exportFields="";
+		for (Field field: fieldList)
+		{
+			if (ReflectionManager.hasExcelExport(field))
+				exportFields=exportFields+field.getName()+",";
+		}
+		
+		if (exportFields.length()>0)
+		{
+			exportFields=exportFields.substring(0, exportFields.length()-1);
+		} else
+			exportFields="*";
+		sb.append("alasql('SELECT "+exportFields+" INTO XLSXML(\""+entityName+".xls\",?) FROM ?',[mystyle,$scope.entityList]);\n");
 
 		sb.append("};\n");
 

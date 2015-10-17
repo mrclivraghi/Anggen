@@ -63,8 +63,8 @@ public class HtmlGenerator {
 			.macros().javascript("http://ui-grid.info/docs/grunt-scripts/vfs_fonts.js")
 			.macros().javascript("http://ui-grid.info/release/ui-grid.js")
 			.macros().javascript("../resources/general_theme/js/angular/"+entityName+".js")
-			.macros().javascript("../resources/general_theme/js/date.js");
-			
+			.macros().javascript("../resources/general_theme/js/date.js")
+			.macros().javascript("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js");
 			
 			
 			//css

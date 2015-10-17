@@ -44,4 +44,12 @@ public  class CssGenerator {
 		htmlAttributes.add("class", "panel-body");
 		return htmlAttributes;
 	}
+
+	public static HtmlAttributes getNav() {
+		HtmlAttributes htmlAttributes= new HtmlAttributes();
+		htmlAttributes.add("class", "nav bar navbar-default");
+		return htmlAttributes;
+	}
+	
+	
 }

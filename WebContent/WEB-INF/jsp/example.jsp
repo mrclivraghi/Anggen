@@ -144,10 +144,12 @@
 							ng-model="selectedEntity.birthTime" ng-readonly="false"
 							name="birthTime" placeholder="birthTime" />
 					</div>
-					<div class="pull-right right-input">
+					<div class="pull-right right-input"
+						ng-class="{&#39;has-error&#39;: !exampleDetailForm.sex.$valid, &#39;has-success&#39;: exampleDetailForm.sex.$valid}">
 						<label id="sex">sex</label><select class="form-control "
 							aria-describedby="sizing-addon3" ng-model="selectedEntity.sex"
-							id="sex" ng-options="sex as sex for sex in childrenList.sexList"
+							id="sex" name="sex"
+							ng-options="sex as sex for sex in childrenList.sexList"
 							enctype="UTF-8"></select>
 					</div>
 				</div>

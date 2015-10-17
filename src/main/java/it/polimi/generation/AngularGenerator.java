@@ -117,7 +117,7 @@ public class AngularGenerator {
 				
 				//html.p()
 				//.content(field.getName())
-				html.div((new HtmlAttributes()).add("class", style+" right-input").add("ng-class","{'has-error': !"+entityName+"DetailForm."+field.getName()+".$valid, 'has-success': "+entityName+"DetailForm."+field.getName()+".$valid}"))
+				html.div((new HtmlAttributes()).add("class", style+" right-input").add("ng-class","{'has-error': !"+entityName+"DetailForm."+field.getName()+".$valid, 'has-success': "+entityName+"DetailForm."+field.getName()+".$valid}").add("style","height: 59px;"))
 				.label((new HtmlAttributes()).add("for", field.getName()))
 				.content(field.getName())
 				.input(getFieldHtmlAttributes(field,"selectedEntity",true,""));
@@ -326,7 +326,7 @@ public class AngularGenerator {
 
 					//.p()
 					//.content(field.getName())
-					html.div((new HtmlAttributes()).add("class", style+" right-input"))
+					html.div((new HtmlAttributes()).add("class", style+" right-input").add("style","height: 59px;"))
 					.label((new HtmlAttributes()).add("id", field.getName())).content(field.getName())
 					.input(getFieldHtmlAttributes(field,baseEntity,false,""))._div();
 

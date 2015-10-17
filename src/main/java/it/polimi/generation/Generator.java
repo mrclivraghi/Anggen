@@ -28,7 +28,6 @@ public class Generator {
 			generator.generateRESTClasses(dependencyClass,false);
 		}
 		
-		
 		for (Class modelClass: allClasses)
 		{
 			HtmlGenerator htmlGenerator = new HtmlGenerator(modelClass);

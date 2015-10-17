@@ -422,7 +422,19 @@ public class JsGenerator {
 					sb.append("alert(\"error\");\n");
 					sb.append("});\n");
 				}
-
+				for (Field field: fieldList)
+				{
+					if (field.getIsEnum())
+					{
+						sb.append(""+entityName+"Service.childrenList."+field.getName()+"List=[");
+						for (String string: field.getEnumValuesList())
+						{
+							sb.append("\""+string+"\",");
+						}
+						
+					}
+				}
+				sb.append("];\n");
 			sb.append("}; \n");
 			if (isParent)
 				sb.append("$scope.init();\n");

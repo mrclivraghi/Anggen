@@ -46,6 +46,7 @@ public class Example {
 	@IgnoreSearch
 	private Time birthTime;
 	
+	private Sex sex;
 	
 	public Example()
 	{
@@ -134,6 +135,20 @@ public class Example {
 	 */
 	public void setBirthTime(Time birthTime) {
 		this.birthTime = birthTime;
+	}
+
+	/**
+	 * @return the sex
+	 */
+	public Sex getSex() {
+		return sex;
+	}
+
+	/**
+	 * @param sex the sex to set
+	 */
+	public void setSex(Sex sex) {
+		this.sex = sex;
 	}
 
 }

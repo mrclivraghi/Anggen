@@ -45,10 +45,12 @@ public class Generator {
 			for (String myPackage: packageList)
 			{
 				html.li((new HtmlAttributes()).add("class", "dropdown"))
-				.a((new HtmlAttributes()).add("href", "#").add("class", "dropdown-toggle").add("data-toggle", "dropdown").add("role", "button").add("aria-haspopup", "true").add("aria-expanded", "false"))
-				.span((new HtmlAttributes()).add("class", "caret"))
-				._span()
-				.content(reflectionManager.parseName(myPackage));
+				.a((new HtmlAttributes()).add("href", "#").add("class", "dropdown-toggle").add("data-toggle", "dropdown").add("role", "button").add("aria-haspopup", "true").add("aria-expanded", "false"));
+				HtmlCanvas caretHtml = new HtmlCanvas();
+				
+				caretHtml.span((new HtmlAttributes()).add("class", "caret"))
+				._span();
+				html.content(reflectionManager.parseName(myPackage)+caretHtml.toHtml(),false);
 				Set<Class<?>> packageClassList = ReflectionManager.getClassInPackage(myPackage);
 				html.ul((new HtmlAttributes()).add("class", "dropdown-menu"));
 				for (Class myClass: packageClassList)

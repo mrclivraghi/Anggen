@@ -182,6 +182,7 @@ public class AngularGenerator {
 
 							.select(CssGenerator.getSelect("").add("ng-model", "selectedEntity."+field.getName())
 									.add("id", field.getName())
+									.add("name", field.getName())
 									.add("ng-options", field.getName()+" as "+reflectionManager.getDescriptionField(field.getFieldClass())+" for "+field.getName()+" in childrenList."+field.getName()+"List track by "+field.getName()+"."+field.getName()+"Id").enctype("UTF-8"))
 									._select()
 									.button(CssGenerator.getButton("show"+Utility.getFirstUpper(field.getName())+"Detail").add("id",field.getName()).add("ng-if", "selectedEntity."+field.getName()+"!=null"))

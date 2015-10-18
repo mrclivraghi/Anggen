@@ -489,6 +489,7 @@ public class JsGenerator {
 		sb.append("enableSelectAll: false,\n");
 		sb.append("paginationPageSizes: [2, 4, 6],\n");
 		sb.append("paginationPageSize: 2,\n");
+		sb.append("enableGridMenu: true,\n");
 		//generate dynamically
 		sb.append("columnDefs: [\n");
 		for (Field field: fieldList)
@@ -564,7 +565,7 @@ public class JsGenerator {
 	public String buildJS()
 	{
 		StringBuilder buildJS= new StringBuilder();
-		buildJS.append("var "+entityName+"App=angular.module(\""+entityName+"App\",['ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date'])\n");
+		buildJS.append("var "+entityName+"App=angular.module(\""+entityName+"App\",['ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter'])\n");
 		JsGenerator jsGenerator = new JsGenerator(classClass, true,null,null);
 		buildJS.append(jsGenerator.generateService());
 		buildJS.append(jsGenerator.generateController());

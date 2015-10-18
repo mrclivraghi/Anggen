@@ -81,7 +81,7 @@ public class AngularGenerator {
 		
 		.div(CssGenerator.getPanelBody())
 		
-		.div((new HtmlAttributes()).add("ui-grid", entityName+"GridOptions").add("ui-grid-pagination", "").add("ui-grid-selection",""))
+		.div((new HtmlAttributes()).add("ui-grid", entityName+"GridOptions").add("ui-grid-pagination", "").add("ui-grid-selection","").add("ui-grid-exporter", ""))
 		._div()
 		
 		._div()

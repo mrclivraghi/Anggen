@@ -91,7 +91,7 @@ public class HtmlGenerator {
 			html.
 			html()
 					.head()
-						.title().content("test order");
+						.title().content(entityName);
 						
 						includeScripts(html);
 						

@@ -91,6 +91,8 @@ public class AngularGenerator {
 		//detail
 		html.form((new HtmlAttributes()).add("id", entityName+"DetailForm").add("name", entityName+"DetailForm").add("ng-show", "selectedEntity.show"));
 		//.p().content("DETAIL");
+		//renderDetail(html);
+		//renderSearchForm(html, "selectedEntity");
 		renderDetail(html);
 		html._form();
 	
@@ -121,17 +123,17 @@ public class AngularGenerator {
 			style= style.equals("pull-left")? "pull-right": "pull-left";
 			if (field.getIsEnum())
 			{
-				html.div((new HtmlAttributes()).add("class", style+" right-input").add("ng-class","{'has-error': !"+entityName+"DetailForm."+field.getName()+".$valid, 'has-success': "+entityName+"DetailForm."+field.getName()+".$valid}"))
-				.label((new HtmlAttributes()).add("id", field.getName())).content(field.getName());
-				html.select(CssGenerator.getSelect("").add("ng-model", "selectedEntity."+field.getName())
-						.add("id", field.getName())
-						.add("name",field.getName())
+				html.div((new HtmlAttributes()).add("class", style+" right-input"));
+				html.div((new HtmlAttributes()).add("class", "input-group").add("ng-class","{'has-error': !"+entityName+"DetailForm."+field.getName()+".$valid, 'has-success': "+entityName+"DetailForm."+field.getName()+".$valid}"));
+				html.span((new HtmlAttributes()).add("class","input-group-addon")).content(field.getName());
+				//.label((new HtmlAttributes()).add("id", field.getName())).content(field.getName());
+				html.select(getFieldHtmlAttributes(field, "selectedEntity", true, style)
 				.add("ng-options", field.getName()+ " as "+field.getName()+" for "+field.getName()+" in childrenList."+field.getName()+"List").enctype("UTF-8"));
 
 				html._select();
+				html._div();
 				renderValidator(html, field);
 				html._div();
-
 			}
 			else
 			{
@@ -140,24 +142,25 @@ public class AngularGenerator {
 
 					//html.p()
 					//.content(field.getName())
-					html.div((new HtmlAttributes()).add("class", style+" right-input").add("ng-class","{'has-error': !"+entityName+"DetailForm."+field.getName()+".$valid, 'has-success': "+entityName+"DetailForm."+field.getName()+".$valid}").add("style","height: 59px;"))
-					.label((new HtmlAttributes()).add("for", field.getName()))
-					.content(field.getName());
-					//.input(getFieldHtmlAttributes(field,"selectedEntity",true,""));
+					html.div((new HtmlAttributes()).add("class", style+" right-input").add("style","height: 59px;").add("ng-class","{'has-error': !"+entityName+"DetailForm."+field.getName()+".$valid, 'has-success': "+entityName+"DetailForm."+field.getName()+".$valid}"));
+					html.div((new HtmlAttributes()).add("class", "input-group"));
+				html.span((new HtmlAttributes()).add("class","input-group-addon")).content(field.getName());
+				//.input(getFieldHtmlAttributes(field,"selectedEntity",true,""));
 					if (getInputType(field).equals("checkbox"))
 					{
-						html.div((new HtmlAttributes()).add("class", "input-group"))
-						.select((new HtmlAttributes()).add("class", "form-control").add("ng-model", entityName+"."+field.getName()).add("name", field.getName()).add("ng-options", "value for value in trueFalseValues"))
-						._select()
-						.span((new HtmlAttributes()).add("class", "input-group-btn"))
-						.button((new HtmlAttributes()).add("class", "btn btn-default")).content(field.getName())
-						._span()
-						._div();
+						//html.div((new HtmlAttributes()).add("class", "input-group"))
+						html.select(getFieldHtmlAttributes(field, "selectedEntity", true, "").add("ng-options", "value for value in trueFalseValues"))
+						._select();
+						//.span((new HtmlAttributes()).add("class", "input-group-btn"))
+						//.button((new HtmlAttributes()).add("class", "btn btn-default")).content(field.getName())
+						//._span()
+						//._div();
 					}else
-					html.input(getFieldHtmlAttributes(field,entityName,false,""));
+					html.input(getFieldHtmlAttributes(field,"selectedEntity",true,""));
 					
-					renderValidator(html,field);
 
+					html._div();
+					renderValidator(html,field);
 					html._div();
 				} else
 					if (field.getCompositeClass()!=null  && !(parentClass.contains(field.getFieldClass())))
@@ -185,15 +188,12 @@ public class AngularGenerator {
 							html.div(CssGenerator.getPanelBody());
 						}else
 						{//entity
-							html.div((new HtmlAttributes()).add("class", style+" right-input").add("ng-class","{'has-error': !"+entityName+"DetailForm."+field.getName()+".$valid, 'has-success': "+entityName+"DetailForm."+field.getName()+".$valid}"))
+							html.div((new HtmlAttributes()).add("class", style+" right-input").add("ng-class","{'has-error': !"+entityName+"DetailForm."+field.getName()+".$valid, 'has-success': "+entityName+"DetailForm."+field.getName()+".$valid}"));
 							
-							.label((new HtmlAttributes()).add("for", field.getName()))
-							.content(field.getName())
-							
-							.div((new HtmlAttributes()).add("class", "input-group"))
-							
-							
-							.select(CssGenerator.getSelect("").add("ng-model", "selectedEntity."+field.getName())
+							html.div((new HtmlAttributes()).add("class", "input-group"));
+				//html.span((new HtmlAttributes()).add("class","input-group-addon")).content(field.getName());
+				
+							html.select(CssGenerator.getSelect("").add("ng-model", "selectedEntity."+field.getName())
 									.add("id", field.getName())
 									.add("name", field.getName())
 									.add("ng-options", field.getName()+" as "+reflectionManager.getDescriptionField(field.getFieldClass())+" for "+field.getName()+" in childrenList."+field.getName()+"List track by "+field.getName()+"."+field.getName()+"Id").enctype("UTF-8"))
@@ -243,14 +243,6 @@ public class AngularGenerator {
 		 */
 	}
 
-	/*
-	 * <div ng-show="mountainDetailForm.name.$error.maxlength">Il nome
-				utente non può superare i 14 caratteri</div>
-			<div ng-show="mountainDetailForm.name.$error.minlength">Il nome
-				utente deve essere di almeno 2 caratteri</div>
-			<div ng-show="mountainDetailForm.name.$error.required && (mountainDetailForm.$dirty)">Il nome utente
-				è obbligatorio</div>
-	 */
 	private void renderValidator(HtmlCanvas html,Field field) throws IOException
 	{
 		Annotation[] annotationList= field.getAnnotationList();
@@ -331,7 +323,7 @@ public class AngularGenerator {
 			readOnly="true";
 		String fieldForm=baseEntity+"."+Utility.getFirstLower(field.getName());
 		String type= getInputType(field);
-		HtmlAttributes htmlAttributes = CssGenerator.getInput(style,!type.equals("checkbox"));
+		HtmlAttributes htmlAttributes = CssGenerator.getInput(style);
 		htmlAttributes.add("type", type);
 		if (ReflectionManager.isTimeField(field))
 		{
@@ -367,14 +359,18 @@ public class AngularGenerator {
 				if (ReflectionManager.hasIgnoreSearch(field)) 
 					continue;
 				style= style.equals("pull-left")? "pull-right": "pull-left";
+				html.div((new HtmlAttributes()).add("class", style+" right-input").add("style","height: 59px;"));
+				
+				html.div((new HtmlAttributes()).add("class", "input-group"));
+				html.span((new HtmlAttributes()).add("class","input-group-addon")).content(field.getName());
+				
 				if (field.getIsEnum())
 				{
-					html.div((new HtmlAttributes()).add("class", style+" right-input"))
-					.label((new HtmlAttributes()).add("id", field.getName())).content(field.getName());
-					html.select(CssGenerator.getSelect("").add("ng-model", "searchBean."+field.getName())
+					//.label((new HtmlAttributes()).add("id", field.getName())).content(field.getName());
+					html.select(CssGenerator.getSelect("").add("ng-model", baseEntity+"."+field.getName())
 							.add("id", field.getName())
 							.add("ng-options", field.getName()+" as "+field.getName()+" for "+field.getName()+" in childrenList."+field.getName()+"List").enctype("UTF-8"));
-							html._select()._div();
+							html._select();
 
 				}
 				else
@@ -384,33 +380,33 @@ public class AngularGenerator {
 
 						//.p()
 						//.content(field.getName())
-						html.div((new HtmlAttributes()).add("class", style+" right-input").add("style","height: 59px;"))
-						.label((new HtmlAttributes()).add("id", field.getName())).content(field.getName());
+						
+						//.label((new HtmlAttributes()).add("id", field.getName())).content(field.getName());
 						if (getInputType(field).equals("checkbox"))
 						{
-							html.div((new HtmlAttributes()).add("class", "input-group"))
-							.select((new HtmlAttributes()).add("class", "form-control").add("ng-model", "searchBean."+field.getName()).add("name", field.getName()).add("ng-options", "value for value in trueFalseValues"))
-							._select()
-							.span((new HtmlAttributes()).add("class", "input-group-btn"))
+							//html.div((new HtmlAttributes()).add("class", "input-group"))
+							html.select((new HtmlAttributes()).add("class", "form-control").add("ng-model", baseEntity+"."+field.getName()).add("name", field.getName()).add("ng-options", "value for value in trueFalseValues"))
+							._select();
+							/*.span((new HtmlAttributes()).add("class", "input-group-btn"))
 							.button((new HtmlAttributes()).add("class", "btn btn-default")).content(field.getName())
-							._span()
-							._div();
+							._span();*/
 						}else
 						html.input(getFieldHtmlAttributes(field,baseEntity,false,""));
 						
-						html._div();
+						//html._div();
 
 					} else
 					{
-						html.div((new HtmlAttributes()).add("class", style+" right-input"))
-						.label((new HtmlAttributes()).add("id", field.getName())).content(field.getName());
-						html.select(CssGenerator.getSelect("").add("ng-model", "searchBean."+field.getName()+"."+field.getName()+"Id")
+						//.label((new HtmlAttributes()).add("id", field.getName())).content(field.getName());
+						html.select(CssGenerator.getSelect("").add("ng-model", baseEntity+"."+field.getName()+"."+field.getName()+"Id")
 								.add("id", field.getName())
 								.add("ng-options", field.getName()+"."+field.getName()+"Id as "+reflectionManager.getDescriptionField(field.getFieldClass())+" for "+field.getName()+" in childrenList."+field.getName()+"List").enctype("UTF-8"))
-								._select()._div();
+								._select();
 
 					}
 				}
+				
+				html._div()._div();
 			}
 			html._div();
 			html.div(CssGenerator.getPanelBody());

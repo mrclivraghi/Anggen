@@ -1,4 +1,4 @@
-var photoApp=angular.module("photoApp",['ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date'])
+var photoApp=angular.module("photoApp",['ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter'])
 .service("photoService", function($http)
 {
 this.entityList =		[];
@@ -149,7 +149,7 @@ $scope.del=function()
 photoService.del().then(function(data) { 
 $scope.search();
 });
-};$scope.showSeedQueryDetail= function(index)
+};$scope.trueFalseValues=[true,false];$scope.showSeedQueryDetail= function(index)
 {
 if (index!=null)
 seedQueryService.setSelectedEntity(photoService.selectedEntity.seedQueryList[index]);
@@ -176,6 +176,7 @@ multiSelect: false,
 enableSelectAll: false,
 paginationPageSizes: [2, 4, 6],
 paginationPageSize: 2,
+enableGridMenu: true,
 columnDefs: [
 { name: 'photoId'},
 { name: 'url'},
@@ -190,11 +191,21 @@ columnDefs: [
  };
 $scope.photoGridOptions.onRegisterApi = function(gridApi){
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
-seedQueryService.selectedEntity.show=false;mountainService.selectedEntity.show=false;photoService
-.setSelectedEntity(row.entity);
-photoService.selectedEntity.show = true;
+seedQueryService.selectedEntity.show=false;mountainService.selectedEntity.show=false;if (row.isSelected)
+photoService.setSelectedEntity(row.entity);
+else 
+photoService.setSelectedEntity(null);
+photoService.selectedEntity.show = row.isSelected;
 });
   };
+$scope.downloadEntityList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("photo.xls",?) FROM ?',[mystyle,$scope.entityList]);
+};
 })
 .service("seedQueryService", function($http)
 {
@@ -357,7 +368,7 @@ $scope.del=function()
 seedQueryService.selectedEntity.show=false;
 photoService.selectedEntity.seedQuery=null;seedQueryService.setSelectedEntity(null);
 $scope.updateParent();
-};$scope.showMountainDetail= function(index)
+};$scope.trueFalseValues=[true,false];$scope.showMountainDetail= function(index)
 {
 if (index!=null)
 mountainService.setSelectedEntity(seedQueryService.selectedEntity.mountainList[index]);
@@ -400,6 +411,7 @@ multiSelect: false,
 enableSelectAll: false,
 paginationPageSizes: [2, 4, 6],
 paginationPageSize: 2,
+enableGridMenu: true,
 columnDefs: [
 { name: 'photoId'},
 { name: 'url'},
@@ -413,11 +425,21 @@ columnDefs: [
  };
 $scope.photoListGridOptions.onRegisterApi = function(gridApi){
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
-photoService
-.setSelectedEntity(row.entity);
-photoService.selectedEntity.show = true;
+if (row.isSelected)
+photoService.setSelectedEntity(row.entity);
+else 
+photoService.setSelectedEntity(null);
+photoService.selectedEntity.show = row.isSelected;
 });
   };
+$scope.downloadEntityList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("seedQuery.xls",?) FROM ?',[mystyle,$scope.entityList]);
+};
 })
 .service("mountainService", function($http)
 {
@@ -580,7 +602,7 @@ $scope.del=function()
 mountainService.selectedEntity.show=false;
 seedQueryService.selectedEntity.mountain=null;mountainService.setSelectedEntity(null);
 $scope.updateParent();
-};$scope.showSeedQueryDetail= function(index)
+};$scope.trueFalseValues=[true,false];$scope.showSeedQueryDetail= function(index)
 {
 if (index!=null)
 seedQueryService.setSelectedEntity(mountainService.selectedEntity.seedQueryList[index]);
@@ -606,6 +628,7 @@ multiSelect: false,
 enableSelectAll: false,
 paginationPageSizes: [2, 4, 6],
 paginationPageSize: 2,
+enableGridMenu: true,
 columnDefs: [
 { name: 'seedQueryId'},
 { name: 'seedKeyword'},
@@ -615,10 +638,20 @@ columnDefs: [
  };
 $scope.seedQueryListGridOptions.onRegisterApi = function(gridApi){
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
-seedQueryService
-.setSelectedEntity(row.entity);
-seedQueryService.selectedEntity.show = true;
+if (row.isSelected)
+seedQueryService.setSelectedEntity(row.entity);
+else 
+seedQueryService.setSelectedEntity(null);
+seedQueryService.selectedEntity.show = row.isSelected;
 });
   };
+$scope.downloadEntityList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("mountain.xls",?) FROM ?',[mystyle,$scope.entityList]);
+};
 })
 ;

@@ -1,4 +1,4 @@
-var exampleApp=angular.module("exampleApp",['ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date'])
+var exampleApp=angular.module("exampleApp",['ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter'])
 .service("exampleService", function($http)
 {
 this.entityList =		[];
@@ -149,7 +149,7 @@ $scope.del=function()
 exampleService.del().then(function(data) { 
 $scope.search();
 });
-};$scope.init=function()
+};$scope.trueFalseValues=[true,false];$scope.init=function()
 {
 exampleService.childrenList.sexList=["MALE","FEMALE",];
 }; 
@@ -160,6 +160,7 @@ multiSelect: false,
 enableSelectAll: false,
 paginationPageSizes: [2, 4, 6],
 paginationPageSize: 2,
+enableGridMenu: true,
 columnDefs: [
 { name: 'exampleId'},
 { name: 'name'},
@@ -171,10 +172,20 @@ columnDefs: [
  };
 $scope.exampleGridOptions.onRegisterApi = function(gridApi){
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
-exampleService
-.setSelectedEntity(row.entity);
-exampleService.selectedEntity.show = true;
+if (row.isSelected)
+exampleService.setSelectedEntity(row.entity);
+else 
+exampleService.setSelectedEntity(null);
+exampleService.selectedEntity.show = row.isSelected;
 });
   };
+$scope.downloadEntityList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT exampleId,name,eta INTO XLSXML("example.xls",?) FROM ?',[mystyle,$scope.entityList]);
+};
 })
 ;

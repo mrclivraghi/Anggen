@@ -1,4 +1,4 @@
-var orderApp=angular.module("orderApp",['ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date'])
+var orderApp=angular.module("orderApp",['ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter'])
 .service("orderService", function($http)
 {
 this.entityList =		[];
@@ -152,7 +152,7 @@ $scope.del=function()
 orderService.del().then(function(data) { 
 $scope.search();
 });
-};$scope.showPersonDetail= function(index)
+};$scope.trueFalseValues=[true,false];$scope.showPersonDetail= function(index)
 {
 if (index!=null)
 personService.setSelectedEntity(orderService.selectedEntity.personList[index]);
@@ -196,6 +196,7 @@ multiSelect: false,
 enableSelectAll: false,
 paginationPageSizes: [2, 4, 6],
 paginationPageSize: 2,
+enableGridMenu: true,
 columnDefs: [
 { name: 'orderId'},
 { name: 'name'},
@@ -206,9 +207,11 @@ columnDefs: [
  };
 $scope.orderGridOptions.onRegisterApi = function(gridApi){
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
-personService.selectedEntity.show=false;placeService.selectedEntity.show=false;orderService
-.setSelectedEntity(row.entity);
-orderService.selectedEntity.show = true;
+personService.selectedEntity.show=false;placeService.selectedEntity.show=false;if (row.isSelected)
+orderService.setSelectedEntity(row.entity);
+else 
+orderService.setSelectedEntity(null);
+orderService.selectedEntity.show = row.isSelected;
 });
   };
 $scope.placeListGridOptions = {
@@ -217,6 +220,7 @@ multiSelect: false,
 enableSelectAll: false,
 paginationPageSizes: [2, 4, 6],
 paginationPageSize: 2,
+enableGridMenu: true,
 columnDefs: [
 { name: 'placeId'},
 { name: 'description'} 
@@ -225,11 +229,21 @@ columnDefs: [
  };
 $scope.placeListGridOptions.onRegisterApi = function(gridApi){
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
-placeService
-.setSelectedEntity(row.entity);
-placeService.selectedEntity.show = true;
+if (row.isSelected)
+placeService.setSelectedEntity(row.entity);
+else 
+placeService.setSelectedEntity(null);
+placeService.selectedEntity.show = row.isSelected;
 });
   };
+$scope.downloadEntityList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("order.xls",?) FROM ?',[mystyle,$scope.entityList]);
+};
 })
 .service("personService", function($http)
 {
@@ -389,9 +403,17 @@ $scope.del=function()
 personService.selectedEntity.show=false;
 orderService.selectedEntity.person=null;personService.setSelectedEntity(null);
 $scope.updateParent();
-};$scope.init=function()
+};$scope.trueFalseValues=[true,false];$scope.init=function()
 {
 }; 
+$scope.downloadEntityList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("person.xls",?) FROM ?',[mystyle,$scope.entityList]);
+};
 })
 .service("placeService", function($http)
 {
@@ -566,7 +588,7 @@ orderService.selectedEntity.placeList.splice(i,1);
 }
 placeService.setSelectedEntity(null);
 $scope.updateParent();
-};$scope.showOrderDetail= function(index)
+};$scope.trueFalseValues=[true,false];$scope.showOrderDetail= function(index)
 {
 if (index!=null)
 orderService.setSelectedEntity(placeService.selectedEntity.orderList[index]);
@@ -586,5 +608,13 @@ placeService.childrenList.orderList=entityList;
 alert("error");
 });
 }; 
+$scope.downloadEntityList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("place.xls",?) FROM ?',[mystyle,$scope.entityList]);
+};
 })
 ;

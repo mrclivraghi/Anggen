@@ -158,6 +158,9 @@ public class AngularGenerator {
 							html._div();
 							html.div(CssGenerator.getPanelBody().add("ng-class","{'has-error': !"+entityName+"DetailForm."+field.getName()+".$valid, 'has-success': "+entityName+"DetailForm."+field.getName()+".$valid}"))
 							.label((new HtmlAttributes()).add("id", field.getName())).content(field.getName())
+									
+							
+							
 							.button(CssGenerator.getButton("show"+Utility.getFirstUpper(field.getName())+"Detail"))
 							.content("Add new "+field.getName());
 							html.div((new HtmlAttributes()).add("id",field.getName()).add("ng-if", "selectedEntity."+field.getName()+"List.length>0"))
@@ -171,24 +174,31 @@ public class AngularGenerator {
 						}else
 						{//entity
 							html.div((new HtmlAttributes()).add("class", style+" right-input").add("ng-class","{'has-error': !"+entityName+"DetailForm."+field.getName()+".$valid, 'has-success': "+entityName+"DetailForm."+field.getName()+".$valid}"))
-							.button(CssGenerator.getButton("show"+Utility.getFirstUpper(field.getName())+"Detail()").add("ng-if", "selectedEntity."+field.getName()+"==null"))
-							.content("Add new "+field.getName());
-
-
-
-							html
+							
 							.label((new HtmlAttributes()).add("for", field.getName()))
 							.content(field.getName())
-
+							
+							.div((new HtmlAttributes()).add("class", "input-group"))
+							
+							
 							.select(CssGenerator.getSelect("").add("ng-model", "selectedEntity."+field.getName())
 									.add("id", field.getName())
 									.add("name", field.getName())
 									.add("ng-options", field.getName()+" as "+reflectionManager.getDescriptionField(field.getFieldClass())+" for "+field.getName()+" in childrenList."+field.getName()+"List track by "+field.getName()+"."+field.getName()+"Id").enctype("UTF-8"))
-									._select()
-									.button(CssGenerator.getButton("show"+Utility.getFirstUpper(field.getName())+"Detail").add("id",field.getName()).add("ng-if", "selectedEntity."+field.getName()+"!=null"))
-									//.p((new HtmlAttributes()).add("ng-click", "show"+Utility.getFirstUpper(field.getName())+"Detail()").add("ng-if", "selectedEntity."+field.getName()+"!=null"))
-									.content(field.getName()+": {{selectedEntity."+field.getName()+"."+field.getName()+"Id}}");
+									._select();
+									
 							renderValidator(html,field);
+							
+
+							html.span((new HtmlAttributes()).add("class", "input-group-btn"))
+							.button(CssGenerator.getButton("show"+Utility.getFirstUpper(field.getName())+"Detail").add("id",field.getName()).add("ng-if", "selectedEntity."+field.getName()+"==null"))
+							.content("Add new "+field.getName())
+							.button(CssGenerator.getButton("show"+Utility.getFirstUpper(field.getName())+"Detail").add("id",field.getName()).add("ng-if", "selectedEntity."+field.getName()+"!=null"))
+									//.p((new HtmlAttributes()).add("ng-click", "show"+Utility.getFirstUpper(field.getName())+"Detail()").add("ng-if", "selectedEntity."+field.getName()+"!=null"))
+									.content("Show detail")
+							._span();
+
+							html._div();
 							html._div();
 
 

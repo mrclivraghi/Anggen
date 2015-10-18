@@ -1,5 +1,7 @@
 package it.polimi.generation;
 
+import it.polimi.utils.Field;
+
 import org.rendersnake.HtmlAttributes;
 import org.rendersnake.internal.CharactersWriteable;
 
@@ -67,6 +69,33 @@ public  class CssGenerator {
 			htmlAttributes.add("class", "form-control "+style );
 		return htmlAttributes;
 	}
+	
+	public static HtmlAttributes getInputGroup(Boolean search,String entityName,Field field)
+	{
+		HtmlAttributes htmlAttributes= new HtmlAttributes();
+		htmlAttributes.add("class", "input-group");
+		/*if (!search)
+		{
+			htmlAttributes.add("ng-class","{'has-error': !"+entityName+"DetailForm."+field.getName()+".$valid, 'has-success': "+entityName+"DetailForm."+field.getName()+".$valid}");
+			//htmlAttributes.add("style", "height:59px");
+		}*/
+		
+		return htmlAttributes;
+	}
+	
+	public static HtmlAttributes getExternalFieldPanel(String style,Boolean search, String entityName,Field field)
+	{
+		HtmlAttributes htmlAttributes= new HtmlAttributes();
+		htmlAttributes.add("class", style+" right-input");
+		if (!search)
+		{
+			htmlAttributes.add("ng-class","{'has-error': !"+entityName+"DetailForm."+field.getName()+".$valid, 'has-success': "+entityName+"DetailForm."+field.getName()+".$valid}");
+			htmlAttributes.add("style", "height:59px");
+		}
+		
+		return htmlAttributes;
+	}
+	
 	
 	
 }

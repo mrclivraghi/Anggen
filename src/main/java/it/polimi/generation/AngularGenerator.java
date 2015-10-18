@@ -55,7 +55,8 @@ public class AngularGenerator {
 		if (isParent)
 		{
 			html.form((new HtmlAttributes()).add("id", entityName+"SearchBean"));
-			renderSearchForm(html,"searchBean");
+			//renderSearchForm(html,"searchBean");
+			renderForm(html, true);
 			html._form();
 		}
 		//list
@@ -93,7 +94,8 @@ public class AngularGenerator {
 		//.p().content("DETAIL");
 		//renderDetail(html);
 		//renderSearchForm(html, "selectedEntity");
-		renderDetail(html);
+		//renderDetail(html);
+		renderForm(html, false);
 		html._form();
 	
 		html._div();
@@ -243,6 +245,182 @@ public class AngularGenerator {
 		 */
 	}
 
+	
+	private void renderForm(HtmlCanvas html,Boolean search) throws IOException {
+		html.div(CssGenerator.getPanel());
+		html.div(CssGenerator.getPanelHeader());
+		String baseEntity;
+		if (search)
+		{
+			baseEntity="searchBean";
+			html.content("Search form "+entityName);
+		}
+		else
+		{
+			baseEntity="selectedEntity";
+			html.content("Detail "+entityName+" {{ selectedEntity."+entityName+"Id }}");
+		}
+		html.div(CssGenerator.getPanelBody());
+		String style="";
+		for (Field field: fieldList)
+		{
+			if (search && ReflectionManager.hasIgnoreSearch(field)) continue;
+			if (!search && ReflectionManager.hasIgnoreUpdate(field)) continue;
+			
+			style= style.equals("pull-left")? "pull-right": "pull-left";
+			if (field.getIsEnum())
+			{
+				html.div(CssGenerator.getExternalFieldPanel(style, search, entityName, field));
+				
+				html.div(CssGenerator.getInputGroup(search, entityName, field));
+				html.span((new HtmlAttributes()).add("class","input-group-addon")).content(field.getName());
+				//.label((new HtmlAttributes()).add("id", field.getName())).content(field.getName());
+				html.select(getFieldHtmlAttributes(field, baseEntity, !search, style)
+				.add("ng-options", field.getName()+ " as "+field.getName()+" for "+field.getName()+" in childrenList."+field.getName()+"List").enctype("UTF-8"));
+				html._select();
+				html._div();
+				if (!search)
+				renderValidator(html, field);
+				html._div();
+			}
+			else
+			{
+				if (reflectionManager.isKnownClass(field.getFieldClass()))
+				{
+
+					//html.p()
+					//.content(field.getName())
+					html.div(CssGenerator.getExternalFieldPanel(style, search, entityName, field));
+					html.div(CssGenerator.getInputGroup(search, entityName, field));
+					html.span((new HtmlAttributes()).add("class","input-group-addon")).content(field.getName());
+					//.input(getFieldHtmlAttributes(field,"selectedEntity",true,""));
+					if (getInputType(field).equals("checkbox"))
+					{
+						//html.div((new HtmlAttributes()).add("class", "input-group"))
+						html.select(getFieldHtmlAttributes(field, baseEntity, !search, "").add("ng-options", "value for value in trueFalseValues"))
+						._select();
+						//.span((new HtmlAttributes()).add("class", "input-group-btn"))
+						//.button((new HtmlAttributes()).add("class", "btn btn-default")).content(field.getName())
+						//._span()
+						//._div();
+					}else
+						html.input(getFieldHtmlAttributes(field,baseEntity,!search,""));
+					html._div();
+					if (!search)
+					renderValidator(html,field);
+					html._div();
+				} else
+					if (field.getCompositeClass()!=null  && !(parentClass.contains(field.getFieldClass())))
+					{ // entity or list!
+
+						if (search)
+						{
+							html.div((new HtmlAttributes()).add("class", style+" right-input").add("style","height: 59px;"));
+							
+							html.div((new HtmlAttributes()).add("class", "input-group"));
+							html.span((new HtmlAttributes()).add("class","input-group-addon")).content(field.getName());
+						
+							html.select(CssGenerator.getSelect("").add("ng-model", baseEntity+"."+field.getName()+"."+field.getName()+"Id")
+									.add("id", field.getName())
+									.add("ng-options", field.getName()+"."+field.getName()+"Id as "+reflectionManager.getDescriptionField(field.getFieldClass())+" for "+field.getName()+" in childrenList."+field.getName()+"List").enctype("UTF-8"))
+									._select();
+							html._div()._div();
+						} else
+						{
+
+
+							if (field.getCompositeClass().fullName().contains("java.util.List"))
+							{ //list
+								//html.div((new HtmlAttributes()).add("class", style))
+								//.label((new HtmlAttributes()).add("for", field.getName()))
+								//.content(field.getName())
+								html._div();
+								html.div(CssGenerator.getPanelBody().add("ng-class","{'has-error': !"+entityName+"DetailForm."+field.getName()+".$valid, 'has-success': "+entityName+"DetailForm."+field.getName()+".$valid}"))
+								.label((new HtmlAttributes()).add("id", field.getName())).content(field.getName())
+								.button(CssGenerator.getButton("show"+Utility.getFirstUpper(field.getName())+"Detail"))
+								.content("Add new "+field.getName());
+								html.div((new HtmlAttributes()).add("id",field.getName()).add("ng-if", "selectedEntity."+field.getName()+"List.length>0"))
+								.div((new HtmlAttributes()).add("style","top: 100px").add("ui-grid", field.getName()+"ListGridOptions").add("ui-grid-pagination", "").add("ui-grid-selection",""))
+								._div();
+								renderValidator(html,field);
+								html._div()._div();
+								html.div(CssGenerator.getPanelBody());
+							}else
+							{//entity
+								html.div(CssGenerator.getExternalFieldPanel(style, search, entityName, field));
+
+								html.div((new HtmlAttributes()).add("class", "input-group"));
+								//html.span((new HtmlAttributes()).add("class","input-group-addon")).content(field.getName());
+								//<span class="input-group-addon">Ordine</span>
+								html.span((new HtmlAttributes()).add("class", "input-group-addon")).content(field.getName());
+								html.select(CssGenerator.getSelect("").add("ng-model", "selectedEntity."+field.getName())
+										.add("id", field.getName())
+										.add("name", field.getName())
+										.add("ng-options", field.getName()+" as "+reflectionManager.getDescriptionField(field.getFieldClass())+" for "+field.getName()+" in childrenList."+field.getName()+"List track by "+field.getName()+"."+field.getName()+"Id").enctype("UTF-8"))
+										._select();
+
+								renderValidator(html,field);
+
+
+								html.span((new HtmlAttributes()).add("class", "input-group-btn"))
+								.button(CssGenerator.getButton("show"+Utility.getFirstUpper(field.getName())+"Detail").add("id",field.getName()).add("ng-if", "selectedEntity."+field.getName()+"==null"))
+								.content("Add new "+field.getName())
+								.button(CssGenerator.getButton("show"+Utility.getFirstUpper(field.getName())+"Detail").add("id",field.getName()).add("ng-if", "selectedEntity."+field.getName()+"!=null"))
+								//.p((new HtmlAttributes()).add("ng-click", "show"+Utility.getFirstUpper(field.getName())+"Detail()").add("ng-if", "selectedEntity."+field.getName()+"!=null"))
+								.content("Show detail")
+								._span();
+
+								html._div();
+								html._div();
+
+
+							}
+						}
+					}
+			}
+		
+		}
+		html._div();
+		html.div(CssGenerator.getPanelBody());
+		if (!search)
+		{
+			html.div((new HtmlAttributes()).add("class", "pull-left"))
+			.form((new HtmlAttributes()).add("id", entityName+"ActionButton").add("ng-if", "selectedEntity.show"))
+			//.p().content("ACTION BUTTON")
+			.button(CssGenerator.getButton("insert").add("ng-if", "selectedEntity."+entityName+"Id==undefined"))
+			.content("Insert")
+			.button(CssGenerator.getButton("update").add("ng-if", "selectedEntity."+entityName+"Id>0"))
+			.content("Update")
+			.button(CssGenerator.getButton("del").add("ng-if", "selectedEntity."+entityName+"Id>0"))
+			.content("Delete");
+			html._form()._div();
+		} else
+		{
+			html.div(CssGenerator.getPanelBody());
+			html.div((new HtmlAttributes()).add("class", "pull-left right-input"))
+			.button(CssGenerator.getButton("addNew"))
+			.content("Add new")
+			.button(CssGenerator.getButton("search"))
+			.content("Find")
+			.button(CssGenerator.getButton("reset"))
+			.content("Reset")
+			._div()
+			._div();
+		}
+		html._div()._div();
+		/*
+		<p ng-click="showPlaceDetail()" >Add new place 
+		</p>
+		<div ng-if="selectedEntity.placeList.length>0">
+			<ul>
+				<li ng-repeat="entity in selectedEntity.placeList" ng-click="showPlaceDetail($index)">{{$index}}--{{entity.placeId}}--{{entity.description}}</li>
+			</ul>
+		</div>
+		 */
+	}
+
+	
+	
 	private void renderValidator(HtmlCanvas html,Field field) throws IOException
 	{
 		Annotation[] annotationList= field.getAnnotationList();

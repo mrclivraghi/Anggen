@@ -64,6 +64,7 @@ public class HtmlGenerator {
 			.macros().javascript("http://ui-grid.info/release/ui-grid.js")
 			.macros().javascript("../resources/general_theme/js/angular/"+entityName+".js")
 			.macros().javascript("../resources/general_theme/js/date.js")
+			.macros().javascript("../resources/general_theme/js/utility.js")
 			.macros().javascript("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js")
 			.macros().javascript("http://cdn.jsdelivr.net/alasql/0.2/alasql.min.js");
 			
@@ -107,7 +108,7 @@ public class HtmlGenerator {
 						childrenHtmlGenerator.generateEntityView(html);
 						//generateEntityView(html, false,field.getName());
 					}*/
-					html.script((new HtmlAttributes()).add("type", "text/javascript")).content("var content = document.querySelector('link[rel="+'"'+"import"+'"'+"]').import; \n $(\"body\").prepend(content.documentElement.getElementsByTagName(\"body\")[0]);",false);
+					html.script((new HtmlAttributes()).add("type", "text/javascript")).content("loadMenu();	activeMenu(\""+entityName+"\");",false);
 					html._body()._html();
 		} catch (IOException e) {
 			e.printStackTrace();

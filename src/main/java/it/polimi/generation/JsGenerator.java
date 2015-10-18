@@ -391,6 +391,7 @@ public class JsGenerator {
 			sb.append("$scope.updateParent();\n");
 		}
 		sb.append("};");
+		sb.append("$scope.trueFalseValues=[true,false];");
 		//if (isParent)
 		{
 			for (Field field: childrenList)

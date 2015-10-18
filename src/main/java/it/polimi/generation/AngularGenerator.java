@@ -142,8 +142,20 @@ public class AngularGenerator {
 					//.content(field.getName())
 					html.div((new HtmlAttributes()).add("class", style+" right-input").add("ng-class","{'has-error': !"+entityName+"DetailForm."+field.getName()+".$valid, 'has-success': "+entityName+"DetailForm."+field.getName()+".$valid}").add("style","height: 59px;"))
 					.label((new HtmlAttributes()).add("for", field.getName()))
-					.content(field.getName())
-					.input(getFieldHtmlAttributes(field,"selectedEntity",true,""));
+					.content(field.getName());
+					//.input(getFieldHtmlAttributes(field,"selectedEntity",true,""));
+					if (getInputType(field).equals("checkbox"))
+					{
+						html.div((new HtmlAttributes()).add("class", "input-group"))
+						.select((new HtmlAttributes()).add("class", "form-control").add("ng-model", entityName+"."+field.getName()).add("name", field.getName()).add("ng-options", "value for value in trueFalseValues"))
+						._select()
+						.span((new HtmlAttributes()).add("class", "input-group-btn"))
+						.button((new HtmlAttributes()).add("class", "btn btn-default")).content(field.getName())
+						._span()
+						._div();
+					}else
+					html.input(getFieldHtmlAttributes(field,entityName,false,""));
+					
 					renderValidator(html,field);
 
 					html._div();
@@ -318,8 +330,8 @@ public class AngularGenerator {
 		if (field.getName().equals(entityName+"Id")&&validation)
 			readOnly="true";
 		String fieldForm=baseEntity+"."+Utility.getFirstLower(field.getName());
-		HtmlAttributes htmlAttributes = CssGenerator.getInput(style);
 		String type= getInputType(field);
+		HtmlAttributes htmlAttributes = CssGenerator.getInput(style,!type.equals("checkbox"));
 		htmlAttributes.add("type", type);
 		if (ReflectionManager.isTimeField(field))
 		{
@@ -373,9 +385,20 @@ public class AngularGenerator {
 						//.p()
 						//.content(field.getName())
 						html.div((new HtmlAttributes()).add("class", style+" right-input").add("style","height: 59px;"))
-						.label((new HtmlAttributes()).add("id", field.getName())).content(field.getName())
-						.input(getFieldHtmlAttributes(field,baseEntity,false,""))._div();
-
+						.label((new HtmlAttributes()).add("id", field.getName())).content(field.getName());
+						if (getInputType(field).equals("checkbox"))
+						{
+							html.div((new HtmlAttributes()).add("class", "input-group"))
+							.select((new HtmlAttributes()).add("class", "form-control").add("ng-model", "searchBean."+field.getName()).add("name", field.getName()).add("ng-options", "value for value in trueFalseValues"))
+							._select()
+							.span((new HtmlAttributes()).add("class", "input-group-btn"))
+							.button((new HtmlAttributes()).add("class", "btn btn-default")).content(field.getName())
+							._span()
+							._div();
+						}else
+						html.input(getFieldHtmlAttributes(field,baseEntity,false,""));
+						
+						html._div();
 
 					} else
 					{

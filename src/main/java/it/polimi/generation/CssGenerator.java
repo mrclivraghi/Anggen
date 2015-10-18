@@ -58,6 +58,15 @@ public  class CssGenerator {
 		htmlAttributes.add("class", "navbar navbar-default");
 		return htmlAttributes;
 	}
+
+
+	public static HtmlAttributes getInput(String style, boolean formControl) {
+		HtmlAttributes htmlAttributes= new HtmlAttributes();
+		htmlAttributes.add("aria-describedby", "sizing-addon3");
+		if (formControl)
+			htmlAttributes.add("class", "form-control "+style );
+		return htmlAttributes;
+	}
 	
 	
 }

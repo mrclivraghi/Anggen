@@ -202,7 +202,7 @@ public class AngularGenerator {
 								downloadCanvas
 								.button(CssGenerator.getButton("show"+Utility.getFirstUpper(field.getName())+"Detail"," pull-right").add("style", "margin-top: -7px"))
 								.content("Add new "+field.getName())
-								.button(CssGenerator.getButton("downloadEntityList","pull-right").add("style", "margin-top:-7px"))
+								.button(CssGenerator.getButton("download"+Utility.getFirstUpper(field.getName())+"List","pull-right").add("style", "margin-top:-7px"))
 								.span((new HtmlAttributes()).add("class", "glyphicon glyphicon-download-alt").add("aria-hidden", "true"))
 								._span()
 								._button();

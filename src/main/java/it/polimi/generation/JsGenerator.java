@@ -459,6 +459,33 @@ public class JsGenerator {
 			exportFields="*";
 		sb.append("alasql('SELECT "+exportFields+" INTO XLSXML(\""+entityName+".xls\",?) FROM ?',[mystyle,$scope.entityList]);\n");
 		sb.append("};\n");
+		
+		
+		for (Field field: childrenList)
+		{
+			sb.append("$scope.download"+Utility.getFirstUpper(field.getName())+"List=function()\n");
+			sb.append("{\n");
+			sb.append("var mystyle = {\n");
+			sb.append(" headers:true, \n");
+			sb.append("column: {style:{Font:{Bold:\"1\"}}}\n");
+			sb.append("};\n");
+			
+			exportFields="";
+			ReflectionManager reflectionManager = new ReflectionManager(field.getFieldClass());
+			for (Field childrenField: reflectionManager.getChildrenFieldList())
+			{
+				if (ReflectionManager.hasExcelExport(childrenField))
+					exportFields=exportFields+field.getName()+",";
+			}
+			
+			if (exportFields.length()>0)
+			{
+				exportFields=exportFields.substring(0, exportFields.length()-1);
+			} else
+				exportFields="*";
+			sb.append("alasql('SELECT "+exportFields+" INTO XLSXML(\""+field.getName()+".xls\",?) FROM ?',[mystyle,$scope.selectedEntity."+field.getName()+"List]);\n");
+			sb.append("};\n");
+		}
 
 		sb.append("})\n");
 		return sb.toString();

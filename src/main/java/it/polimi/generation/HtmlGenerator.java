@@ -15,7 +15,11 @@ import java.util.List;
 import org.rendersnake.DocType;
 import org.rendersnake.HtmlAttributes;
 import org.rendersnake.HtmlCanvas;
-
+/**
+ * Prepare the html template and fill it with angular code and html elements.
+ * @author Marco
+ *
+ */
 public class HtmlGenerator {
 	private List<Field> fieldList;
 	
@@ -46,7 +50,10 @@ public class HtmlGenerator {
 		directoryAngularFiles=file.getAbsolutePath()+"\\src\\main\\webapp\\resources\\theme\\general_theme\\js\\angular\\";
 	}
 	
-	
+	/**
+	 * Include the functional scripts and css
+	 * @param html
+	 */
 	private void includeScripts(HtmlCanvas html)
 	{
 		
@@ -68,7 +75,6 @@ public class HtmlGenerator {
 			.macros().javascript("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js")
 			.macros().javascript("http://cdn.jsdelivr.net/alasql/0.2/alasql.min.js");
 			
-			
 			//css
 			html.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "http://ui-grid.info/release/ui-grid.css"))
 			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"))
@@ -80,6 +86,10 @@ public class HtmlGenerator {
 		}
 	}
 	
+	/**
+	 * Generate the main template of the page
+	 * @throws IllegalAccessException
+	 */
 	public void generateJSP() throws IllegalAccessException
 	{
 		HtmlCanvas html = new HtmlCanvas();
@@ -90,26 +100,16 @@ public class HtmlGenerator {
 			html.render(docType);
 			html.
 			html()
-					.head()
-						.title().content(entityName);
-						
-						includeScripts(html);
-						
-						
-						jsGenerator.saveJsToFile(directoryAngularFiles);
-						//html.script().content(jsGenerator.buildJS(),false)
-					html._head()
-					.body(htmlAttributes.add("ng-app", Utility.getFirstLower(entityName)+"App"));
-					AngularGenerator angularGenerator= new AngularGenerator(classClass, true,new ArrayList<Class>());
-					angularGenerator.generateEntityView(html);
-					/*for (Field field : childrenField)
-					{
-						HtmlGenerator childrenHtmlGenerator = new HtmlGenerator(field.getFieldClass(), false);
-						childrenHtmlGenerator.generateEntityView(html);
-						//generateEntityView(html, false,field.getName());
-					}*/
-					html.script((new HtmlAttributes()).add("type", "text/javascript")).content("loadMenu();	activeMenu(\""+entityName+"\");",false);
-					html._body()._html();
+			.head()
+			.title().content(entityName);
+			includeScripts(html);
+			jsGenerator.saveJsToFile(directoryAngularFiles);
+			html._head()
+			.body(htmlAttributes.add("ng-app", Utility.getFirstLower(entityName)+"App"));
+			AngularGenerator angularGenerator= new AngularGenerator(classClass, true,new ArrayList<Class>());
+			angularGenerator.generateEntityView(html);
+			html.script((new HtmlAttributes()).add("type", "text/javascript")).content("loadMenu();	activeMenu(\""+entityName+"\");",false);
+			html._body()._html();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -122,7 +122,6 @@ public class HtmlGenerator {
 			writer.write(html.toHtml());
 			writer.close();
 		} catch (FileNotFoundException | UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

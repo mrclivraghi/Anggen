@@ -40,6 +40,11 @@ import com.sun.codemodel.JMethod;
 import com.sun.codemodel.JMod;
 import com.sun.codemodel.JVar;
 
+/**
+ * Generates the REST classes to manage the entity
+ * @author Marco
+ *
+ */
 public class RestGenerator {
 	
 	
@@ -59,7 +64,10 @@ public class RestGenerator {
 	
 	private ReflectionManager reflectionManager;
 	
-	
+	/**
+	 * Constructor
+	 * @param classClass
+	 */
 	public RestGenerator(Class classClass)
 	{
 		this.classClass=classClass;
@@ -74,6 +82,11 @@ public class RestGenerator {
 		
 	}
 	
+	/**
+	 * Creates the search query with not null options
+	 * @param method
+	 * @return
+	 */
 	private String getSearchQuery(JMethod method)
 	{
 		String query="select "+alias+" from "+Utility.getFirstUpper(className)+" "+alias+ " where ";
@@ -84,7 +97,6 @@ public class RestGenerator {
 			annotationParam.param("value", field.getName());
 			if (ReflectionManager.isTimeField(field))
 			{
-				//(:birthTime is null or :birthTime=cast(date_trunc('seconds',e.birthTime) as string))
 				query= query + " (:"+field.getName()+" is null or cast(:"+field.getName()+" as string)=cast(date_trunc('seconds',e."+field.getName()+") as string)) and";
 			}
 			else
@@ -123,7 +135,11 @@ public class RestGenerator {
 		return query;
 	}
 	
-	
+	/**
+	 * Main method that generates the classes
+	 * @param dependencyClass
+	 * @param jumpDependency
+	 */
 	public void generateRESTClasses(List<Class> dependencyClass, Boolean jumpDependency)
 	{
 		System.out.println("working for "+classClass.getName());
@@ -139,9 +155,6 @@ public class RestGenerator {
 		try {
 			fieldList = reflectionManager.getFieldList();
 			searchMethod=generateRepository();
-			//String searchMethod="findByOrderIdAndNameAndTimeslotDateAndPersonAndPlace";
-			//System.out.println(searchMethod);
-			//Class repositoryClass=Class.forName(modelClass.getName().replace(".model.", ".repository.")+"Repository");
 			String filePath=classClass.getName().replace(".model.", ".repository.");
 			filePath=filePath.replace(".", "\\");
 			File fileRepository = new File(directory+"\\"+filePath+"Repository.java");
@@ -157,14 +170,12 @@ public class RestGenerator {
 				try {
 					urlRepository=fileRepository.toURL();
 				} catch (MalformedURLException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				
 				try {
 					classLoader= URLClassLoader.newInstance(new URL[] {fileRepository.toURL()});
 				} catch (MalformedURLException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				repositoryClass=Class.forName(classClass.getName().replace(".model.", ".repository.")+"Repository", true, classLoader);
@@ -173,18 +184,17 @@ public class RestGenerator {
 			}
 			else
 				System.out.println(fileRepository.getAbsolutePath()+" does not exists!");
-			//repositoryClass=ClassLoader.getSystemClassLoader().loadClass(modelClass.getName().replace(".model.", ".repository.")+"Repository");
-			
-			//Class serviceClass=Class.forName(modelClass.getName().replace(".model.", ".service.")+"Service");
 			generateServiceImpl(serviceClass,repositoryClass,searchMethod);
 			generateController(serviceClass);
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
-	
+	/**
+	 * Generate the repository class
+	 * @return
+	 */
 	private String generateRepository(){
 		JCodeModel	codeModel = new JCodeModel();
 		JDefinedClass myClass= null;
@@ -201,10 +211,7 @@ public class RestGenerator {
 				if (field.getCompositeClass()==null)
 				{
 					JMethod method=myClass.method(JMod.PUBLIC, listClass, "findBy"+field.getName().replaceFirst(field.getName().substring(0, 1), field.getName().substring(0, 1).toUpperCase()));
-					//if (field.getCompositeClass()==null)
 					method.param(ReflectionManager.getRightParamClass(field), field.getName());
-					//else
-					//method.param(field.getCompositeClass(), field.getName());
 				} else
 				{
 					if (!field.getCompositeClass().fullName().contains("java.util.List"))
@@ -223,7 +230,6 @@ public class RestGenerator {
 			annotationQuery.param("value", query);
 			
 		} catch (JClassAlreadyExistsException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		try {
@@ -233,7 +239,9 @@ public class RestGenerator {
 			}
 		return searchMethod;
 	}
-	
+	/**
+	 * Generates the service interface
+	 */
 	private void generateServiceInterface()
 	{
 		JCodeModel	codeModel = new JCodeModel();
@@ -254,7 +262,6 @@ public class RestGenerator {
 			JMethod update= myClass.method(JMod.PUBLIC, classClass, "update");
 			update.param(classClass, className);
 		} catch (JClassAlreadyExistsException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		try {
@@ -265,7 +272,13 @@ public class RestGenerator {
 	
 	}
 	
-	
+	/**
+	 * Generates the serviceImpl class
+	 * 
+	 * @param interfaceClass
+	 * @param repositoryClass
+	 * @param searchMethod
+	 */
 	private void generateServiceImpl(Class interfaceClass,Class repositoryClass,String searchMethod)
 	{
 		JCodeModel	codeModel = new JCodeModel();
@@ -295,8 +308,6 @@ public class RestGenerator {
 			findById.param(keyClass,lowerClass+"Id");
 			JBlock findByIdBlock= findById.body();
 			findByIdBlock.directStatement("return "+lowerClass+"Repository.findBy"+Utility.getFirstUpper(className)+"Id("+lowerClass+"Id);");
-			//findByIdBlock._return(findByIdExpression);
-			
 			//search
 			JMethod findLike=myClass.method(JMod.PUBLIC, listClass, "find");
 			findLike.annotate(Override.class);
@@ -363,7 +374,10 @@ public class RestGenerator {
 			}
 	
 	}
-
+	/**
+	 * Generates the controller class
+	 * @param serviceClass
+	 */
 	private void generateController(Class serviceClass)
 	{
 		JCodeModel	codeModel = new JCodeModel();
@@ -404,8 +418,6 @@ public class RestGenerator {
 			searchBlock.directStatement("getRightMapping("+lowerClass+"List);");
 			
 			searchBlock.directStatement("return "+response+".body("+lowerClass+"List);");
-			//findByIdBlock._return(findByIdExpression);
-			
 			//getById  
 			JMethod getById=myClass.method(JMod.PUBLIC, ResponseEntity.class, "get"+className+"ById");
 			getById.annotate(ResponseBody.class);
@@ -418,8 +430,6 @@ public class RestGenerator {
 			getByIdBlock.directStatement("List<"+Utility.getFirstUpper(className)+"> "+lowerClass+"List="+lowerClass+"Service.findById("+keyClass.getName()+".valueOf("+lowerClass+"Id));");
 			getByIdBlock.directStatement("getRightMapping("+lowerClass+"List);");
 			getByIdBlock.directStatement("return "+response+".body("+lowerClass+"List);");
-			//findByIdBlock._return(findByIdExpression);
-			
 			//deleteOrderById
 			JMethod delete = myClass.method(JMod.PUBLIC, ResponseEntity.class, "delete"+className+"ById");
 			delete.annotate(ResponseBody.class);
@@ -465,18 +475,7 @@ public class RestGenerator {
 			getRightMappingListBlock.directStatement("getRightMapping("+lowerClass+");");
 			getRightMappingListBlock.directStatement("}");
 			getRightMappingListBlock.directStatement("return "+lowerClass+"List;");
-			/*
-			 *  private void getRightMapping(SeedQuery seedQuery)
-    {
-    	if (seedQuery.getPhotoList()!=null)
-    	for (Photo photo : seedQuery.getPhotoList())
-    	{
-    		photo.setSeedQuery(null);
-    	}
-    	if (seedQuery.getMountain()!=null)
-    		seedQuery.getMountain().setSeedQueryList(null);
-    }
-			 */
+			
 			JMethod getRightMapping= myClass.method(JMod.PRIVATE, void.class, "getRightMapping");
 			getRightMapping.param(classClass, lowerClass);
 			JBlock getRightMappingBlock = getRightMapping.body();
@@ -485,7 +484,6 @@ public class RestGenerator {
 			
 			
 		} catch (JClassAlreadyExistsException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		try {
@@ -496,6 +494,13 @@ public class RestGenerator {
 	
 	}
 	
+	/**
+	 * Nullify the coming back relationships
+	 * @param theClass
+	 * @param block
+	 * @param parentClass
+	 * @param entityName
+	 */
 	private static void generateRightMapping_v2(Class theClass, JBlock block,List<Class> parentClass,String entityName)
 	{
 		ReflectionManager reflectionManager = new ReflectionManager(theClass);
@@ -503,7 +508,6 @@ public class RestGenerator {
 		String lowerClass=entityName!=null? entityName:reflectionManager.parseName();
 		for (Field field: reflectionManager.getChildrenFieldList())
 		{
-			//generate entity.getField() or entity.getfieldList(); 
 			String newEntityName= lowerClass;
 			if (field.getCompositeClass().fullName().contains("java.util.List"))
 				newEntityName=Utility.getFirstLower(field.getName());
@@ -520,7 +524,6 @@ public class RestGenerator {
 				{
 					block.directStatement("for ("+field.getFieldClass().getName()+" "+Utility.getFirstLower(field.getName())+" : "+lowerClass+".get"+Utility.getFirstUpper(field.getName())+"List())");
 					block.directStatement("{");
-					//block.directStatement(""+Utility.getFirstLower(field.getName())+".set"+Utility.getFirstUpper(lowerClass)+"(null);");
 					if (!reflectionManager.isKnownClass(field.getFieldClass()))
 					RestGenerator.generateRightMapping_v2(field.getFieldClass(), block,parentClass,newEntityName);
 					parentClass=oldParentClassList;
@@ -578,6 +581,12 @@ public class RestGenerator {
 		}
 	}
 	*/
+	/**
+	 * Check if a relationship is a coming back one
+	 * @param field
+	 * @return
+	 */
+	/*
 	private static Boolean isBackRelationship(Field field)
 	{
 		if (field.getAnnotationList()==null || field.getAnnotationList().length==0) return false;
@@ -588,6 +597,6 @@ public class RestGenerator {
 		}
 		
 		return false;
-	}
+	}*/
 	
 }

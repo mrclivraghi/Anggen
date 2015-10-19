@@ -16,11 +16,18 @@ import javax.persistence.Entity;
 import org.reflections.Reflections;
 import org.rendersnake.HtmlAttributes;
 import org.rendersnake.HtmlCanvas;
-
+/**
+ * Main class that runs the generation of the files
+ * @author Marco
+ *
+ */
 public class Generator {
 	
 	public static final String modelPackage= "it.polimi.model";
 	
+	/**
+	 * Generate the html menu
+	 */
 	public static void GenerateMenu()
 	{
 		HtmlCanvas html = new HtmlCanvas();

@@ -42,6 +42,7 @@ public class HtmlGenerator {
 	
 	public static final String modelPackage= "it.polimi.model";
 	
+	public static final Boolean bootstrapMenu=true;
 	
 	public HtmlGenerator(Class classClass)
 	{
@@ -124,7 +125,14 @@ public class HtmlGenerator {
 			.body(htmlAttributes.add("ng-app", Utility.getFirstLower(entityName)+"App"));
 			AngularGenerator angularGenerator= new AngularGenerator(classClass, true,new ArrayList<Class>());
 			angularGenerator.generateEntityView(html);
-			html.script((new HtmlAttributes()).add("type", "text/javascript")).content("loadMenu();	activeMenu(\""+entityName+"\");",false);
+			
+			//TODO switch
+			String loadMenuScript="loadMenu(); ";
+			if (HtmlGenerator.bootstrapMenu)
+				loadMenuScript=loadMenuScript+" activeMenu(\""+entityName+"\");";
+			else
+				loadMenuScript=loadMenuScript+" $('#menu').easytree(easyTreeOption);";
+			html.script((new HtmlAttributes()).add("type", "text/javascript")).content(loadMenuScript,false);
 			html._body()._html();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -145,51 +153,15 @@ public class HtmlGenerator {
 	
 	public static void GenerateEasyTreeMenu()
 	{
-		/*
-		 * <div id="demo_menu">
-        <ul>
-            <li><a href="http://www.easyjstree.com" target="_blank" class="current">Home</a></li>
-            <li class="isFolder">
-                Folder 1
-                <ul>
-                    <li><a href="http://www.google.com" target="_blank">Go to Google.com</a></li>
-                    <li><a href="http://www.yahoo.com" target="_blank">Go to Yahoo.com</a></li>
-                </ul>
-            </li>
-            <li>
-                Node 1
-                <ul>
-                    <li>Sub Node 1</li>
-                    <li>Sub Node 2</li>
-                    <li>Sub Node 3</li>
-                </ul>
-            </li>
-            <li>Node 2</li>
-        </ul>
-    </div>
-    <script>
-        $('#demo_menu').easytree();
-    </script>
-		 */
 		HtmlCanvas html= new HtmlCanvas();
 		ReflectionManager reflectionManager = new ReflectionManager(Object.class);
 		try {
-			html.div((new HtmlAttributes()).add("id", "menu"))
+			html.div((new HtmlAttributes()).add("id", "menu").add("style", "width: 250px;"))
 			.ul();
 			List<String> packageList= ReflectionManager.getSubPackages(modelPackage);
 			
 			for (String myPackage: packageList)
 			{
-				/*
-				 * <li class="isFolder">
-                Folder 1
-                <ul>
-                    <li><a href="http://www.google.com" target="_blank">Go to Google.com</a></li>
-                    <li><a href="http://www.yahoo.com" target="_blank">Go to Yahoo.com</a></li>
-                </ul>
-            </li>
-				 * 
-				 */
 				html.li((new HtmlAttributes()).add("class", "isFolder"));
 				Set<Class<?>> packageClassList = ReflectionManager.getClassInPackage(myPackage);
 				HtmlCanvas folderHtml = new HtmlCanvas();
@@ -218,7 +190,7 @@ public class HtmlGenerator {
     </script>
 			 * 
 			 */
-			html.script().content("$('#menu').easytree();",false);
+			html.script().content("function stateChanged(nodes, nodesJson) {var t = nodes[0].text; $.cookie('menu', nodesJson); }; var easyTreeOption={data: $.cookie('menu'), stateChanged: stateChanged};",false);
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

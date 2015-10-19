@@ -54,7 +54,10 @@ public class Generator {
 				e.printStackTrace();
 			}
 		}
-		HtmlGenerator.GenerateMenu();
+		if (HtmlGenerator.bootstrapMenu)
+			HtmlGenerator.GenerateMenu();
+		else
+			HtmlGenerator.GenerateEasyTreeMenu();
 		
 	}
 

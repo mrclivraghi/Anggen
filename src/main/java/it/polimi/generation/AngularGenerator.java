@@ -59,7 +59,14 @@ public class AngularGenerator {
 	 * @throws IOException
 	 */
 	public void generateEntityView(HtmlCanvas html) throws IOException {
-		html.div((new HtmlAttributes()).add("ng-controller", entityName+"Controller"));
+		HtmlAttributes mainControllerAttributes = new HtmlAttributes();
+		mainControllerAttributes.add("ng-controller", entityName+"Controller");
+		
+		if (!HtmlGenerator.bootstrapMenu)
+		{
+			mainControllerAttributes.add("style", "position: absolute; left: 250px; width:80%; top: 30px;");
+		}
+		html.div(mainControllerAttributes);
 		//search bean
 		if (isParent)
 		{

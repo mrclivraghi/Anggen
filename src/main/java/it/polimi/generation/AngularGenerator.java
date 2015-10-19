@@ -197,14 +197,24 @@ public class AngularGenerator {
 
 							if (field.getCompositeClass().fullName().contains("java.util.List"))
 							{ //list
+								
+								HtmlCanvas downloadCanvas= new HtmlCanvas();
+								downloadCanvas
+								.button(CssGenerator.getButton("show"+Utility.getFirstUpper(field.getName())+"Detail"," pull-right").add("style", "margin-top: -7px"))
+								.content("Add new "+field.getName())
+								.button(CssGenerator.getButton("downloadEntityList","pull-right").add("style", "margin-top:-7px"))
+								.span((new HtmlAttributes()).add("class", "glyphicon glyphicon-download-alt").add("aria-hidden", "true"))
+								._span()
+								._button();
+								
 								html._div();
 								html.div(CssGenerator.getPanel())
 								.div(CssGenerator.getPanelHeader())
-								.content(field.getName());
+								.content(field.getName()+downloadCanvas.toHtml(),false);
 								html.div(CssGenerator.getPanelBody().add("ng-class","{'has-error': !"+entityName+"DetailForm."+field.getName()+".$valid, 'has-success': "+entityName+"DetailForm."+field.getName()+".$valid}"))
-								.label((new HtmlAttributes()).add("id", field.getName())).content(field.getName())
-								.button(CssGenerator.getButton("show"+Utility.getFirstUpper(field.getName())+"Detail"))
-								.content("Add new "+field.getName());
+								.label((new HtmlAttributes()).add("id", field.getName())).content(field.getName());
+								//.button(CssGenerator.getButton("show"+Utility.getFirstUpper(field.getName())+"Detail"))
+								//.content("Add new "+field.getName());
 								html.div((new HtmlAttributes()).add("id",field.getName()).add("ng-if", "selectedEntity."+field.getName()+"List.length>0"))
 								.div((new HtmlAttributes()).add("style","top: 100px").add("ui-grid", field.getName()+"ListGridOptions").add("ui-grid-pagination", "").add("ui-grid-selection",""))
 								._div();

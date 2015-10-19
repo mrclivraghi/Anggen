@@ -196,7 +196,7 @@ public class HtmlGenerator {
 				folderHtml.ul();
 				for (Class myClass: packageClassList)
 				{
-					html.li().a((new HtmlAttributes()).add("href", "../"+reflectionManager.parseName(myClass.getName())+"/")).content(reflectionManager.parseName(myClass.getName()))._li();
+					folderHtml.li().a((new HtmlAttributes()).add("href", "../"+reflectionManager.parseName(myClass.getName())+"/")).content(reflectionManager.parseName(myClass.getName()))._li();
 				}
 				folderHtml._ul();
 				html.content(reflectionManager.parseName(myPackage)+folderHtml.toHtml(),false);

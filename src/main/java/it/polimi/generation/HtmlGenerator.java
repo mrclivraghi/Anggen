@@ -51,10 +51,10 @@ public class HtmlGenerator {
 	}
 	
 	/**
-	 * Include the functional scripts and css
+	 * Include the functional js scripts
 	 * @param html
 	 */
-	private void includeScripts(HtmlCanvas html)
+	private void includeJavascriptScripts(HtmlCanvas html)
 	{
 		
 		try {
@@ -74,16 +74,24 @@ public class HtmlGenerator {
 			.macros().javascript("../resources/general_theme/js/utility.js")
 			.macros().javascript("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js")
 			.macros().javascript("http://cdn.jsdelivr.net/alasql/0.2/alasql.min.js");
-			
-			//css
+			} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void incluseCssFiles(HtmlCanvas html)
+	{
+		try {
 			html.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "http://ui-grid.info/release/ui-grid.css"))
 			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"))
 			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../resources/general_theme/css/main.css"))
 			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../resources/general_theme/css/jquery-ui.css"))
 			.link((new HtmlAttributes()).add("rel","import").add("href", "../resources/general_theme/static/menu.html"));
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	
 	}
 	
 	/**
@@ -102,7 +110,8 @@ public class HtmlGenerator {
 			html()
 			.head()
 			.title().content(entityName);
-			includeScripts(html);
+			includeJavascriptScripts(html);
+			incluseCssFiles(html);
 			jsGenerator.saveJsToFile(directoryAngularFiles);
 			html._head()
 			.body(htmlAttributes.add("ng-app", Utility.getFirstLower(entityName)+"App"));

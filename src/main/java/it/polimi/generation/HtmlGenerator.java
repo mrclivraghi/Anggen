@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.Entity;
+
 import org.rendersnake.DocType;
 import org.rendersnake.HtmlAttributes;
 import org.rendersnake.HtmlCanvas;
@@ -40,6 +42,7 @@ public class HtmlGenerator {
 	
 	public static final String modelPackage= "it.polimi.model";
 	
+	public static final Boolean bootstrapMenu=true;
 	
 	public HtmlGenerator(Class classClass)
 	{
@@ -75,6 +78,7 @@ public class HtmlGenerator {
 			.macros().javascript("../resources/general_theme/js/angular/"+entityName+".js")
 			.macros().javascript("../resources/general_theme/js/date.js")
 			.macros().javascript("../resources/general_theme/js/utility.js")
+			.macros().javascript("../resources/general_theme/js/jquery.easytree.js")
 			.macros().javascript("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js")
 			.macros().javascript("http://cdn.jsdelivr.net/alasql/0.2/alasql.min.js");
 			} catch (IOException e) {
@@ -89,6 +93,7 @@ public class HtmlGenerator {
 			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"))
 			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../resources/general_theme/css/main.css"))
 			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../resources/general_theme/css/jquery-ui.css"))
+			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../resources/general_theme/css/easytree/skin-win8/ui.easytree.css"))
 			.link((new HtmlAttributes()).add("rel","import").add("href", "../resources/general_theme/static/menu.html"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -120,7 +125,14 @@ public class HtmlGenerator {
 			.body(htmlAttributes.add("ng-app", Utility.getFirstLower(entityName)+"App"));
 			AngularGenerator angularGenerator= new AngularGenerator(classClass, true,new ArrayList<Class>());
 			angularGenerator.generateEntityView(html);
-			html.script((new HtmlAttributes()).add("type", "text/javascript")).content("loadMenu();	activeMenu(\""+entityName+"\");",false);
+			
+			//TODO switch
+			String loadMenuScript="loadMenu(); ";
+			if (HtmlGenerator.bootstrapMenu)
+				loadMenuScript=loadMenuScript+" activeMenu(\""+entityName+"\");";
+			else
+				loadMenuScript=loadMenuScript+" $('#menu').easytree(easyTreeOption);";
+			html.script((new HtmlAttributes()).add("type", "text/javascript")).content(loadMenuScript,false);
 			html._body()._html();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -139,6 +151,66 @@ public class HtmlGenerator {
 		
 	}
 	
+	public static void GenerateEasyTreeMenu()
+	{
+		HtmlCanvas html= new HtmlCanvas();
+		ReflectionManager reflectionManager = new ReflectionManager(Object.class);
+		try {
+			html.div((new HtmlAttributes()).add("id", "menu").add("style", "width: 250px;"))
+			.ul();
+			List<String> packageList= ReflectionManager.getSubPackages(modelPackage);
+			
+			for (String myPackage: packageList)
+			{
+				html.li((new HtmlAttributes()).add("class", "isFolder"));
+				Set<Class<?>> packageClassList = ReflectionManager.getClassInPackage(myPackage);
+				HtmlCanvas folderHtml = new HtmlCanvas();
+				folderHtml.ul();
+				for (Class myClass: packageClassList)
+				{
+					folderHtml.li().a((new HtmlAttributes()).add("href", "../"+reflectionManager.parseName(myClass.getName())+"/")).content(reflectionManager.parseName(myClass.getName()))._li();
+				}
+				folderHtml._ul();
+				html.content(reflectionManager.parseName(myPackage)+folderHtml.toHtml(),false);
+				
+			}
+			Set<Class<?>> packageClassList = ReflectionManager.getClassInPackage(modelPackage);
+			for (Class theClass: packageClassList)
+			{
+				if (theClass.getPackage().getName().equals(modelPackage))
+				{
+					html.li().a((new HtmlAttributes()).add("href", "../"+reflectionManager.parseName(theClass.getName())+"/")).content(reflectionManager.parseName(theClass.getName()))._li();
+				}
+			}
+			
+			html._ul()._div();
+			/*
+			 * <script>
+        $('#demo_menu').easytree();
+    </script>
+			 * 
+			 */
+			html.script().content("function stateChanged(nodes, nodesJson) {var t = nodes[0].text; $.cookie('menu', nodesJson); }; var easyTreeOption={data: $.cookie('menu'), stateChanged: stateChanged};",false);
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		File file = new File(""); 
+		String directoryViewPages = file.getAbsolutePath()+"\\src\\main\\webapp\\resources\\theme\\general_theme\\static\\";
+		File menuFile=new File(directoryViewPages+"menu.html");
+		PrintWriter writer;
+		try {
+			System.out.println("Written "+menuFile.getAbsolutePath());
+			writer = new PrintWriter(menuFile, "UTF-8");
+			writer.write(html.toHtml());
+			writer.close();
+		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	/**
 	 * Generate the html menu

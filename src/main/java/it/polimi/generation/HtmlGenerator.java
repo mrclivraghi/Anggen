@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.Entity;
+
 import org.rendersnake.DocType;
 import org.rendersnake.HtmlAttributes;
 import org.rendersnake.HtmlCanvas;
@@ -75,6 +77,7 @@ public class HtmlGenerator {
 			.macros().javascript("../resources/general_theme/js/angular/"+entityName+".js")
 			.macros().javascript("../resources/general_theme/js/date.js")
 			.macros().javascript("../resources/general_theme/js/utility.js")
+			.macros().javascript("../resources/general_theme/js/jquery.easytree.js")
 			.macros().javascript("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js")
 			.macros().javascript("http://cdn.jsdelivr.net/alasql/0.2/alasql.min.js");
 			} catch (IOException e) {
@@ -89,6 +92,7 @@ public class HtmlGenerator {
 			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"))
 			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../resources/general_theme/css/main.css"))
 			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../resources/general_theme/css/jquery-ui.css"))
+			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../resources/general_theme/css/easytree/skin-win8/ui.easytree.css"))
 			.link((new HtmlAttributes()).add("rel","import").add("href", "../resources/general_theme/static/menu.html"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -139,6 +143,102 @@ public class HtmlGenerator {
 		
 	}
 	
+	public static void GenerateEasyTreeMenu()
+	{
+		/*
+		 * <div id="demo_menu">
+        <ul>
+            <li><a href="http://www.easyjstree.com" target="_blank" class="current">Home</a></li>
+            <li class="isFolder">
+                Folder 1
+                <ul>
+                    <li><a href="http://www.google.com" target="_blank">Go to Google.com</a></li>
+                    <li><a href="http://www.yahoo.com" target="_blank">Go to Yahoo.com</a></li>
+                </ul>
+            </li>
+            <li>
+                Node 1
+                <ul>
+                    <li>Sub Node 1</li>
+                    <li>Sub Node 2</li>
+                    <li>Sub Node 3</li>
+                </ul>
+            </li>
+            <li>Node 2</li>
+        </ul>
+    </div>
+    <script>
+        $('#demo_menu').easytree();
+    </script>
+		 */
+		HtmlCanvas html= new HtmlCanvas();
+		ReflectionManager reflectionManager = new ReflectionManager(Object.class);
+		try {
+			html.div((new HtmlAttributes()).add("id", "menu"))
+			.ul();
+			List<String> packageList= ReflectionManager.getSubPackages(modelPackage);
+			
+			for (String myPackage: packageList)
+			{
+				/*
+				 * <li class="isFolder">
+                Folder 1
+                <ul>
+                    <li><a href="http://www.google.com" target="_blank">Go to Google.com</a></li>
+                    <li><a href="http://www.yahoo.com" target="_blank">Go to Yahoo.com</a></li>
+                </ul>
+            </li>
+				 * 
+				 */
+				html.li((new HtmlAttributes()).add("class", "isFolder"));
+				Set<Class<?>> packageClassList = ReflectionManager.getClassInPackage(myPackage);
+				HtmlCanvas folderHtml = new HtmlCanvas();
+				folderHtml.ul();
+				for (Class myClass: packageClassList)
+				{
+					html.li().a((new HtmlAttributes()).add("href", "../"+reflectionManager.parseName(myClass.getName())+"/")).content(reflectionManager.parseName(myClass.getName()))._li();
+				}
+				folderHtml._ul();
+				html.content(reflectionManager.parseName(myPackage)+folderHtml.toHtml(),false);
+				
+			}
+			Set<Class<?>> packageClassList = ReflectionManager.getClassInPackage(modelPackage);
+			for (Class theClass: packageClassList)
+			{
+				if (theClass.getPackage().getName().equals(modelPackage))
+				{
+					html.li().a((new HtmlAttributes()).add("href", "../"+reflectionManager.parseName(theClass.getName())+"/")).content(reflectionManager.parseName(theClass.getName()))._li();
+				}
+			}
+			
+			html._ul()._div();
+			/*
+			 * <script>
+        $('#demo_menu').easytree();
+    </script>
+			 * 
+			 */
+			html.script().content("$('#menu').easytree();",false);
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		File file = new File(""); 
+		String directoryViewPages = file.getAbsolutePath()+"\\src\\main\\webapp\\resources\\theme\\general_theme\\static\\";
+		File menuFile=new File(directoryViewPages+"menu.html");
+		PrintWriter writer;
+		try {
+			System.out.println("Written "+menuFile.getAbsolutePath());
+			writer = new PrintWriter(menuFile, "UTF-8");
+			writer.write(html.toHtml());
+			writer.close();
+		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	/**
 	 * Generate the html menu

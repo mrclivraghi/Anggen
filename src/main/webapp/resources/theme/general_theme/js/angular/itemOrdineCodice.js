@@ -211,6 +211,14 @@ column: {style:{Font:{Bold:"1"}}}
 };
 alasql('SELECT * INTO XLSXML("itemOrdineCodice.xls",?) FROM ?',[mystyle,$scope.entityList]);
 };
+$scope.downloadItemOrdineList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("itemOrdine.xls",?) FROM ?',[mystyle,$scope.selectedEntity.itemOrdineList]);
+};
 })
 .service("itemOrdineService", function($http)
 {
@@ -449,6 +457,22 @@ var mystyle = {
 column: {style:{Font:{Bold:"1"}}}
 };
 alasql('SELECT * INTO XLSXML("itemOrdine.xls",?) FROM ?',[mystyle,$scope.entityList]);
+};
+$scope.downloadOrdineList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("ordine.xls",?) FROM ?',[mystyle,$scope.selectedEntity.ordineList]);
+};
+$scope.downloadItemOrdineCodiceList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("itemOrdineCodice.xls",?) FROM ?',[mystyle,$scope.selectedEntity.itemOrdineCodiceList]);
 };
 })
 .service("ordineService", function($http)
@@ -730,6 +754,22 @@ column: {style:{Font:{Bold:"1"}}}
 };
 alasql('SELECT * INTO XLSXML("ordine.xls",?) FROM ?',[mystyle,$scope.entityList]);
 };
+$scope.downloadColloList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("collo.xls",?) FROM ?',[mystyle,$scope.selectedEntity.colloList]);
+};
+$scope.downloadItemOrdineList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("itemOrdine.xls",?) FROM ?',[mystyle,$scope.selectedEntity.itemOrdineList]);
+};
 })
 .service("colloService", function($http)
 {
@@ -931,6 +971,14 @@ var mystyle = {
 column: {style:{Font:{Bold:"1"}}}
 };
 alasql('SELECT * INTO XLSXML("collo.xls",?) FROM ?',[mystyle,$scope.entityList]);
+};
+$scope.downloadOrdineList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("ordine.xls",?) FROM ?',[mystyle,$scope.selectedEntity.ordineList]);
 };
 })
 ;

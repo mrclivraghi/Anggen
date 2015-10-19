@@ -249,6 +249,22 @@ column: {style:{Font:{Bold:"1"}}}
 };
 alasql('SELECT * INTO XLSXML("seedQuery.xls",?) FROM ?',[mystyle,$scope.entityList]);
 };
+$scope.downloadMountainList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("mountain.xls",?) FROM ?',[mystyle,$scope.selectedEntity.mountainList]);
+};
+$scope.downloadPhotoList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("photo.xls",?) FROM ?',[mystyle,$scope.selectedEntity.photoList]);
+};
 })
 .service("mountainService", function($http)
 {
@@ -462,6 +478,14 @@ column: {style:{Font:{Bold:"1"}}}
 };
 alasql('SELECT * INTO XLSXML("mountain.xls",?) FROM ?',[mystyle,$scope.entityList]);
 };
+$scope.downloadSeedQueryList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("seedQuery.xls",?) FROM ?',[mystyle,$scope.selectedEntity.seedQueryList]);
+};
 })
 .service("photoService", function($http)
 {
@@ -663,6 +687,14 @@ var mystyle = {
 column: {style:{Font:{Bold:"1"}}}
 };
 alasql('SELECT * INTO XLSXML("photo.xls",?) FROM ?',[mystyle,$scope.entityList]);
+};
+$scope.downloadSeedQueryList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("seedQuery.xls",?) FROM ?',[mystyle,$scope.selectedEntity.seedQueryList]);
 };
 })
 ;

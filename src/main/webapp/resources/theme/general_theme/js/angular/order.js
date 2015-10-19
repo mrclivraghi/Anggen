@@ -244,6 +244,22 @@ column: {style:{Font:{Bold:"1"}}}
 };
 alasql('SELECT * INTO XLSXML("order.xls",?) FROM ?',[mystyle,$scope.entityList]);
 };
+$scope.downloadPersonList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("person.xls",?) FROM ?',[mystyle,$scope.selectedEntity.personList]);
+};
+$scope.downloadPlaceList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("place.xls",?) FROM ?',[mystyle,$scope.selectedEntity.placeList]);
+};
 })
 .service("personService", function($http)
 {
@@ -615,6 +631,14 @@ var mystyle = {
 column: {style:{Font:{Bold:"1"}}}
 };
 alasql('SELECT * INTO XLSXML("place.xls",?) FROM ?',[mystyle,$scope.entityList]);
+};
+$scope.downloadOrderList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("order.xls",?) FROM ?',[mystyle,$scope.selectedEntity.orderList]);
 };
 })
 ;

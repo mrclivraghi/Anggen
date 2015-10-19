@@ -477,7 +477,10 @@ public class RestGenerator {
 		saveFile(codeModel);
 	
 	}
-	
+	/**
+	 * Save codeModel to file
+	 * @param codeModel
+	 */
 	private void saveFile(JCodeModel codeModel)
 	{
 		try {

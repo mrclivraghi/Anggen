@@ -232,11 +232,7 @@ public class RestGenerator {
 		} catch (JClassAlreadyExistsException e) {
 			e.printStackTrace();
 		}
-		try {
-			   codeModel.build(new File (directory));
-			} catch (Exception ex) {
-			   ex.printStackTrace();
-			}
+		saveFile(codeModel);
 		return searchMethod;
 	}
 	/**
@@ -264,11 +260,7 @@ public class RestGenerator {
 		} catch (JClassAlreadyExistsException e) {
 			e.printStackTrace();
 		}
-		try {
-			   codeModel.build(new File (directory));
-			} catch (Exception ex) {
-			   ex.printStackTrace();
-			}
+		saveFile(codeModel);
 	
 	}
 	
@@ -367,11 +359,7 @@ public class RestGenerator {
 		} catch (JClassAlreadyExistsException e) {
 			e.printStackTrace();
 		}
-		try {
-			   codeModel.build(new File(directory));
-			} catch (Exception ex) {
-			   ex.printStackTrace();
-			}
+		saveFile(codeModel);
 	
 	}
 	/**
@@ -486,12 +474,18 @@ public class RestGenerator {
 		} catch (JClassAlreadyExistsException e) {
 			e.printStackTrace();
 		}
+		saveFile(codeModel);
+	
+	}
+	
+	private void saveFile(JCodeModel codeModel)
+	{
 		try {
 			   codeModel.build(new File (directory));
 			} catch (Exception ex) {
 			   ex.printStackTrace();
 			}
-	
+		
 	}
 	
 	/**

@@ -1,4 +1,4 @@
-var itemOrdineApp=angular.module("itemOrdineApp",['ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date'])
+var itemOrdineApp=angular.module("itemOrdineApp",['ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter'])
 .service("itemOrdineService", function($http)
 {
 this.entityList =		[];
@@ -55,7 +55,7 @@ this.selectedEntity[val] = new Date(entity[val]);
 this.selectedEntity[val] = entity[val];
 }
 }
-	}
+}
 };
 };
 this.search = function() {
@@ -152,7 +152,7 @@ $scope.del=function()
 itemOrdineService.del().then(function(data) { 
 $scope.search();
 });
-};$scope.showOrdineDetail= function(index)
+};$scope.trueFalseValues=[true,false];$scope.showOrdineDetail= function(index)
 {
 if (index!=null)
 ordineService.setSelectedEntity(itemOrdineService.selectedEntity.ordineList[index]);
@@ -196,6 +196,7 @@ multiSelect: false,
 enableSelectAll: false,
 paginationPageSizes: [2, 4, 6],
 paginationPageSize: 2,
+enableGridMenu: true,
 columnDefs: [
 { name: 'itemOrdineId'},
 { name: 'barcode'},
@@ -228,9 +229,11 @@ columnDefs: [
  };
 $scope.itemOrdineGridOptions.onRegisterApi = function(gridApi){
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
-ordineService.selectedEntity.show=false;colloService.selectedEntity.show=false;itemOrdineCodiceService.selectedEntity.show=false;itemOrdineService
-.setSelectedEntity(row.entity);
-itemOrdineService.selectedEntity.show = true;
+ordineService.selectedEntity.show=false;colloService.selectedEntity.show=false;itemOrdineCodiceService.selectedEntity.show=false;if (row.isSelected)
+itemOrdineService.setSelectedEntity(row.entity);
+else 
+itemOrdineService.setSelectedEntity(null);
+itemOrdineService.selectedEntity.show = row.isSelected;
 });
   };
 $scope.itemOrdineCodiceListGridOptions = {
@@ -239,6 +242,7 @@ multiSelect: false,
 enableSelectAll: false,
 paginationPageSizes: [2, 4, 6],
 paginationPageSize: 2,
+enableGridMenu: true,
 columnDefs: [
 { name: 'itemOrdineCodiceId'},
 { name: 'barcode'},
@@ -257,11 +261,37 @@ columnDefs: [
  };
 $scope.itemOrdineCodiceListGridOptions.onRegisterApi = function(gridApi){
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
-itemOrdineCodiceService
-.setSelectedEntity(row.entity);
-itemOrdineCodiceService.selectedEntity.show = true;
+if (row.isSelected)
+itemOrdineCodiceService.setSelectedEntity(row.entity);
+else 
+itemOrdineCodiceService.setSelectedEntity(null);
+itemOrdineCodiceService.selectedEntity.show = row.isSelected;
 });
   };
+$scope.downloadEntityList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("itemOrdine.xls",?) FROM ?',[mystyle,$scope.entityList]);
+};
+$scope.downloadOrdineList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("ordine.xls",?) FROM ?',[mystyle,$scope.selectedEntity.ordineList]);
+};
+$scope.downloadItemOrdineCodiceList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("itemOrdineCodice.xls",?) FROM ?',[mystyle,$scope.selectedEntity.itemOrdineCodiceList]);
+};
 })
 .service("ordineService", function($http)
 {
@@ -314,7 +344,7 @@ this.selectedEntity[val] = new Date(entity[val]);
 this.selectedEntity[val] = entity[val];
 }
 }
-	}
+}
 };
 };
 this.search = function() {
@@ -427,7 +457,7 @@ $scope.del=function()
 ordineService.selectedEntity.show=false;
 itemOrdineService.selectedEntity.ordine=null;ordineService.setSelectedEntity(null);
 $scope.updateParent();
-};$scope.showColloDetail= function(index)
+};$scope.trueFalseValues=[true,false];$scope.showColloDetail= function(index)
 {
 if (index!=null)
 colloService.setSelectedEntity(ordineService.selectedEntity.colloList[index]);
@@ -470,6 +500,7 @@ multiSelect: false,
 enableSelectAll: false,
 paginationPageSizes: [2, 4, 6],
 paginationPageSize: 2,
+enableGridMenu: true,
 columnDefs: [
 { name: 'colloId'},
 { name: 'codice'},
@@ -481,9 +512,11 @@ columnDefs: [
  };
 $scope.colloListGridOptions.onRegisterApi = function(gridApi){
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
-colloService
-.setSelectedEntity(row.entity);
-colloService.selectedEntity.show = true;
+if (row.isSelected)
+colloService.setSelectedEntity(row.entity);
+else 
+colloService.setSelectedEntity(null);
+colloService.selectedEntity.show = row.isSelected;
 });
   };
 $scope.itemOrdineListGridOptions = {
@@ -492,6 +525,7 @@ multiSelect: false,
 enableSelectAll: false,
 paginationPageSizes: [2, 4, 6],
 paginationPageSize: 2,
+enableGridMenu: true,
 columnDefs: [
 { name: 'itemOrdineId'},
 { name: 'barcode'},
@@ -523,11 +557,37 @@ columnDefs: [
  };
 $scope.itemOrdineListGridOptions.onRegisterApi = function(gridApi){
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
-itemOrdineService
-.setSelectedEntity(row.entity);
-itemOrdineService.selectedEntity.show = true;
+if (row.isSelected)
+itemOrdineService.setSelectedEntity(row.entity);
+else 
+itemOrdineService.setSelectedEntity(null);
+itemOrdineService.selectedEntity.show = row.isSelected;
 });
   };
+$scope.downloadEntityList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("ordine.xls",?) FROM ?',[mystyle,$scope.entityList]);
+};
+$scope.downloadColloList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("collo.xls",?) FROM ?',[mystyle,$scope.selectedEntity.colloList]);
+};
+$scope.downloadItemOrdineList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("itemOrdine.xls",?) FROM ?',[mystyle,$scope.selectedEntity.itemOrdineList]);
+};
 })
 .service("colloService", function($http)
 {
@@ -580,7 +640,7 @@ this.selectedEntity[val] = new Date(entity[val]);
 this.selectedEntity[val] = entity[val];
 }
 }
-	}
+}
 };
 };
 this.search = function() {
@@ -702,7 +762,7 @@ ordineService.selectedEntity.colloList.splice(i,1);
 }
 colloService.setSelectedEntity(null);
 $scope.updateParent();
-};$scope.showOrdineDetail= function(index)
+};$scope.trueFalseValues=[true,false];$scope.showOrdineDetail= function(index)
 {
 if (index!=null)
 ordineService.setSelectedEntity(colloService.selectedEntity.ordineList[index]);
@@ -722,6 +782,22 @@ colloService.childrenList.ordineList=entityList;
 alert("error");
 });
 }; 
+$scope.downloadEntityList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("collo.xls",?) FROM ?',[mystyle,$scope.entityList]);
+};
+$scope.downloadOrdineList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("ordine.xls",?) FROM ?',[mystyle,$scope.selectedEntity.ordineList]);
+};
 })
 .service("itemOrdineCodiceService", function($http)
 {
@@ -774,7 +850,7 @@ this.selectedEntity[val] = new Date(entity[val]);
 this.selectedEntity[val] = entity[val];
 }
 }
-	}
+}
 };
 };
 this.search = function() {
@@ -896,7 +972,7 @@ itemOrdineService.selectedEntity.itemOrdineCodiceList.splice(i,1);
 }
 itemOrdineCodiceService.setSelectedEntity(null);
 $scope.updateParent();
-};$scope.showItemOrdineDetail= function(index)
+};$scope.trueFalseValues=[true,false];$scope.showItemOrdineDetail= function(index)
 {
 if (index!=null)
 itemOrdineService.setSelectedEntity(itemOrdineCodiceService.selectedEntity.itemOrdineList[index]);
@@ -916,5 +992,21 @@ itemOrdineCodiceService.childrenList.itemOrdineList=entityList;
 alert("error");
 });
 }; 
+$scope.downloadEntityList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("itemOrdineCodice.xls",?) FROM ?',[mystyle,$scope.entityList]);
+};
+$scope.downloadItemOrdineList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("itemOrdine.xls",?) FROM ?',[mystyle,$scope.selectedEntity.itemOrdineList]);
+};
 })
 ;

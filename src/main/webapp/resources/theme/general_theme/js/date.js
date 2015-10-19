@@ -75,7 +75,6 @@ angular.module('ui.date', [])
           };
         }
         // If we don't destroy the old one it doesn't update properly when the config changes
-		console.log(element);
         element.datepicker('destroy');
         // Create the new datepicker widget
         element.datepicker(opts);

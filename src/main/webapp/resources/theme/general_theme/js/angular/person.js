@@ -1,4 +1,4 @@
-var personApp=angular.module("personApp",['ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date'])
+var personApp=angular.module("personApp",['ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter'])
 .service("personService", function($http)
 {
 this.entityList =		[];
@@ -55,7 +55,7 @@ this.selectedEntity[val] = new Date(entity[val]);
 this.selectedEntity[val] = entity[val];
 }
 }
-	}
+}
 };
 };
 this.search = function() {
@@ -149,7 +149,7 @@ $scope.del=function()
 personService.del().then(function(data) { 
 $scope.search();
 });
-};$scope.init=function()
+};$scope.trueFalseValues=[true,false];$scope.init=function()
 {
 }; 
 $scope.init();
@@ -159,6 +159,7 @@ multiSelect: false,
 enableSelectAll: false,
 paginationPageSizes: [2, 4, 6],
 paginationPageSize: 2,
+enableGridMenu: true,
 columnDefs: [
 { name: 'personId'},
 { name: 'firstName'},
@@ -169,10 +170,20 @@ columnDefs: [
  };
 $scope.personGridOptions.onRegisterApi = function(gridApi){
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
-personService
-.setSelectedEntity(row.entity);
-personService.selectedEntity.show = true;
+if (row.isSelected)
+personService.setSelectedEntity(row.entity);
+else 
+personService.setSelectedEntity(null);
+personService.selectedEntity.show = row.isSelected;
 });
   };
+$scope.downloadEntityList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("person.xls",?) FROM ?',[mystyle,$scope.entityList]);
+};
 })
 ;

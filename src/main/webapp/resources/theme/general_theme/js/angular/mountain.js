@@ -1,4 +1,4 @@
-var mountainApp=angular.module("mountainApp",['ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date'])
+var mountainApp=angular.module("mountainApp",['ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter'])
 .service("mountainService", function($http)
 {
 this.entityList =		[];
@@ -55,7 +55,7 @@ this.selectedEntity[val] = new Date(entity[val]);
 this.selectedEntity[val] = entity[val];
 }
 }
-	}
+}
 };
 };
 this.search = function() {
@@ -152,7 +152,7 @@ $scope.del=function()
 mountainService.del().then(function(data) { 
 $scope.search();
 });
-};$scope.showSeedQueryDetail= function(index)
+};$scope.trueFalseValues=[true,false];$scope.showSeedQueryDetail= function(index)
 {
 if (index!=null)
 seedQueryService.setSelectedEntity(mountainService.selectedEntity.seedQueryList[index]);
@@ -179,6 +179,7 @@ multiSelect: false,
 enableSelectAll: false,
 paginationPageSizes: [2, 4, 6],
 paginationPageSize: 2,
+enableGridMenu: true,
 columnDefs: [
 { name: 'mountainId'},
 { name: 'name'},
@@ -188,9 +189,11 @@ columnDefs: [
  };
 $scope.mountainGridOptions.onRegisterApi = function(gridApi){
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
-seedQueryService.selectedEntity.show=false;photoService.selectedEntity.show=false;mountainService
-.setSelectedEntity(row.entity);
-mountainService.selectedEntity.show = true;
+seedQueryService.selectedEntity.show=false;photoService.selectedEntity.show=false;if (row.isSelected)
+mountainService.setSelectedEntity(row.entity);
+else 
+mountainService.setSelectedEntity(null);
+mountainService.selectedEntity.show = row.isSelected;
 });
   };
 $scope.seedQueryListGridOptions = {
@@ -199,6 +202,7 @@ multiSelect: false,
 enableSelectAll: false,
 paginationPageSizes: [2, 4, 6],
 paginationPageSize: 2,
+enableGridMenu: true,
 columnDefs: [
 { name: 'seedQueryId'},
 { name: 'seedKeyword'},
@@ -208,11 +212,29 @@ columnDefs: [
  };
 $scope.seedQueryListGridOptions.onRegisterApi = function(gridApi){
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
-seedQueryService
-.setSelectedEntity(row.entity);
-seedQueryService.selectedEntity.show = true;
+if (row.isSelected)
+seedQueryService.setSelectedEntity(row.entity);
+else 
+seedQueryService.setSelectedEntity(null);
+seedQueryService.selectedEntity.show = row.isSelected;
 });
   };
+$scope.downloadEntityList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("mountain.xls",?) FROM ?',[mystyle,$scope.entityList]);
+};
+$scope.downloadSeedQueryList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("seedQuery.xls",?) FROM ?',[mystyle,$scope.selectedEntity.seedQueryList]);
+};
 })
 .service("seedQueryService", function($http)
 {
@@ -265,7 +287,7 @@ this.selectedEntity[val] = new Date(entity[val]);
 this.selectedEntity[val] = entity[val];
 }
 }
-	}
+}
 };
 };
 this.search = function() {
@@ -390,7 +412,7 @@ mountainService.selectedEntity.seedQueryList.splice(i,1);
 }
 seedQueryService.setSelectedEntity(null);
 $scope.updateParent();
-};$scope.showMountainDetail= function(index)
+};$scope.trueFalseValues=[true,false];$scope.showMountainDetail= function(index)
 {
 if (index!=null)
 mountainService.setSelectedEntity(seedQueryService.selectedEntity.mountainList[index]);
@@ -433,6 +455,7 @@ multiSelect: false,
 enableSelectAll: false,
 paginationPageSizes: [2, 4, 6],
 paginationPageSize: 2,
+enableGridMenu: true,
 columnDefs: [
 { name: 'photoId'},
 { name: 'url'},
@@ -446,11 +469,37 @@ columnDefs: [
  };
 $scope.photoListGridOptions.onRegisterApi = function(gridApi){
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
-photoService
-.setSelectedEntity(row.entity);
-photoService.selectedEntity.show = true;
+if (row.isSelected)
+photoService.setSelectedEntity(row.entity);
+else 
+photoService.setSelectedEntity(null);
+photoService.selectedEntity.show = row.isSelected;
 });
   };
+$scope.downloadEntityList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("seedQuery.xls",?) FROM ?',[mystyle,$scope.entityList]);
+};
+$scope.downloadMountainList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("mountain.xls",?) FROM ?',[mystyle,$scope.selectedEntity.mountainList]);
+};
+$scope.downloadPhotoList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("photo.xls",?) FROM ?',[mystyle,$scope.selectedEntity.photoList]);
+};
 })
 .service("photoService", function($http)
 {
@@ -503,7 +552,7 @@ this.selectedEntity[val] = new Date(entity[val]);
 this.selectedEntity[val] = entity[val];
 }
 }
-	}
+}
 };
 };
 this.search = function() {
@@ -625,7 +674,7 @@ seedQueryService.selectedEntity.photoList.splice(i,1);
 }
 photoService.setSelectedEntity(null);
 $scope.updateParent();
-};$scope.showSeedQueryDetail= function(index)
+};$scope.trueFalseValues=[true,false];$scope.showSeedQueryDetail= function(index)
 {
 if (index!=null)
 seedQueryService.setSelectedEntity(photoService.selectedEntity.seedQueryList[index]);
@@ -645,5 +694,21 @@ photoService.childrenList.seedQueryList=entityList;
 alert("error");
 });
 }; 
+$scope.downloadEntityList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("photo.xls",?) FROM ?',[mystyle,$scope.entityList]);
+};
+$scope.downloadSeedQueryList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("seedQuery.xls",?) FROM ?',[mystyle,$scope.selectedEntity.seedQueryList]);
+};
 })
 ;

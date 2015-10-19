@@ -15,6 +15,12 @@ import java.util.List;
 
 import com.sun.codemodel.JClass;
 
+
+/**
+ * Generate the JS source files based on angularJS
+ * @author Marco
+ *
+ */
 public class JsGenerator {
 
 	private Class classClass;
@@ -33,7 +39,13 @@ public class JsGenerator {
 
 	private List<ClassDetail> descendantClassList;
 
-
+	/**
+	 * Constructor
+	 * @param classClass
+	 * @param isParent
+	 * @param compositeClass
+	 * @param parentEntityName
+	 */
 	public JsGenerator(Class classClass,Boolean isParent,JClass compositeClass,String parentEntityName)
 	{
 		this.classClass=classClass;
@@ -51,8 +63,11 @@ public class JsGenerator {
 		else
 			entityList=false;
 	}
-
-	public String generateService()
+	/**
+	 * Generate the service code for the entity
+	 * @return
+	 */
+	private String generateService()
 	{
 		StringBuilder sb = new StringBuilder();
 		sb.append(".service(\""+entityName+"Service\", function($http)\n")
@@ -84,13 +99,10 @@ public class JsGenerator {
 			.append("this.resetSearchBean= function()\n")
 			.append("{\n")
 			.append("this.searchBean={};\n")
-			//.append("this.searchBean.name=\"\";\n")
-			//.append("this.searchBean.timeslotDate=\"\";\n")
 			.append("};\n");
 		}
 		sb.append("this.setSelectedEntity= function (entity)\n")
 		.append("{ \n")
-
 		.append("if (entity == null) {\n")
 		.append("entity = {};\n")
 		.append("this.selectedEntity.show = false;\n")
@@ -103,7 +115,6 @@ public class JsGenerator {
 		.append("if (val != undefined) {\n")
 		.append("if (val.toLowerCase().indexOf(\"list\") > -1\n")
 		.append("&& (typeof entity[val] == \"object\" || typeof this.selectedEntity[val]==\"object\")) {\n")
-
 		.append("if (entity[val] != null\n")
 		.append("&& entity[val] != undefined) {\n")
 		.append("if (this.selectedEntity[val]!=undefined)\n")
@@ -113,10 +124,8 @@ public class JsGenerator {
 		.append("for (j = 0; j < entity[val].length; j++)\n")
 		.append("this.selectedEntity[val]\n")
 		.append(".push(entity[val][j]);\n")
-
 		.append("}\n")
 		.append("} else {\n")
-
 		.append("if (val.toLowerCase().indexOf(\"time\") > -1\n")
 		.append("&& typeof val == \"string\") {\n")
 		.append("var date = new Date(entity[val]);\n")
@@ -124,10 +133,8 @@ public class JsGenerator {
 		.append("} else {\n")
 		.append("this.selectedEntity[val] = entity[val];\n")
 		.append("}\n")
-
 		.append("}\n")
-		.append("	}\n")
-
+		.append("}\n")
 		.append("};\n");
 		sb.append("};\n");
 		//search
@@ -179,14 +186,14 @@ public class JsGenerator {
 		sb.append("return promise; \n");
 		sb.append("}\n");
 
-
-
-
 		sb.append("})\n");
-
 		return sb.toString();
 	}
-
+	/**
+	 * Change the visibility of the children entities view
+	 * @param stringBuilder
+	 * @param show
+	 */
 	private void changeChildrenVisibility(StringBuilder stringBuilder,Boolean show)
 	{
 		if (isParent)
@@ -210,8 +217,11 @@ public class JsGenerator {
 		}
 
 	}
-
-	public String generateController()
+	/**
+	 * Generate the angularJS controller
+	 * @return
+	 */
+	private String generateController()
 	{
 		StringBuilder sb = new StringBuilder();
 
@@ -247,33 +257,8 @@ public class JsGenerator {
 			sb.append("if (toDo != null)\n");
 			sb.append("toDo();\n");
 			sb.append("});\n");
-
-			/*sb.append("$http.post(\"../"+parentEntityName+"/\","+parentEntityName+"Service.selectedEntity)\n");
-			sb.append(".then(\n");
-			sb.append("function(response) {\n");
-			sb.append("if (response.status==200)\n");
-			sb.append("	{\n");
-
-			sb.append(""+parentEntityName+"Service.setSelectedEntity(response.data);\n");
-			sb.append("if (toDo!=null)\n");
-			sb.append("toDo(); \n");
-			sb.append("if (!$scope.$$phase)\n");
-			sb.append("$rootScope.$digest();\n");
-
-			sb.append("}\n");
-			sb.append("}\n");
-			sb.append(",function(error) {\n");
-			sb.append("alert(\"error\");\n");
-			sb.append("});\n");*/
 			sb.append("};\n");
 		}
-		/*sb.append("$scope.showEntityDetail= function(index)\n");
-		sb.append("{\n");
-		sb.append(""+entityName+"Service.indexSelected=index;\n");
-		sb.append(""+entityName+"Service.setSelectedEntity($scope.entityList[index]);\n");
-		sb.append(""+entityName+"Service.selectedEntity.show=true;\n");
-		sb.append("};\n");*/
-
 		sb.append("$scope.addNew= function()\n");
 		sb.append("{\n");
 		sb.append(""+entityName+"Service.setSelectedEntity(null);\n");
@@ -391,6 +376,7 @@ public class JsGenerator {
 			sb.append("$scope.updateParent();\n");
 		}
 		sb.append("};");
+		sb.append("$scope.trueFalseValues=[true,false];");
 		//if (isParent)
 		{
 			for (Field field: childrenList)
@@ -452,11 +438,63 @@ public class JsGenerator {
 				sb.append(jsGenerator.getPagination());
 			}
 		}
+		sb.append("$scope.downloadEntityList=function()\n");
+		sb.append("{\n");
+		sb.append("var mystyle = {\n");
+		sb.append(" headers:true, \n");
+		sb.append("column: {style:{Font:{Bold:\"1\"}}}\n");
+		sb.append("};\n");
+		
+		String exportFields="";
+		for (Field field: fieldList)
+		{
+			if (ReflectionManager.hasExcelExport(field))
+				exportFields=exportFields+field.getName()+",";
+		}
+		
+		if (exportFields.length()>0)
+		{
+			exportFields=exportFields.substring(0, exportFields.length()-1);
+		} else
+			exportFields="*";
+		sb.append("alasql('SELECT "+exportFields+" INTO XLSXML(\""+entityName+".xls\",?) FROM ?',[mystyle,$scope.entityList]);\n");
+		sb.append("};\n");
+		
+		
+		for (Field field: childrenList)
+		{
+			sb.append("$scope.download"+Utility.getFirstUpper(field.getName())+"List=function()\n");
+			sb.append("{\n");
+			sb.append("var mystyle = {\n");
+			sb.append(" headers:true, \n");
+			sb.append("column: {style:{Font:{Bold:\"1\"}}}\n");
+			sb.append("};\n");
+			
+			exportFields="";
+			ReflectionManager reflectionManager = new ReflectionManager(field.getFieldClass());
+			for (Field childrenField: reflectionManager.getChildrenFieldList())
+			{
+				if (ReflectionManager.hasExcelExport(childrenField))
+					exportFields=exportFields+field.getName()+",";
+			}
+			
+			if (exportFields.length()>0)
+			{
+				exportFields=exportFields.substring(0, exportFields.length()-1);
+			} else
+				exportFields="*";
+			sb.append("alasql('SELECT "+exportFields+" INTO XLSXML(\""+field.getName()+".xls\",?) FROM ?',[mystyle,$scope.selectedEntity."+field.getName()+"List]);\n");
+			sb.append("};\n");
+		}
+
 		sb.append("})\n");
 		return sb.toString();
 	}
-
-	public String getPagination()
+	/**
+	 * Create the pagination option for ui-grid
+	 * @return
+	 */
+	private String getPagination()
 	{
 		StringBuilder sb = new StringBuilder();
 		//pagination options
@@ -466,6 +504,7 @@ public class JsGenerator {
 		sb.append("enableSelectAll: false,\n");
 		sb.append("paginationPageSizes: [2, 4, 6],\n");
 		sb.append("paginationPageSize: 2,\n");
+		sb.append("enableGridMenu: true,\n");
 		//generate dynamically
 		sb.append("columnDefs: [\n");
 		for (Field field: fieldList)
@@ -503,23 +542,22 @@ public class JsGenerator {
 		sb.append("gridApi.selection.on.rowSelectionChanged($scope,function(row){\n");
 		if (isParent)
 			changeChildrenVisibility(sb, false);
-		sb.append(entityName+"Service\n");
-		sb.append(".setSelectedEntity(row.entity);\n");
-
-		/*		for (Field field: fieldList)
-		{
-			if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List"))
-				sb.append("$scope."+field.getName()+"ListGridOptions.data="+entityName+"Service.selectedEntity."+field.getName()+"List; \n");
-		}
-		 */
-		sb.append(entityName+"Service.selectedEntity.show = true;\n");
+		
+		sb.append("if (row.isSelected)\n");
+		sb.append(entityName+"Service.setSelectedEntity(row.entity);\n");
+		sb.append("else \n");
+		sb.append(entityName+"Service.setSelectedEntity(null);\n");
+		sb.append(entityName+"Service.selectedEntity.show = row.isSelected;\n");
 		sb.append("});\n");
 		sb.append("  };\n");
-
 
 		return sb.toString();
 	}
 
+	/**
+	 * Return the useful services for the entity controller
+	 * @return
+	 */
 	private String getServices() {
 		List<Class> parentClassList= new ArrayList<Class>();
 		parentClassList.add(classClass);
@@ -533,18 +571,19 @@ public class JsGenerator {
 		}
 		return services;
 	}
-
-	public String buildJS()
+	/**
+	 * Create the JS string
+	 * @return
+	 */
+	private String buildJS()
 	{
 		StringBuilder buildJS= new StringBuilder();
-		buildJS.append("var "+entityName+"App=angular.module(\""+entityName+"App\",['ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date'])\n");
+		buildJS.append("var "+entityName+"App=angular.module(\""+entityName+"App\",['ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter'])\n");
 		JsGenerator jsGenerator = new JsGenerator(classClass, true,null,null);
 		buildJS.append(jsGenerator.generateService());
 		buildJS.append(jsGenerator.generateController());
-		
 		List<Class> parentClass= new ArrayList<Class>();
 		parentClass.add(classClass);
-
 		List<ClassDetail> descendantClassList = ReflectionManager.getDescendantClassList(classClass, parentClass);
 		for (ClassDetail theClass : descendantClassList)
 		{
@@ -559,6 +598,43 @@ public class JsGenerator {
 	}
 
 
+
+
+	/**
+	 * Initialize a form
+	 * @return
+	 */
+	private String setTempEntityForm()
+	{
+		StringBuilder sb = new StringBuilder();
+		for (Field field: fieldList)
+		{
+			sb.append("temp"+Utility.getFirstUpper(entityName)+"."+Utility.getFirstLower(field.getName())+"=data[i]."+Utility.getFirstLower(field.getName())+";\n");
+		}
+
+		return sb.toString();
+	}
+	/**
+	 * Save the generated file
+	 * @param directory
+	 */
+	public void saveJsToFile(String directory)
+	{
+		File file = new File(directory+entityName+".js");
+		PrintWriter writer;
+		try {
+			writer = new PrintWriter(file, "UTF-8");
+			writer.write(buildJS());
+			writer.close();
+			System.out.println("written js file "+file.getAbsolutePath());
+		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
+	/*
 	private void generateChildrenJs(StringBuilder sb,List<JsGenerator> jsGeneratorList, List<Class> parentClassList)
 	{
 		if (fieldList==null) return;
@@ -584,35 +660,7 @@ public class JsGenerator {
 				jsGenerator.generateChildrenJs(sb,jsGeneratorList, parentClassList);
 			}
 		}
-	}
-
-
-
-	private String setTempEntityForm()
-	{
-		StringBuilder sb = new StringBuilder();
-		for (Field field: fieldList)
-		{
-			sb.append("temp"+Utility.getFirstUpper(entityName)+"."+Utility.getFirstLower(field.getName())+"=data[i]."+Utility.getFirstLower(field.getName())+";\n");
-		}
-
-		return sb.toString();
-	}
-	
-	public void saveJsToFile(String directory)
-	{
-		File file = new File(directory+entityName+".js");
-		PrintWriter writer;
-		try {
-			writer = new PrintWriter(file, "UTF-8");
-			writer.write(buildJS());
-			writer.close();
-			System.out.println("written js file "+file.getAbsolutePath());
-		} catch (FileNotFoundException | UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+	}*/
 
 
 

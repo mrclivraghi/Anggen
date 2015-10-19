@@ -1,4 +1,4 @@
-var placeApp=angular.module("placeApp",['ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date'])
+var placeApp=angular.module("placeApp",['ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter'])
 .service("placeService", function($http)
 {
 this.entityList =		[];
@@ -55,7 +55,7 @@ this.selectedEntity[val] = new Date(entity[val]);
 this.selectedEntity[val] = entity[val];
 }
 }
-	}
+}
 };
 };
 this.search = function() {
@@ -149,7 +149,7 @@ $scope.del=function()
 placeService.del().then(function(data) { 
 $scope.search();
 });
-};$scope.showOrderDetail= function(index)
+};$scope.trueFalseValues=[true,false];$scope.showOrderDetail= function(index)
 {
 if (index!=null)
 orderService.setSelectedEntity(placeService.selectedEntity.orderList[index]);
@@ -176,6 +176,7 @@ multiSelect: false,
 enableSelectAll: false,
 paginationPageSizes: [2, 4, 6],
 paginationPageSize: 2,
+enableGridMenu: true,
 columnDefs: [
 { name: 'placeId'},
 { name: 'description'},
@@ -185,11 +186,29 @@ columnDefs: [
  };
 $scope.placeGridOptions.onRegisterApi = function(gridApi){
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
-orderService.selectedEntity.show=false;personService.selectedEntity.show=false;placeService
-.setSelectedEntity(row.entity);
-placeService.selectedEntity.show = true;
+orderService.selectedEntity.show=false;personService.selectedEntity.show=false;if (row.isSelected)
+placeService.setSelectedEntity(row.entity);
+else 
+placeService.setSelectedEntity(null);
+placeService.selectedEntity.show = row.isSelected;
 });
   };
+$scope.downloadEntityList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("place.xls",?) FROM ?',[mystyle,$scope.entityList]);
+};
+$scope.downloadOrderList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("order.xls",?) FROM ?',[mystyle,$scope.selectedEntity.orderList]);
+};
 })
 .service("orderService", function($http)
 {
@@ -242,7 +261,7 @@ this.selectedEntity[val] = new Date(entity[val]);
 this.selectedEntity[val] = entity[val];
 }
 }
-	}
+}
 };
 };
 this.search = function() {
@@ -352,7 +371,7 @@ $scope.del=function()
 orderService.selectedEntity.show=false;
 placeService.selectedEntity.order=null;orderService.setSelectedEntity(null);
 $scope.updateParent();
-};$scope.showPersonDetail= function(index)
+};$scope.trueFalseValues=[true,false];$scope.showPersonDetail= function(index)
 {
 if (index!=null)
 personService.setSelectedEntity(orderService.selectedEntity.personList[index]);
@@ -395,6 +414,7 @@ multiSelect: false,
 enableSelectAll: false,
 paginationPageSizes: [2, 4, 6],
 paginationPageSize: 2,
+enableGridMenu: true,
 columnDefs: [
 { name: 'placeId'},
 { name: 'description'} 
@@ -403,11 +423,37 @@ columnDefs: [
  };
 $scope.placeListGridOptions.onRegisterApi = function(gridApi){
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
-placeService
-.setSelectedEntity(row.entity);
-placeService.selectedEntity.show = true;
+if (row.isSelected)
+placeService.setSelectedEntity(row.entity);
+else 
+placeService.setSelectedEntity(null);
+placeService.selectedEntity.show = row.isSelected;
 });
   };
+$scope.downloadEntityList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("order.xls",?) FROM ?',[mystyle,$scope.entityList]);
+};
+$scope.downloadPersonList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("person.xls",?) FROM ?',[mystyle,$scope.selectedEntity.personList]);
+};
+$scope.downloadPlaceList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("place.xls",?) FROM ?',[mystyle,$scope.selectedEntity.placeList]);
+};
 })
 .service("personService", function($http)
 {
@@ -460,7 +506,7 @@ this.selectedEntity[val] = new Date(entity[val]);
 this.selectedEntity[val] = entity[val];
 }
 }
-	}
+}
 };
 };
 this.search = function() {
@@ -567,8 +613,16 @@ $scope.del=function()
 personService.selectedEntity.show=false;
 orderService.selectedEntity.person=null;personService.setSelectedEntity(null);
 $scope.updateParent();
-};$scope.init=function()
+};$scope.trueFalseValues=[true,false];$scope.init=function()
 {
 }; 
+$scope.downloadEntityList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("person.xls",?) FROM ?',[mystyle,$scope.entityList]);
+};
 })
 ;

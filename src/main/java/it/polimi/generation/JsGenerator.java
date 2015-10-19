@@ -153,7 +153,7 @@ public class JsGenerator {
 
 		sb.append("this.searchOne=function(entity) {\n");
 		sb.append("this.setSelectedEntity(null);\n");
-		sb.append("var promise= $http.post(\"../seedQuery/search\",entity)\n");
+		sb.append("var promise= $http.post(\"../"+entityName+"/search\",entity)\n");
 		sb.append(".then( function(response) {\n");
 		sb.append("return response.data;\n");
 		sb.append("})\n");
@@ -571,6 +571,7 @@ public class JsGenerator {
 		} else
 		{
 			sb.append(entityName+"Service.searchOne(row.entity).then(function(data) { \n");
+			sb.append("console.log(data);\n");
 			sb.append(entityName+"Service.setSelectedEntity(data[0]);\n");
 			sb.append("});\n");
 		}

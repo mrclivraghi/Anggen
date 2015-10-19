@@ -563,11 +563,17 @@ public class JsGenerator {
 			changeChildrenVisibility(sb, false);
 
 		sb.append("if (row.isSelected)\n");
-		//sb.append(entityName+"Service.setSelectedEntity(row.entity);\n");
 		sb.append("{\n");
-		sb.append(entityName+"Service.searchOne(row.entity).then(function(data) { \n");
-		sb.append(entityName+"Service.setSelectedEntity(data[0]);\n");
-		sb.append("});\n");
+		if (isParent)
+		{
+			sb.append(entityName+"Service.setSelectedEntity(row.entity);\n");
+			
+		} else
+		{
+			sb.append(entityName+"Service.searchOne(row.entity).then(function(data) { \n");
+			sb.append(entityName+"Service.setSelectedEntity(data[0]);\n");
+			sb.append("});\n");
+		}
 		sb.append("}\n");
 		sb.append("else \n");
 		sb.append(entityName+"Service.setSelectedEntity(null);\n");

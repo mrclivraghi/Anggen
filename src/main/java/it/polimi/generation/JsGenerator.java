@@ -403,10 +403,27 @@ public class JsGenerator {
 				sb.append("$scope.show"+Utility.getFirstUpper(field.getName())+"Detail= function(index)\n");
 				sb.append("{\n");
 				sb.append("if (index!=null)\n");
-				sb.append(field.getName()+"Service.setSelectedEntity("+entityName+"Service.selectedEntity."+field.getName()+"List[index]);\n");
-				sb.append("else \n");
-				sb.append(field.getName()+"Service.setSelectedEntity("+entityName+"Service.selectedEntity."+field.getName()+"); \n");
+				//sb.append(field.getName()+"Service.setSelectedEntity("+entityName+"Service.selectedEntity."+field.getName()+"List[index]);\n");
+				sb.append("{\n");
+				sb.append(field.getName()+"Service.searchOne("+entityName+"Service.selectedEntity."+field.getName()+"List[index]).then(function(data) { \n");
+				sb.append("console.log(data[0]);\n");
+				sb.append(field.getName()+"Service.setSelectedEntity(data[0]);\n");
 				sb.append(field.getName()+"Service.selectedEntity.show=true;\n");
+				
+				sb.append("});\n");
+				sb.append("}\n");
+				sb.append("else \n");
+				sb.append("{\n");
+				sb.append(field.getName()+"Service.setSelectedEntity("+entityName+"Service.selectedEntity."+field.getName()+"); \n");
+				
+				sb.append(field.getName()+"Service.searchOne("+entityName+"Service.selectedEntity."+field.getName()+").then(function(data) { \n");
+				sb.append("console.log(data[0]);\n");
+				sb.append(field.getName()+"Service.setSelectedEntity(data[0]);\n");
+				sb.append(field.getName()+"Service.selectedEntity.show=true;\n");
+				sb.append("});\n");
+				
+				
+				sb.append("}\n");
 				sb.append("};\n");
 
 			}

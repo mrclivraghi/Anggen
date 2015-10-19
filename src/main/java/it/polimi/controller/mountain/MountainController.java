@@ -91,18 +91,21 @@ public class MountainController {
         if (seedQuery.getMountain()!=null)
         {
         //seedQuery.getMountain()
-        seedQuery.setMountain(null);
+      //  seedQuery.setMountain(new Mountain(seedQuery.getMountain().getMountainId()));
+        	seedQuery.setMountain(null);
         }
+        
         if (seedQuery.getPhotoList()!=null)
         {
-        for (it.polimi.model.mountain.Photo photo : seedQuery.getPhotoList())
-        {
-        if (photo.getSeedQuery()!=null)
-        {
-        //photo.getSeedQuery()
-        photo.setSeedQuery(null);
-        }
-        }
+        	seedQuery.setPhotoList(null);
+        	/*for (it.polimi.model.mountain.Photo photo : seedQuery.getPhotoList())
+        	{
+        		if (photo.getSeedQuery()!=null)
+        		{
+        			//photo.getSeedQuery()
+        			photo.setSeedQuery(null);
+        		}
+        	}*/
         }
         }
         }

@@ -69,6 +69,17 @@ alert("error");
 });
 return promise; 
 };
+this.searchOne=function(entity) {
+this.setSelectedEntity(null);
+var promise= $http.post("../seedQuery/search",entity)
+.then( function(response) {
+return response.data;
+})
+.catch(function() {
+alert("error");
+});
+return promise; 
+};
 this.insert = function() {
 var promise= $http.put("../seedQuery/",this.selectedEntity)
 .then( function(response) 
@@ -155,18 +166,42 @@ $scope.search();
 };$scope.trueFalseValues=[true,false];$scope.showMountainDetail= function(index)
 {
 if (index!=null)
-mountainService.setSelectedEntity(seedQueryService.selectedEntity.mountainList[index]);
-else 
-mountainService.setSelectedEntity(seedQueryService.selectedEntity.mountain); 
+{
+mountainService.searchOne(seedQueryService.selectedEntity.mountainList[index]).then(function(data) { 
+console.log(data[0]);
+mountainService.setSelectedEntity(data[0]);
 mountainService.selectedEntity.show=true;
+});
+}
+else 
+{
+mountainService.setSelectedEntity(seedQueryService.selectedEntity.mountain); 
+mountainService.searchOne(seedQueryService.selectedEntity.mountain).then(function(data) { 
+console.log(data[0]);
+mountainService.setSelectedEntity(data[0]);
+mountainService.selectedEntity.show=true;
+});
+}
 };
 $scope.showPhotoDetail= function(index)
 {
 if (index!=null)
-photoService.setSelectedEntity(seedQueryService.selectedEntity.photoList[index]);
-else 
-photoService.setSelectedEntity(seedQueryService.selectedEntity.photo); 
+{
+photoService.searchOne(seedQueryService.selectedEntity.photoList[index]).then(function(data) { 
+console.log(data[0]);
+photoService.setSelectedEntity(data[0]);
 photoService.selectedEntity.show=true;
+});
+}
+else 
+{
+photoService.setSelectedEntity(seedQueryService.selectedEntity.photo); 
+photoService.searchOne(seedQueryService.selectedEntity.photo).then(function(data) { 
+console.log(data[0]);
+photoService.setSelectedEntity(data[0]);
+photoService.selectedEntity.show=true;
+});
+}
 };
 $scope.init=function()
 {
@@ -208,7 +243,9 @@ columnDefs: [
 $scope.seedQueryGridOptions.onRegisterApi = function(gridApi){
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 mountainService.selectedEntity.show=false;photoService.selectedEntity.show=false;if (row.isSelected)
+{
 seedQueryService.setSelectedEntity(row.entity);
+}
 else 
 seedQueryService.setSelectedEntity(null);
 seedQueryService.selectedEntity.show = row.isSelected;
@@ -235,7 +272,12 @@ columnDefs: [
 $scope.photoListGridOptions.onRegisterApi = function(gridApi){
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
-photoService.setSelectedEntity(row.entity);
+{
+photoService.searchOne(row.entity).then(function(data) { 
+console.log(data);
+photoService.setSelectedEntity(data[0]);
+});
+}
 else 
 photoService.setSelectedEntity(null);
 photoService.selectedEntity.show = row.isSelected;
@@ -323,6 +365,17 @@ this.selectedEntity[val] = entity[val];
 this.search = function() {
 this.setSelectedEntity(null);
 var promise= $http.post("../mountain/search",this.searchBean)
+.then( function(response) {
+return response.data;
+})
+.catch(function() {
+alert("error");
+});
+return promise; 
+};
+this.searchOne=function(entity) {
+this.setSelectedEntity(null);
+var promise= $http.post("../mountain/search",entity)
 .then( function(response) {
 return response.data;
 })
@@ -420,7 +473,9 @@ mountainService.selectedEntity.show=false;
 
 seedQueryService.selectedEntity.mountain=mountainService.selectedEntity;
 
-$scope.updateParent();
+mountainService.update().then(function(data){
+mountainService.setSelectedEntity(data);
+});
 };
 $scope.del=function()
 {
@@ -430,10 +485,22 @@ $scope.updateParent();
 };$scope.trueFalseValues=[true,false];$scope.showSeedQueryDetail= function(index)
 {
 if (index!=null)
-seedQueryService.setSelectedEntity(mountainService.selectedEntity.seedQueryList[index]);
-else 
-seedQueryService.setSelectedEntity(mountainService.selectedEntity.seedQuery); 
+{
+seedQueryService.searchOne(mountainService.selectedEntity.seedQueryList[index]).then(function(data) { 
+console.log(data[0]);
+seedQueryService.setSelectedEntity(data[0]);
 seedQueryService.selectedEntity.show=true;
+});
+}
+else 
+{
+seedQueryService.setSelectedEntity(mountainService.selectedEntity.seedQuery); 
+seedQueryService.searchOne(mountainService.selectedEntity.seedQuery).then(function(data) { 
+console.log(data[0]);
+seedQueryService.setSelectedEntity(data[0]);
+seedQueryService.selectedEntity.show=true;
+});
+}
 };
 $scope.init=function()
 {
@@ -464,7 +531,12 @@ columnDefs: [
 $scope.seedQueryListGridOptions.onRegisterApi = function(gridApi){
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
-seedQueryService.setSelectedEntity(row.entity);
+{
+seedQueryService.searchOne(row.entity).then(function(data) { 
+console.log(data);
+seedQueryService.setSelectedEntity(data[0]);
+});
+}
 else 
 seedQueryService.setSelectedEntity(null);
 seedQueryService.selectedEntity.show = row.isSelected;
@@ -544,6 +616,17 @@ this.selectedEntity[val] = entity[val];
 this.search = function() {
 this.setSelectedEntity(null);
 var promise= $http.post("../photo/search",this.searchBean)
+.then( function(response) {
+return response.data;
+})
+.catch(function() {
+alert("error");
+});
+return promise; 
+};
+this.searchOne=function(entity) {
+this.setSelectedEntity(null);
+var promise= $http.post("../photo/search",entity)
 .then( function(response) {
 return response.data;
 })
@@ -648,7 +731,9 @@ seedQueryService.selectedEntity.photoList.splice(i,1);
 
 seedQueryService.selectedEntity.photoList.push(photoService.selectedEntity);
 
-$scope.updateParent();
+photoService.update().then(function(data){
+photoService.setSelectedEntity(data);
+});
 };
 $scope.del=function()
 {
@@ -663,10 +748,22 @@ $scope.updateParent();
 };$scope.trueFalseValues=[true,false];$scope.showSeedQueryDetail= function(index)
 {
 if (index!=null)
-seedQueryService.setSelectedEntity(photoService.selectedEntity.seedQueryList[index]);
-else 
-seedQueryService.setSelectedEntity(photoService.selectedEntity.seedQuery); 
+{
+seedQueryService.searchOne(photoService.selectedEntity.seedQueryList[index]).then(function(data) { 
+console.log(data[0]);
+seedQueryService.setSelectedEntity(data[0]);
 seedQueryService.selectedEntity.show=true;
+});
+}
+else 
+{
+seedQueryService.setSelectedEntity(photoService.selectedEntity.seedQuery); 
+seedQueryService.searchOne(photoService.selectedEntity.seedQuery).then(function(data) { 
+console.log(data[0]);
+seedQueryService.setSelectedEntity(data[0]);
+seedQueryService.selectedEntity.show=true;
+});
+}
 };
 $scope.init=function()
 {

@@ -73,7 +73,7 @@ public class Photo {
 	
 	//RELATIONSHIPS
 
-	@Cascade({CascadeType.ALL})
+	//@Cascade({CascadeType.ALL})
 	@ManyToOne
 	private SeedQuery seedQuery;
 	

@@ -69,6 +69,17 @@ alert("error");
 });
 return promise; 
 };
+this.searchOne=function(entity) {
+this.setSelectedEntity(null);
+var promise= $http.post("../place/search",entity)
+.then( function(response) {
+return response.data;
+})
+.catch(function() {
+alert("error");
+});
+return promise; 
+};
 this.insert = function() {
 var promise= $http.put("../place/",this.selectedEntity)
 .then( function(response) 
@@ -152,10 +163,22 @@ $scope.search();
 };$scope.trueFalseValues=[true,false];$scope.showOrderDetail= function(index)
 {
 if (index!=null)
-orderService.setSelectedEntity(placeService.selectedEntity.orderList[index]);
-else 
-orderService.setSelectedEntity(placeService.selectedEntity.order); 
+{
+orderService.searchOne(placeService.selectedEntity.orderList[index]).then(function(data) { 
+console.log(data[0]);
+orderService.setSelectedEntity(data[0]);
 orderService.selectedEntity.show=true;
+});
+}
+else 
+{
+orderService.setSelectedEntity(placeService.selectedEntity.order); 
+orderService.searchOne(placeService.selectedEntity.order).then(function(data) { 
+console.log(data[0]);
+orderService.setSelectedEntity(data[0]);
+orderService.selectedEntity.show=true;
+});
+}
 };
 $scope.init=function()
 {
@@ -187,7 +210,9 @@ columnDefs: [
 $scope.placeGridOptions.onRegisterApi = function(gridApi){
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 orderService.selectedEntity.show=false;personService.selectedEntity.show=false;if (row.isSelected)
+{
 placeService.setSelectedEntity(row.entity);
+}
 else 
 placeService.setSelectedEntity(null);
 placeService.selectedEntity.show = row.isSelected;
@@ -267,6 +292,17 @@ this.selectedEntity[val] = entity[val];
 this.search = function() {
 this.setSelectedEntity(null);
 var promise= $http.post("../order/search",this.searchBean)
+.then( function(response) {
+return response.data;
+})
+.catch(function() {
+alert("error");
+});
+return promise; 
+};
+this.searchOne=function(entity) {
+this.setSelectedEntity(null);
+var promise= $http.post("../order/search",entity)
 .then( function(response) {
 return response.data;
 })
@@ -364,7 +400,9 @@ orderService.selectedEntity.show=false;
 
 placeService.selectedEntity.order=orderService.selectedEntity;
 
-$scope.updateParent();
+orderService.update().then(function(data){
+orderService.setSelectedEntity(data);
+});
 };
 $scope.del=function()
 {
@@ -374,18 +412,42 @@ $scope.updateParent();
 };$scope.trueFalseValues=[true,false];$scope.showPersonDetail= function(index)
 {
 if (index!=null)
-personService.setSelectedEntity(orderService.selectedEntity.personList[index]);
-else 
-personService.setSelectedEntity(orderService.selectedEntity.person); 
+{
+personService.searchOne(orderService.selectedEntity.personList[index]).then(function(data) { 
+console.log(data[0]);
+personService.setSelectedEntity(data[0]);
 personService.selectedEntity.show=true;
+});
+}
+else 
+{
+personService.setSelectedEntity(orderService.selectedEntity.person); 
+personService.searchOne(orderService.selectedEntity.person).then(function(data) { 
+console.log(data[0]);
+personService.setSelectedEntity(data[0]);
+personService.selectedEntity.show=true;
+});
+}
 };
 $scope.showPlaceDetail= function(index)
 {
 if (index!=null)
-placeService.setSelectedEntity(orderService.selectedEntity.placeList[index]);
-else 
-placeService.setSelectedEntity(orderService.selectedEntity.place); 
+{
+placeService.searchOne(orderService.selectedEntity.placeList[index]).then(function(data) { 
+console.log(data[0]);
+placeService.setSelectedEntity(data[0]);
 placeService.selectedEntity.show=true;
+});
+}
+else 
+{
+placeService.setSelectedEntity(orderService.selectedEntity.place); 
+placeService.searchOne(orderService.selectedEntity.place).then(function(data) { 
+console.log(data[0]);
+placeService.setSelectedEntity(data[0]);
+placeService.selectedEntity.show=true;
+});
+}
 };
 $scope.init=function()
 {
@@ -424,7 +486,12 @@ columnDefs: [
 $scope.placeListGridOptions.onRegisterApi = function(gridApi){
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
-placeService.setSelectedEntity(row.entity);
+{
+placeService.searchOne(row.entity).then(function(data) { 
+console.log(data);
+placeService.setSelectedEntity(data[0]);
+});
+}
 else 
 placeService.setSelectedEntity(null);
 placeService.selectedEntity.show = row.isSelected;
@@ -520,6 +587,17 @@ alert("error");
 });
 return promise; 
 };
+this.searchOne=function(entity) {
+this.setSelectedEntity(null);
+var promise= $http.post("../person/search",entity)
+.then( function(response) {
+return response.data;
+})
+.catch(function() {
+alert("error");
+});
+return promise; 
+};
 this.insert = function() {
 var promise= $http.put("../person/",this.selectedEntity)
 .then( function(response) 
@@ -606,7 +684,9 @@ personService.selectedEntity.show=false;
 
 orderService.selectedEntity.person=personService.selectedEntity;
 
-$scope.updateParent();
+personService.update().then(function(data){
+personService.setSelectedEntity(data);
+});
 };
 $scope.del=function()
 {

@@ -41,7 +41,7 @@ public class Mountain {
 	
 
 	@OneToMany(fetch=FetchType.EAGER)
-	@Cascade({CascadeType.ALL})
+	//@Cascade({CascadeType.ALL})
 	@Type(type="it.polimi.model.SeedQuery")
 	@JoinColumn(name="mountain_id_mountain")
 	private List<SeedQuery> seedQueryList;
@@ -49,6 +49,11 @@ public class Mountain {
 	public Mountain()
 	{
 		
+	}
+	
+	public Mountain(Long mountainId)
+	{
+		this.mountainId=mountainId;
 	}
 	
 	public List<SeedQuery> getSeedQueryList() {

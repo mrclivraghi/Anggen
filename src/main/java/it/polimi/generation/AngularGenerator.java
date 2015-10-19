@@ -198,6 +198,9 @@ public class AngularGenerator {
 							if (field.getCompositeClass().fullName().contains("java.util.List"))
 							{ //list
 								html._div();
+								html.div(CssGenerator.getPanel())
+								.div(CssGenerator.getPanelHeader())
+								.content(field.getName());
 								html.div(CssGenerator.getPanelBody().add("ng-class","{'has-error': !"+entityName+"DetailForm."+field.getName()+".$valid, 'has-success': "+entityName+"DetailForm."+field.getName()+".$valid}"))
 								.label((new HtmlAttributes()).add("id", field.getName())).content(field.getName())
 								.button(CssGenerator.getButton("show"+Utility.getFirstUpper(field.getName())+"Detail"))
@@ -207,6 +210,8 @@ public class AngularGenerator {
 								._div();
 								renderValidator(html,field);
 								html._div()._div();
+								
+								html._div();
 								html.div(CssGenerator.getPanelBody());
 							}else
 							{//entity

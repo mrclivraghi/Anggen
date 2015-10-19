@@ -23,9 +23,9 @@ public class HtmlGenerator {
 	
 	private String entityName;
 
-	public static String directoryViewPages;
+	private static String directoryViewPages;
 	
-	public static String directoryAngularFiles;
+	private static String directoryAngularFiles;
 	
 	private ReflectionManager reflectionManager;
 	

@@ -52,7 +52,7 @@ public class JsGenerator {
 			entityList=false;
 	}
 
-	public String generateService()
+	private String generateService()
 	{
 		StringBuilder sb = new StringBuilder();
 		sb.append(".service(\""+entityName+"Service\", function($http)\n")
@@ -211,7 +211,7 @@ public class JsGenerator {
 
 	}
 
-	public String generateController()
+	private String generateController()
 	{
 		StringBuilder sb = new StringBuilder();
 
@@ -480,7 +480,7 @@ public class JsGenerator {
 		return sb.toString();
 	}
 
-	public String getPagination()
+	private String getPagination()
 	{
 		StringBuilder sb = new StringBuilder();
 		//pagination options
@@ -563,7 +563,7 @@ public class JsGenerator {
 		return services;
 	}
 
-	public String buildJS()
+	private String buildJS()
 	{
 		StringBuilder buildJS= new StringBuilder();
 		buildJS.append("var "+entityName+"App=angular.module(\""+entityName+"App\",['ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter'])\n");

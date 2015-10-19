@@ -62,13 +62,6 @@ public  class CssGenerator {
 	}
 
 
-	public static HtmlAttributes getInput(String style, boolean formControl) {
-		HtmlAttributes htmlAttributes= new HtmlAttributes();
-		htmlAttributes.add("aria-describedby", "sizing-addon3");
-		if (formControl)
-			htmlAttributes.add("class", "form-control "+style );
-		return htmlAttributes;
-	}
 	
 	public static HtmlAttributes getInputGroup(Boolean search,String entityName,Field field)
 	{
@@ -96,6 +89,13 @@ public  class CssGenerator {
 		return htmlAttributes;
 	}
 	
+	/* public static HtmlAttributes getInput(String style, boolean formControl) {
+		HtmlAttributes htmlAttributes= new HtmlAttributes();
+		htmlAttributes.add("aria-describedby", "sizing-addon3");
+		if (formControl)
+			htmlAttributes.add("class", "form-control "+style );
+		return htmlAttributes;
+	}*/
 	
 	
 }

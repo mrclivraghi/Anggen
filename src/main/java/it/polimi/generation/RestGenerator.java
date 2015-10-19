@@ -74,7 +74,7 @@ public class RestGenerator {
 		
 	}
 	
-	public String getSearchQuery(JMethod method)
+	private String getSearchQuery(JMethod method)
 	{
 		String query="select "+alias+" from "+Utility.getFirstUpper(className)+" "+alias+ " where ";
 		for (Field field: fields)
@@ -185,7 +185,7 @@ public class RestGenerator {
 	}
 	
 	
-	public String generateRepository(){
+	private String generateRepository(){
 		JCodeModel	codeModel = new JCodeModel();
 		JDefinedClass myClass= null;
 		String searchMethod="";
@@ -234,7 +234,7 @@ public class RestGenerator {
 		return searchMethod;
 	}
 	
-	public void generateServiceInterface()
+	private void generateServiceInterface()
 	{
 		JCodeModel	codeModel = new JCodeModel();
 		JDefinedClass myClass= null;
@@ -266,7 +266,7 @@ public class RestGenerator {
 	}
 	
 	
-	public void generateServiceImpl(Class interfaceClass,Class repositoryClass,String searchMethod)
+	private void generateServiceImpl(Class interfaceClass,Class repositoryClass,String searchMethod)
 	{
 		JCodeModel	codeModel = new JCodeModel();
 		JDefinedClass myClass= null;
@@ -364,7 +364,7 @@ public class RestGenerator {
 	
 	}
 
-	public void generateController(Class serviceClass)
+	private void generateController(Class serviceClass)
 	{
 		JCodeModel	codeModel = new JCodeModel();
 		JDefinedClass myClass= null;
@@ -550,7 +550,7 @@ public class RestGenerator {
 		}
 	}
 	
-	private static void generateRightMapping(Class theClass,JBlock block,Class parentClass,String entityName)
+	/*private static void generateRightMapping(Class theClass,JBlock block,Class parentClass,String entityName)
 	{
 		ReflectionManager reflectionManager = new ReflectionManager(theClass);
 		String lowerClass=entityName!=null? entityName:reflectionManager.parseName();
@@ -577,7 +577,7 @@ public class RestGenerator {
 			}
 		}
 	}
-	
+	*/
 	private static Boolean isBackRelationship(Field field)
 	{
 		if (field.getAnnotationList()==null || field.getAnnotationList().length==0) return false;

@@ -55,7 +55,7 @@ this.selectedEntity[val] = new Date(entity[val]);
 this.selectedEntity[val] = entity[val];
 }
 }
-	}
+}
 };
 };
 this.search = function() {
@@ -256,7 +256,7 @@ this.selectedEntity[val] = new Date(entity[val]);
 this.selectedEntity[val] = entity[val];
 }
 }
-	}
+}
 };
 };
 this.search = function() {
@@ -536,7 +536,7 @@ this.selectedEntity[val] = new Date(entity[val]);
 this.selectedEntity[val] = entity[val];
 }
 }
-	}
+}
 };
 };
 this.search = function() {
@@ -790,7 +790,7 @@ this.selectedEntity[val] = new Date(entity[val]);
 this.selectedEntity[val] = entity[val];
 }
 }
-	}
+}
 };
 };
 this.search = function() {

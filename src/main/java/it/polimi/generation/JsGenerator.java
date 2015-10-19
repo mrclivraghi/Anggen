@@ -149,6 +149,21 @@ public class JsGenerator {
 		sb.append("});\n");
 		sb.append("return promise; \n");
 		sb.append("};\n");
+		//searchOne
+
+		sb.append("this.searchOne=function(entity) {\n");
+		sb.append("this.setSelectedEntity(null);\n");
+		sb.append("var promise= $http.post(\"../seedQuery/search\",entity)\n");
+		sb.append(".then( function(response) {\n");
+		sb.append("return response.data;\n");
+		sb.append("})\n");
+		sb.append(".catch(function() {\n");
+		sb.append("alert(\"error\");\n");
+		sb.append("});\n");
+		sb.append("return promise; \n");
+		sb.append("};\n");
+
+
 		//insert
 		sb.append("this.insert = function() {\n");
 		sb.append("var promise= $http.put(\"../"+entityName+"/\",this.selectedEntity)\n");
@@ -345,7 +360,11 @@ public class JsGenerator {
 				sb.append(parentEntityName+"Service.selectedEntity."+entityName+"="+entityName+"Service.selectedEntity;\n\n");
 			}
 
-			sb.append("$scope.updateParent();\n");
+			//sb.append("$scope.updateParent();\n");
+			sb.append(entityName+"Service.update().then(function(data){\n");
+			//console.log(data);
+			sb.append(entityName+"Service.setSelectedEntity(data);\n");
+			sb.append("});\n");
 		}
 		sb.append("};\n");
 		//DELETE
@@ -542,9 +561,14 @@ public class JsGenerator {
 		sb.append("gridApi.selection.on.rowSelectionChanged($scope,function(row){\n");
 		if (isParent)
 			changeChildrenVisibility(sb, false);
-		
+
 		sb.append("if (row.isSelected)\n");
-		sb.append(entityName+"Service.setSelectedEntity(row.entity);\n");
+		//sb.append(entityName+"Service.setSelectedEntity(row.entity);\n");
+		sb.append("{\n");
+		sb.append(entityName+"Service.searchOne(row.entity).then(function(data) { \n");
+		sb.append(entityName+"Service.setSelectedEntity(data[0]);\n");
+		sb.append("});\n");
+		sb.append("}\n");
 		sb.append("else \n");
 		sb.append(entityName+"Service.setSelectedEntity(null);\n");
 		sb.append(entityName+"Service.selectedEntity.show = row.isSelected;\n");

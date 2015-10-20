@@ -320,16 +320,23 @@ public class JsGenerator {
 		}else
 		{
 			sb.append(entityName+"Service.selectedEntity.show=false;\n\n");
+			/*sb.append(entityName+"Service.insert().then(function(data) { });\n");*/
+			sb.append(entityName+"Service.selectedEntity.show=false;\n");
+			sb.append(entityName+"Service.selectedEntity."+parentEntityName+"={};\n");
+			sb.append(entityName+"Service.selectedEntity."+parentEntityName+"."+parentEntityName+"Id="+parentEntityName+"Service.selectedEntity."+parentEntityName+"Id;\n");
+			sb.append(entityName+"Service.insert().then(function(data) { \n");
 			if (entityList)
 			{
-				sb.append(parentEntityName+"Service.selectedEntity."+entityName+"List.push("+entityName+"Service.selectedEntity);\n\n");
+				sb.append(""+parentEntityName+"Service.selectedEntity."+entityName+"List.push(data);\n");
+//				sb.append(parentEntityName+"Service.selectedEntity."+entityName+"List.push("+entityName+"Service.selectedEntity);\n\n");
 
 			}else
 			{
-				sb.append(parentEntityName+"Service.selectedEntity."+entityName+"="+entityName+"Service.selectedEntity;\n\n");
+				sb.append(""+parentEntityName+"Service.selectedEntity."+entityName+"=data;\n");
+				//sb.append(parentEntityName+"Service.selectedEntity."+entityName+"="+entityName+"Service.selectedEntity;\n\n");
 			}
-
-			sb.append("$scope.updateParent();\n\n");
+			sb.append("});\n");
+			//sb.append("$scope.updateParent();\n\n");
 
 		}
 		sb.append("};\n");
@@ -414,14 +421,15 @@ public class JsGenerator {
 				sb.append("}\n");
 				sb.append("else \n");
 				sb.append("{\n");
-				sb.append(field.getName()+"Service.setSelectedEntity("+entityName+"Service.selectedEntity."+field.getName()+"); \n");
-				
+				sb.append("if ("+entityName+"Service.selectedEntity."+field.getName()+"==null || "+entityName+"Service.selectedEntity."+field.getName()+"==undefined)\n");
+				sb.append(field.getName()+"Service.setSelectedEntity(null); \n");
+				sb.append("else\n");
 				sb.append(field.getName()+"Service.searchOne("+entityName+"Service.selectedEntity."+field.getName()+").then(function(data) { \n");
 				sb.append("console.log(data[0]);\n");
 				sb.append(field.getName()+"Service.setSelectedEntity(data[0]);\n");
-				sb.append(field.getName()+"Service.selectedEntity.show=true;\n");
 				sb.append("});\n");
 				
+				sb.append(field.getName()+"Service.selectedEntity.show=true;\n");
 				
 				sb.append("}\n");
 				sb.append("};\n");
@@ -458,7 +466,7 @@ public class JsGenerator {
 					}
 				}
 			sb.append("}; \n");
-			if (isParent)
+			//if (isParent)
 				sb.append("$scope.init();\n");
 
 

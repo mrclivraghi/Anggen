@@ -468,7 +468,7 @@ public class RestGenerator {
 			getRightMapping.param(classClass, lowerClass);
 			JBlock getRightMappingBlock = getRightMapping.body();
 			
-			RestGenerator.generateRightMapping_v2(classClass, getRightMappingBlock,new ArrayList<Class>(),null);
+			RestGenerator.generateRightMapping_v3(classClass, getRightMappingBlock);
 			
 			
 		} catch (JClassAlreadyExistsException e) {
@@ -489,6 +489,33 @@ public class RestGenerator {
 			   ex.printStackTrace();
 			}
 		
+	}
+	
+	
+	private static void generateRightMapping_v3(Class theClass, JBlock block)
+	{
+		ReflectionManager reflectionManager = new ReflectionManager(theClass);
+		String lowerClass= reflectionManager.parseName();
+		for (Field mainField: reflectionManager.getChildrenFieldList())
+		{
+			if (mainField.getCompositeClass().fullName().contains("java.util.List"))
+				block.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(mainField.getName())+"List()!=null)");
+			 else
+				block.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(mainField.getName())+"()!=null)");
+			block.directStatement("{");
+			ReflectionManager fieldReflectionManager = new ReflectionManager(mainField.getFieldClass());
+			for (Field field: fieldReflectionManager.getChildrenFieldList())
+			{
+				if (field.getCompositeClass().fullName().contains("java.util.List"))
+					block.directStatement(lowerClass+".set"+Utility.getFirstUpper(mainField.getName())+"List(null);");
+				else
+					block.directStatement(lowerClass+".set"+Utility.getFirstUpper(mainField.getName())+"(null);");
+			}
+			
+			
+			block.directStatement("}");
+			
+		}
 	}
 	
 	/**

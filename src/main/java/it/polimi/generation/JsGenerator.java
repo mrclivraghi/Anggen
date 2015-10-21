@@ -201,6 +201,30 @@ public class JsGenerator {
 		sb.append("return promise; \n");
 		sb.append("}\n");
 
+		
+		
+		
+		if (childrenList!=null)
+			for (Field field: childrenList)
+			{
+
+				sb.append(" this.init"+Utility.getFirstUpper(field.getName())+"List= function()\n");
+				sb.append("{\n");
+				sb.append("var promise= $http\n");
+				sb.append(".post(\"../"+field.getName()+"/search\",\n");
+				sb.append("{})\n");
+				sb.append(".then(\n");
+				sb.append("function(response) {\n");
+				sb.append("return response.data;\n");
+				sb.append("}).catch(function() {\n");
+				sb.append("alert(\"error\");\n");
+				sb.append("});\n");
+				sb.append("return promise;\n");
+				sb.append("};\n");
+			}
+		
+		
+		
 		sb.append("})\n");
 		return sb.toString();
 	}
@@ -333,6 +357,9 @@ public class JsGenerator {
 			}else
 			{
 				sb.append(""+parentEntityName+"Service.selectedEntity."+entityName+"=data;\n");
+				sb.append(parentEntityName+"Service.init"+Utility.getFirstUpper(entityName)+"List().then(function(data) {\n");
+				sb.append(parentEntityName+"Service.childrenList."+Utility.getFirstLower(entityName)+"List=data;\n");
+				sb.append("});\n");
 				//sb.append(parentEntityName+"Service.selectedEntity."+entityName+"="+entityName+"Service.selectedEntity;\n\n");
 			}
 			sb.append("});\n");
@@ -442,14 +469,8 @@ public class JsGenerator {
 				for (Field field: childrenList)
 				{
 
-					sb.append("$http\n");
-					sb.append(".post(\"../"+field.getName()+"/search\",\n");
-					sb.append("{})\n");
-					sb.append(".success(\n");
-					sb.append("function(entityList) {\n");
-					sb.append(""+entityName+"Service.childrenList."+field.getName()+"List=entityList;\n");
-					sb.append("}).error(function() {\n");
-					sb.append("alert(\"error\");\n");
+					sb.append(entityName+"Service.init"+Utility.getFirstUpper(field.getName())+"List().then(function(data) {\n");
+					sb.append(entityName+"Service.childrenList."+Utility.getFirstLower(field.getName())+"List=data;\n");
 					sb.append("});\n");
 				}
 				for (Field field: fieldList)

@@ -157,6 +157,7 @@ $scope.search();
 };
 $scope.del=function()
 {
+nullService.selectedEntity.example=null;
 exampleService.del().then(function(data) { 
 $scope.search();
 });

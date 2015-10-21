@@ -113,6 +113,32 @@ alert("error");
 });
 return promise; 
 }
+ this.initPersonList= function()
+{
+var promise= $http
+.post("../person/search",
+{})
+.then(
+function(response) {
+return response.data;
+}).catch(function() {
+alert("error");
+});
+return promise;
+};
+ this.initPlaceList= function()
+{
+var promise= $http
+.post("../place/search",
+{})
+.then(
+function(response) {
+return response.data;
+}).catch(function() {
+alert("error");
+});
+return promise;
+};
 })
 .controller("orderController",function($scope,$http,orderService,personService,placeService)
 {
@@ -160,6 +186,7 @@ $scope.search();
 };
 $scope.del=function()
 {
+nullService.selectedEntity.order=null;
 orderService.del().then(function(data) { 
 $scope.search();
 });
@@ -175,12 +202,14 @@ personService.selectedEntity.show=true;
 }
 else 
 {
-personService.setSelectedEntity(orderService.selectedEntity.person); 
+if (orderService.selectedEntity.person==null || orderService.selectedEntity.person==undefined)
+personService.setSelectedEntity(null); 
+else
 personService.searchOne(orderService.selectedEntity.person).then(function(data) { 
 console.log(data[0]);
 personService.setSelectedEntity(data[0]);
-personService.selectedEntity.show=true;
 });
+personService.selectedEntity.show=true;
 }
 };
 $scope.showPlaceDetail= function(index)
@@ -195,33 +224,23 @@ placeService.selectedEntity.show=true;
 }
 else 
 {
-placeService.setSelectedEntity(orderService.selectedEntity.place); 
+if (orderService.selectedEntity.place==null || orderService.selectedEntity.place==undefined)
+placeService.setSelectedEntity(null); 
+else
 placeService.searchOne(orderService.selectedEntity.place).then(function(data) { 
 console.log(data[0]);
 placeService.setSelectedEntity(data[0]);
-placeService.selectedEntity.show=true;
 });
+placeService.selectedEntity.show=true;
 }
 };
 $scope.init=function()
 {
-$http
-.post("../person/search",
-{})
-.success(
-function(entityList) {
-orderService.childrenList.personList=entityList;
-}).error(function() {
-alert("error");
+orderService.initPersonList().then(function(data) {
+orderService.childrenList.personList=data;
 });
-$http
-.post("../place/search",
-{})
-.success(
-function(entityList) {
-orderService.childrenList.placeList=entityList;
-}).error(function() {
-alert("error");
+orderService.initPlaceList().then(function(data) {
+orderService.childrenList.placeList=data;
 });
 }; 
 $scope.init();
@@ -453,10 +472,15 @@ $scope.insert=function()
 if (!$scope.personDetailForm.$valid) return; 
 personService.selectedEntity.show=false;
 
-orderService.selectedEntity.person=personService.selectedEntity;
-
-$scope.updateParent();
-
+personService.selectedEntity.show=false;
+personService.selectedEntity.order={};
+personService.selectedEntity.order.orderId=orderService.selectedEntity.orderId;
+personService.insert().then(function(data) { 
+orderService.selectedEntity.person=data;
+orderService.initPersonList().then(function(data) {
+orderService.childrenList.personList=data;
+});
+});
 };
 $scope.update=function()
 {
@@ -469,14 +493,27 @@ personService.update().then(function(data){
 personService.setSelectedEntity(data);
 });
 };
-$scope.del=function()
+$scope.remove= function()
 {
 personService.selectedEntity.show=false;
-orderService.selectedEntity.person=null;personService.setSelectedEntity(null);
+orderService.selectedEntity.person=null;
+personService.setSelectedEntity(null);
 $scope.updateParent();
+};
+$scope.del=function()
+{
+orderService.selectedEntity.person=null;
+$scope.updateParent();
+personService.del().then(function(data) { 
+personService.setSelectedEntity(null);
+orderService.initPersonList().then(function(data) {
+orderService.childrenList.personList=data;
+});
+});
 };$scope.trueFalseValues=[true,false];$scope.init=function()
 {
 }; 
+$scope.init();
 $scope.downloadEntityList=function()
 {
 var mystyle = {
@@ -595,6 +632,19 @@ alert("error");
 });
 return promise; 
 }
+ this.initOrderList= function()
+{
+var promise= $http
+.post("../order/search",
+{})
+.then(
+function(response) {
+return response.data;
+}).catch(function() {
+alert("error");
+});
+return promise;
+};
 })
 .controller("placeController",function($scope,$http,placeService,orderService,personService)
 {
@@ -636,10 +686,12 @@ $scope.insert=function()
 if (!$scope.placeDetailForm.$valid) return; 
 placeService.selectedEntity.show=false;
 
-orderService.selectedEntity.placeList.push(placeService.selectedEntity);
-
-$scope.updateParent();
-
+placeService.selectedEntity.show=false;
+placeService.selectedEntity.order={};
+placeService.selectedEntity.order.orderId=orderService.selectedEntity.orderId;
+placeService.insert().then(function(data) { 
+orderService.selectedEntity.placeList.push(data);
+});
 };
 $scope.update=function()
 {
@@ -662,7 +714,7 @@ placeService.update().then(function(data){
 placeService.setSelectedEntity(data);
 });
 };
-$scope.del=function()
+$scope.remove= function()
 {
 placeService.selectedEntity.show=false;
 for (i=0; i<orderService.selectedEntity.placeList.length; i++)
@@ -672,6 +724,21 @@ orderService.selectedEntity.placeList.splice(i,1);
 }
 placeService.setSelectedEntity(null);
 $scope.updateParent();
+};
+$scope.del=function()
+{
+for (i=0; i<orderService.selectedEntity.placeList.length; i++)
+{
+if (orderService.selectedEntity.placeList[i].placeId==placeService.selectedEntity.placeId)
+orderService.selectedEntity.placeList.splice(i,1);
+}
+$scope.updateParent();
+placeService.del().then(function(data) { 
+placeService.setSelectedEntity(null);
+orderService.initPlaceList().then(function(data) {
+orderService.childrenList.placeList=data;
+});
+});
 };$scope.trueFalseValues=[true,false];$scope.showOrderDetail= function(index)
 {
 if (index!=null)
@@ -684,26 +751,23 @@ orderService.selectedEntity.show=true;
 }
 else 
 {
-orderService.setSelectedEntity(placeService.selectedEntity.order); 
+if (placeService.selectedEntity.order==null || placeService.selectedEntity.order==undefined)
+orderService.setSelectedEntity(null); 
+else
 orderService.searchOne(placeService.selectedEntity.order).then(function(data) { 
 console.log(data[0]);
 orderService.setSelectedEntity(data[0]);
-orderService.selectedEntity.show=true;
 });
+orderService.selectedEntity.show=true;
 }
 };
 $scope.init=function()
 {
-$http
-.post("../order/search",
-{})
-.success(
-function(entityList) {
-placeService.childrenList.orderList=entityList;
-}).error(function() {
-alert("error");
+placeService.initOrderList().then(function(data) {
+placeService.childrenList.orderList=data;
 });
 }; 
+$scope.init();
 $scope.downloadEntityList=function()
 {
 var mystyle = {

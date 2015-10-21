@@ -113,6 +113,19 @@ alert("error");
 });
 return promise; 
 }
+ this.initItemOrdineList= function()
+{
+var promise= $http
+.post("../itemOrdine/search",
+{})
+.then(
+function(response) {
+return response.data;
+}).catch(function() {
+alert("error");
+});
+return promise;
+};
 })
 .controller("itemOrdineCodiceController",function($scope,$http,itemOrdineCodiceService,itemOrdineService,ordineService,colloService)
 {
@@ -157,6 +170,7 @@ $scope.search();
 };
 $scope.del=function()
 {
+nullService.selectedEntity.itemOrdineCodice=null;
 itemOrdineCodiceService.del().then(function(data) { 
 $scope.search();
 });
@@ -172,24 +186,20 @@ itemOrdineService.selectedEntity.show=true;
 }
 else 
 {
-itemOrdineService.setSelectedEntity(itemOrdineCodiceService.selectedEntity.itemOrdine); 
+if (itemOrdineCodiceService.selectedEntity.itemOrdine==null || itemOrdineCodiceService.selectedEntity.itemOrdine==undefined)
+itemOrdineService.setSelectedEntity(null); 
+else
 itemOrdineService.searchOne(itemOrdineCodiceService.selectedEntity.itemOrdine).then(function(data) { 
 console.log(data[0]);
 itemOrdineService.setSelectedEntity(data[0]);
-itemOrdineService.selectedEntity.show=true;
 });
+itemOrdineService.selectedEntity.show=true;
 }
 };
 $scope.init=function()
 {
-$http
-.post("../itemOrdine/search",
-{})
-.success(
-function(entityList) {
-itemOrdineCodiceService.childrenList.itemOrdineList=entityList;
-}).error(function() {
-alert("error");
+itemOrdineCodiceService.initItemOrdineList().then(function(data) {
+itemOrdineCodiceService.childrenList.itemOrdineList=data;
 });
 }; 
 $scope.init();
@@ -354,6 +364,32 @@ alert("error");
 });
 return promise; 
 }
+ this.initOrdineList= function()
+{
+var promise= $http
+.post("../ordine/search",
+{})
+.then(
+function(response) {
+return response.data;
+}).catch(function() {
+alert("error");
+});
+return promise;
+};
+ this.initItemOrdineCodiceList= function()
+{
+var promise= $http
+.post("../itemOrdineCodice/search",
+{})
+.then(
+function(response) {
+return response.data;
+}).catch(function() {
+alert("error");
+});
+return promise;
+};
 })
 .controller("itemOrdineController",function($scope,$http,itemOrdineService,ordineService,colloService,itemOrdineCodiceService)
 {
@@ -398,10 +434,15 @@ $scope.insert=function()
 if (!$scope.itemOrdineDetailForm.$valid) return; 
 itemOrdineService.selectedEntity.show=false;
 
-itemOrdineCodiceService.selectedEntity.itemOrdine=itemOrdineService.selectedEntity;
-
-$scope.updateParent();
-
+itemOrdineService.selectedEntity.show=false;
+itemOrdineService.selectedEntity.itemOrdineCodice={};
+itemOrdineService.selectedEntity.itemOrdineCodice.itemOrdineCodiceId=itemOrdineCodiceService.selectedEntity.itemOrdineCodiceId;
+itemOrdineService.insert().then(function(data) { 
+itemOrdineCodiceService.selectedEntity.itemOrdine=data;
+itemOrdineCodiceService.initItemOrdineList().then(function(data) {
+itemOrdineCodiceService.childrenList.itemOrdineList=data;
+});
+});
 };
 $scope.update=function()
 {
@@ -414,11 +455,23 @@ itemOrdineService.update().then(function(data){
 itemOrdineService.setSelectedEntity(data);
 });
 };
-$scope.del=function()
+$scope.remove= function()
 {
 itemOrdineService.selectedEntity.show=false;
-itemOrdineCodiceService.selectedEntity.itemOrdine=null;itemOrdineService.setSelectedEntity(null);
+itemOrdineCodiceService.selectedEntity.itemOrdine=null;
+itemOrdineService.setSelectedEntity(null);
 $scope.updateParent();
+};
+$scope.del=function()
+{
+itemOrdineCodiceService.selectedEntity.itemOrdine=null;
+$scope.updateParent();
+itemOrdineService.del().then(function(data) { 
+itemOrdineService.setSelectedEntity(null);
+itemOrdineCodiceService.initItemOrdineList().then(function(data) {
+itemOrdineCodiceService.childrenList.itemOrdineList=data;
+});
+});
 };$scope.trueFalseValues=[true,false];$scope.showOrdineDetail= function(index)
 {
 if (index!=null)
@@ -431,12 +484,14 @@ ordineService.selectedEntity.show=true;
 }
 else 
 {
-ordineService.setSelectedEntity(itemOrdineService.selectedEntity.ordine); 
+if (itemOrdineService.selectedEntity.ordine==null || itemOrdineService.selectedEntity.ordine==undefined)
+ordineService.setSelectedEntity(null); 
+else
 ordineService.searchOne(itemOrdineService.selectedEntity.ordine).then(function(data) { 
 console.log(data[0]);
 ordineService.setSelectedEntity(data[0]);
-ordineService.selectedEntity.show=true;
 });
+ordineService.selectedEntity.show=true;
 }
 };
 $scope.showItemOrdineCodiceDetail= function(index)
@@ -451,35 +506,26 @@ itemOrdineCodiceService.selectedEntity.show=true;
 }
 else 
 {
-itemOrdineCodiceService.setSelectedEntity(itemOrdineService.selectedEntity.itemOrdineCodice); 
+if (itemOrdineService.selectedEntity.itemOrdineCodice==null || itemOrdineService.selectedEntity.itemOrdineCodice==undefined)
+itemOrdineCodiceService.setSelectedEntity(null); 
+else
 itemOrdineCodiceService.searchOne(itemOrdineService.selectedEntity.itemOrdineCodice).then(function(data) { 
 console.log(data[0]);
 itemOrdineCodiceService.setSelectedEntity(data[0]);
-itemOrdineCodiceService.selectedEntity.show=true;
 });
+itemOrdineCodiceService.selectedEntity.show=true;
 }
 };
 $scope.init=function()
 {
-$http
-.post("../ordine/search",
-{})
-.success(
-function(entityList) {
-itemOrdineService.childrenList.ordineList=entityList;
-}).error(function() {
-alert("error");
+itemOrdineService.initOrdineList().then(function(data) {
+itemOrdineService.childrenList.ordineList=data;
 });
-$http
-.post("../itemOrdineCodice/search",
-{})
-.success(
-function(entityList) {
-itemOrdineService.childrenList.itemOrdineCodiceList=entityList;
-}).error(function() {
-alert("error");
+itemOrdineService.initItemOrdineCodiceList().then(function(data) {
+itemOrdineService.childrenList.itemOrdineCodiceList=data;
 });
 }; 
+$scope.init();
 $scope.itemOrdineCodiceListGridOptions = {
 enablePaginationControls: true,
 multiSelect: false,
@@ -651,6 +697,32 @@ alert("error");
 });
 return promise; 
 }
+ this.initColloList= function()
+{
+var promise= $http
+.post("../collo/search",
+{})
+.then(
+function(response) {
+return response.data;
+}).catch(function() {
+alert("error");
+});
+return promise;
+};
+ this.initItemOrdineList= function()
+{
+var promise= $http
+.post("../itemOrdine/search",
+{})
+.then(
+function(response) {
+return response.data;
+}).catch(function() {
+alert("error");
+});
+return promise;
+};
 })
 .controller("ordineController",function($scope,$http,ordineService,colloService,itemOrdineService,itemOrdineCodiceService)
 {
@@ -698,10 +770,15 @@ $scope.insert=function()
 if (!$scope.ordineDetailForm.$valid) return; 
 ordineService.selectedEntity.show=false;
 
-itemOrdineService.selectedEntity.ordine=ordineService.selectedEntity;
-
-$scope.updateParent();
-
+ordineService.selectedEntity.show=false;
+ordineService.selectedEntity.itemOrdine={};
+ordineService.selectedEntity.itemOrdine.itemOrdineId=itemOrdineService.selectedEntity.itemOrdineId;
+ordineService.insert().then(function(data) { 
+itemOrdineService.selectedEntity.ordine=data;
+itemOrdineService.initOrdineList().then(function(data) {
+itemOrdineService.childrenList.ordineList=data;
+});
+});
 };
 $scope.update=function()
 {
@@ -714,11 +791,23 @@ ordineService.update().then(function(data){
 ordineService.setSelectedEntity(data);
 });
 };
-$scope.del=function()
+$scope.remove= function()
 {
 ordineService.selectedEntity.show=false;
-itemOrdineService.selectedEntity.ordine=null;ordineService.setSelectedEntity(null);
+itemOrdineService.selectedEntity.ordine=null;
+ordineService.setSelectedEntity(null);
 $scope.updateParent();
+};
+$scope.del=function()
+{
+itemOrdineService.selectedEntity.ordine=null;
+$scope.updateParent();
+ordineService.del().then(function(data) { 
+ordineService.setSelectedEntity(null);
+itemOrdineService.initOrdineList().then(function(data) {
+itemOrdineService.childrenList.ordineList=data;
+});
+});
 };$scope.trueFalseValues=[true,false];$scope.showColloDetail= function(index)
 {
 if (index!=null)
@@ -731,12 +820,14 @@ colloService.selectedEntity.show=true;
 }
 else 
 {
-colloService.setSelectedEntity(ordineService.selectedEntity.collo); 
+if (ordineService.selectedEntity.collo==null || ordineService.selectedEntity.collo==undefined)
+colloService.setSelectedEntity(null); 
+else
 colloService.searchOne(ordineService.selectedEntity.collo).then(function(data) { 
 console.log(data[0]);
 colloService.setSelectedEntity(data[0]);
-colloService.selectedEntity.show=true;
 });
+colloService.selectedEntity.show=true;
 }
 };
 $scope.showItemOrdineDetail= function(index)
@@ -751,35 +842,26 @@ itemOrdineService.selectedEntity.show=true;
 }
 else 
 {
-itemOrdineService.setSelectedEntity(ordineService.selectedEntity.itemOrdine); 
+if (ordineService.selectedEntity.itemOrdine==null || ordineService.selectedEntity.itemOrdine==undefined)
+itemOrdineService.setSelectedEntity(null); 
+else
 itemOrdineService.searchOne(ordineService.selectedEntity.itemOrdine).then(function(data) { 
 console.log(data[0]);
 itemOrdineService.setSelectedEntity(data[0]);
-itemOrdineService.selectedEntity.show=true;
 });
+itemOrdineService.selectedEntity.show=true;
 }
 };
 $scope.init=function()
 {
-$http
-.post("../collo/search",
-{})
-.success(
-function(entityList) {
-ordineService.childrenList.colloList=entityList;
-}).error(function() {
-alert("error");
+ordineService.initColloList().then(function(data) {
+ordineService.childrenList.colloList=data;
 });
-$http
-.post("../itemOrdine/search",
-{})
-.success(
-function(entityList) {
-ordineService.childrenList.itemOrdineList=entityList;
-}).error(function() {
-alert("error");
+ordineService.initItemOrdineList().then(function(data) {
+ordineService.childrenList.itemOrdineList=data;
 });
 }; 
+$scope.init();
 $scope.colloListGridOptions = {
 enablePaginationControls: true,
 multiSelect: false,
@@ -994,6 +1076,19 @@ alert("error");
 });
 return promise; 
 }
+ this.initOrdineList= function()
+{
+var promise= $http
+.post("../ordine/search",
+{})
+.then(
+function(response) {
+return response.data;
+}).catch(function() {
+alert("error");
+});
+return promise;
+};
 })
 .controller("colloController",function($scope,$http,colloService,ordineService,itemOrdineService,itemOrdineCodiceService)
 {
@@ -1035,10 +1130,12 @@ $scope.insert=function()
 if (!$scope.colloDetailForm.$valid) return; 
 colloService.selectedEntity.show=false;
 
-ordineService.selectedEntity.colloList.push(colloService.selectedEntity);
-
-$scope.updateParent();
-
+colloService.selectedEntity.show=false;
+colloService.selectedEntity.ordine={};
+colloService.selectedEntity.ordine.ordineId=ordineService.selectedEntity.ordineId;
+colloService.insert().then(function(data) { 
+ordineService.selectedEntity.colloList.push(data);
+});
 };
 $scope.update=function()
 {
@@ -1061,7 +1158,7 @@ colloService.update().then(function(data){
 colloService.setSelectedEntity(data);
 });
 };
-$scope.del=function()
+$scope.remove= function()
 {
 colloService.selectedEntity.show=false;
 for (i=0; i<ordineService.selectedEntity.colloList.length; i++)
@@ -1071,6 +1168,21 @@ ordineService.selectedEntity.colloList.splice(i,1);
 }
 colloService.setSelectedEntity(null);
 $scope.updateParent();
+};
+$scope.del=function()
+{
+for (i=0; i<ordineService.selectedEntity.colloList.length; i++)
+{
+if (ordineService.selectedEntity.colloList[i].colloId==colloService.selectedEntity.colloId)
+ordineService.selectedEntity.colloList.splice(i,1);
+}
+$scope.updateParent();
+colloService.del().then(function(data) { 
+colloService.setSelectedEntity(null);
+ordineService.initColloList().then(function(data) {
+ordineService.childrenList.colloList=data;
+});
+});
 };$scope.trueFalseValues=[true,false];$scope.showOrdineDetail= function(index)
 {
 if (index!=null)
@@ -1083,26 +1195,23 @@ ordineService.selectedEntity.show=true;
 }
 else 
 {
-ordineService.setSelectedEntity(colloService.selectedEntity.ordine); 
+if (colloService.selectedEntity.ordine==null || colloService.selectedEntity.ordine==undefined)
+ordineService.setSelectedEntity(null); 
+else
 ordineService.searchOne(colloService.selectedEntity.ordine).then(function(data) { 
 console.log(data[0]);
 ordineService.setSelectedEntity(data[0]);
-ordineService.selectedEntity.show=true;
 });
+ordineService.selectedEntity.show=true;
 }
 };
 $scope.init=function()
 {
-$http
-.post("../ordine/search",
-{})
-.success(
-function(entityList) {
-colloService.childrenList.ordineList=entityList;
-}).error(function() {
-alert("error");
+colloService.initOrdineList().then(function(data) {
+colloService.childrenList.ordineList=data;
 });
 }; 
+$scope.init();
 $scope.downloadEntityList=function()
 {
 var mystyle = {

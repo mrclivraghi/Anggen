@@ -113,6 +113,19 @@ alert("error");
 });
 return promise; 
 }
+ this.initSeedQueryList= function()
+{
+var promise= $http
+.post("../seedQuery/search",
+{})
+.then(
+function(response) {
+return response.data;
+}).catch(function() {
+alert("error");
+});
+return promise;
+};
 })
 .controller("photoController",function($scope,$http,photoService,seedQueryService,mountainService)
 {
@@ -157,6 +170,7 @@ $scope.search();
 };
 $scope.del=function()
 {
+nullService.selectedEntity.photo=null;
 photoService.del().then(function(data) { 
 $scope.search();
 });
@@ -172,24 +186,20 @@ seedQueryService.selectedEntity.show=true;
 }
 else 
 {
-seedQueryService.setSelectedEntity(photoService.selectedEntity.seedQuery); 
+if (photoService.selectedEntity.seedQuery==null || photoService.selectedEntity.seedQuery==undefined)
+seedQueryService.setSelectedEntity(null); 
+else
 seedQueryService.searchOne(photoService.selectedEntity.seedQuery).then(function(data) { 
 console.log(data[0]);
 seedQueryService.setSelectedEntity(data[0]);
-seedQueryService.selectedEntity.show=true;
 });
+seedQueryService.selectedEntity.show=true;
 }
 };
 $scope.init=function()
 {
-$http
-.post("../seedQuery/search",
-{})
-.success(
-function(entityList) {
-photoService.childrenList.seedQueryList=entityList;
-}).error(function() {
-alert("error");
+photoService.initSeedQueryList().then(function(data) {
+photoService.childrenList.seedQueryList=data;
 });
 }; 
 $scope.init();
@@ -349,6 +359,32 @@ alert("error");
 });
 return promise; 
 }
+ this.initMountainList= function()
+{
+var promise= $http
+.post("../mountain/search",
+{})
+.then(
+function(response) {
+return response.data;
+}).catch(function() {
+alert("error");
+});
+return promise;
+};
+ this.initPhotoList= function()
+{
+var promise= $http
+.post("../photo/search",
+{})
+.then(
+function(response) {
+return response.data;
+}).catch(function() {
+alert("error");
+});
+return promise;
+};
 })
 .controller("seedQueryController",function($scope,$http,seedQueryService,mountainService,photoService)
 {
@@ -393,10 +429,15 @@ $scope.insert=function()
 if (!$scope.seedQueryDetailForm.$valid) return; 
 seedQueryService.selectedEntity.show=false;
 
-photoService.selectedEntity.seedQuery=seedQueryService.selectedEntity;
-
-$scope.updateParent();
-
+seedQueryService.selectedEntity.show=false;
+seedQueryService.selectedEntity.photo={};
+seedQueryService.selectedEntity.photo.photoId=photoService.selectedEntity.photoId;
+seedQueryService.insert().then(function(data) { 
+photoService.selectedEntity.seedQuery=data;
+photoService.initSeedQueryList().then(function(data) {
+photoService.childrenList.seedQueryList=data;
+});
+});
 };
 $scope.update=function()
 {
@@ -409,11 +450,23 @@ seedQueryService.update().then(function(data){
 seedQueryService.setSelectedEntity(data);
 });
 };
-$scope.del=function()
+$scope.remove= function()
 {
 seedQueryService.selectedEntity.show=false;
-photoService.selectedEntity.seedQuery=null;seedQueryService.setSelectedEntity(null);
+photoService.selectedEntity.seedQuery=null;
+seedQueryService.setSelectedEntity(null);
 $scope.updateParent();
+};
+$scope.del=function()
+{
+photoService.selectedEntity.seedQuery=null;
+$scope.updateParent();
+seedQueryService.del().then(function(data) { 
+seedQueryService.setSelectedEntity(null);
+photoService.initSeedQueryList().then(function(data) {
+photoService.childrenList.seedQueryList=data;
+});
+});
 };$scope.trueFalseValues=[true,false];$scope.showMountainDetail= function(index)
 {
 if (index!=null)
@@ -426,12 +479,14 @@ mountainService.selectedEntity.show=true;
 }
 else 
 {
-mountainService.setSelectedEntity(seedQueryService.selectedEntity.mountain); 
+if (seedQueryService.selectedEntity.mountain==null || seedQueryService.selectedEntity.mountain==undefined)
+mountainService.setSelectedEntity(null); 
+else
 mountainService.searchOne(seedQueryService.selectedEntity.mountain).then(function(data) { 
 console.log(data[0]);
 mountainService.setSelectedEntity(data[0]);
-mountainService.selectedEntity.show=true;
 });
+mountainService.selectedEntity.show=true;
 }
 };
 $scope.showPhotoDetail= function(index)
@@ -446,35 +501,26 @@ photoService.selectedEntity.show=true;
 }
 else 
 {
-photoService.setSelectedEntity(seedQueryService.selectedEntity.photo); 
+if (seedQueryService.selectedEntity.photo==null || seedQueryService.selectedEntity.photo==undefined)
+photoService.setSelectedEntity(null); 
+else
 photoService.searchOne(seedQueryService.selectedEntity.photo).then(function(data) { 
 console.log(data[0]);
 photoService.setSelectedEntity(data[0]);
-photoService.selectedEntity.show=true;
 });
+photoService.selectedEntity.show=true;
 }
 };
 $scope.init=function()
 {
-$http
-.post("../mountain/search",
-{})
-.success(
-function(entityList) {
-seedQueryService.childrenList.mountainList=entityList;
-}).error(function() {
-alert("error");
+seedQueryService.initMountainList().then(function(data) {
+seedQueryService.childrenList.mountainList=data;
 });
-$http
-.post("../photo/search",
-{})
-.success(
-function(entityList) {
-seedQueryService.childrenList.photoList=entityList;
-}).error(function() {
-alert("error");
+seedQueryService.initPhotoList().then(function(data) {
+seedQueryService.childrenList.photoList=data;
 });
 }; 
+$scope.init();
 $scope.photoListGridOptions = {
 enablePaginationControls: true,
 multiSelect: false,
@@ -641,6 +687,19 @@ alert("error");
 });
 return promise; 
 }
+ this.initSeedQueryList= function()
+{
+var promise= $http
+.post("../seedQuery/search",
+{})
+.then(
+function(response) {
+return response.data;
+}).catch(function() {
+alert("error");
+});
+return promise;
+};
 })
 .controller("mountainController",function($scope,$http,mountainService,seedQueryService,photoService)
 {
@@ -685,10 +744,15 @@ $scope.insert=function()
 if (!$scope.mountainDetailForm.$valid) return; 
 mountainService.selectedEntity.show=false;
 
-seedQueryService.selectedEntity.mountain=mountainService.selectedEntity;
-
-$scope.updateParent();
-
+mountainService.selectedEntity.show=false;
+mountainService.selectedEntity.seedQuery={};
+mountainService.selectedEntity.seedQuery.seedQueryId=seedQueryService.selectedEntity.seedQueryId;
+mountainService.insert().then(function(data) { 
+seedQueryService.selectedEntity.mountain=data;
+seedQueryService.initMountainList().then(function(data) {
+seedQueryService.childrenList.mountainList=data;
+});
+});
 };
 $scope.update=function()
 {
@@ -701,11 +765,23 @@ mountainService.update().then(function(data){
 mountainService.setSelectedEntity(data);
 });
 };
-$scope.del=function()
+$scope.remove= function()
 {
 mountainService.selectedEntity.show=false;
-seedQueryService.selectedEntity.mountain=null;mountainService.setSelectedEntity(null);
+seedQueryService.selectedEntity.mountain=null;
+mountainService.setSelectedEntity(null);
 $scope.updateParent();
+};
+$scope.del=function()
+{
+seedQueryService.selectedEntity.mountain=null;
+$scope.updateParent();
+mountainService.del().then(function(data) { 
+mountainService.setSelectedEntity(null);
+seedQueryService.initMountainList().then(function(data) {
+seedQueryService.childrenList.mountainList=data;
+});
+});
 };$scope.trueFalseValues=[true,false];$scope.showSeedQueryDetail= function(index)
 {
 if (index!=null)
@@ -718,26 +794,23 @@ seedQueryService.selectedEntity.show=true;
 }
 else 
 {
-seedQueryService.setSelectedEntity(mountainService.selectedEntity.seedQuery); 
+if (mountainService.selectedEntity.seedQuery==null || mountainService.selectedEntity.seedQuery==undefined)
+seedQueryService.setSelectedEntity(null); 
+else
 seedQueryService.searchOne(mountainService.selectedEntity.seedQuery).then(function(data) { 
 console.log(data[0]);
 seedQueryService.setSelectedEntity(data[0]);
-seedQueryService.selectedEntity.show=true;
 });
+seedQueryService.selectedEntity.show=true;
 }
 };
 $scope.init=function()
 {
-$http
-.post("../seedQuery/search",
-{})
-.success(
-function(entityList) {
-mountainService.childrenList.seedQueryList=entityList;
-}).error(function() {
-alert("error");
+mountainService.initSeedQueryList().then(function(data) {
+mountainService.childrenList.seedQueryList=data;
 });
 }; 
+$scope.init();
 $scope.seedQueryListGridOptions = {
 enablePaginationControls: true,
 multiSelect: false,

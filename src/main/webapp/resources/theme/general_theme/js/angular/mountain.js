@@ -113,6 +113,19 @@ alert("error");
 });
 return promise; 
 }
+ this.initSeedQueryList= function()
+{
+var promise= $http
+.post("../seedQuery/search",
+{})
+.then(
+function(response) {
+return response.data;
+}).catch(function() {
+alert("error");
+});
+return promise;
+};
 })
 .controller("mountainController",function($scope,$http,mountainService,seedQueryService,photoService)
 {
@@ -160,6 +173,7 @@ $scope.search();
 };
 $scope.del=function()
 {
+nullService.selectedEntity.mountain=null;
 mountainService.del().then(function(data) { 
 $scope.search();
 });
@@ -175,24 +189,20 @@ seedQueryService.selectedEntity.show=true;
 }
 else 
 {
-seedQueryService.setSelectedEntity(mountainService.selectedEntity.seedQuery); 
+if (mountainService.selectedEntity.seedQuery==null || mountainService.selectedEntity.seedQuery==undefined)
+seedQueryService.setSelectedEntity(null); 
+else
 seedQueryService.searchOne(mountainService.selectedEntity.seedQuery).then(function(data) { 
 console.log(data[0]);
 seedQueryService.setSelectedEntity(data[0]);
-seedQueryService.selectedEntity.show=true;
 });
+seedQueryService.selectedEntity.show=true;
 }
 };
 $scope.init=function()
 {
-$http
-.post("../seedQuery/search",
-{})
-.success(
-function(entityList) {
-mountainService.childrenList.seedQueryList=entityList;
-}).error(function() {
-alert("error");
+mountainService.initSeedQueryList().then(function(data) {
+mountainService.childrenList.seedQueryList=data;
 });
 }; 
 $scope.init();
@@ -375,6 +385,32 @@ alert("error");
 });
 return promise; 
 }
+ this.initMountainList= function()
+{
+var promise= $http
+.post("../mountain/search",
+{})
+.then(
+function(response) {
+return response.data;
+}).catch(function() {
+alert("error");
+});
+return promise;
+};
+ this.initPhotoList= function()
+{
+var promise= $http
+.post("../photo/search",
+{})
+.then(
+function(response) {
+return response.data;
+}).catch(function() {
+alert("error");
+});
+return promise;
+};
 })
 .controller("seedQueryController",function($scope,$http,seedQueryService,mountainService,photoService)
 {
@@ -419,10 +455,12 @@ $scope.insert=function()
 if (!$scope.seedQueryDetailForm.$valid) return; 
 seedQueryService.selectedEntity.show=false;
 
-mountainService.selectedEntity.seedQueryList.push(seedQueryService.selectedEntity);
-
-$scope.updateParent();
-
+seedQueryService.selectedEntity.show=false;
+seedQueryService.selectedEntity.mountain={};
+seedQueryService.selectedEntity.mountain.mountainId=mountainService.selectedEntity.mountainId;
+seedQueryService.insert().then(function(data) { 
+mountainService.selectedEntity.seedQueryList.push(data);
+});
 };
 $scope.update=function()
 {
@@ -445,7 +483,7 @@ seedQueryService.update().then(function(data){
 seedQueryService.setSelectedEntity(data);
 });
 };
-$scope.del=function()
+$scope.remove= function()
 {
 seedQueryService.selectedEntity.show=false;
 for (i=0; i<mountainService.selectedEntity.seedQueryList.length; i++)
@@ -455,6 +493,21 @@ mountainService.selectedEntity.seedQueryList.splice(i,1);
 }
 seedQueryService.setSelectedEntity(null);
 $scope.updateParent();
+};
+$scope.del=function()
+{
+for (i=0; i<mountainService.selectedEntity.seedQueryList.length; i++)
+{
+if (mountainService.selectedEntity.seedQueryList[i].seedQueryId==seedQueryService.selectedEntity.seedQueryId)
+mountainService.selectedEntity.seedQueryList.splice(i,1);
+}
+$scope.updateParent();
+seedQueryService.del().then(function(data) { 
+seedQueryService.setSelectedEntity(null);
+mountainService.initSeedQueryList().then(function(data) {
+mountainService.childrenList.seedQueryList=data;
+});
+});
 };$scope.trueFalseValues=[true,false];$scope.showMountainDetail= function(index)
 {
 if (index!=null)
@@ -467,12 +520,14 @@ mountainService.selectedEntity.show=true;
 }
 else 
 {
-mountainService.setSelectedEntity(seedQueryService.selectedEntity.mountain); 
+if (seedQueryService.selectedEntity.mountain==null || seedQueryService.selectedEntity.mountain==undefined)
+mountainService.setSelectedEntity(null); 
+else
 mountainService.searchOne(seedQueryService.selectedEntity.mountain).then(function(data) { 
 console.log(data[0]);
 mountainService.setSelectedEntity(data[0]);
-mountainService.selectedEntity.show=true;
 });
+mountainService.selectedEntity.show=true;
 }
 };
 $scope.showPhotoDetail= function(index)
@@ -487,35 +542,26 @@ photoService.selectedEntity.show=true;
 }
 else 
 {
-photoService.setSelectedEntity(seedQueryService.selectedEntity.photo); 
+if (seedQueryService.selectedEntity.photo==null || seedQueryService.selectedEntity.photo==undefined)
+photoService.setSelectedEntity(null); 
+else
 photoService.searchOne(seedQueryService.selectedEntity.photo).then(function(data) { 
 console.log(data[0]);
 photoService.setSelectedEntity(data[0]);
-photoService.selectedEntity.show=true;
 });
+photoService.selectedEntity.show=true;
 }
 };
 $scope.init=function()
 {
-$http
-.post("../mountain/search",
-{})
-.success(
-function(entityList) {
-seedQueryService.childrenList.mountainList=entityList;
-}).error(function() {
-alert("error");
+seedQueryService.initMountainList().then(function(data) {
+seedQueryService.childrenList.mountainList=data;
 });
-$http
-.post("../photo/search",
-{})
-.success(
-function(entityList) {
-seedQueryService.childrenList.photoList=entityList;
-}).error(function() {
-alert("error");
+seedQueryService.initPhotoList().then(function(data) {
+seedQueryService.childrenList.photoList=data;
 });
 }; 
+$scope.init();
 $scope.photoListGridOptions = {
 enablePaginationControls: true,
 multiSelect: false,
@@ -682,6 +728,19 @@ alert("error");
 });
 return promise; 
 }
+ this.initSeedQueryList= function()
+{
+var promise= $http
+.post("../seedQuery/search",
+{})
+.then(
+function(response) {
+return response.data;
+}).catch(function() {
+alert("error");
+});
+return promise;
+};
 })
 .controller("photoController",function($scope,$http,photoService,seedQueryService,mountainService)
 {
@@ -723,10 +782,12 @@ $scope.insert=function()
 if (!$scope.photoDetailForm.$valid) return; 
 photoService.selectedEntity.show=false;
 
-seedQueryService.selectedEntity.photoList.push(photoService.selectedEntity);
-
-$scope.updateParent();
-
+photoService.selectedEntity.show=false;
+photoService.selectedEntity.seedQuery={};
+photoService.selectedEntity.seedQuery.seedQueryId=seedQueryService.selectedEntity.seedQueryId;
+photoService.insert().then(function(data) { 
+seedQueryService.selectedEntity.photoList.push(data);
+});
 };
 $scope.update=function()
 {
@@ -749,7 +810,7 @@ photoService.update().then(function(data){
 photoService.setSelectedEntity(data);
 });
 };
-$scope.del=function()
+$scope.remove= function()
 {
 photoService.selectedEntity.show=false;
 for (i=0; i<seedQueryService.selectedEntity.photoList.length; i++)
@@ -759,6 +820,21 @@ seedQueryService.selectedEntity.photoList.splice(i,1);
 }
 photoService.setSelectedEntity(null);
 $scope.updateParent();
+};
+$scope.del=function()
+{
+for (i=0; i<seedQueryService.selectedEntity.photoList.length; i++)
+{
+if (seedQueryService.selectedEntity.photoList[i].photoId==photoService.selectedEntity.photoId)
+seedQueryService.selectedEntity.photoList.splice(i,1);
+}
+$scope.updateParent();
+photoService.del().then(function(data) { 
+photoService.setSelectedEntity(null);
+seedQueryService.initPhotoList().then(function(data) {
+seedQueryService.childrenList.photoList=data;
+});
+});
 };$scope.trueFalseValues=[true,false];$scope.showSeedQueryDetail= function(index)
 {
 if (index!=null)
@@ -771,26 +847,23 @@ seedQueryService.selectedEntity.show=true;
 }
 else 
 {
-seedQueryService.setSelectedEntity(photoService.selectedEntity.seedQuery); 
+if (photoService.selectedEntity.seedQuery==null || photoService.selectedEntity.seedQuery==undefined)
+seedQueryService.setSelectedEntity(null); 
+else
 seedQueryService.searchOne(photoService.selectedEntity.seedQuery).then(function(data) { 
 console.log(data[0]);
 seedQueryService.setSelectedEntity(data[0]);
-seedQueryService.selectedEntity.show=true;
 });
+seedQueryService.selectedEntity.show=true;
 }
 };
 $scope.init=function()
 {
-$http
-.post("../seedQuery/search",
-{})
-.success(
-function(entityList) {
-photoService.childrenList.seedQueryList=entityList;
-}).error(function() {
-alert("error");
+photoService.initSeedQueryList().then(function(data) {
+photoService.childrenList.seedQueryList=data;
 });
 }; 
+$scope.init();
 $scope.downloadEntityList=function()
 {
 var mystyle = {

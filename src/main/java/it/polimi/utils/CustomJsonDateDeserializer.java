@@ -24,7 +24,7 @@ public class CustomJsonDateDeserializer extends JsonDeserializer<Date>
         try {
             Date returnedDate=format.parse(date);
             System.out.println(returnedDate.toString());
-            returnedDate.setDate(returnedDate.getDate()+1);
+           // returnedDate.setDate(returnedDate.getDate()+1);
             System.out.println(returnedDate.toString());
             return returnedDate;
         } catch (ParseException e) {

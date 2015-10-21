@@ -26,7 +26,7 @@ public class SeedQueryServiceImpl
 
     @Override
     public List<SeedQuery> find(SeedQuery seedQuery) {
-        return seedQueryRepository.findBySeedQueryIdAndSeedKeywordAndStatusAndMountainAndPhoto(seedQuery.getSeedQueryId(),seedQuery.getSeedKeyword(),seedQuery.getStatus(),seedQuery.getMountain(),seedQuery.getPhotoList()==null? null :seedQuery.getPhotoList().get(0));
+        return seedQueryRepository.findBySeedQueryIdAndSeedKeywordAndStatusAndMountainAndPhoto(seedQuery.getSeedQueryId(),seedQuery.getSeedKeyword(),seedQuery.getStatus(),seedQuery.getMountain(),seedQuery.getPhotoList()==null || seedQuery.getPhotoList().size()==0? null :seedQuery.getPhotoList().get(0));
     }
 
     @Override
@@ -49,13 +49,13 @@ public class SeedQueryServiceImpl
         photo.setSeedQuery(seedQuery);
         }
         SeedQuery returnedSeedQuery=seedQueryRepository.save(seedQuery);
-        if (seedQuery.getMountain()!=null)
+        /*if (seedQuery.getMountain()!=null)
         {
         List<SeedQuery> seedQueryList = seedQueryRepository.findByMountain( seedQuery.getMountain());
         if (!seedQueryList.contains(returnedSeedQuery))
         seedQueryList.add(returnedSeedQuery);
         returnedSeedQuery.getMountain().setSeedQueryList(seedQueryList);
-        }
+        }*/
          return returnedSeedQuery;
     }
 

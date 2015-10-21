@@ -69,6 +69,17 @@ alert("error");
 });
 return promise; 
 };
+this.searchOne=function(entity) {
+this.setSelectedEntity(null);
+var promise= $http.post("../itemOrdineCodice/search",entity)
+.then( function(response) {
+return response.data;
+})
+.catch(function() {
+alert("error");
+});
+return promise; 
+};
 this.insert = function() {
 var promise= $http.put("../itemOrdineCodice/",this.selectedEntity)
 .then( function(response) 
@@ -152,10 +163,22 @@ $scope.search();
 };$scope.trueFalseValues=[true,false];$scope.showItemOrdineDetail= function(index)
 {
 if (index!=null)
-itemOrdineService.setSelectedEntity(itemOrdineCodiceService.selectedEntity.itemOrdineList[index]);
-else 
-itemOrdineService.setSelectedEntity(itemOrdineCodiceService.selectedEntity.itemOrdine); 
+{
+itemOrdineService.searchOne(itemOrdineCodiceService.selectedEntity.itemOrdineList[index]).then(function(data) { 
+console.log(data[0]);
+itemOrdineService.setSelectedEntity(data[0]);
 itemOrdineService.selectedEntity.show=true;
+});
+}
+else 
+{
+itemOrdineService.setSelectedEntity(itemOrdineCodiceService.selectedEntity.itemOrdine); 
+itemOrdineService.searchOne(itemOrdineCodiceService.selectedEntity.itemOrdine).then(function(data) { 
+console.log(data[0]);
+itemOrdineService.setSelectedEntity(data[0]);
+itemOrdineService.selectedEntity.show=true;
+});
+}
 };
 $scope.init=function()
 {
@@ -197,7 +220,9 @@ columnDefs: [
 $scope.itemOrdineCodiceGridOptions.onRegisterApi = function(gridApi){
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 itemOrdineService.selectedEntity.show=false;ordineService.selectedEntity.show=false;colloService.selectedEntity.show=false;if (row.isSelected)
+{
 itemOrdineCodiceService.setSelectedEntity(row.entity);
+}
 else 
 itemOrdineCodiceService.setSelectedEntity(null);
 itemOrdineCodiceService.selectedEntity.show = row.isSelected;
@@ -277,6 +302,17 @@ this.selectedEntity[val] = entity[val];
 this.search = function() {
 this.setSelectedEntity(null);
 var promise= $http.post("../itemOrdine/search",this.searchBean)
+.then( function(response) {
+return response.data;
+})
+.catch(function() {
+alert("error");
+});
+return promise; 
+};
+this.searchOne=function(entity) {
+this.setSelectedEntity(null);
+var promise= $http.post("../itemOrdine/search",entity)
 .then( function(response) {
 return response.data;
 })
@@ -374,7 +410,9 @@ itemOrdineService.selectedEntity.show=false;
 
 itemOrdineCodiceService.selectedEntity.itemOrdine=itemOrdineService.selectedEntity;
 
-$scope.updateParent();
+itemOrdineService.update().then(function(data){
+itemOrdineService.setSelectedEntity(data);
+});
 };
 $scope.del=function()
 {
@@ -384,18 +422,42 @@ $scope.updateParent();
 };$scope.trueFalseValues=[true,false];$scope.showOrdineDetail= function(index)
 {
 if (index!=null)
-ordineService.setSelectedEntity(itemOrdineService.selectedEntity.ordineList[index]);
-else 
-ordineService.setSelectedEntity(itemOrdineService.selectedEntity.ordine); 
+{
+ordineService.searchOne(itemOrdineService.selectedEntity.ordineList[index]).then(function(data) { 
+console.log(data[0]);
+ordineService.setSelectedEntity(data[0]);
 ordineService.selectedEntity.show=true;
+});
+}
+else 
+{
+ordineService.setSelectedEntity(itemOrdineService.selectedEntity.ordine); 
+ordineService.searchOne(itemOrdineService.selectedEntity.ordine).then(function(data) { 
+console.log(data[0]);
+ordineService.setSelectedEntity(data[0]);
+ordineService.selectedEntity.show=true;
+});
+}
 };
 $scope.showItemOrdineCodiceDetail= function(index)
 {
 if (index!=null)
-itemOrdineCodiceService.setSelectedEntity(itemOrdineService.selectedEntity.itemOrdineCodiceList[index]);
-else 
-itemOrdineCodiceService.setSelectedEntity(itemOrdineService.selectedEntity.itemOrdineCodice); 
+{
+itemOrdineCodiceService.searchOne(itemOrdineService.selectedEntity.itemOrdineCodiceList[index]).then(function(data) { 
+console.log(data[0]);
+itemOrdineCodiceService.setSelectedEntity(data[0]);
 itemOrdineCodiceService.selectedEntity.show=true;
+});
+}
+else 
+{
+itemOrdineCodiceService.setSelectedEntity(itemOrdineService.selectedEntity.itemOrdineCodice); 
+itemOrdineCodiceService.searchOne(itemOrdineService.selectedEntity.itemOrdineCodice).then(function(data) { 
+console.log(data[0]);
+itemOrdineCodiceService.setSelectedEntity(data[0]);
+itemOrdineCodiceService.selectedEntity.show=true;
+});
+}
 };
 $scope.init=function()
 {
@@ -444,7 +506,12 @@ columnDefs: [
 $scope.itemOrdineCodiceListGridOptions.onRegisterApi = function(gridApi){
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
-itemOrdineCodiceService.setSelectedEntity(row.entity);
+{
+itemOrdineCodiceService.searchOne(row.entity).then(function(data) { 
+console.log(data);
+itemOrdineCodiceService.setSelectedEntity(data[0]);
+});
+}
 else 
 itemOrdineCodiceService.setSelectedEntity(null);
 itemOrdineCodiceService.selectedEntity.show = row.isSelected;
@@ -532,6 +599,17 @@ this.selectedEntity[val] = entity[val];
 this.search = function() {
 this.setSelectedEntity(null);
 var promise= $http.post("../ordine/search",this.searchBean)
+.then( function(response) {
+return response.data;
+})
+.catch(function() {
+alert("error");
+});
+return promise; 
+};
+this.searchOne=function(entity) {
+this.setSelectedEntity(null);
+var promise= $http.post("../ordine/search",entity)
 .then( function(response) {
 return response.data;
 })
@@ -632,7 +710,9 @@ ordineService.selectedEntity.show=false;
 
 itemOrdineService.selectedEntity.ordine=ordineService.selectedEntity;
 
-$scope.updateParent();
+ordineService.update().then(function(data){
+ordineService.setSelectedEntity(data);
+});
 };
 $scope.del=function()
 {
@@ -642,18 +722,42 @@ $scope.updateParent();
 };$scope.trueFalseValues=[true,false];$scope.showColloDetail= function(index)
 {
 if (index!=null)
-colloService.setSelectedEntity(ordineService.selectedEntity.colloList[index]);
-else 
-colloService.setSelectedEntity(ordineService.selectedEntity.collo); 
+{
+colloService.searchOne(ordineService.selectedEntity.colloList[index]).then(function(data) { 
+console.log(data[0]);
+colloService.setSelectedEntity(data[0]);
 colloService.selectedEntity.show=true;
+});
+}
+else 
+{
+colloService.setSelectedEntity(ordineService.selectedEntity.collo); 
+colloService.searchOne(ordineService.selectedEntity.collo).then(function(data) { 
+console.log(data[0]);
+colloService.setSelectedEntity(data[0]);
+colloService.selectedEntity.show=true;
+});
+}
 };
 $scope.showItemOrdineDetail= function(index)
 {
 if (index!=null)
-itemOrdineService.setSelectedEntity(ordineService.selectedEntity.itemOrdineList[index]);
-else 
-itemOrdineService.setSelectedEntity(ordineService.selectedEntity.itemOrdine); 
+{
+itemOrdineService.searchOne(ordineService.selectedEntity.itemOrdineList[index]).then(function(data) { 
+console.log(data[0]);
+itemOrdineService.setSelectedEntity(data[0]);
 itemOrdineService.selectedEntity.show=true;
+});
+}
+else 
+{
+itemOrdineService.setSelectedEntity(ordineService.selectedEntity.itemOrdine); 
+itemOrdineService.searchOne(ordineService.selectedEntity.itemOrdine).then(function(data) { 
+console.log(data[0]);
+itemOrdineService.setSelectedEntity(data[0]);
+itemOrdineService.selectedEntity.show=true;
+});
+}
 };
 $scope.init=function()
 {
@@ -695,7 +799,12 @@ columnDefs: [
 $scope.colloListGridOptions.onRegisterApi = function(gridApi){
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
-colloService.setSelectedEntity(row.entity);
+{
+colloService.searchOne(row.entity).then(function(data) { 
+console.log(data);
+colloService.setSelectedEntity(data[0]);
+});
+}
 else 
 colloService.setSelectedEntity(null);
 colloService.selectedEntity.show = row.isSelected;
@@ -740,7 +849,12 @@ columnDefs: [
 $scope.itemOrdineListGridOptions.onRegisterApi = function(gridApi){
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
-itemOrdineService.setSelectedEntity(row.entity);
+{
+itemOrdineService.searchOne(row.entity).then(function(data) { 
+console.log(data);
+itemOrdineService.setSelectedEntity(data[0]);
+});
+}
 else 
 itemOrdineService.setSelectedEntity(null);
 itemOrdineService.selectedEntity.show = row.isSelected;
@@ -828,6 +942,17 @@ this.selectedEntity[val] = entity[val];
 this.search = function() {
 this.setSelectedEntity(null);
 var promise= $http.post("../collo/search",this.searchBean)
+.then( function(response) {
+return response.data;
+})
+.catch(function() {
+alert("error");
+});
+return promise; 
+};
+this.searchOne=function(entity) {
+this.setSelectedEntity(null);
+var promise= $http.post("../collo/search",entity)
 .then( function(response) {
 return response.data;
 })
@@ -932,7 +1057,9 @@ ordineService.selectedEntity.colloList.splice(i,1);
 
 ordineService.selectedEntity.colloList.push(colloService.selectedEntity);
 
-$scope.updateParent();
+colloService.update().then(function(data){
+colloService.setSelectedEntity(data);
+});
 };
 $scope.del=function()
 {
@@ -947,10 +1074,22 @@ $scope.updateParent();
 };$scope.trueFalseValues=[true,false];$scope.showOrdineDetail= function(index)
 {
 if (index!=null)
-ordineService.setSelectedEntity(colloService.selectedEntity.ordineList[index]);
-else 
-ordineService.setSelectedEntity(colloService.selectedEntity.ordine); 
+{
+ordineService.searchOne(colloService.selectedEntity.ordineList[index]).then(function(data) { 
+console.log(data[0]);
+ordineService.setSelectedEntity(data[0]);
 ordineService.selectedEntity.show=true;
+});
+}
+else 
+{
+ordineService.setSelectedEntity(colloService.selectedEntity.ordine); 
+ordineService.searchOne(colloService.selectedEntity.ordine).then(function(data) { 
+console.log(data[0]);
+ordineService.setSelectedEntity(data[0]);
+ordineService.selectedEntity.show=true;
+});
+}
 };
 $scope.init=function()
 {

@@ -69,6 +69,17 @@ alert("error");
 });
 return promise; 
 };
+this.searchOne=function(entity) {
+this.setSelectedEntity(null);
+var promise= $http.post("../example/search",entity)
+.then( function(response) {
+return response.data;
+})
+.catch(function() {
+alert("error");
+});
+return promise; 
+};
 this.insert = function() {
 var promise= $http.put("../example/",this.selectedEntity)
 .then( function(response) 
@@ -173,7 +184,9 @@ columnDefs: [
 $scope.exampleGridOptions.onRegisterApi = function(gridApi){
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
+{
 exampleService.setSelectedEntity(row.entity);
+}
 else 
 exampleService.setSelectedEntity(null);
 exampleService.selectedEntity.show = row.isSelected;

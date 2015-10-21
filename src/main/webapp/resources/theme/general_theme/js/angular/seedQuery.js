@@ -113,30 +113,38 @@ var seedQueryApp=angular.module("seedQueryApp",['ngTouch', 'ui.grid', 'ui.grid.p
 		});
 		return promise; 
 	}
-	
-	this.init=function()
+	//TODO AUTOGEN
+	this.initMountainList= function()
 	{
-		$http
+		var promise= $http
 		.post("../mountain/search",
 				{})
-				.success(
-						function(entityList) {
-							console.log(entityList);
-							this.childrenList.mountainList=entityList;
-						}).error(function() {
+				.then(
+						function(response) {
+							return response.data;
+						}).catch(function() {
 							alert("error");
 						});
-		$http
+		
+		return promise;
+	};
+	
+	this.initPhotoList= function()
+	{
+		var promise= $http
 		.post("../photo/search",
 				{})
-				.success(
-						function(entityList) {
-							console.log(entityList);
-							this.childrenList.photoList=entityList;
-						}).error(function() {
+				.then(
+
+						function(response) {
+							return response.data;
+						}).catch(function() {
 							alert("error");
 						});
-	}; 
+		
+		return promise;
+	};
+	
 	
 		})
 		.controller("seedQueryController",function($scope,$http,seedQueryService,mountainService,photoService)
@@ -253,6 +261,9 @@ var seedQueryApp=angular.module("seedQueryApp",['ngTouch', 'ui.grid', 'ui.grid.p
 										alert("error");
 									});
 				}; 
+				
+				
+				
 				$scope.init();
 				$scope.seedQueryGridOptions = {
 						enablePaginationControls: true,
@@ -496,7 +507,11 @@ var seedQueryApp=angular.module("seedQueryApp",['ngTouch', 'ui.grid', 'ui.grid.p
 								mountainService.insert().then(function(data) { 
 									console.log(data);
 									seedQueryService.selectedEntity.mountain=data;
-									seedQueryService.init();
+									seedQueryService.initMountainList().then(function(data) {
+										console.log("initMountainList");
+										console.log(data);
+										seedQueryService.childrenList.mountainList=data;
+									});
 								});
 							};
 							$scope.update=function()

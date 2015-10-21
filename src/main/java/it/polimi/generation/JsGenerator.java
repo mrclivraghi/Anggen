@@ -429,7 +429,19 @@ public class JsGenerator {
 		//DELETE
 		sb.append("$scope.del=function()\n");
 		sb.append("{\n");
-		sb.append(parentEntityName+"Service.selectedEntity."+entityName+"=null;\n");
+		//update entity in $scope
+		if (entityList)
+		{
+			sb.append("for (i=0; i<"+parentEntityName+"Service.selectedEntity."+entityName+"List.length; i++)\n");
+			sb.append("{\n");
+			sb.append("if ("+parentEntityName+"Service.selectedEntity."+entityName+"List[i]."+entityName+"Id=="+entityName+"Service.selectedEntity."+entityName+"Id)\n");
+			sb.append(""+parentEntityName+"Service.selectedEntity."+entityName+"List.splice(i,1);\n");
+			sb.append("}\n");
+
+		}else
+		{
+			sb.append(parentEntityName+"Service.selectedEntity."+entityName+"=null;\n");
+		}
 
 		if (!isParent)
 			sb.append("$scope.updateParent();\n");

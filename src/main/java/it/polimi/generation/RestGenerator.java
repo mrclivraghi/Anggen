@@ -495,21 +495,31 @@ public class RestGenerator {
 	private static void generateRightMapping_v3(Class theClass, JBlock block)
 	{
 		ReflectionManager reflectionManager = new ReflectionManager(theClass);
-		String lowerClass= reflectionManager.parseName();
+		String lowerClass= "";
 		for (Field mainField: reflectionManager.getChildrenFieldList())
 		{
+			lowerClass=reflectionManager.parseName();
 			if (mainField.getCompositeClass().fullName().contains("java.util.List"))
+			{
 				block.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(mainField.getName())+"List()!=null)");
+				block.directStatement("for ("+mainField.getFieldClass().getName()+" "+Utility.getFirstLower(mainField.getName())+" :"+lowerClass+".get"+Utility.getFirstUpper(mainField.getName())+"List())\n");
+				block.directStatement("{\n");
+				lowerClass=mainField.getName();
+			}
 			 else
-				block.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(mainField.getName())+"()!=null)");
-			block.directStatement("{");
+			 {
+				 
+				 block.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(mainField.getName())+"()!=null)");
+				 block.directStatement("{");
+				 lowerClass=lowerClass+".get"+Utility.getFirstUpper(mainField.getName())+"()";
+			 }
 			ReflectionManager fieldReflectionManager = new ReflectionManager(mainField.getFieldClass());
 			for (Field field: fieldReflectionManager.getChildrenFieldList())
 			{
 				if (field.getCompositeClass().fullName().contains("java.util.List"))
-					block.directStatement(lowerClass+".set"+Utility.getFirstUpper(mainField.getName())+"List(null);");
+					block.directStatement(lowerClass+".set"+Utility.getFirstUpper(field.getName())+"List(null);");
 				else
-					block.directStatement(lowerClass+".set"+Utility.getFirstUpper(mainField.getName())+"(null);");
+					block.directStatement(lowerClass+".set"+Utility.getFirstUpper(field.getName())+"(null);");
 			}
 			
 			

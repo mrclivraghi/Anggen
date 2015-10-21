@@ -15,6 +15,27 @@
 
 	<mvc:view-controller path="/" view-name="index" />
 
+<bean id="localeResolver" class="org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver"/>
+
+<bean id="restExceptionResolver" class="it.polimi.utils.exception.RestExceptionHandler">
+  <property name="order" value="100"></property>
+  <property name="errorResolver">
+    <bean class="it.polimi.utils.exception.DefaultRestErrorResolver">
+      <property name="localeResolver" ref="localeResolver"></property>
+      <property name="defaultMoreInfoUrl" value="mailto:support@mycompany.com"></property>
+      <property name="exceptionMappingDefinitions">
+        <map>
+          <!-- 404 -->
+          <entry key="NullPointerException" value="404, _exmsg"></entry>
+          <!-- 500 (catch all): -->
+          <entry key="Throwable" value="500, error.internal"></entry>
+        </map>
+      </property>
+    </bean>
+  </property>
+</bean>
+
+
 	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="viewClass"
@@ -66,6 +87,7 @@
 				class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
 				<property name="objectMapper" ref="objectMapper" />
 			</bean>
+		
 		</mvc:message-converters>
 	</mvc:annotation-driven>
 

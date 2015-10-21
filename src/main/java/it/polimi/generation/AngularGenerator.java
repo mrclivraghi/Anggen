@@ -262,6 +262,9 @@ public class AngularGenerator {
 			.content("Update")
 			.button(CssGenerator.getButton("del").add("ng-if", "selectedEntity."+entityName+"Id>0"))
 			.content("Delete");
+			if (!isParent)
+				html.button(CssGenerator.getButton("remove").add("ng-if", "selectedEntity."+entityName+"Id>0"))
+				.content("Remove");
 			html._form()._div();
 		} else
 		{

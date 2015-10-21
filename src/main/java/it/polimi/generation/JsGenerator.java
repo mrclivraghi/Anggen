@@ -401,16 +401,11 @@ public class JsGenerator {
 			sb.append("});\n");
 		}
 		sb.append("};\n");
-		//DELETE
-		sb.append("$scope.del=function()\n");
-		sb.append("{\n");
-		if (isParent)
+		//REMOVE
+		if (!isParent)
 		{
-			sb.append(entityName+"Service.del().then(function(data) { \n");
-			sb.append("$scope.search();\n");
-			sb.append("});\n");
-		}else
-		{
+			sb.append("$scope.remove= function()\n");
+			sb.append("{\n");
 			sb.append(entityName+"Service.selectedEntity.show=false;\n");
 			if (entityList)
 			{
@@ -422,12 +417,35 @@ public class JsGenerator {
 
 			}else
 			{
-				sb.append(parentEntityName+"Service.selectedEntity."+entityName+"=null;");
+				sb.append(parentEntityName+"Service.selectedEntity."+entityName+"=null;\n");
 			}
 
 			sb.append(entityName+"Service.setSelectedEntity(null);\n");
 			sb.append("$scope.updateParent();\n");
+			
+			sb.append("};\n");
 		}
+
+		//DELETE
+		sb.append("$scope.del=function()\n");
+		sb.append("{\n");
+		sb.append(parentEntityName+"Service.selectedEntity."+entityName+"=null;\n");
+
+		if (!isParent)
+			sb.append("$scope.updateParent();\n");
+		
+		sb.append(entityName+"Service.del().then(function(data) { \n");
+		if (isParent)
+		{
+			sb.append("$scope.search();\n");
+		}else
+		{
+			sb.append(entityName+"Service.setSelectedEntity(null);\n");
+			sb.append(parentEntityName+"Service.init"+Utility.getFirstUpper(entityName)+"List().then(function(data) {\n");
+			sb.append(parentEntityName+"Service.childrenList."+Utility.getFirstLower(entityName)+"List=data;\n");
+			sb.append("});\n");
+		}
+		sb.append("});\n");
 		sb.append("};");
 		sb.append("$scope.trueFalseValues=[true,false];");
 		//if (isParent)

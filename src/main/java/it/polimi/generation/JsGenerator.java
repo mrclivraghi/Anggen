@@ -291,11 +291,14 @@ public class JsGenerator {
 			sb.append("$scope.updateParent = function(toDo)\n");
 			sb.append("{\n");
 
-			sb.append(parentEntityName+"Service.update().then(function(data) {\n");
+			sb.append(parentEntityName+"Service.update().then(function successCallback(response) {\n");
 			sb.append(parentEntityName+"Service.setSelectedEntity(data);\n");
 			sb.append("if (toDo != null)\n");
 			sb.append("toDo();\n");
-			sb.append("});\n");
+			sb.append("},function errorCallback(response) {      \n");
+			manageRestError(sb);
+			sb.append("}\n");
+			sb.append(");\n");
 			sb.append("};\n");
 		}
 		sb.append("$scope.addNew= function()\n");
@@ -325,8 +328,10 @@ public class JsGenerator {
 				}
 			}
 
-		sb.append(entityName+"Service.search().then(function(response) { \n");
+		sb.append(entityName+"Service.search().then(function successCallback(response) {\n");
 		sb.append(entityName+"Service.setEntityList(response.data);\n");
+		sb.append("},function errorCallback(response) { \n");
+		manageRestError(sb);
 		sb.append("});\n");
 
 		sb.append("};\n");
@@ -337,8 +342,10 @@ public class JsGenerator {
 		sb.append("if (!$scope."+entityName+"DetailForm.$valid) return; \n");
 		if (isParent)
 		{
-			sb.append(entityName+"Service.insert().then(function(response) { \n");
+			sb.append(entityName+"Service.insert().then(function successCallback(response) { \n");
 			sb.append("$scope.search();\n");
+			sb.append("},function errorCallback(response) { \n");
+			manageRestError(sb);
 			sb.append("});\n");
 
 		}else
@@ -348,7 +355,7 @@ public class JsGenerator {
 			sb.append(entityName+"Service.selectedEntity.show=false;\n");
 			sb.append(entityName+"Service.selectedEntity."+parentEntityName+"={};\n");
 			sb.append(entityName+"Service.selectedEntity."+parentEntityName+"."+parentEntityName+"Id="+parentEntityName+"Service.selectedEntity."+parentEntityName+"Id;\n");
-			sb.append(entityName+"Service.insert().then(function(response) { \n");
+			sb.append(entityName+"Service.insert().then(function successCallBack(response) { \n");
 			if (entityList)
 			{
 				sb.append(""+parentEntityName+"Service.selectedEntity."+entityName+"List.push(response.data);\n");
@@ -362,6 +369,8 @@ public class JsGenerator {
 				sb.append("});\n");
 				//sb.append(parentEntityName+"Service.selectedEntity."+entityName+"="+entityName+"Service.selectedEntity;\n\n");
 			}
+			sb.append("},function errorCallback(response) { \n");
+			manageRestError(sb);
 			sb.append("});\n");
 			//sb.append("$scope.updateParent();\n\n");
 
@@ -374,8 +383,10 @@ public class JsGenerator {
 		if (isParent)
 		{
 			changeChildrenVisibility(sb, false);
-			sb.append(entityName+"Service.update().then(function(response) { \n");
+			sb.append(entityName+"Service.update().then(function successCallback(response) { \n");
 			sb.append("$scope.search();\n");
+			sb.append("},function errorCallback(response) { \n");
+			manageRestError(sb);
 			sb.append("});\n");
 		}else
 		{
@@ -395,9 +406,11 @@ public class JsGenerator {
 			}
 
 			//sb.append("$scope.updateParent();\n");
-			sb.append(entityName+"Service.update().then(function(response){\n");
+			sb.append(entityName+"Service.update().then(function successCallback(response){\n");
 			//console.log(data);
 			sb.append(entityName+"Service.setSelectedEntity(response.data);\n");
+			sb.append("},function errorCallback(response) { \n");
+			manageRestError(sb);
 			sb.append("});\n");
 		}
 		sb.append("};\n");
@@ -446,7 +459,7 @@ public class JsGenerator {
 		if (!isParent)
 			sb.append("$scope.updateParent();\n");
 		
-		sb.append(entityName+"Service.del().then(function(response) { \n");
+		sb.append(entityName+"Service.del().then(function successCallback(response) { \n");
 		if (isParent)
 		{
 			sb.append("$scope.search();\n");
@@ -457,6 +470,8 @@ public class JsGenerator {
 			sb.append(parentEntityName+"Service.childrenList."+Utility.getFirstLower(entityName)+"List=response.data;\n");
 			sb.append("});\n");
 		}
+		sb.append("},function errorCallback(response) { \n");
+		manageRestError(sb);
 		sb.append("});\n");
 		sb.append("};\n");
 		sb.append("$scope.trueFalseValues=[true,false];\n");
@@ -481,7 +496,7 @@ public class JsGenerator {
 				// or server returns response with an error status.
 				//sb.append(" console.log(\"response-error-controller\");\n");
 				//sb.append("console.log(response);\n");
-				sb.append("return response;\n");
+				manageRestError(sb);
 				sb.append("  }	\n");
 
 				//+ "function(data) { \n");
@@ -512,7 +527,7 @@ public class JsGenerator {
 				// or server returns response with an error status.
 				//sb.append(" console.log(\"response-error-controller\");\n");
 				//sb.append("console.log(response);\n");
-				sb.append("return response;\n");
+				manageRestError(sb);
 				sb.append("  }	\n");
 				
 				//sb.append("console.log(data[0]);\n");
@@ -532,8 +547,10 @@ public class JsGenerator {
 				for (Field field: childrenList)
 				{
 
-					sb.append(entityName+"Service.init"+Utility.getFirstUpper(field.getName())+"List().then(function(response) {\n");
+					sb.append(entityName+"Service.init"+Utility.getFirstUpper(field.getName())+"List().then(function successCallback(response) {\n");
 					sb.append(entityName+"Service.childrenList."+Utility.getFirstLower(field.getName())+"List=response.data;\n");
+					sb.append("},function errorCallback(response) { \n");
+					manageRestError(sb);
 					sb.append("});\n");
 				}
 				for (Field field: fieldList)
@@ -739,6 +756,11 @@ public class JsGenerator {
 
 
 
+	private void manageRestError(StringBuilder sb)
+	{
+		sb.append("return; \n");
+	}
+	
 
 	/**
 	 * Initialize a form

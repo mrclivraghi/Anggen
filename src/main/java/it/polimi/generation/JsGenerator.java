@@ -140,13 +140,13 @@ public class JsGenerator {
 		//search
 		sb.append("this.search = function() {\n");
 		sb.append("this.setSelectedEntity(null);\n");
-		sb.append("var promise= $http.post(\"../"+entityName+"/search\",this.searchBean)\n");
-		sb.append(".then( function(response) {\n");
+		sb.append("var promise= $http.post(\"../"+entityName+"/search\",this.searchBean);\n");
+		/*sb.append(".then( function(response) {\n");
 		sb.append("return response.data;\n");
 		sb.append("})\n");
 		sb.append(".catch(function() {\n");
 		sb.append("alert(\"error\");\n");
-		sb.append("});\n");
+		sb.append("});\n");*/
 		sb.append("return promise; \n");
 		sb.append("};\n");
 		//searchOne
@@ -166,38 +166,38 @@ public class JsGenerator {
 
 		//insert
 		sb.append("this.insert = function() {\n");
-		sb.append("var promise= $http.put(\"../"+entityName+"/\",this.selectedEntity)\n");
-		sb.append(".then( function(response) \n");
+		sb.append("var promise= $http.put(\"../"+entityName+"/\",this.selectedEntity);\n");
+		/*sb.append(".then( function(response) \n");
 		sb.append("{\n");
 		sb.append("return response.data;\n");
 		sb.append("})\n");
 		sb.append(".catch(function() \n");
 		sb.append("{ \n");
 		sb.append("alert(\"error\");\n");
-		sb.append("});\n");
+		sb.append("});\n");*/
 		sb.append("return promise; \n");
 		sb.append("};\n");
 		//update
 		sb.append("this.update = function() {\n");
-		sb.append("var promise= $http.post(\"../"+entityName+"/\",this.selectedEntity)\n");
-		sb.append(".then( function(response) {\n");
+		sb.append("var promise= $http.post(\"../"+entityName+"/\",this.selectedEntity);\n");
+		/*sb.append(".then( function(response) {\n");
 		sb.append("return response.data;\n");
 		sb.append("})\n");
 		sb.append(".catch(function() { \n");
 		sb.append("alert(\"error\");\n");
-		sb.append("});\n");
+		sb.append("});\n");*/
 		sb.append("return promise; \n");
 		sb.append("}\n");
 		//delete
 		sb.append("this.del = function() {\n");
 		sb.append("var url=\"../"+entityName+"/\"+this.selectedEntity."+entityName+"Id;\n");
-		sb.append("var promise= $http[\"delete\"](url)\n");
-		sb.append(".then( function(response) {\n");
+		sb.append("var promise= $http[\"delete\"](url);\n");
+		/*sb.append(".then( function(response) {\n");
 		sb.append("return response.data;\n");
 		sb.append("})\n");
 		sb.append(".catch(function() {\n"); 
 		sb.append("alert(\"error\");\n");
-		sb.append("});\n");
+		sb.append("});\n");*/
 		sb.append("return promise; \n");
 		sb.append("}\n");
 
@@ -212,13 +212,13 @@ public class JsGenerator {
 				sb.append("{\n");
 				sb.append("var promise= $http\n");
 				sb.append(".post(\"../"+field.getName()+"/search\",\n");
-				sb.append("{})\n");
-				sb.append(".then(\n");
+				sb.append("{});\n");
+				/*sb.append(".then(\n");
 				sb.append("function(response) {\n");
 				sb.append("return response.data;\n");
 				sb.append("}).catch(function() {\n");
 				sb.append("alert(\"error\");\n");
-				sb.append("});\n");
+				sb.append("});\n");*/
 				sb.append("return promise;\n");
 				sb.append("};\n");
 			}
@@ -325,8 +325,8 @@ public class JsGenerator {
 				}
 			}
 
-		sb.append(entityName+"Service.search().then(function(data) { \n");
-		sb.append(entityName+"Service.setEntityList(data);\n");
+		sb.append(entityName+"Service.search().then(function(response) { \n");
+		sb.append(entityName+"Service.setEntityList(response.data);\n");
 		sb.append("});\n");
 
 		sb.append("};\n");
@@ -337,7 +337,7 @@ public class JsGenerator {
 		sb.append("if (!$scope."+entityName+"DetailForm.$valid) return; \n");
 		if (isParent)
 		{
-			sb.append(entityName+"Service.insert().then(function(data) { \n");
+			sb.append(entityName+"Service.insert().then(function(response) { \n");
 			sb.append("$scope.search();\n");
 			sb.append("});\n");
 
@@ -348,17 +348,17 @@ public class JsGenerator {
 			sb.append(entityName+"Service.selectedEntity.show=false;\n");
 			sb.append(entityName+"Service.selectedEntity."+parentEntityName+"={};\n");
 			sb.append(entityName+"Service.selectedEntity."+parentEntityName+"."+parentEntityName+"Id="+parentEntityName+"Service.selectedEntity."+parentEntityName+"Id;\n");
-			sb.append(entityName+"Service.insert().then(function(data) { \n");
+			sb.append(entityName+"Service.insert().then(function(response) { \n");
 			if (entityList)
 			{
-				sb.append(""+parentEntityName+"Service.selectedEntity."+entityName+"List.push(data);\n");
+				sb.append(""+parentEntityName+"Service.selectedEntity."+entityName+"List.push(response.data);\n");
 //				sb.append(parentEntityName+"Service.selectedEntity."+entityName+"List.push("+entityName+"Service.selectedEntity);\n\n");
 
 			}else
 			{
-				sb.append(""+parentEntityName+"Service.selectedEntity."+entityName+"=data;\n");
-				sb.append(parentEntityName+"Service.init"+Utility.getFirstUpper(entityName)+"List().then(function(data) {\n");
-				sb.append(parentEntityName+"Service.childrenList."+Utility.getFirstLower(entityName)+"List=data;\n");
+				sb.append(""+parentEntityName+"Service.selectedEntity."+entityName+"=response.data;\n");
+				sb.append(parentEntityName+"Service.init"+Utility.getFirstUpper(entityName)+"List().then(function(response) {\n");
+				sb.append(parentEntityName+"Service.childrenList."+Utility.getFirstLower(entityName)+"List=response.data;\n");
 				sb.append("});\n");
 				//sb.append(parentEntityName+"Service.selectedEntity."+entityName+"="+entityName+"Service.selectedEntity;\n\n");
 			}
@@ -374,7 +374,7 @@ public class JsGenerator {
 		if (isParent)
 		{
 			changeChildrenVisibility(sb, false);
-			sb.append(entityName+"Service.update().then(function(data) { \n");
+			sb.append(entityName+"Service.update().then(function(response) { \n");
 			sb.append("$scope.search();\n");
 			sb.append("});\n");
 		}else
@@ -395,9 +395,9 @@ public class JsGenerator {
 			}
 
 			//sb.append("$scope.updateParent();\n");
-			sb.append(entityName+"Service.update().then(function(data){\n");
+			sb.append(entityName+"Service.update().then(function(response){\n");
 			//console.log(data);
-			sb.append(entityName+"Service.setSelectedEntity(data);\n");
+			sb.append(entityName+"Service.setSelectedEntity(response.data);\n");
 			sb.append("});\n");
 		}
 		sb.append("};\n");
@@ -446,15 +446,15 @@ public class JsGenerator {
 		if (!isParent)
 			sb.append("$scope.updateParent();\n");
 		
-		sb.append(entityName+"Service.del().then(function(data) { \n");
+		sb.append(entityName+"Service.del().then(function(response) { \n");
 		if (isParent)
 		{
 			sb.append("$scope.search();\n");
 		}else
 		{
 			sb.append(entityName+"Service.setSelectedEntity(null);\n");
-			sb.append(parentEntityName+"Service.init"+Utility.getFirstUpper(entityName)+"List().then(function(data) {\n");
-			sb.append(parentEntityName+"Service.childrenList."+Utility.getFirstLower(entityName)+"List=data;\n");
+			sb.append(parentEntityName+"Service.init"+Utility.getFirstUpper(entityName)+"List().then(function(response) {\n");
+			sb.append(parentEntityName+"Service.childrenList."+Utility.getFirstLower(entityName)+"List=response.data;\n");
 			sb.append("});\n");
 		}
 		sb.append("});\n");
@@ -473,8 +473,8 @@ public class JsGenerator {
 				sb.append("function successCallback(response) {\n");
 				sb.append("console.log(\"response-ok\");\n");
 				sb.append("console.log(response);\n");
-				sb.append("mountainService.setSelectedEntity(response.data[0]);\n");
-				sb.append("mountainService.selectedEntity.show=true;\n");
+				sb.append(field.getName()+"Service.setSelectedEntity(response.data[0]);\n");
+				sb.append(field.getName()+"Service.selectedEntity.show=true;\n");
 
 				sb.append("  }, function errorCallback(response) {\n");
 				// called asynchronously if an error occurs
@@ -494,7 +494,10 @@ public class JsGenerator {
 				sb.append("else \n");
 				sb.append("{\n");
 				sb.append("if ("+entityName+"Service.selectedEntity."+field.getName()+"==null || "+entityName+"Service.selectedEntity."+field.getName()+"==undefined)\n");
+				sb.append("{\n");
 				sb.append(field.getName()+"Service.setSelectedEntity(null); \n");
+				sb.append(field.getName()+"Service.selectedEntity.show=true; \n");
+				sb.append("}\n");
 				sb.append("else\n");
 				sb.append(field.getName()+"Service.searchOne("+entityName+"Service.selectedEntity."+field.getName()+").then(\n");
 				
@@ -529,8 +532,8 @@ public class JsGenerator {
 				for (Field field: childrenList)
 				{
 
-					sb.append(entityName+"Service.init"+Utility.getFirstUpper(field.getName())+"List().then(function(data) {\n");
-					sb.append(entityName+"Service.childrenList."+Utility.getFirstLower(field.getName())+"List=data;\n");
+					sb.append(entityName+"Service.init"+Utility.getFirstUpper(field.getName())+"List().then(function(response) {\n");
+					sb.append(entityName+"Service.childrenList."+Utility.getFirstLower(field.getName())+"List=response.data;\n");
 					sb.append("});\n");
 				}
 				for (Field field: fieldList)

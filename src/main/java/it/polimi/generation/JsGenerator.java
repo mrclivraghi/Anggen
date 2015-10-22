@@ -153,13 +153,13 @@ public class JsGenerator {
 
 		sb.append("this.searchOne=function(entity) {\n");
 		sb.append("this.setSelectedEntity(null);\n");
-		sb.append("var promise= $http.get(\"../"+entityName+"/\"+entity."+entityName+"Id)\n");
-		sb.append(".then( function(response) {\n");
-		sb.append("return response.data;\n");
-		sb.append("})\n");
-		sb.append(".catch(function() {\n");
-		sb.append("alert(\"error\");\n");
-		sb.append("});\n");
+		sb.append("var promise= $http.get(\"../"+entityName+"/\"+entity."+entityName+"Id);\n");
+		//sb.append(".then( function(response) {\n");
+		//sb.append("return response.data;\n");
+		//sb.append("})\n");
+		//sb.append(".catch(function() {\n");
+		//sb.append("alert(\"error\");\n");
+		//sb.append("});\n");
 		sb.append("return promise; \n");
 		sb.append("};\n");
 
@@ -458,8 +458,8 @@ public class JsGenerator {
 			sb.append("});\n");
 		}
 		sb.append("});\n");
-		sb.append("};");
-		sb.append("$scope.trueFalseValues=[true,false];");
+		sb.append("};\n");
+		sb.append("$scope.trueFalseValues=[true,false];\n");
 		//if (isParent)
 		{
 			for (Field field: childrenList)
@@ -469,25 +469,55 @@ public class JsGenerator {
 				sb.append("if (index!=null)\n");
 				//sb.append(field.getName()+"Service.setSelectedEntity("+entityName+"Service.selectedEntity."+field.getName()+"List[index]);\n");
 				sb.append("{\n");
-				sb.append(field.getName()+"Service.searchOne("+entityName+"Service.selectedEntity."+field.getName()+"List[index]).then(function(data) { \n");
-				sb.append("console.log(data[0]);\n");
-				sb.append(field.getName()+"Service.setSelectedEntity(data[0]);\n");
-				sb.append(field.getName()+"Service.selectedEntity.show=true;\n");
-				
-				sb.append("});\n");
+				sb.append(field.getName()+"Service.searchOne("+entityName+"Service.selectedEntity."+field.getName()+"List[index]).then(\n");
+				sb.append("function successCallback(response) {\n");
+				sb.append("console.log(\"response-ok\");\n");
+				sb.append("console.log(response);\n");
+				sb.append("mountainService.setSelectedEntity(response.data[0]);\n");
+				sb.append("mountainService.selectedEntity.show=true;\n");
+
+				sb.append("  }, function errorCallback(response) {\n");
+				// called asynchronously if an error occurs
+				// or server returns response with an error status.
+				//sb.append(" console.log(\"response-error-controller\");\n");
+				//sb.append("console.log(response);\n");
+				sb.append("return response;\n");
+				sb.append("  }	\n");
+
+				//+ "function(data) { \n");
+				//sb.append("console.log(data[0]);\n");
+				//sb.append(field.getName()+"Service.setSelectedEntity(data[0]);\n");
+				//sb.append(field.getName()+"Service.selectedEntity.show=true;\n");
+
+				sb.append(");\n");
 				sb.append("}\n");
 				sb.append("else \n");
 				sb.append("{\n");
 				sb.append("if ("+entityName+"Service.selectedEntity."+field.getName()+"==null || "+entityName+"Service.selectedEntity."+field.getName()+"==undefined)\n");
 				sb.append(field.getName()+"Service.setSelectedEntity(null); \n");
 				sb.append("else\n");
-				sb.append(field.getName()+"Service.searchOne("+entityName+"Service.selectedEntity."+field.getName()+").then(function(data) { \n");
-				sb.append("console.log(data[0]);\n");
-				sb.append(field.getName()+"Service.setSelectedEntity(data[0]);\n");
-				sb.append("});\n");
+				sb.append(field.getName()+"Service.searchOne("+entityName+"Service.selectedEntity."+field.getName()+").then(\n");
 				
+				sb.append("function successCallback(response) {\n");
+				//sb.append("console.log(\"response-ok\");\n");
+				//sb.append("console.log(response);\n");
+				sb.append(field.getName()+"Service.setSelectedEntity(response.data[0]);\n");
 				sb.append(field.getName()+"Service.selectedEntity.show=true;\n");
+
+				sb.append("  }, function errorCallback(response) {\n");
+				// called asynchronously if an error occurs
+				// or server returns response with an error status.
+				//sb.append(" console.log(\"response-error-controller\");\n");
+				//sb.append("console.log(response);\n");
+				sb.append("return response;\n");
+				sb.append("  }	\n");
 				
+				//sb.append("console.log(data[0]);\n");
+				//sb.append(field.getName()+"Service.setSelectedEntity(data[0]);\n");
+				
+				sb.append(");\n");
+
+
 				sb.append("}\n");
 				sb.append("};\n");
 

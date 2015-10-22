@@ -84,23 +84,17 @@ public class SeedQueryController {
     }
 
     private void getRightMapping(SeedQuery seedQuery) {
-    	if (seedQuery.getMountain()!=null)
-    	{
-    		if (seedQuery.getMountain().getSeedQueryList()!=null)
-    		{
-    			seedQuery.getMountain().setSeedQueryList(null);
-    		}
-    	}
-    	if (seedQuery.getPhotoList()!=null)
-    	{
-    		for (it.polimi.model.mountain.Photo photo : seedQuery.getPhotoList())
-    		{
-    			if (photo.getSeedQuery()!=null)
-    			{
-    				photo.setSeedQuery(null);
-    			}
-    		}
-    	}
+        if (seedQuery.getMountain()!=null)
+        {
+        seedQuery.getMountain().setSeedQueryList(null);
+        }
+        if (seedQuery.getPhotoList()!=null)
+        for (it.polimi.model.mountain.Photo photo :seedQuery.getPhotoList())
+
+        {
+
+        photo.setSeedQuery(null);
+        }
     }
 
 }

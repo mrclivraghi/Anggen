@@ -86,14 +86,8 @@ public class PhotoController {
     private void getRightMapping(Photo photo) {
         if (photo.getSeedQuery()!=null)
         {
-        	if (photo.getSeedQuery().getMountain()!=null)
-        	{
-        		photo.getSeedQuery().setMountain(null);
-        	}
-        	if (photo.getSeedQuery().getPhotoList()!=null)
-        	{
-        		photo.getSeedQuery().setPhotoList(null);
-        	}
+        photo.getSeedQuery().setMountain(null);
+        photo.getSeedQuery().setPhotoList(null);
         }
     }
 

@@ -88,15 +88,11 @@ public class OrderController {
         {
         }
         if (order.getPlaceList()!=null)
+        for (it.polimi.model.test.Place place :order.getPlaceList())
+
         {
-        for (it.polimi.model.test.Place place : order.getPlaceList())
-        {
-        if (place.getOrder()!=null)
-        {
-        //place.getOrder()
+
         place.setOrder(null);
-        }
-        }
         }
     }
 

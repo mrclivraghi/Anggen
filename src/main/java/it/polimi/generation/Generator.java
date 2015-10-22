@@ -33,7 +33,7 @@ public class Generator {
 		Set<Class<?>> allClasses = reflections.getTypesAnnotatedWith(Entity.class);
 		List<Class> dependencyClass = new ArrayList<Class>();
 		
-	/*	for (Class modelClass: allClasses)
+		/*for (Class modelClass: allClasses)
 		{
 			RestGenerator generator = new RestGenerator(modelClass);
 			generator.generateRESTClasses(dependencyClass,true);
@@ -54,11 +54,11 @@ public class Generator {
 				e.printStackTrace();
 			}
 		}
-		if (HtmlGenerator.bootstrapMenu)
+		/*if (HtmlGenerator.bootstrapMenu)
 			HtmlGenerator.GenerateMenu();
 		else
 			HtmlGenerator.GenerateEasyTreeMenu();
-		
+		*/
 	}
 
 }

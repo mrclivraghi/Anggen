@@ -60,57 +60,25 @@ this.selectedEntity[val] = entity[val];
 };
 this.search = function() {
 this.setSelectedEntity(null);
-var promise= $http.post("../person/search",this.searchBean)
-.then( function(response) {
-return response.data;
-})
-.catch(function() {
-alert("error");
-});
+var promise= $http.post("../person/search",this.searchBean);
 return promise; 
 };
 this.searchOne=function(entity) {
 this.setSelectedEntity(null);
-var promise= $http.post("../person/search",entity)
-.then( function(response) {
-return response.data;
-})
-.catch(function() {
-alert("error");
-});
+var promise= $http.get("../person/"+entity.personId);
 return promise; 
 };
 this.insert = function() {
-var promise= $http.put("../person/",this.selectedEntity)
-.then( function(response) 
-{
-return response.data;
-})
-.catch(function() 
-{ 
-alert("error");
-});
+var promise= $http.put("../person/",this.selectedEntity);
 return promise; 
 };
 this.update = function() {
-var promise= $http.post("../person/",this.selectedEntity)
-.then( function(response) {
-return response.data;
-})
-.catch(function() { 
-alert("error");
-});
+var promise= $http.post("../person/",this.selectedEntity);
 return promise; 
 }
 this.del = function() {
 var url="../person/"+this.selectedEntity.personId;
-var promise= $http["delete"](url)
-.then( function(response) {
-return response.data;
-})
-.catch(function() {
-alert("error");
-});
+var promise= $http["delete"](url);
 return promise; 
 }
 })
@@ -137,31 +105,41 @@ personService.selectedEntity.show=true;
 $scope.search=function()
 {
 personService.selectedEntity.show=false;
-personService.search().then(function(data) { 
-personService.setEntityList(data);
+personService.search().then(function successCallback(response) {
+personService.setEntityList(response.data);
+},function errorCallback(response) { 
+return; 
 });
 };
 $scope.insert=function()
 {
 if (!$scope.personDetailForm.$valid) return; 
-personService.insert().then(function(data) { 
+personService.insert().then(function successCallback(response) { 
 $scope.search();
+},function errorCallback(response) { 
+return; 
 });
 };
 $scope.update=function()
 {
 if (!$scope.personDetailForm.$valid) return; 
-personService.update().then(function(data) { 
+personService.update().then(function successCallback(response) { 
 $scope.search();
+},function errorCallback(response) { 
+return; 
 });
 };
 $scope.del=function()
 {
 nullService.selectedEntity.person=null;
-personService.del().then(function(data) { 
+personService.del().then(function successCallback(response) { 
 $scope.search();
+},function errorCallback(response) { 
+return; 
 });
-};$scope.trueFalseValues=[true,false];$scope.init=function()
+};
+$scope.trueFalseValues=[true,false];
+$scope.init=function()
 {
 }; 
 $scope.init();

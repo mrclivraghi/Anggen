@@ -41,13 +41,13 @@ public class PhotoServiceImpl
     @Transactional
     public Photo update(Photo photo) {
         Photo returnedPhoto=photoRepository.save(photo);
-        /*if (photo.getSeedQuery()!=null)
+        if (photo.getSeedQuery()!=null)
         {
         List<Photo> photoList = photoRepository.findBySeedQuery( photo.getSeedQuery());
         if (!photoList.contains(returnedPhoto))
         photoList.add(returnedPhoto);
         returnedPhoto.getSeedQuery().setPhotoList(photoList);
-        }*/
+        }
          return returnedPhoto;
     }
 

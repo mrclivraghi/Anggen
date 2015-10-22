@@ -60,57 +60,25 @@ this.selectedEntity[val] = entity[val];
 };
 this.search = function() {
 this.setSelectedEntity(null);
-var promise= $http.post("../example/search",this.searchBean)
-.then( function(response) {
-return response.data;
-})
-.catch(function() {
-alert("error");
-});
+var promise= $http.post("../example/search",this.searchBean);
 return promise; 
 };
 this.searchOne=function(entity) {
 this.setSelectedEntity(null);
-var promise= $http.post("../example/search",entity)
-.then( function(response) {
-return response.data;
-})
-.catch(function() {
-alert("error");
-});
+var promise= $http.get("../example/"+entity.exampleId);
 return promise; 
 };
 this.insert = function() {
-var promise= $http.put("../example/",this.selectedEntity)
-.then( function(response) 
-{
-return response.data;
-})
-.catch(function() 
-{ 
-alert("error");
-});
+var promise= $http.put("../example/",this.selectedEntity);
 return promise; 
 };
 this.update = function() {
-var promise= $http.post("../example/",this.selectedEntity)
-.then( function(response) {
-return response.data;
-})
-.catch(function() { 
-alert("error");
-});
+var promise= $http.post("../example/",this.selectedEntity);
 return promise; 
 }
 this.del = function() {
 var url="../example/"+this.selectedEntity.exampleId;
-var promise= $http["delete"](url)
-.then( function(response) {
-return response.data;
-})
-.catch(function() {
-alert("error");
-});
+var promise= $http["delete"](url);
 return promise; 
 }
 })
@@ -137,31 +105,41 @@ exampleService.selectedEntity.show=true;
 $scope.search=function()
 {
 exampleService.selectedEntity.show=false;
-exampleService.search().then(function(data) { 
-exampleService.setEntityList(data);
+exampleService.search().then(function successCallback(response) {
+exampleService.setEntityList(response.data);
+},function errorCallback(response) { 
+return; 
 });
 };
 $scope.insert=function()
 {
 if (!$scope.exampleDetailForm.$valid) return; 
-exampleService.insert().then(function(data) { 
+exampleService.insert().then(function successCallback(response) { 
 $scope.search();
+},function errorCallback(response) { 
+return; 
 });
 };
 $scope.update=function()
 {
 if (!$scope.exampleDetailForm.$valid) return; 
-exampleService.update().then(function(data) { 
+exampleService.update().then(function successCallback(response) { 
 $scope.search();
+},function errorCallback(response) { 
+return; 
 });
 };
 $scope.del=function()
 {
 nullService.selectedEntity.example=null;
-exampleService.del().then(function(data) { 
+exampleService.del().then(function successCallback(response) { 
 $scope.search();
+},function errorCallback(response) { 
+return; 
 });
-};$scope.trueFalseValues=[true,false];$scope.init=function()
+};
+$scope.trueFalseValues=[true,false];
+$scope.init=function()
 {
 exampleService.childrenList.sexList=["MALE","FEMALE",];
 }; 

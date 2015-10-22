@@ -2,11 +2,14 @@
 package it.polimi.controller.mountain;
 
 import java.util.List;
+
 import it.polimi.model.mountain.Mountain;
 import it.polimi.service.mountain.MountainService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -85,30 +88,14 @@ public class MountainController {
 
     private void getRightMapping(Mountain mountain) {
         if (mountain.getSeedQueryList()!=null)
+        for (it.polimi.model.mountain.SeedQuery seedQuery :mountain.getSeedQueryList())
+
         {
-        for (it.polimi.model.mountain.SeedQuery seedQuery : mountain.getSeedQueryList())
-        {
-        if (seedQuery.getMountain()!=null)
-        {
-        //seedQuery.getMountain()
-      //  seedQuery.setMountain(new Mountain(seedQuery.getMountain().getMountainId()));
-        	seedQuery.setMountain(null);
-        }
-        
-        if (seedQuery.getPhotoList()!=null)
-        {
-        	seedQuery.setPhotoList(null);
-        	/*for (it.polimi.model.mountain.Photo photo : seedQuery.getPhotoList())
-        	{
-        		if (photo.getSeedQuery()!=null)
-        		{
-        			//photo.getSeedQuery()
-        			photo.setSeedQuery(null);
-        		}
-        	}*/
-        }
-        }
+
+        seedQuery.setMountain(null);
+        seedQuery.setPhotoList(null);
         }
     }
+
 
 }

@@ -85,37 +85,19 @@ public class OrdineController {
 
     private void getRightMapping(Ordine ordine) {
         if (ordine.getColloList()!=null)
+        for (it.polimi.model.storepicking.Collo collo :ordine.getColloList())
+
         {
-        for (it.polimi.model.storepicking.Collo collo : ordine.getColloList())
-        {
-        if (collo.getOrdine()!=null)
-        {
-        //collo.getOrdine()
+
         collo.setOrdine(null);
         }
-        }
-        }
         if (ordine.getItemOrdineList()!=null)
+        for (it.polimi.model.storepicking.ItemOrdine itemOrdine :ordine.getItemOrdineList())
+
         {
-        for (it.polimi.model.storepicking.ItemOrdine itemOrdine : ordine.getItemOrdineList())
-        {
-        if (itemOrdine.getOrdine()!=null)
-        {
-        //itemOrdine.getOrdine()
+
         itemOrdine.setOrdine(null);
-        }
-        if (itemOrdine.getItemOrdineCodiceList()!=null)
-        {
-        for (it.polimi.model.storepicking.ItemOrdineCodice itemOrdineCodice : itemOrdine.getItemOrdineCodiceList())
-        {
-        if (itemOrdineCodice.getItemOrdine()!=null)
-        {
-        //itemOrdineCodice.getItemOrdine()
-        itemOrdineCodice.setItemOrdine(null);
-        }
-        }
-        }
-        }
+        itemOrdine.setItemOrdineCodiceList(null);
         }
     }
 

@@ -86,32 +86,8 @@ public class ColloController {
     private void getRightMapping(Collo collo) {
         if (collo.getOrdine()!=null)
         {
-        if (collo.getOrdine().getColloList()!=null)
-        {
         collo.getOrdine().setColloList(null);
-        }
-        if (collo.getOrdine().getItemOrdineList()!=null)
-        {
-        for (it.polimi.model.storepicking.ItemOrdine itemOrdine : collo.getOrdine().getItemOrdineList())
-        {
-        if (itemOrdine.getOrdine()!=null)
-        {
-        //itemOrdine.getOrdine()
-        itemOrdine.setOrdine(null);
-        }
-        if (itemOrdine.getItemOrdineCodiceList()!=null)
-        {
-        for (it.polimi.model.storepicking.ItemOrdineCodice itemOrdineCodice : itemOrdine.getItemOrdineCodiceList())
-        {
-        if (itemOrdineCodice.getItemOrdine()!=null)
-        {
-        //itemOrdineCodice.getItemOrdine()
-        itemOrdineCodice.setItemOrdine(null);
-        }
-        }
-        }
-        }
-        }
+        collo.getOrdine().setItemOrdineList(null);
         }
     }
 

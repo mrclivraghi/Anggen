@@ -49,7 +49,7 @@ public class OrderServiceImpl
         place.setOrder(order);
         }
         Order returnedOrder=orderRepository.save(order);
-      /*  if (order.getPerson()!=null)
+        /*if (order.getPerson()!=null)
         {
         List<Order> orderList = orderRepository.findByPerson( order.getPerson());
         if (!orderList.contains(returnedOrder))

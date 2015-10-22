@@ -86,28 +86,8 @@ public class ItemOrdineCodiceController {
     private void getRightMapping(ItemOrdineCodice itemOrdineCodice) {
         if (itemOrdineCodice.getItemOrdine()!=null)
         {
-        if (itemOrdineCodice.getItemOrdine().getOrdine()!=null)
-        {
-        if (itemOrdineCodice.getItemOrdine().getOrdine().getColloList()!=null)
-        {
-        for (it.polimi.model.storepicking.Collo collo : itemOrdineCodice.getItemOrdine().getOrdine().getColloList())
-        {
-        if (collo.getOrdine()!=null)
-        {
-        //collo.getOrdine()
-        collo.setOrdine(null);
-        }
-        }
-        }
-        if (itemOrdineCodice.getItemOrdine().getOrdine().getItemOrdineList()!=null)
-        {
-        itemOrdineCodice.getItemOrdine().getOrdine().setItemOrdineList(null);
-        }
-        }
-        if (itemOrdineCodice.getItemOrdine().getItemOrdineCodiceList()!=null)
-        {
+        itemOrdineCodice.getItemOrdine().setOrdine(null);
         itemOrdineCodice.getItemOrdine().setItemOrdineCodiceList(null);
-        }
         }
     }
 

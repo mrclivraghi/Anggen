@@ -86,13 +86,8 @@ public class PlaceController {
     private void getRightMapping(Place place) {
         if (place.getOrder()!=null)
         {
-        if (place.getOrder().getPerson()!=null)
-        {
-        }
-        if (place.getOrder().getPlaceList()!=null)
-        {
+        place.getOrder().setPerson(null);
         place.getOrder().setPlaceList(null);
-        }
         }
     }
 

@@ -66,21 +66,21 @@ public class HtmlGenerator {
 		try {
 			//js
 			html
-			.macros().javascript("http://code.jquery.com/jquery-1.9.1.js")
-			.macros().javascript("http://code.jquery.com/ui/1.11.4/jquery-ui.js")
-			.macros().javascript("http://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.js")
-			.macros().javascript("http://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular-touch.js")
-			.macros().javascript("http://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular-animate.js")
-			.macros().javascript("http://ui-grid.info/docs/grunt-scripts/csv.js")
-			.macros().javascript("http://ui-grid.info/docs/grunt-scripts/pdfmake.js")
-			.macros().javascript("http://ui-grid.info/docs/grunt-scripts/vfs_fonts.js")
-			.macros().javascript("http://ui-grid.info/release/ui-grid.js")
+			.macros().javascript("../resources/general_theme/js/jquery-1.9.1.js")
+			.macros().javascript("../resources/general_theme/js/jquery-ui.js")
+			.macros().javascript("../resources/general_theme/js/angular.js")
+			.macros().javascript("../resources/general_theme/js/angular-touch.js")
+			.macros().javascript("../resources/general_theme/js/angular-animate.js")
+			.macros().javascript("../resources/general_theme/js/csv.js")
+			.macros().javascript("../resources/general_theme/js/pdfmake.js")
+			.macros().javascript("../resources/general_theme/js/vfs_fonts.js")
+			.macros().javascript("../resources/general_theme/js/ui-grid.js")
 			.macros().javascript("../resources/general_theme/js/angular/"+entityName+".js")
 			.macros().javascript("../resources/general_theme/js/date.js")
 			.macros().javascript("../resources/general_theme/js/utility.js")
 			.macros().javascript("../resources/general_theme/js/jquery.easytree.js")
-			.macros().javascript("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js")
-			.macros().javascript("http://cdn.jsdelivr.net/alasql/0.2/alasql.min.js");
+			.macros().javascript("../resources/general_theme/js/bootstrap.min.js")
+			.macros().javascript("../resources/general_theme/js/alasql.min.js");
 			} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -89,8 +89,8 @@ public class HtmlGenerator {
 	public void incluseCssFiles(HtmlCanvas html)
 	{
 		try {
-			html.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "http://ui-grid.info/release/ui-grid.css"))
-			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"))
+			html.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../resources/general_theme/css/ui-grid.css"))
+			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../resources/general_theme/css/bootstrap.min.css"))
 			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../resources/general_theme/css/main.css"))
 			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../resources/general_theme/css/jquery-ui.css"))
 			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../resources/general_theme/css/easytree/skin-win8/ui.easytree.css"))

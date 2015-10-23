@@ -85,6 +85,13 @@ public class JsGenerator {
 		.append("{\n")
 		.append("this.entityList.push(entity);\n")
 		.append("};\n")
+
+		.append("this.emptyList= function(list)\n")
+		.append("{\n")
+		.append("while (list.length>0)\n")
+		.append("list.pop();\n")
+		.append("}\n")
+
 		.append("this.setEntityList= function(entityList)\n")
 		.append("{ \n")
 		.append("while (this.entityList.length>0)\n")
@@ -124,7 +131,8 @@ public class JsGenerator {
 		.append("for (j = 0; j < entity[val].length; j++)\n")
 		.append("this.selectedEntity[val]\n")
 		.append(".push(entity[val][j]);\n")
-		.append("}\n")
+		.append("} else \n")
+		.append("this.emptyList(selectedEntity[val]);\n")
 		.append("} else {\n")
 		.append("if (val.toLowerCase().indexOf(\"time\") > -1\n")
 		.append("&& typeof val == \"string\") {\n")

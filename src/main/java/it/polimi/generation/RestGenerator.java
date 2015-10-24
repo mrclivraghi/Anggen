@@ -354,7 +354,9 @@ public class RestGenerator {
 			for (Field field: fields)
 			{
 				if (field.getCompositeClass()!=null)
-					if (!field.getCompositeClass().fullName().contains("java.util.List"))			
+				{
+					ReflectionManager fieldReflectionManager = new ReflectionManager(field.getFieldClass());
+					if (!field.getCompositeClass().fullName().contains("java.util.List") && fieldReflectionManager.containFieldWithClass(classClass))			
 					{
 						updateBlock.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(field.getName())+"()!=null)");
 						updateBlock.directStatement("{");
@@ -364,6 +366,7 @@ public class RestGenerator {
 						updateBlock.directStatement("returned"+Utility.getFirstUpper(className)+".get"+Utility.getFirstUpper(field.getName())+"().set"+Utility.getFirstUpper(className)+"List("+lowerClass+"List);");
 						updateBlock.directStatement("}");
 					}
+				}
 			}
 			
 			updateBlock.directStatement(" return returned"+Utility.getFirstUpper(className)+";");

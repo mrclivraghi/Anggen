@@ -456,6 +456,17 @@ public class ReflectionManager {
 		return allClasses;
 	}
 	
+	
+	public Boolean containFieldWithClass(Class fieldClass)
+	{
+		List<Field> fieldList = getFieldList();
+		for (Field field: fieldList)
+			if (field.getFieldClass()==fieldClass)
+				return true;
+		
+		return false;
+	}
+	
 	public static void main(String[] args)
 	{
 		ReflectionManager reflectionManager= new ReflectionManager(Example.class);

@@ -62,7 +62,7 @@ public class AngularGenerator {
 		HtmlAttributes mainControllerAttributes = new HtmlAttributes();
 		mainControllerAttributes.add("ng-controller", entityName+"Controller");
 		
-		if (!HtmlGenerator.bootstrapMenu)
+		if (Generator.easyTreeMenu)
 		{
 			mainControllerAttributes.add("style", "position: absolute; left: 250px; width:80%; top: 30px;");
 		}

@@ -5,12 +5,14 @@ import it.polimi.utils.ReflectionManager;
 import it.polimi.utils.Utility;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -18,6 +20,7 @@ import javax.persistence.Entity;
 import org.rendersnake.DocType;
 import org.rendersnake.HtmlAttributes;
 import org.rendersnake.HtmlCanvas;
+import org.springframework.beans.factory.annotation.Value;
 /**
  * Prepare the html template and fill it with angular code and html elements.
  * @author Marco
@@ -40,9 +43,6 @@ public class HtmlGenerator {
 	
 	private DocType docType= DocType.HTML5;
 	
-	public static final String modelPackage= "it.polimi.model";
-	
-	public static final Boolean bootstrapMenu=true;
 	
 	public HtmlGenerator(Class classClass)
 	{
@@ -52,9 +52,11 @@ public class HtmlGenerator {
 		this.fieldList=reflectionManager.getFieldList();
 		this.childrenField=reflectionManager.getChildrenFieldList();
 		File file = new File(""); 
-		directoryViewPages = file.getAbsolutePath()+"\\WebContent\\WEB-INF\\jsp\\";
-		directoryAngularFiles=file.getAbsolutePath()+"\\src\\main\\webapp\\resources\\theme\\general_theme\\js\\angular\\";
+		directoryViewPages = file.getAbsolutePath()+Generator.htmlDirectory;
+		directoryAngularFiles=file.getAbsolutePath()+Generator.angularDirectory;
 	}
+	
+	
 	
 	/**
 	 * Include the functional js scripts
@@ -128,7 +130,7 @@ public class HtmlGenerator {
 			
 			//TODO switch
 			String loadMenuScript="loadMenu(); ";
-			if (HtmlGenerator.bootstrapMenu)
+			if (Generator.bootstrapMenu)
 				loadMenuScript=loadMenuScript+" activeMenu(\""+entityName+"\");";
 			else
 				loadMenuScript=loadMenuScript+" $('#menu').easytree(easyTreeOption);";
@@ -158,7 +160,7 @@ public class HtmlGenerator {
 		try {
 			html.div((new HtmlAttributes()).add("id", "menu").add("style", "width: 250px;"))
 			.ul();
-			List<String> packageList= ReflectionManager.getSubPackages(modelPackage);
+			List<String> packageList= ReflectionManager.getSubPackages(Generator.modelPackage);
 			
 			for (String myPackage: packageList)
 			{
@@ -174,10 +176,10 @@ public class HtmlGenerator {
 				html.content(reflectionManager.parseName(myPackage)+folderHtml.toHtml(),false);
 				
 			}
-			Set<Class<?>> packageClassList = ReflectionManager.getClassInPackage(modelPackage);
+			Set<Class<?>> packageClassList = ReflectionManager.getClassInPackage(Generator.modelPackage);
 			for (Class theClass: packageClassList)
 			{
-				if (theClass.getPackage().getName().equals(modelPackage))
+				if (theClass.getPackage().getName().equals(Generator.modelPackage))
 				{
 					html.li().a((new HtmlAttributes()).add("href", "../"+reflectionManager.parseName(theClass.getName())+"/")).content(reflectionManager.parseName(theClass.getName()))._li();
 				}
@@ -198,7 +200,7 @@ public class HtmlGenerator {
 		}
 		
 		File file = new File(""); 
-		String directoryViewPages = file.getAbsolutePath()+"\\src\\main\\webapp\\resources\\theme\\general_theme\\static\\";
+		String directoryViewPages = file.getAbsolutePath()+Generator.menuDirectory;
 		File menuFile=new File(directoryViewPages+"menu.html");
 		PrintWriter writer;
 		try {
@@ -235,7 +237,7 @@ public class HtmlGenerator {
 			._div()//end header
 			.div((new HtmlAttributes()).add("class", "collapse navbar-collapse").add("id", "bs-example-navbar-collapse-1")) //start real nav menu
 			.ul((new HtmlAttributes()).add("class", "nav navbar-nav"));
-			List<String> packageList= ReflectionManager.getSubPackages(modelPackage);
+			List<String> packageList= ReflectionManager.getSubPackages(Generator.modelPackage);
 			for (String myPackage: packageList)
 			{
 				html.li((new HtmlAttributes()).add("class", "dropdown"))
@@ -256,10 +258,10 @@ public class HtmlGenerator {
 				html._ul();
 				html._li();
 			}
-			Set<Class<?>> packageClassList = ReflectionManager.getClassInPackage(modelPackage);
+			Set<Class<?>> packageClassList = ReflectionManager.getClassInPackage(Generator.modelPackage);
 			for (Class theClass: packageClassList)
 			{
-				if (theClass.getPackage().getName().equals(modelPackage))
+				if (theClass.getPackage().getName().equals(Generator.modelPackage))
 				{
 					html.li().a((new HtmlAttributes()).add("href", "../"+reflectionManager.parseName(theClass.getName())+"/")).content(reflectionManager.parseName(theClass.getName()))._li();
 				}
@@ -274,7 +276,7 @@ public class HtmlGenerator {
 		}
 		
 		File file = new File(""); 
-		String directoryViewPages = file.getAbsolutePath()+"\\src\\main\\webapp\\resources\\theme\\general_theme\\static\\";
+		String directoryViewPages = file.getAbsolutePath()+Generator.menuDirectory;
 		File menuFile=new File(directoryViewPages+"menu.html");
 		PrintWriter writer;
 		try {

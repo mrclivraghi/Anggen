@@ -300,7 +300,7 @@ public class JsGenerator {
 			sb.append("{\n");
 
 			sb.append(parentEntityName+"Service.update().then(function successCallback(response) {\n");
-			sb.append(parentEntityName+"Service.setSelectedEntity(data);\n");
+			sb.append(parentEntityName+"Service.setSelectedEntity(response);\n");
 			sb.append("if (toDo != null)\n");
 			sb.append("toDo();\n");
 			sb.append("},function errorCallback(response) {      \n");
@@ -704,9 +704,9 @@ public class JsGenerator {
 			
 		} else
 		{
-			sb.append(entityName+"Service.searchOne(row.entity).then(function(data) { \n");
-			sb.append("console.log(data);\n");
-			sb.append(entityName+"Service.setSelectedEntity(data[0]);\n");
+			sb.append(entityName+"Service.searchOne(row.entity).then(function(response) { \n");
+			sb.append("console.log(response.data);\n");
+			sb.append(entityName+"Service.setSelectedEntity(response.data[0]);\n");
 			sb.append("});\n");
 		}
 		sb.append("}\n");

@@ -4,6 +4,8 @@ package it.polimi.controller.mountain;
 import java.util.List;
 import it.polimi.model.mountain.SeedQuery;
 import it.polimi.service.mountain.SeedQueryService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -19,6 +21,7 @@ public class SeedQueryController {
 
     @Autowired
     public SeedQueryService seedQueryService;
+    private final static Logger log = LoggerFactory.getLogger(SeedQuery.class);
 
     @RequestMapping(method = RequestMethod.GET)
     public String manage() {
@@ -31,8 +34,10 @@ public class SeedQueryController {
         @RequestBody
         SeedQuery seedQuery) {
         List<SeedQuery> seedQueryList;
+         log.info("Searching seedQuery like {}", seedQuery.getSeedQueryId()+' '+ seedQuery.getSeedKeyword());
         seedQueryList=seedQueryService.find(seedQuery);
         getRightMapping(seedQueryList);
+         log.info("Search: returning {} seedQuery.",seedQueryList.size());
         return ResponseEntity.ok().body(seedQueryList);
     }
 
@@ -41,8 +46,10 @@ public class SeedQueryController {
     public ResponseEntity getseedQueryById(
         @PathVariable
         String seedQueryId) {
+        log.info("Searching seedQuery with id {}",seedQueryId);
         List<SeedQuery> seedQueryList=seedQueryService.findById(java.lang.Long.valueOf(seedQueryId));
         getRightMapping(seedQueryList);
+         log.info("Search: returning {} seedQuery.",seedQueryList.size());
         return ResponseEntity.ok().body(seedQueryList);
     }
 
@@ -51,6 +58,7 @@ public class SeedQueryController {
     public ResponseEntity deleteseedQueryById(
         @PathVariable
         String seedQueryId) {
+        log.info("Deleting seedQuery with id {}",seedQueryId);
         seedQueryService.deleteById(java.lang.Long.valueOf(seedQueryId));
         return ResponseEntity.ok().build();
     }
@@ -60,8 +68,10 @@ public class SeedQueryController {
     public ResponseEntity insertseedQuery(
         @RequestBody
         SeedQuery seedQuery) {
+        log.info("Inserting seedQuery like {}", seedQuery.getSeedQueryId()+' '+ seedQuery.getSeedKeyword());
         SeedQuery insertedseedQuery=seedQueryService.insert(seedQuery);
         getRightMapping(insertedseedQuery);
+        log.info("Inserted seedQuery with id {}",insertedseedQuery.getSeedQueryId());
         return ResponseEntity.ok().body(insertedseedQuery);
     }
 
@@ -70,6 +80,7 @@ public class SeedQueryController {
     public ResponseEntity updateseedQuery(
         @RequestBody
         SeedQuery seedQuery) {
+        log.info("Updating seedQuery with id {}",seedQuery.getSeedQueryId());
         SeedQuery updatedseedQuery=seedQueryService.update(seedQuery);
         getRightMapping(updatedseedQuery);
         return ResponseEntity.ok().body(updatedseedQuery);

@@ -4,6 +4,8 @@ package it.polimi.controller.test;
 import java.util.List;
 import it.polimi.model.test.Person;
 import it.polimi.service.test.PersonService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -19,6 +21,7 @@ public class PersonController {
 
     @Autowired
     public PersonService personService;
+    private final static Logger log = LoggerFactory.getLogger(Person.class);
 
     @RequestMapping(method = RequestMethod.GET)
     public String manage() {
@@ -31,8 +34,10 @@ public class PersonController {
         @RequestBody
         Person person) {
         List<Person> personList;
+         log.info("Searching person like {}",person.toString());
         personList=personService.find(person);
         getRightMapping(personList);
+         log.info("Search: returning {} person.",personList.size());
         return ResponseEntity.ok().body(personList);
     }
 
@@ -41,8 +46,10 @@ public class PersonController {
     public ResponseEntity getpersonById(
         @PathVariable
         String personId) {
+        log.info("Searching person with id {}",personId);
         List<Person> personList=personService.findById(java.lang.Long.valueOf(personId));
         getRightMapping(personList);
+         log.info("Search: returning {} person.",personList.size());
         return ResponseEntity.ok().body(personList);
     }
 
@@ -51,6 +58,7 @@ public class PersonController {
     public ResponseEntity deletepersonById(
         @PathVariable
         String personId) {
+        log.info("Deleting person with id {}",personId);
         personService.deleteById(java.lang.Long.valueOf(personId));
         return ResponseEntity.ok().build();
     }
@@ -60,8 +68,10 @@ public class PersonController {
     public ResponseEntity insertperson(
         @RequestBody
         Person person) {
+        log.info("Inserting person like {}",person.toString());
         Person insertedperson=personService.insert(person);
         getRightMapping(insertedperson);
+        log.info("Inserted person with id {}",insertedperson.getPersonId());
         return ResponseEntity.ok().body(insertedperson);
     }
 
@@ -70,6 +80,7 @@ public class PersonController {
     public ResponseEntity updateperson(
         @RequestBody
         Person person) {
+        log.info("Updating person with id {}",person.getPersonId());
         Person updatedperson=personService.update(person);
         getRightMapping(updatedperson);
         return ResponseEntity.ok().body(updatedperson);

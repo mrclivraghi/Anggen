@@ -4,6 +4,8 @@ package it.polimi.controller.storepicking;
 import java.util.List;
 import it.polimi.model.storepicking.Ordine;
 import it.polimi.service.storepicking.OrdineService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -19,6 +21,7 @@ public class OrdineController {
 
     @Autowired
     public OrdineService ordineService;
+    private final static Logger log = LoggerFactory.getLogger(Ordine.class);
 
     @RequestMapping(method = RequestMethod.GET)
     public String manage() {
@@ -31,8 +34,10 @@ public class OrdineController {
         @RequestBody
         Ordine ordine) {
         List<Ordine> ordineList;
+         log.info("Searching ordine like {}",ordine.toString());
         ordineList=ordineService.find(ordine);
         getRightMapping(ordineList);
+         log.info("Search: returning {} ordine.",ordineList.size());
         return ResponseEntity.ok().body(ordineList);
     }
 
@@ -41,8 +46,10 @@ public class OrdineController {
     public ResponseEntity getordineById(
         @PathVariable
         String ordineId) {
+        log.info("Searching ordine with id {}",ordineId);
         List<Ordine> ordineList=ordineService.findById(java.lang.Integer.valueOf(ordineId));
         getRightMapping(ordineList);
+         log.info("Search: returning {} ordine.",ordineList.size());
         return ResponseEntity.ok().body(ordineList);
     }
 
@@ -51,6 +58,7 @@ public class OrdineController {
     public ResponseEntity deleteordineById(
         @PathVariable
         String ordineId) {
+        log.info("Deleting ordine with id {}",ordineId);
         ordineService.deleteById(java.lang.Integer.valueOf(ordineId));
         return ResponseEntity.ok().build();
     }
@@ -60,8 +68,10 @@ public class OrdineController {
     public ResponseEntity insertordine(
         @RequestBody
         Ordine ordine) {
+        log.info("Inserting ordine like {}",ordine.toString());
         Ordine insertedordine=ordineService.insert(ordine);
         getRightMapping(insertedordine);
+        log.info("Inserted ordine with id {}",insertedordine.getOrdineId());
         return ResponseEntity.ok().body(insertedordine);
     }
 
@@ -70,6 +80,7 @@ public class OrdineController {
     public ResponseEntity updateordine(
         @RequestBody
         Ordine ordine) {
+        log.info("Updating ordine with id {}",ordine.getOrdineId());
         Ordine updatedordine=ordineService.update(ordine);
         getRightMapping(updatedordine);
         return ResponseEntity.ok().body(updatedordine);

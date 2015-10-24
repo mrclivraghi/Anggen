@@ -4,6 +4,8 @@ package it.polimi.controller.test;
 import java.util.List;
 import it.polimi.model.test.Place;
 import it.polimi.service.test.PlaceService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -19,6 +21,7 @@ public class PlaceController {
 
     @Autowired
     public PlaceService placeService;
+    private final static Logger log = LoggerFactory.getLogger(Place.class);
 
     @RequestMapping(method = RequestMethod.GET)
     public String manage() {
@@ -31,8 +34,10 @@ public class PlaceController {
         @RequestBody
         Place place) {
         List<Place> placeList;
+         log.info("Searching place like {}",place.toString());
         placeList=placeService.find(place);
         getRightMapping(placeList);
+         log.info("Search: returning {} place.",placeList.size());
         return ResponseEntity.ok().body(placeList);
     }
 
@@ -41,8 +46,10 @@ public class PlaceController {
     public ResponseEntity getplaceById(
         @PathVariable
         String placeId) {
+        log.info("Searching place with id {}",placeId);
         List<Place> placeList=placeService.findById(java.lang.Long.valueOf(placeId));
         getRightMapping(placeList);
+         log.info("Search: returning {} place.",placeList.size());
         return ResponseEntity.ok().body(placeList);
     }
 
@@ -51,6 +58,7 @@ public class PlaceController {
     public ResponseEntity deleteplaceById(
         @PathVariable
         String placeId) {
+        log.info("Deleting place with id {}",placeId);
         placeService.deleteById(java.lang.Long.valueOf(placeId));
         return ResponseEntity.ok().build();
     }
@@ -60,8 +68,10 @@ public class PlaceController {
     public ResponseEntity insertplace(
         @RequestBody
         Place place) {
+        log.info("Inserting place like {}",place.toString());
         Place insertedplace=placeService.insert(place);
         getRightMapping(insertedplace);
+        log.info("Inserted place with id {}",insertedplace.getPlaceId());
         return ResponseEntity.ok().body(insertedplace);
     }
 
@@ -70,6 +80,7 @@ public class PlaceController {
     public ResponseEntity updateplace(
         @RequestBody
         Place place) {
+        log.info("Updating place with id {}",place.getPlaceId());
         Place updatedplace=placeService.update(place);
         getRightMapping(updatedplace);
         return ResponseEntity.ok().body(updatedplace);

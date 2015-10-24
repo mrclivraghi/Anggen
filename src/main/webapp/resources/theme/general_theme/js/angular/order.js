@@ -9,6 +9,11 @@ this.addEntity=function (entity)
 {
 this.entityList.push(entity);
 };
+this.emptyList= function(list)
+{
+while (list.length>0)
+list.pop();
+}
 this.setEntityList= function(entityList)
 { 
 while (this.entityList.length>0)
@@ -45,7 +50,8 @@ if (entity[val] != null)
 for (j = 0; j < entity[val].length; j++)
 this.selectedEntity[val]
 .push(entity[val][j]);
-}
+} else 
+this.emptyList(this.selectedEntity[val]);
 } else {
 if (val.toLowerCase().indexOf("time") > -1
 && typeof val == "string") {
@@ -125,6 +131,7 @@ delete orderService.searchBean.place;
 orderService.search().then(function successCallback(response) {
 orderService.setEntityList(response.data);
 },function errorCallback(response) { 
+alert("error");
 return; 
 });
 };
@@ -134,6 +141,7 @@ if (!$scope.orderDetailForm.$valid) return;
 orderService.insert().then(function successCallback(response) { 
 $scope.search();
 },function errorCallback(response) { 
+alert("error");
 return; 
 });
 };
@@ -143,6 +151,7 @@ if (!$scope.orderDetailForm.$valid) return;
 personService.selectedEntity.show=false;placeService.selectedEntity.show=false;orderService.update().then(function successCallback(response) { 
 $scope.search();
 },function errorCallback(response) { 
+alert("error");
 return; 
 });
 };
@@ -152,6 +161,7 @@ nullService.selectedEntity.order=null;
 orderService.del().then(function successCallback(response) { 
 $scope.search();
 },function errorCallback(response) { 
+alert("error");
 return; 
 });
 };
@@ -167,6 +177,7 @@ console.log(response);
 personService.setSelectedEntity(response.data[0]);
 personService.selectedEntity.show=true;
   }, function errorCallback(response) {
+alert("error");
 return; 
   }	
 );
@@ -184,6 +195,7 @@ function successCallback(response) {
 personService.setSelectedEntity(response.data[0]);
 personService.selectedEntity.show=true;
   }, function errorCallback(response) {
+alert("error");
 return; 
   }	
 );
@@ -200,6 +212,7 @@ console.log(response);
 placeService.setSelectedEntity(response.data[0]);
 placeService.selectedEntity.show=true;
   }, function errorCallback(response) {
+alert("error");
 return; 
   }	
 );
@@ -217,6 +230,7 @@ function successCallback(response) {
 placeService.setSelectedEntity(response.data[0]);
 placeService.selectedEntity.show=true;
   }, function errorCallback(response) {
+alert("error");
 return; 
   }	
 );
@@ -227,11 +241,13 @@ $scope.init=function()
 orderService.initPersonList().then(function successCallback(response) {
 orderService.childrenList.personList=response.data;
 },function errorCallback(response) { 
+alert("error");
 return; 
 });
 orderService.initPlaceList().then(function successCallback(response) {
 orderService.childrenList.placeList=response.data;
 },function errorCallback(response) { 
+alert("error");
 return; 
 });
 }; 
@@ -324,6 +340,11 @@ this.addEntity=function (entity)
 {
 this.entityList.push(entity);
 };
+this.emptyList= function(list)
+{
+while (list.length>0)
+list.pop();
+}
 this.setEntityList= function(entityList)
 { 
 while (this.entityList.length>0)
@@ -355,7 +376,8 @@ if (entity[val] != null)
 for (j = 0; j < entity[val].length; j++)
 this.selectedEntity[val]
 .push(entity[val][j]);
-}
+} else 
+this.emptyList(this.selectedEntity[val]);
 } else {
 if (val.toLowerCase().indexOf("time") > -1
 && typeof val == "string") {
@@ -412,6 +434,7 @@ orderService.setSelectedEntity(data);
 if (toDo != null)
 toDo();
 },function errorCallback(response) {      
+alert("error");
 return; 
 }
 );
@@ -429,6 +452,7 @@ personService.selectedEntity.show=false;
 personService.search().then(function successCallback(response) {
 personService.setEntityList(response.data);
 },function errorCallback(response) { 
+alert("error");
 return; 
 });
 };
@@ -446,6 +470,7 @@ orderService.initPersonList().then(function(response) {
 orderService.childrenList.personList=response.data;
 });
 },function errorCallback(response) { 
+alert("error");
 return; 
 });
 };
@@ -459,6 +484,7 @@ orderService.selectedEntity.person=personService.selectedEntity;
 personService.update().then(function successCallback(response){
 personService.setSelectedEntity(response.data);
 },function errorCallback(response) { 
+alert("error");
 return; 
 });
 };
@@ -479,6 +505,7 @@ orderService.initPersonList().then(function(response) {
 orderService.childrenList.personList=response.data;
 });
 },function errorCallback(response) { 
+alert("error");
 return; 
 });
 };
@@ -506,6 +533,11 @@ this.addEntity=function (entity)
 {
 this.entityList.push(entity);
 };
+this.emptyList= function(list)
+{
+while (list.length>0)
+list.pop();
+}
 this.setEntityList= function(entityList)
 { 
 while (this.entityList.length>0)
@@ -537,7 +569,8 @@ if (entity[val] != null)
 for (j = 0; j < entity[val].length; j++)
 this.selectedEntity[val]
 .push(entity[val][j]);
-}
+} else 
+this.emptyList(this.selectedEntity[val]);
 } else {
 if (val.toLowerCase().indexOf("time") > -1
 && typeof val == "string") {
@@ -601,6 +634,7 @@ orderService.setSelectedEntity(data);
 if (toDo != null)
 toDo();
 },function errorCallback(response) {      
+alert("error");
 return; 
 }
 );
@@ -618,6 +652,7 @@ placeService.selectedEntity.show=false;
 placeService.search().then(function successCallback(response) {
 placeService.setEntityList(response.data);
 },function errorCallback(response) { 
+alert("error");
 return; 
 });
 };
@@ -632,6 +667,7 @@ placeService.selectedEntity.order.orderId=orderService.selectedEntity.orderId;
 placeService.insert().then(function successCallBack(response) { 
 orderService.selectedEntity.placeList.push(response.data);
 },function errorCallback(response) { 
+alert("error");
 return; 
 });
 };
@@ -655,6 +691,7 @@ orderService.selectedEntity.placeList.push(placeService.selectedEntity);
 placeService.update().then(function successCallback(response){
 placeService.setSelectedEntity(response.data);
 },function errorCallback(response) { 
+alert("error");
 return; 
 });
 };
@@ -683,6 +720,7 @@ orderService.initPlaceList().then(function(response) {
 orderService.childrenList.placeList=response.data;
 });
 },function errorCallback(response) { 
+alert("error");
 return; 
 });
 };
@@ -698,6 +736,7 @@ console.log(response);
 orderService.setSelectedEntity(response.data[0]);
 orderService.selectedEntity.show=true;
   }, function errorCallback(response) {
+alert("error");
 return; 
   }	
 );
@@ -715,6 +754,7 @@ function successCallback(response) {
 orderService.setSelectedEntity(response.data[0]);
 orderService.selectedEntity.show=true;
   }, function errorCallback(response) {
+alert("error");
 return; 
   }	
 );
@@ -725,6 +765,7 @@ $scope.init=function()
 placeService.initOrderList().then(function successCallback(response) {
 placeService.childrenList.orderList=response.data;
 },function errorCallback(response) { 
+alert("error");
 return; 
 });
 }; 

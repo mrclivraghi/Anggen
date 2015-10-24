@@ -4,6 +4,8 @@ package it.polimi.controller.storepicking;
 import java.util.List;
 import it.polimi.model.storepicking.ItemOrdine;
 import it.polimi.service.storepicking.ItemOrdineService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -19,6 +21,7 @@ public class ItemOrdineController {
 
     @Autowired
     public ItemOrdineService itemOrdineService;
+    private final static Logger log = LoggerFactory.getLogger(ItemOrdine.class);
 
     @RequestMapping(method = RequestMethod.GET)
     public String manage() {
@@ -31,8 +34,10 @@ public class ItemOrdineController {
         @RequestBody
         ItemOrdine itemOrdine) {
         List<ItemOrdine> itemOrdineList;
+         log.info("Searching itemOrdine like {}",itemOrdine.toString());
         itemOrdineList=itemOrdineService.find(itemOrdine);
         getRightMapping(itemOrdineList);
+         log.info("Search: returning {} itemOrdine.",itemOrdineList.size());
         return ResponseEntity.ok().body(itemOrdineList);
     }
 
@@ -41,8 +46,10 @@ public class ItemOrdineController {
     public ResponseEntity getitemOrdineById(
         @PathVariable
         String itemOrdineId) {
+        log.info("Searching itemOrdine with id {}",itemOrdineId);
         List<ItemOrdine> itemOrdineList=itemOrdineService.findById(java.lang.Integer.valueOf(itemOrdineId));
         getRightMapping(itemOrdineList);
+         log.info("Search: returning {} itemOrdine.",itemOrdineList.size());
         return ResponseEntity.ok().body(itemOrdineList);
     }
 
@@ -51,6 +58,7 @@ public class ItemOrdineController {
     public ResponseEntity deleteitemOrdineById(
         @PathVariable
         String itemOrdineId) {
+        log.info("Deleting itemOrdine with id {}",itemOrdineId);
         itemOrdineService.deleteById(java.lang.Integer.valueOf(itemOrdineId));
         return ResponseEntity.ok().build();
     }
@@ -60,8 +68,10 @@ public class ItemOrdineController {
     public ResponseEntity insertitemOrdine(
         @RequestBody
         ItemOrdine itemOrdine) {
+        log.info("Inserting itemOrdine like {}",itemOrdine.toString());
         ItemOrdine inserteditemOrdine=itemOrdineService.insert(itemOrdine);
         getRightMapping(inserteditemOrdine);
+        log.info("Inserted itemOrdine with id {}",inserteditemOrdine.getItemOrdineId());
         return ResponseEntity.ok().body(inserteditemOrdine);
     }
 
@@ -70,6 +80,7 @@ public class ItemOrdineController {
     public ResponseEntity updateitemOrdine(
         @RequestBody
         ItemOrdine itemOrdine) {
+        log.info("Updating itemOrdine with id {}",itemOrdine.getItemOrdineId());
         ItemOrdine updateditemOrdine=itemOrdineService.update(itemOrdine);
         getRightMapping(updateditemOrdine);
         return ResponseEntity.ok().body(updateditemOrdine);

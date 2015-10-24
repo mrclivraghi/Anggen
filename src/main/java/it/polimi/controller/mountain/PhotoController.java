@@ -4,6 +4,8 @@ package it.polimi.controller.mountain;
 import java.util.List;
 import it.polimi.model.mountain.Photo;
 import it.polimi.service.mountain.PhotoService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -19,6 +21,7 @@ public class PhotoController {
 
     @Autowired
     public PhotoService photoService;
+    private final static Logger log = LoggerFactory.getLogger(Photo.class);
 
     @RequestMapping(method = RequestMethod.GET)
     public String manage() {
@@ -31,8 +34,10 @@ public class PhotoController {
         @RequestBody
         Photo photo) {
         List<Photo> photoList;
+         log.info("Searching photo like {}", photo.getPhotoId()+' '+ photo.getUrl());
         photoList=photoService.find(photo);
         getRightMapping(photoList);
+         log.info("Search: returning {} photo.",photoList.size());
         return ResponseEntity.ok().body(photoList);
     }
 
@@ -41,8 +46,10 @@ public class PhotoController {
     public ResponseEntity getphotoById(
         @PathVariable
         String photoId) {
+        log.info("Searching photo with id {}",photoId);
         List<Photo> photoList=photoService.findById(java.lang.Long.valueOf(photoId));
         getRightMapping(photoList);
+         log.info("Search: returning {} photo.",photoList.size());
         return ResponseEntity.ok().body(photoList);
     }
 
@@ -51,6 +58,7 @@ public class PhotoController {
     public ResponseEntity deletephotoById(
         @PathVariable
         String photoId) {
+        log.info("Deleting photo with id {}",photoId);
         photoService.deleteById(java.lang.Long.valueOf(photoId));
         return ResponseEntity.ok().build();
     }
@@ -60,8 +68,10 @@ public class PhotoController {
     public ResponseEntity insertphoto(
         @RequestBody
         Photo photo) {
+        log.info("Inserting photo like {}", photo.getPhotoId()+' '+ photo.getUrl());
         Photo insertedphoto=photoService.insert(photo);
         getRightMapping(insertedphoto);
+        log.info("Inserted photo with id {}",insertedphoto.getPhotoId());
         return ResponseEntity.ok().body(insertedphoto);
     }
 
@@ -70,6 +80,7 @@ public class PhotoController {
     public ResponseEntity updatephoto(
         @RequestBody
         Photo photo) {
+        log.info("Updating photo with id {}",photo.getPhotoId());
         Photo updatedphoto=photoService.update(photo);
         getRightMapping(updatedphoto);
         return ResponseEntity.ok().body(updatedphoto);

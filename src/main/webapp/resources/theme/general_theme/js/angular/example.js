@@ -9,6 +9,11 @@ this.addEntity=function (entity)
 {
 this.entityList.push(entity);
 };
+this.emptyList= function(list)
+{
+while (list.length>0)
+list.pop();
+}
 this.setEntityList= function(entityList)
 { 
 while (this.entityList.length>0)
@@ -45,7 +50,8 @@ if (entity[val] != null)
 for (j = 0; j < entity[val].length; j++)
 this.selectedEntity[val]
 .push(entity[val][j]);
-}
+} else 
+this.emptyList(this.selectedEntity[val]);
 } else {
 if (val.toLowerCase().indexOf("time") > -1
 && typeof val == "string") {
@@ -108,6 +114,7 @@ exampleService.selectedEntity.show=false;
 exampleService.search().then(function successCallback(response) {
 exampleService.setEntityList(response.data);
 },function errorCallback(response) { 
+alert("error");
 return; 
 });
 };
@@ -117,6 +124,7 @@ if (!$scope.exampleDetailForm.$valid) return;
 exampleService.insert().then(function successCallback(response) { 
 $scope.search();
 },function errorCallback(response) { 
+alert("error");
 return; 
 });
 };
@@ -126,6 +134,7 @@ if (!$scope.exampleDetailForm.$valid) return;
 exampleService.update().then(function successCallback(response) { 
 $scope.search();
 },function errorCallback(response) { 
+alert("error");
 return; 
 });
 };
@@ -135,6 +144,7 @@ nullService.selectedEntity.example=null;
 exampleService.del().then(function successCallback(response) { 
 $scope.search();
 },function errorCallback(response) { 
+alert("error");
 return; 
 });
 };

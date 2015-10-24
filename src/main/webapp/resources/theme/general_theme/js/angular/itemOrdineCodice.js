@@ -9,6 +9,11 @@ this.addEntity=function (entity)
 {
 this.entityList.push(entity);
 };
+this.emptyList= function(list)
+{
+while (list.length>0)
+list.pop();
+}
 this.setEntityList= function(entityList)
 { 
 while (this.entityList.length>0)
@@ -45,7 +50,8 @@ if (entity[val] != null)
 for (j = 0; j < entity[val].length; j++)
 this.selectedEntity[val]
 .push(entity[val][j]);
-}
+} else 
+this.emptyList(this.selectedEntity[val]);
 } else {
 if (val.toLowerCase().indexOf("time") > -1
 && typeof val == "string") {
@@ -115,6 +121,7 @@ itemOrdineCodiceService.selectedEntity.show=false;
 itemOrdineCodiceService.search().then(function successCallback(response) {
 itemOrdineCodiceService.setEntityList(response.data);
 },function errorCallback(response) { 
+alert("error");
 return; 
 });
 };
@@ -124,6 +131,7 @@ if (!$scope.itemOrdineCodiceDetailForm.$valid) return;
 itemOrdineCodiceService.insert().then(function successCallback(response) { 
 $scope.search();
 },function errorCallback(response) { 
+alert("error");
 return; 
 });
 };
@@ -133,6 +141,7 @@ if (!$scope.itemOrdineCodiceDetailForm.$valid) return;
 itemOrdineService.selectedEntity.show=false;ordineService.selectedEntity.show=false;colloService.selectedEntity.show=false;itemOrdineCodiceService.update().then(function successCallback(response) { 
 $scope.search();
 },function errorCallback(response) { 
+alert("error");
 return; 
 });
 };
@@ -142,6 +151,7 @@ nullService.selectedEntity.itemOrdineCodice=null;
 itemOrdineCodiceService.del().then(function successCallback(response) { 
 $scope.search();
 },function errorCallback(response) { 
+alert("error");
 return; 
 });
 };
@@ -157,6 +167,7 @@ console.log(response);
 itemOrdineService.setSelectedEntity(response.data[0]);
 itemOrdineService.selectedEntity.show=true;
   }, function errorCallback(response) {
+alert("error");
 return; 
   }	
 );
@@ -174,6 +185,7 @@ function successCallback(response) {
 itemOrdineService.setSelectedEntity(response.data[0]);
 itemOrdineService.selectedEntity.show=true;
   }, function errorCallback(response) {
+alert("error");
 return; 
   }	
 );
@@ -184,6 +196,7 @@ $scope.init=function()
 itemOrdineCodiceService.initItemOrdineList().then(function successCallback(response) {
 itemOrdineCodiceService.childrenList.itemOrdineList=response.data;
 },function errorCallback(response) { 
+alert("error");
 return; 
 });
 }; 
@@ -250,6 +263,11 @@ this.addEntity=function (entity)
 {
 this.entityList.push(entity);
 };
+this.emptyList= function(list)
+{
+while (list.length>0)
+list.pop();
+}
 this.setEntityList= function(entityList)
 { 
 while (this.entityList.length>0)
@@ -281,7 +299,8 @@ if (entity[val] != null)
 for (j = 0; j < entity[val].length; j++)
 this.selectedEntity[val]
 .push(entity[val][j]);
-}
+} else 
+this.emptyList(this.selectedEntity[val]);
 } else {
 if (val.toLowerCase().indexOf("time") > -1
 && typeof val == "string") {
@@ -352,6 +371,7 @@ itemOrdineCodiceService.setSelectedEntity(data);
 if (toDo != null)
 toDo();
 },function errorCallback(response) {      
+alert("error");
 return; 
 }
 );
@@ -372,6 +392,7 @@ delete itemOrdineService.searchBean.itemOrdineCodice;
 itemOrdineService.search().then(function successCallback(response) {
 itemOrdineService.setEntityList(response.data);
 },function errorCallback(response) { 
+alert("error");
 return; 
 });
 };
@@ -389,6 +410,7 @@ itemOrdineCodiceService.initItemOrdineList().then(function(response) {
 itemOrdineCodiceService.childrenList.itemOrdineList=response.data;
 });
 },function errorCallback(response) { 
+alert("error");
 return; 
 });
 };
@@ -402,6 +424,7 @@ itemOrdineCodiceService.selectedEntity.itemOrdine=itemOrdineService.selectedEnti
 itemOrdineService.update().then(function successCallback(response){
 itemOrdineService.setSelectedEntity(response.data);
 },function errorCallback(response) { 
+alert("error");
 return; 
 });
 };
@@ -422,6 +445,7 @@ itemOrdineCodiceService.initItemOrdineList().then(function(response) {
 itemOrdineCodiceService.childrenList.itemOrdineList=response.data;
 });
 },function errorCallback(response) { 
+alert("error");
 return; 
 });
 };
@@ -437,6 +461,7 @@ console.log(response);
 ordineService.setSelectedEntity(response.data[0]);
 ordineService.selectedEntity.show=true;
   }, function errorCallback(response) {
+alert("error");
 return; 
   }	
 );
@@ -454,6 +479,7 @@ function successCallback(response) {
 ordineService.setSelectedEntity(response.data[0]);
 ordineService.selectedEntity.show=true;
   }, function errorCallback(response) {
+alert("error");
 return; 
   }	
 );
@@ -470,6 +496,7 @@ console.log(response);
 itemOrdineCodiceService.setSelectedEntity(response.data[0]);
 itemOrdineCodiceService.selectedEntity.show=true;
   }, function errorCallback(response) {
+alert("error");
 return; 
   }	
 );
@@ -487,6 +514,7 @@ function successCallback(response) {
 itemOrdineCodiceService.setSelectedEntity(response.data[0]);
 itemOrdineCodiceService.selectedEntity.show=true;
   }, function errorCallback(response) {
+alert("error");
 return; 
   }	
 );
@@ -497,11 +525,13 @@ $scope.init=function()
 itemOrdineService.initOrdineList().then(function successCallback(response) {
 itemOrdineService.childrenList.ordineList=response.data;
 },function errorCallback(response) { 
+alert("error");
 return; 
 });
 itemOrdineService.initItemOrdineCodiceList().then(function successCallback(response) {
 itemOrdineService.childrenList.itemOrdineCodiceList=response.data;
 },function errorCallback(response) { 
+alert("error");
 return; 
 });
 }; 
@@ -578,6 +608,11 @@ this.addEntity=function (entity)
 {
 this.entityList.push(entity);
 };
+this.emptyList= function(list)
+{
+while (list.length>0)
+list.pop();
+}
 this.setEntityList= function(entityList)
 { 
 while (this.entityList.length>0)
@@ -609,7 +644,8 @@ if (entity[val] != null)
 for (j = 0; j < entity[val].length; j++)
 this.selectedEntity[val]
 .push(entity[val][j]);
-}
+} else 
+this.emptyList(this.selectedEntity[val]);
 } else {
 if (val.toLowerCase().indexOf("time") > -1
 && typeof val == "string") {
@@ -680,6 +716,7 @@ itemOrdineService.setSelectedEntity(data);
 if (toDo != null)
 toDo();
 },function errorCallback(response) {      
+alert("error");
 return; 
 }
 );
@@ -703,6 +740,7 @@ delete ordineService.searchBean.itemOrdine;
 ordineService.search().then(function successCallback(response) {
 ordineService.setEntityList(response.data);
 },function errorCallback(response) { 
+alert("error");
 return; 
 });
 };
@@ -720,6 +758,7 @@ itemOrdineService.initOrdineList().then(function(response) {
 itemOrdineService.childrenList.ordineList=response.data;
 });
 },function errorCallback(response) { 
+alert("error");
 return; 
 });
 };
@@ -733,6 +772,7 @@ itemOrdineService.selectedEntity.ordine=ordineService.selectedEntity;
 ordineService.update().then(function successCallback(response){
 ordineService.setSelectedEntity(response.data);
 },function errorCallback(response) { 
+alert("error");
 return; 
 });
 };
@@ -753,6 +793,7 @@ itemOrdineService.initOrdineList().then(function(response) {
 itemOrdineService.childrenList.ordineList=response.data;
 });
 },function errorCallback(response) { 
+alert("error");
 return; 
 });
 };
@@ -768,6 +809,7 @@ console.log(response);
 colloService.setSelectedEntity(response.data[0]);
 colloService.selectedEntity.show=true;
   }, function errorCallback(response) {
+alert("error");
 return; 
   }	
 );
@@ -785,6 +827,7 @@ function successCallback(response) {
 colloService.setSelectedEntity(response.data[0]);
 colloService.selectedEntity.show=true;
   }, function errorCallback(response) {
+alert("error");
 return; 
   }	
 );
@@ -801,6 +844,7 @@ console.log(response);
 itemOrdineService.setSelectedEntity(response.data[0]);
 itemOrdineService.selectedEntity.show=true;
   }, function errorCallback(response) {
+alert("error");
 return; 
   }	
 );
@@ -818,6 +862,7 @@ function successCallback(response) {
 itemOrdineService.setSelectedEntity(response.data[0]);
 itemOrdineService.selectedEntity.show=true;
   }, function errorCallback(response) {
+alert("error");
 return; 
   }	
 );
@@ -828,11 +873,13 @@ $scope.init=function()
 ordineService.initColloList().then(function successCallback(response) {
 ordineService.childrenList.colloList=response.data;
 },function errorCallback(response) { 
+alert("error");
 return; 
 });
 ordineService.initItemOrdineList().then(function successCallback(response) {
 ordineService.childrenList.itemOrdineList=response.data;
 },function errorCallback(response) { 
+alert("error");
 return; 
 });
 }; 
@@ -952,6 +999,11 @@ this.addEntity=function (entity)
 {
 this.entityList.push(entity);
 };
+this.emptyList= function(list)
+{
+while (list.length>0)
+list.pop();
+}
 this.setEntityList= function(entityList)
 { 
 while (this.entityList.length>0)
@@ -983,7 +1035,8 @@ if (entity[val] != null)
 for (j = 0; j < entity[val].length; j++)
 this.selectedEntity[val]
 .push(entity[val][j]);
-}
+} else 
+this.emptyList(this.selectedEntity[val]);
 } else {
 if (val.toLowerCase().indexOf("time") > -1
 && typeof val == "string") {
@@ -1047,6 +1100,7 @@ ordineService.setSelectedEntity(data);
 if (toDo != null)
 toDo();
 },function errorCallback(response) {      
+alert("error");
 return; 
 }
 );
@@ -1064,6 +1118,7 @@ colloService.selectedEntity.show=false;
 colloService.search().then(function successCallback(response) {
 colloService.setEntityList(response.data);
 },function errorCallback(response) { 
+alert("error");
 return; 
 });
 };
@@ -1078,6 +1133,7 @@ colloService.selectedEntity.ordine.ordineId=ordineService.selectedEntity.ordineI
 colloService.insert().then(function successCallBack(response) { 
 ordineService.selectedEntity.colloList.push(response.data);
 },function errorCallback(response) { 
+alert("error");
 return; 
 });
 };
@@ -1101,6 +1157,7 @@ ordineService.selectedEntity.colloList.push(colloService.selectedEntity);
 colloService.update().then(function successCallback(response){
 colloService.setSelectedEntity(response.data);
 },function errorCallback(response) { 
+alert("error");
 return; 
 });
 };
@@ -1129,6 +1186,7 @@ ordineService.initColloList().then(function(response) {
 ordineService.childrenList.colloList=response.data;
 });
 },function errorCallback(response) { 
+alert("error");
 return; 
 });
 };
@@ -1144,6 +1202,7 @@ console.log(response);
 ordineService.setSelectedEntity(response.data[0]);
 ordineService.selectedEntity.show=true;
   }, function errorCallback(response) {
+alert("error");
 return; 
   }	
 );
@@ -1161,6 +1220,7 @@ function successCallback(response) {
 ordineService.setSelectedEntity(response.data[0]);
 ordineService.selectedEntity.show=true;
   }, function errorCallback(response) {
+alert("error");
 return; 
   }	
 );
@@ -1171,6 +1231,7 @@ $scope.init=function()
 colloService.initOrdineList().then(function successCallback(response) {
 colloService.childrenList.ordineList=response.data;
 },function errorCallback(response) { 
+alert("error");
 return; 
 });
 }; 

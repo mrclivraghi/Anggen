@@ -1,5 +1,7 @@
 package it.polimi.model.mountain;
 
+import it.polimi.utils.annotation.DescriptionField;
+
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -28,9 +30,11 @@ public class SeedQuery {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name ="id_seed_query")
+	@DescriptionField
 	private Long seedQueryId;
 	
 	@Column(name ="seed_keyword")
+	@DescriptionField
 	private String seedKeyword;
 	
 	@NotNull

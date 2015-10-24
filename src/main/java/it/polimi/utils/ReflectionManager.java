@@ -2,6 +2,8 @@ package it.polimi.utils;
 
 import it.polimi.model.Example;
 import it.polimi.model.Sex;
+import it.polimi.model.mountain.Mountain;
+import it.polimi.utils.annotation.DescriptionField;
 import it.polimi.utils.annotation.ExcelExport;
 import it.polimi.utils.annotation.IgnoreSearch;
 import it.polimi.utils.annotation.IgnoreTableList;
@@ -236,10 +238,15 @@ public class ReflectionManager {
 	
 	public String getDescriptionField()
 	{
-		return getDescriptionField(classClass);
+		return getDescriptionField(classClass,false);
 	}
 	
-	public String getDescriptionField(Class classClass)
+	public String getDescriptionField(Boolean withGetter)
+	{
+		return getDescriptionField(classClass,withGetter);
+	}
+	
+	public String getDescriptionField(Class classClass,Boolean withGetter)
 	{
 		String descriptionFields="";
 		String entity=parseName(classClass.getName());
@@ -252,12 +259,27 @@ public class ReflectionManager {
 			fieldList = getFieldList();
 		for (Field field: fieldList)
 		{
-			if (field.getFieldClass()==String.class)
+			for (Annotation annotation: field.getAnnotationList())
 			{
-				descriptionFields=descriptionFields+" "+entity+"."+field.getName()+"+' '+";
+				if (annotation.annotationType()==DescriptionField.class)
+				{
+					if (withGetter)
+						descriptionFields=descriptionFields+" "+entity+".get"+Utility.getFirstUpper(field.getName())+"()+' '+";
+					else
+						descriptionFields=descriptionFields+" "+entity+"."+field.getName()+"+' '+";
+
+				}
 			}
 		}
-		descriptionFields=descriptionFields.substring(0, descriptionFields.length()-5);
+		if (descriptionFields.length()>5)
+			descriptionFields=descriptionFields.substring(0, descriptionFields.length()-5);
+		else
+		{
+			if (withGetter)
+				descriptionFields=entity+".toString()";
+			else
+				descriptionFields=entity+"."+entity+"Id";
+		}
 		return descriptionFields;
 	}
 	
@@ -414,6 +436,18 @@ public class ReflectionManager {
 		return menuItemList;
 	}
 	
+
+
+	public static Class getRightParamClass(Field field) {
+		if (field.getIsEnum())
+			return Integer.class;
+		
+		if (ReflectionManager.isDateField(field))
+			return String.class;
+		
+		return field.getFieldClass();
+	}
+	
 	
 	public static Set<Class<?>> getClassInPackage(String thePackage)
 	{
@@ -461,15 +495,10 @@ public class ReflectionManager {
 		{
 			System.out.println(string);
 		}
-	}
-
-	public static Class getRightParamClass(Field field) {
-		if (field.getIsEnum())
-			return Integer.class;
 		
-		if (ReflectionManager.isDateField(field))
-			return String.class;
 		
-		return field.getFieldClass();
+		System.out.println(reflectionManager.getDescriptionField(Mountain.class, false));
+		System.out.println(reflectionManager.getDescriptionField(Mountain.class, true));
+		
 	}
 }

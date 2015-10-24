@@ -422,7 +422,7 @@ public class RestGenerator {
 			JBlock searchBlock= search.body();
 			JVar entityList= searchBlock.decl(listClass, lowerClass+"List");
 			// log.info("Searching mountain like {}",mountain);
-			searchBlock.directStatement(" log.info(\"Searching "+lowerClass+" like {}\","+lowerClass+");");
+			searchBlock.directStatement(" log.info(\"Searching "+lowerClass+" like {}\","+reflectionManager.getDescriptionField(true)+");");
 			searchBlock.directStatement(""+lowerClass+"List="+lowerClass+"Service.find("+lowerClass+");");
 			searchBlock.directStatement("getRightMapping("+lowerClass+"List);");
 			searchBlock.directStatement(" log.info(\"Search: returning {} "+lowerClass+".\","+lowerClass+"List.size());");
@@ -456,7 +456,7 @@ public class RestGenerator {
 			deleteBlock.directStatement(lowerClass+"Service.deleteById("+keyClass.getName()+".valueOf("+lowerClass+"Id));");
 			deleteBlock.directStatement("return "+response+".build();");
 			
-			//InsertOrder
+			//Insert
 			JMethod insert = myClass.method(JMod.PUBLIC, ResponseEntity.class, "insert"+className+"");
 			insert.annotate(ResponseBody.class);
 			JAnnotationUse requestMappingInsert = insert.annotate(RequestMapping.class);
@@ -464,7 +464,7 @@ public class RestGenerator {
 			orderParam= insert.param(classClass,lowerClass+"");
 			orderParam.annotate(RequestBody.class);
 			JBlock insertBlock= insert.body();
-			insertBlock.directStatement("log.info(\"Inserting "+lowerClass+" like {}\","+lowerClass+");");
+			insertBlock.directStatement("log.info(\"Inserting "+lowerClass+" like {}\","+reflectionManager.getDescriptionField(true)+");");
 			insertBlock.directStatement(Utility.getFirstUpper(className)+" inserted"+className+"="+lowerClass+"Service.insert("+lowerClass+");");
 			insertBlock.directStatement("getRightMapping(inserted"+className+");");
 			insertBlock.directStatement("log.info(\"Inserted "+lowerClass+" with id {}\",inserted"+lowerClass+".get"+Utility.getFirstUpper(lowerClass)+"Id());");

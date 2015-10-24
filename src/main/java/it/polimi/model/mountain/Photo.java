@@ -1,6 +1,7 @@
 package it.polimi.model.mountain;
 
 import it.polimi.utils.CustomJsonDateDeserializer;
+import it.polimi.utils.annotation.DescriptionField;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -50,8 +51,10 @@ public class Photo {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name ="id_photo")
+	@DescriptionField
 	private Long photoId;
 	
+	@DescriptionField
 	private String url;
 	
 	private String social;

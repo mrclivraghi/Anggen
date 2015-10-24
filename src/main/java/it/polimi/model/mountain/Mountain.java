@@ -1,5 +1,7 @@
 package it.polimi.model.mountain;
 
+import it.polimi.utils.annotation.DescriptionField;
+
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -31,10 +33,12 @@ public class Mountain {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name ="id_mountain")
+	@DescriptionField
 	private Long mountainId;
 		
 	@NotBlank
 	@Size(min=2, max=14)
+	@DescriptionField
 	private String name;
 	
 	private String height;

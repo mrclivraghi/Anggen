@@ -132,7 +132,7 @@ public class JsGenerator {
 		.append("this.selectedEntity[val]\n")
 		.append(".push(entity[val][j]);\n")
 		.append("} else \n")
-		.append("this.emptyList(selectedEntity[val]);\n")
+		.append("this.emptyList(this.selectedEntity[val]);\n")
 		.append("} else {\n")
 		.append("if (val.toLowerCase().indexOf(\"time\") > -1\n")
 		.append("&& typeof val == \"string\") {\n")

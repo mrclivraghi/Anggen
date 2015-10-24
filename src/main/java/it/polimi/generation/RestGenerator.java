@@ -1,5 +1,6 @@
 package it.polimi.generation;
 
+import it.polimi.model.mountain.Mountain;
 import it.polimi.utils.Field;
 import it.polimi.utils.ReflectionManager;
 import it.polimi.utils.Utility;
@@ -10,10 +11,13 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.ManyToOne;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -36,8 +40,16 @@ import com.sun.codemodel.JClass;
 import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JDefinedClass;
+import com.sun.codemodel.JExpr;
+import com.sun.codemodel.JExpression;
+import com.sun.codemodel.JFieldRef;
+import com.sun.codemodel.JFormatter;
+import com.sun.codemodel.JInvocation;
 import com.sun.codemodel.JMethod;
 import com.sun.codemodel.JMod;
+import com.sun.codemodel.JPackage;
+import com.sun.codemodel.JType;
+import com.sun.codemodel.JTypeVar;
 import com.sun.codemodel.JVar;
 
 /**
@@ -383,6 +395,14 @@ public class RestGenerator {
 			//declare service
 			JVar repository = myClass.field(JMod.PUBLIC, serviceClass, lowerClass+"Service");
 			repository.annotate(Autowired.class);
+			//private final static Logger log = LoggerFactory.getLogger(Mountain.class);
+			JClass factory = codeModel.directClass("org.slf4j.LoggerFactory");
+			JVar log = myClass.field(JMod.PRIVATE+JMod.STATIC+JMod.FINAL, Logger.class, "log");
+			JClass jClassClass = codeModel.ref(classClass);
+			log.init(factory.staticInvoke("getLogger").arg(jClassClass.dotclass()));
+			//log.assign(factory.staticInvoke("getLogger"));
+			
+			
 			//manage
 			JMethod manage = myClass.method(JMod.PUBLIC, String.class, "manage");
 			JAnnotationUse requestMappingManage = manage.annotate(RequestMapping.class);
@@ -401,10 +421,11 @@ public class RestGenerator {
 			orderParam.annotate(RequestBody.class);
 			JBlock searchBlock= search.body();
 			JVar entityList= searchBlock.decl(listClass, lowerClass+"List");
-			//searchBlock.de
+			// log.info("Searching mountain like {}",mountain);
+			searchBlock.directStatement(" log.info(\"Searching "+lowerClass+" like {}\","+lowerClass+");");
 			searchBlock.directStatement(""+lowerClass+"List="+lowerClass+"Service.find("+lowerClass+");");
 			searchBlock.directStatement("getRightMapping("+lowerClass+"List);");
-			
+			searchBlock.directStatement(" log.info(\"Search: returning {} "+lowerClass+".\","+lowerClass+"List.size());");
 			searchBlock.directStatement("return "+response+".body("+lowerClass+"List);");
 			//getById  
 			JMethod getById=myClass.method(JMod.PUBLIC, ResponseEntity.class, "get"+className+"ById");
@@ -415,10 +436,13 @@ public class RestGenerator {
 			orderParam= getById.param(String.class,lowerClass+"Id");
 			orderParam.annotate(PathVariable.class);
 			JBlock getByIdBlock= getById.body();
+			getByIdBlock.directStatement("log.info(\"Searching "+lowerClass+" with id {}\","+lowerClass+"Id);");
 			getByIdBlock.directStatement("List<"+Utility.getFirstUpper(className)+"> "+lowerClass+"List="+lowerClass+"Service.findById("+keyClass.getName()+".valueOf("+lowerClass+"Id));");
 			getByIdBlock.directStatement("getRightMapping("+lowerClass+"List);");
+			getByIdBlock.directStatement(" log.info(\"Search: returning {} "+lowerClass+".\","+lowerClass+"List.size());");
+			
 			getByIdBlock.directStatement("return "+response+".body("+lowerClass+"List);");
-			//deleteOrderById
+			//deleteById
 			JMethod delete = myClass.method(JMod.PUBLIC, ResponseEntity.class, "delete"+className+"ById");
 			delete.annotate(ResponseBody.class);
 			JAnnotationUse requestMappingDelete = delete.annotate(RequestMapping.class);
@@ -427,6 +451,8 @@ public class RestGenerator {
 			orderParam= delete.param(String.class,lowerClass+"Id");
 			orderParam.annotate(PathVariable.class);
 			JBlock deleteBlock= delete.body();
+			deleteBlock.directStatement("log.info(\"Deleting "+lowerClass+" with id {}\","+lowerClass+"Id);");
+			
 			deleteBlock.directStatement(lowerClass+"Service.deleteById("+keyClass.getName()+".valueOf("+lowerClass+"Id));");
 			deleteBlock.directStatement("return "+response+".build();");
 			
@@ -438,9 +464,11 @@ public class RestGenerator {
 			orderParam= insert.param(classClass,lowerClass+"");
 			orderParam.annotate(RequestBody.class);
 			JBlock insertBlock= insert.body();
-			
+			insertBlock.directStatement("log.info(\"Inserting "+lowerClass+" like {}\","+lowerClass+");");
 			insertBlock.directStatement(Utility.getFirstUpper(className)+" inserted"+className+"="+lowerClass+"Service.insert("+lowerClass+");");
 			insertBlock.directStatement("getRightMapping(inserted"+className+");");
+			insertBlock.directStatement("log.info(\"Inserted "+lowerClass+" with id {}\",inserted"+lowerClass+".get"+Utility.getFirstUpper(lowerClass)+"Id());");
+			
 			insertBlock.directStatement("return "+response+".body(inserted"+className+");");
 			//UpdateOrder
 			JMethod update = myClass.method(JMod.PUBLIC, ResponseEntity.class, "update"+className+"");
@@ -450,6 +478,8 @@ public class RestGenerator {
 			orderParam= update.param(classClass,lowerClass+"");
 			orderParam.annotate(RequestBody.class);
 			JBlock updateBlock= update.body();
+			updateBlock.directStatement("log.info(\"Updating "+lowerClass+" with id {}\","+lowerClass+".get"+Utility.getFirstUpper(lowerClass)+"Id());");
+			
 			updateBlock.directStatement(Utility.getFirstUpper(className)+" updated"+className+"="+lowerClass+"Service.update("+lowerClass+");");
 			updateBlock.directStatement("getRightMapping(updated"+className+");");
 			updateBlock.directStatement("return "+response+".body(updated"+className+");");

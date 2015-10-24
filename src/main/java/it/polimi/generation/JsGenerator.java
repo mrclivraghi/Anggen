@@ -766,6 +766,7 @@ public class JsGenerator {
 
 	private void manageRestError(StringBuilder sb)
 	{
+		sb.append("alert(\"error\");\n");
 		sb.append("return; \n");
 	}
 	

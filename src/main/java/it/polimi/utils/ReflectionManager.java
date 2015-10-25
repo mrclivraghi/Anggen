@@ -504,7 +504,8 @@ public class ReflectionManager {
 				}
 			}
 		}
-		
+		if (tabNameList.size()==0)
+			tabNameList.add("Detail");
 		return tabNameList;
 	}
 	
@@ -537,7 +538,7 @@ public class ReflectionManager {
 				}
 			}
 		}
-		if (fieldList.size()==0) //default every field
+		if (fieldList.size()==0  && tabName.equals("Detail")) //default every field
 			return getFieldList();
 		return fieldList;
 	}

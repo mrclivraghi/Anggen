@@ -444,7 +444,7 @@ public class AngularGenerator {
     <li role="presentation"><a href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab">Tab1</a></li>
   </ul> 
 		 */
-		html.ul((new HtmlAttributes()).add("class", "nav nav-tabs").add("role", "tablist"));
+		html.ul((new HtmlAttributes()).add("class", "nav nav-tabs").add("role", "tablist").add("id", entityName+"Tabs"));
 		for (String tabName: reflectionManager.getTabsName())
 		{
 			html.li((new HtmlAttributes()).add("role", "presentation"))
@@ -529,8 +529,10 @@ public class AngularGenerator {
 									.span((new HtmlAttributes()).add("class", "glyphicon glyphicon-download-alt").add("aria-hidden", "true"))
 									._span()
 									._button();
-									
-									html._div();
+									style="pull-left";
+									html.br().br();
+									html.div((new HtmlAttributes()).add("class", style).add("style", "width: 100%"));
+									//html._div();
 									html.div(CssGenerator.getPanel())
 									.div(CssGenerator.getPanelHeader())
 									.content(field.getName()+downloadCanvas.toHtml(),false);
@@ -545,7 +547,10 @@ public class AngularGenerator {
 									html._div()._div();
 									
 									html._div();
-									html.div(CssGenerator.getPanelBody());
+									
+									
+									html._div();
+									//html.div(CssGenerator.getPanelBody());
 								}else
 								{//entity
 									html.div(CssGenerator.getExternalFieldPanel(style, search, entityName, field));
@@ -582,6 +587,11 @@ public class AngularGenerator {
 		
 
 		html._div();
+		
+		if (!search)
+		{
+			html.script((new HtmlAttributes()).add("type", "text/javascript")).content("$('#"+entityName+"Tabs a:first').tab('show');");
+		}
 		html.div(CssGenerator.getPanelBody());
 		if (!search)
 		{

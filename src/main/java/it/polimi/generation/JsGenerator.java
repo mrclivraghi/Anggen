@@ -319,6 +319,7 @@ public class JsGenerator {
 		{
 			changeChildrenVisibility(sb, false);
 		}
+		sb.append("$('#"+entityName+"Tabs li:eq(0) a').tab('show');\n");
 		sb.append("};\n");
 		sb.append("		\n");			
 		//search function
@@ -545,6 +546,7 @@ public class JsGenerator {
 
 
 				sb.append("}\n");
+				sb.append("$('#"+field.getName()+"Tabs li:eq(0) a').tab('show');\n");
 				sb.append("};\n");
 
 			}
@@ -709,6 +711,7 @@ public class JsGenerator {
 			sb.append(entityName+"Service.setSelectedEntity(response.data[0]);\n");
 			sb.append("});\n");
 		}
+		sb.append("$('#"+entityName+"Tabs li:eq(0) a').tab('show');\n");
 		sb.append("}\n");
 		sb.append("else \n");
 		sb.append(entityName+"Service.setSelectedEntity(null);\n");

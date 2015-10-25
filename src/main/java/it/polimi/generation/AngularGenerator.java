@@ -448,7 +448,7 @@ public class AngularGenerator {
 		for (String tabName: reflectionManager.getTabsName())
 		{
 			html.li((new HtmlAttributes()).add("role", "presentation"))
-			.a((new HtmlAttributes()).add("href", "#"+tabName).add("aria-controls", tabName).add("role", "tab").add("data-toggle", "tab"))
+			.a((new HtmlAttributes()).add("href", "#"+entityName+"-"+tabName).add("aria-controls", tabName).add("role", "tab").add("data-toggle", "tab"))
 			.content(tabName);
 			html._li();
 		}
@@ -458,7 +458,7 @@ public class AngularGenerator {
 		for (String tabName: reflectionManager.getTabsName())
 		{
 			 //<div role="tabpanel" class="tab-pane fade in active" id="home">
-			html.div((new HtmlAttributes()).add("role", "tabpanel").add("class", "tab-pane fade").add("id", tabName));
+			html.div((new HtmlAttributes()).add("role", "tabpanel").add("class", "tab-pane fade").add("id", entityName+"-"));
 			
 			String style="";
 			for (Field field: reflectionManager.getFieldByTabName(tabName))

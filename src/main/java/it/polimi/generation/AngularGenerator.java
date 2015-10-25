@@ -458,7 +458,7 @@ public class AngularGenerator {
 		for (String tabName: reflectionManager.getTabsName())
 		{
 			 //<div role="tabpanel" class="tab-pane fade in active" id="home">
-			html.div((new HtmlAttributes()).add("role", "tabpanel").add("class", "tab-pane fade").add("id", entityName+"-"));
+			html.div((new HtmlAttributes()).add("role", "tabpanel").add("class", "tab-pane fade").add("id", entityName+"-"+tabName));
 			
 			String style="";
 			for (Field field: reflectionManager.getFieldByTabName(tabName))

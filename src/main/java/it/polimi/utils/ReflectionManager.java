@@ -8,6 +8,7 @@ import it.polimi.utils.annotation.ExcelExport;
 import it.polimi.utils.annotation.IgnoreSearch;
 import it.polimi.utils.annotation.IgnoreTableList;
 import it.polimi.utils.annotation.IgnoreUpdate;
+import it.polimi.utils.annotation.Tab;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
@@ -384,6 +385,12 @@ public class ReflectionManager {
 		return hasIgnoreAnnotation(field, IgnoreSearch.class);
 	}
 	
+	public static Boolean hasTab(Field field)
+	{
+		return hasIgnoreAnnotation(field, Tab.class);
+	}
+	
+	
 	public static Boolean hasExcelExport(Field field)
 	{
 		return hasIgnoreAnnotation(field, ExcelExport.class);
@@ -466,6 +473,75 @@ public class ReflectionManager {
 		
 		return false;
 	}
+	
+	
+	public List<String> getTabsName()
+	{
+		List<String> tabNameList = new ArrayList<String>();
+		for (Field field: getFieldList())
+		{
+			for (Annotation annotation: field.getAnnotationList())
+			{
+				if (annotation.annotationType()==Tab.class)
+				{
+					for (Method method : annotation.annotationType().getDeclaredMethods()) {
+						if (method.getName().equals("number"))
+						{
+							Object value=null;
+							try {
+								value = method.invoke(annotation, (Object[])null);
+							} catch (IllegalAccessException
+									| IllegalArgumentException
+									| InvocationTargetException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							
+							if (!tabNameList.contains("tab"+value))
+								tabNameList.add("tab"+value);
+						}
+					}
+				}
+			}
+		}
+		
+		return tabNameList;
+	}
+	
+	public List<Field> getFieldByTabName(String tabName)
+	{
+		List<Field> fieldList = new ArrayList<Field>();
+		for (Field field: getFieldList())
+		{
+			if (ReflectionManager.hasTab(field))
+			{
+				for (Annotation annotation: field.getAnnotationList())
+				{
+					for (Method method : annotation.annotationType().getDeclaredMethods()) {
+						if (method.getName().equals("number"))
+						{
+							Object value=null;
+							try {
+								value = method.invoke(annotation, (Object[])null);
+								if (tabName.equals("tab"+value))
+									fieldList.add(field);
+
+							} catch (IllegalAccessException
+									| IllegalArgumentException
+									| InvocationTargetException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+					}
+				}
+			}
+		}
+		if (fieldList.size()==0) //default every field
+			return getFieldList();
+		return fieldList;
+	}
+	
 	
 	public static void main(String[] args)
 	{

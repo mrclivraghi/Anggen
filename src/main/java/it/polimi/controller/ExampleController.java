@@ -34,6 +34,7 @@ public class ExampleController {
         @RequestBody
         Example example) {
         List<Example> exampleList;
+        if (example.getExampleId()!=null)
          log.info("Searching example like {}",example.toString());
         exampleList=exampleService.find(example);
         getRightMapping(exampleList);

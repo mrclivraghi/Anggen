@@ -113,7 +113,8 @@ $scope.addNew= function()
 colloService.setSelectedEntity(null);
 colloService.setEntityList(null);
 colloService.selectedEntity.show=true;
-ordineService.selectedEntity.show=false;itemOrdineService.selectedEntity.show=false;itemOrdineCodiceService.selectedEntity.show=false;};
+ordineService.selectedEntity.show=false;itemOrdineService.selectedEntity.show=false;itemOrdineCodiceService.selectedEntity.show=false;$('#colloTabs li:eq(0) a').tab('show');
+};
 		
 $scope.search=function()
 {
@@ -190,6 +191,7 @@ return;
   }	
 );
 }
+$('#ordineTabs li:eq(0) a').tab('show');
 };
 $scope.init=function()
 {
@@ -223,6 +225,7 @@ gridApi.selection.on.rowSelectionChanged($scope,function(row){
 ordineService.selectedEntity.show=false;itemOrdineService.selectedEntity.show=false;itemOrdineCodiceService.selectedEntity.show=false;if (row.isSelected)
 {
 colloService.setSelectedEntity(row.entity);
+$('#colloTabs li:eq(0) a').tab('show');
 }
 else 
 colloService.setSelectedEntity(null);
@@ -360,7 +363,7 @@ ordineService.setEntityList(null);
 $scope.updateParent = function(toDo)
 {
 colloService.update().then(function successCallback(response) {
-colloService.setSelectedEntity(data);
+colloService.setSelectedEntity(response);
 if (toDo != null)
 toDo();
 },function errorCallback(response) {      
@@ -374,6 +377,7 @@ $scope.addNew= function()
 ordineService.setSelectedEntity(null);
 ordineService.setEntityList(null);
 ordineService.selectedEntity.show=true;
+$('#ordineTabs li:eq(0) a').tab('show');
 };
 		
 $scope.search=function()
@@ -480,6 +484,7 @@ return;
   }	
 );
 }
+$('#colloTabs li:eq(0) a').tab('show');
 };
 $scope.showItemOrdineDetail= function(index)
 {
@@ -515,6 +520,7 @@ return;
   }	
 );
 }
+$('#itemOrdineTabs li:eq(0) a').tab('show');
 };
 $scope.init=function()
 {
@@ -552,10 +558,11 @@ $scope.colloListGridOptions.onRegisterApi = function(gridApi){
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
-colloService.searchOne(row.entity).then(function(data) { 
-console.log(data);
-colloService.setSelectedEntity(data[0]);
+colloService.searchOne(row.entity).then(function(response) { 
+console.log(response.data);
+colloService.setSelectedEntity(response.data[0]);
 });
+$('#colloTabs li:eq(0) a').tab('show');
 }
 else 
 colloService.setSelectedEntity(null);
@@ -602,10 +609,11 @@ $scope.itemOrdineListGridOptions.onRegisterApi = function(gridApi){
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
-itemOrdineService.searchOne(row.entity).then(function(data) { 
-console.log(data);
-itemOrdineService.setSelectedEntity(data[0]);
+itemOrdineService.searchOne(row.entity).then(function(response) { 
+console.log(response.data);
+itemOrdineService.setSelectedEntity(response.data[0]);
 });
+$('#itemOrdineTabs li:eq(0) a').tab('show');
 }
 else 
 itemOrdineService.setSelectedEntity(null);
@@ -751,7 +759,7 @@ itemOrdineService.setEntityList(null);
 $scope.updateParent = function(toDo)
 {
 ordineService.update().then(function successCallback(response) {
-ordineService.setSelectedEntity(data);
+ordineService.setSelectedEntity(response);
 if (toDo != null)
 toDo();
 },function errorCallback(response) {      
@@ -765,6 +773,7 @@ $scope.addNew= function()
 itemOrdineService.setSelectedEntity(null);
 itemOrdineService.setEntityList(null);
 itemOrdineService.selectedEntity.show=true;
+$('#itemOrdineTabs li:eq(0) a').tab('show');
 };
 		
 $scope.search=function()
@@ -883,6 +892,7 @@ return;
   }	
 );
 }
+$('#ordineTabs li:eq(0) a').tab('show');
 };
 $scope.showItemOrdineCodiceDetail= function(index)
 {
@@ -918,6 +928,7 @@ return;
   }	
 );
 }
+$('#itemOrdineCodiceTabs li:eq(0) a').tab('show');
 };
 $scope.init=function()
 {
@@ -962,10 +973,11 @@ $scope.itemOrdineCodiceListGridOptions.onRegisterApi = function(gridApi){
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
-itemOrdineCodiceService.searchOne(row.entity).then(function(data) { 
-console.log(data);
-itemOrdineCodiceService.setSelectedEntity(data[0]);
+itemOrdineCodiceService.searchOne(row.entity).then(function(response) { 
+console.log(response.data);
+itemOrdineCodiceService.setSelectedEntity(response.data[0]);
 });
+$('#itemOrdineCodiceTabs li:eq(0) a').tab('show');
 }
 else 
 itemOrdineCodiceService.setSelectedEntity(null);
@@ -1104,7 +1116,7 @@ itemOrdineCodiceService.setEntityList(null);
 $scope.updateParent = function(toDo)
 {
 itemOrdineService.update().then(function successCallback(response) {
-itemOrdineService.setSelectedEntity(data);
+itemOrdineService.setSelectedEntity(response);
 if (toDo != null)
 toDo();
 },function errorCallback(response) {      
@@ -1118,6 +1130,7 @@ $scope.addNew= function()
 itemOrdineCodiceService.setSelectedEntity(null);
 itemOrdineCodiceService.setEntityList(null);
 itemOrdineCodiceService.selectedEntity.show=true;
+$('#itemOrdineCodiceTabs li:eq(0) a').tab('show');
 };
 		
 $scope.search=function()
@@ -1233,6 +1246,7 @@ return;
   }	
 );
 }
+$('#itemOrdineTabs li:eq(0) a').tab('show');
 };
 $scope.init=function()
 {

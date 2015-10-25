@@ -120,7 +120,8 @@ $scope.addNew= function()
 orderService.setSelectedEntity(null);
 orderService.setEntityList(null);
 orderService.selectedEntity.show=true;
-personService.selectedEntity.show=false;placeService.selectedEntity.show=false;};
+personService.selectedEntity.show=false;placeService.selectedEntity.show=false;$('#orderTabs li:eq(0) a').tab('show');
+};
 		
 $scope.search=function()
 {
@@ -200,6 +201,7 @@ return;
   }	
 );
 }
+$('#personTabs li:eq(0) a').tab('show');
 };
 $scope.showPlaceDetail= function(index)
 {
@@ -235,6 +237,7 @@ return;
   }	
 );
 }
+$('#placeTabs li:eq(0) a').tab('show');
 };
 $scope.init=function()
 {
@@ -272,6 +275,7 @@ gridApi.selection.on.rowSelectionChanged($scope,function(row){
 personService.selectedEntity.show=false;placeService.selectedEntity.show=false;if (row.isSelected)
 {
 orderService.setSelectedEntity(row.entity);
+$('#orderTabs li:eq(0) a').tab('show');
 }
 else 
 orderService.setSelectedEntity(null);
@@ -295,10 +299,11 @@ $scope.placeListGridOptions.onRegisterApi = function(gridApi){
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
-placeService.searchOne(row.entity).then(function(data) { 
-console.log(data);
-placeService.setSelectedEntity(data[0]);
+placeService.searchOne(row.entity).then(function(response) { 
+console.log(response.data);
+placeService.setSelectedEntity(response.data[0]);
 });
+$('#placeTabs li:eq(0) a').tab('show');
 }
 else 
 placeService.setSelectedEntity(null);
@@ -430,7 +435,7 @@ personService.setEntityList(null);
 $scope.updateParent = function(toDo)
 {
 orderService.update().then(function successCallback(response) {
-orderService.setSelectedEntity(data);
+orderService.setSelectedEntity(response);
 if (toDo != null)
 toDo();
 },function errorCallback(response) {      
@@ -444,6 +449,7 @@ $scope.addNew= function()
 personService.setSelectedEntity(null);
 personService.setEntityList(null);
 personService.selectedEntity.show=true;
+$('#personTabs li:eq(0) a').tab('show');
 };
 		
 $scope.search=function()
@@ -630,7 +636,7 @@ placeService.setEntityList(null);
 $scope.updateParent = function(toDo)
 {
 orderService.update().then(function successCallback(response) {
-orderService.setSelectedEntity(data);
+orderService.setSelectedEntity(response);
 if (toDo != null)
 toDo();
 },function errorCallback(response) {      
@@ -644,6 +650,7 @@ $scope.addNew= function()
 placeService.setSelectedEntity(null);
 placeService.setEntityList(null);
 placeService.selectedEntity.show=true;
+$('#placeTabs li:eq(0) a').tab('show');
 };
 		
 $scope.search=function()
@@ -759,6 +766,7 @@ return;
   }	
 );
 }
+$('#orderTabs li:eq(0) a').tab('show');
 };
 $scope.init=function()
 {

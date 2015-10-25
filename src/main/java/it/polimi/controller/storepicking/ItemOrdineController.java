@@ -34,6 +34,7 @@ public class ItemOrdineController {
         @RequestBody
         ItemOrdine itemOrdine) {
         List<ItemOrdine> itemOrdineList;
+        if (itemOrdine.getItemOrdineId()!=null)
          log.info("Searching itemOrdine like {}",itemOrdine.toString());
         itemOrdineList=itemOrdineService.find(itemOrdine);
         getRightMapping(itemOrdineList);

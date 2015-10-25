@@ -1,5 +1,5 @@
-var exampleApp=angular.module("exampleApp",['ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter'])
-.service("exampleService", function($http)
+var ambulatorioApp=angular.module("ambulatorioApp",['ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter'])
+.service("ambulatorioService", function($http)
 {
 this.entityList =		[];
 this.selectedEntity= 	{show: false 
@@ -66,54 +66,54 @@ this.selectedEntity[val] = entity[val];
 };
 this.search = function() {
 this.setSelectedEntity(null);
-var promise= $http.post("../example/search",this.searchBean);
+var promise= $http.post("../ambulatorio/search",this.searchBean);
 return promise; 
 };
 this.searchOne=function(entity) {
 this.setSelectedEntity(null);
-var promise= $http.get("../example/"+entity.exampleId);
+var promise= $http.get("../ambulatorio/"+entity.ambulatorioId);
 return promise; 
 };
 this.insert = function() {
-var promise= $http.put("../example/",this.selectedEntity);
+var promise= $http.put("../ambulatorio/",this.selectedEntity);
 return promise; 
 };
 this.update = function() {
-var promise= $http.post("../example/",this.selectedEntity);
+var promise= $http.post("../ambulatorio/",this.selectedEntity);
 return promise; 
 }
 this.del = function() {
-var url="../example/"+this.selectedEntity.exampleId;
+var url="../ambulatorio/"+this.selectedEntity.ambulatorioId;
 var promise= $http["delete"](url);
 return promise; 
 }
 })
-.controller("exampleController",function($scope,$http,exampleService)
+.controller("ambulatorioController",function($scope,$http,ambulatorioService)
 {
-$scope.searchBean=exampleService.searchBean;
-$scope.entityList=exampleService.entityList;
-$scope.selectedEntity=exampleService.selectedEntity;
-$scope.childrenList=exampleService.childrenList; 
+$scope.searchBean=ambulatorioService.searchBean;
+$scope.entityList=ambulatorioService.entityList;
+$scope.selectedEntity=ambulatorioService.selectedEntity;
+$scope.childrenList=ambulatorioService.childrenList; 
 $scope.reset = function()
 {
-exampleService.resetSearchBean();
-$scope.searchBean=exampleService.searchBean;exampleService.setSelectedEntity(null);
-exampleService.selectedEntity.show=false;
-exampleService.setEntityList(null); 
+ambulatorioService.resetSearchBean();
+$scope.searchBean=ambulatorioService.searchBean;ambulatorioService.setSelectedEntity(null);
+ambulatorioService.selectedEntity.show=false;
+ambulatorioService.setEntityList(null); 
 }
 $scope.addNew= function()
 {
-exampleService.setSelectedEntity(null);
-exampleService.setEntityList(null);
-exampleService.selectedEntity.show=true;
-$('#exampleTabs li:eq(0) a').tab('show');
+ambulatorioService.setSelectedEntity(null);
+ambulatorioService.setEntityList(null);
+ambulatorioService.selectedEntity.show=true;
+$('#ambulatorioTabs li:eq(0) a').tab('show');
 };
 		
 $scope.search=function()
 {
-exampleService.selectedEntity.show=false;
-exampleService.search().then(function successCallback(response) {
-exampleService.setEntityList(response.data);
+ambulatorioService.selectedEntity.show=false;
+ambulatorioService.search().then(function successCallback(response) {
+ambulatorioService.setEntityList(response.data);
 },function errorCallback(response) { 
 alert("error");
 return; 
@@ -121,8 +121,8 @@ return;
 };
 $scope.insert=function()
 {
-if (!$scope.exampleDetailForm.$valid) return; 
-exampleService.insert().then(function successCallback(response) { 
+if (!$scope.ambulatorioDetailForm.$valid) return; 
+ambulatorioService.insert().then(function successCallback(response) { 
 $scope.search();
 },function errorCallback(response) { 
 alert("error");
@@ -131,8 +131,8 @@ return;
 };
 $scope.update=function()
 {
-if (!$scope.exampleDetailForm.$valid) return; 
-exampleService.update().then(function successCallback(response) { 
+if (!$scope.ambulatorioDetailForm.$valid) return; 
+ambulatorioService.update().then(function successCallback(response) { 
 $scope.search();
 },function errorCallback(response) { 
 alert("error");
@@ -141,8 +141,8 @@ return;
 };
 $scope.del=function()
 {
-nullService.selectedEntity.example=null;
-exampleService.del().then(function successCallback(response) { 
+nullService.selectedEntity.ambulatorio=null;
+ambulatorioService.del().then(function successCallback(response) { 
 $scope.search();
 },function errorCallback(response) { 
 alert("error");
@@ -152,10 +152,9 @@ return;
 $scope.trueFalseValues=[true,false];
 $scope.init=function()
 {
-exampleService.childrenList.sexList=["MALE","FEMALE",];
 }; 
 $scope.init();
-$scope.exampleGridOptions = {
+$scope.ambulatorioGridOptions = {
 enablePaginationControls: true,
 multiSelect: false,
 enableSelectAll: false,
@@ -163,24 +162,22 @@ paginationPageSizes: [2, 4, 6],
 paginationPageSize: 2,
 enableGridMenu: true,
 columnDefs: [
-{ name: 'exampleId'},
-{ name: 'name'},
-{ name: 'birthDate', cellFilter: "date:'dd-MM-yyyy'"},
-{ name: 'birthTime', cellFilter: "date:'HH:mm'"},
-{ name: 'sex'} 
+{ name: 'ambulatorioId'},
+{ name: 'nome'},
+{ name: 'indirizzo'} 
 ]
-,data: exampleService.entityList
+,data: ambulatorioService.entityList
  };
-$scope.exampleGridOptions.onRegisterApi = function(gridApi){
+$scope.ambulatorioGridOptions.onRegisterApi = function(gridApi){
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
-exampleService.setSelectedEntity(row.entity);
-$('#exampleTabs li:eq(0) a').tab('show');
+ambulatorioService.setSelectedEntity(row.entity);
+$('#ambulatorioTabs li:eq(0) a').tab('show');
 }
 else 
-exampleService.setSelectedEntity(null);
-exampleService.selectedEntity.show = row.isSelected;
+ambulatorioService.setSelectedEntity(null);
+ambulatorioService.selectedEntity.show = row.isSelected;
 });
   };
 $scope.downloadEntityList=function()
@@ -189,7 +186,7 @@ var mystyle = {
  headers:true, 
 column: {style:{Font:{Bold:"1"}}}
 };
-alasql('SELECT exampleId,name,eta INTO XLSXML("example.xls",?) FROM ?',[mystyle,$scope.entityList]);
+alasql('SELECT * INTO XLSXML("ambulatorio.xls",?) FROM ?',[mystyle,$scope.entityList]);
 };
 })
 ;

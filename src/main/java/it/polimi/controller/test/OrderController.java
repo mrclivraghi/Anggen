@@ -34,6 +34,7 @@ public class OrderController {
         @RequestBody
         Order order) {
         List<Order> orderList;
+        if (order.getOrderId()!=null)
          log.info("Searching order like {}",order.toString());
         orderList=orderService.find(order);
         getRightMapping(orderList);

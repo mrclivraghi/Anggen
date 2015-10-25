@@ -34,6 +34,7 @@ public class PlaceController {
         @RequestBody
         Place place) {
         List<Place> placeList;
+        if (place.getPlaceId()!=null)
          log.info("Searching place like {}",place.toString());
         placeList=placeService.find(place);
         getRightMapping(placeList);

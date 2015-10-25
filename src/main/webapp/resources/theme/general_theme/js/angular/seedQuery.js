@@ -120,7 +120,8 @@ $scope.addNew= function()
 seedQueryService.setSelectedEntity(null);
 seedQueryService.setEntityList(null);
 seedQueryService.selectedEntity.show=true;
-mountainService.selectedEntity.show=false;photoService.selectedEntity.show=false;};
+mountainService.selectedEntity.show=false;photoService.selectedEntity.show=false;$('#seedQueryTabs li:eq(0) a').tab('show');
+};
 		
 $scope.search=function()
 {
@@ -200,6 +201,7 @@ return;
   }	
 );
 }
+$('#mountainTabs li:eq(0) a').tab('show');
 };
 $scope.showPhotoDetail= function(index)
 {
@@ -235,6 +237,7 @@ return;
   }	
 );
 }
+$('#photoTabs li:eq(0) a').tab('show');
 };
 $scope.init=function()
 {
@@ -272,6 +275,7 @@ gridApi.selection.on.rowSelectionChanged($scope,function(row){
 mountainService.selectedEntity.show=false;photoService.selectedEntity.show=false;if (row.isSelected)
 {
 seedQueryService.setSelectedEntity(row.entity);
+$('#seedQueryTabs li:eq(0) a').tab('show');
 }
 else 
 seedQueryService.setSelectedEntity(null);
@@ -300,10 +304,11 @@ $scope.photoListGridOptions.onRegisterApi = function(gridApi){
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
-photoService.searchOne(row.entity).then(function(data) { 
-console.log(data);
-photoService.setSelectedEntity(data[0]);
+photoService.searchOne(row.entity).then(function(response) { 
+console.log(response.data);
+photoService.setSelectedEntity(response.data[0]);
 });
+$('#photoTabs li:eq(0) a').tab('show');
 }
 else 
 photoService.setSelectedEntity(null);
@@ -442,7 +447,7 @@ mountainService.setEntityList(null);
 $scope.updateParent = function(toDo)
 {
 seedQueryService.update().then(function successCallback(response) {
-seedQueryService.setSelectedEntity(data);
+seedQueryService.setSelectedEntity(response);
 if (toDo != null)
 toDo();
 },function errorCallback(response) {      
@@ -456,6 +461,7 @@ $scope.addNew= function()
 mountainService.setSelectedEntity(null);
 mountainService.setEntityList(null);
 mountainService.selectedEntity.show=true;
+$('#mountainTabs li:eq(0) a').tab('show');
 };
 		
 $scope.search=function()
@@ -559,6 +565,7 @@ return;
   }	
 );
 }
+$('#seedQueryTabs li:eq(0) a').tab('show');
 };
 $scope.init=function()
 {
@@ -588,10 +595,11 @@ $scope.seedQueryListGridOptions.onRegisterApi = function(gridApi){
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
-seedQueryService.searchOne(row.entity).then(function(data) { 
-console.log(data);
-seedQueryService.setSelectedEntity(data[0]);
+seedQueryService.searchOne(row.entity).then(function(response) { 
+console.log(response.data);
+seedQueryService.setSelectedEntity(response.data[0]);
 });
+$('#seedQueryTabs li:eq(0) a').tab('show');
 }
 else 
 seedQueryService.setSelectedEntity(null);
@@ -722,7 +730,7 @@ photoService.setEntityList(null);
 $scope.updateParent = function(toDo)
 {
 seedQueryService.update().then(function successCallback(response) {
-seedQueryService.setSelectedEntity(data);
+seedQueryService.setSelectedEntity(response);
 if (toDo != null)
 toDo();
 },function errorCallback(response) {      
@@ -736,6 +744,7 @@ $scope.addNew= function()
 photoService.setSelectedEntity(null);
 photoService.setEntityList(null);
 photoService.selectedEntity.show=true;
+$('#photoTabs li:eq(0) a').tab('show');
 };
 		
 $scope.search=function()
@@ -851,6 +860,7 @@ return;
   }	
 );
 }
+$('#seedQueryTabs li:eq(0) a').tab('show');
 };
 $scope.init=function()
 {

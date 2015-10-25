@@ -425,6 +425,8 @@ public class RestGenerator {
 			JBlock searchBlock= search.body();
 			JVar entityList= searchBlock.decl(listClass, lowerClass+"List");
 			// log.info("Searching mountain like {}",mountain);
+			//TODO ,anage null on description field
+			searchBlock.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(lowerClass)+"Id()!=null)");
 			searchBlock.directStatement(" log.info(\"Searching "+lowerClass+" like {}\","+reflectionManager.getDescriptionField(true)+");");
 			searchBlock.directStatement(""+lowerClass+"List="+lowerClass+"Service.find("+lowerClass+");");
 			searchBlock.directStatement("getRightMapping("+lowerClass+"List);");

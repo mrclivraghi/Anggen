@@ -694,6 +694,7 @@ public class JsGenerator {
 
 		//on row selection
 		sb.append("$scope."+entityName+ (entityList? "List":"")+"GridOptions.onRegisterApi = function(gridApi){\n");
+		sb.append("$scope."+entityName+"GridApi = gridApi;");
 		sb.append("gridApi.selection.on.rowSelectionChanged($scope,function(row){\n");
 		if (isParent)
 			changeChildrenVisibility(sb, false);
@@ -805,6 +806,17 @@ public class JsGenerator {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	public static String resetTableTab(String tabName,Class entityClass) {
+		String resetTableTabString="";
+		ReflectionManager reflectionManager = new ReflectionManager(entityClass);
+		for (Field field: reflectionManager.getFieldByTabName(tabName))
+		{
+			if (field.getCompositeClass()!= null && field.getCompositeClass().fullName().contains("java.util.List"))
+				resetTableTabString=resetTableTabString+" $scope."+field.getName()+"GridApi.core.handleWindowResize(); ";
+				//$scope.seedQueryGridApi.core.handleWindowResize();
+		}
+		return resetTableTabString;
 	}
 	
 	

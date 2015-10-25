@@ -448,7 +448,7 @@ public class AngularGenerator {
 		for (String tabName: reflectionManager.getTabsName())
 		{
 			html.li((new HtmlAttributes()).add("role", "presentation"))
-			.a((new HtmlAttributes()).add("href", "#"+entityName+"-"+tabName).add("aria-controls", tabName).add("role", "tab").add("data-toggle", "tab"))
+			.a((new HtmlAttributes()).add("href", "#"+entityName+"-"+tabName).add("aria-controls", tabName).add("role", "tab").add("data-toggle", "tab").add("ng-click",JsGenerator.resetTableTab(tabName,classClass)))
 			.content(tabName);
 			html._li();
 		}

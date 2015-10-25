@@ -34,6 +34,7 @@ public class PersonController {
         @RequestBody
         Person person) {
         List<Person> personList;
+        if (person.getPersonId()!=null)
          log.info("Searching person like {}",person.toString());
         personList=personService.find(person);
         getRightMapping(personList);

@@ -34,6 +34,7 @@ public class SeedQueryController {
         @RequestBody
         SeedQuery seedQuery) {
         List<SeedQuery> seedQueryList;
+        if (seedQuery.getSeedQueryId()!=null)
          log.info("Searching seedQuery like {}", seedQuery.getSeedQueryId()+' '+ seedQuery.getSeedKeyword());
         seedQueryList=seedQueryService.find(seedQuery);
         getRightMapping(seedQueryList);

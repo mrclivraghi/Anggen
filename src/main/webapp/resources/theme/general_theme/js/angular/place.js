@@ -113,7 +113,8 @@ $scope.addNew= function()
 placeService.setSelectedEntity(null);
 placeService.setEntityList(null);
 placeService.selectedEntity.show=true;
-orderService.selectedEntity.show=false;personService.selectedEntity.show=false;};
+orderService.selectedEntity.show=false;personService.selectedEntity.show=false;$('#placeTabs li:eq(0) a').tab('show');
+};
 		
 $scope.search=function()
 {
@@ -190,6 +191,7 @@ return;
   }	
 );
 }
+$('#orderTabs li:eq(0) a').tab('show');
 };
 $scope.init=function()
 {
@@ -220,6 +222,7 @@ gridApi.selection.on.rowSelectionChanged($scope,function(row){
 orderService.selectedEntity.show=false;personService.selectedEntity.show=false;if (row.isSelected)
 {
 placeService.setSelectedEntity(row.entity);
+$('#placeTabs li:eq(0) a').tab('show');
 }
 else 
 placeService.setSelectedEntity(null);
@@ -357,7 +360,7 @@ orderService.setEntityList(null);
 $scope.updateParent = function(toDo)
 {
 placeService.update().then(function successCallback(response) {
-placeService.setSelectedEntity(data);
+placeService.setSelectedEntity(response);
 if (toDo != null)
 toDo();
 },function errorCallback(response) {      
@@ -371,6 +374,7 @@ $scope.addNew= function()
 orderService.setSelectedEntity(null);
 orderService.setEntityList(null);
 orderService.selectedEntity.show=true;
+$('#orderTabs li:eq(0) a').tab('show');
 };
 		
 $scope.search=function()
@@ -474,6 +478,7 @@ return;
   }	
 );
 }
+$('#personTabs li:eq(0) a').tab('show');
 };
 $scope.showPlaceDetail= function(index)
 {
@@ -509,6 +514,7 @@ return;
   }	
 );
 }
+$('#placeTabs li:eq(0) a').tab('show');
 };
 $scope.init=function()
 {
@@ -543,10 +549,11 @@ $scope.placeListGridOptions.onRegisterApi = function(gridApi){
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
-placeService.searchOne(row.entity).then(function(data) { 
-console.log(data);
-placeService.setSelectedEntity(data[0]);
+placeService.searchOne(row.entity).then(function(response) { 
+console.log(response.data);
+placeService.setSelectedEntity(response.data[0]);
 });
+$('#placeTabs li:eq(0) a').tab('show');
 }
 else 
 placeService.setSelectedEntity(null);
@@ -678,7 +685,7 @@ personService.setEntityList(null);
 $scope.updateParent = function(toDo)
 {
 orderService.update().then(function successCallback(response) {
-orderService.setSelectedEntity(data);
+orderService.setSelectedEntity(response);
 if (toDo != null)
 toDo();
 },function errorCallback(response) {      
@@ -692,6 +699,7 @@ $scope.addNew= function()
 personService.setSelectedEntity(null);
 personService.setEntityList(null);
 personService.selectedEntity.show=true;
+$('#personTabs li:eq(0) a').tab('show');
 };
 		
 $scope.search=function()

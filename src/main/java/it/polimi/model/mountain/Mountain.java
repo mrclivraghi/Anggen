@@ -1,6 +1,7 @@
 package it.polimi.model.mountain;
 
 import it.polimi.utils.annotation.DescriptionField;
+import it.polimi.utils.annotation.Tab;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -34,13 +35,16 @@ public class Mountain {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name ="id_mountain")
 	@DescriptionField
+	@Tab(number=1)
 	private Long mountainId;
 		
 	@NotBlank
 	@Size(min=2, max=14)
 	@DescriptionField
+	@Tab(number=1)
 	private String name;
 	
+	@Tab(number=1)
 	private String height;
 	
 
@@ -48,6 +52,7 @@ public class Mountain {
 	//@Cascade({CascadeType.ALL})
 	@Type(type="it.polimi.model.SeedQuery")
 	@JoinColumn(name="mountain_id_mountain")
+	@Tab(number=2)
 	private List<SeedQuery> seedQueryList;
 	
 	public Mountain()

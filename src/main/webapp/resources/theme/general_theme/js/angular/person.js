@@ -106,6 +106,7 @@ $scope.addNew= function()
 personService.setSelectedEntity(null);
 personService.setEntityList(null);
 personService.selectedEntity.show=true;
+$('#personTabs li:eq(0) a').tab('show');
 };
 		
 $scope.search=function()
@@ -173,6 +174,7 @@ gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
 personService.setSelectedEntity(row.entity);
+$('#personTabs li:eq(0) a').tab('show');
 }
 else 
 personService.setSelectedEntity(null);

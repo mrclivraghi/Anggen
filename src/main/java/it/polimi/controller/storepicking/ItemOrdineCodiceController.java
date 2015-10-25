@@ -34,6 +34,7 @@ public class ItemOrdineCodiceController {
         @RequestBody
         ItemOrdineCodice itemOrdineCodice) {
         List<ItemOrdineCodice> itemOrdineCodiceList;
+        if (itemOrdineCodice.getItemOrdineCodiceId()!=null)
          log.info("Searching itemOrdineCodice like {}",itemOrdineCodice.toString());
         itemOrdineCodiceList=itemOrdineCodiceService.find(itemOrdineCodice);
         getRightMapping(itemOrdineCodiceList);

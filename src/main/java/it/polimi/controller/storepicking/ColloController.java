@@ -34,6 +34,7 @@ public class ColloController {
         @RequestBody
         Collo collo) {
         List<Collo> colloList;
+        if (collo.getColloId()!=null)
          log.info("Searching collo like {}",collo.toString());
         colloList=colloService.find(collo);
         getRightMapping(colloList);

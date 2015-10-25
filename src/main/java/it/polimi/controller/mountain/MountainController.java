@@ -34,6 +34,7 @@ public class MountainController {
         @RequestBody
         Mountain mountain) {
         List<Mountain> mountainList;
+        if (mountain.getMountainId()!=null)
          log.info("Searching mountain like {}", mountain.getMountainId()+' '+ mountain.getName());
         mountainList=mountainService.find(mountain);
         getRightMapping(mountainList);

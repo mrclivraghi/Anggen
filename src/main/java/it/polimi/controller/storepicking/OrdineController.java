@@ -34,6 +34,7 @@ public class OrdineController {
         @RequestBody
         Ordine ordine) {
         List<Ordine> ordineList;
+        if (ordine.getOrdineId()!=null)
          log.info("Searching ordine like {}",ordine.toString());
         ordineList=ordineService.find(ordine);
         getRightMapping(ordineList);

@@ -34,6 +34,7 @@ public class PhotoController {
         @RequestBody
         Photo photo) {
         List<Photo> photoList;
+        if (photo.getPhotoId()!=null)
          log.info("Searching photo like {}", photo.getPhotoId()+' '+ photo.getUrl());
         photoList=photoService.find(photo);
         getRightMapping(photoList);

@@ -3,6 +3,8 @@ package it.polimi.utils;
 import it.polimi.model.Example;
 import it.polimi.model.Sex;
 import it.polimi.model.mountain.Mountain;
+import it.polimi.model.ospedale.Ambulatorio;
+import it.polimi.model.ospedale.Paziente;
 import it.polimi.utils.annotation.DescriptionField;
 import it.polimi.utils.annotation.ExcelExport;
 import it.polimi.utils.annotation.IgnoreSearch;
@@ -24,6 +26,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -206,11 +209,11 @@ public class ReflectionManager {
 		List<ClassDetail> returnedClassList = new ArrayList<ClassDetail>();
 		List<Field> childrenFieldList = reflectionManager.getChildrenFieldList();
 		if (childrenFieldList.size()==0) return returnedClassList;
-		for (Field field : childrenFieldList)
+		List<Field> thisRunFields= new ArrayList<Field>();
+		
+		for (Field field: childrenFieldList)
 		{
-			if (parentClassList.contains(field.getFieldClass()))
-			{}//childrenClassList.remove(fieldClass);
-			else
+			if (!parentClassList.contains(field.getFieldClass()))
 			{
 				ClassDetail classDetail = new ClassDetail();
 				classDetail.setClassClass(field.getFieldClass());
@@ -218,8 +221,14 @@ public class ReflectionManager {
 				classDetail.setParentName(reflectionManager.parseName());;
 				returnedClassList.add(classDetail);
 				parentClassList.add(field.getFieldClass());
-				returnedClassList.addAll(ReflectionManager.getDescendantClassList(field.getFieldClass(), parentClassList));
+				thisRunFields.add(field);
+				
 			}
+		}
+		
+		for (Field field : thisRunFields)
+		{
+				returnedClassList.addAll(ReflectionManager.getDescendantClassList(field.getFieldClass(), parentClassList));
 		}
 		
 		return returnedClassList;
@@ -382,31 +391,36 @@ public class ReflectionManager {
 	
 	public static Boolean hasIgnoreSearch(Field field)
 	{
-		return hasIgnoreAnnotation(field, IgnoreSearch.class);
+		return hasAnnotation(field, IgnoreSearch.class);
 	}
 	
 	public static Boolean hasTab(Field field)
 	{
-		return hasIgnoreAnnotation(field, Tab.class);
+		return hasAnnotation(field, Tab.class);
 	}
 	
 	
 	public static Boolean hasExcelExport(Field field)
 	{
-		return hasIgnoreAnnotation(field, ExcelExport.class);
+		return hasAnnotation(field, ExcelExport.class);
 	}
 	
 	public static Boolean hasIgnoreUpdate(Field field)
 	{
-		return hasIgnoreAnnotation(field, IgnoreUpdate.class);
+		return hasAnnotation(field, IgnoreUpdate.class);
 	}
 	
 	public static Boolean hasIgnoreTableList(Field field)
 	{
-		return hasIgnoreAnnotation(field, IgnoreTableList.class);
+		return hasAnnotation(field, IgnoreTableList.class);
 	}
 	
-	private static Boolean hasIgnoreAnnotation(Field field,Class ignoreAnnotationClass)
+	public static Boolean hasManyToMany(Field field)
+	{
+		return hasAnnotation(field, ManyToMany.class);
+	}
+	
+	private static Boolean hasAnnotation(Field field,Class ignoreAnnotationClass)
 	{
 		Annotation[] annotationList= field.getAnnotationList();
 		for (int i=0; i<annotationList.length; i++)
@@ -416,6 +430,19 @@ public class ReflectionManager {
 		}
 		return false;
 	}
+	
+	public static Boolean hasManyToManyAssociation (Class theClass,String parentClass)
+	{
+		ReflectionManager reflectionManager = new ReflectionManager(theClass);
+		
+		for (Field field: reflectionManager.getFieldList())
+		{
+			if ((reflectionManager.parseName(field.getFieldClass().getName()).equals(parentClass) || field.getFieldClass().getName().equals(parentClass))&& ReflectionManager.hasManyToMany(field))
+				return true;
+		}
+		return false;
+	}
+	
 	
 	public static List<String> getSubPackages(String mainPackage)
 	{
@@ -485,7 +512,7 @@ public class ReflectionManager {
 				if (annotation.annotationType()==Tab.class)
 				{
 					for (Method method : annotation.annotationType().getDeclaredMethods()) {
-						if (method.getName().equals("number"))
+						if (method.getName().equals("name"))
 						{
 							Object value=null;
 							try {
@@ -497,8 +524,8 @@ public class ReflectionManager {
 								e.printStackTrace();
 							}
 							
-							if (!tabNameList.contains("tab"+value))
-								tabNameList.add("tab"+value);
+							if (!tabNameList.contains(value))
+								tabNameList.add((String) value);
 						}
 					}
 				}
@@ -519,12 +546,12 @@ public class ReflectionManager {
 				for (Annotation annotation: field.getAnnotationList())
 				{
 					for (Method method : annotation.annotationType().getDeclaredMethods()) {
-						if (method.getName().equals("number"))
+						if (method.getName().equals("name"))
 						{
 							Object value=null;
 							try {
 								value = method.invoke(annotation, (Object[])null);
-								if (tabName.equals("tab"+value))
+								if (tabName.equals(""+value))
 									fieldList.add(field);
 
 							} catch (IllegalAccessException
@@ -588,5 +615,7 @@ public class ReflectionManager {
 		System.out.println(reflectionManager.getDescriptionField(Mountain.class, false));
 		System.out.println(reflectionManager.getDescriptionField(Mountain.class, true));
 		
+		System.out.println("-----");
+		System.out.println(ReflectionManager.hasManyToManyAssociation(Paziente.class, Ambulatorio.class.getName()));
 	}
 }

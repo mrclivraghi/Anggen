@@ -72,7 +72,7 @@ public class Generator {
 		Set<Class<?>> allClasses = reflections.getTypesAnnotatedWith(Entity.class);
 		List<Class> dependencyClass = new ArrayList<Class>();
 		
-		/*for (Class modelClass: allClasses)
+		for (Class modelClass: allClasses)
 		{
 			RestGenerator generator = new RestGenerator(modelClass);
 			generator.generateRESTClasses(dependencyClass,true);
@@ -82,7 +82,7 @@ public class Generator {
 			RestGenerator generator = new RestGenerator(modelClass);
 			generator.generateRESTClasses(dependencyClass,false);
 		}
-		*/
+		
 		for (Class modelClass: allClasses)
 		{
 			HtmlGenerator htmlGenerator = new HtmlGenerator(modelClass);

@@ -274,6 +274,7 @@ public class JsGenerator {
 
 		sb.append(".controller(\""+entityName+"Controller\",function($scope,$http"+getServices()+")\n");
 		sb.append("{\n");
+		sb.append("//"+parentEntityName+"\n");
 		//search var
 		sb.append("$scope.searchBean="+entityName+"Service.searchBean;\n");
 		sb.append("$scope.entityList="+entityName+"Service.entityList;\n");
@@ -362,8 +363,18 @@ public class JsGenerator {
 			sb.append(entityName+"Service.selectedEntity.show=false;\n\n");
 			/*sb.append(entityName+"Service.insert().then(function(data) { });\n");*/
 			sb.append(entityName+"Service.selectedEntity.show=false;\n");
-			sb.append(entityName+"Service.selectedEntity."+parentEntityName+"={};\n");
-			sb.append(entityName+"Service.selectedEntity."+parentEntityName+"."+parentEntityName+"Id="+parentEntityName+"Service.selectedEntity."+parentEntityName+"Id;\n");
+			//TODO 
+			if (ReflectionManager.hasManyToManyAssociation(classClass, parentEntityName))
+			{
+				sb.append(entityName+"Service.selectedEntity."+parentEntityName+"List.push("+parentEntityName+"Service.selectedEntity);\n");
+			}else
+			{
+				sb.append(entityName+"Service.selectedEntity."+parentEntityName+"={};\n");
+				sb.append(entityName+"Service.selectedEntity."+parentEntityName+"."+parentEntityName+"Id="+parentEntityName+"Service.selectedEntity."+parentEntityName+"Id;\n");
+			
+			}
+			
+			
 			sb.append(entityName+"Service.insert().then(function successCallBack(response) { \n");
 			if (entityList)
 			{
@@ -521,6 +532,7 @@ public class JsGenerator {
 				sb.append("{\n");
 				sb.append(field.getName()+"Service.setSelectedEntity(null); \n");
 				sb.append(field.getName()+"Service.selectedEntity.show=true; \n");
+				//TODO set owner, list or entity?
 				sb.append("}\n");
 				sb.append("else\n");
 				sb.append(field.getName()+"Service.searchOne("+entityName+"Service.selectedEntity."+field.getName()+").then(\n");

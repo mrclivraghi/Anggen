@@ -1,6 +1,8 @@
 package it.polimi.generation;
 
 import it.polimi.model.mountain.Mountain;
+import it.polimi.model.ospedale.Ambulatorio;
+import it.polimi.model.ospedale.Paziente;
 import it.polimi.utils.Field;
 import it.polimi.utils.ReflectionManager;
 import it.polimi.utils.Utility;
@@ -346,7 +348,44 @@ public class RestGenerator {
 					updateBlock.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(field.getName())+"List()!=null)");
 					updateBlock.directStatement("for ("+(field.getFieldClass().getName())+" "+field.getName()+": "+lowerClass+".get"+Utility.getFirstUpper(field.getName())+"List())");
 					updateBlock.directStatement("{");
-					updateBlock.directStatement(field.getName()+".set"+Utility.getFirstUpper(className)+"("+lowerClass+");");
+					/*
+					 *  for (it.polimi.model.ospedale.Paziente paziente: ambulatorio.getPazienteList())
+        {
+        	Paziente savedPaziente = pazienteRepository.findOne(paziente.getPazienteId());
+        	Boolean found= false;
+        	for (Ambulatorio tempAmb : savedPaziente.getAmbulatorioList())
+        	{
+        		if (tempAmb.getAmbulatorioId().equals(ambulatorio.getAmbulatorioId()))
+        		{
+        			found=true;
+        			break;
+        		}
+        	}
+        	
+        	if (!found)
+        		savedPaziente.getAmbulatorioList().add(ambulatorio);
+        }
+					 */
+					//lowerclass:  ambulatorio, field.getName: paziente
+					if (ReflectionManager.hasManyToManyAssociation(field.getFieldClass(), className))
+					{
+						updateBlock.directStatement(field.getFieldClass().getName()+" saved"+Utility.getFirstUpper(field.getName())+" = "+field.getName()+"Repository.findOne("+field.getName()+".get"+Utility.getFirstUpper(field.getName())+"Id());");
+						updateBlock.directStatement("Boolean found=false; ");
+						updateBlock.directStatement("for ("+Utility.getFirstUpper(className)+" temp"+Utility.getFirstUpper(className)+" : saved"+Utility.getFirstUpper(field.getName())+".get"+Utility.getFirstUpper(className)+"List())");
+						updateBlock.directStatement("{");
+						updateBlock.directStatement("if (temp"+Utility.getFirstUpper(className)+".get"+Utility.getFirstUpper(className)+"Id().equals("+lowerClass+".get"+Utility.getFirstUpper(className)+"Id()))");
+						updateBlock.directStatement("{");
+						updateBlock.directStatement("found=true;");
+						updateBlock.directStatement("break;");
+						updateBlock.directStatement("}");
+						updateBlock.directStatement("}");
+						updateBlock.directStatement("if (!found)");
+						updateBlock.directStatement("saved"+Utility.getFirstUpper(field.getName())+".get"+Utility.getFirstUpper(className)+"List().add("+lowerClass+");");
+						
+					} else
+					{
+						updateBlock.directStatement(field.getName()+".set"+Utility.getFirstUpper(className)+"("+lowerClass+");");
+					}
 					updateBlock.directStatement("}");
 				} 
 			}

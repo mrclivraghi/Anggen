@@ -360,7 +360,7 @@ public class JsGenerator {
 
 		}else
 		{
-			sb.append(entityName+"Service.selectedEntity.show=false;\n\n");
+			//sb.append(entityName+"Service.selectedEntity.show=false;\n\n");
 			/*sb.append(entityName+"Service.insert().then(function(data) { });\n");*/
 			sb.append(entityName+"Service.selectedEntity.show=false;\n");
 			//TODO 
@@ -499,6 +499,9 @@ public class JsGenerator {
 		{
 			for (Field field: childrenList)
 			{
+				
+				
+				
 				sb.append("$scope.show"+Utility.getFirstUpper(field.getName())+"Detail= function(index)\n");
 				sb.append("{\n");
 				sb.append("if (index!=null)\n");
@@ -630,6 +633,13 @@ public class JsGenerator {
 		
 		for (Field field: childrenList)
 		{
+			if (field.getCompositeClass().fullName().contains("java.util.List"))
+			{
+				sb.append("$scope.saveLinked"+Utility.getFirstUpper(field.getName())+"= function() {\n");
+				sb.append(entityName+"Service.selectedEntity."+field.getName()+"List.push("+entityName+"Service.selectedEntity."+field.getName()+");\n");
+				sb.append("}\n");
+			}
+			
 			sb.append("$scope.download"+Utility.getFirstUpper(field.getName())+"List=function()\n");
 			sb.append("{\n");
 			sb.append("var mystyle = {\n");

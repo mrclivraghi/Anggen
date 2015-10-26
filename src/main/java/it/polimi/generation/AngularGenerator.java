@@ -525,11 +525,16 @@ public class AngularGenerator {
 									downloadCanvas
 									.button(CssGenerator.getButton("show"+Utility.getFirstUpper(field.getName())+"Detail"," pull-right").add("style", "margin-top: -7px"))
 									.content("Add new "+field.getName())
+									//<button type="button" class="btn btn-info btn-lg" data-toggle="modal" 
+									//data-target="#myModal">Open Modal</button>
+									.button((new HtmlAttributes()).add("type", "button").add("class", "btn btn-default pull-right").add("style", "margin-top: -7px").add("data-toggle", "modal").add("data-target", "#"+entityName+"-"+field.getName()))
+									.content("Link existing")
 									.button(CssGenerator.getButton("download"+Utility.getFirstUpper(field.getName())+"List","pull-right").add("style", "margin-top:-7px"))
 									.span((new HtmlAttributes()).add("class", "glyphicon glyphicon-download-alt").add("aria-hidden", "true"))
 									._span()
 									._button();
 									style="pull-left";
+									renderModalInsertExistingPanel(html,field);
 									html.br().br();
 									html.div((new HtmlAttributes()).add("class", style).add("style", "width: 100%"));
 									//html._div();
@@ -623,6 +628,59 @@ public class AngularGenerator {
 		html._div()._div();
 	}
 
+	
+	private void renderModalInsertExistingPanel(HtmlCanvas html, Field field)
+	{
+		/*<!-- Modal -->
+      <div class="modal-body">
+        <p>Some text in the modal.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>*/
+		try {
+			html.div((new HtmlAttributes()).add("id", entityName+"-"+field.getName()).add("class", "modal fade").add("role", "dialog"))
+			.div((new HtmlAttributes()).add("class", "modal-dialog"))
+			.div((new HtmlAttributes()).add("class", "modal-content"))
+			.div((new HtmlAttributes()).add("class", "modal-header"))
+			.button((new HtmlAttributes()).add("type", "button").add("class", "close").add("data-dismiss", "modal")).content("&times;",false)
+			.h4((new HtmlAttributes()).add("class", "modal-title")).content("Modal header")
+			._div()
+			.div((new HtmlAttributes()).add("class", "modal-body"))
+			.p().content("some text");
+			
+			html.div((new HtmlAttributes()).add("class", "input-group"));
+			html.span((new HtmlAttributes()).add("class", "input-group-addon")).content(field.getName());
+			html.select(CssGenerator.getSelect("").add("ng-model", "selectedEntity."+field.getName())
+					.add("id", field.getName())
+					.add("name", field.getName())
+					.add("ng-options", field.getName()+" as "+reflectionManager.getDescriptionField(field.getFieldClass(),false)+" for "+field.getName()+" in childrenList."+field.getName()+"List track by "+field.getName()+"."+field.getName()+"Id").enctype("UTF-8"))
+					._select();
+			renderValidator(html,field);
+			html.span((new HtmlAttributes()).add("class", "input-group-btn"))
+			.button(CssGenerator.getButton("saveLinked"+Utility.getFirstUpper(field.getName())+"").add("id",field.getName()))
+			.content("Save")
+			._span();
+			html._div();
+			
+			html._div()
+			.div((new HtmlAttributes()).add("class", "modal-footer"))
+			.button(CssGenerator.getButton("close").add("data-dismiss", "modal")).content("close")
+			._div()
+			._div()
+			._div()
+			._div();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
 	/*private void renderSearchForm(HtmlCanvas html,String baseEntity)
 	{ 
 		try {

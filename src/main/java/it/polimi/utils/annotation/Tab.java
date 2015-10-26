@@ -9,4 +9,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Tab {
 	int number() default 1;
+	String name() default "Details";
 }

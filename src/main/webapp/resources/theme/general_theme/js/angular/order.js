@@ -327,6 +327,9 @@ column: {style:{Font:{Bold:"1"}}}
 };
 alasql('SELECT * INTO XLSXML("person.xls",?) FROM ?',[mystyle,$scope.selectedEntity.personList]);
 };
+$scope.saveLinkedPlace= function() {
+orderService.selectedEntity.placeList.push(orderService.selectedEntity.place);
+}
 $scope.downloadPlaceList=function()
 {
 var mystyle = {
@@ -467,8 +470,6 @@ return;
 $scope.insert=function()
 {
 if (!$scope.personDetailForm.$valid) return; 
-personService.selectedEntity.show=false;
-
 personService.selectedEntity.show=false;
 personService.selectedEntity.order={};
 personService.selectedEntity.order.orderId=orderService.selectedEntity.orderId;
@@ -669,8 +670,6 @@ return;
 $scope.insert=function()
 {
 if (!$scope.placeDetailForm.$valid) return; 
-placeService.selectedEntity.show=false;
-
 placeService.selectedEntity.show=false;
 placeService.selectedEntity.order={};
 placeService.selectedEntity.order.orderId=orderService.selectedEntity.orderId;

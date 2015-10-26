@@ -406,8 +406,6 @@ $scope.insert=function()
 {
 if (!$scope.itemOrdineDetailForm.$valid) return; 
 itemOrdineService.selectedEntity.show=false;
-
-itemOrdineService.selectedEntity.show=false;
 itemOrdineService.selectedEntity.itemOrdineCodice={};
 itemOrdineService.selectedEntity.itemOrdineCodice.itemOrdineCodiceId=itemOrdineCodiceService.selectedEntity.itemOrdineCodiceId;
 itemOrdineService.insert().then(function successCallBack(response) { 
@@ -598,6 +596,9 @@ column: {style:{Font:{Bold:"1"}}}
 };
 alasql('SELECT * INTO XLSXML("ordine.xls",?) FROM ?',[mystyle,$scope.selectedEntity.ordineList]);
 };
+$scope.saveLinkedItemOrdineCodice= function() {
+itemOrdineService.selectedEntity.itemOrdineCodiceList.push(itemOrdineService.selectedEntity.itemOrdineCodice);
+}
 $scope.downloadItemOrdineCodiceList=function()
 {
 var mystyle = {
@@ -758,8 +759,6 @@ return;
 $scope.insert=function()
 {
 if (!$scope.ordineDetailForm.$valid) return; 
-ordineService.selectedEntity.show=false;
-
 ordineService.selectedEntity.show=false;
 ordineService.selectedEntity.itemOrdine={};
 ordineService.selectedEntity.itemOrdine.itemOrdineId=itemOrdineService.selectedEntity.itemOrdineId;
@@ -987,6 +986,9 @@ column: {style:{Font:{Bold:"1"}}}
 };
 alasql('SELECT * INTO XLSXML("ordine.xls",?) FROM ?',[mystyle,$scope.entityList]);
 };
+$scope.saveLinkedCollo= function() {
+ordineService.selectedEntity.colloList.push(ordineService.selectedEntity.collo);
+}
 $scope.downloadColloList=function()
 {
 var mystyle = {
@@ -995,6 +997,9 @@ column: {style:{Font:{Bold:"1"}}}
 };
 alasql('SELECT * INTO XLSXML("collo.xls",?) FROM ?',[mystyle,$scope.selectedEntity.colloList]);
 };
+$scope.saveLinkedItemOrdine= function() {
+ordineService.selectedEntity.itemOrdineList.push(ordineService.selectedEntity.itemOrdine);
+}
 $scope.downloadItemOrdineList=function()
 {
 var mystyle = {
@@ -1142,8 +1147,6 @@ return;
 $scope.insert=function()
 {
 if (!$scope.colloDetailForm.$valid) return; 
-colloService.selectedEntity.show=false;
-
 colloService.selectedEntity.show=false;
 colloService.selectedEntity.ordine={};
 colloService.selectedEntity.ordine.ordineId=ordineService.selectedEntity.ordineId;

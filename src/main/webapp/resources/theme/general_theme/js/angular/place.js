@@ -396,8 +396,6 @@ $scope.insert=function()
 {
 if (!$scope.orderDetailForm.$valid) return; 
 orderService.selectedEntity.show=false;
-
-orderService.selectedEntity.show=false;
 orderService.selectedEntity.place={};
 orderService.selectedEntity.place.placeId=placeService.selectedEntity.placeId;
 orderService.insert().then(function successCallBack(response) { 
@@ -578,6 +576,9 @@ column: {style:{Font:{Bold:"1"}}}
 };
 alasql('SELECT * INTO XLSXML("person.xls",?) FROM ?',[mystyle,$scope.selectedEntity.personList]);
 };
+$scope.saveLinkedPlace= function() {
+orderService.selectedEntity.placeList.push(orderService.selectedEntity.place);
+}
 $scope.downloadPlaceList=function()
 {
 var mystyle = {
@@ -718,8 +719,6 @@ return;
 $scope.insert=function()
 {
 if (!$scope.personDetailForm.$valid) return; 
-personService.selectedEntity.show=false;
-
 personService.selectedEntity.show=false;
 personService.selectedEntity.order={};
 personService.selectedEntity.order.orderId=orderService.selectedEntity.orderId;

@@ -352,6 +352,9 @@ column: {style:{Font:{Bold:"1"}}}
 };
 alasql('SELECT * INTO XLSXML("paziente.xls",?) FROM ?',[mystyle,$scope.entityList]);
 };
+$scope.saveLinkedFascicolo= function() {
+pazienteService.selectedEntity.fascicoloList.push(pazienteService.selectedEntity.fascicolo);
+}
 $scope.downloadFascicoloList=function()
 {
 var mystyle = {
@@ -360,6 +363,9 @@ column: {style:{Font:{Bold:"1"}}}
 };
 alasql('SELECT * INTO XLSXML("fascicolo.xls",?) FROM ?',[mystyle,$scope.selectedEntity.fascicoloList]);
 };
+$scope.saveLinkedAmbulatorio= function() {
+pazienteService.selectedEntity.ambulatorioList.push(pazienteService.selectedEntity.ambulatorio);
+}
 $scope.downloadAmbulatorioList=function()
 {
 var mystyle = {
@@ -514,8 +520,6 @@ return;
 $scope.insert=function()
 {
 if (!$scope.fascicoloDetailForm.$valid) return; 
-fascicoloService.selectedEntity.show=false;
-
 fascicoloService.selectedEntity.show=false;
 fascicoloService.selectedEntity.paziente={};
 fascicoloService.selectedEntity.paziente.pazienteId=pazienteService.selectedEntity.pazienteId;
@@ -835,8 +839,6 @@ $scope.insert=function()
 {
 if (!$scope.ambulatorioDetailForm.$valid) return; 
 ambulatorioService.selectedEntity.show=false;
-
-ambulatorioService.selectedEntity.show=false;
 ambulatorioService.selectedEntity.pazienteList.push(pazienteService.selectedEntity);
 ambulatorioService.insert().then(function successCallBack(response) { 
 pazienteService.selectedEntity.ambulatorioList.push(response.data);
@@ -983,6 +985,9 @@ column: {style:{Font:{Bold:"1"}}}
 };
 alasql('SELECT * INTO XLSXML("ambulatorio.xls",?) FROM ?',[mystyle,$scope.entityList]);
 };
+$scope.saveLinkedPaziente= function() {
+ambulatorioService.selectedEntity.pazienteList.push(ambulatorioService.selectedEntity.paziente);
+}
 $scope.downloadPazienteList=function()
 {
 var mystyle = {

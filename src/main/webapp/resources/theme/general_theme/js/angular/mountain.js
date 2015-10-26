@@ -270,6 +270,9 @@ column: {style:{Font:{Bold:"1"}}}
 };
 alasql('SELECT * INTO XLSXML("mountain.xls",?) FROM ?',[mystyle,$scope.entityList]);
 };
+$scope.saveLinkedSeedQuery= function() {
+mountainService.selectedEntity.seedQueryList.push(mountainService.selectedEntity.seedQuery);
+}
 $scope.downloadSeedQueryList=function()
 {
 var mystyle = {
@@ -427,8 +430,6 @@ return;
 $scope.insert=function()
 {
 if (!$scope.seedQueryDetailForm.$valid) return; 
-seedQueryService.selectedEntity.show=false;
-
 seedQueryService.selectedEntity.show=false;
 seedQueryService.selectedEntity.mountain={};
 seedQueryService.selectedEntity.mountain.mountainId=mountainService.selectedEntity.mountainId;
@@ -630,6 +631,9 @@ column: {style:{Font:{Bold:"1"}}}
 };
 alasql('SELECT * INTO XLSXML("mountain.xls",?) FROM ?',[mystyle,$scope.selectedEntity.mountainList]);
 };
+$scope.saveLinkedPhoto= function() {
+seedQueryService.selectedEntity.photoList.push(seedQueryService.selectedEntity.photo);
+}
 $scope.downloadPhotoList=function()
 {
 var mystyle = {
@@ -777,8 +781,6 @@ return;
 $scope.insert=function()
 {
 if (!$scope.photoDetailForm.$valid) return; 
-photoService.selectedEntity.show=false;
-
 photoService.selectedEntity.show=false;
 photoService.selectedEntity.seedQuery={};
 photoService.selectedEntity.seedQuery.seedQueryId=seedQueryService.selectedEntity.seedQueryId;

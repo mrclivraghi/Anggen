@@ -35,16 +35,16 @@ public class Mountain {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name ="id_mountain")
 	@DescriptionField
-	@Tab(number=1)
+	@Tab(number=1,name="tab1")
 	private Long mountainId;
 		
 	@NotBlank
 	@Size(min=2, max=14)
 	@DescriptionField
-	@Tab(number=1)
+	@Tab(number=1,name="tab1")
 	private String name;
 	
-	@Tab(number=1)
+	@Tab(number=1,name="tab1")
 	private String height;
 	
 
@@ -52,7 +52,7 @@ public class Mountain {
 	//@Cascade({CascadeType.ALL})
 	@Type(type="it.polimi.model.SeedQuery")
 	@JoinColumn(name="mountain_id_mountain")
-	@Tab(number=2)
+	@Tab(number=2,name="tab2")
 	private List<SeedQuery> seedQueryList;
 	
 	public Mountain()

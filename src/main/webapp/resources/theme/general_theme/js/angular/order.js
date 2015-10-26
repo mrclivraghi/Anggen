@@ -104,6 +104,7 @@ return promise;
 })
 .controller("orderController",function($scope,$http,orderService,personService,placeService)
 {
+//null
 $scope.searchBean=orderService.searchBean;
 $scope.entityList=orderService.entityList;
 $scope.selectedEntity=orderService.selectedEntity;
@@ -271,7 +272,7 @@ columnDefs: [
 ,data: orderService.entityList
  };
 $scope.orderGridOptions.onRegisterApi = function(gridApi){
-gridApi.selection.on.rowSelectionChanged($scope,function(row){
+$scope.orderGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
 personService.selectedEntity.show=false;placeService.selectedEntity.show=false;if (row.isSelected)
 {
 orderService.setSelectedEntity(row.entity);
@@ -296,7 +297,7 @@ columnDefs: [
 ,data: $scope.selectedEntity.placeList
  };
 $scope.placeListGridOptions.onRegisterApi = function(gridApi){
-gridApi.selection.on.rowSelectionChanged($scope,function(row){
+$scope.placeGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
 placeService.searchOne(row.entity).then(function(response) { 
@@ -421,6 +422,7 @@ return promise;
 })
 .controller("personController",function($scope,$http,personService)
 {
+//order
 $scope.searchBean=personService.searchBean;
 $scope.entityList=personService.entityList;
 $scope.selectedEntity=personService.selectedEntity;
@@ -622,6 +624,7 @@ return promise;
 })
 .controller("placeController",function($scope,$http,placeService,orderService,personService)
 {
+//order
 $scope.searchBean=placeService.searchBean;
 $scope.entityList=placeService.entityList;
 $scope.selectedEntity=placeService.selectedEntity;

@@ -97,6 +97,7 @@ return promise;
 })
 .controller("mountainController",function($scope,$http,mountainService,seedQueryService,photoService)
 {
+//null
 $scope.searchBean=mountainService.searchBean;
 $scope.entityList=mountainService.entityList;
 $scope.selectedEntity=mountainService.selectedEntity;
@@ -221,7 +222,7 @@ columnDefs: [
 ,data: mountainService.entityList
  };
 $scope.mountainGridOptions.onRegisterApi = function(gridApi){
-gridApi.selection.on.rowSelectionChanged($scope,function(row){
+$scope.mountainGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
 seedQueryService.selectedEntity.show=false;photoService.selectedEntity.show=false;if (row.isSelected)
 {
 mountainService.setSelectedEntity(row.entity);
@@ -247,7 +248,7 @@ columnDefs: [
 ,data: $scope.selectedEntity.seedQueryList
  };
 $scope.seedQueryListGridOptions.onRegisterApi = function(gridApi){
-gridApi.selection.on.rowSelectionChanged($scope,function(row){
+$scope.seedQueryGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
 seedQueryService.searchOne(row.entity).then(function(response) { 
@@ -378,6 +379,7 @@ return promise;
 })
 .controller("seedQueryController",function($scope,$http,seedQueryService,mountainService,photoService)
 {
+//mountain
 $scope.searchBean=seedQueryService.searchBean;
 $scope.entityList=seedQueryService.entityList;
 $scope.selectedEntity=seedQueryService.selectedEntity;
@@ -598,7 +600,7 @@ columnDefs: [
 ,data: $scope.selectedEntity.photoList
  };
 $scope.photoListGridOptions.onRegisterApi = function(gridApi){
-gridApi.selection.on.rowSelectionChanged($scope,function(row){
+$scope.photoGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
 photoService.searchOne(row.entity).then(function(response) { 
@@ -730,6 +732,7 @@ return promise;
 })
 .controller("photoController",function($scope,$http,photoService,seedQueryService,mountainService)
 {
+//seedQuery
 $scope.searchBean=photoService.searchBean;
 $scope.entityList=photoService.entityList;
 $scope.selectedEntity=photoService.selectedEntity;

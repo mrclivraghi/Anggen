@@ -90,6 +90,7 @@ return promise;
 })
 .controller("exampleController",function($scope,$http,exampleService)
 {
+//null
 $scope.searchBean=exampleService.searchBean;
 $scope.entityList=exampleService.entityList;
 $scope.selectedEntity=exampleService.selectedEntity;
@@ -172,7 +173,7 @@ columnDefs: [
 ,data: exampleService.entityList
  };
 $scope.exampleGridOptions.onRegisterApi = function(gridApi){
-gridApi.selection.on.rowSelectionChanged($scope,function(row){
+$scope.exampleGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
 exampleService.setSelectedEntity(row.entity);

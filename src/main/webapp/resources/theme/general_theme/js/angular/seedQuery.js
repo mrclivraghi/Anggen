@@ -104,6 +104,7 @@ return promise;
 })
 .controller("seedQueryController",function($scope,$http,seedQueryService,mountainService,photoService)
 {
+//null
 $scope.searchBean=seedQueryService.searchBean;
 $scope.entityList=seedQueryService.entityList;
 $scope.selectedEntity=seedQueryService.selectedEntity;
@@ -271,7 +272,7 @@ columnDefs: [
 ,data: seedQueryService.entityList
  };
 $scope.seedQueryGridOptions.onRegisterApi = function(gridApi){
-gridApi.selection.on.rowSelectionChanged($scope,function(row){
+$scope.seedQueryGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
 mountainService.selectedEntity.show=false;photoService.selectedEntity.show=false;if (row.isSelected)
 {
 seedQueryService.setSelectedEntity(row.entity);
@@ -301,7 +302,7 @@ columnDefs: [
 ,data: $scope.selectedEntity.photoList
  };
 $scope.photoListGridOptions.onRegisterApi = function(gridApi){
-gridApi.selection.on.rowSelectionChanged($scope,function(row){
+$scope.photoGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
 photoService.searchOne(row.entity).then(function(response) { 
@@ -433,6 +434,7 @@ return promise;
 })
 .controller("mountainController",function($scope,$http,mountainService,seedQueryService,photoService)
 {
+//seedQuery
 $scope.searchBean=mountainService.searchBean;
 $scope.entityList=mountainService.entityList;
 $scope.selectedEntity=mountainService.selectedEntity;
@@ -592,7 +594,7 @@ columnDefs: [
 ,data: $scope.selectedEntity.seedQueryList
  };
 $scope.seedQueryListGridOptions.onRegisterApi = function(gridApi){
-gridApi.selection.on.rowSelectionChanged($scope,function(row){
+$scope.seedQueryGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
 seedQueryService.searchOne(row.entity).then(function(response) { 
@@ -716,6 +718,7 @@ return promise;
 })
 .controller("photoController",function($scope,$http,photoService,seedQueryService,mountainService)
 {
+//seedQuery
 $scope.searchBean=photoService.searchBean;
 $scope.entityList=photoService.entityList;
 $scope.selectedEntity=photoService.selectedEntity;

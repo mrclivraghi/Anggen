@@ -2,6 +2,7 @@
 package it.polimi.repository.ospedale;
 
 import java.util.List;
+import it.polimi.model.ospedale.Ambulatorio;
 import it.polimi.model.ospedale.Fascicolo;
 import it.polimi.model.ospedale.Paziente;
 import org.springframework.data.jpa.repository.Query;
@@ -23,8 +24,8 @@ public interface PazienteRepository
 
     public List<Paziente> findByBirthDate(String birthDate);
 
-    @Query("select p from Paziente p where  (:pazienteId is null or cast(:pazienteId as string)=cast(p.pazienteId as string)) and (:nome is null or :nome='' or cast(:nome as string)=p.nome) and (:cognome is null or :cognome='' or cast(:cognome as string)=p.cognome) and (:birthDate is null or cast(:birthDate as string)=cast(date(p.birthDate) as string)) and (:fascicolo in elements(p.fascicoloList)  or :fascicolo is null) ")
-    public List<Paziente> findByPazienteIdAndNomeAndCognomeAndBirthDateAndFascicolo(
+    @Query("select p from Paziente p where  (:pazienteId is null or cast(:pazienteId as string)=cast(p.pazienteId as string)) and (:nome is null or :nome='' or cast(:nome as string)=p.nome) and (:cognome is null or :cognome='' or cast(:cognome as string)=p.cognome) and (:birthDate is null or cast(:birthDate as string)=cast(date(p.birthDate) as string)) and (:fascicolo in elements(p.fascicoloList)  or :fascicolo is null) and (:ambulatorio in elements(p.ambulatorioList)  or :ambulatorio is null) ")
+    public List<Paziente> findByPazienteIdAndNomeAndCognomeAndBirthDateAndFascicoloAndAmbulatorio(
         @Param("pazienteId")
         Long pazienteId,
         @Param("nome")
@@ -34,6 +35,8 @@ public interface PazienteRepository
         @Param("birthDate")
         String birthDate,
         @Param("fascicolo")
-        Fascicolo fascicolo);
+        Fascicolo fascicolo,
+        @Param("ambulatorio")
+        Ambulatorio ambulatorio);
 
 }

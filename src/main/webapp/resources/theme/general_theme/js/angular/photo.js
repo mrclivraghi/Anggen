@@ -97,6 +97,7 @@ return promise;
 })
 .controller("photoController",function($scope,$http,photoService,seedQueryService,mountainService)
 {
+//null
 $scope.searchBean=photoService.searchBean;
 $scope.entityList=photoService.entityList;
 $scope.selectedEntity=photoService.selectedEntity;
@@ -223,7 +224,7 @@ columnDefs: [
 ,data: photoService.entityList
  };
 $scope.photoGridOptions.onRegisterApi = function(gridApi){
-gridApi.selection.on.rowSelectionChanged($scope,function(row){
+$scope.photoGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
 seedQueryService.selectedEntity.show=false;mountainService.selectedEntity.show=false;if (row.isSelected)
 {
 photoService.setSelectedEntity(row.entity);
@@ -351,6 +352,7 @@ return promise;
 })
 .controller("seedQueryController",function($scope,$http,seedQueryService,mountainService,photoService)
 {
+//photo
 $scope.searchBean=seedQueryService.searchBean;
 $scope.entityList=seedQueryService.entityList;
 $scope.selectedEntity=seedQueryService.selectedEntity;
@@ -556,7 +558,7 @@ columnDefs: [
 ,data: $scope.selectedEntity.photoList
  };
 $scope.photoListGridOptions.onRegisterApi = function(gridApi){
-gridApi.selection.on.rowSelectionChanged($scope,function(row){
+$scope.photoGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
 photoService.searchOne(row.entity).then(function(response) { 
@@ -688,6 +690,7 @@ return promise;
 })
 .controller("mountainController",function($scope,$http,mountainService,seedQueryService,photoService)
 {
+//seedQuery
 $scope.searchBean=mountainService.searchBean;
 $scope.entityList=mountainService.entityList;
 $scope.selectedEntity=mountainService.selectedEntity;
@@ -847,7 +850,7 @@ columnDefs: [
 ,data: $scope.selectedEntity.seedQueryList
  };
 $scope.seedQueryListGridOptions.onRegisterApi = function(gridApi){
-gridApi.selection.on.rowSelectionChanged($scope,function(row){
+$scope.seedQueryGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
 seedQueryService.searchOne(row.entity).then(function(response) { 

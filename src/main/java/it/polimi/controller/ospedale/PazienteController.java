@@ -104,6 +104,13 @@ public class PazienteController {
         fascicolo.setPaziente(null);
         fascicolo.setAmbulatorio(null);
         }
+        if (paziente.getAmbulatorioList()!=null)
+        for (it.polimi.model.ospedale.Ambulatorio ambulatorio :paziente.getAmbulatorioList())
+
+        {
+
+        ambulatorio.setPazienteList(null);
+        }
     }
 
 }

@@ -99,9 +99,11 @@ public class FascicoloController {
         if (fascicolo.getPaziente()!=null)
         {
         fascicolo.getPaziente().setFascicoloList(null);
+        fascicolo.getPaziente().setAmbulatorioList(null);
         }
         if (fascicolo.getAmbulatorio()!=null)
         {
+        fascicolo.getAmbulatorio().setPazienteList(null);
         }
     }
 

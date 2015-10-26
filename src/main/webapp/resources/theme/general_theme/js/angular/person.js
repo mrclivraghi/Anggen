@@ -90,6 +90,7 @@ return promise;
 })
 .controller("personController",function($scope,$http,personService)
 {
+//null
 $scope.searchBean=personService.searchBean;
 $scope.entityList=personService.entityList;
 $scope.selectedEntity=personService.selectedEntity;
@@ -170,7 +171,7 @@ columnDefs: [
 ,data: personService.entityList
  };
 $scope.personGridOptions.onRegisterApi = function(gridApi){
-gridApi.selection.on.rowSelectionChanged($scope,function(row){
+$scope.personGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
 personService.setSelectedEntity(row.entity);

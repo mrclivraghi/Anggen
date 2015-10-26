@@ -47,7 +47,7 @@ public class SeedQuery {
 	@ManyToOne(fetch=FetchType.EAGER)
 	//@Cascade({CascadeType.PERSIST})
 	@JoinColumn(name="mountain_id_mountain")
-	@Tab(number=2)
+	@Tab(number=2,name="relationships")
 	private Mountain mountain;
 	
 	
@@ -55,7 +55,7 @@ public class SeedQuery {
 	//@Cascade({CascadeType.ALL})
 	@Type(type="it.polimi.model.Photo")
 	@JoinColumn(name="seedquery_id_seed_query")
-	@Tab(number=2)
+	@Tab(number=2,name="relationships")
 	private List<Photo> photoList;
 	
 

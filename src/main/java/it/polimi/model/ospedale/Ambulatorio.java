@@ -1,12 +1,16 @@
 package it.polimi.model.ospedale;
 
+import java.util.List;
+
 import it.polimi.utils.annotation.DescriptionField;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 
 @Entity
 public class Ambulatorio {
@@ -21,6 +25,10 @@ public class Ambulatorio {
 	
 	private String indirizzo;
 
+	
+	@ManyToMany(mappedBy = "ambulatorioList",fetch=FetchType.EAGER)
+	private List<Paziente> pazienteList;
+	
 	
 	/**
 	 * @return the ambulatorioId
@@ -62,6 +70,20 @@ public class Ambulatorio {
 	 */
 	public void setIndirizzo(String indirizzo) {
 		this.indirizzo = indirizzo;
+	}
+
+	/**
+	 * @return the pazienteList
+	 */
+	public List<Paziente> getPazienteList() {
+		return pazienteList;
+	}
+
+	/**
+	 * @param pazienteList the pazienteList to set
+	 */
+	public void setPazienteList(List<Paziente> pazienteList) {
+		this.pazienteList = pazienteList;
 	}
 	
 }

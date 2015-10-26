@@ -97,6 +97,7 @@ return promise;
 })
 .controller("itemOrdineCodiceController",function($scope,$http,itemOrdineCodiceService,itemOrdineService,ordineService,colloService)
 {
+//null
 $scope.searchBean=itemOrdineCodiceService.searchBean;
 $scope.entityList=itemOrdineCodiceService.entityList;
 $scope.selectedEntity=itemOrdineCodiceService.selectedEntity;
@@ -228,7 +229,7 @@ columnDefs: [
 ,data: itemOrdineCodiceService.entityList
  };
 $scope.itemOrdineCodiceGridOptions.onRegisterApi = function(gridApi){
-gridApi.selection.on.rowSelectionChanged($scope,function(row){
+$scope.itemOrdineCodiceGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
 itemOrdineService.selectedEntity.show=false;ordineService.selectedEntity.show=false;colloService.selectedEntity.show=false;if (row.isSelected)
 {
 itemOrdineCodiceService.setSelectedEntity(row.entity);
@@ -354,8 +355,9 @@ var promise= $http
 return promise;
 };
 })
-.controller("itemOrdineController",function($scope,$http,itemOrdineService,ordineService,colloService,itemOrdineCodiceService)
+.controller("itemOrdineController",function($scope,$http,itemOrdineService,ordineService,itemOrdineCodiceService,colloService)
 {
+//itemOrdineCodice
 $scope.searchBean=itemOrdineService.searchBean;
 $scope.entityList=itemOrdineService.entityList;
 $scope.selectedEntity=itemOrdineService.selectedEntity;
@@ -566,7 +568,7 @@ columnDefs: [
 ,data: $scope.selectedEntity.itemOrdineCodiceList
  };
 $scope.itemOrdineCodiceListGridOptions.onRegisterApi = function(gridApi){
-gridApi.selection.on.rowSelectionChanged($scope,function(row){
+$scope.itemOrdineCodiceGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
 itemOrdineCodiceService.searchOne(row.entity).then(function(response) { 
@@ -705,6 +707,7 @@ return promise;
 })
 .controller("ordineController",function($scope,$http,ordineService,colloService,itemOrdineService,itemOrdineCodiceService)
 {
+//itemOrdine
 $scope.searchBean=ordineService.searchBean;
 $scope.entityList=ordineService.entityList;
 $scope.selectedEntity=ordineService.selectedEntity;
@@ -911,7 +914,7 @@ columnDefs: [
 ,data: $scope.selectedEntity.colloList
  };
 $scope.colloListGridOptions.onRegisterApi = function(gridApi){
-gridApi.selection.on.rowSelectionChanged($scope,function(row){
+$scope.colloGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
 colloService.searchOne(row.entity).then(function(response) { 
@@ -962,7 +965,7 @@ columnDefs: [
 ,data: $scope.selectedEntity.itemOrdineList
  };
 $scope.itemOrdineListGridOptions.onRegisterApi = function(gridApi){
-gridApi.selection.on.rowSelectionChanged($scope,function(row){
+$scope.itemOrdineGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
 itemOrdineService.searchOne(row.entity).then(function(response) { 
@@ -1094,6 +1097,7 @@ return promise;
 })
 .controller("colloController",function($scope,$http,colloService,ordineService,itemOrdineService,itemOrdineCodiceService)
 {
+//ordine
 $scope.searchBean=colloService.searchBean;
 $scope.entityList=colloService.entityList;
 $scope.selectedEntity=colloService.selectedEntity;

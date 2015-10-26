@@ -104,6 +104,7 @@ return promise;
 })
 .controller("fascicoloController",function($scope,$http,fascicoloService,pazienteService,ambulatorioService)
 {
+//null
 $scope.searchBean=fascicoloService.searchBean;
 $scope.entityList=fascicoloService.entityList;
 $scope.selectedEntity=fascicoloService.selectedEntity;
@@ -269,7 +270,7 @@ columnDefs: [
 ,data: fascicoloService.entityList
  };
 $scope.fascicoloGridOptions.onRegisterApi = function(gridApi){
-gridApi.selection.on.rowSelectionChanged($scope,function(row){
+$scope.fascicoloGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
 pazienteService.selectedEntity.show=false;ambulatorioService.selectedEntity.show=false;if (row.isSelected)
 {
 fascicoloService.setSelectedEntity(row.entity);
@@ -309,7 +310,7 @@ alasql('SELECT * INTO XLSXML("ambulatorio.xls",?) FROM ?',[mystyle,$scope.select
 {
 this.entityList =		[];
 this.selectedEntity= 	{show: false 
-,fascicoloList: []};
+,fascicoloList: [],ambulatorioList: []};
 this.childrenList=[]; 
 this.addEntity=function (entity)
 {
@@ -395,9 +396,17 @@ var promise= $http
 {});
 return promise;
 };
+ this.initAmbulatorioList= function()
+{
+var promise= $http
+.post("../ambulatorio/search",
+{});
+return promise;
+};
 })
 .controller("pazienteController",function($scope,$http,pazienteService,fascicoloService,ambulatorioService)
 {
+//fascicolo
 $scope.searchBean=pazienteService.searchBean;
 $scope.entityList=pazienteService.entityList;
 $scope.selectedEntity=pazienteService.selectedEntity;
@@ -435,6 +444,9 @@ pazienteService.selectedEntity.show=false;
 pazienteService.searchBean.fascicoloList=[];
 pazienteService.searchBean.fascicoloList.push(pazienteService.searchBean.fascicolo);
 delete pazienteService.searchBean.fascicolo; 
+pazienteService.searchBean.ambulatorioList=[];
+pazienteService.searchBean.ambulatorioList.push(pazienteService.searchBean.ambulatorio);
+delete pazienteService.searchBean.ambulatorio; 
 pazienteService.search().then(function successCallback(response) {
 pazienteService.setEntityList(response.data);
 },function errorCallback(response) { 
@@ -532,10 +544,52 @@ return;
 }
 $('#fascicoloTabs li:eq(0) a').tab('show');
 };
+$scope.showAmbulatorioDetail= function(index)
+{
+if (index!=null)
+{
+ambulatorioService.searchOne(pazienteService.selectedEntity.ambulatorioList[index]).then(
+function successCallback(response) {
+console.log("response-ok");
+console.log(response);
+ambulatorioService.setSelectedEntity(response.data[0]);
+ambulatorioService.selectedEntity.show=true;
+  }, function errorCallback(response) {
+alert("error");
+return; 
+  }	
+);
+}
+else 
+{
+if (pazienteService.selectedEntity.ambulatorio==null || pazienteService.selectedEntity.ambulatorio==undefined)
+{
+ambulatorioService.setSelectedEntity(null); 
+ambulatorioService.selectedEntity.show=true; 
+}
+else
+ambulatorioService.searchOne(pazienteService.selectedEntity.ambulatorio).then(
+function successCallback(response) {
+ambulatorioService.setSelectedEntity(response.data[0]);
+ambulatorioService.selectedEntity.show=true;
+  }, function errorCallback(response) {
+alert("error");
+return; 
+  }	
+);
+}
+$('#ambulatorioTabs li:eq(0) a').tab('show');
+};
 $scope.init=function()
 {
 pazienteService.initFascicoloList().then(function successCallback(response) {
 pazienteService.childrenList.fascicoloList=response.data;
+},function errorCallback(response) { 
+alert("error");
+return; 
+});
+pazienteService.initAmbulatorioList().then(function successCallback(response) {
+pazienteService.childrenList.ambulatorioList=response.data;
 },function errorCallback(response) { 
 alert("error");
 return; 
@@ -557,7 +611,7 @@ columnDefs: [
 ,data: $scope.selectedEntity.fascicoloList
  };
 $scope.fascicoloListGridOptions.onRegisterApi = function(gridApi){
-gridApi.selection.on.rowSelectionChanged($scope,function(row){
+$scope.fascicoloGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
 fascicoloService.searchOne(row.entity).then(function(response) { 
@@ -569,6 +623,35 @@ $('#fascicoloTabs li:eq(0) a').tab('show');
 else 
 fascicoloService.setSelectedEntity(null);
 fascicoloService.selectedEntity.show = row.isSelected;
+});
+  };
+$scope.ambulatorioListGridOptions = {
+enablePaginationControls: true,
+multiSelect: false,
+enableSelectAll: false,
+paginationPageSizes: [2, 4, 6],
+paginationPageSize: 2,
+enableGridMenu: true,
+columnDefs: [
+{ name: 'ambulatorioId'},
+{ name: 'nome'},
+{ name: 'indirizzo'} 
+]
+,data: $scope.selectedEntity.ambulatorioList
+ };
+$scope.ambulatorioListGridOptions.onRegisterApi = function(gridApi){
+$scope.ambulatorioGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
+if (row.isSelected)
+{
+ambulatorioService.searchOne(row.entity).then(function(response) { 
+console.log(response.data);
+ambulatorioService.setSelectedEntity(response.data[0]);
+});
+$('#ambulatorioTabs li:eq(0) a').tab('show');
+}
+else 
+ambulatorioService.setSelectedEntity(null);
+ambulatorioService.selectedEntity.show = row.isSelected;
 });
   };
 $scope.downloadEntityList=function()
@@ -587,12 +670,20 @@ column: {style:{Font:{Bold:"1"}}}
 };
 alasql('SELECT * INTO XLSXML("fascicolo.xls",?) FROM ?',[mystyle,$scope.selectedEntity.fascicoloList]);
 };
+$scope.downloadAmbulatorioList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("ambulatorio.xls",?) FROM ?',[mystyle,$scope.selectedEntity.ambulatorioList]);
+};
 })
 .service("ambulatorioService", function($http)
 {
 this.entityList =		[];
 this.selectedEntity= 	{show: false 
-};
+,pazienteList: []};
 this.childrenList=[]; 
 this.addEntity=function (entity)
 {
@@ -671,9 +762,17 @@ var url="../ambulatorio/"+this.selectedEntity.ambulatorioId;
 var promise= $http["delete"](url);
 return promise; 
 }
-})
-.controller("ambulatorioController",function($scope,$http,ambulatorioService)
+ this.initPazienteList= function()
 {
+var promise= $http
+.post("../paziente/search",
+{});
+return promise;
+};
+})
+.controller("ambulatorioController",function($scope,$http,ambulatorioService,pazienteService,fascicoloService)
+{
+//fascicolo
 $scope.searchBean=ambulatorioService.searchBean;
 $scope.entityList=ambulatorioService.entityList;
 $scope.selectedEntity=ambulatorioService.selectedEntity;
@@ -708,6 +807,9 @@ $('#ambulatorioTabs li:eq(0) a').tab('show');
 $scope.search=function()
 {
 ambulatorioService.selectedEntity.show=false;
+ambulatorioService.searchBean.pazienteList=[];
+ambulatorioService.searchBean.pazienteList.push(ambulatorioService.searchBean.paziente);
+delete ambulatorioService.searchBean.paziente; 
 ambulatorioService.search().then(function successCallback(response) {
 ambulatorioService.setEntityList(response.data);
 },function errorCallback(response) { 
@@ -769,10 +871,82 @@ return;
 });
 };
 $scope.trueFalseValues=[true,false];
+$scope.showPazienteDetail= function(index)
+{
+if (index!=null)
+{
+pazienteService.searchOne(ambulatorioService.selectedEntity.pazienteList[index]).then(
+function successCallback(response) {
+console.log("response-ok");
+console.log(response);
+pazienteService.setSelectedEntity(response.data[0]);
+pazienteService.selectedEntity.show=true;
+  }, function errorCallback(response) {
+alert("error");
+return; 
+  }	
+);
+}
+else 
+{
+if (ambulatorioService.selectedEntity.paziente==null || ambulatorioService.selectedEntity.paziente==undefined)
+{
+pazienteService.setSelectedEntity(null); 
+pazienteService.selectedEntity.show=true; 
+}
+else
+pazienteService.searchOne(ambulatorioService.selectedEntity.paziente).then(
+function successCallback(response) {
+pazienteService.setSelectedEntity(response.data[0]);
+pazienteService.selectedEntity.show=true;
+  }, function errorCallback(response) {
+alert("error");
+return; 
+  }	
+);
+}
+$('#pazienteTabs li:eq(0) a').tab('show');
+};
 $scope.init=function()
 {
+ambulatorioService.initPazienteList().then(function successCallback(response) {
+ambulatorioService.childrenList.pazienteList=response.data;
+},function errorCallback(response) { 
+alert("error");
+return; 
+});
 }; 
 $scope.init();
+$scope.pazienteListGridOptions = {
+enablePaginationControls: true,
+multiSelect: false,
+enableSelectAll: false,
+paginationPageSizes: [2, 4, 6],
+paginationPageSize: 2,
+enableGridMenu: true,
+columnDefs: [
+{ name: 'pazienteId'},
+{ name: 'nome'},
+{ name: 'cognome'},
+{ name: 'birthDate', cellFilter: "date:'dd-MM-yyyy'"} 
+]
+,data: $scope.selectedEntity.pazienteList
+ };
+$scope.pazienteListGridOptions.onRegisterApi = function(gridApi){
+$scope.pazienteGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
+if (row.isSelected)
+{
+pazienteService.searchOne(row.entity).then(function(response) { 
+console.log(response.data);
+pazienteService.setSelectedEntity(response.data[0]);
+});
+$('#pazienteTabs li:eq(0) a').tab('show');
+}
+else 
+pazienteService.setSelectedEntity(null);
+pazienteService.selectedEntity.show = row.isSelected;
+});
+  };
 $scope.downloadEntityList=function()
 {
 var mystyle = {
@@ -780,6 +954,14 @@ var mystyle = {
 column: {style:{Font:{Bold:"1"}}}
 };
 alasql('SELECT * INTO XLSXML("ambulatorio.xls",?) FROM ?',[mystyle,$scope.entityList]);
+};
+$scope.downloadPazienteList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("paziente.xls",?) FROM ?',[mystyle,$scope.selectedEntity.pazienteList]);
 };
 })
 ;

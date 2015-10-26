@@ -13,6 +13,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.Type;
@@ -39,6 +41,16 @@ public class Paziente {
 	@JoinColumn(name="paziente_id_paziente")
 	private List<Fascicolo> fascicoloList;
 
+	@ManyToMany(fetch=FetchType.EAGER)
+	@Type(type="it.polimi.model.ospedale.Ambulatorio")
+	@JoinTable(name="paziente_ambulatorio", joinColumns = {
+			@JoinColumn(name="paziente_id") },
+			inverseJoinColumns= {
+			@JoinColumn(name="ambulatorio_id")
+			
+	})
+	private List<Ambulatorio> ambulatorioList;
+	
 	/**
 	 * @return the pazienteId
 	 */
@@ -107,6 +119,20 @@ public class Paziente {
 	 */
 	public void setFascicoloList(List<Fascicolo> fascicoloList) {
 		this.fascicoloList = fascicoloList;
+	}
+
+	/**
+	 * @return the ambulatorioList
+	 */
+	public List<Ambulatorio> getAmbulatorioList() {
+		return ambulatorioList;
+	}
+
+	/**
+	 * @param ambulatorioList the ambulatorioList to set
+	 */
+	public void setAmbulatorioList(List<Ambulatorio> ambulatorioList) {
+		this.ambulatorioList = ambulatorioList;
 	}
 	
 }

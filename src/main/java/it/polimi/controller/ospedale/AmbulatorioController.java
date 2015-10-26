@@ -96,6 +96,14 @@ public class AmbulatorioController {
     }
 
     private void getRightMapping(Ambulatorio ambulatorio) {
+        if (ambulatorio.getPazienteList()!=null)
+        for (it.polimi.model.ospedale.Paziente paziente :ambulatorio.getPazienteList())
+
+        {
+
+        paziente.setFascicoloList(null);
+        paziente.setAmbulatorioList(null);
+        }
     }
 
 }

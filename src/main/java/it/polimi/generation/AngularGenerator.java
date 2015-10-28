@@ -71,7 +71,7 @@ public class AngularGenerator {
 		if (isParent)
 		{
 			html.form((new HtmlAttributes()).add("id", entityName+"SearchBean"));
-			renderForm(html, true);
+			renderTabForm(html, true);
 			html._form();
 		}
 		HtmlCanvas downloadCanvas= new HtmlCanvas();
@@ -444,23 +444,38 @@ public class AngularGenerator {
     <li role="presentation"><a href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab">Tab1</a></li>
   </ul> 
 		 */
-		html.ul((new HtmlAttributes()).add("class", "nav nav-tabs").add("role", "tablist").add("id", entityName+"Tabs"));
-		for (String tabName: reflectionManager.getTabsName())
+		List<String> tabNameList;
+		if (search)
 		{
-			html.li((new HtmlAttributes()).add("role", "presentation"))
-			.a((new HtmlAttributes()).add("href", "#"+entityName+"-"+tabName).add("aria-controls", tabName).add("role", "tab").add("data-toggle", "tab").add("ng-click",JsGenerator.resetTableTab(tabName,classClass)))
-			.content(tabName);
-			html._li();
-		}
-		html._ul();
+			tabNameList=new ArrayList<String>();
+			tabNameList.add("Detail");
+		} else
+			tabNameList=reflectionManager.getTabsName();
 		
-		html.div((new HtmlAttributes()).add("class", "tab-content"));
-		for (String tabName: reflectionManager.getTabsName())
+		if (!search)
+		{
+			html.ul((new HtmlAttributes()).add("class", "nav nav-tabs").add("role", "tablist").add("id", entityName+"Tabs"));
+			for (String tabName: tabNameList)
+			{
+				html.li((new HtmlAttributes()).add("role", "presentation"))
+				.a((new HtmlAttributes()).add("href", "#"+entityName+"-"+tabName).add("aria-controls", tabName).add("role", "tab").add("data-toggle", "tab").add("ng-click",JsGenerator.resetTableTab(tabName,classClass)))
+				.content(tabName);
+				html._li();
+			}
+			html._ul();
+			html.div((new HtmlAttributes()).add("class", "tab-content"));
+		}
+		
+		
+		for (String tabName: tabNameList)
 		{
 			 //<div role="tabpanel" class="tab-pane fade in active" id="home">
-			html.div((new HtmlAttributes()).add("role", "tabpanel").add("class", "tab-pane fade").add("id", entityName+"-"+tabName));
+			if (!search)
+				html.div((new HtmlAttributes()).add("role", "tabpanel").add("class", "tab-pane fade").add("id", entityName+"-"+tabName));
 			
 			String style="";
+			if (entityName.equals("mountain"))
+				System.out.println("");
 			for (Field field: reflectionManager.getFieldByTabName(tabName))
 			{
 				if (search && ReflectionManager.hasIgnoreSearch(field)) continue;
@@ -493,7 +508,7 @@ public class AngularGenerator {
 							html.select(getFieldHtmlAttributes(field, baseEntity, !search, "").add("ng-options", "value for value in trueFalseValues"))
 							._select();
 						}else
-							html.input(getFieldHtmlAttributes(field,baseEntity,!search,""));
+								html.input(getFieldHtmlAttributes(field,baseEntity,!search,""));
 						html._div();
 						if (!search)
 						renderValidator(html,field);
@@ -585,10 +600,11 @@ public class AngularGenerator {
 			}
 			
 			
-			
-			html._div();
+			if (!search)
+				html._div();
 		}
-		html._div();
+		if (!search)
+			html._div(); //close tab content
 		
 
 		html._div();

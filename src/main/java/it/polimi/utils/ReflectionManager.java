@@ -5,6 +5,7 @@ import it.polimi.model.Sex;
 import it.polimi.model.mountain.Mountain;
 import it.polimi.model.ospedale.Ambulatorio;
 import it.polimi.model.ospedale.Paziente;
+import it.polimi.utils.annotation.DateBetween;
 import it.polimi.utils.annotation.DescriptionField;
 import it.polimi.utils.annotation.ExcelExport;
 import it.polimi.utils.annotation.IgnoreSearch;
@@ -418,6 +419,11 @@ public class ReflectionManager {
 	public static Boolean hasManyToMany(Field field)
 	{
 		return hasAnnotation(field, ManyToMany.class);
+	}
+	
+	public static Boolean hasDateBetween(Field field)
+	{
+		return hasAnnotation(field, DateBetween.class);
 	}
 	
 	private static Boolean hasAnnotation(Field field,Class ignoreAnnotationClass)

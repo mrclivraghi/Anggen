@@ -500,6 +500,28 @@ public class AngularGenerator {
 				{
 					if (reflectionManager.isKnownClass(field.getFieldClass()))
 					{
+						
+						if (search && ReflectionManager.hasDateBetween(field))
+						{
+							field.setName(field.getName()+"From");
+							html.div(CssGenerator.getExternalFieldPanel(style, search, entityName, field));
+							html.div(CssGenerator.getInputGroup());
+							html.span((new HtmlAttributes()).add("class","input-group-addon")).content(field.getName());
+							html.input(getFieldHtmlAttributes(field,baseEntity,!search,""));
+							html._div()._div();
+							
+							style= style.equals("pull-left")? "pull-right": "pull-left";
+							
+							field.setName(field.getName().replace("From", "To"));
+							html.div(CssGenerator.getExternalFieldPanel(style, search, entityName, field));
+							html.div(CssGenerator.getInputGroup());
+							html.span((new HtmlAttributes()).add("class","input-group-addon")).content(field.getName());
+							html.input(getFieldHtmlAttributes(field,baseEntity,!search,""));
+							html._div()._div();
+						}
+						else
+						{
+						
 						html.div(CssGenerator.getExternalFieldPanel(style, search, entityName, field));
 						html.div(CssGenerator.getInputGroup());
 						html.span((new HtmlAttributes()).add("class","input-group-addon")).content(field.getName());
@@ -513,6 +535,8 @@ public class AngularGenerator {
 						if (!search)
 						renderValidator(html,field);
 						html._div();
+						
+						}
 					} else
 						if (field.getCompositeClass()!=null  && !(parentClass.contains(field.getFieldClass())))
 						{ // entity or list!

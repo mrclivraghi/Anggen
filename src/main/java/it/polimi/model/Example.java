@@ -39,6 +39,7 @@ public class Example {
 	
 	@IgnoreTableList
 	@ExcelExport
+	@Between
 	private Long eta;
 	
 	@IgnoreTableList

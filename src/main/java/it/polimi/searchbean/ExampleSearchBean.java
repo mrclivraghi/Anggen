@@ -9,7 +9,8 @@ public class ExampleSearchBean {
 
     public Integer exampleId;
     public String name;
-    public Long eta;
+    public Long etaFrom;
+    public Long etaTo;
     public Boolean male;
     public Date birthDateFrom;
     public Date birthDateTo;
@@ -32,12 +33,20 @@ public class ExampleSearchBean {
         this.name=name;
     }
 
-    public Long getEta() {
-        return this.eta;
+    public Long getEtaFrom() {
+        return this.etaFrom;
     }
 
-    public void setEta(Long eta) {
-        this.eta=eta;
+    public void setEtaFrom(Long etaFrom) {
+        this.etaFrom=etaFrom;
+    }
+
+    public Long getEtaTo() {
+        return this.etaTo;
+    }
+
+    public void setEtaTo(Long etaTo) {
+        this.etaTo=etaTo;
     }
 
     public Boolean getMale() {

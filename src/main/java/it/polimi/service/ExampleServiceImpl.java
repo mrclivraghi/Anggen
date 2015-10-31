@@ -24,7 +24,7 @@ public class ExampleServiceImpl
 
     @Override
     public List<Example> find(ExampleSearchBean example) {
-        return exampleRepository.findByExampleIdAndNameAndEtaAndMaleAndGreaterThanBirthDateFromAndLessThanBirthDateToAndBirthDateAndBirthTimeAndSex(example.getExampleId(),example.getName(),example.getEta(),example.getMale(),it.polimi.utils.Utility.formatDate(example.getBirthDateFrom()),it.polimi.utils.Utility.formatDate(example.getBirthDateTo()),it.polimi.utils.Utility.formatTime(example.getBirthTime()), (example.getSex()==null)? null : example.getSex().getValue());
+        return exampleRepository.findByExampleIdAndNameAndGreaterThanEtaFromAndLessThanEtaToAndEtaAndMaleAndGreaterThanBirthDateFromAndLessThanBirthDateToAndBirthDateAndBirthTimeAndSex(example.getExampleId(),example.getName(),example.getEtaFrom(),example.getEtaTo(),example.getMale(),it.polimi.utils.Utility.formatDate(example.getBirthDateFrom()),it.polimi.utils.Utility.formatDate(example.getBirthDateTo()),it.polimi.utils.Utility.formatTime(example.getBirthTime()), (example.getSex()==null)? null : example.getSex().getValue());
     }
 
     @Override

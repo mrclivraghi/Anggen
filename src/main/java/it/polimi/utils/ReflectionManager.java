@@ -150,7 +150,6 @@ public class ReflectionManager {
 								repositoryClass=Class.forName(elementType.getTypeName().replace(".model.", ".repository.")+"Repository");
 							} catch (ClassNotFoundException e) {
 								// TODO Auto-generated catch block
-								e.printStackTrace();
 							}
 						}
 					}else

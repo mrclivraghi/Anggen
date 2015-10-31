@@ -489,6 +489,20 @@ public class AngularGenerator {
 					renderField(html, field, search, style, baseEntity);
 				}else
 					renderField(html, field, search, style, baseEntity);
+				
+				if (search)
+				{
+					reflectionManager.addChildrenFilter(field);
+					if (field.getChildrenFilterList()!=null)
+						for (Field filterField: field.getChildrenFilterList())
+						{
+							String filterFieldName=reflectionManager.parseName(filterField.getOwnerClass().getName())+Utility.getFirstUpper(filterField.getName());
+							filterField.setName(filterFieldName);
+							renderField(html, filterField, search, style, baseEntity);
+							
+						}
+				}
+				
 			}
 			
 			

@@ -153,7 +153,7 @@ public class RestGenerator {
 				annotationParam.param("value", filterFieldName);
 				String hibernateField="";
 				
-				if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List"))
+				if (ReflectionManager.isListField(filterField))
 				{// cerco quel campo in una lista
 					String aliasFilterOwnerClass= reflectionManager.parseName(filterField.getOwnerClass().getName()).substring(0, 1);
 					
@@ -197,7 +197,7 @@ public class RestGenerator {
 
 					} else
 					{ // Entity or entity list!!!
-						if (field.getCompositeClass().fullName().contains("java.util.List"))
+						if (ReflectionManager.isListField(field))
 						{
 							query=query+" (:"+fieldName+" in elements("+hibernateField+"List)  or :"+fieldName+" is null) and";
 						}else
@@ -282,7 +282,7 @@ public class RestGenerator {
 						generateGetterAndSetter(myClass, field.getName()+"To", field.getFieldClass());
 					} else
 					{
-						if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List") && field.getRepositoryClass()!=null)
+						if (ReflectionManager.isListField(field) && field.getRepositoryClass()!=null)
 						{
 							JClass listClass = codeModel.ref(List.class).narrow(field.getFieldClass());
 							JVar fieldVar = myClass.field(JMod.PUBLIC, listClass, field.getName()+"List");
@@ -366,7 +366,7 @@ public class RestGenerator {
 					method.param(ReflectionManager.getRightParamClass(field), field.getName());
 				} else
 				{
-					if (!field.getCompositeClass().fullName().contains("java.util.List"))
+					if (!ReflectionManager.isListField(field))
 					{ // find by entity
 						JMethod method= myClass.method(JMod.PUBLIC, listClass, "findBy"+Utility.getFirstUpper(field.getName()));
 						method.param(field.getFieldClass(), field.getName());
@@ -476,7 +476,7 @@ public class RestGenerator {
 			repository.annotate(Autowired.class);
 			for (Field field: fields)
 			{
-				if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List") && field.getRepositoryClass()!=null)
+				if (ReflectionManager.isListField(field) && field.getRepositoryClass()!=null)
 				{
 					JVar fieldListRepository = myClass.field(JMod.PUBLIC, field.getRepositoryClass(), field.getName()+"Repository");
 					fieldListRepository.annotate(Autowired.class);
@@ -518,7 +518,7 @@ public class RestGenerator {
 			for (Field field: fields)
 			{
 				if (field.getCompositeClass()!=null)
-				if (field.getCompositeClass().fullName().contains("java.util.List"))
+				if (ReflectionManager.isListField(field))
 				{
 					updateBlock.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(field.getName())+"List()!=null)");
 					updateBlock.directStatement("for ("+(field.getFieldClass().getName())+" "+field.getName()+": "+lowerClass+".get"+Utility.getFirstUpper(field.getName())+"List())");
@@ -551,7 +551,7 @@ public class RestGenerator {
 				if (field.getCompositeClass()!=null)
 				{
 					ReflectionManager fieldReflectionManager = new ReflectionManager(field.getFieldClass());
-					if (!field.getCompositeClass().fullName().contains("java.util.List") && fieldReflectionManager.containFieldWithClass(classClass))			
+					if (!ReflectionManager.isListField(field) && fieldReflectionManager.containFieldWithClass(classClass))			
 					{
 						updateBlock.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(field.getName())+"()!=null)");
 						updateBlock.directStatement("{");
@@ -731,7 +731,7 @@ public class RestGenerator {
 		for (Field mainField: reflectionManager.getChildrenFieldList())
 		{
 			lowerClass=reflectionManager.parseName();
-			if (mainField.getCompositeClass().fullName().contains("java.util.List"))
+			if (ReflectionManager.isListField(mainField))
 			{
 				block.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(mainField.getName())+"List()!=null)");
 				block.directStatement("for ("+mainField.getFieldClass().getName()+" "+Utility.getFirstLower(mainField.getName())+" :"+lowerClass+".get"+Utility.getFirstUpper(mainField.getName())+"List())\n");
@@ -748,7 +748,7 @@ public class RestGenerator {
 			ReflectionManager fieldReflectionManager = new ReflectionManager(mainField.getFieldClass());
 			for (Field field: fieldReflectionManager.getChildrenFieldList())
 			{
-				if (field.getCompositeClass().fullName().contains("java.util.List"))
+				if (ReflectionManager.isListField(field))
 					block.directStatement(lowerClass+".set"+Utility.getFirstUpper(field.getName())+"List(null);");
 				else
 					block.directStatement(lowerClass+".set"+Utility.getFirstUpper(field.getName())+"(null);");
@@ -775,12 +775,12 @@ public class RestGenerator {
 		for (Field field: reflectionManager.getChildrenFieldList())
 		{
 			String newEntityName= lowerClass;
-			if (field.getCompositeClass().fullName().contains("java.util.List"))
+			if (ReflectionManager.isListField(field))
 				newEntityName=Utility.getFirstLower(field.getName());
 			else
 				newEntityName=newEntityName+".get"+Utility.getFirstUpper(field.getName())+"()";
 			ArrayList<Class> oldParentClassList = (ArrayList<Class>) ((ArrayList<Class>) parentClass).clone();
-			if (field.getCompositeClass().fullName().contains("java.util.List"))
+			if (ReflectionManager.isListField(field))
 			{
 				block.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(field.getName())+"List()!=null)");
 				block.directStatement("{");

@@ -82,6 +82,11 @@ public class ReflectionManager {
 		
 		return false;
 	}
+
+	public static Boolean isListField(Field field)
+	{
+		return (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List"));
+	}
 	
 	public String parseName()
 	{

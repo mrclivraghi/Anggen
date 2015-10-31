@@ -110,7 +110,7 @@ public class Generator {
 			{
 				if (ReflectionManager.hasId(field) && !field.getName().equals(reflectionManager.parseName()+"Id"))
 					throw new Exception(myClass.getName()+": primary key name is wrong. it's "+field.getName()+" instead of "+reflectionManager.parseName()+"Id");
-				if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List") && !(field.getName().equals(reflectionManager.parseName(field.getFieldClass().getName())+"")))
+				if (ReflectionManager.isListField(field) && !(field.getName().equals(reflectionManager.parseName(field.getFieldClass().getName())+"")))
 						throw new Exception(""+myClass.getName()+": list field name is wrong. It's "+field.getName()+"List instead of "+reflectionManager.parseName(field.getFieldClass().getName())+"List");
 				if (ReflectionManager.hasBetween(field) && !reflectionManager.isKnownClass(field.getFieldClass()))
 					throw new Exception(myClass.getName()+": Between annotation is invalid for type "+field.getFieldClass().getName());

@@ -197,7 +197,7 @@ public class AngularGenerator {
 						{
 
 
-							if (field.getCompositeClass().fullName().contains("java.util.List"))
+							if (ReflectionManager.isListField(field))
 							{ //list
 								
 								HtmlCanvas downloadCanvas= new HtmlCanvas();
@@ -613,7 +613,7 @@ public class AngularGenerator {
 					{
 
 
-						if (field.getCompositeClass().fullName().contains("java.util.List"))
+						if (ReflectionManager.isListField(field))
 						{ //list
 							
 							HtmlCanvas downloadCanvas= new HtmlCanvas();

@@ -76,7 +76,7 @@ public class JsGenerator {
 		.append("this.selectedEntity= 	{show: false \n");
 		for (Field field: fieldList)
 		{
-			if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List"))
+			if (ReflectionManager.isListField(field))
 				sb.append(","+field.getName()+"List: []");
 		}
 		sb.append("};\n")
@@ -330,7 +330,7 @@ public class JsGenerator {
 		if (childrenList!=null)
 			for (Field field: childrenList)
 			{
-				if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List"))
+				if (ReflectionManager.isListField(field))
 				{
 					sb.append(""+entityName+"Service.searchBean."+field.getName()+"List=[];\n");
 					sb.append(""+entityName+"Service.searchBean."+field.getName()+"List.push("+entityName+"Service.searchBean."+field.getName()+");\n");
@@ -602,7 +602,7 @@ public class JsGenerator {
 			sb.append(getPagination());
 		for (Field field: childrenList)
 		{
-			if (field.getCompositeClass().fullName().contains("java.util.List"))
+			if (ReflectionManager.isListField(field))
 			{
 				JsGenerator jsGenerator = new JsGenerator(field.getFieldClass(), false, field.getCompositeClass(), entityName);
 				sb.append(jsGenerator.getPagination());
@@ -633,7 +633,7 @@ public class JsGenerator {
 		
 		for (Field field: childrenList)
 		{
-			if (field.getCompositeClass().fullName().contains("java.util.List"))
+			if (ReflectionManager.isListField(field))
 			{
 				sb.append("$scope.saveLinked"+Utility.getFirstUpper(field.getName())+"= function() {\n");
 				sb.append(entityName+"Service.selectedEntity."+field.getName()+"List.push("+entityName+"Service.selectedEntity."+field.getName()+");\n");
@@ -700,7 +700,7 @@ public class JsGenerator {
 						sb.append("{ name: '"+field.getName()+"'},\n");
 				}
 			}
-			else if (!field.getCompositeClass().fullName().contains("java.util.List") && isParent)
+			else if (!ReflectionManager.isListField(field) && isParent)
 			{
 				sb.append("{ name: '"+field.getName()+"."+field.getName()+"Id', displayName: '"+field.getName()+"'},\n");
 			}
@@ -834,7 +834,7 @@ public class JsGenerator {
 		ReflectionManager reflectionManager = new ReflectionManager(entityClass);
 		for (Field field: reflectionManager.getFieldByTabName(tabName))
 		{
-			if (field.getCompositeClass()!= null && field.getCompositeClass().fullName().contains("java.util.List"))
+			if (ReflectionManager.isListField(field))
 				resetTableTabString=resetTableTabString+" $scope."+field.getName()+"GridApi.core.handleWindowResize(); ";
 				//$scope.seedQueryGridApi.core.handleWindowResize();
 		}

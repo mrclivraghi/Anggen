@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -32,7 +31,7 @@ public class PhotoController {
     @ResponseBody
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ResponseEntity search(
-        @RequestBody
+        @org.springframework.web.bind.annotation.RequestBody
         PhotoSearchBean photo) {
         List<Photo> photoList;
         if (photo.getPhotoId()!=null)
@@ -68,7 +67,7 @@ public class PhotoController {
     @ResponseBody
     @RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity insertphoto(
-        @RequestBody
+        @org.springframework.web.bind.annotation.RequestBody
         Photo photo) {
         log.info("Inserting photo like {}", photo.getPhotoId()+' '+ photo.getUrl());
         Photo insertedphoto=photoService.insert(photo);
@@ -80,7 +79,7 @@ public class PhotoController {
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity updatephoto(
-        @RequestBody
+        @org.springframework.web.bind.annotation.RequestBody
         Photo photo) {
         log.info("Updating photo with id {}",photo.getPhotoId());
         Photo updatedphoto=photoService.update(photo);

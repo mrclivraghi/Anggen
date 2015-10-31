@@ -5,6 +5,7 @@ import java.util.List;
 import it.polimi.model.storepicking.ItemOrdineCodice;
 import it.polimi.repository.storepicking.ItemOrdineCodiceRepository;
 import it.polimi.searchbean.storepicking.ItemOrdineCodiceSearchBean;
+import it.polimi.service.storepicking.ItemOrdineCodiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

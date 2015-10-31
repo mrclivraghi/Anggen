@@ -57,8 +57,8 @@ public class OrdineSearchBean {
     public String referencePhone;
     public BigDecimal latitude;
     public BigDecimal longitude;
-    public List<Collo> collo;
-    public List<ItemOrdine> itemOrdine;
+    public List<Collo> colloList;
+    public List<ItemOrdine> itemOrdineList;
 
     public Integer getOrdineId() {
         return this.ordineId;
@@ -445,19 +445,19 @@ public class OrdineSearchBean {
     }
 
     public List<Collo> getColloList() {
-        return this.collo;
+        return this.colloList;
     }
 
-    public void setColloList(List<Collo> collo) {
-        this.collo=collo;
+    public void setColloList(List<Collo> colloList) {
+        this.colloList=colloList;
     }
 
     public List<ItemOrdine> getItemOrdineList() {
-        return this.itemOrdine;
+        return this.itemOrdineList;
     }
 
-    public void setItemOrdineList(List<ItemOrdine> itemOrdine) {
-        this.itemOrdine=itemOrdine;
+    public void setItemOrdineList(List<ItemOrdine> itemOrdineList) {
+        this.itemOrdineList=itemOrdineList;
     }
 
 }

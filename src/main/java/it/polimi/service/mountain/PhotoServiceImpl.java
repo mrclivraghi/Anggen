@@ -5,6 +5,7 @@ import java.util.List;
 import it.polimi.model.mountain.Photo;
 import it.polimi.repository.mountain.PhotoRepository;
 import it.polimi.searchbean.mountain.PhotoSearchBean;
+import it.polimi.service.mountain.PhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

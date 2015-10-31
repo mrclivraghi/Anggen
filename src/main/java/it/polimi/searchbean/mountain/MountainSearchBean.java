@@ -9,7 +9,7 @@ public class MountainSearchBean {
     public Long mountainId;
     public String name;
     public String height;
-    public List<SeedQuery> seedQuery;
+    public List<SeedQuery> seedQueryList;
 
     public Long getMountainId() {
         return this.mountainId;
@@ -36,11 +36,11 @@ public class MountainSearchBean {
     }
 
     public List<SeedQuery> getSeedQueryList() {
-        return this.seedQuery;
+        return this.seedQueryList;
     }
 
-    public void setSeedQueryList(List<SeedQuery> seedQuery) {
-        this.seedQuery=seedQuery;
+    public void setSeedQueryList(List<SeedQuery> seedQueryList) {
+        this.seedQueryList=seedQueryList;
     }
 
 }

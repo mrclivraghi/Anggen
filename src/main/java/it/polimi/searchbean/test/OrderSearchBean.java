@@ -12,7 +12,7 @@ public class OrderSearchBean {
     public String name;
     public Date timeslotDate;
     public Person person;
-    public List<Place> place;
+    public List<Place> placeList;
 
     public Long getOrderId() {
         return this.orderId;
@@ -47,11 +47,11 @@ public class OrderSearchBean {
     }
 
     public List<Place> getPlaceList() {
-        return this.place;
+        return this.placeList;
     }
 
-    public void setPlaceList(List<Place> place) {
-        this.place=place;
+    public void setPlaceList(List<Place> placeList) {
+        this.placeList=placeList;
     }
 
 }

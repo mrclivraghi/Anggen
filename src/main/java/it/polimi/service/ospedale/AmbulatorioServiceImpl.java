@@ -6,7 +6,7 @@ import it.polimi.model.ospedale.Ambulatorio;
 import it.polimi.repository.ospedale.AmbulatorioRepository;
 import it.polimi.repository.ospedale.PazienteRepository;
 import it.polimi.searchbean.ospedale.AmbulatorioSearchBean;
-import org.springframework.beans.factory.annotation.Autowired;
+import it.polimi.service.ospedale.AmbulatorioService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,9 +15,9 @@ public class AmbulatorioServiceImpl
     implements AmbulatorioService
 {
 
-    @Autowired
+    @org.springframework.beans.factory.annotation.Autowired
     public AmbulatorioRepository ambulatorioRepository;
-    @Autowired
+    @org.springframework.beans.factory.annotation.Autowired
     public PazienteRepository pazienteRepository;
 
     @Override

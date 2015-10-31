@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -32,7 +31,7 @@ public class PersonController {
     @ResponseBody
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ResponseEntity search(
-        @RequestBody
+        @org.springframework.web.bind.annotation.RequestBody
         PersonSearchBean person) {
         List<Person> personList;
         if (person.getPersonId()!=null)
@@ -68,7 +67,7 @@ public class PersonController {
     @ResponseBody
     @RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity insertperson(
-        @RequestBody
+        @org.springframework.web.bind.annotation.RequestBody
         Person person) {
         log.info("Inserting person like {}",person.toString());
         Person insertedperson=personService.insert(person);
@@ -80,7 +79,7 @@ public class PersonController {
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity updateperson(
-        @RequestBody
+        @org.springframework.web.bind.annotation.RequestBody
         Person person) {
         log.info("Updating person with id {}",person.getPersonId());
         Person updatedperson=personService.update(person);

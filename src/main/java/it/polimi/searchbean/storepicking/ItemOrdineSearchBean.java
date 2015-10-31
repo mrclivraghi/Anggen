@@ -35,7 +35,7 @@ public class ItemOrdineSearchBean {
     public BigDecimal weightFinale;
     public BigDecimal weightIniz;
     public Ordine ordine;
-    public List<ItemOrdineCodice> itemOrdineCodice;
+    public List<ItemOrdineCodice> itemOrdineCodiceList;
 
     public Integer getItemOrdineId() {
         return this.itemOrdineId;
@@ -246,11 +246,11 @@ public class ItemOrdineSearchBean {
     }
 
     public List<ItemOrdineCodice> getItemOrdineCodiceList() {
-        return this.itemOrdineCodice;
+        return this.itemOrdineCodiceList;
     }
 
-    public void setItemOrdineCodiceList(List<ItemOrdineCodice> itemOrdineCodice) {
-        this.itemOrdineCodice=itemOrdineCodice;
+    public void setItemOrdineCodiceList(List<ItemOrdineCodice> itemOrdineCodiceList) {
+        this.itemOrdineCodiceList=itemOrdineCodiceList;
     }
 
 }

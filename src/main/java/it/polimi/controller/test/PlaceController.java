@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -32,7 +31,7 @@ public class PlaceController {
     @ResponseBody
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ResponseEntity search(
-        @RequestBody
+        @org.springframework.web.bind.annotation.RequestBody
         PlaceSearchBean place) {
         List<Place> placeList;
         if (place.getPlaceId()!=null)
@@ -68,7 +67,7 @@ public class PlaceController {
     @ResponseBody
     @RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity insertplace(
-        @RequestBody
+        @org.springframework.web.bind.annotation.RequestBody
         Place place) {
         log.info("Inserting place like {}",place.toString());
         Place insertedplace=placeService.insert(place);
@@ -80,7 +79,7 @@ public class PlaceController {
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity updateplace(
-        @RequestBody
+        @org.springframework.web.bind.annotation.RequestBody
         Place place) {
         log.info("Updating place with id {}",place.getPlaceId());
         Place updatedplace=placeService.update(place);

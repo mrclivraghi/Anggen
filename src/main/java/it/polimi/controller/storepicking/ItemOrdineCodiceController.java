@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -32,7 +31,7 @@ public class ItemOrdineCodiceController {
     @ResponseBody
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ResponseEntity search(
-        @RequestBody
+        @org.springframework.web.bind.annotation.RequestBody
         ItemOrdineCodiceSearchBean itemOrdineCodice) {
         List<ItemOrdineCodice> itemOrdineCodiceList;
         if (itemOrdineCodice.getItemOrdineCodiceId()!=null)
@@ -68,7 +67,7 @@ public class ItemOrdineCodiceController {
     @ResponseBody
     @RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity insertitemOrdineCodice(
-        @RequestBody
+        @org.springframework.web.bind.annotation.RequestBody
         ItemOrdineCodice itemOrdineCodice) {
         log.info("Inserting itemOrdineCodice like {}",itemOrdineCodice.toString());
         ItemOrdineCodice inserteditemOrdineCodice=itemOrdineCodiceService.insert(itemOrdineCodice);
@@ -80,7 +79,7 @@ public class ItemOrdineCodiceController {
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity updateitemOrdineCodice(
-        @RequestBody
+        @org.springframework.web.bind.annotation.RequestBody
         ItemOrdineCodice itemOrdineCodice) {
         log.info("Updating itemOrdineCodice with id {}",itemOrdineCodice.getItemOrdineCodiceId());
         ItemOrdineCodice updateditemOrdineCodice=itemOrdineCodiceService.update(itemOrdineCodice);

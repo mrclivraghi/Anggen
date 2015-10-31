@@ -6,7 +6,7 @@ import it.polimi.model.test.Order;
 import it.polimi.repository.test.OrderRepository;
 import it.polimi.repository.test.PlaceRepository;
 import it.polimi.searchbean.test.OrderSearchBean;
-import org.springframework.beans.factory.annotation.Autowired;
+import it.polimi.service.test.OrderService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,9 +15,9 @@ public class OrderServiceImpl
     implements OrderService
 {
 
-    @Autowired
+    @org.springframework.beans.factory.annotation.Autowired
     public OrderRepository orderRepository;
-    @Autowired
+    @org.springframework.beans.factory.annotation.Autowired
     public PlaceRepository placeRepository;
 
     @Override

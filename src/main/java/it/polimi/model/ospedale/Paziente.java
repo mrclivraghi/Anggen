@@ -1,5 +1,6 @@
 package it.polimi.model.ospedale;
 
+import it.polimi.utils.annotation.Between;
 import it.polimi.utils.annotation.DescriptionField;
 import it.polimi.utils.annotation.IgnoreSearch;
 

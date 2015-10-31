@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -32,7 +31,7 @@ public class OrderController {
     @ResponseBody
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ResponseEntity search(
-        @RequestBody
+        @org.springframework.web.bind.annotation.RequestBody
         OrderSearchBean order) {
         List<Order> orderList;
         if (order.getOrderId()!=null)
@@ -68,7 +67,7 @@ public class OrderController {
     @ResponseBody
     @RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity insertorder(
-        @RequestBody
+        @org.springframework.web.bind.annotation.RequestBody
         Order order) {
         log.info("Inserting order like {}",order.toString());
         Order insertedorder=orderService.insert(order);
@@ -80,7 +79,7 @@ public class OrderController {
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity updateorder(
-        @RequestBody
+        @org.springframework.web.bind.annotation.RequestBody
         Order order) {
         log.info("Updating order with id {}",order.getOrderId());
         Order updatedorder=orderService.update(order);

@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -32,7 +31,7 @@ public class SeedQueryController {
     @ResponseBody
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ResponseEntity search(
-        @RequestBody
+        @org.springframework.web.bind.annotation.RequestBody
         SeedQuerySearchBean seedQuery) {
         List<SeedQuery> seedQueryList;
         if (seedQuery.getSeedQueryId()!=null)
@@ -68,7 +67,7 @@ public class SeedQueryController {
     @ResponseBody
     @RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity insertseedQuery(
-        @RequestBody
+        @org.springframework.web.bind.annotation.RequestBody
         SeedQuery seedQuery) {
         log.info("Inserting seedQuery like {}", seedQuery.getSeedQueryId()+' '+ seedQuery.getSeedKeyword());
         SeedQuery insertedseedQuery=seedQueryService.insert(seedQuery);
@@ -80,7 +79,7 @@ public class SeedQueryController {
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity updateseedQuery(
-        @RequestBody
+        @org.springframework.web.bind.annotation.RequestBody
         SeedQuery seedQuery) {
         log.info("Updating seedQuery with id {}",seedQuery.getSeedQueryId());
         SeedQuery updatedseedQuery=seedQueryService.update(seedQuery);

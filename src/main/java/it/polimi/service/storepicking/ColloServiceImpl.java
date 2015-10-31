@@ -5,6 +5,7 @@ import java.util.List;
 import it.polimi.model.storepicking.Collo;
 import it.polimi.repository.storepicking.ColloRepository;
 import it.polimi.searchbean.storepicking.ColloSearchBean;
+import it.polimi.service.storepicking.ColloService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -6,7 +6,7 @@ import it.polimi.model.mountain.SeedQuery;
 import it.polimi.repository.mountain.PhotoRepository;
 import it.polimi.repository.mountain.SeedQueryRepository;
 import it.polimi.searchbean.mountain.SeedQuerySearchBean;
-import org.springframework.beans.factory.annotation.Autowired;
+import it.polimi.service.mountain.SeedQueryService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,9 +15,9 @@ public class SeedQueryServiceImpl
     implements SeedQueryService
 {
 
-    @Autowired
+    @org.springframework.beans.factory.annotation.Autowired
     public SeedQueryRepository seedQueryRepository;
-    @Autowired
+    @org.springframework.beans.factory.annotation.Autowired
     public PhotoRepository photoRepository;
 
     @Override

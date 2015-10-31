@@ -35,6 +35,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
 import com.sun.codemodel.ClassType;
 import com.sun.codemodel.JAnnotationUse;
 import com.sun.codemodel.JBlock;
@@ -76,6 +77,9 @@ public class RestGenerator {
 	
 	private Class keyClass;
 	
+	private Class searchBeanClass;
+	
+	
 	private ReflectionManager reflectionManager;
 	
 	/**
@@ -106,46 +110,75 @@ public class RestGenerator {
 		String query="select "+alias+" from "+Utility.getFirstUpper(className)+" "+alias+ " where ";
 		for (Field field: fields)
 		{
-			JVar param = method.param(ReflectionManager.getRightParamClass(field), field.getName());
-			JAnnotationUse annotationParam= param.annotate(Param.class);
-			annotationParam.param("value", field.getName());
-			if (ReflectionManager.isTimeField(field))
+			
+			
+			if (ReflectionManager.hasDateBetween(field))
 			{
-				query= query + " (:"+field.getName()+" is null or cast(:"+field.getName()+" as string)=cast(date_trunc('seconds',e."+field.getName()+") as string)) and";
+				JVar param = method.param(ReflectionManager.getRightParamClass(field), field.getName()+"From");
+				JAnnotationUse annotationParam= param.annotate(Param.class);
+				annotationParam.param("value", field.getName()+"From");
+			
+				query=query+getFieldSearchQuery(field, field.getName()+"From","<=");
+			
+				param = method.param(ReflectionManager.getRightParamClass(field), field.getName()+"To");
+				annotationParam= param.annotate(Param.class);
+				annotationParam.param("value", field.getName()+"To");
+			
+				query=query+getFieldSearchQuery(field, field.getName()+"To",">=");
+				
+			}else
+			{
+				JVar param = method.param(ReflectionManager.getRightParamClass(field), field.getName());
+				JAnnotationUse annotationParam= param.annotate(Param.class);
+				annotationParam.param("value", field.getName());
+				query=query+getFieldSearchQuery(field, field.getName(),"=");
 			}
-			else
+			
+			
+		}
+		query=query.substring(0,query.length()-3);
+		return query;
+	}
+	
+	
+	private String getFieldSearchQuery(Field field, String fieldName,String comparator)
+	{
+		String query="";
+		if (ReflectionManager.isTimeField(field))
+		{
+			query= query + " (:"+fieldName+" is null or cast(:"+fieldName+" as string)"+comparator+"cast(date_trunc('seconds',"+alias+"."+field.getName()+") as string)) and";
+		}
+		else
+		{
+			if (ReflectionManager.isDateField(field))
 			{
-				if (ReflectionManager.isDateField(field))
+				query= query+" (:"+fieldName+" is null or cast(:"+fieldName+" as string)"+comparator+"cast(date("+alias+"."+field.getName()+") as string)) and";
+			} else
+			{
+				if (field.getFieldClass()==String.class)
 				{
-					query= query+" (:"+field.getName()+" is null or cast(:"+field.getName()+" as string)=cast(date("+alias+"."+field.getName()+") as string)) and";
+					query= query+" (:"+fieldName+" is null or :"+fieldName+"='' or cast(:"+fieldName+" as string)"+comparator+""+alias+"."+field.getName()+") and";
 				} else
 				{
-					if (field.getFieldClass()==String.class)
+					if (field.getCompositeClass()==null)
 					{
-						query= query+" (:"+field.getName()+" is null or :"+field.getName()+"='' or cast(:"+field.getName()+" as string)="+alias+"."+field.getName()+") and";
+						query=query+" (:"+fieldName+" is null or cast(:"+fieldName+" as string)"+comparator+"cast("+alias+"."+field.getName()+" as string)) and";
+
 					} else
-					{
-						if (field.getCompositeClass()==null)
+					{ // Entity or entity list!!!
+						if (field.getCompositeClass().fullName().contains("java.util.List"))
 						{
-							query=query+" (:"+field.getName()+" is null or cast(:"+field.getName()+" as string)=cast("+alias+"."+field.getName()+" as string)) and";
-
-						} else
-						{ // Entity or entity list!!!
-							if (field.getCompositeClass().fullName().contains("java.util.List"))
-							{
-								query=query+" (:"+field.getName()+" in elements("+alias+"."+field.getName()+"List)  or :"+field.getName()+" is null) and";
-							}else
-							{
-								query=query+" (:"+field.getName()+"="+alias+"."+field.getName()+" or :"+field.getName()+" is null) and";
-							}
-
+							query=query+" (:"+fieldName+" in elements("+alias+"."+field.getName()+"List)  or :"+fieldName+" is null) and";
+						}else
+						{
+							query=query+" (:"+fieldName+""+comparator+""+alias+"."+field.getName()+" or :"+fieldName+" is null) and";
 						}
 
 					}
 
-				}}
-		}
-		query=query.substring(0,query.length()-3);
+				}
+
+			}}
 		return query;
 	}
 	
@@ -164,8 +197,15 @@ public class RestGenerator {
 			dependencyClass.add(classClass);
 			return;
 		}
-		generateServiceInterface();
+		generateSearchBean();
 		List<Field> fieldList=null;
+		try {
+			searchBeanClass = Class.forName(classClass.getName().replace(".model.", ".searchbean.")+"SearchBean",true,ClassLoader.getSystemClassLoader());
+		} catch (ClassNotFoundException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		generateServiceInterface();
 		try {
 			fieldList = reflectionManager.getFieldList();
 			searchMethod=generateRepository();
@@ -234,6 +274,10 @@ public class RestGenerator {
 						method.param(field.getFieldClass(), field.getName());
 					}
 				}
+				if (ReflectionManager.hasDateBetween(field))
+				{
+					searchMethod=searchMethod+"GreaterThan"+Utility.getFirstUpper(field.getName())+"FromAndLessThan"+Utility.getFirstUpper(field.getName())+"ToAnd";
+				}
 				searchMethod=searchMethod+Utility.getFirstUpper(field.getName())+"And";
 			}
 			searchMethod=searchMethod.substring(0,searchMethod.length()-3);
@@ -249,6 +293,75 @@ public class RestGenerator {
 		saveFile(codeModel);
 		return searchMethod;
 	}
+	
+	private void generateSearchBean(){
+		JCodeModel codeModel = new JCodeModel();
+		JDefinedClass myClass = null;
+		
+		try {
+			myClass = codeModel._class(""+fullClassName.replace(".model.", ".searchbean.")+"SearchBean", ClassType.CLASS);
+			List<Field> fieldList = reflectionManager.getFieldList();
+			for (Field field: fieldList)
+			{
+				if (ReflectionManager.hasDateBetween(field))
+				{
+					JVar fieldFromVar = myClass.field(JMod.PUBLIC, field.getFieldClass(), field.getName()+"From");
+					generateGetterAndSetter(myClass, field.getName()+"From", field.getFieldClass());
+					JVar fieldToVar = myClass.field(JMod.PUBLIC, field.getFieldClass(), field.getName()+"To");
+					generateGetterAndSetter(myClass, field.getName()+"To", field.getFieldClass());
+				} else
+				{
+					if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List") && field.getRepositoryClass()!=null)
+					{
+						JClass listClass = codeModel.ref(List.class).narrow(field.getFieldClass());
+						JVar fieldVar = myClass.field(JMod.PUBLIC, listClass, field.getName());
+						generateGetterAndSetter(myClass, field.getName(), listClass);
+						
+						
+						
+					}else
+					{
+					JVar fieldVar = myClass.field(JMod.PUBLIC, field.getFieldClass(), field.getName());
+					generateGetterAndSetter(myClass, field.getName(), field.getFieldClass());
+					}
+				}
+			}
+			saveFile(codeModel);
+		} catch (JClassAlreadyExistsException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
+	
+	private void generateGetterAndSetter(JDefinedClass myClass, String varName, Class varClass)
+	{
+		JMethod getter= myClass.method(JMod.PUBLIC, varClass, "get"+Utility.getFirstUpper(varName));
+		JBlock getterBlock = getter.body();
+		getterBlock.directStatement("return this."+varName+";");
+		
+		JMethod setter= myClass.method(JMod.PUBLIC, void.class, "set"+Utility.getFirstUpper(varName));
+		setter.param(varClass, varName);
+		JBlock setterBlock = setter.body();
+		setterBlock.directStatement("this."+varName+"="+varName+";");
+		
+	}
+	private void generateGetterAndSetter(JDefinedClass myClass, String varName, JClass varClass)
+	{
+		JMethod getter= myClass.method(JMod.PUBLIC, varClass, "get"+Utility.getFirstUpper(varName)+"List");
+		JBlock getterBlock = getter.body();
+		getterBlock.directStatement("return this."+varName+";");
+		
+		JMethod setter= myClass.method(JMod.PUBLIC, void.class, "set"+Utility.getFirstUpper(varName)+"List");
+		setter.param(varClass, varName);
+		JBlock setterBlock = setter.body();
+		setterBlock.directStatement("this."+varName+"="+varName+";");
+		
+	}
+	
+	
 	/**
 	 * Generates the service interface
 	 */
@@ -264,7 +377,7 @@ public class RestGenerator {
 			String lowerClass= className.replaceFirst(className.substring(0, 1), className.substring(0, 1).toLowerCase());
 			findById.param(keyClass,className+"Id");
 			JMethod findLike=myClass.method(JMod.PUBLIC, listClass, "find");
-			findLike.param(classClass, className);
+			findLike.param(searchBeanClass, className);
 			JMethod deleteById = myClass.method(JMod.PUBLIC, void.class, "deleteById");
 			deleteById.param(keyClass, className+"Id");
 			JMethod insert= myClass.method(JMod.PUBLIC, classClass, "insert");
@@ -317,7 +430,7 @@ public class RestGenerator {
 			//search
 			JMethod findLike=myClass.method(JMod.PUBLIC, listClass, "find");
 			findLike.annotate(Override.class);
-			findLike.param(classClass, lowerClass);
+			findLike.param(searchBeanClass, lowerClass);
 			JBlock findLikeBlock= findLike.body();
 			findLikeBlock.directStatement("return "+lowerClass+"Repository."+searchMethod+"("+reflectionManager.getAllParam()+");");
 			//delete
@@ -459,7 +572,7 @@ public class RestGenerator {
 			JAnnotationUse requestMappingSearch = search.annotate(RequestMapping.class);
 			requestMappingSearch.param("value", "/search");
 			requestMappingSearch.param("method",RequestMethod.POST);
-			JVar orderParam= search.param(classClass,lowerClass);
+			JVar orderParam= search.param(searchBeanClass,lowerClass);
 			orderParam.annotate(RequestBody.class);
 			JBlock searchBlock= search.body();
 			JVar entityList= searchBlock.decl(listClass, lowerClass+"List");

@@ -5,6 +5,7 @@ import it.polimi.model.Sex;
 import it.polimi.model.mountain.Mountain;
 import it.polimi.model.ospedale.Ambulatorio;
 import it.polimi.model.ospedale.Paziente;
+import it.polimi.utils.annotation.Between;
 import it.polimi.utils.annotation.DescriptionField;
 import it.polimi.utils.annotation.ExcelExport;
 import it.polimi.utils.annotation.IgnoreSearch;
@@ -131,6 +132,8 @@ public class ReflectionManager {
 					Object[] enumValues=field.getType().getEnumConstants();
 					for (int i=0; i<enumValues.length; i++)
 						enumValuesList.add(enumValues[i].toString());
+					
+					fieldClass=field.getType();
 					
 				} else
 				{
@@ -320,30 +323,45 @@ public class ReflectionManager {
 		String className = parseName();
 		for (Field field: fields)
 		{
-			if (field.getIsEnum())
+			if (ReflectionManager.hasDateBetween(field))
 			{
-				string=string+" ("+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(field.getName())+"()==null)? null : "+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(field.getName())+"().getValue(),";
+				string=string+manageSingleParam(className, field,  field.getName()+"From");
+				string=string+manageSingleParam(className, field,  field.getName()+"To");
 			}else
-			{
-				if (ReflectionManager.isTimeField(field))
-				{
-					string=string+"it.polimi.utils.Utility.formatTime("+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(field.getName())+"()),";
-				}
-				else
-				{
-					if (ReflectionManager.isDateField(field))
-					{
-						string=string+"it.polimi.utils.Utility.formatDate("+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(field.getName())+"()),";
-					}else
-					{
-						if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List"))
-							string=string+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(field.getName())+"List()==null? null :"+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(field.getName())+"List().get(0),";
-						else
-							string=string+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(field.getName())+"(),";
-					}
-				}}}
+				string=string+manageSingleParam(className, field,  field.getName());
+		
+		}
 		return string.substring(0, string.length()-1);
 	}
+	
+	private String manageSingleParam(String className,Field field, String fieldName)
+	{
+		String string="";
+		if (field.getIsEnum())
+		{
+			string=string+" ("+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(fieldName)+"()==null)? null : "+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(fieldName)+"().getValue(),";
+		}else
+		{
+			if (ReflectionManager.isTimeField(field))
+			{
+				string=string+"it.polimi.utils.Utility.formatTime("+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(fieldName)+"()),";
+			}
+			else
+			{
+				if (ReflectionManager.isDateField(field))
+				{
+					string=string+"it.polimi.utils.Utility.formatDate("+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(fieldName)+"()),";
+				}else
+				{
+					if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List"))
+						string=string+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(fieldName)+"List()==null? null :"+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(fieldName)+"List().get(0),";
+					else
+						string=string+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(fieldName)+"(),";
+				}
+			}}
+		return string;
+	}
+	
 	
 	public static Boolean isDateField(Field field)
 	{
@@ -418,6 +436,11 @@ public class ReflectionManager {
 	public static Boolean hasManyToMany(Field field)
 	{
 		return hasAnnotation(field, ManyToMany.class);
+	}
+	
+	public static Boolean hasDateBetween(Field field)
+	{
+		return hasAnnotation(field, Between.class);
 	}
 	
 	private static Boolean hasAnnotation(Field field,Class ignoreAnnotationClass)

@@ -3,6 +3,7 @@ package it.polimi.controller.mountain;
 
 import java.util.List;
 import it.polimi.model.mountain.Mountain;
+import it.polimi.searchbean.mountain.MountainSearchBean;
 import it.polimi.service.mountain.MountainService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +33,7 @@ public class MountainController {
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ResponseEntity search(
         @RequestBody
-        Mountain mountain) {
+        MountainSearchBean mountain) {
         List<Mountain> mountainList;
         if (mountain.getMountainId()!=null)
          log.info("Searching mountain like {}", mountain.getMountainId()+' '+ mountain.getName());

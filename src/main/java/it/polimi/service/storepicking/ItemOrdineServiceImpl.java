@@ -5,6 +5,7 @@ import java.util.List;
 import it.polimi.model.storepicking.ItemOrdine;
 import it.polimi.repository.storepicking.ItemOrdineCodiceRepository;
 import it.polimi.repository.storepicking.ItemOrdineRepository;
+import it.polimi.searchbean.storepicking.ItemOrdineSearchBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +26,7 @@ public class ItemOrdineServiceImpl
     }
 
     @Override
-    public List<ItemOrdine> find(ItemOrdine itemOrdine) {
+    public List<ItemOrdine> find(ItemOrdineSearchBean itemOrdine) {
         return itemOrdineRepository.findByItemOrdineIdAndBarcodeAndCarfCanaleLocaleAndDaCancellareAndFormatAndIdStatoFeedbackAndIdStatoItemOrdineAndIdStatoPreparazioneAndInfoFeedbackAndNameAndNoteAndPrioritaAndProductStatusAndPromoPuntiAndQuantityFinaleAndQuantityInizAndSingleUnitWeightAndSostituitoAndTsModificaAndTsPreparazioneAndVOrderItemIdAndVPriceAndVProductIdAndWeightFinaleAndWeightInizAndOrdineAndItemOrdineCodice(itemOrdine.getItemOrdineId(),itemOrdine.getBarcode(),itemOrdine.getCarfCanaleLocale(),itemOrdine.getDaCancellare(),itemOrdine.getFormat(),itemOrdine.getIdStatoFeedback(),itemOrdine.getIdStatoItemOrdine(),itemOrdine.getIdStatoPreparazione(),itemOrdine.getInfoFeedback(),itemOrdine.getName(),itemOrdine.getNote(),itemOrdine.getPriorita(),itemOrdine.getProductStatus(),itemOrdine.getPromoPunti(),itemOrdine.getQuantityFinale(),itemOrdine.getQuantityIniz(),itemOrdine.getSingleUnitWeight(),itemOrdine.getSostituito(),it.polimi.utils.Utility.formatDate(itemOrdine.getTsModifica()),it.polimi.utils.Utility.formatDate(itemOrdine.getTsPreparazione()),itemOrdine.getVOrderItemId(),itemOrdine.getVPrice(),itemOrdine.getVProductId(),itemOrdine.getWeightFinale(),itemOrdine.getWeightIniz(),itemOrdine.getOrdine(),itemOrdine.getItemOrdineCodiceList()==null? null :itemOrdine.getItemOrdineCodiceList().get(0));
     }
 

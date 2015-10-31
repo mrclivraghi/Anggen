@@ -3,6 +3,7 @@ package it.polimi.controller;
 
 import java.util.List;
 import it.polimi.model.Example;
+import it.polimi.searchbean.ExampleSearchBean;
 import it.polimi.service.ExampleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +33,7 @@ public class ExampleController {
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ResponseEntity search(
         @RequestBody
-        Example example) {
+        ExampleSearchBean example) {
         List<Example> exampleList;
         if (example.getExampleId()!=null)
          log.info("Searching example like {}",example.toString());

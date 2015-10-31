@@ -6,6 +6,7 @@ import it.polimi.model.ospedale.Paziente;
 import it.polimi.repository.ospedale.AmbulatorioRepository;
 import it.polimi.repository.ospedale.FascicoloRepository;
 import it.polimi.repository.ospedale.PazienteRepository;
+import it.polimi.searchbean.ospedale.PazienteSearchBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +29,7 @@ public class PazienteServiceImpl
     }
 
     @Override
-    public List<Paziente> find(Paziente paziente) {
+    public List<Paziente> find(PazienteSearchBean paziente) {
         return pazienteRepository.findByPazienteIdAndNomeAndCognomeAndBirthDateAndFascicoloAndAmbulatorio(paziente.getPazienteId(),paziente.getNome(),paziente.getCognome(),it.polimi.utils.Utility.formatDate(paziente.getBirthDate()),paziente.getFascicoloList()==null? null :paziente.getFascicoloList().get(0),paziente.getAmbulatorioList()==null? null :paziente.getAmbulatorioList().get(0));
     }
 

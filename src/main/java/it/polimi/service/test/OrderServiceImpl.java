@@ -5,6 +5,7 @@ import java.util.List;
 import it.polimi.model.test.Order;
 import it.polimi.repository.test.OrderRepository;
 import it.polimi.repository.test.PlaceRepository;
+import it.polimi.searchbean.test.OrderSearchBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +26,7 @@ public class OrderServiceImpl
     }
 
     @Override
-    public List<Order> find(Order order) {
+    public List<Order> find(OrderSearchBean order) {
         return orderRepository.findByOrderIdAndNameAndTimeslotDateAndPersonAndPlace(order.getOrderId(),order.getName(),it.polimi.utils.Utility.formatDate(order.getTimeslotDate()),order.getPerson(),order.getPlaceList()==null? null :order.getPlaceList().get(0));
     }
 

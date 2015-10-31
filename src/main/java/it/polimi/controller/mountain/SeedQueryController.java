@@ -3,6 +3,7 @@ package it.polimi.controller.mountain;
 
 import java.util.List;
 import it.polimi.model.mountain.SeedQuery;
+import it.polimi.searchbean.mountain.SeedQuerySearchBean;
 import it.polimi.service.mountain.SeedQueryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +33,7 @@ public class SeedQueryController {
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ResponseEntity search(
         @RequestBody
-        SeedQuery seedQuery) {
+        SeedQuerySearchBean seedQuery) {
         List<SeedQuery> seedQueryList;
         if (seedQuery.getSeedQueryId()!=null)
          log.info("Searching seedQuery like {}", seedQuery.getSeedQueryId()+' '+ seedQuery.getSeedKeyword());

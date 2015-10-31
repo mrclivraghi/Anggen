@@ -4,6 +4,7 @@ package it.polimi.service.storepicking;
 import java.util.List;
 import it.polimi.model.storepicking.ItemOrdineCodice;
 import it.polimi.repository.storepicking.ItemOrdineCodiceRepository;
+import it.polimi.searchbean.storepicking.ItemOrdineCodiceSearchBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +23,7 @@ public class ItemOrdineCodiceServiceImpl
     }
 
     @Override
-    public List<ItemOrdineCodice> find(ItemOrdineCodice itemOrdineCodice) {
+    public List<ItemOrdineCodice> find(ItemOrdineCodiceSearchBean itemOrdineCodice) {
         return itemOrdineCodiceRepository.findByItemOrdineCodiceIdAndBarcodeAndBarcodeReadAndDaCancellareAndIdStatoAndNameAndNelCarrelloAndQuantityFinaleAndTsModificaAndVPriceAndVProductIdAndWeightFinaleAndItemOrdine(itemOrdineCodice.getItemOrdineCodiceId(),itemOrdineCodice.getBarcode(),itemOrdineCodice.getBarcodeRead(),itemOrdineCodice.getDaCancellare(),itemOrdineCodice.getIdStato(),itemOrdineCodice.getName(),itemOrdineCodice.getNelCarrello(),itemOrdineCodice.getQuantityFinale(),it.polimi.utils.Utility.formatDate(itemOrdineCodice.getTsModifica()),itemOrdineCodice.getVPrice(),itemOrdineCodice.getVProductId(),itemOrdineCodice.getWeightFinale(),itemOrdineCodice.getItemOrdine());
     }
 

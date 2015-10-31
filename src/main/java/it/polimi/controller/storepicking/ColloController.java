@@ -3,6 +3,7 @@ package it.polimi.controller.storepicking;
 
 import java.util.List;
 import it.polimi.model.storepicking.Collo;
+import it.polimi.searchbean.storepicking.ColloSearchBean;
 import it.polimi.service.storepicking.ColloService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +33,7 @@ public class ColloController {
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ResponseEntity search(
         @RequestBody
-        Collo collo) {
+        ColloSearchBean collo) {
         List<Collo> colloList;
         if (collo.getColloId()!=null)
          log.info("Searching collo like {}",collo.toString());

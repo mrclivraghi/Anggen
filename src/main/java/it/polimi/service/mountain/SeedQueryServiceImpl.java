@@ -5,6 +5,7 @@ import java.util.List;
 import it.polimi.model.mountain.SeedQuery;
 import it.polimi.repository.mountain.PhotoRepository;
 import it.polimi.repository.mountain.SeedQueryRepository;
+import it.polimi.searchbean.mountain.SeedQuerySearchBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +26,7 @@ public class SeedQueryServiceImpl
     }
 
     @Override
-    public List<SeedQuery> find(SeedQuery seedQuery) {
+    public List<SeedQuery> find(SeedQuerySearchBean seedQuery) {
         return seedQueryRepository.findBySeedQueryIdAndSeedKeywordAndStatusAndMountainAndPhoto(seedQuery.getSeedQueryId(),seedQuery.getSeedKeyword(),seedQuery.getStatus(),seedQuery.getMountain(),seedQuery.getPhotoList()==null? null :seedQuery.getPhotoList().get(0));
     }
 

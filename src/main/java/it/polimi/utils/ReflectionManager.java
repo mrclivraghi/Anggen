@@ -8,6 +8,7 @@ import it.polimi.model.ospedale.Paziente;
 import it.polimi.utils.annotation.Between;
 import it.polimi.utils.annotation.DescriptionField;
 import it.polimi.utils.annotation.ExcelExport;
+import it.polimi.utils.annotation.Filter;
 import it.polimi.utils.annotation.IgnoreSearch;
 import it.polimi.utils.annotation.IgnoreTableList;
 import it.polimi.utils.annotation.IgnoreUpdate;
@@ -102,12 +103,24 @@ public class ReflectionManager {
 		{
 			if (field.getCompositeClass()!=null)
 			{
+				addChildrenFilter(field);
 				childrenList.add(field);
 			}
 		}
 		return childrenList;
 	}
 	
+	public void addChildrenFilter(Field field)
+	{
+		if (field.getCompositeClass()==null) return;
+		ReflectionManager reflectionManager = new ReflectionManager(field.getFieldClass());
+		field.setChildrenFilterList(new ArrayList<Field>());
+		for (Field childrenField: reflectionManager.getFieldList())
+		{
+			if (ReflectionManager.hasFilter(childrenField))
+				field.getChildrenFilterList().add(childrenField);
+		}
+	}
 	
 	public List<Field> getFieldList()
 	{
@@ -162,6 +175,7 @@ public class ReflectionManager {
 			myField.setAnnotationList(field.getAnnotations());
 			myField.setIsEnum(isEnum);
 			myField.setEnumValuesList(enumValuesList);
+			myField.setOwnerClass(classClass);
 			fieldList.add(myField);
 		}
 		return fieldList;
@@ -422,6 +436,10 @@ public class ReflectionManager {
 		return hasAnnotation(field, javax.persistence.Id.class);
 	}
 	
+	public static Boolean hasFilter(Field field)
+	{
+		return hasAnnotation(field, Filter.class);
+	}
 	
 	public static Boolean hasExcelExport(Field field)
 	{

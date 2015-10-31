@@ -13,6 +13,8 @@ public class Field{
 	private Annotation[] annotationList;
 	private Boolean isEnum;
 	private List<String> enumValuesList;
+	private List<Field> childrenFilterList;
+	private Class ownerClass;
 	
 	public Field(String name, Class fieldClass, JClass compositeClass,Class repositoryClass)
 	{
@@ -82,4 +84,33 @@ public class Field{
 	public void setEnumValuesList(List<String> enumValuesList) {
 		this.enumValuesList = enumValuesList;
 	}
+
+	/**
+	 * @return the childrenFilterList
+	 */
+	public List<Field> getChildrenFilterList() {
+		return childrenFilterList;
+	}
+
+	/**
+	 * @param childrenFilterList the childrenFilterList to set
+	 */
+	public void setChildrenFilterList(List<Field> childrenFilterList) {
+		this.childrenFilterList = childrenFilterList;
+	}
+
+	/**
+	 * @return the ownerClass
+	 */
+	public Class getOwnerClass() {
+		return ownerClass;
+	}
+
+	/**
+	 * @param ownerClass the ownerClass to set
+	 */
+	public void setOwnerClass(Class ownerClass) {
+		this.ownerClass = ownerClass;
+	}
+
 }

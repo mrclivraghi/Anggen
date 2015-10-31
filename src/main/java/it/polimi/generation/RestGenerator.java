@@ -254,6 +254,17 @@ public class RestGenerator {
 							JVar fieldVar = myClass.field(JMod.PUBLIC, field.getFieldClass(), field.getName());
 							generateGetterAndSetter(myClass, field.getName(), field.getFieldClass());
 						}
+						//filter modification
+						if (field.getCompositeClass()!=null)
+						{
+							reflectionManager.addChildrenFilter(field);
+						for (Field filterField: field.getChildrenFilterList())
+						{
+							String filterFieldName=reflectionManager.parseName(filterField.getOwnerClass().getName())+Utility.getFirstUpper(filterField.getName());
+							JVar fieldVar = myClass.field(JMod.PUBLIC, filterField.getFieldClass(), filterFieldName);
+							generateGetterAndSetter(myClass, filterFieldName, filterField.getFieldClass());
+						}
+						}
 					}
 				}
 				saveFile(codeModel);

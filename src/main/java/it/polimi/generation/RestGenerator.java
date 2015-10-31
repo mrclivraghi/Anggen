@@ -110,46 +110,75 @@ public class RestGenerator {
 		String query="select "+alias+" from "+Utility.getFirstUpper(className)+" "+alias+ " where ";
 		for (Field field: fields)
 		{
-			JVar param = method.param(ReflectionManager.getRightParamClass(field), field.getName());
-			JAnnotationUse annotationParam= param.annotate(Param.class);
-			annotationParam.param("value", field.getName());
-			if (ReflectionManager.isTimeField(field))
+			
+			
+			if (ReflectionManager.hasDateBetween(field))
 			{
-				query= query + " (:"+field.getName()+" is null or cast(:"+field.getName()+" as string)=cast(date_trunc('seconds',e."+field.getName()+") as string)) and";
+				JVar param = method.param(ReflectionManager.getRightParamClass(field), field.getName()+"From");
+				JAnnotationUse annotationParam= param.annotate(Param.class);
+				annotationParam.param("value", field.getName()+"From");
+			
+				query=query+getFieldSearchQuery(field, field.getName()+"From",'>');
+			
+				param = method.param(ReflectionManager.getRightParamClass(field), field.getName()+"To");
+				annotationParam= param.annotate(Param.class);
+				annotationParam.param("value", field.getName()+"To");
+			
+				query=query+getFieldSearchQuery(field, field.getName()+"To",'<');
+				
+			}else
+			{
+				JVar param = method.param(ReflectionManager.getRightParamClass(field), field.getName());
+				JAnnotationUse annotationParam= param.annotate(Param.class);
+				annotationParam.param("value", field.getName());
+				query=query+getFieldSearchQuery(field, field.getName(),'=');
 			}
-			else
+			
+			
+		}
+		query=query.substring(0,query.length()-3);
+		return query;
+	}
+	
+	
+	private String getFieldSearchQuery(Field field, String fieldName,Character comparator)
+	{
+		String query="";
+		if (ReflectionManager.isTimeField(field))
+		{
+			query= query + " (:"+fieldName+" is null or cast(:"+fieldName+" as string)"+comparator+"cast(date_trunc('seconds',e."+fieldName+") as string)) and";
+		}
+		else
+		{
+			if (ReflectionManager.isDateField(field))
 			{
-				if (ReflectionManager.isDateField(field))
+				query= query+" (:"+fieldName+" is null or cast(:"+fieldName+" as string)"+comparator+"cast(date("+alias+"."+fieldName+") as string)) and";
+			} else
+			{
+				if (field.getFieldClass()==String.class)
 				{
-					query= query+" (:"+field.getName()+" is null or cast(:"+field.getName()+" as string)=cast(date("+alias+"."+field.getName()+") as string)) and";
+					query= query+" (:"+fieldName+" is null or :"+fieldName+"='' or cast(:"+fieldName+" as string)"+comparator+""+alias+"."+fieldName+") and";
 				} else
 				{
-					if (field.getFieldClass()==String.class)
+					if (field.getCompositeClass()==null)
 					{
-						query= query+" (:"+field.getName()+" is null or :"+field.getName()+"='' or cast(:"+field.getName()+" as string)="+alias+"."+field.getName()+") and";
+						query=query+" (:"+fieldName+" is null or cast(:"+fieldName+" as string)"+comparator+"cast("+alias+"."+fieldName+" as string)) and";
+
 					} else
-					{
-						if (field.getCompositeClass()==null)
+					{ // Entity or entity list!!!
+						if (field.getCompositeClass().fullName().contains("java.util.List"))
 						{
-							query=query+" (:"+field.getName()+" is null or cast(:"+field.getName()+" as string)=cast("+alias+"."+field.getName()+" as string)) and";
-
-						} else
-						{ // Entity or entity list!!!
-							if (field.getCompositeClass().fullName().contains("java.util.List"))
-							{
-								query=query+" (:"+field.getName()+" in elements("+alias+"."+field.getName()+"List)  or :"+field.getName()+" is null) and";
-							}else
-							{
-								query=query+" (:"+field.getName()+"="+alias+"."+field.getName()+" or :"+field.getName()+" is null) and";
-							}
-
+							query=query+" (:"+fieldName+" in elements("+alias+"."+fieldName+"List)  or :"+fieldName+" is null) and";
+						}else
+						{
+							query=query+" (:"+fieldName+""+comparator+""+alias+"."+fieldName+" or :"+fieldName+" is null) and";
 						}
 
 					}
 
-				}}
-		}
-		query=query.substring(0,query.length()-3);
+				}
+
+			}}
 		return query;
 	}
 	
@@ -244,6 +273,10 @@ public class RestGenerator {
 						JMethod method= myClass.method(JMod.PUBLIC, listClass, "findBy"+Utility.getFirstUpper(field.getName()));
 						method.param(field.getFieldClass(), field.getName());
 					}
+				}
+				if (ReflectionManager.hasDateBetween(field))
+				{
+					searchMethod=searchMethod+"GreaterThan"+Utility.getFirstUpper(field.getName())+"FromAndLessThan"+Utility.getFirstUpper(field.getName())+"ToAnd";
 				}
 				searchMethod=searchMethod+Utility.getFirstUpper(field.getName())+"And";
 			}

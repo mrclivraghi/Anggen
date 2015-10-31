@@ -323,30 +323,45 @@ public class ReflectionManager {
 		String className = parseName();
 		for (Field field: fields)
 		{
-			if (field.getIsEnum())
+			if (ReflectionManager.hasDateBetween(field))
 			{
-				string=string+" ("+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(field.getName())+"()==null)? null : "+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(field.getName())+"().getValue(),";
+				string=string+manageSingleParam(className, field,  field.getName()+"From");
+				string=string+manageSingleParam(className, field,  field.getName()+"To");
 			}else
-			{
-				if (ReflectionManager.isTimeField(field))
-				{
-					string=string+"it.polimi.utils.Utility.formatTime("+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(field.getName())+"()),";
-				}
-				else
-				{
-					if (ReflectionManager.isDateField(field))
-					{
-						string=string+"it.polimi.utils.Utility.formatDate("+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(field.getName())+"()),";
-					}else
-					{
-						if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List"))
-							string=string+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(field.getName())+"List()==null? null :"+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(field.getName())+"List().get(0),";
-						else
-							string=string+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(field.getName())+"(),";
-					}
-				}}}
+				string=string+manageSingleParam(className, field,  field.getName());
+		
+		}
 		return string.substring(0, string.length()-1);
 	}
+	
+	private String manageSingleParam(String className,Field field, String fieldName)
+	{
+		String string="";
+		if (field.getIsEnum())
+		{
+			string=string+" ("+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(fieldName)+"()==null)? null : "+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(fieldName)+"().getValue(),";
+		}else
+		{
+			if (ReflectionManager.isTimeField(field))
+			{
+				string=string+"it.polimi.utils.Utility.formatTime("+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(fieldName)+"()),";
+			}
+			else
+			{
+				if (ReflectionManager.isDateField(field))
+				{
+					string=string+"it.polimi.utils.Utility.formatDate("+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(fieldName)+"()),";
+				}else
+				{
+					if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List"))
+						string=string+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(fieldName)+"List()==null? null :"+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(fieldName)+"List().get(0),";
+					else
+						string=string+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(fieldName)+"(),";
+				}
+			}}
+		return string;
+	}
+	
 	
 	public static Boolean isDateField(Field field)
 	{

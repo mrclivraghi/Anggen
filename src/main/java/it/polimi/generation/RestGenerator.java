@@ -118,20 +118,20 @@ public class RestGenerator {
 				JAnnotationUse annotationParam= param.annotate(Param.class);
 				annotationParam.param("value", field.getName()+"From");
 			
-				query=query+getFieldSearchQuery(field, field.getName()+"From",'>');
+				query=query+getFieldSearchQuery(field, field.getName()+"From","<=");
 			
 				param = method.param(ReflectionManager.getRightParamClass(field), field.getName()+"To");
 				annotationParam= param.annotate(Param.class);
 				annotationParam.param("value", field.getName()+"To");
 			
-				query=query+getFieldSearchQuery(field, field.getName()+"To",'<');
+				query=query+getFieldSearchQuery(field, field.getName()+"To",">=");
 				
 			}else
 			{
 				JVar param = method.param(ReflectionManager.getRightParamClass(field), field.getName());
 				JAnnotationUse annotationParam= param.annotate(Param.class);
 				annotationParam.param("value", field.getName());
-				query=query+getFieldSearchQuery(field, field.getName(),'=');
+				query=query+getFieldSearchQuery(field, field.getName(),"=");
 			}
 			
 			
@@ -141,37 +141,37 @@ public class RestGenerator {
 	}
 	
 	
-	private String getFieldSearchQuery(Field field, String fieldName,Character comparator)
+	private String getFieldSearchQuery(Field field, String fieldName,String comparator)
 	{
 		String query="";
 		if (ReflectionManager.isTimeField(field))
 		{
-			query= query + " (:"+fieldName+" is null or cast(:"+fieldName+" as string)"+comparator+"cast(date_trunc('seconds',e."+fieldName+") as string)) and";
+			query= query + " (:"+fieldName+" is null or cast(:"+fieldName+" as string)"+comparator+"cast(date_trunc('seconds',"+alias+"."+field.getName()+") as string)) and";
 		}
 		else
 		{
 			if (ReflectionManager.isDateField(field))
 			{
-				query= query+" (:"+fieldName+" is null or cast(:"+fieldName+" as string)"+comparator+"cast(date("+alias+"."+fieldName+") as string)) and";
+				query= query+" (:"+fieldName+" is null or cast(:"+fieldName+" as string)"+comparator+"cast(date("+alias+"."+field.getName()+") as string)) and";
 			} else
 			{
 				if (field.getFieldClass()==String.class)
 				{
-					query= query+" (:"+fieldName+" is null or :"+fieldName+"='' or cast(:"+fieldName+" as string)"+comparator+""+alias+"."+fieldName+") and";
+					query= query+" (:"+fieldName+" is null or :"+fieldName+"='' or cast(:"+fieldName+" as string)"+comparator+""+alias+"."+field.getName()+") and";
 				} else
 				{
 					if (field.getCompositeClass()==null)
 					{
-						query=query+" (:"+fieldName+" is null or cast(:"+fieldName+" as string)"+comparator+"cast("+alias+"."+fieldName+" as string)) and";
+						query=query+" (:"+fieldName+" is null or cast(:"+fieldName+" as string)"+comparator+"cast("+alias+"."+field.getName()+" as string)) and";
 
 					} else
 					{ // Entity or entity list!!!
 						if (field.getCompositeClass().fullName().contains("java.util.List"))
 						{
-							query=query+" (:"+fieldName+" in elements("+alias+"."+fieldName+"List)  or :"+fieldName+" is null) and";
+							query=query+" (:"+fieldName+" in elements("+alias+"."+field.getName()+"List)  or :"+fieldName+" is null) and";
 						}else
 						{
-							query=query+" (:"+fieldName+""+comparator+""+alias+"."+fieldName+" or :"+fieldName+" is null) and";
+							query=query+" (:"+fieldName+""+comparator+""+alias+"."+field.getName()+" or :"+fieldName+" is null) and";
 						}
 
 					}

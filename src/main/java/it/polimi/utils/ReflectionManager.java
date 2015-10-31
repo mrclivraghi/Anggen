@@ -2,10 +2,16 @@ package it.polimi.utils;
 
 import it.polimi.model.Example;
 import it.polimi.model.Sex;
+import it.polimi.model.mountain.Mountain;
+import it.polimi.model.ospedale.Ambulatorio;
+import it.polimi.model.ospedale.Paziente;
+import it.polimi.utils.annotation.Between;
+import it.polimi.utils.annotation.DescriptionField;
 import it.polimi.utils.annotation.ExcelExport;
 import it.polimi.utils.annotation.IgnoreSearch;
 import it.polimi.utils.annotation.IgnoreTableList;
 import it.polimi.utils.annotation.IgnoreUpdate;
+import it.polimi.utils.annotation.Tab;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
@@ -21,6 +27,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -126,6 +133,8 @@ public class ReflectionManager {
 					for (int i=0; i<enumValues.length; i++)
 						enumValuesList.add(enumValues[i].toString());
 					
+					fieldClass=field.getType();
+					
 				} else
 				{
 					jClass=codeModel.ref(field.getType());
@@ -203,11 +212,11 @@ public class ReflectionManager {
 		List<ClassDetail> returnedClassList = new ArrayList<ClassDetail>();
 		List<Field> childrenFieldList = reflectionManager.getChildrenFieldList();
 		if (childrenFieldList.size()==0) return returnedClassList;
-		for (Field field : childrenFieldList)
+		List<Field> thisRunFields= new ArrayList<Field>();
+		
+		for (Field field: childrenFieldList)
 		{
-			if (parentClassList.contains(field.getFieldClass()))
-			{}//childrenClassList.remove(fieldClass);
-			else
+			if (!parentClassList.contains(field.getFieldClass()))
 			{
 				ClassDetail classDetail = new ClassDetail();
 				classDetail.setClassClass(field.getFieldClass());
@@ -215,8 +224,14 @@ public class ReflectionManager {
 				classDetail.setParentName(reflectionManager.parseName());;
 				returnedClassList.add(classDetail);
 				parentClassList.add(field.getFieldClass());
-				returnedClassList.addAll(ReflectionManager.getDescendantClassList(field.getFieldClass(), parentClassList));
+				thisRunFields.add(field);
+				
 			}
+		}
+		
+		for (Field field : thisRunFields)
+		{
+				returnedClassList.addAll(ReflectionManager.getDescendantClassList(field.getFieldClass(), parentClassList));
 		}
 		
 		return returnedClassList;
@@ -236,10 +251,15 @@ public class ReflectionManager {
 	
 	public String getDescriptionField()
 	{
-		return getDescriptionField(classClass);
+		return getDescriptionField(classClass,false);
 	}
 	
-	public String getDescriptionField(Class classClass)
+	public String getDescriptionField(Boolean withGetter)
+	{
+		return getDescriptionField(classClass,withGetter);
+	}
+	
+	public String getDescriptionField(Class classClass,Boolean withGetter)
 	{
 		String descriptionFields="";
 		String entity=parseName(classClass.getName());
@@ -252,12 +272,27 @@ public class ReflectionManager {
 			fieldList = getFieldList();
 		for (Field field: fieldList)
 		{
-			if (field.getFieldClass()==String.class)
+			for (Annotation annotation: field.getAnnotationList())
 			{
-				descriptionFields=descriptionFields+" "+entity+"."+field.getName()+"+' '+";
+				if (annotation.annotationType()==DescriptionField.class)
+				{
+					if (withGetter)
+						descriptionFields=descriptionFields+" "+entity+".get"+Utility.getFirstUpper(field.getName())+"()+' '+";
+					else
+						descriptionFields=descriptionFields+" "+entity+"."+field.getName()+"+' '+";
+
+				}
 			}
 		}
-		descriptionFields=descriptionFields.substring(0, descriptionFields.length()-5);
+		if (descriptionFields.length()>5)
+			descriptionFields=descriptionFields.substring(0, descriptionFields.length()-5);
+		else
+		{
+			if (withGetter)
+				descriptionFields=entity+".toString()";
+			else
+				descriptionFields=entity+"."+entity+"Id";
+		}
 		return descriptionFields;
 	}
 	
@@ -288,30 +323,45 @@ public class ReflectionManager {
 		String className = parseName();
 		for (Field field: fields)
 		{
-			if (field.getIsEnum())
+			if (ReflectionManager.hasDateBetween(field))
 			{
-				string=string+" ("+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(field.getName())+"()==null)? null : "+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(field.getName())+"().getValue(),";
+				string=string+manageSingleParam(className, field,  field.getName()+"From");
+				string=string+manageSingleParam(className, field,  field.getName()+"To");
 			}else
-			{
-				if (ReflectionManager.isTimeField(field))
-				{
-					string=string+"it.polimi.utils.Utility.formatTime("+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(field.getName())+"()),";
-				}
-				else
-				{
-					if (ReflectionManager.isDateField(field))
-					{
-						string=string+"it.polimi.utils.Utility.formatDate("+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(field.getName())+"()),";
-					}else
-					{
-						if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List"))
-							string=string+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(field.getName())+"List()==null? null :"+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(field.getName())+"List().get(0),";
-						else
-							string=string+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(field.getName())+"(),";
-					}
-				}}}
+				string=string+manageSingleParam(className, field,  field.getName());
+		
+		}
 		return string.substring(0, string.length()-1);
 	}
+	
+	private String manageSingleParam(String className,Field field, String fieldName)
+	{
+		String string="";
+		if (field.getIsEnum())
+		{
+			string=string+" ("+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(fieldName)+"()==null)? null : "+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(fieldName)+"().getValue(),";
+		}else
+		{
+			if (ReflectionManager.isTimeField(field))
+			{
+				string=string+"it.polimi.utils.Utility.formatTime("+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(fieldName)+"()),";
+			}
+			else
+			{
+				if (ReflectionManager.isDateField(field))
+				{
+					string=string+"it.polimi.utils.Utility.formatDate("+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(fieldName)+"()),";
+				}else
+				{
+					if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List"))
+						string=string+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(fieldName)+"List()==null? null :"+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(fieldName)+"List().get(0),";
+					else
+						string=string+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(fieldName)+"(),";
+				}
+			}}
+		return string;
+	}
+	
 	
 	public static Boolean isDateField(Field field)
 	{
@@ -359,25 +409,41 @@ public class ReflectionManager {
 	
 	public static Boolean hasIgnoreSearch(Field field)
 	{
-		return hasIgnoreAnnotation(field, IgnoreSearch.class);
+		return hasAnnotation(field, IgnoreSearch.class);
 	}
+	
+	public static Boolean hasTab(Field field)
+	{
+		return hasAnnotation(field, Tab.class);
+	}
+	
 	
 	public static Boolean hasExcelExport(Field field)
 	{
-		return hasIgnoreAnnotation(field, ExcelExport.class);
+		return hasAnnotation(field, ExcelExport.class);
 	}
 	
 	public static Boolean hasIgnoreUpdate(Field field)
 	{
-		return hasIgnoreAnnotation(field, IgnoreUpdate.class);
+		return hasAnnotation(field, IgnoreUpdate.class);
 	}
 	
 	public static Boolean hasIgnoreTableList(Field field)
 	{
-		return hasIgnoreAnnotation(field, IgnoreTableList.class);
+		return hasAnnotation(field, IgnoreTableList.class);
 	}
 	
-	private static Boolean hasIgnoreAnnotation(Field field,Class ignoreAnnotationClass)
+	public static Boolean hasManyToMany(Field field)
+	{
+		return hasAnnotation(field, ManyToMany.class);
+	}
+	
+	public static Boolean hasDateBetween(Field field)
+	{
+		return hasAnnotation(field, Between.class);
+	}
+	
+	private static Boolean hasAnnotation(Field field,Class ignoreAnnotationClass)
 	{
 		Annotation[] annotationList= field.getAnnotationList();
 		for (int i=0; i<annotationList.length; i++)
@@ -387,6 +453,19 @@ public class ReflectionManager {
 		}
 		return false;
 	}
+	
+	public static Boolean hasManyToManyAssociation (Class theClass,String parentClass)
+	{
+		ReflectionManager reflectionManager = new ReflectionManager(theClass);
+		
+		for (Field field: reflectionManager.getFieldList())
+		{
+			if ((reflectionManager.parseName(field.getFieldClass().getName()).equals(parentClass) || field.getFieldClass().getName().equals(parentClass))&& ReflectionManager.hasManyToMany(field))
+				return true;
+		}
+		return false;
+	}
+	
 	
 	public static List<String> getSubPackages(String mainPackage)
 	{
@@ -414,6 +493,18 @@ public class ReflectionManager {
 		return menuItemList;
 	}
 	
+
+
+	public static Class getRightParamClass(Field field) {
+		if (field.getIsEnum())
+			return Integer.class;
+		
+		if (ReflectionManager.isDateField(field))
+			return String.class;
+		
+		return field.getFieldClass();
+	}
+	
 	
 	public static Set<Class<?>> getClassInPackage(String thePackage)
 	{
@@ -421,6 +512,87 @@ public class ReflectionManager {
 		Set<Class<?>> allClasses = reflections.getTypesAnnotatedWith(Entity.class);
 		return allClasses;
 	}
+	
+	
+	public Boolean containFieldWithClass(Class fieldClass)
+	{
+		List<Field> fieldList = getFieldList();
+		for (Field field: fieldList)
+			if (field.getFieldClass()==fieldClass)
+				return true;
+		
+		return false;
+	}
+	
+	
+	public List<String> getTabsName()
+	{
+		List<String> tabNameList = new ArrayList<String>();
+		for (Field field: getFieldList())
+		{
+			for (Annotation annotation: field.getAnnotationList())
+			{
+				if (annotation.annotationType()==Tab.class)
+				{
+					for (Method method : annotation.annotationType().getDeclaredMethods()) {
+						if (method.getName().equals("name"))
+						{
+							Object value=null;
+							try {
+								value = method.invoke(annotation, (Object[])null);
+							} catch (IllegalAccessException
+									| IllegalArgumentException
+									| InvocationTargetException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							
+							if (!tabNameList.contains(value))
+								tabNameList.add((String) value);
+						}
+					}
+				}
+			}
+		}
+		if (tabNameList.size()==0)
+			tabNameList.add("Detail");
+		return tabNameList;
+	}
+	
+	public List<Field> getFieldByTabName(String tabName)
+	{
+		List<Field> fieldList = new ArrayList<Field>();
+		for (Field field: getFieldList())
+		{
+			if (ReflectionManager.hasTab(field))
+			{
+				for (Annotation annotation: field.getAnnotationList())
+				{
+					for (Method method : annotation.annotationType().getDeclaredMethods()) {
+						if (method.getName().equals("name"))
+						{
+							Object value=null;
+							try {
+								value = method.invoke(annotation, (Object[])null);
+								if (tabName.equals(""+value))
+									fieldList.add(field);
+
+							} catch (IllegalAccessException
+									| IllegalArgumentException
+									| InvocationTargetException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+					}
+				}
+			}
+		}
+		if (fieldList.size()==0  && tabName.equals("Detail")) //default every field
+			return getFieldList();
+		return fieldList;
+	}
+	
 	
 	public static void main(String[] args)
 	{
@@ -461,15 +633,12 @@ public class ReflectionManager {
 		{
 			System.out.println(string);
 		}
-	}
-
-	public static Class getRightParamClass(Field field) {
-		if (field.getIsEnum())
-			return Integer.class;
 		
-		if (ReflectionManager.isDateField(field))
-			return String.class;
 		
-		return field.getFieldClass();
+		System.out.println(reflectionManager.getDescriptionField(Mountain.class, false));
+		System.out.println(reflectionManager.getDescriptionField(Mountain.class, true));
+		
+		System.out.println("-----");
+		System.out.println(ReflectionManager.hasManyToManyAssociation(Paziente.class, Ambulatorio.class.getName()));
 	}
 }

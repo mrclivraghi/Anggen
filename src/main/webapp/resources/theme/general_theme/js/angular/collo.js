@@ -9,6 +9,11 @@ this.addEntity=function (entity)
 {
 this.entityList.push(entity);
 };
+this.emptyList= function(list)
+{
+while (list.length>0)
+list.pop();
+}
 this.setEntityList= function(entityList)
 { 
 while (this.entityList.length>0)
@@ -45,7 +50,8 @@ if (entity[val] != null)
 for (j = 0; j < entity[val].length; j++)
 this.selectedEntity[val]
 .push(entity[val][j]);
-}
+} else 
+this.emptyList(this.selectedEntity[val]);
 } else {
 if (val.toLowerCase().indexOf("time") > -1
 && typeof val == "string") {
@@ -60,51 +66,38 @@ this.selectedEntity[val] = entity[val];
 };
 this.search = function() {
 this.setSelectedEntity(null);
-var promise= $http.post("../collo/search",this.searchBean)
-.then( function(response) {
-return response.data;
-})
-.catch(function() {
-alert("error");
-});
+var promise= $http.post("../collo/search",this.searchBean);
+return promise; 
+};
+this.searchOne=function(entity) {
+this.setSelectedEntity(null);
+var promise= $http.get("../collo/"+entity.colloId);
 return promise; 
 };
 this.insert = function() {
-var promise= $http.put("../collo/",this.selectedEntity)
-.then( function(response) 
-{
-return response.data;
-})
-.catch(function() 
-{ 
-alert("error");
-});
+var promise= $http.put("../collo/",this.selectedEntity);
 return promise; 
 };
 this.update = function() {
-var promise= $http.post("../collo/",this.selectedEntity)
-.then( function(response) {
-return response.data;
-})
-.catch(function() { 
-alert("error");
-});
+var promise= $http.post("../collo/",this.selectedEntity);
 return promise; 
 }
 this.del = function() {
 var url="../collo/"+this.selectedEntity.colloId;
-var promise= $http["delete"](url)
-.then( function(response) {
-return response.data;
-})
-.catch(function() {
-alert("error");
-});
+var promise= $http["delete"](url);
 return promise; 
 }
+ this.initOrdineList= function()
+{
+var promise= $http
+.post("../ordine/search",
+{});
+return promise;
+};
 })
 .controller("colloController",function($scope,$http,colloService,ordineService,itemOrdineService,itemOrdineCodiceService)
 {
+//null
 $scope.searchBean=colloService.searchBean;
 $scope.entityList=colloService.entityList;
 $scope.selectedEntity=colloService.selectedEntity;
@@ -121,52 +114,93 @@ $scope.addNew= function()
 colloService.setSelectedEntity(null);
 colloService.setEntityList(null);
 colloService.selectedEntity.show=true;
-ordineService.selectedEntity.show=false;itemOrdineService.selectedEntity.show=false;itemOrdineCodiceService.selectedEntity.show=false;};
+ordineService.selectedEntity.show=false;itemOrdineService.selectedEntity.show=false;itemOrdineCodiceService.selectedEntity.show=false;$('#colloTabs li:eq(0) a').tab('show');
+};
 		
 $scope.search=function()
 {
 colloService.selectedEntity.show=false;
-colloService.search().then(function(data) { 
-colloService.setEntityList(data);
+colloService.search().then(function successCallback(response) {
+colloService.setEntityList(response.data);
+},function errorCallback(response) { 
+alert("error");
+return; 
 });
 };
 $scope.insert=function()
 {
 if (!$scope.colloDetailForm.$valid) return; 
-colloService.insert().then(function(data) { 
+colloService.insert().then(function successCallback(response) { 
 $scope.search();
+},function errorCallback(response) { 
+alert("error");
+return; 
 });
 };
 $scope.update=function()
 {
 if (!$scope.colloDetailForm.$valid) return; 
-ordineService.selectedEntity.show=false;itemOrdineService.selectedEntity.show=false;itemOrdineCodiceService.selectedEntity.show=false;colloService.update().then(function(data) { 
+ordineService.selectedEntity.show=false;itemOrdineService.selectedEntity.show=false;itemOrdineCodiceService.selectedEntity.show=false;colloService.update().then(function successCallback(response) { 
 $scope.search();
+},function errorCallback(response) { 
+alert("error");
+return; 
 });
 };
 $scope.del=function()
 {
-colloService.del().then(function(data) { 
+nullService.selectedEntity.collo=null;
+colloService.del().then(function successCallback(response) { 
 $scope.search();
+},function errorCallback(response) { 
+alert("error");
+return; 
 });
-};$scope.trueFalseValues=[true,false];$scope.showOrdineDetail= function(index)
+};
+$scope.trueFalseValues=[true,false];
+$scope.showOrdineDetail= function(index)
 {
 if (index!=null)
-ordineService.setSelectedEntity(colloService.selectedEntity.ordineList[index]);
-else 
-ordineService.setSelectedEntity(colloService.selectedEntity.ordine); 
+{
+ordineService.searchOne(colloService.selectedEntity.ordineList[index]).then(
+function successCallback(response) {
+console.log("response-ok");
+console.log(response);
+ordineService.setSelectedEntity(response.data[0]);
 ordineService.selectedEntity.show=true;
+  }, function errorCallback(response) {
+alert("error");
+return; 
+  }	
+);
+}
+else 
+{
+if (colloService.selectedEntity.ordine==null || colloService.selectedEntity.ordine==undefined)
+{
+ordineService.setSelectedEntity(null); 
+ordineService.selectedEntity.show=true; 
+}
+else
+ordineService.searchOne(colloService.selectedEntity.ordine).then(
+function successCallback(response) {
+ordineService.setSelectedEntity(response.data[0]);
+ordineService.selectedEntity.show=true;
+  }, function errorCallback(response) {
+alert("error");
+return; 
+  }	
+);
+}
+$('#ordineTabs li:eq(0) a').tab('show');
 };
 $scope.init=function()
 {
-$http
-.post("../ordine/search",
-{})
-.success(
-function(entityList) {
-colloService.childrenList.ordineList=entityList;
-}).error(function() {
+colloService.initOrdineList().then(function successCallback(response) {
+colloService.childrenList.ordineList=response.data;
+},function errorCallback(response) { 
 alert("error");
+return; 
 });
 }; 
 $scope.init();
@@ -188,9 +222,12 @@ columnDefs: [
 ,data: colloService.entityList
  };
 $scope.colloGridOptions.onRegisterApi = function(gridApi){
-gridApi.selection.on.rowSelectionChanged($scope,function(row){
+$scope.colloGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
 ordineService.selectedEntity.show=false;itemOrdineService.selectedEntity.show=false;itemOrdineCodiceService.selectedEntity.show=false;if (row.isSelected)
+{
 colloService.setSelectedEntity(row.entity);
+$('#colloTabs li:eq(0) a').tab('show');
+}
 else 
 colloService.setSelectedEntity(null);
 colloService.selectedEntity.show = row.isSelected;
@@ -223,6 +260,11 @@ this.addEntity=function (entity)
 {
 this.entityList.push(entity);
 };
+this.emptyList= function(list)
+{
+while (list.length>0)
+list.pop();
+}
 this.setEntityList= function(entityList)
 { 
 while (this.entityList.length>0)
@@ -254,7 +296,8 @@ if (entity[val] != null)
 for (j = 0; j < entity[val].length; j++)
 this.selectedEntity[val]
 .push(entity[val][j]);
-}
+} else 
+this.emptyList(this.selectedEntity[val]);
 } else {
 if (val.toLowerCase().indexOf("time") > -1
 && typeof val == "string") {
@@ -269,51 +312,45 @@ this.selectedEntity[val] = entity[val];
 };
 this.search = function() {
 this.setSelectedEntity(null);
-var promise= $http.post("../ordine/search",this.searchBean)
-.then( function(response) {
-return response.data;
-})
-.catch(function() {
-alert("error");
-});
+var promise= $http.post("../ordine/search",this.searchBean);
+return promise; 
+};
+this.searchOne=function(entity) {
+this.setSelectedEntity(null);
+var promise= $http.get("../ordine/"+entity.ordineId);
 return promise; 
 };
 this.insert = function() {
-var promise= $http.put("../ordine/",this.selectedEntity)
-.then( function(response) 
-{
-return response.data;
-})
-.catch(function() 
-{ 
-alert("error");
-});
+var promise= $http.put("../ordine/",this.selectedEntity);
 return promise; 
 };
 this.update = function() {
-var promise= $http.post("../ordine/",this.selectedEntity)
-.then( function(response) {
-return response.data;
-})
-.catch(function() { 
-alert("error");
-});
+var promise= $http.post("../ordine/",this.selectedEntity);
 return promise; 
 }
 this.del = function() {
 var url="../ordine/"+this.selectedEntity.ordineId;
-var promise= $http["delete"](url)
-.then( function(response) {
-return response.data;
-})
-.catch(function() {
-alert("error");
-});
+var promise= $http["delete"](url);
 return promise; 
 }
+ this.initColloList= function()
+{
+var promise= $http
+.post("../collo/search",
+{});
+return promise;
+};
+ this.initItemOrdineList= function()
+{
+var promise= $http
+.post("../itemOrdine/search",
+{});
+return promise;
+};
 })
 .controller("ordineController",function($scope,$http,ordineService,colloService,itemOrdineService,itemOrdineCodiceService)
 {
+//collo
 $scope.searchBean=ordineService.searchBean;
 $scope.entityList=ordineService.entityList;
 $scope.selectedEntity=ordineService.selectedEntity;
@@ -327,17 +364,22 @@ ordineService.setEntityList(null);
 }
 $scope.updateParent = function(toDo)
 {
-colloService.update().then(function(data) {
-colloService.setSelectedEntity(data);
+colloService.update().then(function successCallback(response) {
+colloService.setSelectedEntity(response);
 if (toDo != null)
 toDo();
-});
+},function errorCallback(response) {      
+alert("error");
+return; 
+}
+);
 };
 $scope.addNew= function()
 {
 ordineService.setSelectedEntity(null);
 ordineService.setEntityList(null);
 ordineService.selectedEntity.show=true;
+$('#ordineTabs li:eq(0) a').tab('show');
 };
 		
 $scope.search=function()
@@ -349,19 +391,28 @@ delete ordineService.searchBean.collo;
 ordineService.searchBean.itemOrdineList=[];
 ordineService.searchBean.itemOrdineList.push(ordineService.searchBean.itemOrdine);
 delete ordineService.searchBean.itemOrdine; 
-ordineService.search().then(function(data) { 
-ordineService.setEntityList(data);
+ordineService.search().then(function successCallback(response) {
+ordineService.setEntityList(response.data);
+},function errorCallback(response) { 
+alert("error");
+return; 
 });
 };
 $scope.insert=function()
 {
 if (!$scope.ordineDetailForm.$valid) return; 
 ordineService.selectedEntity.show=false;
-
-colloService.selectedEntity.ordine=ordineService.selectedEntity;
-
-$scope.updateParent();
-
+ordineService.selectedEntity.collo={};
+ordineService.selectedEntity.collo.colloId=colloService.selectedEntity.colloId;
+ordineService.insert().then(function successCallBack(response) { 
+colloService.selectedEntity.ordine=response.data;
+colloService.initOrdineList().then(function(response) {
+colloService.childrenList.ordineList=response.data;
+});
+},function errorCallback(response) { 
+alert("error");
+return; 
+});
 };
 $scope.update=function()
 {
@@ -370,50 +421,123 @@ ordineService.selectedEntity.show=false;
 
 colloService.selectedEntity.ordine=ordineService.selectedEntity;
 
+ordineService.update().then(function successCallback(response){
+ordineService.setSelectedEntity(response.data);
+},function errorCallback(response) { 
+alert("error");
+return; 
+});
+};
+$scope.remove= function()
+{
+ordineService.selectedEntity.show=false;
+colloService.selectedEntity.ordine=null;
+ordineService.setSelectedEntity(null);
 $scope.updateParent();
 };
 $scope.del=function()
 {
-ordineService.selectedEntity.show=false;
-colloService.selectedEntity.ordine=null;ordineService.setSelectedEntity(null);
+colloService.selectedEntity.ordine=null;
 $scope.updateParent();
-};$scope.trueFalseValues=[true,false];$scope.showColloDetail= function(index)
+ordineService.del().then(function successCallback(response) { 
+ordineService.setSelectedEntity(null);
+colloService.initOrdineList().then(function(response) {
+colloService.childrenList.ordineList=response.data;
+});
+},function errorCallback(response) { 
+alert("error");
+return; 
+});
+};
+$scope.trueFalseValues=[true,false];
+$scope.showColloDetail= function(index)
 {
 if (index!=null)
-colloService.setSelectedEntity(ordineService.selectedEntity.colloList[index]);
-else 
-colloService.setSelectedEntity(ordineService.selectedEntity.collo); 
+{
+colloService.searchOne(ordineService.selectedEntity.colloList[index]).then(
+function successCallback(response) {
+console.log("response-ok");
+console.log(response);
+colloService.setSelectedEntity(response.data[0]);
 colloService.selectedEntity.show=true;
+  }, function errorCallback(response) {
+alert("error");
+return; 
+  }	
+);
+}
+else 
+{
+if (ordineService.selectedEntity.collo==null || ordineService.selectedEntity.collo==undefined)
+{
+colloService.setSelectedEntity(null); 
+colloService.selectedEntity.show=true; 
+}
+else
+colloService.searchOne(ordineService.selectedEntity.collo).then(
+function successCallback(response) {
+colloService.setSelectedEntity(response.data[0]);
+colloService.selectedEntity.show=true;
+  }, function errorCallback(response) {
+alert("error");
+return; 
+  }	
+);
+}
+$('#colloTabs li:eq(0) a').tab('show');
 };
 $scope.showItemOrdineDetail= function(index)
 {
 if (index!=null)
-itemOrdineService.setSelectedEntity(ordineService.selectedEntity.itemOrdineList[index]);
-else 
-itemOrdineService.setSelectedEntity(ordineService.selectedEntity.itemOrdine); 
+{
+itemOrdineService.searchOne(ordineService.selectedEntity.itemOrdineList[index]).then(
+function successCallback(response) {
+console.log("response-ok");
+console.log(response);
+itemOrdineService.setSelectedEntity(response.data[0]);
 itemOrdineService.selectedEntity.show=true;
+  }, function errorCallback(response) {
+alert("error");
+return; 
+  }	
+);
+}
+else 
+{
+if (ordineService.selectedEntity.itemOrdine==null || ordineService.selectedEntity.itemOrdine==undefined)
+{
+itemOrdineService.setSelectedEntity(null); 
+itemOrdineService.selectedEntity.show=true; 
+}
+else
+itemOrdineService.searchOne(ordineService.selectedEntity.itemOrdine).then(
+function successCallback(response) {
+itemOrdineService.setSelectedEntity(response.data[0]);
+itemOrdineService.selectedEntity.show=true;
+  }, function errorCallback(response) {
+alert("error");
+return; 
+  }	
+);
+}
+$('#itemOrdineTabs li:eq(0) a').tab('show');
 };
 $scope.init=function()
 {
-$http
-.post("../collo/search",
-{})
-.success(
-function(entityList) {
-ordineService.childrenList.colloList=entityList;
-}).error(function() {
+ordineService.initColloList().then(function successCallback(response) {
+ordineService.childrenList.colloList=response.data;
+},function errorCallback(response) { 
 alert("error");
+return; 
 });
-$http
-.post("../itemOrdine/search",
-{})
-.success(
-function(entityList) {
-ordineService.childrenList.itemOrdineList=entityList;
-}).error(function() {
+ordineService.initItemOrdineList().then(function successCallback(response) {
+ordineService.childrenList.itemOrdineList=response.data;
+},function errorCallback(response) { 
 alert("error");
+return; 
 });
 }; 
+$scope.init();
 $scope.colloListGridOptions = {
 enablePaginationControls: true,
 multiSelect: false,
@@ -431,9 +555,15 @@ columnDefs: [
 ,data: $scope.selectedEntity.colloList
  };
 $scope.colloListGridOptions.onRegisterApi = function(gridApi){
-gridApi.selection.on.rowSelectionChanged($scope,function(row){
+$scope.colloGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
-colloService.setSelectedEntity(row.entity);
+{
+colloService.searchOne(row.entity).then(function(response) { 
+console.log(response.data);
+colloService.setSelectedEntity(response.data[0]);
+});
+$('#colloTabs li:eq(0) a').tab('show');
+}
 else 
 colloService.setSelectedEntity(null);
 colloService.selectedEntity.show = row.isSelected;
@@ -476,9 +606,15 @@ columnDefs: [
 ,data: $scope.selectedEntity.itemOrdineList
  };
 $scope.itemOrdineListGridOptions.onRegisterApi = function(gridApi){
-gridApi.selection.on.rowSelectionChanged($scope,function(row){
+$scope.itemOrdineGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
-itemOrdineService.setSelectedEntity(row.entity);
+{
+itemOrdineService.searchOne(row.entity).then(function(response) { 
+console.log(response.data);
+itemOrdineService.setSelectedEntity(response.data[0]);
+});
+$('#itemOrdineTabs li:eq(0) a').tab('show');
+}
 else 
 itemOrdineService.setSelectedEntity(null);
 itemOrdineService.selectedEntity.show = row.isSelected;
@@ -492,6 +628,9 @@ column: {style:{Font:{Bold:"1"}}}
 };
 alasql('SELECT * INTO XLSXML("ordine.xls",?) FROM ?',[mystyle,$scope.entityList]);
 };
+$scope.saveLinkedCollo= function() {
+ordineService.selectedEntity.colloList.push(ordineService.selectedEntity.collo);
+}
 $scope.downloadColloList=function()
 {
 var mystyle = {
@@ -500,6 +639,9 @@ column: {style:{Font:{Bold:"1"}}}
 };
 alasql('SELECT * INTO XLSXML("collo.xls",?) FROM ?',[mystyle,$scope.selectedEntity.colloList]);
 };
+$scope.saveLinkedItemOrdine= function() {
+ordineService.selectedEntity.itemOrdineList.push(ordineService.selectedEntity.itemOrdine);
+}
 $scope.downloadItemOrdineList=function()
 {
 var mystyle = {
@@ -519,6 +661,11 @@ this.addEntity=function (entity)
 {
 this.entityList.push(entity);
 };
+this.emptyList= function(list)
+{
+while (list.length>0)
+list.pop();
+}
 this.setEntityList= function(entityList)
 { 
 while (this.entityList.length>0)
@@ -550,7 +697,8 @@ if (entity[val] != null)
 for (j = 0; j < entity[val].length; j++)
 this.selectedEntity[val]
 .push(entity[val][j]);
-}
+} else 
+this.emptyList(this.selectedEntity[val]);
 } else {
 if (val.toLowerCase().indexOf("time") > -1
 && typeof val == "string") {
@@ -565,51 +713,45 @@ this.selectedEntity[val] = entity[val];
 };
 this.search = function() {
 this.setSelectedEntity(null);
-var promise= $http.post("../itemOrdine/search",this.searchBean)
-.then( function(response) {
-return response.data;
-})
-.catch(function() {
-alert("error");
-});
+var promise= $http.post("../itemOrdine/search",this.searchBean);
+return promise; 
+};
+this.searchOne=function(entity) {
+this.setSelectedEntity(null);
+var promise= $http.get("../itemOrdine/"+entity.itemOrdineId);
 return promise; 
 };
 this.insert = function() {
-var promise= $http.put("../itemOrdine/",this.selectedEntity)
-.then( function(response) 
-{
-return response.data;
-})
-.catch(function() 
-{ 
-alert("error");
-});
+var promise= $http.put("../itemOrdine/",this.selectedEntity);
 return promise; 
 };
 this.update = function() {
-var promise= $http.post("../itemOrdine/",this.selectedEntity)
-.then( function(response) {
-return response.data;
-})
-.catch(function() { 
-alert("error");
-});
+var promise= $http.post("../itemOrdine/",this.selectedEntity);
 return promise; 
 }
 this.del = function() {
 var url="../itemOrdine/"+this.selectedEntity.itemOrdineId;
-var promise= $http["delete"](url)
-.then( function(response) {
-return response.data;
-})
-.catch(function() {
-alert("error");
-});
+var promise= $http["delete"](url);
 return promise; 
 }
-})
-.controller("itemOrdineController",function($scope,$http,itemOrdineService,ordineService,colloService,itemOrdineCodiceService)
+ this.initOrdineList= function()
 {
+var promise= $http
+.post("../ordine/search",
+{});
+return promise;
+};
+ this.initItemOrdineCodiceList= function()
+{
+var promise= $http
+.post("../itemOrdineCodice/search",
+{});
+return promise;
+};
+})
+.controller("itemOrdineController",function($scope,$http,itemOrdineService,ordineService,itemOrdineCodiceService,colloService)
+{
+//ordine
 $scope.searchBean=itemOrdineService.searchBean;
 $scope.entityList=itemOrdineService.entityList;
 $scope.selectedEntity=itemOrdineService.selectedEntity;
@@ -623,17 +765,22 @@ itemOrdineService.setEntityList(null);
 }
 $scope.updateParent = function(toDo)
 {
-ordineService.update().then(function(data) {
-ordineService.setSelectedEntity(data);
+ordineService.update().then(function successCallback(response) {
+ordineService.setSelectedEntity(response);
 if (toDo != null)
 toDo();
-});
+},function errorCallback(response) {      
+alert("error");
+return; 
+}
+);
 };
 $scope.addNew= function()
 {
 itemOrdineService.setSelectedEntity(null);
 itemOrdineService.setEntityList(null);
 itemOrdineService.selectedEntity.show=true;
+$('#itemOrdineTabs li:eq(0) a').tab('show');
 };
 		
 $scope.search=function()
@@ -642,19 +789,25 @@ itemOrdineService.selectedEntity.show=false;
 itemOrdineService.searchBean.itemOrdineCodiceList=[];
 itemOrdineService.searchBean.itemOrdineCodiceList.push(itemOrdineService.searchBean.itemOrdineCodice);
 delete itemOrdineService.searchBean.itemOrdineCodice; 
-itemOrdineService.search().then(function(data) { 
-itemOrdineService.setEntityList(data);
+itemOrdineService.search().then(function successCallback(response) {
+itemOrdineService.setEntityList(response.data);
+},function errorCallback(response) { 
+alert("error");
+return; 
 });
 };
 $scope.insert=function()
 {
 if (!$scope.itemOrdineDetailForm.$valid) return; 
 itemOrdineService.selectedEntity.show=false;
-
-ordineService.selectedEntity.itemOrdineList.push(itemOrdineService.selectedEntity);
-
-$scope.updateParent();
-
+itemOrdineService.selectedEntity.ordine={};
+itemOrdineService.selectedEntity.ordine.ordineId=ordineService.selectedEntity.ordineId;
+itemOrdineService.insert().then(function successCallBack(response) { 
+ordineService.selectedEntity.itemOrdineList.push(response.data);
+},function errorCallback(response) { 
+alert("error");
+return; 
+});
 };
 $scope.update=function()
 {
@@ -673,9 +826,14 @@ ordineService.selectedEntity.itemOrdineList.splice(i,1);
 
 ordineService.selectedEntity.itemOrdineList.push(itemOrdineService.selectedEntity);
 
-$scope.updateParent();
+itemOrdineService.update().then(function successCallback(response){
+itemOrdineService.setSelectedEntity(response.data);
+},function errorCallback(response) { 
+alert("error");
+return; 
+});
 };
-$scope.del=function()
+$scope.remove= function()
 {
 itemOrdineService.selectedEntity.show=false;
 for (i=0; i<ordineService.selectedEntity.itemOrdineList.length; i++)
@@ -685,43 +843,114 @@ ordineService.selectedEntity.itemOrdineList.splice(i,1);
 }
 itemOrdineService.setSelectedEntity(null);
 $scope.updateParent();
-};$scope.trueFalseValues=[true,false];$scope.showOrdineDetail= function(index)
+};
+$scope.del=function()
+{
+for (i=0; i<ordineService.selectedEntity.itemOrdineList.length; i++)
+{
+if (ordineService.selectedEntity.itemOrdineList[i].itemOrdineId==itemOrdineService.selectedEntity.itemOrdineId)
+ordineService.selectedEntity.itemOrdineList.splice(i,1);
+}
+$scope.updateParent();
+itemOrdineService.del().then(function successCallback(response) { 
+itemOrdineService.setSelectedEntity(null);
+ordineService.initItemOrdineList().then(function(response) {
+ordineService.childrenList.itemOrdineList=response.data;
+});
+},function errorCallback(response) { 
+alert("error");
+return; 
+});
+};
+$scope.trueFalseValues=[true,false];
+$scope.showOrdineDetail= function(index)
 {
 if (index!=null)
-ordineService.setSelectedEntity(itemOrdineService.selectedEntity.ordineList[index]);
-else 
-ordineService.setSelectedEntity(itemOrdineService.selectedEntity.ordine); 
+{
+ordineService.searchOne(itemOrdineService.selectedEntity.ordineList[index]).then(
+function successCallback(response) {
+console.log("response-ok");
+console.log(response);
+ordineService.setSelectedEntity(response.data[0]);
 ordineService.selectedEntity.show=true;
+  }, function errorCallback(response) {
+alert("error");
+return; 
+  }	
+);
+}
+else 
+{
+if (itemOrdineService.selectedEntity.ordine==null || itemOrdineService.selectedEntity.ordine==undefined)
+{
+ordineService.setSelectedEntity(null); 
+ordineService.selectedEntity.show=true; 
+}
+else
+ordineService.searchOne(itemOrdineService.selectedEntity.ordine).then(
+function successCallback(response) {
+ordineService.setSelectedEntity(response.data[0]);
+ordineService.selectedEntity.show=true;
+  }, function errorCallback(response) {
+alert("error");
+return; 
+  }	
+);
+}
+$('#ordineTabs li:eq(0) a').tab('show');
 };
 $scope.showItemOrdineCodiceDetail= function(index)
 {
 if (index!=null)
-itemOrdineCodiceService.setSelectedEntity(itemOrdineService.selectedEntity.itemOrdineCodiceList[index]);
-else 
-itemOrdineCodiceService.setSelectedEntity(itemOrdineService.selectedEntity.itemOrdineCodice); 
+{
+itemOrdineCodiceService.searchOne(itemOrdineService.selectedEntity.itemOrdineCodiceList[index]).then(
+function successCallback(response) {
+console.log("response-ok");
+console.log(response);
+itemOrdineCodiceService.setSelectedEntity(response.data[0]);
 itemOrdineCodiceService.selectedEntity.show=true;
+  }, function errorCallback(response) {
+alert("error");
+return; 
+  }	
+);
+}
+else 
+{
+if (itemOrdineService.selectedEntity.itemOrdineCodice==null || itemOrdineService.selectedEntity.itemOrdineCodice==undefined)
+{
+itemOrdineCodiceService.setSelectedEntity(null); 
+itemOrdineCodiceService.selectedEntity.show=true; 
+}
+else
+itemOrdineCodiceService.searchOne(itemOrdineService.selectedEntity.itemOrdineCodice).then(
+function successCallback(response) {
+itemOrdineCodiceService.setSelectedEntity(response.data[0]);
+itemOrdineCodiceService.selectedEntity.show=true;
+  }, function errorCallback(response) {
+alert("error");
+return; 
+  }	
+);
+}
+$('#itemOrdineCodiceTabs li:eq(0) a').tab('show');
 };
 $scope.init=function()
 {
-$http
-.post("../ordine/search",
-{})
-.success(
-function(entityList) {
-itemOrdineService.childrenList.ordineList=entityList;
-}).error(function() {
+itemOrdineService.initOrdineList().then(function successCallback(response) {
+itemOrdineService.childrenList.ordineList=response.data;
+},function errorCallback(response) { 
 alert("error");
+return; 
 });
-$http
-.post("../itemOrdineCodice/search",
-{})
-.success(
-function(entityList) {
-itemOrdineService.childrenList.itemOrdineCodiceList=entityList;
-}).error(function() {
+itemOrdineService.initItemOrdineCodiceList().then(function successCallback(response) {
+itemOrdineService.childrenList.itemOrdineCodiceList=response.data;
+},function errorCallback(response) { 
 alert("error");
+return; 
 });
 }; 
+$scope.init();
 $scope.itemOrdineCodiceListGridOptions = {
 enablePaginationControls: true,
 multiSelect: false,
@@ -746,9 +975,15 @@ columnDefs: [
 ,data: $scope.selectedEntity.itemOrdineCodiceList
  };
 $scope.itemOrdineCodiceListGridOptions.onRegisterApi = function(gridApi){
-gridApi.selection.on.rowSelectionChanged($scope,function(row){
+$scope.itemOrdineCodiceGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
-itemOrdineCodiceService.setSelectedEntity(row.entity);
+{
+itemOrdineCodiceService.searchOne(row.entity).then(function(response) { 
+console.log(response.data);
+itemOrdineCodiceService.setSelectedEntity(response.data[0]);
+});
+$('#itemOrdineCodiceTabs li:eq(0) a').tab('show');
+}
 else 
 itemOrdineCodiceService.setSelectedEntity(null);
 itemOrdineCodiceService.selectedEntity.show = row.isSelected;
@@ -770,6 +1005,9 @@ column: {style:{Font:{Bold:"1"}}}
 };
 alasql('SELECT * INTO XLSXML("ordine.xls",?) FROM ?',[mystyle,$scope.selectedEntity.ordineList]);
 };
+$scope.saveLinkedItemOrdineCodice= function() {
+itemOrdineService.selectedEntity.itemOrdineCodiceList.push(itemOrdineService.selectedEntity.itemOrdineCodice);
+}
 $scope.downloadItemOrdineCodiceList=function()
 {
 var mystyle = {
@@ -789,6 +1027,11 @@ this.addEntity=function (entity)
 {
 this.entityList.push(entity);
 };
+this.emptyList= function(list)
+{
+while (list.length>0)
+list.pop();
+}
 this.setEntityList= function(entityList)
 { 
 while (this.entityList.length>0)
@@ -820,7 +1063,8 @@ if (entity[val] != null)
 for (j = 0; j < entity[val].length; j++)
 this.selectedEntity[val]
 .push(entity[val][j]);
-}
+} else 
+this.emptyList(this.selectedEntity[val]);
 } else {
 if (val.toLowerCase().indexOf("time") > -1
 && typeof val == "string") {
@@ -835,51 +1079,38 @@ this.selectedEntity[val] = entity[val];
 };
 this.search = function() {
 this.setSelectedEntity(null);
-var promise= $http.post("../itemOrdineCodice/search",this.searchBean)
-.then( function(response) {
-return response.data;
-})
-.catch(function() {
-alert("error");
-});
+var promise= $http.post("../itemOrdineCodice/search",this.searchBean);
+return promise; 
+};
+this.searchOne=function(entity) {
+this.setSelectedEntity(null);
+var promise= $http.get("../itemOrdineCodice/"+entity.itemOrdineCodiceId);
 return promise; 
 };
 this.insert = function() {
-var promise= $http.put("../itemOrdineCodice/",this.selectedEntity)
-.then( function(response) 
-{
-return response.data;
-})
-.catch(function() 
-{ 
-alert("error");
-});
+var promise= $http.put("../itemOrdineCodice/",this.selectedEntity);
 return promise; 
 };
 this.update = function() {
-var promise= $http.post("../itemOrdineCodice/",this.selectedEntity)
-.then( function(response) {
-return response.data;
-})
-.catch(function() { 
-alert("error");
-});
+var promise= $http.post("../itemOrdineCodice/",this.selectedEntity);
 return promise; 
 }
 this.del = function() {
 var url="../itemOrdineCodice/"+this.selectedEntity.itemOrdineCodiceId;
-var promise= $http["delete"](url)
-.then( function(response) {
-return response.data;
-})
-.catch(function() {
-alert("error");
-});
+var promise= $http["delete"](url);
 return promise; 
 }
+ this.initItemOrdineList= function()
+{
+var promise= $http
+.post("../itemOrdine/search",
+{});
+return promise;
+};
 })
 .controller("itemOrdineCodiceController",function($scope,$http,itemOrdineCodiceService,itemOrdineService,ordineService,colloService)
 {
+//itemOrdine
 $scope.searchBean=itemOrdineCodiceService.searchBean;
 $scope.entityList=itemOrdineCodiceService.entityList;
 $scope.selectedEntity=itemOrdineCodiceService.selectedEntity;
@@ -893,35 +1124,46 @@ itemOrdineCodiceService.setEntityList(null);
 }
 $scope.updateParent = function(toDo)
 {
-itemOrdineService.update().then(function(data) {
-itemOrdineService.setSelectedEntity(data);
+itemOrdineService.update().then(function successCallback(response) {
+itemOrdineService.setSelectedEntity(response);
 if (toDo != null)
 toDo();
-});
+},function errorCallback(response) {      
+alert("error");
+return; 
+}
+);
 };
 $scope.addNew= function()
 {
 itemOrdineCodiceService.setSelectedEntity(null);
 itemOrdineCodiceService.setEntityList(null);
 itemOrdineCodiceService.selectedEntity.show=true;
+$('#itemOrdineCodiceTabs li:eq(0) a').tab('show');
 };
 		
 $scope.search=function()
 {
 itemOrdineCodiceService.selectedEntity.show=false;
-itemOrdineCodiceService.search().then(function(data) { 
-itemOrdineCodiceService.setEntityList(data);
+itemOrdineCodiceService.search().then(function successCallback(response) {
+itemOrdineCodiceService.setEntityList(response.data);
+},function errorCallback(response) { 
+alert("error");
+return; 
 });
 };
 $scope.insert=function()
 {
 if (!$scope.itemOrdineCodiceDetailForm.$valid) return; 
 itemOrdineCodiceService.selectedEntity.show=false;
-
-itemOrdineService.selectedEntity.itemOrdineCodiceList.push(itemOrdineCodiceService.selectedEntity);
-
-$scope.updateParent();
-
+itemOrdineCodiceService.selectedEntity.itemOrdine={};
+itemOrdineCodiceService.selectedEntity.itemOrdine.itemOrdineId=itemOrdineService.selectedEntity.itemOrdineId;
+itemOrdineCodiceService.insert().then(function successCallBack(response) { 
+itemOrdineService.selectedEntity.itemOrdineCodiceList.push(response.data);
+},function errorCallback(response) { 
+alert("error");
+return; 
+});
 };
 $scope.update=function()
 {
@@ -940,9 +1182,14 @@ itemOrdineService.selectedEntity.itemOrdineCodiceList.splice(i,1);
 
 itemOrdineService.selectedEntity.itemOrdineCodiceList.push(itemOrdineCodiceService.selectedEntity);
 
-$scope.updateParent();
+itemOrdineCodiceService.update().then(function successCallback(response){
+itemOrdineCodiceService.setSelectedEntity(response.data);
+},function errorCallback(response) { 
+alert("error");
+return; 
+});
 };
-$scope.del=function()
+$scope.remove= function()
 {
 itemOrdineCodiceService.selectedEntity.show=false;
 for (i=0; i<itemOrdineService.selectedEntity.itemOrdineCodiceList.length; i++)
@@ -952,26 +1199,72 @@ itemOrdineService.selectedEntity.itemOrdineCodiceList.splice(i,1);
 }
 itemOrdineCodiceService.setSelectedEntity(null);
 $scope.updateParent();
-};$scope.trueFalseValues=[true,false];$scope.showItemOrdineDetail= function(index)
+};
+$scope.del=function()
+{
+for (i=0; i<itemOrdineService.selectedEntity.itemOrdineCodiceList.length; i++)
+{
+if (itemOrdineService.selectedEntity.itemOrdineCodiceList[i].itemOrdineCodiceId==itemOrdineCodiceService.selectedEntity.itemOrdineCodiceId)
+itemOrdineService.selectedEntity.itemOrdineCodiceList.splice(i,1);
+}
+$scope.updateParent();
+itemOrdineCodiceService.del().then(function successCallback(response) { 
+itemOrdineCodiceService.setSelectedEntity(null);
+itemOrdineService.initItemOrdineCodiceList().then(function(response) {
+itemOrdineService.childrenList.itemOrdineCodiceList=response.data;
+});
+},function errorCallback(response) { 
+alert("error");
+return; 
+});
+};
+$scope.trueFalseValues=[true,false];
+$scope.showItemOrdineDetail= function(index)
 {
 if (index!=null)
-itemOrdineService.setSelectedEntity(itemOrdineCodiceService.selectedEntity.itemOrdineList[index]);
-else 
-itemOrdineService.setSelectedEntity(itemOrdineCodiceService.selectedEntity.itemOrdine); 
+{
+itemOrdineService.searchOne(itemOrdineCodiceService.selectedEntity.itemOrdineList[index]).then(
+function successCallback(response) {
+console.log("response-ok");
+console.log(response);
+itemOrdineService.setSelectedEntity(response.data[0]);
 itemOrdineService.selectedEntity.show=true;
+  }, function errorCallback(response) {
+alert("error");
+return; 
+  }	
+);
+}
+else 
+{
+if (itemOrdineCodiceService.selectedEntity.itemOrdine==null || itemOrdineCodiceService.selectedEntity.itemOrdine==undefined)
+{
+itemOrdineService.setSelectedEntity(null); 
+itemOrdineService.selectedEntity.show=true; 
+}
+else
+itemOrdineService.searchOne(itemOrdineCodiceService.selectedEntity.itemOrdine).then(
+function successCallback(response) {
+itemOrdineService.setSelectedEntity(response.data[0]);
+itemOrdineService.selectedEntity.show=true;
+  }, function errorCallback(response) {
+alert("error");
+return; 
+  }	
+);
+}
+$('#itemOrdineTabs li:eq(0) a').tab('show');
 };
 $scope.init=function()
 {
-$http
-.post("../itemOrdine/search",
-{})
-.success(
-function(entityList) {
-itemOrdineCodiceService.childrenList.itemOrdineList=entityList;
-}).error(function() {
+itemOrdineCodiceService.initItemOrdineList().then(function successCallback(response) {
+itemOrdineCodiceService.childrenList.itemOrdineList=response.data;
+},function errorCallback(response) { 
 alert("error");
+return; 
 });
 }; 
+$scope.init();
 $scope.downloadEntityList=function()
 {
 var mystyle = {

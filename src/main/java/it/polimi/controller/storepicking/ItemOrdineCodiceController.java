@@ -3,7 +3,10 @@ package it.polimi.controller.storepicking;
 
 import java.util.List;
 import it.polimi.model.storepicking.ItemOrdineCodice;
+import it.polimi.searchbean.storepicking.ItemOrdineCodiceSearchBean;
 import it.polimi.service.storepicking.ItemOrdineCodiceService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -19,6 +22,7 @@ public class ItemOrdineCodiceController {
 
     @Autowired
     public ItemOrdineCodiceService itemOrdineCodiceService;
+    private final static Logger log = LoggerFactory.getLogger(ItemOrdineCodice.class);
 
     @RequestMapping(method = RequestMethod.GET)
     public String manage() {
@@ -29,10 +33,13 @@ public class ItemOrdineCodiceController {
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ResponseEntity search(
         @RequestBody
-        ItemOrdineCodice itemOrdineCodice) {
+        ItemOrdineCodiceSearchBean itemOrdineCodice) {
         List<ItemOrdineCodice> itemOrdineCodiceList;
+        if (itemOrdineCodice.getItemOrdineCodiceId()!=null)
+         log.info("Searching itemOrdineCodice like {}",itemOrdineCodice.toString());
         itemOrdineCodiceList=itemOrdineCodiceService.find(itemOrdineCodice);
         getRightMapping(itemOrdineCodiceList);
+         log.info("Search: returning {} itemOrdineCodice.",itemOrdineCodiceList.size());
         return ResponseEntity.ok().body(itemOrdineCodiceList);
     }
 
@@ -41,8 +48,10 @@ public class ItemOrdineCodiceController {
     public ResponseEntity getitemOrdineCodiceById(
         @PathVariable
         String itemOrdineCodiceId) {
+        log.info("Searching itemOrdineCodice with id {}",itemOrdineCodiceId);
         List<ItemOrdineCodice> itemOrdineCodiceList=itemOrdineCodiceService.findById(java.lang.Integer.valueOf(itemOrdineCodiceId));
         getRightMapping(itemOrdineCodiceList);
+         log.info("Search: returning {} itemOrdineCodice.",itemOrdineCodiceList.size());
         return ResponseEntity.ok().body(itemOrdineCodiceList);
     }
 
@@ -51,6 +60,7 @@ public class ItemOrdineCodiceController {
     public ResponseEntity deleteitemOrdineCodiceById(
         @PathVariable
         String itemOrdineCodiceId) {
+        log.info("Deleting itemOrdineCodice with id {}",itemOrdineCodiceId);
         itemOrdineCodiceService.deleteById(java.lang.Integer.valueOf(itemOrdineCodiceId));
         return ResponseEntity.ok().build();
     }
@@ -60,8 +70,10 @@ public class ItemOrdineCodiceController {
     public ResponseEntity insertitemOrdineCodice(
         @RequestBody
         ItemOrdineCodice itemOrdineCodice) {
+        log.info("Inserting itemOrdineCodice like {}",itemOrdineCodice.toString());
         ItemOrdineCodice inserteditemOrdineCodice=itemOrdineCodiceService.insert(itemOrdineCodice);
         getRightMapping(inserteditemOrdineCodice);
+        log.info("Inserted itemOrdineCodice with id {}",inserteditemOrdineCodice.getItemOrdineCodiceId());
         return ResponseEntity.ok().body(inserteditemOrdineCodice);
     }
 
@@ -70,6 +82,7 @@ public class ItemOrdineCodiceController {
     public ResponseEntity updateitemOrdineCodice(
         @RequestBody
         ItemOrdineCodice itemOrdineCodice) {
+        log.info("Updating itemOrdineCodice with id {}",itemOrdineCodice.getItemOrdineCodiceId());
         ItemOrdineCodice updateditemOrdineCodice=itemOrdineCodiceService.update(itemOrdineCodice);
         getRightMapping(updateditemOrdineCodice);
         return ResponseEntity.ok().body(updateditemOrdineCodice);
@@ -86,28 +99,8 @@ public class ItemOrdineCodiceController {
     private void getRightMapping(ItemOrdineCodice itemOrdineCodice) {
         if (itemOrdineCodice.getItemOrdine()!=null)
         {
-        if (itemOrdineCodice.getItemOrdine().getOrdine()!=null)
-        {
-        if (itemOrdineCodice.getItemOrdine().getOrdine().getColloList()!=null)
-        {
-        for (it.polimi.model.storepicking.Collo collo : itemOrdineCodice.getItemOrdine().getOrdine().getColloList())
-        {
-        if (collo.getOrdine()!=null)
-        {
-        //collo.getOrdine()
-        collo.setOrdine(null);
-        }
-        }
-        }
-        if (itemOrdineCodice.getItemOrdine().getOrdine().getItemOrdineList()!=null)
-        {
-        itemOrdineCodice.getItemOrdine().getOrdine().setItemOrdineList(null);
-        }
-        }
-        if (itemOrdineCodice.getItemOrdine().getItemOrdineCodiceList()!=null)
-        {
+        itemOrdineCodice.getItemOrdine().setOrdine(null);
         itemOrdineCodice.getItemOrdine().setItemOrdineCodiceList(null);
-        }
         }
     }
 

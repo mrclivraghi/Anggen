@@ -9,6 +9,11 @@ this.addEntity=function (entity)
 {
 this.entityList.push(entity);
 };
+this.emptyList= function(list)
+{
+while (list.length>0)
+list.pop();
+}
 this.setEntityList= function(entityList)
 { 
 while (this.entityList.length>0)
@@ -45,7 +50,8 @@ if (entity[val] != null)
 for (j = 0; j < entity[val].length; j++)
 this.selectedEntity[val]
 .push(entity[val][j]);
-}
+} else 
+this.emptyList(this.selectedEntity[val]);
 } else {
 if (val.toLowerCase().indexOf("time") > -1
 && typeof val == "string") {
@@ -60,51 +66,31 @@ this.selectedEntity[val] = entity[val];
 };
 this.search = function() {
 this.setSelectedEntity(null);
-var promise= $http.post("../example/search",this.searchBean)
-.then( function(response) {
-return response.data;
-})
-.catch(function() {
-alert("error");
-});
+var promise= $http.post("../example/search",this.searchBean);
+return promise; 
+};
+this.searchOne=function(entity) {
+this.setSelectedEntity(null);
+var promise= $http.get("../example/"+entity.exampleId);
 return promise; 
 };
 this.insert = function() {
-var promise= $http.put("../example/",this.selectedEntity)
-.then( function(response) 
-{
-return response.data;
-})
-.catch(function() 
-{ 
-alert("error");
-});
+var promise= $http.put("../example/",this.selectedEntity);
 return promise; 
 };
 this.update = function() {
-var promise= $http.post("../example/",this.selectedEntity)
-.then( function(response) {
-return response.data;
-})
-.catch(function() { 
-alert("error");
-});
+var promise= $http.post("../example/",this.selectedEntity);
 return promise; 
 }
 this.del = function() {
 var url="../example/"+this.selectedEntity.exampleId;
-var promise= $http["delete"](url)
-.then( function(response) {
-return response.data;
-})
-.catch(function() {
-alert("error");
-});
+var promise= $http["delete"](url);
 return promise; 
 }
 })
 .controller("exampleController",function($scope,$http,exampleService)
 {
+//null
 $scope.searchBean=exampleService.searchBean;
 $scope.entityList=exampleService.entityList;
 $scope.selectedEntity=exampleService.selectedEntity;
@@ -121,35 +107,51 @@ $scope.addNew= function()
 exampleService.setSelectedEntity(null);
 exampleService.setEntityList(null);
 exampleService.selectedEntity.show=true;
+$('#exampleTabs li:eq(0) a').tab('show');
 };
 		
 $scope.search=function()
 {
 exampleService.selectedEntity.show=false;
-exampleService.search().then(function(data) { 
-exampleService.setEntityList(data);
+exampleService.search().then(function successCallback(response) {
+exampleService.setEntityList(response.data);
+},function errorCallback(response) { 
+alert("error");
+return; 
 });
 };
 $scope.insert=function()
 {
 if (!$scope.exampleDetailForm.$valid) return; 
-exampleService.insert().then(function(data) { 
+exampleService.insert().then(function successCallback(response) { 
 $scope.search();
+},function errorCallback(response) { 
+alert("error");
+return; 
 });
 };
 $scope.update=function()
 {
 if (!$scope.exampleDetailForm.$valid) return; 
-exampleService.update().then(function(data) { 
+exampleService.update().then(function successCallback(response) { 
 $scope.search();
+},function errorCallback(response) { 
+alert("error");
+return; 
 });
 };
 $scope.del=function()
 {
-exampleService.del().then(function(data) { 
+nullService.selectedEntity.example=null;
+exampleService.del().then(function successCallback(response) { 
 $scope.search();
+},function errorCallback(response) { 
+alert("error");
+return; 
 });
-};$scope.trueFalseValues=[true,false];$scope.init=function()
+};
+$scope.trueFalseValues=[true,false];
+$scope.init=function()
 {
 exampleService.childrenList.sexList=["MALE","FEMALE",];
 }; 
@@ -171,9 +173,12 @@ columnDefs: [
 ,data: exampleService.entityList
  };
 $scope.exampleGridOptions.onRegisterApi = function(gridApi){
-gridApi.selection.on.rowSelectionChanged($scope,function(row){
+$scope.exampleGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
+{
 exampleService.setSelectedEntity(row.entity);
+$('#exampleTabs li:eq(0) a').tab('show');
+}
 else 
 exampleService.setSelectedEntity(null);
 exampleService.selectedEntity.show = row.isSelected;

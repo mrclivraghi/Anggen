@@ -28,18 +28,22 @@ public interface ExampleRepository
 
     public List<Example> findBySex(Integer sex);
 
-    @Query("select e from Example e where  (:exampleId is null or cast(:exampleId as string)=cast(e.exampleId as string)) and (:name is null or :name='' or cast(:name as string)=e.name) and (:eta is null or cast(:eta as string)=cast(e.eta as string)) and (:male is null or cast(:male as string)=cast(e.male as string)) and (:birthDate is null or cast(:birthDate as string)=cast(date(e.birthDate) as string)) and (:birthTime is null or cast(:birthTime as string)=cast(date_trunc('seconds',e.birthTime) as string)) and (:sex is null or cast(:sex as string)=cast(e.sex as string)) ")
-    public List<Example> findByExampleIdAndNameAndEtaAndMaleAndBirthDateAndBirthTimeAndSex(
+    @Query("select e from Example e where  (:exampleId is null or cast(:exampleId as string)=cast(e.exampleId as string)) and (:name is null or :name='' or cast(:name as string)=e.name) and (:etaFrom is null or cast(:etaFrom as string)<=cast(e.eta as string)) and (:etaTo is null or cast(:etaTo as string)>=cast(e.eta as string)) and (:male is null or cast(:male as string)=cast(e.male as string)) and (:birthDateFrom is null or cast(:birthDateFrom as string)<=cast(date(e.birthDate) as string)) and (:birthDateTo is null or cast(:birthDateTo as string)>=cast(date(e.birthDate) as string)) and (:birthTime is null or cast(:birthTime as string)=cast(date_trunc('seconds',e.birthTime) as string)) and (:sex is null or cast(:sex as string)=cast(e.sex as string)) ")
+    public List<Example> findByExampleIdAndNameAndGreaterThanEtaFromAndLessThanEtaToAndEtaAndMaleAndGreaterThanBirthDateFromAndLessThanBirthDateToAndBirthDateAndBirthTimeAndSex(
         @Param("exampleId")
         Integer exampleId,
         @Param("name")
         String name,
-        @Param("eta")
-        Long eta,
+        @Param("etaFrom")
+        Long etaFrom,
+        @Param("etaTo")
+        Long etaTo,
         @Param("male")
         Boolean male,
-        @Param("birthDate")
-        String birthDate,
+        @Param("birthDateFrom")
+        String birthDateFrom,
+        @Param("birthDateTo")
+        String birthDateTo,
         @Param("birthTime")
         String birthTime,
         @Param("sex")

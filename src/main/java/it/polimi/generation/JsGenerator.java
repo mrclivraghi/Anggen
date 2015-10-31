@@ -85,6 +85,13 @@ public class JsGenerator {
 		.append("{\n")
 		.append("this.entityList.push(entity);\n")
 		.append("};\n")
+
+		.append("this.emptyList= function(list)\n")
+		.append("{\n")
+		.append("while (list.length>0)\n")
+		.append("list.pop();\n")
+		.append("}\n")
+
 		.append("this.setEntityList= function(entityList)\n")
 		.append("{ \n")
 		.append("while (this.entityList.length>0)\n")
@@ -124,7 +131,8 @@ public class JsGenerator {
 		.append("for (j = 0; j < entity[val].length; j++)\n")
 		.append("this.selectedEntity[val]\n")
 		.append(".push(entity[val][j]);\n")
-		.append("}\n")
+		.append("} else \n")
+		.append("this.emptyList(this.selectedEntity[val]);\n")
 		.append("} else {\n")
 		.append("if (val.toLowerCase().indexOf(\"time\") > -1\n")
 		.append("&& typeof val == \"string\") {\n")
@@ -140,52 +148,91 @@ public class JsGenerator {
 		//search
 		sb.append("this.search = function() {\n");
 		sb.append("this.setSelectedEntity(null);\n");
-		sb.append("var promise= $http.post(\"../"+entityName+"/search\",this.searchBean)\n");
-		sb.append(".then( function(response) {\n");
+		sb.append("var promise= $http.post(\"../"+entityName+"/search\",this.searchBean);\n");
+		/*sb.append(".then( function(response) {\n");
 		sb.append("return response.data;\n");
 		sb.append("})\n");
 		sb.append(".catch(function() {\n");
 		sb.append("alert(\"error\");\n");
-		sb.append("});\n");
+		sb.append("});\n");*/
 		sb.append("return promise; \n");
 		sb.append("};\n");
+		//searchOne
+
+		sb.append("this.searchOne=function(entity) {\n");
+		sb.append("this.setSelectedEntity(null);\n");
+		sb.append("var promise= $http.get(\"../"+entityName+"/\"+entity."+entityName+"Id);\n");
+		//sb.append(".then( function(response) {\n");
+		//sb.append("return response.data;\n");
+		//sb.append("})\n");
+		//sb.append(".catch(function() {\n");
+		//sb.append("alert(\"error\");\n");
+		//sb.append("});\n");
+		sb.append("return promise; \n");
+		sb.append("};\n");
+
+
 		//insert
 		sb.append("this.insert = function() {\n");
-		sb.append("var promise= $http.put(\"../"+entityName+"/\",this.selectedEntity)\n");
-		sb.append(".then( function(response) \n");
+		sb.append("var promise= $http.put(\"../"+entityName+"/\",this.selectedEntity);\n");
+		/*sb.append(".then( function(response) \n");
 		sb.append("{\n");
 		sb.append("return response.data;\n");
 		sb.append("})\n");
 		sb.append(".catch(function() \n");
 		sb.append("{ \n");
 		sb.append("alert(\"error\");\n");
-		sb.append("});\n");
+		sb.append("});\n");*/
 		sb.append("return promise; \n");
 		sb.append("};\n");
 		//update
 		sb.append("this.update = function() {\n");
-		sb.append("var promise= $http.post(\"../"+entityName+"/\",this.selectedEntity)\n");
-		sb.append(".then( function(response) {\n");
+		sb.append("var promise= $http.post(\"../"+entityName+"/\",this.selectedEntity);\n");
+		/*sb.append(".then( function(response) {\n");
 		sb.append("return response.data;\n");
 		sb.append("})\n");
 		sb.append(".catch(function() { \n");
 		sb.append("alert(\"error\");\n");
-		sb.append("});\n");
+		sb.append("});\n");*/
 		sb.append("return promise; \n");
 		sb.append("}\n");
 		//delete
 		sb.append("this.del = function() {\n");
 		sb.append("var url=\"../"+entityName+"/\"+this.selectedEntity."+entityName+"Id;\n");
-		sb.append("var promise= $http[\"delete\"](url)\n");
-		sb.append(".then( function(response) {\n");
+		sb.append("var promise= $http[\"delete\"](url);\n");
+		/*sb.append(".then( function(response) {\n");
 		sb.append("return response.data;\n");
 		sb.append("})\n");
 		sb.append(".catch(function() {\n"); 
 		sb.append("alert(\"error\");\n");
-		sb.append("});\n");
+		sb.append("});\n");*/
 		sb.append("return promise; \n");
 		sb.append("}\n");
 
+		
+		
+		
+		if (childrenList!=null)
+			for (Field field: childrenList)
+			{
+
+				sb.append(" this.init"+Utility.getFirstUpper(field.getName())+"List= function()\n");
+				sb.append("{\n");
+				sb.append("var promise= $http\n");
+				sb.append(".post(\"../"+field.getName()+"/search\",\n");
+				sb.append("{});\n");
+				/*sb.append(".then(\n");
+				sb.append("function(response) {\n");
+				sb.append("return response.data;\n");
+				sb.append("}).catch(function() {\n");
+				sb.append("alert(\"error\");\n");
+				sb.append("});\n");*/
+				sb.append("return promise;\n");
+				sb.append("};\n");
+			}
+		
+		
+		
 		sb.append("})\n");
 		return sb.toString();
 	}
@@ -227,6 +274,7 @@ public class JsGenerator {
 
 		sb.append(".controller(\""+entityName+"Controller\",function($scope,$http"+getServices()+")\n");
 		sb.append("{\n");
+		sb.append("//"+parentEntityName+"\n");
 		//search var
 		sb.append("$scope.searchBean="+entityName+"Service.searchBean;\n");
 		sb.append("$scope.entityList="+entityName+"Service.entityList;\n");
@@ -252,11 +300,14 @@ public class JsGenerator {
 			sb.append("$scope.updateParent = function(toDo)\n");
 			sb.append("{\n");
 
-			sb.append(parentEntityName+"Service.update().then(function(data) {\n");
-			sb.append(parentEntityName+"Service.setSelectedEntity(data);\n");
+			sb.append(parentEntityName+"Service.update().then(function successCallback(response) {\n");
+			sb.append(parentEntityName+"Service.setSelectedEntity(response);\n");
 			sb.append("if (toDo != null)\n");
 			sb.append("toDo();\n");
-			sb.append("});\n");
+			sb.append("},function errorCallback(response) {      \n");
+			manageRestError(sb);
+			sb.append("}\n");
+			sb.append(");\n");
 			sb.append("};\n");
 		}
 		sb.append("$scope.addNew= function()\n");
@@ -269,6 +320,7 @@ public class JsGenerator {
 		{
 			changeChildrenVisibility(sb, false);
 		}
+		sb.append("$('#"+entityName+"Tabs li:eq(0) a').tab('show');\n");
 		sb.append("};\n");
 		sb.append("		\n");			
 		//search function
@@ -286,8 +338,10 @@ public class JsGenerator {
 				}
 			}
 
-		sb.append(entityName+"Service.search().then(function(data) { \n");
-		sb.append(entityName+"Service.setEntityList(data);\n");
+		sb.append(entityName+"Service.search().then(function successCallback(response) {\n");
+		sb.append(entityName+"Service.setEntityList(response.data);\n");
+		sb.append("},function errorCallback(response) { \n");
+		manageRestError(sb);
 		sb.append("});\n");
 
 		sb.append("};\n");
@@ -298,23 +352,47 @@ public class JsGenerator {
 		sb.append("if (!$scope."+entityName+"DetailForm.$valid) return; \n");
 		if (isParent)
 		{
-			sb.append(entityName+"Service.insert().then(function(data) { \n");
+			sb.append(entityName+"Service.insert().then(function successCallback(response) { \n");
 			sb.append("$scope.search();\n");
+			sb.append("},function errorCallback(response) { \n");
+			manageRestError(sb);
 			sb.append("});\n");
 
 		}else
 		{
-			sb.append(entityName+"Service.selectedEntity.show=false;\n\n");
+			//sb.append(entityName+"Service.selectedEntity.show=false;\n\n");
+			/*sb.append(entityName+"Service.insert().then(function(data) { });\n");*/
+			sb.append(entityName+"Service.selectedEntity.show=false;\n");
+			//TODO 
+			if (ReflectionManager.hasManyToManyAssociation(classClass, parentEntityName))
+			{
+				sb.append(entityName+"Service.selectedEntity."+parentEntityName+"List.push("+parentEntityName+"Service.selectedEntity);\n");
+			}else
+			{
+				sb.append(entityName+"Service.selectedEntity."+parentEntityName+"={};\n");
+				sb.append(entityName+"Service.selectedEntity."+parentEntityName+"."+parentEntityName+"Id="+parentEntityName+"Service.selectedEntity."+parentEntityName+"Id;\n");
+			
+			}
+			
+			
+			sb.append(entityName+"Service.insert().then(function successCallBack(response) { \n");
 			if (entityList)
 			{
-				sb.append(parentEntityName+"Service.selectedEntity."+entityName+"List.push("+entityName+"Service.selectedEntity);\n\n");
+				sb.append(""+parentEntityName+"Service.selectedEntity."+entityName+"List.push(response.data);\n");
+//				sb.append(parentEntityName+"Service.selectedEntity."+entityName+"List.push("+entityName+"Service.selectedEntity);\n\n");
 
 			}else
 			{
-				sb.append(parentEntityName+"Service.selectedEntity."+entityName+"="+entityName+"Service.selectedEntity;\n\n");
+				sb.append(""+parentEntityName+"Service.selectedEntity."+entityName+"=response.data;\n");
+				sb.append(parentEntityName+"Service.init"+Utility.getFirstUpper(entityName)+"List().then(function(response) {\n");
+				sb.append(parentEntityName+"Service.childrenList."+Utility.getFirstLower(entityName)+"List=response.data;\n");
+				sb.append("});\n");
+				//sb.append(parentEntityName+"Service.selectedEntity."+entityName+"="+entityName+"Service.selectedEntity;\n\n");
 			}
-
-			sb.append("$scope.updateParent();\n\n");
+			sb.append("},function errorCallback(response) { \n");
+			manageRestError(sb);
+			sb.append("});\n");
+			//sb.append("$scope.updateParent();\n\n");
 
 		}
 		sb.append("};\n");
@@ -325,8 +403,10 @@ public class JsGenerator {
 		if (isParent)
 		{
 			changeChildrenVisibility(sb, false);
-			sb.append(entityName+"Service.update().then(function(data) { \n");
+			sb.append(entityName+"Service.update().then(function successCallback(response) { \n");
 			sb.append("$scope.search();\n");
+			sb.append("},function errorCallback(response) { \n");
+			manageRestError(sb);
 			sb.append("});\n");
 		}else
 		{
@@ -345,19 +425,20 @@ public class JsGenerator {
 				sb.append(parentEntityName+"Service.selectedEntity."+entityName+"="+entityName+"Service.selectedEntity;\n\n");
 			}
 
-			sb.append("$scope.updateParent();\n");
+			//sb.append("$scope.updateParent();\n");
+			sb.append(entityName+"Service.update().then(function successCallback(response){\n");
+			//console.log(data);
+			sb.append(entityName+"Service.setSelectedEntity(response.data);\n");
+			sb.append("},function errorCallback(response) { \n");
+			manageRestError(sb);
+			sb.append("});\n");
 		}
 		sb.append("};\n");
-		//DELETE
-		sb.append("$scope.del=function()\n");
-		sb.append("{\n");
-		if (isParent)
+		//REMOVE
+		if (!isParent)
 		{
-			sb.append(entityName+"Service.del().then(function(data) { \n");
-			sb.append("$scope.search();\n");
-			sb.append("});\n");
-		}else
-		{
+			sb.append("$scope.remove= function()\n");
+			sb.append("{\n");
 			sb.append(entityName+"Service.selectedEntity.show=false;\n");
 			if (entityList)
 			{
@@ -369,25 +450,118 @@ public class JsGenerator {
 
 			}else
 			{
-				sb.append(parentEntityName+"Service.selectedEntity."+entityName+"=null;");
+				sb.append(parentEntityName+"Service.selectedEntity."+entityName+"=null;\n");
 			}
 
 			sb.append(entityName+"Service.setSelectedEntity(null);\n");
 			sb.append("$scope.updateParent();\n");
+			
+			sb.append("};\n");
 		}
-		sb.append("};");
-		sb.append("$scope.trueFalseValues=[true,false];");
+
+		//DELETE
+		sb.append("$scope.del=function()\n");
+		sb.append("{\n");
+		//update entity in $scope
+		if (entityList)
+		{
+			sb.append("for (i=0; i<"+parentEntityName+"Service.selectedEntity."+entityName+"List.length; i++)\n");
+			sb.append("{\n");
+			sb.append("if ("+parentEntityName+"Service.selectedEntity."+entityName+"List[i]."+entityName+"Id=="+entityName+"Service.selectedEntity."+entityName+"Id)\n");
+			sb.append(""+parentEntityName+"Service.selectedEntity."+entityName+"List.splice(i,1);\n");
+			sb.append("}\n");
+
+		}else
+		{
+			sb.append(parentEntityName+"Service.selectedEntity."+entityName+"=null;\n");
+		}
+
+		if (!isParent)
+			sb.append("$scope.updateParent();\n");
+		
+		sb.append(entityName+"Service.del().then(function successCallback(response) { \n");
+		if (isParent)
+		{
+			sb.append("$scope.search();\n");
+		}else
+		{
+			sb.append(entityName+"Service.setSelectedEntity(null);\n");
+			sb.append(parentEntityName+"Service.init"+Utility.getFirstUpper(entityName)+"List().then(function(response) {\n");
+			sb.append(parentEntityName+"Service.childrenList."+Utility.getFirstLower(entityName)+"List=response.data;\n");
+			sb.append("});\n");
+		}
+		sb.append("},function errorCallback(response) { \n");
+		manageRestError(sb);
+		sb.append("});\n");
+		sb.append("};\n");
+		sb.append("$scope.trueFalseValues=[true,false];\n");
 		//if (isParent)
 		{
 			for (Field field: childrenList)
 			{
+				
+				
+				
 				sb.append("$scope.show"+Utility.getFirstUpper(field.getName())+"Detail= function(index)\n");
 				sb.append("{\n");
 				sb.append("if (index!=null)\n");
-				sb.append(field.getName()+"Service.setSelectedEntity("+entityName+"Service.selectedEntity."+field.getName()+"List[index]);\n");
-				sb.append("else \n");
-				sb.append(field.getName()+"Service.setSelectedEntity("+entityName+"Service.selectedEntity."+field.getName()+"); \n");
+				//sb.append(field.getName()+"Service.setSelectedEntity("+entityName+"Service.selectedEntity."+field.getName()+"List[index]);\n");
+				sb.append("{\n");
+				sb.append(field.getName()+"Service.searchOne("+entityName+"Service.selectedEntity."+field.getName()+"List[index]).then(\n");
+				sb.append("function successCallback(response) {\n");
+				sb.append("console.log(\"response-ok\");\n");
+				sb.append("console.log(response);\n");
+				sb.append(field.getName()+"Service.setSelectedEntity(response.data[0]);\n");
 				sb.append(field.getName()+"Service.selectedEntity.show=true;\n");
+
+				sb.append("  }, function errorCallback(response) {\n");
+				// called asynchronously if an error occurs
+				// or server returns response with an error status.
+				//sb.append(" console.log(\"response-error-controller\");\n");
+				//sb.append("console.log(response);\n");
+				manageRestError(sb);
+				sb.append("  }	\n");
+
+				//+ "function(data) { \n");
+				//sb.append("console.log(data[0]);\n");
+				//sb.append(field.getName()+"Service.setSelectedEntity(data[0]);\n");
+				//sb.append(field.getName()+"Service.selectedEntity.show=true;\n");
+
+				sb.append(");\n");
+				sb.append("}\n");
+				sb.append("else \n");
+				sb.append("{\n");
+				sb.append("if ("+entityName+"Service.selectedEntity."+field.getName()+"==null || "+entityName+"Service.selectedEntity."+field.getName()+"==undefined)\n");
+				sb.append("{\n");
+				sb.append(field.getName()+"Service.setSelectedEntity(null); \n");
+				sb.append(field.getName()+"Service.selectedEntity.show=true; \n");
+				//TODO set owner, list or entity?
+				sb.append("}\n");
+				sb.append("else\n");
+				sb.append(field.getName()+"Service.searchOne("+entityName+"Service.selectedEntity."+field.getName()+").then(\n");
+				
+				sb.append("function successCallback(response) {\n");
+				//sb.append("console.log(\"response-ok\");\n");
+				//sb.append("console.log(response);\n");
+				sb.append(field.getName()+"Service.setSelectedEntity(response.data[0]);\n");
+				sb.append(field.getName()+"Service.selectedEntity.show=true;\n");
+
+				sb.append("  }, function errorCallback(response) {\n");
+				// called asynchronously if an error occurs
+				// or server returns response with an error status.
+				//sb.append(" console.log(\"response-error-controller\");\n");
+				//sb.append("console.log(response);\n");
+				manageRestError(sb);
+				sb.append("  }	\n");
+				
+				//sb.append("console.log(data[0]);\n");
+				//sb.append(field.getName()+"Service.setSelectedEntity(data[0]);\n");
+				
+				sb.append(");\n");
+
+
+				sb.append("}\n");
+				sb.append("$('#"+field.getName()+"Tabs li:eq(0) a').tab('show');\n");
 				sb.append("};\n");
 
 			}
@@ -398,14 +572,10 @@ public class JsGenerator {
 				for (Field field: childrenList)
 				{
 
-					sb.append("$http\n");
-					sb.append(".post(\"../"+field.getName()+"/search\",\n");
-					sb.append("{})\n");
-					sb.append(".success(\n");
-					sb.append("function(entityList) {\n");
-					sb.append(""+entityName+"Service.childrenList."+field.getName()+"List=entityList;\n");
-					sb.append("}).error(function() {\n");
-					sb.append("alert(\"error\");\n");
+					sb.append(entityName+"Service.init"+Utility.getFirstUpper(field.getName())+"List().then(function successCallback(response) {\n");
+					sb.append(entityName+"Service.childrenList."+Utility.getFirstLower(field.getName())+"List=response.data;\n");
+					sb.append("},function errorCallback(response) { \n");
+					manageRestError(sb);
 					sb.append("});\n");
 				}
 				for (Field field: fieldList)
@@ -422,7 +592,7 @@ public class JsGenerator {
 					}
 				}
 			sb.append("}; \n");
-			if (isParent)
+			//if (isParent)
 				sb.append("$scope.init();\n");
 
 
@@ -463,6 +633,13 @@ public class JsGenerator {
 		
 		for (Field field: childrenList)
 		{
+			if (field.getCompositeClass().fullName().contains("java.util.List"))
+			{
+				sb.append("$scope.saveLinked"+Utility.getFirstUpper(field.getName())+"= function() {\n");
+				sb.append(entityName+"Service.selectedEntity."+field.getName()+"List.push("+entityName+"Service.selectedEntity."+field.getName()+");\n");
+				sb.append("}\n");
+			}
+			
 			sb.append("$scope.download"+Utility.getFirstUpper(field.getName())+"List=function()\n");
 			sb.append("{\n");
 			sb.append("var mystyle = {\n");
@@ -539,12 +716,26 @@ public class JsGenerator {
 
 		//on row selection
 		sb.append("$scope."+entityName+ (entityList? "List":"")+"GridOptions.onRegisterApi = function(gridApi){\n");
+		sb.append("$scope."+entityName+"GridApi = gridApi;");
 		sb.append("gridApi.selection.on.rowSelectionChanged($scope,function(row){\n");
 		if (isParent)
 			changeChildrenVisibility(sb, false);
-		
+
 		sb.append("if (row.isSelected)\n");
-		sb.append(entityName+"Service.setSelectedEntity(row.entity);\n");
+		sb.append("{\n");
+		if (isParent)
+		{
+			sb.append(entityName+"Service.setSelectedEntity(row.entity);\n");
+			
+		} else
+		{
+			sb.append(entityName+"Service.searchOne(row.entity).then(function(response) { \n");
+			sb.append("console.log(response.data);\n");
+			sb.append(entityName+"Service.setSelectedEntity(response.data[0]);\n");
+			sb.append("});\n");
+		}
+		sb.append("$('#"+entityName+"Tabs li:eq(0) a').tab('show');\n");
+		sb.append("}\n");
 		sb.append("else \n");
 		sb.append(entityName+"Service.setSelectedEntity(null);\n");
 		sb.append(entityName+"Service.selectedEntity.show = row.isSelected;\n");
@@ -599,6 +790,12 @@ public class JsGenerator {
 
 
 
+	private void manageRestError(StringBuilder sb)
+	{
+		sb.append("alert(\"error\");\n");
+		sb.append("return; \n");
+	}
+	
 
 	/**
 	 * Initialize a form
@@ -631,6 +828,17 @@ public class JsGenerator {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	public static String resetTableTab(String tabName,Class entityClass) {
+		String resetTableTabString="";
+		ReflectionManager reflectionManager = new ReflectionManager(entityClass);
+		for (Field field: reflectionManager.getFieldByTabName(tabName))
+		{
+			if (field.getCompositeClass()!= null && field.getCompositeClass().fullName().contains("java.util.List"))
+				resetTableTabString=resetTableTabString+" $scope."+field.getName()+"GridApi.core.handleWindowResize(); ";
+				//$scope.seedQueryGridApi.core.handleWindowResize();
+		}
+		return resetTableTabString;
 	}
 	
 	

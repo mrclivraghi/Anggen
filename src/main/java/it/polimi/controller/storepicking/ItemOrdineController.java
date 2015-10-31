@@ -3,7 +3,10 @@ package it.polimi.controller.storepicking;
 
 import java.util.List;
 import it.polimi.model.storepicking.ItemOrdine;
+import it.polimi.searchbean.storepicking.ItemOrdineSearchBean;
 import it.polimi.service.storepicking.ItemOrdineService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -19,6 +22,7 @@ public class ItemOrdineController {
 
     @Autowired
     public ItemOrdineService itemOrdineService;
+    private final static Logger log = LoggerFactory.getLogger(ItemOrdine.class);
 
     @RequestMapping(method = RequestMethod.GET)
     public String manage() {
@@ -29,10 +33,13 @@ public class ItemOrdineController {
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ResponseEntity search(
         @RequestBody
-        ItemOrdine itemOrdine) {
+        ItemOrdineSearchBean itemOrdine) {
         List<ItemOrdine> itemOrdineList;
+        if (itemOrdine.getItemOrdineId()!=null)
+         log.info("Searching itemOrdine like {}",itemOrdine.toString());
         itemOrdineList=itemOrdineService.find(itemOrdine);
         getRightMapping(itemOrdineList);
+         log.info("Search: returning {} itemOrdine.",itemOrdineList.size());
         return ResponseEntity.ok().body(itemOrdineList);
     }
 
@@ -41,8 +48,10 @@ public class ItemOrdineController {
     public ResponseEntity getitemOrdineById(
         @PathVariable
         String itemOrdineId) {
+        log.info("Searching itemOrdine with id {}",itemOrdineId);
         List<ItemOrdine> itemOrdineList=itemOrdineService.findById(java.lang.Integer.valueOf(itemOrdineId));
         getRightMapping(itemOrdineList);
+         log.info("Search: returning {} itemOrdine.",itemOrdineList.size());
         return ResponseEntity.ok().body(itemOrdineList);
     }
 
@@ -51,6 +60,7 @@ public class ItemOrdineController {
     public ResponseEntity deleteitemOrdineById(
         @PathVariable
         String itemOrdineId) {
+        log.info("Deleting itemOrdine with id {}",itemOrdineId);
         itemOrdineService.deleteById(java.lang.Integer.valueOf(itemOrdineId));
         return ResponseEntity.ok().build();
     }
@@ -60,8 +70,10 @@ public class ItemOrdineController {
     public ResponseEntity insertitemOrdine(
         @RequestBody
         ItemOrdine itemOrdine) {
+        log.info("Inserting itemOrdine like {}",itemOrdine.toString());
         ItemOrdine inserteditemOrdine=itemOrdineService.insert(itemOrdine);
         getRightMapping(inserteditemOrdine);
+        log.info("Inserted itemOrdine with id {}",inserteditemOrdine.getItemOrdineId());
         return ResponseEntity.ok().body(inserteditemOrdine);
     }
 
@@ -70,6 +82,7 @@ public class ItemOrdineController {
     public ResponseEntity updateitemOrdine(
         @RequestBody
         ItemOrdine itemOrdine) {
+        log.info("Updating itemOrdine with id {}",itemOrdine.getItemOrdineId());
         ItemOrdine updateditemOrdine=itemOrdineService.update(itemOrdine);
         getRightMapping(updateditemOrdine);
         return ResponseEntity.ok().body(updateditemOrdine);
@@ -86,32 +99,15 @@ public class ItemOrdineController {
     private void getRightMapping(ItemOrdine itemOrdine) {
         if (itemOrdine.getOrdine()!=null)
         {
-        if (itemOrdine.getOrdine().getColloList()!=null)
-        {
-        for (it.polimi.model.storepicking.Collo collo : itemOrdine.getOrdine().getColloList())
-        {
-        if (collo.getOrdine()!=null)
-        {
-        //collo.getOrdine()
-        collo.setOrdine(null);
-        }
-        }
-        }
-        if (itemOrdine.getOrdine().getItemOrdineList()!=null)
-        {
+        itemOrdine.getOrdine().setColloList(null);
         itemOrdine.getOrdine().setItemOrdineList(null);
         }
-        }
         if (itemOrdine.getItemOrdineCodiceList()!=null)
+        for (it.polimi.model.storepicking.ItemOrdineCodice itemOrdineCodice :itemOrdine.getItemOrdineCodiceList())
+
         {
-        for (it.polimi.model.storepicking.ItemOrdineCodice itemOrdineCodice : itemOrdine.getItemOrdineCodiceList())
-        {
-        if (itemOrdineCodice.getItemOrdine()!=null)
-        {
-        //itemOrdineCodice.getItemOrdine()
+
         itemOrdineCodice.setItemOrdine(null);
-        }
-        }
         }
     }
 

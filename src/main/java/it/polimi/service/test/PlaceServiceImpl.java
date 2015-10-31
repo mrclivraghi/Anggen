@@ -4,6 +4,7 @@ package it.polimi.service.test;
 import java.util.List;
 import it.polimi.model.test.Place;
 import it.polimi.repository.test.PlaceRepository;
+import it.polimi.searchbean.test.PlaceSearchBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +23,7 @@ public class PlaceServiceImpl
     }
 
     @Override
-    public List<Place> find(Place place) {
+    public List<Place> find(PlaceSearchBean place) {
         return placeRepository.findByPlaceIdAndDescriptionAndOrder(place.getPlaceId(),place.getDescription(),place.getOrder());
     }
 

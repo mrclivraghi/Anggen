@@ -9,6 +9,11 @@ this.addEntity=function (entity)
 {
 this.entityList.push(entity);
 };
+this.emptyList= function(list)
+{
+while (list.length>0)
+list.pop();
+}
 this.setEntityList= function(entityList)
 { 
 while (this.entityList.length>0)
@@ -45,7 +50,8 @@ if (entity[val] != null)
 for (j = 0; j < entity[val].length; j++)
 this.selectedEntity[val]
 .push(entity[val][j]);
-}
+} else 
+this.emptyList(this.selectedEntity[val]);
 } else {
 if (val.toLowerCase().indexOf("time") > -1
 && typeof val == "string") {
@@ -60,51 +66,31 @@ this.selectedEntity[val] = entity[val];
 };
 this.search = function() {
 this.setSelectedEntity(null);
-var promise= $http.post("../person/search",this.searchBean)
-.then( function(response) {
-return response.data;
-})
-.catch(function() {
-alert("error");
-});
+var promise= $http.post("../person/search",this.searchBean);
+return promise; 
+};
+this.searchOne=function(entity) {
+this.setSelectedEntity(null);
+var promise= $http.get("../person/"+entity.personId);
 return promise; 
 };
 this.insert = function() {
-var promise= $http.put("../person/",this.selectedEntity)
-.then( function(response) 
-{
-return response.data;
-})
-.catch(function() 
-{ 
-alert("error");
-});
+var promise= $http.put("../person/",this.selectedEntity);
 return promise; 
 };
 this.update = function() {
-var promise= $http.post("../person/",this.selectedEntity)
-.then( function(response) {
-return response.data;
-})
-.catch(function() { 
-alert("error");
-});
+var promise= $http.post("../person/",this.selectedEntity);
 return promise; 
 }
 this.del = function() {
 var url="../person/"+this.selectedEntity.personId;
-var promise= $http["delete"](url)
-.then( function(response) {
-return response.data;
-})
-.catch(function() {
-alert("error");
-});
+var promise= $http["delete"](url);
 return promise; 
 }
 })
 .controller("personController",function($scope,$http,personService)
 {
+//null
 $scope.searchBean=personService.searchBean;
 $scope.entityList=personService.entityList;
 $scope.selectedEntity=personService.selectedEntity;
@@ -121,35 +107,51 @@ $scope.addNew= function()
 personService.setSelectedEntity(null);
 personService.setEntityList(null);
 personService.selectedEntity.show=true;
+$('#personTabs li:eq(0) a').tab('show');
 };
 		
 $scope.search=function()
 {
 personService.selectedEntity.show=false;
-personService.search().then(function(data) { 
-personService.setEntityList(data);
+personService.search().then(function successCallback(response) {
+personService.setEntityList(response.data);
+},function errorCallback(response) { 
+alert("error");
+return; 
 });
 };
 $scope.insert=function()
 {
 if (!$scope.personDetailForm.$valid) return; 
-personService.insert().then(function(data) { 
+personService.insert().then(function successCallback(response) { 
 $scope.search();
+},function errorCallback(response) { 
+alert("error");
+return; 
 });
 };
 $scope.update=function()
 {
 if (!$scope.personDetailForm.$valid) return; 
-personService.update().then(function(data) { 
+personService.update().then(function successCallback(response) { 
 $scope.search();
+},function errorCallback(response) { 
+alert("error");
+return; 
 });
 };
 $scope.del=function()
 {
-personService.del().then(function(data) { 
+nullService.selectedEntity.person=null;
+personService.del().then(function successCallback(response) { 
 $scope.search();
+},function errorCallback(response) { 
+alert("error");
+return; 
 });
-};$scope.trueFalseValues=[true,false];$scope.init=function()
+};
+$scope.trueFalseValues=[true,false];
+$scope.init=function()
 {
 }; 
 $scope.init();
@@ -169,9 +171,12 @@ columnDefs: [
 ,data: personService.entityList
  };
 $scope.personGridOptions.onRegisterApi = function(gridApi){
-gridApi.selection.on.rowSelectionChanged($scope,function(row){
+$scope.personGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
+{
 personService.setSelectedEntity(row.entity);
+$('#personTabs li:eq(0) a').tab('show');
+}
 else 
 personService.setSelectedEntity(null);
 personService.selectedEntity.show = row.isSelected;

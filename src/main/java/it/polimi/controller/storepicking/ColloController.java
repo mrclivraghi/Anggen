@@ -3,7 +3,10 @@ package it.polimi.controller.storepicking;
 
 import java.util.List;
 import it.polimi.model.storepicking.Collo;
+import it.polimi.searchbean.storepicking.ColloSearchBean;
 import it.polimi.service.storepicking.ColloService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -19,6 +22,7 @@ public class ColloController {
 
     @Autowired
     public ColloService colloService;
+    private final static Logger log = LoggerFactory.getLogger(Collo.class);
 
     @RequestMapping(method = RequestMethod.GET)
     public String manage() {
@@ -29,10 +33,13 @@ public class ColloController {
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ResponseEntity search(
         @RequestBody
-        Collo collo) {
+        ColloSearchBean collo) {
         List<Collo> colloList;
+        if (collo.getColloId()!=null)
+         log.info("Searching collo like {}",collo.toString());
         colloList=colloService.find(collo);
         getRightMapping(colloList);
+         log.info("Search: returning {} collo.",colloList.size());
         return ResponseEntity.ok().body(colloList);
     }
 
@@ -41,8 +48,10 @@ public class ColloController {
     public ResponseEntity getcolloById(
         @PathVariable
         String colloId) {
+        log.info("Searching collo with id {}",colloId);
         List<Collo> colloList=colloService.findById(java.lang.Integer.valueOf(colloId));
         getRightMapping(colloList);
+         log.info("Search: returning {} collo.",colloList.size());
         return ResponseEntity.ok().body(colloList);
     }
 
@@ -51,6 +60,7 @@ public class ColloController {
     public ResponseEntity deletecolloById(
         @PathVariable
         String colloId) {
+        log.info("Deleting collo with id {}",colloId);
         colloService.deleteById(java.lang.Integer.valueOf(colloId));
         return ResponseEntity.ok().build();
     }
@@ -60,8 +70,10 @@ public class ColloController {
     public ResponseEntity insertcollo(
         @RequestBody
         Collo collo) {
+        log.info("Inserting collo like {}",collo.toString());
         Collo insertedcollo=colloService.insert(collo);
         getRightMapping(insertedcollo);
+        log.info("Inserted collo with id {}",insertedcollo.getColloId());
         return ResponseEntity.ok().body(insertedcollo);
     }
 
@@ -70,6 +82,7 @@ public class ColloController {
     public ResponseEntity updatecollo(
         @RequestBody
         Collo collo) {
+        log.info("Updating collo with id {}",collo.getColloId());
         Collo updatedcollo=colloService.update(collo);
         getRightMapping(updatedcollo);
         return ResponseEntity.ok().body(updatedcollo);
@@ -86,32 +99,8 @@ public class ColloController {
     private void getRightMapping(Collo collo) {
         if (collo.getOrdine()!=null)
         {
-        if (collo.getOrdine().getColloList()!=null)
-        {
         collo.getOrdine().setColloList(null);
-        }
-        if (collo.getOrdine().getItemOrdineList()!=null)
-        {
-        for (it.polimi.model.storepicking.ItemOrdine itemOrdine : collo.getOrdine().getItemOrdineList())
-        {
-        if (itemOrdine.getOrdine()!=null)
-        {
-        //itemOrdine.getOrdine()
-        itemOrdine.setOrdine(null);
-        }
-        if (itemOrdine.getItemOrdineCodiceList()!=null)
-        {
-        for (it.polimi.model.storepicking.ItemOrdineCodice itemOrdineCodice : itemOrdine.getItemOrdineCodiceList())
-        {
-        if (itemOrdineCodice.getItemOrdine()!=null)
-        {
-        //itemOrdineCodice.getItemOrdine()
-        itemOrdineCodice.setItemOrdine(null);
-        }
-        }
-        }
-        }
-        }
+        collo.getOrdine().setItemOrdineList(null);
         }
     }
 

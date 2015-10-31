@@ -3,7 +3,10 @@ package it.polimi.controller.test;
 
 import java.util.List;
 import it.polimi.model.test.Order;
+import it.polimi.searchbean.test.OrderSearchBean;
 import it.polimi.service.test.OrderService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -19,6 +22,7 @@ public class OrderController {
 
     @Autowired
     public OrderService orderService;
+    private final static Logger log = LoggerFactory.getLogger(Order.class);
 
     @RequestMapping(method = RequestMethod.GET)
     public String manage() {
@@ -29,10 +33,13 @@ public class OrderController {
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ResponseEntity search(
         @RequestBody
-        Order order) {
+        OrderSearchBean order) {
         List<Order> orderList;
+        if (order.getOrderId()!=null)
+         log.info("Searching order like {}",order.toString());
         orderList=orderService.find(order);
         getRightMapping(orderList);
+         log.info("Search: returning {} order.",orderList.size());
         return ResponseEntity.ok().body(orderList);
     }
 
@@ -41,8 +48,10 @@ public class OrderController {
     public ResponseEntity getorderById(
         @PathVariable
         String orderId) {
+        log.info("Searching order with id {}",orderId);
         List<Order> orderList=orderService.findById(java.lang.Long.valueOf(orderId));
         getRightMapping(orderList);
+         log.info("Search: returning {} order.",orderList.size());
         return ResponseEntity.ok().body(orderList);
     }
 
@@ -51,6 +60,7 @@ public class OrderController {
     public ResponseEntity deleteorderById(
         @PathVariable
         String orderId) {
+        log.info("Deleting order with id {}",orderId);
         orderService.deleteById(java.lang.Long.valueOf(orderId));
         return ResponseEntity.ok().build();
     }
@@ -60,8 +70,10 @@ public class OrderController {
     public ResponseEntity insertorder(
         @RequestBody
         Order order) {
+        log.info("Inserting order like {}",order.toString());
         Order insertedorder=orderService.insert(order);
         getRightMapping(insertedorder);
+        log.info("Inserted order with id {}",insertedorder.getOrderId());
         return ResponseEntity.ok().body(insertedorder);
     }
 
@@ -70,6 +82,7 @@ public class OrderController {
     public ResponseEntity updateorder(
         @RequestBody
         Order order) {
+        log.info("Updating order with id {}",order.getOrderId());
         Order updatedorder=orderService.update(order);
         getRightMapping(updatedorder);
         return ResponseEntity.ok().body(updatedorder);
@@ -88,15 +101,11 @@ public class OrderController {
         {
         }
         if (order.getPlaceList()!=null)
+        for (it.polimi.model.test.Place place :order.getPlaceList())
+
         {
-        for (it.polimi.model.test.Place place : order.getPlaceList())
-        {
-        if (place.getOrder()!=null)
-        {
-        //place.getOrder()
+
         place.setOrder(null);
-        }
-        }
         }
     }
 

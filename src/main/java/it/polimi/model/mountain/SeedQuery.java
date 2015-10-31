@@ -1,5 +1,8 @@
 package it.polimi.model.mountain;
 
+import it.polimi.utils.annotation.DescriptionField;
+import it.polimi.utils.annotation.Tab;
+
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -28,24 +31,31 @@ public class SeedQuery {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name ="id_seed_query")
+	@DescriptionField
+	@Tab(number=1)
 	private Long seedQueryId;
 	
 	@Column(name ="seed_keyword")
+	@DescriptionField
+	@Tab(number=1)
 	private String seedKeyword;
 	
 	@NotNull
+	@Tab(number=1)
 	private Integer status;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
-	@Cascade({CascadeType.PERSIST})
+	//@Cascade({CascadeType.PERSIST})
 	@JoinColumn(name="mountain_id_mountain")
+	@Tab(number=2,name="relationships")
 	private Mountain mountain;
 	
 	
 	@OneToMany(fetch=FetchType.EAGER)
-	@Cascade({CascadeType.ALL})
+	//@Cascade({CascadeType.ALL})
 	@Type(type="it.polimi.model.Photo")
 	@JoinColumn(name="seedquery_id_seed_query")
+	@Tab(number=2,name="relationships")
 	private List<Photo> photoList;
 	
 

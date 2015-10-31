@@ -128,20 +128,41 @@ public class RestGenerator {
 				JAnnotationUse annotationParam= param.annotate(Param.class);
 				annotationParam.param("value", field.getName()+"From");
 			
-				query=query+getFieldSearchQuery(field, field.getName()+"From","<=");
+				query=query+getFieldSearchQuery(field, field.getName()+"From",alias+"."+field.getName(),"<=");
 			
 				param = method.param(ReflectionManager.getRightParamClass(field), field.getName()+"To");
 				annotationParam= param.annotate(Param.class);
 				annotationParam.param("value", field.getName()+"To");
 			
-				query=query+getFieldSearchQuery(field, field.getName()+"To",">=");
+				query=query+getFieldSearchQuery(field, field.getName()+"To",alias+"."+field.getName(),">=");
 				
 			}else
 			{
 				JVar param = method.param(ReflectionManager.getRightParamClass(field), field.getName());
 				JAnnotationUse annotationParam= param.annotate(Param.class);
 				annotationParam.param("value", field.getName());
-				query=query+getFieldSearchQuery(field, field.getName(),"=");
+				query=query+getFieldSearchQuery(field, field.getName(),alias+"."+field.getName(),"=");
+			}
+			if (field.getChildrenFilterList()!=null)
+			for (Field filterField: field.getChildrenFilterList())
+			{
+				String filterFieldName=reflectionManager.parseName(filterField.getOwnerClass().getName())+Utility.getFirstUpper(filterField.getName());
+				
+				JVar param = method.param(ReflectionManager.getRightParamClass(filterField), filterFieldName);
+				JAnnotationUse annotationParam= param.annotate(Param.class);
+				annotationParam.param("value", filterFieldName);
+				String hibernateField="";
+				
+				if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List"))
+				{// cerco quel campo in una lista
+					String aliasFilterOwnerClass= reflectionManager.parseName(filterField.getOwnerClass().getName()).substring(0, 1);
+					
+					query=query+" ( :"+filterFieldName+" is null or cast(:"+filterFieldName+" as string)='' or "+alias+" in (select "+aliasFilterOwnerClass+"."+reflectionManager.parseName(className)+" from "+reflectionManager.parseName(filterField.getOwnerClass().getName())+" "+aliasFilterOwnerClass+" where "+aliasFilterOwnerClass+"."+filterField.getName()+"=:"+filterFieldName+")) and";
+				}else // cerco quel campo nell'ìentità collegata
+				{
+					hibernateField=""+alias+"."+reflectionManager.parseName(filterField.getOwnerClass().getName())+"."+filterField.getName();
+					query=query+getFieldSearchQuery(filterField, filterFieldName,hibernateField,"=");
+				}
 			}
 			
 			
@@ -151,37 +172,37 @@ public class RestGenerator {
 	}
 	
 	
-	private String getFieldSearchQuery(Field field, String fieldName,String comparator)
+	private String getFieldSearchQuery(Field field, String fieldName,String hibernateField, String comparator)
 	{
 		String query="";
 		if (ReflectionManager.isTimeField(field))
 		{
-			query= query + " (:"+fieldName+" is null or cast(:"+fieldName+" as string)"+comparator+"cast(date_trunc('seconds',"+alias+"."+field.getName()+") as string)) and";
+			query= query + " (:"+fieldName+" is null or cast(:"+fieldName+" as string)"+comparator+"cast(date_trunc('seconds',"+hibernateField+") as string)) and";
 		}
 		else
 		{
 			if (ReflectionManager.isDateField(field))
 			{
-				query= query+" (:"+fieldName+" is null or cast(:"+fieldName+" as string)"+comparator+"cast(date("+alias+"."+field.getName()+") as string)) and";
+				query= query+" (:"+fieldName+" is null or cast(:"+fieldName+" as string)"+comparator+"cast(date("+hibernateField+") as string)) and";
 			} else
 			{
 				if (field.getFieldClass()==String.class)
 				{
-					query= query+" (:"+fieldName+" is null or :"+fieldName+"='' or cast(:"+fieldName+" as string)"+comparator+""+alias+"."+field.getName()+") and";
+					query= query+" (:"+fieldName+" is null or :"+fieldName+"='' or cast(:"+fieldName+" as string)"+comparator+""+hibernateField+") and";
 				} else
 				{
 					if (field.getCompositeClass()==null)
 					{
-						query=query+" (:"+fieldName+" is null or cast(:"+fieldName+" as string)"+comparator+"cast("+alias+"."+field.getName()+" as string)) and";
+						query=query+" (:"+fieldName+" is null or cast(:"+fieldName+" as string)"+comparator+"cast("+hibernateField+" as string)) and";
 
 					} else
 					{ // Entity or entity list!!!
 						if (field.getCompositeClass().fullName().contains("java.util.List"))
 						{
-							query=query+" (:"+fieldName+" in elements("+alias+"."+field.getName()+"List)  or :"+fieldName+" is null) and";
+							query=query+" (:"+fieldName+" in elements("+hibernateField+"List)  or :"+fieldName+" is null) and";
 						}else
 						{
-							query=query+" (:"+fieldName+""+comparator+""+alias+"."+field.getName()+" or :"+fieldName+" is null) and";
+							query=query+" (:"+fieldName+""+comparator+""+hibernateField+" or :"+fieldName+" is null) and";
 						}
 
 					}
@@ -189,6 +210,26 @@ public class RestGenerator {
 				}
 
 			}}
+		
+		if (field.getChildrenFilterList()!=null)
+			for (Field filterField: field.getChildrenFilterList())
+			{
+				String filterFieldName=reflectionManager.parseName(filterField.getOwnerClass().getName())+Utility.getFirstUpper(filterField.getName());
+				
+				hibernateField="";
+				
+				if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List"))
+				{// cerco quel campo in una lista
+					String aliasFilterOwnerClass= reflectionManager.parseName(filterField.getOwnerClass().getName()).substring(0, 1);
+					
+					query=query+" ( :"+filterFieldName+" is null or cast(:"+filterFieldName+" as string)='' or "+alias+" in (select "+aliasFilterOwnerClass+"."+reflectionManager.parseName(className)+" from "+reflectionManager.parseName(filterField.getOwnerClass().getName())+" "+aliasFilterOwnerClass+" where "+aliasFilterOwnerClass+"."+filterField.getName()+"=:"+filterFieldName+")) and";
+				}else // cerco quel campo nell'ìentità collegata
+				{
+					hibernateField=""+alias+"."+reflectionManager.parseName(filterField.getOwnerClass().getName())+"."+filterField.getName();
+					query=query+getFieldSearchQuery(filterField, filterFieldName,hibernateField,"=");
+				}
+			}
+		
 		return query;
 	}
 	
@@ -331,13 +372,15 @@ public class RestGenerator {
 						method.param(field.getFieldClass(), field.getName());
 					}
 				}
-				if (ReflectionManager.hasBetween(field))
-				{
-					searchMethod=searchMethod+"GreaterThan"+Utility.getFirstUpper(field.getName())+"FromAndLessThan"+Utility.getFirstUpper(field.getName())+"ToAnd";
-				}
-				searchMethod=searchMethod+Utility.getFirstUpper(field.getName())+"And";
+				//if (ReflectionManager.hasBetween(field))
+				//{
+					//searchMethod=searchMethod+"GreaterThan"+Utility.getFirstUpper(field.getName())+"FromAndLessThan"+Utility.getFirstUpper(field.getName())+"ToAnd";
+				//}
+				//searchMethod=searchMethod+Utility.getFirstUpper(field.getName())+"And";
+				reflectionManager.addChildrenFilter(field);
 			}
-			searchMethod=searchMethod.substring(0,searchMethod.length()-3);
+			
+			searchMethod=getRepositorySearchMethod();
 			JMethod method=myClass.method(JMod.PUBLIC, listClass, searchMethod);
 			String alias=className.substring(0, 1).toLowerCase();
 			String query=getSearchQuery(method);
@@ -394,8 +437,13 @@ public class RestGenerator {
 			if (ReflectionManager.hasBetween(field))
 			{
 				searchMethod=searchMethod+"GreaterThan"+Utility.getFirstUpper(field.getName())+"FromAndLessThan"+Utility.getFirstUpper(field.getName())+"ToAnd";
-			}
+			} else
 			searchMethod=searchMethod+Utility.getFirstUpper(field.getName())+"And";
+			if (field.getChildrenFilterList()!=null)
+				for (Field filterField: field.getChildrenFilterList())
+				{
+					searchMethod=searchMethod+Utility.getFirstUpper(filterField.getName())+"And";
+				}
 		}
 		searchMethod=searchMethod.substring(0,searchMethod.length()-3);
 		return searchMethod;

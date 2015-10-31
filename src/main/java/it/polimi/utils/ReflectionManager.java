@@ -35,10 +35,13 @@ import javax.persistence.TemporalType;
 import org.hibernate.mapping.Array;
 import org.reflections.Reflections;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.repository.query.Param;
 
+import com.sun.codemodel.JAnnotationUse;
 import com.sun.codemodel.JClass;
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JType;
+import com.sun.codemodel.JVar;
 
 public class ReflectionManager {
 	
@@ -342,7 +345,16 @@ public class ReflectionManager {
 				string=string+manageSingleParam(className, field,  field.getName()+"To");
 			}else
 				string=string+manageSingleParam(className, field,  field.getName());
-		
+			addChildrenFilter(field);
+			if (field.getChildrenFilterList()!=null)
+				for (Field filterField: field.getChildrenFilterList())
+				{
+					ReflectionManager reflectionManager = new ReflectionManager(filterField.getOwnerClass());
+					String filterFieldName=reflectionManager.parseName(filterField.getOwnerClass().getName())+Utility.getFirstUpper(filterField.getName());
+					string = string+manageSingleParam(className, filterField, filterFieldName);
+					
+				}
+			
 		}
 		return string.substring(0, string.length()-1);
 	}

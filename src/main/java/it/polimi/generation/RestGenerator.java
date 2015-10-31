@@ -35,6 +35,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
 import com.sun.codemodel.ClassType;
 import com.sun.codemodel.JAnnotationUse;
 import com.sun.codemodel.JBlock;
@@ -75,6 +76,9 @@ public class RestGenerator {
 	private List<Field> fields;
 	
 	private Class keyClass;
+	
+	private Class searchBeanClass;
+	
 	
 	private ReflectionManager reflectionManager;
 	
@@ -164,9 +168,15 @@ public class RestGenerator {
 			dependencyClass.add(classClass);
 			return;
 		}
-		generateServiceInterface();
 		generateSearchBean();
 		List<Field> fieldList=null;
+		try {
+			searchBeanClass = Class.forName(classClass.getName().replace(".model.", ".searchbean.")+"SearchBean",true,ClassLoader.getSystemClassLoader());
+		} catch (ClassNotFoundException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		generateServiceInterface();
 		try {
 			fieldList = reflectionManager.getFieldList();
 			searchMethod=generateRepository();
@@ -268,9 +278,19 @@ public class RestGenerator {
 					generateGetterAndSetter(myClass, field.getName()+"To", field.getFieldClass());
 				} else
 				{
+					if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List") && field.getRepositoryClass()!=null)
+					{
+						JClass listClass = codeModel.ref(List.class).narrow(field.getFieldClass());
+						JVar fieldVar = myClass.field(JMod.PUBLIC, listClass, field.getName());
+						generateGetterAndSetter(myClass, field.getName(), listClass);
+						
+						
+						
+					}else
+					{
 					JVar fieldVar = myClass.field(JMod.PUBLIC, field.getFieldClass(), field.getName());
 					generateGetterAndSetter(myClass, field.getName(), field.getFieldClass());
-					
+					}
 				}
 			}
 			saveFile(codeModel);
@@ -280,6 +300,8 @@ public class RestGenerator {
 		}
 		
 	}
+	
+	
 	
 	private void generateGetterAndSetter(JDefinedClass myClass, String varName, Class varClass)
 	{
@@ -293,7 +315,18 @@ public class RestGenerator {
 		setterBlock.directStatement("this."+varName+"="+varName+";");
 		
 	}
-	
+	private void generateGetterAndSetter(JDefinedClass myClass, String varName, JClass varClass)
+	{
+		JMethod getter= myClass.method(JMod.PUBLIC, varClass, "get"+Utility.getFirstUpper(varName)+"List");
+		JBlock getterBlock = getter.body();
+		getterBlock.directStatement("return this."+varName+";");
+		
+		JMethod setter= myClass.method(JMod.PUBLIC, void.class, "set"+Utility.getFirstUpper(varName)+"List");
+		setter.param(varClass, varName);
+		JBlock setterBlock = setter.body();
+		setterBlock.directStatement("this."+varName+"="+varName+";");
+		
+	}
 	
 	
 	/**
@@ -311,7 +344,7 @@ public class RestGenerator {
 			String lowerClass= className.replaceFirst(className.substring(0, 1), className.substring(0, 1).toLowerCase());
 			findById.param(keyClass,className+"Id");
 			JMethod findLike=myClass.method(JMod.PUBLIC, listClass, "find");
-			findLike.param(classClass, className);
+			findLike.param(searchBeanClass, className);
 			JMethod deleteById = myClass.method(JMod.PUBLIC, void.class, "deleteById");
 			deleteById.param(keyClass, className+"Id");
 			JMethod insert= myClass.method(JMod.PUBLIC, classClass, "insert");
@@ -364,7 +397,7 @@ public class RestGenerator {
 			//search
 			JMethod findLike=myClass.method(JMod.PUBLIC, listClass, "find");
 			findLike.annotate(Override.class);
-			findLike.param(classClass, lowerClass);
+			findLike.param(searchBeanClass, lowerClass);
 			JBlock findLikeBlock= findLike.body();
 			findLikeBlock.directStatement("return "+lowerClass+"Repository."+searchMethod+"("+reflectionManager.getAllParam()+");");
 			//delete
@@ -506,7 +539,7 @@ public class RestGenerator {
 			JAnnotationUse requestMappingSearch = search.annotate(RequestMapping.class);
 			requestMappingSearch.param("value", "/search");
 			requestMappingSearch.param("method",RequestMethod.POST);
-			JVar orderParam= search.param(classClass,lowerClass);
+			JVar orderParam= search.param(searchBeanClass,lowerClass);
 			orderParam.annotate(RequestBody.class);
 			JBlock searchBlock= search.body();
 			JVar entityList= searchBlock.decl(listClass, lowerClass+"List");

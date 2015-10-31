@@ -77,10 +77,20 @@ public class RestGenerator {
 	
 	private Class keyClass;
 	
-	private Class searchBeanClass;
+	private JDefinedClass searchBeanClass;
 	
+	private JDefinedClass repositoryClass;
+
+	private JDefinedClass serviceInterfaceClass;
+	
+	private JDefinedClass serviceImplClass;
 	
 	private ReflectionManager reflectionManager;
+	
+	public void setSearchBeanClass(JDefinedClass searchBeanClass)
+	{
+		this.searchBeanClass=searchBeanClass;
+	}
 	
 	/**
 	 * Constructor
@@ -184,6 +194,81 @@ public class RestGenerator {
 	
 	
 	
+
+	private void generateGetterAndSetter(JDefinedClass myClass, String varName, Class varClass)
+	{
+		JMethod getter= myClass.method(JMod.PUBLIC, varClass, "get"+Utility.getFirstUpper(varName));
+		JBlock getterBlock = getter.body();
+		getterBlock.directStatement("return this."+varName+";");
+		
+		JMethod setter= myClass.method(JMod.PUBLIC, void.class, "set"+Utility.getFirstUpper(varName));
+		setter.param(varClass, varName);
+		JBlock setterBlock = setter.body();
+		setterBlock.directStatement("this."+varName+"="+varName+";");
+		
+	}
+	private void generateGetterAndSetter(JDefinedClass myClass, String varName, JClass varClass)
+	{
+		JMethod getter= myClass.method(JMod.PUBLIC, varClass, "get"+Utility.getFirstUpper(varName));
+		JBlock getterBlock = getter.body();
+		getterBlock.directStatement("return this."+varName+";");
+		
+		JMethod setter= myClass.method(JMod.PUBLIC, void.class, "set"+Utility.getFirstUpper(varName));
+		setter.param(varClass, varName);
+		JBlock setterBlock = setter.body();
+		setterBlock.directStatement("this."+varName+"="+varName+";");
+		
+	}
+	
+	
+	public void generateSearchBean() {
+
+			ReflectionManager reflectionManager = new ReflectionManager(classClass);
+			String fullClassName = Utility.getFirstLower(classClass.getName());
+			JCodeModel codeModel = new JCodeModel();
+			JDefinedClass myClass = null;
+
+			try {
+				myClass = codeModel._class(""+fullClassName.replace(".model.", ".searchbean.")+"SearchBean", ClassType.CLASS);
+				List<Field> fieldList = reflectionManager.getFieldList();
+				for (Field field: fieldList)
+				{
+					if (ReflectionManager.hasBetween(field))
+					{
+						JVar fieldFromVar = myClass.field(JMod.PUBLIC, field.getFieldClass(), field.getName()+"From");
+						generateGetterAndSetter(myClass, field.getName()+"From", field.getFieldClass());
+						JVar fieldToVar = myClass.field(JMod.PUBLIC, field.getFieldClass(), field.getName()+"To");
+						generateGetterAndSetter(myClass, field.getName()+"To", field.getFieldClass());
+					} else
+					{
+						if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List") && field.getRepositoryClass()!=null)
+						{
+							JClass listClass = codeModel.ref(List.class).narrow(field.getFieldClass());
+							JVar fieldVar = myClass.field(JMod.PUBLIC, listClass, field.getName()+"List");
+							generateGetterAndSetter(myClass, field.getName()+"List", listClass);
+
+
+
+						}else
+						{
+							JVar fieldVar = myClass.field(JMod.PUBLIC, field.getFieldClass(), field.getName());
+							generateGetterAndSetter(myClass, field.getName(), field.getFieldClass());
+						}
+					}
+				}
+				saveFile(codeModel);
+				searchBeanClass=myClass;
+			} catch (JClassAlreadyExistsException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+
+	}
+	
+	
+	
+	
 	/**
 	 * Main method that generates the classes
 	 * @param dependencyClass
@@ -199,51 +284,11 @@ public class RestGenerator {
 			dependencyClass.add(classClass);
 			return;
 		}
-		List<Field> fieldList=null;
-		try {
-			searchBeanClass = Class.forName(classClass.getName().replace(".model.", ".searchbean.")+"SearchBean",true,ClassLoader.getSystemClassLoader());
-		} catch (ClassNotFoundException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
+		generateSearchBean();
 		generateServiceInterface();
-		try {
-			fieldList = reflectionManager.getFieldList();
-			searchMethod=generateRepository();
-			String filePath=classClass.getName().replace(".model.", ".repository.");
-			filePath=filePath.replace(".", "\\");
-			/*File fileRepository = new File(directory+"\\"+filePath+"Repository.java");
-			File fileService = new File(directory+"\\"+filePath.replace("repository", "service")+"Service.java");
-			Class repositoryClass=null;
-			Class serviceClass=null;
-			if (fileRepository.exists())
-			{
-				//TODO improve...
-				System.out.println("esiste!");
-				URLClassLoader classLoader=null;
-				URL urlRepository=null;
-				try {
-					urlRepository=fileRepository.toURL();
-				} catch (MalformedURLException e1) {
-					e1.printStackTrace();
-				}
-				
-				try {
-					classLoader= URLClassLoader.newInstance(new URL[] {fileRepository.toURL()});
-				} catch (MalformedURLException e) {
-					e.printStackTrace();
-				}
-				repositoryClass=Class.forName(classClass.getName().replace(".model.", ".repository.")+"Repository", true, classLoader);
-				serviceClass=Class.forName(classClass.getName().replace(".model.", ".service.")+"Service", true, classLoader);
-				
-			}
-			else
-				System.out.println(fileRepository.getAbsolutePath()+" does not exists!");*/
+		generateRepository();
 			generateServiceImpl();
 			generateController();
-		} catch (ClassNotFoundException e) {
-			throw new Exception("Classes not found. Try to refresh your project.");
-		}
 	}
 	
 	/**
@@ -292,6 +337,7 @@ public class RestGenerator {
 			e.printStackTrace();
 		}
 		saveFile(codeModel);
+		repositoryClass=myClass;
 		return searchMethod;
 	}
 	
@@ -305,7 +351,7 @@ public class RestGenerator {
 	public void generateServiceInterface() throws ClassNotFoundException
 	{
 		
-		searchBeanClass=Class.forName(classClass.getName().replace(".model.", ".searchbean.")+"SearchBean");
+		//searchBeanClass=Class.forName(classClass.getName().replace(".model.", ".searchbean.")+"SearchBean");
 		
 		JCodeModel	codeModel = new JCodeModel();
 		JDefinedClass myClass= null;
@@ -329,6 +375,7 @@ public class RestGenerator {
 		}
 		saveFile(codeModel);
 	
+		serviceInterfaceClass=myClass;
 	}
 	
 	private String getRepositorySearchMethod()
@@ -357,10 +404,16 @@ public class RestGenerator {
 	 */
 	public void generateServiceImpl() throws ClassNotFoundException
 	{
-		Class interfaceClass=Class.forName(classClass.getName().replace(".model.", ".service.")+"Service");
-		Class repositoryClass=Class.forName(classClass.getName().replace(".model.", ".repository.")+"Repository");
+		/*Class interfaceClass;
+		Class repositoryClass;
+		try {
+		interfaceClass=Class.forName(classClass.getName().replace(".model.", ".service.")+"Service");
+		repositoryClass=Class.forName(classClass.getName().replace(".model.", ".repository.")+"Repository");
 		searchBeanClass=Class.forName(classClass.getName().replace(".model.", ".searchbean.")+"SearchBean");
-		
+		} catch (ClassNotFoundException e)
+		{
+			throw new ClassNotFoundException("This is not a critical error. Try to refresh your project");
+		}*/
 		String searchMethod=getRepositorySearchMethod();
 		
 		JCodeModel	codeModel = new JCodeModel();
@@ -369,7 +422,7 @@ public class RestGenerator {
 		try {
 			myClass = codeModel._class(""+fullClassName.replace(".model.", ".service.")+"ServiceImpl", ClassType.CLASS);
 			className=reflectionManager.parseName();
-			myClass._implements(interfaceClass);
+			myClass._implements(serviceInterfaceClass);
 			myClass.annotate(Service.class);
 			JClass listClass = codeModel.ref(List.class).narrow(classClass);
 			String lowerClass= className.replaceFirst(className.substring(0, 1), className.substring(0, 1).toLowerCase());
@@ -491,6 +544,7 @@ public class RestGenerator {
 		}
 		saveFile(codeModel);
 	
+		serviceImplClass=myClass;
 	}
 	/**
 	 * Generates the controller class
@@ -499,8 +553,14 @@ public class RestGenerator {
 	 */
 	public void generateController() throws ClassNotFoundException
 	{
-		Class serviceClass=Class.forName(classClass.getName().replace(".model.", ".service.")+"ServiceImpl");
-		
+		/*Class serviceClass;
+				try {
+					serviceClass=Class.forName(classClass.getName().replace(".model.", ".service.")+"ServiceImpl");
+					searchBeanClass=Class.forName(classClass.getName().replace(".model.", ".searchbean.")+"SearchBean");
+				} catch (ClassNotFoundException e)
+		{
+					throw new ClassNotFoundException("This is not a critical error. Try to refresh your project");
+		}*/
 		JCodeModel	codeModel = new JCodeModel();
 		JDefinedClass myClass= null;
 		String response="ResponseEntity.ok()";
@@ -514,7 +574,7 @@ public class RestGenerator {
 			JAnnotationUse requestMappingClass = myClass.annotate(RequestMapping.class);
 			requestMappingClass.param("value", "/"+lowerClass);
 			//declare service
-			JVar repository = myClass.field(JMod.PUBLIC, serviceClass, lowerClass+"Service");
+			JVar repository = myClass.field(JMod.PUBLIC, serviceInterfaceClass, lowerClass+"Service");
 			repository.annotate(Autowired.class);
 			//private final static Logger log = LoggerFactory.getLogger(Mountain.class);
 			JClass factory = codeModel.directClass("org.slf4j.LoggerFactory");

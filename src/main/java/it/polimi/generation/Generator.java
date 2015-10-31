@@ -119,151 +119,23 @@ public class Generator {
 		}
 	}
 	
-	
-	private void checkSearchBean() throws Exception
-	{
-		for (Class myClass: allClasses)
-		{
-			try {
-			Class searchBeanClass = Class.forName(myClass.getName().replace(".model.", ".searchbean.")+"SearchBean",true,ClassLoader.getSystemClassLoader());
-			} catch(Exception e)
-			{
-				throw new Exception("SearchBean not found. Try to refresh yout project. ");
-			}
-		}
-	}
-	
 
 	
-	/**
-	 * Save codeModel to file
-	 * @param codeModel
-	 */
-	private void saveFile(JCodeModel codeModel)
+		
+	public void generate()
 	{
 		try {
-			File file = new File(""); 
-			String directory = file.getAbsolutePath()+"\\src\\main\\java";
-			   codeModel.build(new File (directory));
-			} catch (Exception ex) {
-			   ex.printStackTrace();
-			}
-		
-	}
-	
-	private void generateGetterAndSetter(JDefinedClass myClass, String varName, Class varClass)
-	{
-		JMethod getter= myClass.method(JMod.PUBLIC, varClass, "get"+Utility.getFirstUpper(varName));
-		JBlock getterBlock = getter.body();
-		getterBlock.directStatement("return this."+varName+";");
-		
-		JMethod setter= myClass.method(JMod.PUBLIC, void.class, "set"+Utility.getFirstUpper(varName));
-		setter.param(varClass, varName);
-		JBlock setterBlock = setter.body();
-		setterBlock.directStatement("this."+varName+"="+varName+";");
-		
-	}
-	private void generateGetterAndSetter(JDefinedClass myClass, String varName, JClass varClass)
-	{
-		JMethod getter= myClass.method(JMod.PUBLIC, varClass, "get"+Utility.getFirstUpper(varName)+"List");
-		JBlock getterBlock = getter.body();
-		getterBlock.directStatement("return this."+varName+";");
-		
-		JMethod setter= myClass.method(JMod.PUBLIC, void.class, "set"+Utility.getFirstUpper(varName)+"List");
-		setter.param(varClass, varName);
-		JBlock setterBlock = setter.body();
-		setterBlock.directStatement("this."+varName+"="+varName+";");
-		
-	}
-	
-	
-	public void generateSearchBean() {
-
-		for (Class theClass : allClasses)
-		{
-
-			ReflectionManager reflectionManager = new ReflectionManager(theClass);
-			String fullClassName = Utility.getFirstLower(theClass.getName());
-			JCodeModel codeModel = new JCodeModel();
-			JDefinedClass myClass = null;
-
-			try {
-				myClass = codeModel._class(""+fullClassName.replace(".model.", ".searchbean.")+"SearchBean", ClassType.CLASS);
-				List<Field> fieldList = reflectionManager.getFieldList();
-				for (Field field: fieldList)
-				{
-					if (ReflectionManager.hasBetween(field))
-					{
-						JVar fieldFromVar = myClass.field(JMod.PUBLIC, field.getFieldClass(), field.getName()+"From");
-						generateGetterAndSetter(myClass, field.getName()+"From", field.getFieldClass());
-						JVar fieldToVar = myClass.field(JMod.PUBLIC, field.getFieldClass(), field.getName()+"To");
-						generateGetterAndSetter(myClass, field.getName()+"To", field.getFieldClass());
-					} else
-					{
-						if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List") && field.getRepositoryClass()!=null)
-						{
-							JClass listClass = codeModel.ref(List.class).narrow(field.getFieldClass());
-							JVar fieldVar = myClass.field(JMod.PUBLIC, listClass, field.getName());
-							generateGetterAndSetter(myClass, field.getName(), listClass);
-
-
-
-						}else
-						{
-							JVar fieldVar = myClass.field(JMod.PUBLIC, field.getFieldClass(), field.getName());
-							generateGetterAndSetter(myClass, field.getName(), field.getFieldClass());
-						}
-					}
-				}
-				saveFile(codeModel);
-			} catch (JClassAlreadyExistsException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-		}
-	}
-	
-	public void generateRepositoryAndServiceInterface()
-	{
-		try {
+			
 			for (Class modelClass: allClasses)
 			{
 				RestGenerator restGenerator = new RestGenerator(modelClass);
-				restGenerator.generateRepository();
-				restGenerator.generateServiceInterface();
+				restGenerator.generateRESTClasses(dependencyClass, true);
 			}
 			for (Class modelClass:dependencyClass)
 			{
 				RestGenerator restGenerator = new RestGenerator(modelClass);
-				restGenerator.generateRepository();
-				restGenerator.generateServiceInterface();
+				restGenerator.generateRESTClasses(dependencyClass, false);
 			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	public void generateServiceAndController() throws ClassNotFoundException
-	{
-			for (Class modelClass: allClasses)
-			{
-				RestGenerator restGenerator = new RestGenerator(modelClass);
-				restGenerator.generateServiceImpl();
-				restGenerator.generateController();
-			}
-			for (Class modelClass:dependencyClass)
-			{
-				RestGenerator restGenerator = new RestGenerator(modelClass);
-				restGenerator.generateServiceImpl();
-				restGenerator.generateController();
-			}
-	}
-	
-	public void generateViewFiles()
-	{
-		try {
 			
 			for (Class modelClass: allClasses)
 			{
@@ -295,11 +167,7 @@ public class Generator {
 		Generator generator = new Generator();
 		try {
 			generator.checkModel();
-			generator.generateSearchBean();
-			generator.checkSearchBean();
-			generator.generateRepositoryAndServiceInterface();
-			generator.generateServiceAndController();
-			generator.generateViewFiles();
+			generator.generate();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

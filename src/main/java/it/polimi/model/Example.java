@@ -1,6 +1,6 @@
 package it.polimi.model;
 
-import it.polimi.utils.annotation.DateBetween;
+import it.polimi.utils.annotation.Between;
 import it.polimi.utils.annotation.ExcelExport;
 import it.polimi.utils.annotation.IgnoreSearch;
 import it.polimi.utils.annotation.IgnoreTableList;
@@ -45,7 +45,7 @@ public class Example {
 	private Boolean male;
 	
 	@javax.persistence.Temporal(value=TemporalType.DATE)
-	@DateBetween
+	@Between
 	private Date birthDate;
 	
 	//@javax.persistence.Temporal(TemporalType.TIME)

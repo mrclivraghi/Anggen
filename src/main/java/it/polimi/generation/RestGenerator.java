@@ -165,6 +165,7 @@ public class RestGenerator {
 			return;
 		}
 		generateServiceInterface();
+		generateSearchBean();
 		List<Field> fieldList=null;
 		try {
 			fieldList = reflectionManager.getFieldList();
@@ -249,6 +250,52 @@ public class RestGenerator {
 		saveFile(codeModel);
 		return searchMethod;
 	}
+	
+	private void generateSearchBean(){
+		JCodeModel codeModel = new JCodeModel();
+		JDefinedClass myClass = null;
+		
+		try {
+			myClass = codeModel._class(""+fullClassName.replace(".model.", ".searchbean.")+"SearchBean", ClassType.CLASS);
+			List<Field> fieldList = reflectionManager.getFieldList();
+			for (Field field: fieldList)
+			{
+				if (ReflectionManager.hasDateBetween(field))
+				{
+					JVar fieldFromVar = myClass.field(JMod.PUBLIC, field.getFieldClass(), field.getName()+"From");
+					generateGetterAndSetter(myClass, field.getName()+"From", field.getFieldClass());
+					JVar fieldToVar = myClass.field(JMod.PUBLIC, field.getFieldClass(), field.getName()+"To");
+					generateGetterAndSetter(myClass, field.getName()+"To", field.getFieldClass());
+				} else
+				{
+					JVar fieldVar = myClass.field(JMod.PUBLIC, field.getFieldClass(), field.getName());
+					generateGetterAndSetter(myClass, field.getName(), field.getFieldClass());
+					
+				}
+			}
+			saveFile(codeModel);
+		} catch (JClassAlreadyExistsException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	private void generateGetterAndSetter(JDefinedClass myClass, String varName, Class varClass)
+	{
+		JMethod getter= myClass.method(JMod.PUBLIC, varClass, "get"+Utility.getFirstUpper(varName));
+		JBlock getterBlock = getter.body();
+		getterBlock.directStatement("return this."+varName+";");
+		
+		JMethod setter= myClass.method(JMod.PUBLIC, void.class, "set"+Utility.getFirstUpper(varName));
+		setter.param(varClass, varName);
+		JBlock setterBlock = setter.body();
+		setterBlock.directStatement("this."+varName+"="+varName+";");
+		
+	}
+	
+	
+	
 	/**
 	 * Generates the service interface
 	 */

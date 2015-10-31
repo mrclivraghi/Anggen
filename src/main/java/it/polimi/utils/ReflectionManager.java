@@ -5,7 +5,7 @@ import it.polimi.model.Sex;
 import it.polimi.model.mountain.Mountain;
 import it.polimi.model.ospedale.Ambulatorio;
 import it.polimi.model.ospedale.Paziente;
-import it.polimi.utils.annotation.DateBetween;
+import it.polimi.utils.annotation.Between;
 import it.polimi.utils.annotation.DescriptionField;
 import it.polimi.utils.annotation.ExcelExport;
 import it.polimi.utils.annotation.IgnoreSearch;
@@ -132,6 +132,8 @@ public class ReflectionManager {
 					Object[] enumValues=field.getType().getEnumConstants();
 					for (int i=0; i<enumValues.length; i++)
 						enumValuesList.add(enumValues[i].toString());
+					
+					fieldClass=field.getType();
 					
 				} else
 				{
@@ -423,7 +425,7 @@ public class ReflectionManager {
 	
 	public static Boolean hasDateBetween(Field field)
 	{
-		return hasAnnotation(field, DateBetween.class);
+		return hasAnnotation(field, Between.class);
 	}
 	
 	private static Boolean hasAnnotation(Field field,Class ignoreAnnotationClass)

@@ -274,7 +274,7 @@ public class RestGenerator {
 	 * @param dependencyClass
 	 * @param jumpDependency
 	 */
-	public void generateRESTClasses(List<Class> dependencyClass, Boolean jumpDependency) throws Exception
+	public void generateRESTClasses(List<Class> dependencyClass, Boolean jumpDependency)
 	{
 		System.out.println("working for "+classClass.getName());
 		String searchMethod="";
@@ -287,8 +287,8 @@ public class RestGenerator {
 		generateSearchBean();
 		generateServiceInterface();
 		generateRepository();
-			generateServiceImpl();
-			generateController();
+		generateServiceImpl();
+		generateController();
 	}
 	
 	/**
@@ -348,11 +348,8 @@ public class RestGenerator {
 	 * Generates the service interface
 	 * @throws ClassNotFoundException 
 	 */
-	public void generateServiceInterface() throws ClassNotFoundException
+	public void generateServiceInterface()
 	{
-		
-		//searchBeanClass=Class.forName(classClass.getName().replace(".model.", ".searchbean.")+"SearchBean");
-		
 		JCodeModel	codeModel = new JCodeModel();
 		JDefinedClass myClass= null;
 		try {
@@ -374,7 +371,7 @@ public class RestGenerator {
 			e.printStackTrace();
 		}
 		saveFile(codeModel);
-	
+
 		serviceInterfaceClass=myClass;
 	}
 	
@@ -402,18 +399,8 @@ public class RestGenerator {
 	 * @param searchMethod
 	 * @throws ClassNotFoundException 
 	 */
-	public void generateServiceImpl() throws ClassNotFoundException
+	public void generateServiceImpl()
 	{
-		/*Class interfaceClass;
-		Class repositoryClass;
-		try {
-		interfaceClass=Class.forName(classClass.getName().replace(".model.", ".service.")+"Service");
-		repositoryClass=Class.forName(classClass.getName().replace(".model.", ".repository.")+"Repository");
-		searchBeanClass=Class.forName(classClass.getName().replace(".model.", ".searchbean.")+"SearchBean");
-		} catch (ClassNotFoundException e)
-		{
-			throw new ClassNotFoundException("This is not a critical error. Try to refresh your project");
-		}*/
 		String searchMethod=getRepositorySearchMethod();
 		
 		JCodeModel	codeModel = new JCodeModel();
@@ -477,25 +464,6 @@ public class RestGenerator {
 					updateBlock.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(field.getName())+"List()!=null)");
 					updateBlock.directStatement("for ("+(field.getFieldClass().getName())+" "+field.getName()+": "+lowerClass+".get"+Utility.getFirstUpper(field.getName())+"List())");
 					updateBlock.directStatement("{");
-					/*
-					 *  for (it.polimi.model.ospedale.Paziente paziente: ambulatorio.getPazienteList())
-        {
-        	Paziente savedPaziente = pazienteRepository.findOne(paziente.getPazienteId());
-        	Boolean found= false;
-        	for (Ambulatorio tempAmb : savedPaziente.getAmbulatorioList())
-        	{
-        		if (tempAmb.getAmbulatorioId().equals(ambulatorio.getAmbulatorioId()))
-        		{
-        			found=true;
-        			break;
-        		}
-        	}
-        	
-        	if (!found)
-        		savedPaziente.getAmbulatorioList().add(ambulatorio);
-        }
-					 */
-					//lowerclass:  ambulatorio, field.getName: paziente
 					if (ReflectionManager.hasManyToManyAssociation(field.getFieldClass(), className))
 					{
 						updateBlock.directStatement(field.getFieldClass().getName()+" saved"+Utility.getFirstUpper(field.getName())+" = "+field.getName()+"Repository.findOne("+field.getName()+".get"+Utility.getFirstUpper(field.getName())+"Id());");
@@ -551,16 +519,8 @@ public class RestGenerator {
 	 * @param serviceClass
 	 * @throws ClassNotFoundException 
 	 */
-	public void generateController() throws ClassNotFoundException
+	public void generateController()
 	{
-		/*Class serviceClass;
-				try {
-					serviceClass=Class.forName(classClass.getName().replace(".model.", ".service.")+"ServiceImpl");
-					searchBeanClass=Class.forName(classClass.getName().replace(".model.", ".searchbean.")+"SearchBean");
-				} catch (ClassNotFoundException e)
-		{
-					throw new ClassNotFoundException("This is not a critical error. Try to refresh your project");
-		}*/
 		JCodeModel	codeModel = new JCodeModel();
 		JDefinedClass myClass= null;
 		String response="ResponseEntity.ok()";

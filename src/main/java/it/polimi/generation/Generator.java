@@ -124,8 +124,6 @@ public class Generator {
 		
 	public void generate()
 	{
-		try {
-			
 			for (Class modelClass: allClasses)
 			{
 				RestGenerator restGenerator = new RestGenerator(modelClass);
@@ -156,10 +154,6 @@ public class Generator {
 				else //DEFAULTS
 					HtmlGenerator.GenerateMenu();
 			}
-		} catch (Exception e)
-		{
-			e.printStackTrace();
-		}
 	}
 	
 	public static void main(String[] args) {

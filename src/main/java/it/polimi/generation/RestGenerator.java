@@ -112,7 +112,7 @@ public class RestGenerator {
 		{
 			
 			
-			if (ReflectionManager.hasDateBetween(field))
+			if (ReflectionManager.hasBetween(field))
 			{
 				JVar param = method.param(ReflectionManager.getRightParamClass(field), field.getName()+"From");
 				JAnnotationUse annotationParam= param.annotate(Param.class);
@@ -274,7 +274,7 @@ public class RestGenerator {
 						method.param(field.getFieldClass(), field.getName());
 					}
 				}
-				if (ReflectionManager.hasDateBetween(field))
+				if (ReflectionManager.hasBetween(field))
 				{
 					searchMethod=searchMethod+"GreaterThan"+Utility.getFirstUpper(field.getName())+"FromAndLessThan"+Utility.getFirstUpper(field.getName())+"ToAnd";
 				}
@@ -303,7 +303,7 @@ public class RestGenerator {
 			List<Field> fieldList = reflectionManager.getFieldList();
 			for (Field field: fieldList)
 			{
-				if (ReflectionManager.hasDateBetween(field))
+				if (ReflectionManager.hasBetween(field))
 				{
 					JVar fieldFromVar = myClass.field(JMod.PUBLIC, field.getFieldClass(), field.getName()+"From");
 					generateGetterAndSetter(myClass, field.getName()+"From", field.getFieldClass());

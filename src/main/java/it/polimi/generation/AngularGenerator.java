@@ -481,7 +481,7 @@ public class AngularGenerator {
 			for (Field field: reflectionManager.getFieldByTabName(tabName))
 			{
 
-				if (ReflectionManager.hasDateBetween(field)&& (search))
+				if (ReflectionManager.hasBetween(field)&& (search))
 				{
 					field.setName(field.getName()+"From");
 					renderField(html, field, search, style, baseEntity);

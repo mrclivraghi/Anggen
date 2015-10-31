@@ -323,7 +323,7 @@ public class ReflectionManager {
 		String className = parseName();
 		for (Field field: fields)
 		{
-			if (ReflectionManager.hasDateBetween(field))
+			if (ReflectionManager.hasBetween(field))
 			{
 				string=string+manageSingleParam(className, field,  field.getName()+"From");
 				string=string+manageSingleParam(className, field,  field.getName()+"To");
@@ -438,7 +438,7 @@ public class ReflectionManager {
 		return hasAnnotation(field, ManyToMany.class);
 	}
 	
-	public static Boolean hasDateBetween(Field field)
+	public static Boolean hasBetween(Field field)
 	{
 		return hasAnnotation(field, Between.class);
 	}

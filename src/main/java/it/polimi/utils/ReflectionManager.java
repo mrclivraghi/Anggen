@@ -418,6 +418,12 @@ public class ReflectionManager {
 	}
 	
 	
+	public static Boolean hasId(Field field)
+	{
+		return hasAnnotation(field, javax.persistence.Id.class);
+	}
+	
+	
 	public static Boolean hasExcelExport(Field field)
 	{
 		return hasAnnotation(field, ExcelExport.class);

@@ -24,8 +24,8 @@ public interface SeedQueryRepository
 
     public List<SeedQuery> findByMountain(Mountain mountain);
 
-    @Query("select s from SeedQuery s where  (:seedQueryId is null or cast(:seedQueryId as string)=cast(s.seedQueryId as string)) and (:seedKeyword is null or :seedKeyword='' or cast(:seedKeyword as string)=s.seedKeyword) and (:status is null or cast(:status as string)=cast(s.status as string)) and (:mountain=s.mountain or :mountain is null) and (:photo in elements(s.photoList)  or :photo is null) ")
-    public List<SeedQuery> findBySeedQueryIdAndSeedKeywordAndStatusAndMountainAndPhoto(
+    @Query("select s from SeedQuery s where  (:seedQueryId is null or cast(:seedQueryId as string)=cast(s.seedQueryId as string)) and (:seedKeyword is null or :seedKeyword='' or cast(:seedKeyword as string)=s.seedKeyword) and (:status is null or cast(:status as string)=cast(s.status as string)) and (:mountain=s.mountain or :mountain is null) and (:mountainHeight is null or :mountainHeight='' or cast(:mountainHeight as string)=s.mountain.height) and (:photo in elements(s.photoList)  or :photo is null) ")
+    public List<SeedQuery> findBySeedQueryIdAndSeedKeywordAndStatusAndMountainAndHeightAndPhoto(
         @Param("seedQueryId")
         Long seedQueryId,
         @Param("seedKeyword")
@@ -34,6 +34,8 @@ public interface SeedQueryRepository
         Integer status,
         @Param("mountain")
         Mountain mountain,
+        @Param("mountainHeight")
+        String mountainHeight,
         @Param("photo")
         Photo photo);
 

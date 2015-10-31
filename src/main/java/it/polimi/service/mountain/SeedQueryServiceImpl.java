@@ -27,7 +27,7 @@ public class SeedQueryServiceImpl
 
     @Override
     public List<SeedQuery> find(SeedQuerySearchBean seedQuery) {
-        return seedQueryRepository.findBySeedQueryIdAndSeedKeywordAndStatusAndMountainAndPhoto(seedQuery.getSeedQueryId(),seedQuery.getSeedKeyword(),seedQuery.getStatus(),seedQuery.getMountain(),seedQuery.getPhotoList()==null? null :seedQuery.getPhotoList().get(0));
+        return seedQueryRepository.findBySeedQueryIdAndSeedKeywordAndStatusAndMountainAndHeightAndPhoto(seedQuery.getSeedQueryId(),seedQuery.getSeedKeyword(),seedQuery.getStatus(),seedQuery.getMountain(),seedQuery.getMountainHeight(),seedQuery.getPhotoList()==null? null :seedQuery.getPhotoList().get(0));
     }
 
     @Override

@@ -25,7 +25,7 @@ public class PhotoServiceImpl
 
     @Override
     public List<Photo> find(PhotoSearchBean photo) {
-        return photoRepository.findByPhotoIdAndUrlAndSocialAndDateAndStatusAndSocialIdAndRelatedPostAndSeedQuery(photo.getPhotoId(),photo.getUrl(),photo.getSocial(),it.polimi.utils.Utility.formatDate(photo.getDate()),photo.getStatus(),photo.getSocialId(),photo.getRelatedPost(),photo.getSeedQuery());
+        return photoRepository.findByPhotoIdAndUrlAndSocialAndDateAndStatusAndSocialIdAndRelatedPostAndSeedQueryAndSeedKeyword(photo.getPhotoId(),photo.getUrl(),photo.getSocial(),it.polimi.utils.Utility.formatDate(photo.getDate()),photo.getStatus(),photo.getSocialId(),photo.getRelatedPost(),photo.getSeedQuery(),photo.getSeedQuerySeedKeyword());
     }
 
     @Override

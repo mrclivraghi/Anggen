@@ -11,6 +11,7 @@ public class SeedQuerySearchBean {
     public String seedKeyword;
     public Integer status;
     public Mountain mountain;
+    public String mountainHeight;
     public List<Photo> photoList;
 
     public Long getSeedQueryId() {
@@ -43,6 +44,14 @@ public class SeedQuerySearchBean {
 
     public void setMountain(Mountain mountain) {
         this.mountain=mountain;
+    }
+
+    public String getMountainHeight() {
+        return this.mountainHeight;
+    }
+
+    public void setMountainHeight(String mountainHeight) {
+        this.mountainHeight=mountainHeight;
     }
 
     public List<Photo> getPhotoList() {

@@ -27,7 +27,7 @@ public class MountainServiceImpl
 
     @Override
     public List<Mountain> find(MountainSearchBean mountain) {
-        return mountainRepository.findByMountainIdAndNameAndHeightAndSeedQuery(mountain.getMountainId(),mountain.getName(),mountain.getHeight(),mountain.getSeedQueryList()==null? null :mountain.getSeedQueryList().get(0));
+        return mountainRepository.findByMountainIdAndNameAndHeightAndSeedQueryAndSeedKeyword(mountain.getMountainId(),mountain.getName(),mountain.getHeight(),mountain.getSeedQueryList()==null? null :mountain.getSeedQueryList().get(0),mountain.getSeedQuerySeedKeyword());
     }
 
     @Override

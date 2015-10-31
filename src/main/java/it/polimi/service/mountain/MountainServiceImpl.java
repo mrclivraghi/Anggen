@@ -5,6 +5,7 @@ import java.util.List;
 import it.polimi.model.mountain.Mountain;
 import it.polimi.repository.mountain.MountainRepository;
 import it.polimi.repository.mountain.SeedQueryRepository;
+import it.polimi.searchbean.mountain.MountainSearchBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +26,7 @@ public class MountainServiceImpl
     }
 
     @Override
-    public List<Mountain> find(Mountain mountain) {
+    public List<Mountain> find(MountainSearchBean mountain) {
         return mountainRepository.findByMountainIdAndNameAndHeightAndSeedQuery(mountain.getMountainId(),mountain.getName(),mountain.getHeight(),mountain.getSeedQueryList()==null? null :mountain.getSeedQueryList().get(0));
     }
 

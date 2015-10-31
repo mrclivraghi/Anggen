@@ -5,6 +5,7 @@ import java.util.List;
 import it.polimi.model.ospedale.Ambulatorio;
 import it.polimi.repository.ospedale.AmbulatorioRepository;
 import it.polimi.repository.ospedale.PazienteRepository;
+import it.polimi.searchbean.ospedale.AmbulatorioSearchBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +26,7 @@ public class AmbulatorioServiceImpl
     }
 
     @Override
-    public List<Ambulatorio> find(Ambulatorio ambulatorio) {
+    public List<Ambulatorio> find(AmbulatorioSearchBean ambulatorio) {
         return ambulatorioRepository.findByAmbulatorioIdAndNomeAndIndirizzoAndPaziente(ambulatorio.getAmbulatorioId(),ambulatorio.getNome(),ambulatorio.getIndirizzo(),ambulatorio.getPazienteList()==null? null :ambulatorio.getPazienteList().get(0));
     }
 

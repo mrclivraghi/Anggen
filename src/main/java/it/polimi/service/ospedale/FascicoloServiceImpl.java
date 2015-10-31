@@ -4,6 +4,7 @@ package it.polimi.service.ospedale;
 import java.util.List;
 import it.polimi.model.ospedale.Fascicolo;
 import it.polimi.repository.ospedale.FascicoloRepository;
+import it.polimi.searchbean.ospedale.FascicoloSearchBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +23,7 @@ public class FascicoloServiceImpl
     }
 
     @Override
-    public List<Fascicolo> find(Fascicolo fascicolo) {
+    public List<Fascicolo> find(FascicoloSearchBean fascicolo) {
         return fascicoloRepository.findByFascicoloIdAndCreationDateAndPazienteAndAmbulatorioAndTipoIntervento(fascicolo.getFascicoloId(),it.polimi.utils.Utility.formatDate(fascicolo.getCreationDate()),fascicolo.getPaziente(),fascicolo.getAmbulatorio(),fascicolo.getTipoIntervento());
     }
 

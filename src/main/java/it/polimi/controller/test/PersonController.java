@@ -3,6 +3,7 @@ package it.polimi.controller.test;
 
 import java.util.List;
 import it.polimi.model.test.Person;
+import it.polimi.searchbean.test.PersonSearchBean;
 import it.polimi.service.test.PersonService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +33,7 @@ public class PersonController {
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ResponseEntity search(
         @RequestBody
-        Person person) {
+        PersonSearchBean person) {
         List<Person> personList;
         if (person.getPersonId()!=null)
          log.info("Searching person like {}",person.toString());

@@ -4,6 +4,7 @@ package it.polimi.service.storepicking;
 import java.util.List;
 import it.polimi.model.storepicking.Collo;
 import it.polimi.repository.storepicking.ColloRepository;
+import it.polimi.searchbean.storepicking.ColloSearchBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +23,7 @@ public class ColloServiceImpl
     }
 
     @Override
-    public List<Collo> find(Collo collo) {
+    public List<Collo> find(ColloSearchBean collo) {
         return colloRepository.findByColloIdAndCodiceAndCutoffRoadnetAndOrdinamentoReportAndTsGenerazioneAndOrdine(collo.getColloId(),collo.getCodice(),collo.getCutoffRoadnet(),collo.getOrdinamentoReport(),it.polimi.utils.Utility.formatDate(collo.getTsGenerazione()),collo.getOrdine());
     }
 

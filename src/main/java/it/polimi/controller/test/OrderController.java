@@ -3,6 +3,7 @@ package it.polimi.controller.test;
 
 import java.util.List;
 import it.polimi.model.test.Order;
+import it.polimi.searchbean.test.OrderSearchBean;
 import it.polimi.service.test.OrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +33,7 @@ public class OrderController {
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ResponseEntity search(
         @RequestBody
-        Order order) {
+        OrderSearchBean order) {
         List<Order> orderList;
         if (order.getOrderId()!=null)
          log.info("Searching order like {}",order.toString());

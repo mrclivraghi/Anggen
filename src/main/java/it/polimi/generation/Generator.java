@@ -82,7 +82,7 @@ public class Generator {
 			RestGenerator generator = new RestGenerator(modelClass);
 			generator.generateRESTClasses(dependencyClass,false);
 		}
-		
+		/*
 		for (Class modelClass: allClasses)
 		{
 			HtmlGenerator htmlGenerator = new HtmlGenerator(modelClass);
@@ -101,7 +101,7 @@ public class Generator {
 				HtmlGenerator.GenerateEasyTreeMenu();
 			else //DEFAULTS
 				HtmlGenerator.GenerateMenu();
-		}
+		}*/
 	}
 
 }

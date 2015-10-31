@@ -3,6 +3,7 @@ package it.polimi.controller.storepicking;
 
 import java.util.List;
 import it.polimi.model.storepicking.ItemOrdineCodice;
+import it.polimi.searchbean.storepicking.ItemOrdineCodiceSearchBean;
 import it.polimi.service.storepicking.ItemOrdineCodiceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +33,7 @@ public class ItemOrdineCodiceController {
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ResponseEntity search(
         @RequestBody
-        ItemOrdineCodice itemOrdineCodice) {
+        ItemOrdineCodiceSearchBean itemOrdineCodice) {
         List<ItemOrdineCodice> itemOrdineCodiceList;
         if (itemOrdineCodice.getItemOrdineCodiceId()!=null)
          log.info("Searching itemOrdineCodice like {}",itemOrdineCodice.toString());

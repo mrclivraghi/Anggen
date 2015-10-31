@@ -3,6 +3,7 @@ package it.polimi.controller.ospedale;
 
 import java.util.List;
 import it.polimi.model.ospedale.Fascicolo;
+import it.polimi.searchbean.ospedale.FascicoloSearchBean;
 import it.polimi.service.ospedale.FascicoloService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +33,7 @@ public class FascicoloController {
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ResponseEntity search(
         @RequestBody
-        Fascicolo fascicolo) {
+        FascicoloSearchBean fascicolo) {
         List<Fascicolo> fascicoloList;
         if (fascicolo.getFascicoloId()!=null)
          log.info("Searching fascicolo like {}", fascicolo.getFascicoloId());

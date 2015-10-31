@@ -4,6 +4,7 @@ package it.polimi.service.mountain;
 import java.util.List;
 import it.polimi.model.mountain.Photo;
 import it.polimi.repository.mountain.PhotoRepository;
+import it.polimi.searchbean.mountain.PhotoSearchBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +23,7 @@ public class PhotoServiceImpl
     }
 
     @Override
-    public List<Photo> find(Photo photo) {
+    public List<Photo> find(PhotoSearchBean photo) {
         return photoRepository.findByPhotoIdAndUrlAndSocialAndDateAndStatusAndSocialIdAndRelatedPostAndSeedQuery(photo.getPhotoId(),photo.getUrl(),photo.getSocial(),it.polimi.utils.Utility.formatDate(photo.getDate()),photo.getStatus(),photo.getSocialId(),photo.getRelatedPost(),photo.getSeedQuery());
     }
 

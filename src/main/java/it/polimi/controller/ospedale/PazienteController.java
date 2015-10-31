@@ -3,6 +3,7 @@ package it.polimi.controller.ospedale;
 
 import java.util.List;
 import it.polimi.model.ospedale.Paziente;
+import it.polimi.searchbean.ospedale.PazienteSearchBean;
 import it.polimi.service.ospedale.PazienteService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +33,7 @@ public class PazienteController {
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ResponseEntity search(
         @RequestBody
-        Paziente paziente) {
+        PazienteSearchBean paziente) {
         List<Paziente> pazienteList;
         if (paziente.getPazienteId()!=null)
          log.info("Searching paziente like {}", paziente.getPazienteId());

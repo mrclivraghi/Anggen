@@ -3,6 +3,7 @@ package it.polimi.controller.ospedale;
 
 import java.util.List;
 import it.polimi.model.ospedale.Ambulatorio;
+import it.polimi.searchbean.ospedale.AmbulatorioSearchBean;
 import it.polimi.service.ospedale.AmbulatorioService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +33,7 @@ public class AmbulatorioController {
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ResponseEntity search(
         @RequestBody
-        Ambulatorio ambulatorio) {
+        AmbulatorioSearchBean ambulatorio) {
         List<Ambulatorio> ambulatorioList;
         if (ambulatorio.getAmbulatorioId()!=null)
          log.info("Searching ambulatorio like {}", ambulatorio.getAmbulatorioId());

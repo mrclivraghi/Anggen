@@ -4,6 +4,7 @@ package it.polimi.service.test;
 import java.util.List;
 import it.polimi.model.test.Person;
 import it.polimi.repository.test.PersonRepository;
+import it.polimi.searchbean.test.PersonSearchBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +23,7 @@ public class PersonServiceImpl
     }
 
     @Override
-    public List<Person> find(Person person) {
+    public List<Person> find(PersonSearchBean person) {
         return personRepository.findByPersonIdAndFirstNameAndLastNameAndBirthDate(person.getPersonId(),person.getFirstName(),person.getLastName(),it.polimi.utils.Utility.formatDate(person.getBirthDate()));
     }
 

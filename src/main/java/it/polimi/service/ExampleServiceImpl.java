@@ -4,6 +4,7 @@ package it.polimi.service;
 import java.util.List;
 import it.polimi.model.Example;
 import it.polimi.repository.ExampleRepository;
+import it.polimi.searchbean.ExampleSearchBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,8 +23,8 @@ public class ExampleServiceImpl
     }
 
     @Override
-    public List<Example> find(Example example) {
-        return exampleRepository.findByExampleIdAndNameAndEtaAndMaleAndBirthDateAndBirthTimeAndSex(example.getExampleId(),example.getName(),example.getEta(),example.getMale(),it.polimi.utils.Utility.formatDate(example.getBirthDate()),it.polimi.utils.Utility.formatTime(example.getBirthTime()), (example.getSex()==null)? null : example.getSex().getValue());
+    public List<Example> find(ExampleSearchBean example) {
+        return exampleRepository.findByExampleIdAndNameAndEtaAndMaleAndGreaterThanBirthDateFromAndLessThanBirthDateToAndBirthDateAndBirthTimeAndSex(example.getExampleId(),example.getName(),example.getEta(),example.getMale(),it.polimi.utils.Utility.formatDate(example.getBirthDateFrom()),it.polimi.utils.Utility.formatDate(example.getBirthDateTo()),it.polimi.utils.Utility.formatTime(example.getBirthTime()), (example.getSex()==null)? null : example.getSex().getValue());
     }
 
     @Override

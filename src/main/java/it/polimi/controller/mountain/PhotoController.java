@@ -3,6 +3,7 @@ package it.polimi.controller.mountain;
 
 import java.util.List;
 import it.polimi.model.mountain.Photo;
+import it.polimi.searchbean.mountain.PhotoSearchBean;
 import it.polimi.service.mountain.PhotoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +33,7 @@ public class PhotoController {
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ResponseEntity search(
         @RequestBody
-        Photo photo) {
+        PhotoSearchBean photo) {
         List<Photo> photoList;
         if (photo.getPhotoId()!=null)
          log.info("Searching photo like {}", photo.getPhotoId()+' '+ photo.getUrl());

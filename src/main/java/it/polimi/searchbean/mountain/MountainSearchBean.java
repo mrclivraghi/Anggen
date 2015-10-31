@@ -10,6 +10,7 @@ public class MountainSearchBean {
     public String name;
     public String height;
     public List<SeedQuery> seedQueryList;
+    public String seedQuerySeedKeyword;
 
     public Long getMountainId() {
         return this.mountainId;
@@ -41,6 +42,14 @@ public class MountainSearchBean {
 
     public void setSeedQueryList(List<SeedQuery> seedQueryList) {
         this.seedQueryList=seedQueryList;
+    }
+
+    public String getSeedQuerySeedKeyword() {
+        return this.seedQuerySeedKeyword;
+    }
+
+    public void setSeedQuerySeedKeyword(String seedQuerySeedKeyword) {
+        this.seedQuerySeedKeyword=seedQuerySeedKeyword;
     }
 
 }

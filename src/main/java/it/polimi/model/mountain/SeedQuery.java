@@ -1,6 +1,7 @@
 package it.polimi.model.mountain;
 
 import it.polimi.utils.annotation.DescriptionField;
+import it.polimi.utils.annotation.Filter;
 import it.polimi.utils.annotation.Tab;
 
 import java.math.BigDecimal;
@@ -38,6 +39,7 @@ public class SeedQuery {
 	@Column(name ="seed_keyword")
 	@DescriptionField
 	@Tab(number=1)
+	@Filter
 	private String seedKeyword;
 	
 	@NotNull

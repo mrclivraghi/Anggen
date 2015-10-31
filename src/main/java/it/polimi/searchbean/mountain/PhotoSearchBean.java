@@ -14,6 +14,7 @@ public class PhotoSearchBean {
     public String socialId;
     public String relatedPost;
     public SeedQuery seedQuery;
+    public String seedQuerySeedKeyword;
 
     public Long getPhotoId() {
         return this.photoId;
@@ -77,6 +78,14 @@ public class PhotoSearchBean {
 
     public void setSeedQuery(SeedQuery seedQuery) {
         this.seedQuery=seedQuery;
+    }
+
+    public String getSeedQuerySeedKeyword() {
+        return this.seedQuerySeedKeyword;
+    }
+
+    public void setSeedQuerySeedKeyword(String seedQuerySeedKeyword) {
+        this.seedQuerySeedKeyword=seedQuerySeedKeyword;
     }
 
 }

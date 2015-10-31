@@ -31,8 +31,8 @@ public interface PhotoRepository
 
     public List<Photo> findBySeedQuery(SeedQuery seedQuery);
 
-    @Query("select p from Photo p where  (:photoId is null or cast(:photoId as string)=cast(p.photoId as string)) and (:url is null or :url='' or cast(:url as string)=p.url) and (:social is null or :social='' or cast(:social as string)=p.social) and (:date is null or cast(:date as string)=cast(date(p.date) as string)) and (:status is null or cast(:status as string)=cast(p.status as string)) and (:socialId is null or :socialId='' or cast(:socialId as string)=p.socialId) and (:relatedPost is null or :relatedPost='' or cast(:relatedPost as string)=p.relatedPost) and (:seedQuery=p.seedQuery or :seedQuery is null) ")
-    public List<Photo> findByPhotoIdAndUrlAndSocialAndDateAndStatusAndSocialIdAndRelatedPostAndSeedQuery(
+    @Query("select p from Photo p where  (:photoId is null or cast(:photoId as string)=cast(p.photoId as string)) and (:url is null or :url='' or cast(:url as string)=p.url) and (:social is null or :social='' or cast(:social as string)=p.social) and (:date is null or cast(:date as string)=cast(date(p.date) as string)) and (:status is null or cast(:status as string)=cast(p.status as string)) and (:socialId is null or :socialId='' or cast(:socialId as string)=p.socialId) and (:relatedPost is null or :relatedPost='' or cast(:relatedPost as string)=p.relatedPost) and (:seedQuery=p.seedQuery or :seedQuery is null) and (:seedQuerySeedKeyword is null or :seedQuerySeedKeyword='' or cast(:seedQuerySeedKeyword as string)=p.seedQuery.seedKeyword) ")
+    public List<Photo> findByPhotoIdAndUrlAndSocialAndDateAndStatusAndSocialIdAndRelatedPostAndSeedQueryAndSeedKeyword(
         @Param("photoId")
         Long photoId,
         @Param("url")
@@ -48,6 +48,8 @@ public interface PhotoRepository
         @Param("relatedPost")
         String relatedPost,
         @Param("seedQuery")
-        SeedQuery seedQuery);
+        SeedQuery seedQuery,
+        @Param("seedQuerySeedKeyword")
+        String seedQuerySeedKeyword);
 
 }

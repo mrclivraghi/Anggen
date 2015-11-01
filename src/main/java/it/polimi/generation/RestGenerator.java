@@ -153,7 +153,7 @@ public class RestGenerator {
 				annotationParam.param("value", filterFieldName);
 				String hibernateField="";
 				
-				if (ReflectionManager.isListField(filterField))
+				if (ReflectionManager.isListField(field))
 				{// cerco quel campo in una lista
 					String aliasFilterOwnerClass= reflectionManager.parseName(filterField.getOwnerClass().getName()).substring(0, 1);
 					

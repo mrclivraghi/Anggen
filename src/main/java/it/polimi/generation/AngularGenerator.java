@@ -460,7 +460,7 @@ public class AngularGenerator {
 			for (String tabName: tabNameList)
 			{
 				html.li((new HtmlAttributes()).add("role", "presentation"))
-				.a((new HtmlAttributes()).add("href", "#"+entityName+"-"+tabName.replace(' ','-' )).add("aria-controls", tabName.replace(' ','-' )).add("role", "tab").add("data-toggle", "tab").add("ng-click",JsGenerator.resetTableTab(tabName,classClass)))
+				.a((new HtmlAttributes()).add("href", "#"+entityName+"-"+tabName.replace(' ','-' )).add("aria-controls", tabName.replace(' ','-' )).add("role", "tab").add("data-toggle", "tab").add("ng-click","refreshTable"+Utility.getFirstUpper(tabName.replaceAll(" ", ""))+"()"))
 				.content(tabName);
 				html._li();
 			}

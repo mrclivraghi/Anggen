@@ -494,6 +494,14 @@ public class JsGenerator {
 		manageRestError(sb);
 		sb.append("});\n");
 		sb.append("};\n");
+		ReflectionManager reflectionManager = new ReflectionManager(classClass);
+		for (String tabName: reflectionManager.getTabsName())
+		{
+			sb.append("$scope.refreshTable"+Utility.getFirstUpper(tabName.replaceAll(" ", ""))+"= function() \n");
+			sb.append("{\n");
+		sb.append(JsGenerator.resetTableTab(tabName,classClass));
+		sb.append("};\n");
+		}
 		sb.append("$scope.trueFalseValues=[true,false];\n");
 		//if (isParent)
 		{
@@ -648,7 +656,6 @@ public class JsGenerator {
 			sb.append("};\n");
 			
 			exportFields="";
-			ReflectionManager reflectionManager = new ReflectionManager(field.getFieldClass());
 			for (Field childrenField: reflectionManager.getChildrenFieldList())
 			{
 				if (ReflectionManager.hasExcelExport(childrenField))
@@ -835,9 +842,10 @@ public class JsGenerator {
 		for (Field field: reflectionManager.getFieldByTabName(tabName))
 		{
 			if (ReflectionManager.isListField(field))
-				resetTableTabString=resetTableTabString+" $scope."+field.getName()+"GridApi.core.handleWindowResize(); ";
+				resetTableTabString=resetTableTabString+" $scope."+field.getName()+"GridApi.core.handleWindowResize(); \n";
 				//$scope.seedQueryGridApi.core.handleWindowResize();
 		}
+		resetTableTabString = resetTableTabString+" alert('done');";
 		return resetTableTabString;
 	}
 	

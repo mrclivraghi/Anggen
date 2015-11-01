@@ -49,6 +49,8 @@ public class Generator {
 	
 	public static String htmlDirectory;
 	
+	public static String applicationName;
+	
 	private Set<Class<?>> allClasses;
 	
 	private Reflections reflections;
@@ -77,6 +79,7 @@ public class Generator {
 			Generator.menuDirectory=properties.getProperty("application.menu.directory");
 			Generator.angularDirectory=properties.getProperty("application.angular.directory");
 			Generator.htmlDirectory=properties.getProperty("application.html.directory");
+			Generator.applicationName=properties.getProperty("application.name");
 			
 			
 		} catch (FileNotFoundException e) {

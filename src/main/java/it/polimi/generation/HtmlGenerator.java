@@ -233,7 +233,7 @@ public class HtmlGenerator {
 			.span((new HtmlAttributes()).add("class", "icon-bar"))._span()
 			._button()
 			.a((new HtmlAttributes()).add("class", "navbar-brand").add("href", "#"))
-			.content("Brand")
+			.content(Generator.applicationName)
 			._div()//end header
 			.div((new HtmlAttributes()).add("class", "collapse navbar-collapse").add("id", "bs-example-navbar-collapse-1")) //start real nav menu
 			.ul((new HtmlAttributes()).add("class", "nav navbar-nav"));

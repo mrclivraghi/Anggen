@@ -460,7 +460,7 @@ public class AngularGenerator {
 			for (String tabName: tabNameList)
 			{
 				html.li((new HtmlAttributes()).add("role", "presentation"))
-				.a((new HtmlAttributes()).add("href", "#"+entityName+"-"+tabName).add("aria-controls", tabName).add("role", "tab").add("data-toggle", "tab").add("ng-click",JsGenerator.resetTableTab(tabName,classClass)))
+				.a((new HtmlAttributes()).add("href", "#"+entityName+"-"+tabName.replace(' ','-' )).add("aria-controls", tabName.replace(' ','-' )).add("role", "tab").add("data-toggle", "tab").add("ng-click",JsGenerator.resetTableTab(tabName,classClass)))
 				.content(tabName);
 				html._li();
 			}
@@ -473,7 +473,7 @@ public class AngularGenerator {
 		{
 			 //<div role="tabpanel" class="tab-pane fade in active" id="home">
 			if (!search)
-				html.div((new HtmlAttributes()).add("role", "tabpanel").add("class", "tab-pane fade").add("id", entityName+"-"+tabName));
+				html.div((new HtmlAttributes()).add("role", "tabpanel").add("class", "tab-pane fade").add("id", entityName+"-"+tabName.replace(' ','-' )));
 			
 			String style="";
 			if (entityName.equals("mountain"))

@@ -9,7 +9,7 @@
 		<org.springframework.version>4.1.6.RELEASE</org.springframework.version>
 		<org.hibernate-entitymanager.version>4.3.10.Final</org.hibernate-entitymanager.version>
 		<postgres.version>9.4-1204-jdbc42</postgres.version>
-
+	 <springsecurity.version>4.0.1.RELEASE</springsecurity.version>
 	</properties>
 
 	
@@ -43,22 +43,16 @@
 		</dependency>
 		<!--  spring security stuff -->
 		
-		
-		<dependency>
-	<groupId>org.springframework.security</groupId>
-	<artifactId>spring-security-core</artifactId>
-	<version>3.2.3.RELEASE</version>
-    </dependency>
-    <dependency>
-        <groupId>org.springframework.security</groupId>
-        <artifactId>spring-security-web</artifactId>
-        <version>3.2.3.RELEASE</version>
-    </dependency>
-    <dependency>
-        <groupId>org.springframework.security</groupId>
-        <artifactId>spring-security-config</artifactId>
-        <version>3.2.3.RELEASE</version>
-    </dependency>
+ <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+            <version>${springsecurity.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+            <version>${springsecurity.version}</version>
+        </dependency>
 
       <dependency>
 			<groupId>org.hibernate</groupId>

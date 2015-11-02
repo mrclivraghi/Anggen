@@ -463,6 +463,7 @@ public class AngularGenerator {
 				.a((new HtmlAttributes()).add("href", "#"+entityName+"-"+tabName.replace(' ','-' )).add("aria-controls", tabName.replace(' ','-' )).add("role", "tab").add("data-toggle", "tab").add("ng-click","refreshTable"+Utility.getFirstUpper(tabName.replaceAll(" ", ""))+"()"))
 				.content(tabName);
 				html._li();
+				html.script((new HtmlAttributes()).add("type", "text/javascript")).content(JsGenerator.scriptResizeTableTab(tabName, entityName),false);
 			}
 			html._ul();
 			html.div((new HtmlAttributes()).add("class", "tab-content"));

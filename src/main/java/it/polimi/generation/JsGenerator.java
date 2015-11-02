@@ -845,8 +845,21 @@ public class JsGenerator {
 				resetTableTabString=resetTableTabString+" $scope."+field.getName()+"GridApi.core.handleWindowResize(); \n";
 				//$scope.seedQueryGridApi.core.handleWindowResize();
 		}
-		resetTableTabString = resetTableTabString+" alert('done');";
+		//resetTableTabString = resetTableTabString+" alert('done');";
 		return resetTableTabString;
+	}
+	public static String scriptResizeTableTab(String tabName,String entityName)
+	{
+		StringBuilder sb= new StringBuilder();
+
+		sb.append("$('a[href=\"#"+entityName+"-"+tabName+"\"]').on('shown.bs.tab', function (e) {\n");
+		sb.append("var target = $(e.target).attr(\"href\"); // activated tab\n");
+		sb.append("//console.log(target);\n");
+		sb.append("if (angular.element($('#"+entityName+"Tabs')).scope()!=null && angular.element($('#"+entityName+"Tabs')).scope()!=undefined) \n");
+		sb.append("angular.element($('#"+entityName+"Tabs')).scope().refreshTable"+Utility.getFirstUpper(tabName.replaceAll(" ",""))+"();\n");
+		sb.append("});\n");
+
+		return sb.toString();
 	}
 	
 	

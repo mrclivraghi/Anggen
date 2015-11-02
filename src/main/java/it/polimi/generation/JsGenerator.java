@@ -160,7 +160,7 @@ public class JsGenerator {
 		//searchOne
 
 		sb.append("this.searchOne=function(entity) {\n");
-		sb.append("this.setSelectedEntity(null);\n");
+		//sb.append("this.setSelectedEntity(null);\n");
 		sb.append("var promise= $http.get(\"../"+entityName+"/\"+entity."+entityName+"Id);\n");
 		//sb.append(".then( function(response) {\n");
 		//sb.append("return response.data;\n");

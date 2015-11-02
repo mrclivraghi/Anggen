@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -23,10 +24,7 @@ public class Authority {
 	private Long authorityId;
 	private String name;
 	
-	@OneToMany(fetch=FetchType.EAGER)
-	//@Cascade({CascadeType.ALL})
-	@Type(type="it.polimi.model.login.User")
-	@JoinColumn(name="authorty_id_authority")
+	@ManyToMany(mappedBy = "authorityList",fetch=FetchType.EAGER)
 	private List<User> userList;
 	
 	/**
@@ -52,5 +50,17 @@ public class Authority {
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+	/**
+	 * @return the userList
+	 */
+	public List<User> getUserList() {
+		return userList;
+	}
+	/**
+	 * @param userList the userList to set
+	 */
+	public void setUserList(List<User> userList) {
+		this.userList = userList;
 	}
 }

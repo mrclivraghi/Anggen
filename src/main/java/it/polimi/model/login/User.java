@@ -1,5 +1,7 @@
 package it.polimi.model.login;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -7,6 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -23,11 +27,17 @@ public class User {
 	private String username;
 	private String password;
 	private String role;
+	private Boolean enabled;
 	
-	@ManyToOne(fetch=FetchType.EAGER)
-	//@Cascade({CascadeType.PERSIST})
-	@JoinColumn(name="authority_id_authority")
-	private Authority authority;
+	@ManyToMany(fetch=FetchType.EAGER)
+	@Type(type="it.polimi.model.login.Authority")
+	@JoinTable(name="user_authority", joinColumns = {
+			@JoinColumn(name="user_id") },
+			inverseJoinColumns= {
+			@JoinColumn(name="authority_id")
+			
+	})
+	private List<Authority> authorityList;
 	
 	public String getUsername() {
 		return username;
@@ -62,13 +72,25 @@ public class User {
 	/**
 	 * @return the authority
 	 */
-	public Authority getAuthority() {
-		return authority;
+	public List<Authority> getAuthorityList() {
+		return authorityList;
 	}
 	/**
 	 * @param authority the authority to set
 	 */
-	public void setAuthority(Authority authority) {
-		this.authority = authority;
+	public void setAuthorityList(List<Authority> authorityList) {
+		this.authorityList = authorityList;
+	}
+	/**
+	 * @return the enabled
+	 */
+	public Boolean getEnabled() {
+		return enabled;
+	}
+	/**
+	 * @param enabled the enabled to set
+	 */
+	public void setEnabled(Boolean enabled) {
+		this.enabled = enabled;
 	}
 }

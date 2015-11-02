@@ -157,6 +157,9 @@ alert("error");
 return; 
 });
 };
+$scope.refreshTableDetail= function() 
+{
+};
 $scope.trueFalseValues=[true,false];
 $scope.showSeedQueryDetail= function(index)
 {
@@ -447,6 +450,13 @@ photoService.childrenList.seedQueryList=response.data;
 alert("error");
 return; 
 });
+};
+$scope.refreshTableDetails= function() 
+{
+};
+$scope.refreshTableRelationships= function() 
+{
+ $scope.photoGridApi.core.handleWindowResize(); 
 };
 $scope.trueFalseValues=[true,false];
 $scope.showMountainDetail= function(index)
@@ -786,6 +796,13 @@ seedQueryService.childrenList.mountainList=response.data;
 alert("error");
 return; 
 });
+};
+$scope.refreshTableTab1= function() 
+{
+};
+$scope.refreshTableTab2= function() 
+{
+ $scope.seedQueryGridApi.core.handleWindowResize(); 
 };
 $scope.trueFalseValues=[true,false];
 $scope.showSeedQueryDetail= function(index)

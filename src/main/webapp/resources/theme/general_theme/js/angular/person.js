@@ -150,6 +150,9 @@ alert("error");
 return; 
 });
 };
+$scope.refreshTableDetail= function() 
+{
+};
 $scope.trueFalseValues=[true,false];
 $scope.init=function()
 {

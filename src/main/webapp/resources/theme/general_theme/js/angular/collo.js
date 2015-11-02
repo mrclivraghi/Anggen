@@ -157,6 +157,9 @@ alert("error");
 return; 
 });
 };
+$scope.refreshTableDetail= function() 
+{
+};
 $scope.trueFalseValues=[true,false];
 $scope.showOrdineDetail= function(index)
 {
@@ -448,6 +451,11 @@ colloService.childrenList.ordineList=response.data;
 alert("error");
 return; 
 });
+};
+$scope.refreshTableDetail= function() 
+{
+ $scope.colloGridApi.core.handleWindowResize(); 
+ $scope.itemOrdineGridApi.core.handleWindowResize(); 
 };
 $scope.trueFalseValues=[true,false];
 $scope.showColloDetail= function(index)
@@ -862,6 +870,10 @@ alert("error");
 return; 
 });
 };
+$scope.refreshTableDetail= function() 
+{
+ $scope.itemOrdineCodiceGridApi.core.handleWindowResize(); 
+};
 $scope.trueFalseValues=[true,false];
 $scope.showOrdineDetail= function(index)
 {
@@ -1217,6 +1229,9 @@ itemOrdineService.childrenList.itemOrdineCodiceList=response.data;
 alert("error");
 return; 
 });
+};
+$scope.refreshTableDetail= function() 
+{
 };
 $scope.trueFalseValues=[true,false];
 $scope.showItemOrdineDetail= function(index)

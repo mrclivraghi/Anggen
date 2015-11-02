@@ -160,6 +160,10 @@ alert("error");
 return; 
 });
 };
+$scope.refreshTableDetail= function() 
+{
+ $scope.pazienteGridApi.core.handleWindowResize(); 
+};
 $scope.trueFalseValues=[true,false];
 $scope.showPazienteDetail= function(index)
 {
@@ -495,6 +499,14 @@ ambulatorioService.childrenList.pazienteList=response.data;
 alert("error");
 return; 
 });
+};
+$scope.refreshTableDatianagrafici= function() 
+{
+};
+$scope.refreshTableRel= function() 
+{
+ $scope.fascicoloGridApi.core.handleWindowResize(); 
+ $scope.ambulatorioGridApi.core.handleWindowResize(); 
 };
 $scope.trueFalseValues=[true,false];
 $scope.showFascicoloDetail= function(index)
@@ -881,6 +893,9 @@ pazienteService.childrenList.fascicoloList=response.data;
 alert("error");
 return; 
 });
+};
+$scope.refreshTableDetail= function() 
+{
 };
 $scope.trueFalseValues=[true,false];
 $scope.showPazienteDetail= function(index)

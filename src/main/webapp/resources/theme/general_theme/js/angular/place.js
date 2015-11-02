@@ -157,6 +157,9 @@ alert("error");
 return; 
 });
 };
+$scope.refreshTableDetail= function() 
+{
+};
 $scope.trueFalseValues=[true,false];
 $scope.showOrderDetail= function(index)
 {
@@ -442,6 +445,10 @@ placeService.childrenList.orderList=response.data;
 alert("error");
 return; 
 });
+};
+$scope.refreshTableDetail= function() 
+{
+ $scope.placeGridApi.core.handleWindowResize(); 
 };
 $scope.trueFalseValues=[true,false];
 $scope.showPersonDetail= function(index)
@@ -766,6 +773,9 @@ orderService.childrenList.personList=response.data;
 alert("error");
 return; 
 });
+};
+$scope.refreshTableDetail= function() 
+{
 };
 $scope.trueFalseValues=[true,false];
 $scope.init=function()

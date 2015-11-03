@@ -1,5 +1,6 @@
 package it.polimi.utils;
 
+import it.polimi.generation.Generator;
 import it.polimi.model.Example;
 import it.polimi.model.Sex;
 import it.polimi.model.mountain.Mountain;
@@ -40,6 +41,7 @@ import org.springframework.data.repository.query.Param;
 import com.sun.codemodel.JAnnotationUse;
 import com.sun.codemodel.JClass;
 import com.sun.codemodel.JCodeModel;
+import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JType;
 import com.sun.codemodel.JVar;
 
@@ -141,7 +143,7 @@ public class ReflectionManager {
 		{
 			Class fieldClass= null;
 			JClass jClass=null;
-			Class repositoryClass=null;
+			JDefinedClass repositoryClass=null;
 			Boolean isEnum=field.getType().isEnum();
 			List<String> enumValuesList= new ArrayList<String>();
 			if (isKnownClass(field.getType()))
@@ -168,9 +170,9 @@ public class ReflectionManager {
 							try {
 								fieldClass=Class.forName(elementType.getTypeName());
 								jClass=jClass.narrow(fieldClass);
-								repositoryClass=Class.forName(elementType.getTypeName().replace(".model.", ".repository.")+"Repository");
+								repositoryClass=Generator.repositoryMap.get(elementType.getTypeName());
 							} catch (ClassNotFoundException e) {
-								// TODO Auto-generated catch block
+								//e.printStackTrace();
 							}
 						}
 					}else

@@ -282,7 +282,7 @@ public class RestGenerator {
 						generateGetterAndSetter(myClass, field.getName()+"To", field.getFieldClass());
 					} else
 					{
-						if (ReflectionManager.isListField(field) && field.getRepositoryClass()!=null)
+						if (ReflectionManager.isListField(field))
 						{
 							JClass listClass = codeModel.ref(List.class).narrow(field.getFieldClass());
 							JVar fieldVar = myClass.field(JMod.PUBLIC, listClass, field.getName()+"List");
@@ -336,9 +336,9 @@ public class RestGenerator {
 			dependencyClass.add(classClass);
 			return;
 		}
+		generateRepository();
 		generateSearchBean();
 		generateServiceInterface();
-		generateRepository();
 		generateServiceImpl();
 		generateController();
 	}
@@ -392,6 +392,7 @@ public class RestGenerator {
 		}
 		saveFile(codeModel);
 		repositoryClass=myClass;
+		Generator.repositoryMap.put(classClass.getName(), repositoryClass);
 		return searchMethod;
 	}
 	
@@ -666,6 +667,7 @@ public class RestGenerator {
 			orderParam= insert.param(classClass,lowerClass+"");
 			orderParam.annotate(RequestBody.class);
 			JBlock insertBlock= insert.body();
+			insertBlock.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(lowerClass)+"Id()!=null)");
 			insertBlock.directStatement("log.info(\"Inserting "+lowerClass+" like {}\","+reflectionManager.getDescriptionField(true)+");");
 			insertBlock.directStatement(Utility.getFirstUpper(className)+" inserted"+className+"="+lowerClass+"Service.insert("+lowerClass+");");
 			insertBlock.directStatement("getRightMapping(inserted"+className+");");

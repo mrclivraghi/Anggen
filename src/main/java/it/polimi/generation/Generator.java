@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
@@ -56,6 +57,8 @@ public class Generator {
 	private Reflections reflections;
 	
 	public List<Class> dependencyClass;
+	
+	public static HashMap<String, JDefinedClass> repositoryMap = new HashMap<String, JDefinedClass>();
 	
 	
 	public Generator()

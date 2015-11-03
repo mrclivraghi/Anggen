@@ -4,24 +4,25 @@ import java.lang.annotation.Annotation;
 import java.util.List;
 
 import com.sun.codemodel.JClass;
+import com.sun.codemodel.JDefinedClass;
 
 public class Field{
 	private String name;
 	private Class fieldClass;
 	private JClass compositeClass;
-	private Class repositoryClass;
+	private JDefinedClass repositoryClass;
 	private Annotation[] annotationList;
 	private Boolean isEnum;
 	private List<String> enumValuesList;
 	private List<Field> childrenFilterList;
 	private Class ownerClass;
 	
-	public Field(String name, Class fieldClass, JClass compositeClass,Class repositoryClass)
+	public Field(String name, Class fieldClass, JClass compositeClass,JDefinedClass repositoryClass2)
 	{
 		this.name=name;
 		this.fieldClass=fieldClass;
 		this.setCompositeClass(compositeClass);
-		this.setRepositoryClass(repositoryClass);
+		this.setRepositoryClass(repositoryClass2);
 	}
 	
 	public String getName() {
@@ -42,11 +43,11 @@ public class Field{
 	public void setCompositeClass(JClass compositeClass) {
 		this.compositeClass = compositeClass;
 	}
-	public Class getRepositoryClass() {
+	public JDefinedClass getRepositoryClass() {
 		return repositoryClass;
 	}
-	public void setRepositoryClass(Class repositoryClass) {
-		this.repositoryClass = repositoryClass;
+	public void setRepositoryClass(JDefinedClass repositoryClass2) {
+		this.repositoryClass = repositoryClass2;
 	}
 
 	public Annotation[] getAnnotationList() {

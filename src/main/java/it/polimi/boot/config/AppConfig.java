@@ -39,7 +39,7 @@ public class AppConfig {
                 prop.put("hibernate.format_sql", "true");
                 prop.put("hibernate.show_sql", "true");
                 prop.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
-                prop.put("hibernate.hbm2ddl.auto", "create-drop");
+                prop.put("hibernate.hbm2ddl.auto", "update");
                 //spring.jpa.hibernate.naming-strategy=org.hibernate.cfg.UppercaseNamingStrategy
                 //prop.put("hibernate.naming-strategy","org.hibernate.cfg.UppercaseNamingStrategy");
                 return prop;
@@ -67,7 +67,7 @@ public class AppConfig {
 		InternalResourceViewResolver viewResolver 
                              = new InternalResourceViewResolver();
 		viewResolver.setViewClass(JstlView.class);
-		viewResolver.setPrefix("/WEB-INF/pages/");
+		viewResolver.setPrefix("/WEB-INF/jsp/");
 		viewResolver.setSuffix(".jsp");
 		return viewResolver;
 	}

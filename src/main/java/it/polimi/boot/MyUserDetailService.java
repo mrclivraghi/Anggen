@@ -1,6 +1,6 @@
 package it.polimi.boot;
 
-import it.polimi.boot.domain.UserRole;
+import it.polimi.boot.domain.Role;
 import it.polimi.boot.repository.UserRepository;
 
 import java.util.ArrayList;
@@ -34,7 +34,7 @@ public class MyUserDetailService implements UserDetailsService {
 	
 		it.polimi.boot.domain.User user = userRepository.findByUsername(username);
 		List<GrantedAuthority> authorities = 
-                                      buildUserAuthority(user.getUserRole());
+                                      buildUserAuthority(user.getUserRoleList());
 
 		return buildUserForAuthentication(user, authorities);
 		
@@ -48,12 +48,12 @@ public class MyUserDetailService implements UserDetailsService {
 			user.isEnabled(), true, true, true, authorities);
 	}
 
-	private List<GrantedAuthority> buildUserAuthority(Set<UserRole> userRoles) {
+	private List<GrantedAuthority> buildUserAuthority(List<Role> userRoles) {
 
 		Set<GrantedAuthority> setAuths = new HashSet<GrantedAuthority>();
 
 		// Build user's authorities
-		for (UserRole userRole : userRoles) {
+		for (Role userRole : userRoles) {
 			setAuths.add(new SimpleGrantedAuthority(userRole.getRole()));
 		}
 

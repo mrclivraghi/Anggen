@@ -32,12 +32,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 			.authorizeRequests()
-			.antMatchers("/public/**","/error","/css/**","/img/**","/js/**").permitAll()
-				.anyRequest().authenticated()
+			.antMatchers("/public/**","/error","/css/**","/img/**","/js/**","/mountain2/**").permitAll()
+				.anyRequest().permitAll();/*
 				.and()
 			.formLogin()
 				.and()
-			.httpBasic();
+			.httpBasic();*/
 	}
 	
 	@Autowired

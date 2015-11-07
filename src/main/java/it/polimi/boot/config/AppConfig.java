@@ -6,6 +6,7 @@ import javax.sql.DataSource;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -21,10 +22,49 @@ import org.springframework.web.servlet.view.JstlView;
 @ComponentScan({ "it.polimi.*" })
 @Import({ SecurityConfig.class })
 public class AppConfig {
+	
 
-        @Bean
-        public SessionFactory sessionFactory() {
-                LocalSessionFactoryBuilder builder = 
+	
+	 @Value("${hibernate.format_sql}")
+	 private String formatSql;
+	
+	 @Value("${hibernate.show_sql}")
+	 private String showSql;
+	 
+	 @Value("${hibernate.dialect}")
+	 private String dialect;
+	 
+	 @Value("${hibernate.hbm2ddl.auto}")
+	 private String mode;
+	 
+	 @Value("${hibernate.naming-strategy}")
+	 private String namingStrategy;
+
+	 @Value("${datasource.driver.class.name}")
+	 private String driverClassName;
+	 
+	 @Value("${datasource.jdbc}")
+	 private String jdbcString;
+	 
+	 @Value("${datasource.url}")
+	 private String dbUrl;
+	 
+	 @Value("${datasource.port}")
+	 private String dbPort;
+	 
+	 @Value("${datasource.db.name}")
+	 private String dbName;
+	 
+	 @Value("${datasource.username}")
+	 private String dbUser;
+	 
+	 @Value("${datasource.password}")
+	 private String dbPassword;
+
+
+	 @Bean
+	 public SessionFactory sessionFactory() {
+		 LocalSessionFactoryBuilder builder = 
 			new LocalSessionFactoryBuilder(dataSource());
                 builder.scanPackages("it.polimi")
                       .addProperties(getHibernateProperties());
@@ -34,12 +74,12 @@ public class AppConfig {
 
 	private Properties getHibernateProperties() {
                 Properties prop = new Properties();
-                prop.put("hibernate.format_sql", "true");
-                prop.put("hibernate.show_sql", "true");
-                prop.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
-                prop.put("hibernate.hbm2ddl.auto", "update");
+                prop.put("hibernate.format_sql", formatSql);
+                prop.put("hibernate.show_sql", showSql);
+                prop.put("hibernate.dialect", dialect);
+                prop.put("hibernate.hbm2ddl.auto", mode);
                 //spring.jpa.hibernate.naming-strategy=org.hibernate.cfg.UppercaseNamingStrategy
-                prop.put("hibernate.naming-strategy","it.polimi.boot.OracleNamingStrategy");
+                prop.put("hibernate.naming-strategy",namingStrategy);
                 return prop;
         }
 	
@@ -47,10 +87,10 @@ public class AppConfig {
 	public DataSource dataSource() {
 		
 		BasicDataSource ds = new BasicDataSource();
-	        ds.setDriverClassName("org.postgresql.Driver");
-		ds.setUrl("jdbc:postgresql://localhost:5432/test_db");
-		ds.setUsername("postgres");
-		ds.setPassword("postgres");
+	        ds.setDriverClassName(driverClassName);
+		ds.setUrl(jdbcString+"://"+dbUrl+":"+dbPort+"/"+dbName);
+		ds.setUsername(dbUser);
+		ds.setPassword(dbPassword);
 		return ds;
 	}
 	

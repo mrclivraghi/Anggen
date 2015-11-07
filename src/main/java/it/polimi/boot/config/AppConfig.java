@@ -22,11 +22,11 @@ import org.springframework.web.servlet.view.JstlView;
 @Import({ SecurityConfig.class })
 public class AppConfig {
 
-      /*  @Bean
+        @Bean
         public SessionFactory sessionFactory() {
                 LocalSessionFactoryBuilder builder = 
 			new LocalSessionFactoryBuilder(dataSource());
-                builder.scanPackages("it.polimi").addResource("/static/")
+                builder.scanPackages("it.polimi")
                       .addProperties(getHibernateProperties());
 
               return builder.buildSessionFactory();
@@ -43,7 +43,7 @@ public class AppConfig {
                 return prop;
         }
 	
-*/	@Bean(name = "dataSource")
+	@Bean(name = "dataSource")
 	public DataSource dataSource() {
 		
 		BasicDataSource ds = new BasicDataSource();
@@ -60,7 +60,7 @@ public class AppConfig {
                 return new HibernateTransactionManager(sessionFactory());
         }*/
 		
-/*	@Bean
+	@Bean
 	public InternalResourceViewResolver viewResolver() {
 		InternalResourceViewResolver viewResolver 
                              = new InternalResourceViewResolver();
@@ -68,6 +68,6 @@ public class AppConfig {
 		viewResolver.setPrefix("/WEB-INF/jsp/");
 		viewResolver.setSuffix(".jsp");
 		return viewResolver;
-	}*/
+	}
 	
 }

@@ -32,7 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 			.authorizeRequests()
-			.antMatchers("/public/**","/error","/css/**","/img/**","/js/**","/mountain2/**").permitAll()
+			.antMatchers("/public/**","/error","/css/**","/img/**","/js/**","/mountain/**").permitAll()
 				.anyRequest().permitAll();/*
 				.and()
 			.formLogin()

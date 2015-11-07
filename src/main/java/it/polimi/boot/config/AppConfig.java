@@ -39,7 +39,7 @@ public class AppConfig {
                 prop.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
                 prop.put("hibernate.hbm2ddl.auto", "update");
                 //spring.jpa.hibernate.naming-strategy=org.hibernate.cfg.UppercaseNamingStrategy
-                //prop.put("hibernate.naming-strategy","org.hibernate.cfg.UppercaseNamingStrategy");
+                prop.put("hibernate.naming-strategy","it.polimi.boot.OracleNamingStrategy");
                 return prop;
         }
 	

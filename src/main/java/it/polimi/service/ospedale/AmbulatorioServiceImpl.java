@@ -20,12 +20,9 @@ public class AmbulatorioServiceImpl
 
     @Autowired
     public AmbulatorioRepository ambulatorioRepository;
-
+    
     @Autowired
-    public PazienteRepository pazienteRepository;
-    
-    
-    
+    private PazienteRepository pazienteRepository;
 
     @Override
     public List<Ambulatorio> findById(Long ambulatorioId) {

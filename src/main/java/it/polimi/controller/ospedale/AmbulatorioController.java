@@ -69,6 +69,7 @@ public class AmbulatorioController {
     public ResponseEntity insertambulatorio(
         @org.springframework.web.bind.annotation.RequestBody
         Ambulatorio ambulatorio) {
+        if (ambulatorio.getAmbulatorioId()!=null)
         log.info("Inserting ambulatorio like {}", ambulatorio.getAmbulatorioId());
         Ambulatorio insertedambulatorio=ambulatorioService.insert(ambulatorio);
         getRightMapping(insertedambulatorio);

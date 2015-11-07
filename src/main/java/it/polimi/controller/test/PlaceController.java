@@ -69,6 +69,7 @@ public class PlaceController {
     public ResponseEntity insertplace(
         @org.springframework.web.bind.annotation.RequestBody
         Place place) {
+        if (place.getPlaceId()!=null)
         log.info("Inserting place like {}",place.toString());
         Place insertedplace=placeService.insert(place);
         getRightMapping(insertedplace);

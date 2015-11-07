@@ -69,6 +69,7 @@ public class ItemOrdineCodiceController {
     public ResponseEntity insertitemOrdineCodice(
         @org.springframework.web.bind.annotation.RequestBody
         ItemOrdineCodice itemOrdineCodice) {
+        if (itemOrdineCodice.getItemOrdineCodiceId()!=null)
         log.info("Inserting itemOrdineCodice like {}",itemOrdineCodice.toString());
         ItemOrdineCodice inserteditemOrdineCodice=itemOrdineCodiceService.insert(itemOrdineCodice);
         getRightMapping(inserteditemOrdineCodice);

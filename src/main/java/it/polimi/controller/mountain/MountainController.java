@@ -2,11 +2,9 @@
 package it.polimi.controller.mountain;
 
 import java.util.List;
-
 import it.polimi.model.mountain.Mountain;
 import it.polimi.searchbean.mountain.MountainSearchBean;
 import it.polimi.service.mountain.MountainService;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +14,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.View;
 
 @Controller
 @RequestMapping("/mountain")
@@ -74,6 +69,7 @@ public class MountainController {
     public ResponseEntity insertmountain(
         @org.springframework.web.bind.annotation.RequestBody
         Mountain mountain) {
+        if (mountain.getMountainId()!=null)
         log.info("Inserting mountain like {}", mountain.getMountainId()+' '+ mountain.getName());
         Mountain insertedmountain=mountainService.insert(mountain);
         getRightMapping(insertedmountain);

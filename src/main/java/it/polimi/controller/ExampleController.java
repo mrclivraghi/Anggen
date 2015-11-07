@@ -69,6 +69,7 @@ public class ExampleController {
     public ResponseEntity insertexample(
         @org.springframework.web.bind.annotation.RequestBody
         Example example) {
+        if (example.getExampleId()!=null)
         log.info("Inserting example like {}",example.toString());
         Example insertedexample=exampleService.insert(example);
         getRightMapping(insertedexample);

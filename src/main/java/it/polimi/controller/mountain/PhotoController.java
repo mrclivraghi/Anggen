@@ -69,6 +69,7 @@ public class PhotoController {
     public ResponseEntity insertphoto(
         @org.springframework.web.bind.annotation.RequestBody
         Photo photo) {
+        if (photo.getPhotoId()!=null)
         log.info("Inserting photo like {}", photo.getPhotoId()+' '+ photo.getUrl());
         Photo insertedphoto=photoService.insert(photo);
         getRightMapping(insertedphoto);

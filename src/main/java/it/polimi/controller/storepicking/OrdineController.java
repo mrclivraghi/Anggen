@@ -69,6 +69,7 @@ public class OrdineController {
     public ResponseEntity insertordine(
         @org.springframework.web.bind.annotation.RequestBody
         Ordine ordine) {
+        if (ordine.getOrdineId()!=null)
         log.info("Inserting ordine like {}",ordine.toString());
         Ordine insertedordine=ordineService.insert(ordine);
         getRightMapping(insertedordine);

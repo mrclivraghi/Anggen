@@ -68,21 +68,21 @@ public class HtmlGenerator {
 		try {
 			//js
 			html
-			.macros().javascript("../resources/general_theme/js/jquery-1.9.1.js")
-			.macros().javascript("../resources/general_theme/js/jquery-ui.js")
-			.macros().javascript("../resources/general_theme/js/angular.js")
-			.macros().javascript("../resources/general_theme/js/angular-touch.js")
-			.macros().javascript("../resources/general_theme/js/angular-animate.js")
-			.macros().javascript("../resources/general_theme/js/csv.js")
-			.macros().javascript("../resources/general_theme/js/pdfmake.js")
-			.macros().javascript("../resources/general_theme/js/vfs_fonts.js")
-			.macros().javascript("../resources/general_theme/js/ui-grid.js")
-			.macros().javascript("../resources/general_theme/js/angular/"+entityName+".js")
-			.macros().javascript("../resources/general_theme/js/date.js")
-			.macros().javascript("../resources/general_theme/js/utility.js")
-			.macros().javascript("../resources/general_theme/js/jquery.easytree.js")
-			.macros().javascript("../resources/general_theme/js/bootstrap.min.js")
-			.macros().javascript("../resources/general_theme/js/alasql.min.js");
+			.macros().javascript("../js/jquery-1.9.1.js")
+			.macros().javascript("../js/jquery-ui.js")
+			.macros().javascript("../js/angular.js")
+			.macros().javascript("../js/angular-touch.js")
+			.macros().javascript("../js/angular-animate.js")
+			.macros().javascript("../js/csv.js")
+			.macros().javascript("../js/pdfmake.js")
+			.macros().javascript("../js/vfs_fonts.js")
+			.macros().javascript("../js/ui-grid.js")
+			.macros().javascript("../js/angular/"+entityName+".js")
+			.macros().javascript("../js/date.js")
+			.macros().javascript("../js/utility.js")
+			.macros().javascript("../js/jquery.easytree.js")
+			.macros().javascript("../js/bootstrap.min.js")
+			.macros().javascript("../js/alasql.min.js");
 			} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -91,12 +91,12 @@ public class HtmlGenerator {
 	public void incluseCssFiles(HtmlCanvas html)
 	{
 		try {
-			html.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../resources/general_theme/css/ui-grid.css"))
-			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../resources/general_theme/css/bootstrap.min.css"))
-			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../resources/general_theme/css/main.css"))
-			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../resources/general_theme/css/jquery-ui.css"))
-			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../resources/general_theme/css/easytree/skin-win8/ui.easytree.css"))
-			.link((new HtmlAttributes()).add("rel","import").add("href", "../resources/general_theme/static/menu.html"));
+			html.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../css/ui-grid.css"))
+			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../css/bootstrap.min.css"))
+			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../css/main.css"))
+			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../css/jquery-ui.css"))
+			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../css/easytree/skin-win8/ui.easytree.css"))
+			.link((new HtmlAttributes()).add("rel","import").add("href", "../menu.html"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

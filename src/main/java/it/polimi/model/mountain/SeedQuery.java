@@ -56,7 +56,7 @@ public class SeedQuery {
 	@OneToMany(fetch=FetchType.EAGER)
 	//@Cascade({CascadeType.ALL})
 	@Type(type="it.polimi.model.Photo")
-	@JoinColumn(name="seedquery_id_seed_query")
+	@JoinColumn(name="seed_query_id_seed_query")
 	@Tab(name="relationships")
 	private List<Photo> photoList;
 	

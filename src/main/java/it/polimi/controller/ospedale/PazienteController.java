@@ -69,6 +69,7 @@ public class PazienteController {
     public ResponseEntity insertpaziente(
         @org.springframework.web.bind.annotation.RequestBody
         Paziente paziente) {
+        if (paziente.getPazienteId()!=null)
         log.info("Inserting paziente like {}", paziente.getPazienteId());
         Paziente insertedpaziente=pazienteService.insert(paziente);
         getRightMapping(insertedpaziente);

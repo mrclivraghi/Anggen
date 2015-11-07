@@ -69,6 +69,7 @@ public class MountainController {
     public ResponseEntity insertmountain(
         @org.springframework.web.bind.annotation.RequestBody
         Mountain mountain) {
+        if (mountain.getMountainId()!=null)
         log.info("Inserting mountain like {}", mountain.getMountainId()+' '+ mountain.getName());
         Mountain insertedmountain=mountainService.insert(mountain);
         getRightMapping(insertedmountain);

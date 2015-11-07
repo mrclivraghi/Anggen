@@ -69,6 +69,7 @@ public class OrderController {
     public ResponseEntity insertorder(
         @org.springframework.web.bind.annotation.RequestBody
         Order order) {
+        if (order.getOrderId()!=null)
         log.info("Inserting order like {}",order.toString());
         Order insertedorder=orderService.insert(order);
         getRightMapping(insertedorder);

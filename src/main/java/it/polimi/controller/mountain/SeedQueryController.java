@@ -69,6 +69,7 @@ public class SeedQueryController {
     public ResponseEntity insertseedQuery(
         @org.springframework.web.bind.annotation.RequestBody
         SeedQuery seedQuery) {
+        if (seedQuery.getSeedQueryId()!=null)
         log.info("Inserting seedQuery like {}", seedQuery.getSeedQueryId()+' '+ seedQuery.getSeedKeyword());
         SeedQuery insertedseedQuery=seedQueryService.insert(seedQuery);
         getRightMapping(insertedseedQuery);

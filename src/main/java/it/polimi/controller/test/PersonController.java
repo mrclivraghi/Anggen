@@ -69,6 +69,7 @@ public class PersonController {
     public ResponseEntity insertperson(
         @org.springframework.web.bind.annotation.RequestBody
         Person person) {
+        if (person.getPersonId()!=null)
         log.info("Inserting person like {}",person.toString());
         Person insertedperson=personService.insert(person);
         getRightMapping(insertedperson);

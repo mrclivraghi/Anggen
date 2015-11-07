@@ -69,6 +69,7 @@ public class FascicoloController {
     public ResponseEntity insertfascicolo(
         @org.springframework.web.bind.annotation.RequestBody
         Fascicolo fascicolo) {
+        if (fascicolo.getFascicoloId()!=null)
         log.info("Inserting fascicolo like {}", fascicolo.getFascicoloId());
         Fascicolo insertedfascicolo=fascicoloService.insert(fascicolo);
         getRightMapping(insertedfascicolo);

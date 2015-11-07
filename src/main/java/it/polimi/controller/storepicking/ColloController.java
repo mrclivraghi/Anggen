@@ -69,6 +69,7 @@ public class ColloController {
     public ResponseEntity insertcollo(
         @org.springframework.web.bind.annotation.RequestBody
         Collo collo) {
+        if (collo.getColloId()!=null)
         log.info("Inserting collo like {}",collo.toString());
         Collo insertedcollo=colloService.insert(collo);
         getRightMapping(insertedcollo);

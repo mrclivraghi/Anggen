@@ -1,4 +1,4 @@
-package it.polimi.boot.domain;
+package it.polimi.model.security;
 
 
 import static javax.persistence.GenerationType.IDENTITY;
@@ -11,10 +11,13 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+
+import org.hibernate.annotations.Type;
 
 @Entity
 @Table(name = "role", schema = "sso")
@@ -28,9 +31,20 @@ public class Role{
 	
 	private String role;
 	
-	@ManyToMany(mappedBy = "userRoleList",fetch=FetchType.EAGER)
+	@ManyToMany(mappedBy = "roleList",fetch=FetchType.EAGER)
 	private List<User> userList;
 
+
+	@ManyToMany(fetch=FetchType.EAGER)
+	@Type(type="it.polimi.domain.security.UserRole")
+	@JoinTable(name="role_entity", schema="sso", joinColumns = {
+			@JoinColumn(name="role_id") },
+			inverseJoinColumns= {
+			@JoinColumn(name="entity_id")
+			
+	})
+	private List<it.polimi.model.security.Entity> entityList;
+	
 	public Role() {
 	}
 
@@ -68,6 +82,20 @@ public class Role{
 	 */
 	public void setUserList(List<User> userList) {
 		this.userList = userList;
+	}
+
+	/**
+	 * @return the entityList
+	 */
+	public List<it.polimi.model.security.Entity> getEntityList() {
+		return entityList;
+	}
+
+	/**
+	 * @param entityList the entityList to set
+	 */
+	public void setEntityList(List<it.polimi.model.security.Entity> entityList) {
+		this.entityList = entityList;
 	}
 
 

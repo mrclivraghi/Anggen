@@ -1,4 +1,4 @@
-package it.polimi.boot.domain;
+package it.polimi.model.security;
 import static javax.persistence.GenerationType.IDENTITY;
 
 import java.util.ArrayList;
@@ -35,14 +35,14 @@ public class User {
 	
 
 	@ManyToMany(fetch=FetchType.EAGER)
-	@Type(type="it.polimi.boot.domain.UserRole")
+	@Type(type="it.polimi.domain.security.UserRole")
 	@JoinTable(name="user_role", schema="sso", joinColumns = {
 			@JoinColumn(name="user_id") },
 			inverseJoinColumns= {
 			@JoinColumn(name="role_id")
 			
 	})
-	private List<Role> userRoleList = new ArrayList<Role>();
+	private List<Role> roleList = new ArrayList<Role>();
 
 	public User() {
 	}
@@ -95,19 +95,6 @@ public class User {
 		this.password = password;
 	}
 
-	/**
-	 * @return the userRoleList
-	 */
-	public List<Role> getUserRoleList() {
-		return userRoleList;
-	}
-
-	/**
-	 * @param userRoleList the userRoleList to set
-	 */
-	public void setUserRoleList(List<Role> userRoleList) {
-		this.userRoleList = userRoleList;
-	}
 
 	/**
 	 * @return the enabled
@@ -121,6 +108,20 @@ public class User {
 	 */
 	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
+	}
+
+	/**
+	 * @return the roleList
+	 */
+	public List<Role> getRoleList() {
+		return roleList;
+	}
+
+	/**
+	 * @param roleList the roleList to set
+	 */
+	public void setRoleList(List<Role> roleList) {
+		this.roleList = roleList;
 	}
 
 }

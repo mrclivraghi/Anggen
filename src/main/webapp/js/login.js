@@ -1,65 +1,25 @@
-angular.module('hello', [ 'ngRoute' ]).config(function($routeProvider, $httpProvider) {
+angular.module('login', [ ])
+.service("loginService",function($http) {
 
-	$routeProvider.when('/', {
-		templateUrl : 'home.html',
-		controller : 'home'
-	}).when('/login', {
-		templateUrl : 'login.html',
-		controller : 'navigation'
-	}).otherwise('/');
+	this.credentials={};
+	
+	this.login = function() {
+			var promise=$http.post("../login",this.credentials);
+			return promise;
 
-	$httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
-}).controller(
-		'navigation',
+	}
+})
+.controller(
+		'loginController',
 
-		function($rootScope, $scope, $http, $location, $route) {
+		function($scope, $http,loginService) {
 
-			$scope.tab = function(route) {
-				return $route.current && route === $route.current.controller;
-			};
+			$scope.credentials=loginService.credentials;
 
-			var authenticate = function(credentials, callback) {
-
-				var headers = credentials ? {
-					authorization : "Basic "
-							+ btoa(credentials.username + ":"
-									+ credentials.password)
-				} : {};
-
-				$http.get('user', {
-					headers : headers
-				}).success(function(data) {
-					if (data.name) {
-						$rootScope.authenticated = true;
-					} else {
-						$rootScope.authenticated = false;
-					}
-					callback && callback($rootScope.authenticated);
-				}).error(function() {
-					$rootScope.authenticated = false;
-					callback && callback(false);
-				});
-
-			}
-
-			authenticate();
-
-			$scope.credentials = {};
 			$scope.login = function() {
-				authenticate($scope.credentials, function(authenticated) {
-					if (authenticated) {
-						console.log("Login succeeded")
-						$location.path("/");
-						$scope.error = false;
-						$rootScope.authenticated = true;
-					} else {
-						console.log("Login failed")
-						$location.path("/login");
-						$scope.error = true;
-						$rootScope.authenticated = false;
-					}
-				})
+				loginService.login().then(function (response) {console.log(response);})
+				.catch(function(response){ console.log(response); });
 			};
 
 			$scope.logout = function() {
@@ -72,8 +32,4 @@ angular.module('hello', [ 'ngRoute' ]).config(function($routeProvider, $httpProv
 				});
 			}
 
-		}).controller('home', function($scope, $http) {
-	$http.get('/resource/').success(function(data) {
-		$scope.greeting = data;
-	})
-});
+		});

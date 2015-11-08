@@ -4,7 +4,6 @@ package it.polimi.service.storepicking;
 import java.util.List;
 import it.polimi.model.storepicking.Ordine;
 import it.polimi.repository.storepicking.ColloRepository;
-import it.polimi.repository.storepicking.ItemOrdineRepository;
 import it.polimi.repository.storepicking.OrdineRepository;
 import it.polimi.searchbean.storepicking.OrdineSearchBean;
 import it.polimi.service.storepicking.OrdineService;
@@ -20,8 +19,6 @@ public class OrdineServiceImpl
     public OrdineRepository ordineRepository;
     @org.springframework.beans.factory.annotation.Autowired
     public ColloRepository colloRepository;
-    @org.springframework.beans.factory.annotation.Autowired
-    public ItemOrdineRepository itemOrdineRepository;
 
     @Override
     public List<Ordine> findById(Integer ordineId) {

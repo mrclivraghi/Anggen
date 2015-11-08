@@ -1,5 +1,6 @@
 package it.polimi.generation;
 
+import it.polimi.repository.security.UserRepository;
 import it.polimi.utils.Field;
 import it.polimi.utils.ReflectionManager;
 import it.polimi.utils.Utility;
@@ -10,6 +11,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,9 +25,11 @@ import java.util.Set;
 
 import javax.persistence.Entity;
 
+import org.apache.commons.dbcp.BasicDataSource;
 import org.reflections.Reflections;
 import org.rendersnake.HtmlAttributes;
 import org.rendersnake.HtmlCanvas;
+import org.springframework.beans.factory.annotation.Value;
 
 import com.sun.codemodel.ClassType;
 import com.sun.codemodel.JBlock;
@@ -60,6 +69,26 @@ public class Generator {
 	
 	public static HashMap<String, JDefinedClass> repositoryMap = new HashMap<String, JDefinedClass>();
 	
+	 @Value("${}")
+	 public static  String driverClassName;
+	 
+	 @Value("${}")
+	 public static  String jdbcString;
+	 
+	 @Value("${datasource.url}")
+	 public static  String dbUrl;
+	 
+	 @Value("${datasource.port}")
+	 public static  String dbPort;
+	 
+	 @Value("${datasource.db.name}")
+	 public static  String dbName;
+	 
+	 @Value("${datasource.username}")
+	 public static  String dbUser;
+	 
+	 @Value("${datasource.password}")
+	 public static  String dbPassword;
 	
 	public Generator()
 	{
@@ -83,6 +112,14 @@ public class Generator {
 			Generator.angularDirectory=properties.getProperty("application.angular.directory");
 			Generator.htmlDirectory=properties.getProperty("application.html.directory");
 			Generator.applicationName=properties.getProperty("application.name");
+			Generator.driverClassName=properties.getProperty("datasource.driver.class.name");
+			Generator.jdbcString=properties.getProperty("datasource.jdbc");
+			Generator.dbUrl=properties.getProperty("datasource.url");
+			Generator.dbPort=properties.getProperty("datasource.port");
+			Generator.dbName=properties.getProperty("datasource.db.name");
+			Generator.dbUser=properties.getProperty("datasource.username");
+			Generator.dbPassword=properties.getProperty("datasource.password");
+			
 			
 			
 		} catch (FileNotFoundException e) {
@@ -150,6 +187,7 @@ public class Generator {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+
 			}
 			if (Generator.bootstrapMenu)
 				HtmlGenerator.GenerateMenu();
@@ -162,12 +200,44 @@ public class Generator {
 			}
 	}
 	
+	public void saveEntities()
+	{
+		BasicDataSource ds = new BasicDataSource();
+        ds.setDriverClassName(driverClassName);
+	ds.setUrl(jdbcString+"://"+dbUrl+":"+dbPort+"/"+dbName);
+	ds.setUsername(dbUser);
+	ds.setPassword(dbPassword);
+	ReflectionManager reflectionManager = new ReflectionManager(Generator.class);
+	
+	try {
+		Connection connection=ds.getConnection();
+		for (Class modelClass: allClasses)
+		{
+			PreparedStatement checkExisting = connection.prepareStatement("select entity_name from sso.entity where entity_name=?");
+			checkExisting.setString(1, reflectionManager.parseName(modelClass.getName()));
+			ResultSet rs = checkExisting.executeQuery();
+			if (rs.next())
+				continue;
+			PreparedStatement stmt = connection.prepareStatement("insert into sso.entity (entity_name) values (?)");
+			stmt.setString(1, reflectionManager.parseName(modelClass.getName()));
+			stmt.executeUpdate();
+			System.out.println("Inserted entity with name "+reflectionManager.parseName(modelClass.getName()));
+		}
+		
+		connection.close();
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	}
+	
 	public static void main(String[] args) {
 		
 		Generator generator = new Generator();
 		try {
 			generator.checkModel();
 			generator.generate();
+			generator.saveEntities();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

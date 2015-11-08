@@ -682,7 +682,7 @@ alasql('SELECT * INTO XLSXML("entity.xls",?) FROM ?',[mystyle,$scope.selectedEnt
 {
 this.entityList =		[];
 this.selectedEntity= 	{show: false 
-,roleList: []};
+};
 this.childrenList=[]; 
 this.addEntity=function (entity)
 {
@@ -805,9 +805,6 @@ $('#userTabs li:eq(0) a').tab('show');
 $scope.search=function()
 {
 userService.selectedEntity.show=false;
-userService.searchBean.roleList=[];
-userService.searchBean.roleList.push(userService.searchBean.role);
-delete userService.searchBean.role; 
 userService.search().then(function successCallback(response) {
 userService.setEntityList(response.data);
 },function errorCallback(response) { 
@@ -819,7 +816,8 @@ $scope.insert=function()
 {
 if (!$scope.userDetailForm.$valid) return; 
 userService.selectedEntity.show=false;
-userService.selectedEntity.roleList.push(roleService.selectedEntity);
+userService.selectedEntity.role={};
+userService.selectedEntity.role.roleId=roleService.selectedEntity.roleId;
 userService.insert().then(function successCallBack(response) { 
 roleService.selectedEntity.userList.push(response.data);
 },function errorCallback(response) { 
@@ -882,7 +880,6 @@ return;
 };
 $scope.refreshTableDetail= function() 
 {
- $scope.roleGridApi.core.handleWindowResize(); 
 };
 $scope.trueFalseValues=[true,false];
 $scope.showRoleDetail= function(index)
@@ -931,34 +928,6 @@ return;
 });
 }; 
 $scope.init();
-$scope.roleListGridOptions = {
-enablePaginationControls: true,
-multiSelect: false,
-enableSelectAll: false,
-paginationPageSizes: [2, 4, 6],
-paginationPageSize: 2,
-enableGridMenu: true,
-columnDefs: [
-{ name: 'roleId'},
-{ name: 'role'} 
-]
-,data: $scope.selectedEntity.roleList
- };
-$scope.roleListGridOptions.onRegisterApi = function(gridApi){
-$scope.roleGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
-if (row.isSelected)
-{
-roleService.searchOne(row.entity).then(function(response) { 
-console.log(response.data);
-roleService.setSelectedEntity(response.data[0]);
-});
-$('#roleTabs li:eq(0) a').tab('show');
-}
-else 
-roleService.setSelectedEntity(null);
-roleService.selectedEntity.show = row.isSelected;
-});
-  };
 $scope.downloadEntityList=function()
 {
 var mystyle = {
@@ -967,9 +936,6 @@ column: {style:{Font:{Bold:"1"}}}
 };
 alasql('SELECT * INTO XLSXML("user.xls",?) FROM ?',[mystyle,$scope.entityList]);
 };
-$scope.saveLinkedRole= function() {
-userService.selectedEntity.roleList.push(userService.selectedEntity.role);
-}
 $scope.downloadRoleList=function()
 {
 var mystyle = {

@@ -1,7 +1,6 @@
 
 package it.polimi.searchbean.security;
 
-import java.util.List;
 import it.polimi.model.security.Role;
 
 public class UserSearchBean {
@@ -10,7 +9,7 @@ public class UserSearchBean {
     public String username;
     public String password;
     public Boolean enabled;
-    public List<Role> roleList;
+    public Role role;
 
     public Long getUserId() {
         return this.userId;
@@ -44,12 +43,12 @@ public class UserSearchBean {
         this.enabled=enabled;
     }
 
-    public List<Role> getRoleList() {
-        return this.roleList;
+    public Role getRole() {
+        return this.role;
     }
 
-    public void setRoleList(List<Role> roleList) {
-        this.roleList=roleList;
+    public void setRole(Role role) {
+        this.role=role;
     }
 
 }

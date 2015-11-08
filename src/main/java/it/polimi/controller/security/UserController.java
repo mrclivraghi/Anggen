@@ -97,13 +97,10 @@ public class UserController {
     }
 
     private void getRightMapping(User user) {
-        if (user.getRoleList()!=null)
-        for (it.polimi.model.security.Role role :user.getRoleList())
-
+        if (user.getRole()!=null)
         {
-
-        role.setUserList(null);
-        role.setEntityList(null);
+        user.getRole().setUserList(null);
+        user.getRole().setEntityList(null);
         }
     }
 

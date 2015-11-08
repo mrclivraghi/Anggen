@@ -3,7 +3,7 @@ var userApp=angular.module("userApp",['ngTouch', 'ui.grid', 'ui.grid.pagination'
 {
 this.entityList =		[];
 this.selectedEntity= 	{show: false 
-,roleList: []};
+};
 this.childrenList=[]; 
 this.addEntity=function (entity)
 {
@@ -119,9 +119,6 @@ roleService.selectedEntity.show=false;entityService.selectedEntity.show=false;$(
 $scope.search=function()
 {
 userService.selectedEntity.show=false;
-userService.searchBean.roleList=[];
-userService.searchBean.roleList.push(userService.searchBean.role);
-delete userService.searchBean.role; 
 userService.search().then(function successCallback(response) {
 userService.setEntityList(response.data);
 },function errorCallback(response) { 
@@ -161,7 +158,6 @@ return;
 };
 $scope.refreshTableDetail= function() 
 {
- $scope.roleGridApi.core.handleWindowResize(); 
 };
 $scope.trueFalseValues=[true,false];
 $scope.showRoleDetail= function(index)
@@ -221,7 +217,8 @@ columnDefs: [
 { name: 'userId'},
 { name: 'username'},
 { name: 'password'},
-{ name: 'enabled'} 
+{ name: 'enabled'},
+{ name: 'role.roleId', displayName: 'role'} 
 ]
 ,data: userService.entityList
  };
@@ -237,34 +234,6 @@ userService.setSelectedEntity(null);
 userService.selectedEntity.show = row.isSelected;
 });
   };
-$scope.roleListGridOptions = {
-enablePaginationControls: true,
-multiSelect: false,
-enableSelectAll: false,
-paginationPageSizes: [2, 4, 6],
-paginationPageSize: 2,
-enableGridMenu: true,
-columnDefs: [
-{ name: 'roleId'},
-{ name: 'role'} 
-]
-,data: $scope.selectedEntity.roleList
- };
-$scope.roleListGridOptions.onRegisterApi = function(gridApi){
-$scope.roleGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
-if (row.isSelected)
-{
-roleService.searchOne(row.entity).then(function(response) { 
-console.log(response.data);
-roleService.setSelectedEntity(response.data[0]);
-});
-$('#roleTabs li:eq(0) a').tab('show');
-}
-else 
-roleService.setSelectedEntity(null);
-roleService.selectedEntity.show = row.isSelected;
-});
-  };
 $scope.downloadEntityList=function()
 {
 var mystyle = {
@@ -273,9 +242,6 @@ column: {style:{Font:{Bold:"1"}}}
 };
 alasql('SELECT * INTO XLSXML("user.xls",?) FROM ?',[mystyle,$scope.entityList]);
 };
-$scope.saveLinkedRole= function() {
-userService.selectedEntity.roleList.push(userService.selectedEntity.role);
-}
 $scope.downloadRoleList=function()
 {
 var mystyle = {
@@ -436,9 +402,13 @@ $scope.insert=function()
 {
 if (!$scope.roleDetailForm.$valid) return; 
 roleService.selectedEntity.show=false;
-roleService.selectedEntity.userList.push(userService.selectedEntity);
+roleService.selectedEntity.user={};
+roleService.selectedEntity.user.userId=userService.selectedEntity.userId;
 roleService.insert().then(function successCallBack(response) { 
-userService.selectedEntity.roleList.push(response.data);
+userService.selectedEntity.role=response.data;
+userService.initRoleList().then(function(response) {
+userService.childrenList.roleList=response.data;
+});
 },function errorCallback(response) { 
 alert("error");
 return; 
@@ -449,17 +419,7 @@ $scope.update=function()
 if (!$scope.roleDetailForm.$valid) return; 
 roleService.selectedEntity.show=false;
 
-for (i=0; i<userService.selectedEntity.roleList.length; i++)
-
-{
-
-if (userService.selectedEntity.roleList[i].roleId==roleService.selectedEntity.roleId)
-
-userService.selectedEntity.roleList.splice(i,1);
-
-}
-
-userService.selectedEntity.roleList.push(roleService.selectedEntity);
+userService.selectedEntity.role=roleService.selectedEntity;
 
 roleService.update().then(function successCallback(response){
 roleService.setSelectedEntity(response.data);
@@ -471,21 +431,13 @@ return;
 $scope.remove= function()
 {
 roleService.selectedEntity.show=false;
-for (i=0; i<userService.selectedEntity.roleList.length; i++)
-{
-if (userService.selectedEntity.roleList[i].roleId==roleService.selectedEntity.roleId)
-userService.selectedEntity.roleList.splice(i,1);
-}
+userService.selectedEntity.role=null;
 roleService.setSelectedEntity(null);
 $scope.updateParent();
 };
 $scope.del=function()
 {
-for (i=0; i<userService.selectedEntity.roleList.length; i++)
-{
-if (userService.selectedEntity.roleList[i].roleId==roleService.selectedEntity.roleId)
-userService.selectedEntity.roleList.splice(i,1);
-}
+userService.selectedEntity.role=null;
 $scope.updateParent();
 roleService.del().then(function successCallback(response) { 
 roleService.setSelectedEntity(null);

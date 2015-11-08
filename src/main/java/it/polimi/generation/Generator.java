@@ -133,12 +133,12 @@ public class Generator {
 			for (Class modelClass: allClasses)
 			{
 				RestGenerator restGenerator = new RestGenerator(modelClass);
-				restGenerator.generateRESTClasses(dependencyClass, true);
+				//restGenerator.generateRESTClasses(dependencyClass, true);
 			}
 			for (Class modelClass:dependencyClass)
 			{
 				RestGenerator restGenerator = new RestGenerator(modelClass);
-				restGenerator.generateRESTClasses(dependencyClass, false);
+				//restGenerator.generateRESTClasses(dependencyClass, false);
 			}
 			
 			for (Class modelClass: allClasses)

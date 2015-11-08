@@ -38,7 +38,7 @@ public class MyUserDetailService implements UserDetailsService {
 			throw new UsernameNotFoundException("Username "+username+" not found");
 		it.polimi.model.security.User user = userList.get(0);
 		List<GrantedAuthority> authorities = 
-                                      buildUserAuthority(user.getRoleList());
+                                      buildUserAuthority(user.getRole());
 		System.out.println("cerco user by "+username);
 		return buildUserForAuthentication(user, authorities);
 		
@@ -52,14 +52,11 @@ public class MyUserDetailService implements UserDetailsService {
 			user.isEnabled(), true, true, true, authorities);
 	}
 
-	private List<GrantedAuthority> buildUserAuthority(List<Role> userRoles) {
+	private List<GrantedAuthority> buildUserAuthority(Role role) {
 
 		Set<GrantedAuthority> setAuths = new HashSet<GrantedAuthority>();
 
-		// Build user's authorities
-		for (Role userRole : userRoles) {
-			setAuths.add(new SimpleGrantedAuthority(userRole.getRole()));
-		}
+			setAuths.add(new SimpleGrantedAuthority(role.getRole()));
 
 		List<GrantedAuthority> Result = new ArrayList<GrantedAuthority>(setAuths);
 

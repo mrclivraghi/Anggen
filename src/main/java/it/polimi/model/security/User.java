@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -34,15 +35,8 @@ public class User {
 	private Boolean enabled;
 	
 
-	@ManyToMany(fetch=FetchType.EAGER)
-	@Type(type="it.polimi.domain.security.UserRole")
-	@JoinTable(name="user_role", schema="sso", joinColumns = {
-			@JoinColumn(name="user_id") },
-			inverseJoinColumns= {
-			@JoinColumn(name="role_id")
-			
-	})
-	private List<Role> roleList = new ArrayList<Role>();
+	@ManyToOne(fetch=FetchType.EAGER)
+	private Role role;
 
 	public User() {
 	}
@@ -111,17 +105,17 @@ public class User {
 	}
 
 	/**
-	 * @return the roleList
+	 * @return the role
 	 */
-	public List<Role> getRoleList() {
-		return roleList;
+	public Role getRole() {
+		return role;
 	}
 
 	/**
-	 * @param roleList the roleList to set
+	 * @param role the role to set
 	 */
-	public void setRoleList(List<Role> roleList) {
-		this.roleList = roleList;
+	public void setRole(Role role) {
+		this.role = role;
 	}
 
 }

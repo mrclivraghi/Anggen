@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -31,7 +32,10 @@ public class Role{
 	
 	private String role;
 	
-	@ManyToMany(mappedBy = "roleList",fetch=FetchType.EAGER)
+	@OneToMany(fetch=FetchType.EAGER)
+	//@Cascade({CascadeType.ALL})
+	@Type(type="it.polimi.model.security.User")
+	@JoinColumn(name="role_role_id")
 	private List<User> userList;
 
 

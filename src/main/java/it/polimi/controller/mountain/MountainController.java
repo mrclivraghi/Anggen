@@ -2,18 +2,25 @@
 package it.polimi.controller.mountain;
 
 import java.util.List;
+
 import it.polimi.model.mountain.Mountain;
 import it.polimi.searchbean.mountain.MountainSearchBean;
+import it.polimi.searchbean.security.UserSearchBean;
 import it.polimi.service.mountain.MountainService;
+import it.polimi.service.security.UserService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/mountain")
@@ -21,11 +28,23 @@ public class MountainController {
 
     @Autowired
     public MountainService mountainService;
+    
+    @Autowired UserService userService;
+    
+    
     private final static Logger log = LoggerFactory.getLogger(Mountain.class);
 
     @RequestMapping(method = RequestMethod.GET)
-    public String manage() {
-        return "mountain";
+    public ModelAndView manage() {
+    	User principal = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    	UserSearchBean userSearchBean = new UserSearchBean();
+    	userSearchBean.setUsername(principal.getUsername());
+    	
+    	it.polimi.model.security.User myUser = userService.find(userSearchBean).get(0);
+    	
+        ModelAndView mav = new ModelAndView("mountain");
+        mav.addObject(myUser.getRole().getEntityList());
+        return mav;
     }
 
     @ResponseBody

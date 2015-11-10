@@ -222,6 +222,7 @@ public class HtmlGenerator {
 		HtmlCanvas html = new HtmlCanvas();
 		ReflectionManager reflectionManager = new ReflectionManager(Object.class);
 		try {
+			
 			html.nav(CssGenerator.getNav())
 			.div((new HtmlAttributes()).add("class", "container-fluid"))
 			.div((new HtmlAttributes()).add("class", "navbar-header")) // start nav header
@@ -238,36 +239,66 @@ public class HtmlGenerator {
 			.div((new HtmlAttributes()).add("class", "collapse navbar-collapse").add("id", "bs-example-navbar-collapse-1")) //start real nav menu
 			.ul((new HtmlAttributes()).add("class", "nav navbar-nav"));
 			List<String> packageList= ReflectionManager.getSubPackages(Generator.modelPackage);
+			StringBuilder sb = new StringBuilder();
 			for (String myPackage: packageList)
 			{
-				html.li((new HtmlAttributes()).add("class", "dropdown"))
+				
+				HtmlCanvas ulHtml= new HtmlCanvas();
+				ulHtml.li((new HtmlAttributes()).add("class", "dropdown"))
 				.a((new HtmlAttributes()).add("href", "#").add("class", "dropdown-toggle").add("data-toggle", "dropdown").add("role", "button").add("aria-haspopup", "true").add("aria-expanded", "false"));
 				HtmlCanvas caretHtml = new HtmlCanvas();
 				
 				caretHtml.span((new HtmlAttributes()).add("class", "caret"))
 				._span();
-				html.content(reflectionManager.parseName(myPackage)+caretHtml.toHtml(),false);
+				ulHtml.content(reflectionManager.parseName(myPackage)+caretHtml.toHtml(),false);
 				Set<Class<?>> packageClassList = ReflectionManager.getClassInPackage(myPackage);
-				html.ul((new HtmlAttributes()).add("class", "dropdown-menu"));
+				ulHtml.ul((new HtmlAttributes()).add("class", "dropdown-menu"));
+				String ulContent="";
 				for (Class myClass: packageClassList)
 				{
-					// todo put link
-					html.li().a((new HtmlAttributes()).add("href", "../"+reflectionManager.parseName(myClass.getName())+"/")).content(reflectionManager.parseName(myClass.getName()))._li();
+					ulContent=ulContent+"<c:forEach var=\"entity\" items=\"${entityList}\">";
+					ulContent=ulContent+"<c:if test=\"${entity.entityName=='"+reflectionManager.parseName(myClass.getName())+"'}\">";
+					ulContent=ulContent+"<li><a href=\"../"+reflectionManager.parseName(myClass.getName())+"/\">"+reflectionManager.parseName(myClass.getName())+"</a></li>";
+					ulContent=ulContent+"</c:if>";
+					ulContent=ulContent+"</c:forEach>";
 				}
+				ulHtml.content(ulContent,false);
+				//html._ul();
+				ulHtml._li();
+				ulContent="<c:set var=\"fill\" value=\"0\"/>";
+				ulContent=ulContent+"<c:forEach var=\"entity\" items=\"${entityList}\">";
+				String condition="";
+				for (Class myClass: packageClassList)
+				{
+					condition=condition+"entity.entityName=='"+reflectionManager.parseName(myClass.getName())+"' ||";
+				}
+				condition=condition.substring(0, condition.length()-3);
+				ulContent=ulContent+"<c:if test=\"${"+condition+"}\">";
+				ulContent=ulContent+"<c:set var=\"fill\" value=\"1\"/>";
+				ulContent=ulContent+"</c:if>";
+				ulContent=ulContent+"</c:forEach>";
+				ulContent=ulContent+"<c:if test=\"${fill==1}\">";
+				ulContent=ulContent+ulHtml.toHtml();
+				ulContent=ulContent+"</c:if>";
+				sb.append(ulContent);
 				
-				html._ul();
-				html._li();
 			}
 			Set<Class<?>> packageClassList = ReflectionManager.getClassInPackage(Generator.modelPackage);
 			for (Class theClass: packageClassList)
 			{
 				if (theClass.getPackage().getName().equals(Generator.modelPackage))
 				{
-					html.li().a((new HtmlAttributes()).add("href", "../"+reflectionManager.parseName(theClass.getName())+"/")).content(reflectionManager.parseName(theClass.getName()))._li();
+					String ulContent="<c:forEach var=\"entity\" items=\"${entityList}\">";
+					ulContent=ulContent+"<c:if test=\"${entity.entityName=='"+reflectionManager.parseName(theClass.getName())+"'}\">";
+					ulContent=ulContent+"<li><a href=\"../"+reflectionManager.parseName(theClass.getName())+"/\">"+reflectionManager.parseName(theClass.getName())+"</a></li>";
+					ulContent=ulContent+"</c:if>";
+					ulContent=ulContent+"</c:forEach>";
+					sb.append(ulContent);
 				}
 			}
-			html._ul()
-			._div() //end real nav menu
+			html.content(sb.toString(),false);
+//			html._ul()
+			html._div() //end real nav menu
 			._div()
 			._nav();
 		} catch (IOException e1) {
@@ -277,11 +308,12 @@ public class HtmlGenerator {
 		
 		File file = new File(""); 
 		String directoryViewPages = file.getAbsolutePath()+Generator.menuDirectory;
-		File menuFile=new File(directoryViewPages+"menu.html");
+		File menuFile=new File(directoryViewPages+"menu.jsp");
 		PrintWriter writer;
 		try {
 			System.out.println("Written "+menuFile.getAbsolutePath());
 			writer = new PrintWriter(menuFile, "UTF-8");
+			writer.write("<%@ taglib prefix=\"c\" uri=\"http://java.sun.com/jsp/jstl/core\" %>");
 			writer.write(html.toHtml());
 			writer.close();
 		} catch (FileNotFoundException | UnsupportedEncodingException e) {

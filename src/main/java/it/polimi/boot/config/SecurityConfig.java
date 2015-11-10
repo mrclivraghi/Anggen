@@ -18,7 +18,7 @@ import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
-
+@Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -44,7 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		*/ 
 		http
 			.authorizeRequests()
-			.antMatchers("/css/**","/img/**","/js/**").permitAll()
+			.antMatchers("/css/**","/img/**","/js/**","/auth/**","/login/**").permitAll()
 				.and()
 				.authorizeRequests().anyRequest().fullyAuthenticated().and()
 				.formLogin().and().csrf()

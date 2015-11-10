@@ -1,5 +1,6 @@
 package it.polimi.generation;
 
+import it.polimi.repository.security.UserRepository;
 import it.polimi.utils.Field;
 import it.polimi.utils.ReflectionManager;
 import it.polimi.utils.Utility;
@@ -10,6 +11,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,9 +25,11 @@ import java.util.Set;
 
 import javax.persistence.Entity;
 
+import org.apache.commons.dbcp.BasicDataSource;
 import org.reflections.Reflections;
 import org.rendersnake.HtmlAttributes;
 import org.rendersnake.HtmlCanvas;
+import org.springframework.beans.factory.annotation.Value;
 
 import com.sun.codemodel.ClassType;
 import com.sun.codemodel.JBlock;
@@ -61,6 +70,7 @@ public class Generator {
 	public static HashMap<String, JDefinedClass> repositoryMap = new HashMap<String, JDefinedClass>();
 	
 	
+	
 	public Generator()
 	{
 		init();
@@ -83,6 +93,8 @@ public class Generator {
 			Generator.angularDirectory=properties.getProperty("application.angular.directory");
 			Generator.htmlDirectory=properties.getProperty("application.html.directory");
 			Generator.applicationName=properties.getProperty("application.name");
+			
+			
 			
 			
 		} catch (FileNotFoundException e) {
@@ -133,12 +145,12 @@ public class Generator {
 			for (Class modelClass: allClasses)
 			{
 				RestGenerator restGenerator = new RestGenerator(modelClass);
-				restGenerator.generateRESTClasses(dependencyClass, true);
+				//restGenerator.generateRESTClasses(dependencyClass, true);
 			}
 			for (Class modelClass:dependencyClass)
 			{
 				RestGenerator restGenerator = new RestGenerator(modelClass);
-				restGenerator.generateRESTClasses(dependencyClass, false);
+				//restGenerator.generateRESTClasses(dependencyClass, false);
 			}
 			
 			for (Class modelClass: allClasses)
@@ -150,6 +162,7 @@ public class Generator {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+
 			}
 			if (Generator.bootstrapMenu)
 				HtmlGenerator.GenerateMenu();
@@ -161,6 +174,8 @@ public class Generator {
 					HtmlGenerator.GenerateMenu();
 			}
 	}
+	
+	
 	
 	public static void main(String[] args) {
 		

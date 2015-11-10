@@ -1,4 +1,4 @@
-package it.polimi.boot.domain;
+package it.polimi.model.security;
 import static javax.persistence.GenerationType.IDENTITY;
 
 import java.util.ArrayList;
@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -34,15 +35,8 @@ public class User {
 	private Boolean enabled;
 	
 
-	@ManyToMany(fetch=FetchType.EAGER)
-	@Type(type="it.polimi.boot.domain.UserRole")
-	@JoinTable(name="user_role", schema="sso", joinColumns = {
-			@JoinColumn(name="user_id") },
-			inverseJoinColumns= {
-			@JoinColumn(name="role_id")
-			
-	})
-	private List<Role> userRoleList = new ArrayList<Role>();
+	@ManyToOne(fetch=FetchType.EAGER)
+	private Role role;
 
 	public User() {
 	}
@@ -95,19 +89,6 @@ public class User {
 		this.password = password;
 	}
 
-	/**
-	 * @return the userRoleList
-	 */
-	public List<Role> getUserRoleList() {
-		return userRoleList;
-	}
-
-	/**
-	 * @param userRoleList the userRoleList to set
-	 */
-	public void setUserRoleList(List<Role> userRoleList) {
-		this.userRoleList = userRoleList;
-	}
 
 	/**
 	 * @return the enabled
@@ -121,6 +102,20 @@ public class User {
 	 */
 	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
+	}
+
+	/**
+	 * @return the role
+	 */
+	public Role getRole() {
+		return role;
+	}
+
+	/**
+	 * @param role the role to set
+	 */
+	public void setRole(Role role) {
+		this.role = role;
 	}
 
 }

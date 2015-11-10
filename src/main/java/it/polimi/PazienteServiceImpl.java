@@ -1,5 +1,5 @@
 
-package it.polimi.service.ospedale;
+package it.polimi;
 
 import java.util.List;
 
@@ -7,13 +7,15 @@ import it.polimi.model.ospedale.Paziente;
 import it.polimi.repository.ospedale.AmbulatorioRepository;
 import it.polimi.repository.ospedale.FascicoloRepository;
 import it.polimi.repository.ospedale.PazienteRepository;
+import it.polimi.repository.security.UserRepository;
 import it.polimi.searchbean.ospedale.PazienteSearchBean;
 import it.polimi.service.ospedale.PazienteService;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
+
 public class PazienteServiceImpl
     implements PazienteService
 {
@@ -23,7 +25,7 @@ public class PazienteServiceImpl
     @org.springframework.beans.factory.annotation.Autowired
     public FascicoloRepository fascicoloRepository;
 
-    @org.springframework.beans.factory.annotation.Autowired
+    @Autowired
     public AmbulatorioRepository ambulatorioRepository;
     
     @Override

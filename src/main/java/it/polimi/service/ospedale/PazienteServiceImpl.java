@@ -2,14 +2,12 @@
 package it.polimi.service.ospedale;
 
 import java.util.List;
-
 import it.polimi.model.ospedale.Paziente;
 import it.polimi.repository.ospedale.AmbulatorioRepository;
 import it.polimi.repository.ospedale.FascicoloRepository;
 import it.polimi.repository.ospedale.PazienteRepository;
 import it.polimi.searchbean.ospedale.PazienteSearchBean;
 import it.polimi.service.ospedale.PazienteService;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,10 +20,9 @@ public class PazienteServiceImpl
     public PazienteRepository pazienteRepository;
     @org.springframework.beans.factory.annotation.Autowired
     public FascicoloRepository fascicoloRepository;
-
     @org.springframework.beans.factory.annotation.Autowired
     public AmbulatorioRepository ambulatorioRepository;
-    
+
     @Override
     public List<Paziente> findById(Long pazienteId) {
         return pazienteRepository.findByPazienteId(pazienteId);

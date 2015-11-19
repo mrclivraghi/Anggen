@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -32,7 +31,7 @@ public class ExampleController {
     @ResponseBody
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ResponseEntity search(
-        @RequestBody
+        @org.springframework.web.bind.annotation.RequestBody
         ExampleSearchBean example) {
         List<Example> exampleList;
         if (example.getExampleId()!=null)
@@ -68,8 +67,9 @@ public class ExampleController {
     @ResponseBody
     @RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity insertexample(
-        @RequestBody
+        @org.springframework.web.bind.annotation.RequestBody
         Example example) {
+        if (example.getExampleId()!=null)
         log.info("Inserting example like {}",example.toString());
         Example insertedexample=exampleService.insert(example);
         getRightMapping(insertedexample);
@@ -80,7 +80,7 @@ public class ExampleController {
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity updateexample(
-        @RequestBody
+        @org.springframework.web.bind.annotation.RequestBody
         Example example) {
         log.info("Updating example with id {}",example.getExampleId());
         Example updatedexample=exampleService.update(example);

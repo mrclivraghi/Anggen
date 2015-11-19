@@ -35,7 +35,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
 import com.sun.codemodel.ClassType;
 import com.sun.codemodel.JAnnotationUse;
 import com.sun.codemodel.JBlock;
@@ -77,10 +76,20 @@ public class RestGenerator {
 	
 	private Class keyClass;
 	
-	private Class searchBeanClass;
+	private JDefinedClass searchBeanClass;
 	
+	private JDefinedClass repositoryClass;
+
+	private JDefinedClass serviceInterfaceClass;
+	
+	private JDefinedClass serviceImplClass;
 	
 	private ReflectionManager reflectionManager;
+	
+	public void setSearchBeanClass(JDefinedClass searchBeanClass)
+	{
+		this.searchBeanClass=searchBeanClass;
+	}
 	
 	/**
 	 * Constructor
@@ -112,26 +121,47 @@ public class RestGenerator {
 		{
 			
 			
-			if (ReflectionManager.hasDateBetween(field))
+			if (ReflectionManager.hasBetween(field))
 			{
 				JVar param = method.param(ReflectionManager.getRightParamClass(field), field.getName()+"From");
 				JAnnotationUse annotationParam= param.annotate(Param.class);
 				annotationParam.param("value", field.getName()+"From");
 			
-				query=query+getFieldSearchQuery(field, field.getName()+"From","<=");
+				query=query+getFieldSearchQuery(field, field.getName()+"From",alias+"."+field.getName(),"<=");
 			
 				param = method.param(ReflectionManager.getRightParamClass(field), field.getName()+"To");
 				annotationParam= param.annotate(Param.class);
 				annotationParam.param("value", field.getName()+"To");
 			
-				query=query+getFieldSearchQuery(field, field.getName()+"To",">=");
+				query=query+getFieldSearchQuery(field, field.getName()+"To",alias+"."+field.getName(),">=");
 				
 			}else
 			{
 				JVar param = method.param(ReflectionManager.getRightParamClass(field), field.getName());
 				JAnnotationUse annotationParam= param.annotate(Param.class);
 				annotationParam.param("value", field.getName());
-				query=query+getFieldSearchQuery(field, field.getName(),"=");
+				query=query+getFieldSearchQuery(field, field.getName(),alias+"."+field.getName(),"=");
+			}
+			if (field.getChildrenFilterList()!=null)
+			for (Field filterField: field.getChildrenFilterList())
+			{
+				String filterFieldName=reflectionManager.parseName(filterField.getOwnerClass().getName())+Utility.getFirstUpper(filterField.getName());
+				
+				JVar param = method.param(ReflectionManager.getRightParamClass(filterField), filterFieldName);
+				JAnnotationUse annotationParam= param.annotate(Param.class);
+				annotationParam.param("value", filterFieldName);
+				String hibernateField="";
+				
+				if (ReflectionManager.isListField(field))
+				{// cerco quel campo in una lista
+					String aliasFilterOwnerClass= reflectionManager.parseName(filterField.getOwnerClass().getName()).substring(0, 1);
+					
+					query=query+" ( :"+filterFieldName+" is null or cast(:"+filterFieldName+" as string)='' or "+alias+" in (select "+aliasFilterOwnerClass+"."+reflectionManager.parseName(className)+" from "+Utility.getFirstUpper(reflectionManager.parseName(filterField.getOwnerClass().getName()))+" "+aliasFilterOwnerClass+" where "+aliasFilterOwnerClass+"."+filterField.getName()+"=cast(:"+filterFieldName+" as string))) and";
+				}else // cerco quel campo nell'ìentità collegata
+				{
+					hibernateField=""+alias+"."+reflectionManager.parseName(filterField.getOwnerClass().getName())+"."+filterField.getName();
+					query=query+getFieldSearchQuery(filterField, filterFieldName,hibernateField,"=");
+				}
 			}
 			
 			
@@ -141,37 +171,37 @@ public class RestGenerator {
 	}
 	
 	
-	private String getFieldSearchQuery(Field field, String fieldName,String comparator)
+	private String getFieldSearchQuery(Field field, String fieldName,String hibernateField, String comparator)
 	{
 		String query="";
 		if (ReflectionManager.isTimeField(field))
 		{
-			query= query + " (:"+fieldName+" is null or cast(:"+fieldName+" as string)"+comparator+"cast(date_trunc('seconds',"+alias+"."+field.getName()+") as string)) and";
+			query= query + " (:"+fieldName+" is null or cast(:"+fieldName+" as string)"+comparator+"cast(date_trunc('seconds',"+hibernateField+") as string)) and";
 		}
 		else
 		{
 			if (ReflectionManager.isDateField(field))
 			{
-				query= query+" (:"+fieldName+" is null or cast(:"+fieldName+" as string)"+comparator+"cast(date("+alias+"."+field.getName()+") as string)) and";
+				query= query+" (:"+fieldName+" is null or cast(:"+fieldName+" as string)"+comparator+"cast(date("+hibernateField+") as string)) and";
 			} else
 			{
 				if (field.getFieldClass()==String.class)
 				{
-					query= query+" (:"+fieldName+" is null or :"+fieldName+"='' or cast(:"+fieldName+" as string)"+comparator+""+alias+"."+field.getName()+") and";
+					query= query+" (:"+fieldName+" is null or :"+fieldName+"='' or cast(:"+fieldName+" as string)"+comparator+""+hibernateField+") and";
 				} else
 				{
 					if (field.getCompositeClass()==null)
 					{
-						query=query+" (:"+fieldName+" is null or cast(:"+fieldName+" as string)"+comparator+"cast("+alias+"."+field.getName()+" as string)) and";
+						query=query+" (:"+fieldName+" is null or cast(:"+fieldName+" as string)"+comparator+"cast("+hibernateField+" as string)) and";
 
 					} else
 					{ // Entity or entity list!!!
-						if (field.getCompositeClass().fullName().contains("java.util.List"))
+						if (ReflectionManager.isListField(field))
 						{
-							query=query+" (:"+fieldName+" in elements("+alias+"."+field.getName()+"List)  or :"+fieldName+" is null) and";
+							query=query+" (:"+fieldName+" in elements("+hibernateField+"List)  or :"+fieldName+" is null) and";
 						}else
 						{
-							query=query+" (:"+fieldName+""+comparator+""+alias+"."+field.getName()+" or :"+fieldName+" is null) and";
+							query=query+" (:"+fieldName+""+comparator+""+hibernateField+" or :"+fieldName+" is null) and";
 						}
 
 					}
@@ -179,8 +209,116 @@ public class RestGenerator {
 				}
 
 			}}
+		
+		/*if (field.getChildrenFilterList()!=null)
+			for (Field filterField: field.getChildrenFilterList())
+			{
+				String filterFieldName=reflectionManager.parseName(filterField.getOwnerClass().getName())+Utility.getFirstUpper(filterField.getName());
+				
+				hibernateField="";
+				
+				if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List"))
+				{// cerco quel campo in una lista
+					String aliasFilterOwnerClass= reflectionManager.parseName(filterField.getOwnerClass().getName()).substring(0, 1);
+					
+					query=query+" ( :"+filterFieldName+" is null or cast(:"+filterFieldName+" as string)='' or "+alias+" in (select "+aliasFilterOwnerClass+"."+reflectionManager.parseName(className)+" from "+Utility.getFirstUpper(reflectionManager.parseName(filterField.getOwnerClass().getName()))+" "+aliasFilterOwnerClass+" where "+aliasFilterOwnerClass+"."+filterField.getName()+"=cast(:"+filterFieldName+" as string))) and";
+				}else // cerco quel campo nell'ìentità collegata
+				{
+					hibernateField=""+alias+"."+reflectionManager.parseName(filterField.getOwnerClass().getName())+"."+filterField.getName();
+					query=query+getFieldSearchQuery(filterField, filterFieldName,hibernateField,"=");
+				}
+			}*/
+		
 		return query;
 	}
+	
+	
+	
+
+	private void generateGetterAndSetter(JDefinedClass myClass, String varName, Class varClass)
+	{
+		JMethod getter= myClass.method(JMod.PUBLIC, varClass, "get"+Utility.getFirstUpper(varName));
+		JBlock getterBlock = getter.body();
+		getterBlock.directStatement("return this."+varName+";");
+		
+		JMethod setter= myClass.method(JMod.PUBLIC, void.class, "set"+Utility.getFirstUpper(varName));
+		setter.param(varClass, varName);
+		JBlock setterBlock = setter.body();
+		setterBlock.directStatement("this."+varName+"="+varName+";");
+		
+	}
+	private void generateGetterAndSetter(JDefinedClass myClass, String varName, JClass varClass)
+	{
+		JMethod getter= myClass.method(JMod.PUBLIC, varClass, "get"+Utility.getFirstUpper(varName));
+		JBlock getterBlock = getter.body();
+		getterBlock.directStatement("return this."+varName+";");
+		
+		JMethod setter= myClass.method(JMod.PUBLIC, void.class, "set"+Utility.getFirstUpper(varName));
+		setter.param(varClass, varName);
+		JBlock setterBlock = setter.body();
+		setterBlock.directStatement("this."+varName+"="+varName+";");
+		
+	}
+	
+	
+	public void generateSearchBean() {
+
+			ReflectionManager reflectionManager = new ReflectionManager(classClass);
+			String fullClassName = Utility.getFirstLower(classClass.getName());
+			JCodeModel codeModel = new JCodeModel();
+			JDefinedClass myClass = null;
+
+			try {
+				myClass = codeModel._class(""+fullClassName.replace(".model.", ".searchbean.")+"SearchBean", ClassType.CLASS);
+				List<Field> fieldList = reflectionManager.getFieldList();
+				for (Field field: fieldList)
+				{
+					if (ReflectionManager.hasBetween(field))
+					{
+						JVar fieldFromVar = myClass.field(JMod.PUBLIC, field.getFieldClass(), field.getName()+"From");
+						generateGetterAndSetter(myClass, field.getName()+"From", field.getFieldClass());
+						JVar fieldToVar = myClass.field(JMod.PUBLIC, field.getFieldClass(), field.getName()+"To");
+						generateGetterAndSetter(myClass, field.getName()+"To", field.getFieldClass());
+					} else
+					{
+						if (ReflectionManager.isListField(field))
+						{
+							JClass listClass = codeModel.ref(List.class).narrow(field.getFieldClass());
+							JVar fieldVar = myClass.field(JMod.PUBLIC, listClass, field.getName()+"List");
+							generateGetterAndSetter(myClass, field.getName()+"List", listClass);
+
+
+
+						}else
+						{
+							JVar fieldVar = myClass.field(JMod.PUBLIC, field.getFieldClass(), field.getName());
+							generateGetterAndSetter(myClass, field.getName(), field.getFieldClass());
+						}
+						//filter modification
+						if (field.getCompositeClass()!=null)
+						{
+							reflectionManager.addChildrenFilter(field);
+						for (Field filterField: field.getChildrenFilterList())
+						{
+							String filterFieldName=reflectionManager.parseName(filterField.getOwnerClass().getName())+Utility.getFirstUpper(filterField.getName());
+							JVar fieldVar = myClass.field(JMod.PUBLIC, filterField.getFieldClass(), filterFieldName);
+							generateGetterAndSetter(myClass, filterFieldName, filterField.getFieldClass());
+						}
+						}
+					}
+				}
+				saveFile(codeModel);
+				searchBeanClass=myClass;
+			} catch (JClassAlreadyExistsException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+
+	}
+	
+	
+	
 	
 	/**
 	 * Main method that generates the classes
@@ -197,59 +335,18 @@ public class RestGenerator {
 			dependencyClass.add(classClass);
 			return;
 		}
+		generateRepository();
 		generateSearchBean();
-		List<Field> fieldList=null;
-		try {
-			searchBeanClass = Class.forName(classClass.getName().replace(".model.", ".searchbean.")+"SearchBean",true,ClassLoader.getSystemClassLoader());
-		} catch (ClassNotFoundException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
 		generateServiceInterface();
-		try {
-			fieldList = reflectionManager.getFieldList();
-			searchMethod=generateRepository();
-			String filePath=classClass.getName().replace(".model.", ".repository.");
-			filePath=filePath.replace(".", "\\");
-			File fileRepository = new File(directory+"\\"+filePath+"Repository.java");
-			File fileService = new File(directory+"\\"+filePath.replace("repository", "service")+"Service.java");
-			Class repositoryClass=null;
-			Class serviceClass=null;
-			if (fileRepository.exists())
-			{
-				//TODO improve...
-				System.out.println("esiste!");
-				URLClassLoader classLoader=null;
-				URL urlRepository=null;
-				try {
-					urlRepository=fileRepository.toURL();
-				} catch (MalformedURLException e1) {
-					e1.printStackTrace();
-				}
-				
-				try {
-					classLoader= URLClassLoader.newInstance(new URL[] {fileRepository.toURL()});
-				} catch (MalformedURLException e) {
-					e.printStackTrace();
-				}
-				repositoryClass=Class.forName(classClass.getName().replace(".model.", ".repository.")+"Repository", true, classLoader);
-				serviceClass=Class.forName(classClass.getName().replace(".model.", ".service.")+"Service", true, classLoader);
-				
-			}
-			else
-				System.out.println(fileRepository.getAbsolutePath()+" does not exists!");
-			generateServiceImpl(serviceClass,repositoryClass,searchMethod);
-			generateController(serviceClass);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
+		generateServiceImpl();
+		generateController();
 	}
 	
 	/**
 	 * Generate the repository class
 	 * @return
 	 */
-	private String generateRepository(){
+	public String generateRepository(){
 		JCodeModel	codeModel = new JCodeModel();
 		JDefinedClass myClass= null;
 		String searchMethod="";
@@ -268,19 +365,21 @@ public class RestGenerator {
 					method.param(ReflectionManager.getRightParamClass(field), field.getName());
 				} else
 				{
-					if (!field.getCompositeClass().fullName().contains("java.util.List"))
+					if (!ReflectionManager.isListField(field))
 					{ // find by entity
 						JMethod method= myClass.method(JMod.PUBLIC, listClass, "findBy"+Utility.getFirstUpper(field.getName()));
 						method.param(field.getFieldClass(), field.getName());
 					}
 				}
-				if (ReflectionManager.hasDateBetween(field))
-				{
-					searchMethod=searchMethod+"GreaterThan"+Utility.getFirstUpper(field.getName())+"FromAndLessThan"+Utility.getFirstUpper(field.getName())+"ToAnd";
-				}
-				searchMethod=searchMethod+Utility.getFirstUpper(field.getName())+"And";
+				//if (ReflectionManager.hasBetween(field))
+				//{
+					//searchMethod=searchMethod+"GreaterThan"+Utility.getFirstUpper(field.getName())+"FromAndLessThan"+Utility.getFirstUpper(field.getName())+"ToAnd";
+				//}
+				//searchMethod=searchMethod+Utility.getFirstUpper(field.getName())+"And";
+				reflectionManager.addChildrenFilter(field);
 			}
-			searchMethod=searchMethod.substring(0,searchMethod.length()-3);
+			
+			searchMethod=getRepositorySearchMethod();
 			JMethod method=myClass.method(JMod.PUBLIC, listClass, searchMethod);
 			String alias=className.substring(0, 1).toLowerCase();
 			String query=getSearchQuery(method);
@@ -291,81 +390,19 @@ public class RestGenerator {
 			e.printStackTrace();
 		}
 		saveFile(codeModel);
+		repositoryClass=myClass;
+		Generator.repositoryMap.put(classClass.getName(), repositoryClass);
 		return searchMethod;
 	}
 	
-	private void generateSearchBean(){
-		JCodeModel codeModel = new JCodeModel();
-		JDefinedClass myClass = null;
-		
-		try {
-			myClass = codeModel._class(""+fullClassName.replace(".model.", ".searchbean.")+"SearchBean", ClassType.CLASS);
-			List<Field> fieldList = reflectionManager.getFieldList();
-			for (Field field: fieldList)
-			{
-				if (ReflectionManager.hasDateBetween(field))
-				{
-					JVar fieldFromVar = myClass.field(JMod.PUBLIC, field.getFieldClass(), field.getName()+"From");
-					generateGetterAndSetter(myClass, field.getName()+"From", field.getFieldClass());
-					JVar fieldToVar = myClass.field(JMod.PUBLIC, field.getFieldClass(), field.getName()+"To");
-					generateGetterAndSetter(myClass, field.getName()+"To", field.getFieldClass());
-				} else
-				{
-					if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List") && field.getRepositoryClass()!=null)
-					{
-						JClass listClass = codeModel.ref(List.class).narrow(field.getFieldClass());
-						JVar fieldVar = myClass.field(JMod.PUBLIC, listClass, field.getName());
-						generateGetterAndSetter(myClass, field.getName(), listClass);
-						
-						
-						
-					}else
-					{
-					JVar fieldVar = myClass.field(JMod.PUBLIC, field.getFieldClass(), field.getName());
-					generateGetterAndSetter(myClass, field.getName(), field.getFieldClass());
-					}
-				}
-			}
-			saveFile(codeModel);
-		} catch (JClassAlreadyExistsException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
 	
-	
-	
-	private void generateGetterAndSetter(JDefinedClass myClass, String varName, Class varClass)
-	{
-		JMethod getter= myClass.method(JMod.PUBLIC, varClass, "get"+Utility.getFirstUpper(varName));
-		JBlock getterBlock = getter.body();
-		getterBlock.directStatement("return this."+varName+";");
-		
-		JMethod setter= myClass.method(JMod.PUBLIC, void.class, "set"+Utility.getFirstUpper(varName));
-		setter.param(varClass, varName);
-		JBlock setterBlock = setter.body();
-		setterBlock.directStatement("this."+varName+"="+varName+";");
-		
-	}
-	private void generateGetterAndSetter(JDefinedClass myClass, String varName, JClass varClass)
-	{
-		JMethod getter= myClass.method(JMod.PUBLIC, varClass, "get"+Utility.getFirstUpper(varName)+"List");
-		JBlock getterBlock = getter.body();
-		getterBlock.directStatement("return this."+varName+";");
-		
-		JMethod setter= myClass.method(JMod.PUBLIC, void.class, "set"+Utility.getFirstUpper(varName)+"List");
-		setter.param(varClass, varName);
-		JBlock setterBlock = setter.body();
-		setterBlock.directStatement("this."+varName+"="+varName+";");
-		
-	}
 	
 	
 	/**
 	 * Generates the service interface
+	 * @throws ClassNotFoundException 
 	 */
-	private void generateServiceInterface()
+	public void generateServiceInterface()
 	{
 		JCodeModel	codeModel = new JCodeModel();
 		JDefinedClass myClass= null;
@@ -388,8 +425,30 @@ public class RestGenerator {
 			e.printStackTrace();
 		}
 		saveFile(codeModel);
-	
+
+		serviceInterfaceClass=myClass;
 	}
+	
+	private String getRepositorySearchMethod()
+	{
+		String searchMethod="findBy";
+		for (Field field: fields)
+		{
+			if (ReflectionManager.hasBetween(field))
+			{
+				searchMethod=searchMethod+"GreaterThan"+Utility.getFirstUpper(field.getName())+"FromAndLessThan"+Utility.getFirstUpper(field.getName())+"ToAnd";
+			} else
+			searchMethod=searchMethod+Utility.getFirstUpper(field.getName())+"And";
+			if (field.getChildrenFilterList()!=null)
+				for (Field filterField: field.getChildrenFilterList())
+				{
+					searchMethod=searchMethod+Utility.getFirstUpper(filterField.getName())+"And";
+				}
+		}
+		searchMethod=searchMethod.substring(0,searchMethod.length()-3);
+		return searchMethod;
+	}
+	
 	
 	/**
 	 * Generates the serviceImpl class
@@ -397,16 +456,19 @@ public class RestGenerator {
 	 * @param interfaceClass
 	 * @param repositoryClass
 	 * @param searchMethod
+	 * @throws ClassNotFoundException 
 	 */
-	private void generateServiceImpl(Class interfaceClass,Class repositoryClass,String searchMethod)
+	public void generateServiceImpl()
 	{
+		String searchMethod=getRepositorySearchMethod();
+		
 		JCodeModel	codeModel = new JCodeModel();
 		JDefinedClass myClass= null;
 		ReflectionManager reflectionManager = new ReflectionManager(classClass);
 		try {
 			myClass = codeModel._class(""+fullClassName.replace(".model.", ".service.")+"ServiceImpl", ClassType.CLASS);
 			className=reflectionManager.parseName();
-			myClass._implements(interfaceClass);
+			myClass._implements(serviceInterfaceClass);
 			myClass.annotate(Service.class);
 			JClass listClass = codeModel.ref(List.class).narrow(classClass);
 			String lowerClass= className.replaceFirst(className.substring(0, 1), className.substring(0, 1).toLowerCase());
@@ -414,7 +476,7 @@ public class RestGenerator {
 			repository.annotate(Autowired.class);
 			for (Field field: fields)
 			{
-				if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List") && field.getRepositoryClass()!=null)
+				if (ReflectionManager.isListField(field) && field.getRepositoryClass()!=null)
 				{
 					JVar fieldListRepository = myClass.field(JMod.PUBLIC, field.getRepositoryClass(), field.getName()+"Repository");
 					fieldListRepository.annotate(Autowired.class);
@@ -456,30 +518,11 @@ public class RestGenerator {
 			for (Field field: fields)
 			{
 				if (field.getCompositeClass()!=null)
-				if (field.getCompositeClass().fullName().contains("java.util.List"))
+				if (ReflectionManager.isListField(field))
 				{
 					updateBlock.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(field.getName())+"List()!=null)");
 					updateBlock.directStatement("for ("+(field.getFieldClass().getName())+" "+field.getName()+": "+lowerClass+".get"+Utility.getFirstUpper(field.getName())+"List())");
 					updateBlock.directStatement("{");
-					/*
-					 *  for (it.polimi.model.ospedale.Paziente paziente: ambulatorio.getPazienteList())
-        {
-        	Paziente savedPaziente = pazienteRepository.findOne(paziente.getPazienteId());
-        	Boolean found= false;
-        	for (Ambulatorio tempAmb : savedPaziente.getAmbulatorioList())
-        	{
-        		if (tempAmb.getAmbulatorioId().equals(ambulatorio.getAmbulatorioId()))
-        		{
-        			found=true;
-        			break;
-        		}
-        	}
-        	
-        	if (!found)
-        		savedPaziente.getAmbulatorioList().add(ambulatorio);
-        }
-					 */
-					//lowerclass:  ambulatorio, field.getName: paziente
 					if (ReflectionManager.hasManyToManyAssociation(field.getFieldClass(), className))
 					{
 						updateBlock.directStatement(field.getFieldClass().getName()+" saved"+Utility.getFirstUpper(field.getName())+" = "+field.getName()+"Repository.findOne("+field.getName()+".get"+Utility.getFirstUpper(field.getName())+"Id());");
@@ -508,7 +551,7 @@ public class RestGenerator {
 				if (field.getCompositeClass()!=null)
 				{
 					ReflectionManager fieldReflectionManager = new ReflectionManager(field.getFieldClass());
-					if (!field.getCompositeClass().fullName().contains("java.util.List") && fieldReflectionManager.containFieldWithClass(classClass))			
+					if (!ReflectionManager.isListField(field) && fieldReflectionManager.containFieldWithClass(classClass))			
 					{
 						updateBlock.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(field.getName())+"()!=null)");
 						updateBlock.directStatement("{");
@@ -528,12 +571,14 @@ public class RestGenerator {
 		}
 		saveFile(codeModel);
 	
+		serviceImplClass=myClass;
 	}
 	/**
 	 * Generates the controller class
 	 * @param serviceClass
+	 * @throws ClassNotFoundException 
 	 */
-	private void generateController(Class serviceClass)
+	public void generateController()
 	{
 		JCodeModel	codeModel = new JCodeModel();
 		JDefinedClass myClass= null;
@@ -548,7 +593,7 @@ public class RestGenerator {
 			JAnnotationUse requestMappingClass = myClass.annotate(RequestMapping.class);
 			requestMappingClass.param("value", "/"+lowerClass);
 			//declare service
-			JVar repository = myClass.field(JMod.PUBLIC, serviceClass, lowerClass+"Service");
+			JVar repository = myClass.field(JMod.PUBLIC, serviceInterfaceClass, lowerClass+"Service");
 			repository.annotate(Autowired.class);
 			//private final static Logger log = LoggerFactory.getLogger(Mountain.class);
 			JClass factory = codeModel.directClass("org.slf4j.LoggerFactory");
@@ -621,6 +666,7 @@ public class RestGenerator {
 			orderParam= insert.param(classClass,lowerClass+"");
 			orderParam.annotate(RequestBody.class);
 			JBlock insertBlock= insert.body();
+			insertBlock.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(lowerClass)+"Id()!=null)");
 			insertBlock.directStatement("log.info(\"Inserting "+lowerClass+" like {}\","+reflectionManager.getDescriptionField(true)+");");
 			insertBlock.directStatement(Utility.getFirstUpper(className)+" inserted"+className+"="+lowerClass+"Service.insert("+lowerClass+");");
 			insertBlock.directStatement("getRightMapping(inserted"+className+");");
@@ -686,7 +732,7 @@ public class RestGenerator {
 		for (Field mainField: reflectionManager.getChildrenFieldList())
 		{
 			lowerClass=reflectionManager.parseName();
-			if (mainField.getCompositeClass().fullName().contains("java.util.List"))
+			if (ReflectionManager.isListField(mainField))
 			{
 				block.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(mainField.getName())+"List()!=null)");
 				block.directStatement("for ("+mainField.getFieldClass().getName()+" "+Utility.getFirstLower(mainField.getName())+" :"+lowerClass+".get"+Utility.getFirstUpper(mainField.getName())+"List())\n");
@@ -703,7 +749,7 @@ public class RestGenerator {
 			ReflectionManager fieldReflectionManager = new ReflectionManager(mainField.getFieldClass());
 			for (Field field: fieldReflectionManager.getChildrenFieldList())
 			{
-				if (field.getCompositeClass().fullName().contains("java.util.List"))
+				if (ReflectionManager.isListField(field))
 					block.directStatement(lowerClass+".set"+Utility.getFirstUpper(field.getName())+"List(null);");
 				else
 					block.directStatement(lowerClass+".set"+Utility.getFirstUpper(field.getName())+"(null);");
@@ -730,12 +776,12 @@ public class RestGenerator {
 		for (Field field: reflectionManager.getChildrenFieldList())
 		{
 			String newEntityName= lowerClass;
-			if (field.getCompositeClass().fullName().contains("java.util.List"))
+			if (ReflectionManager.isListField(field))
 				newEntityName=Utility.getFirstLower(field.getName());
 			else
 				newEntityName=newEntityName+".get"+Utility.getFirstUpper(field.getName())+"()";
 			ArrayList<Class> oldParentClassList = (ArrayList<Class>) ((ArrayList<Class>) parentClass).clone();
-			if (field.getCompositeClass().fullName().contains("java.util.List"))
+			if (ReflectionManager.isListField(field))
 			{
 				block.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(field.getName())+"List()!=null)");
 				block.directStatement("{");

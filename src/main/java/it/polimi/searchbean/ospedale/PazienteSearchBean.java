@@ -12,8 +12,8 @@ public class PazienteSearchBean {
     public String nome;
     public String cognome;
     public Date birthDate;
-    public List<Fascicolo> fascicolo;
-    public List<Ambulatorio> ambulatorio;
+    public List<Fascicolo> fascicoloList;
+    public List<Ambulatorio> ambulatorioList;
 
     public Long getPazienteId() {
         return this.pazienteId;
@@ -48,19 +48,19 @@ public class PazienteSearchBean {
     }
 
     public List<Fascicolo> getFascicoloList() {
-        return this.fascicolo;
+        return this.fascicoloList;
     }
 
-    public void setFascicoloList(List<Fascicolo> fascicolo) {
-        this.fascicolo=fascicolo;
+    public void setFascicoloList(List<Fascicolo> fascicoloList) {
+        this.fascicoloList=fascicoloList;
     }
 
     public List<Ambulatorio> getAmbulatorioList() {
-        return this.ambulatorio;
+        return this.ambulatorioList;
     }
 
-    public void setAmbulatorioList(List<Ambulatorio> ambulatorio) {
-        this.ambulatorio=ambulatorio;
+    public void setAmbulatorioList(List<Ambulatorio> ambulatorioList) {
+        this.ambulatorioList=ambulatorioList;
     }
 
 }

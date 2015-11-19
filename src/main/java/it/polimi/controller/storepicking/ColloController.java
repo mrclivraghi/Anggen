@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -32,7 +31,7 @@ public class ColloController {
     @ResponseBody
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ResponseEntity search(
-        @RequestBody
+        @org.springframework.web.bind.annotation.RequestBody
         ColloSearchBean collo) {
         List<Collo> colloList;
         if (collo.getColloId()!=null)
@@ -68,8 +67,9 @@ public class ColloController {
     @ResponseBody
     @RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity insertcollo(
-        @RequestBody
+        @org.springframework.web.bind.annotation.RequestBody
         Collo collo) {
+        if (collo.getColloId()!=null)
         log.info("Inserting collo like {}",collo.toString());
         Collo insertedcollo=colloService.insert(collo);
         getRightMapping(insertedcollo);
@@ -80,7 +80,7 @@ public class ColloController {
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity updatecollo(
-        @RequestBody
+        @org.springframework.web.bind.annotation.RequestBody
         Collo collo) {
         log.info("Updating collo with id {}",collo.getColloId());
         Collo updatedcollo=colloService.update(collo);

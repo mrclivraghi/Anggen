@@ -9,7 +9,7 @@ public class AmbulatorioSearchBean {
     public Long ambulatorioId;
     public String nome;
     public String indirizzo;
-    public List<Paziente> paziente;
+    public List<Paziente> pazienteList;
 
     public Long getAmbulatorioId() {
         return this.ambulatorioId;
@@ -36,11 +36,11 @@ public class AmbulatorioSearchBean {
     }
 
     public List<Paziente> getPazienteList() {
-        return this.paziente;
+        return this.pazienteList;
     }
 
-    public void setPazienteList(List<Paziente> paziente) {
-        this.paziente=paziente;
+    public void setPazienteList(List<Paziente> pazienteList) {
+        this.pazienteList=pazienteList;
     }
 
 }

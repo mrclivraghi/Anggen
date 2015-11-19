@@ -5,6 +5,7 @@ import java.util.List;
 import it.polimi.model.ospedale.Fascicolo;
 import it.polimi.repository.ospedale.FascicoloRepository;
 import it.polimi.searchbean.ospedale.FascicoloSearchBean;
+import it.polimi.service.ospedale.FascicoloService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

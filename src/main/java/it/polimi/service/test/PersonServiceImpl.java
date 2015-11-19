@@ -5,6 +5,7 @@ import java.util.List;
 import it.polimi.model.test.Person;
 import it.polimi.repository.test.PersonRepository;
 import it.polimi.searchbean.test.PersonSearchBean;
+import it.polimi.service.test.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

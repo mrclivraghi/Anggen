@@ -1,5 +1,6 @@
 package it.polimi.utils;
 
+import it.polimi.generation.Generator;
 import it.polimi.model.Example;
 import it.polimi.model.Sex;
 import it.polimi.model.mountain.Mountain;
@@ -8,6 +9,7 @@ import it.polimi.model.ospedale.Paziente;
 import it.polimi.utils.annotation.Between;
 import it.polimi.utils.annotation.DescriptionField;
 import it.polimi.utils.annotation.ExcelExport;
+import it.polimi.utils.annotation.Filter;
 import it.polimi.utils.annotation.IgnoreSearch;
 import it.polimi.utils.annotation.IgnoreTableList;
 import it.polimi.utils.annotation.IgnoreUpdate;
@@ -34,10 +36,14 @@ import javax.persistence.TemporalType;
 import org.hibernate.mapping.Array;
 import org.reflections.Reflections;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.repository.query.Param;
 
+import com.sun.codemodel.JAnnotationUse;
 import com.sun.codemodel.JClass;
 import com.sun.codemodel.JCodeModel;
+import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JType;
+import com.sun.codemodel.JVar;
 
 public class ReflectionManager {
 	
@@ -78,6 +84,11 @@ public class ReflectionManager {
 		
 		return false;
 	}
+
+	public static Boolean isListField(Field field)
+	{
+		return (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List"));
+	}
 	
 	public String parseName()
 	{
@@ -102,12 +113,24 @@ public class ReflectionManager {
 		{
 			if (field.getCompositeClass()!=null)
 			{
+				addChildrenFilter(field);
 				childrenList.add(field);
 			}
 		}
 		return childrenList;
 	}
 	
+	public void addChildrenFilter(Field field)
+	{
+		if (field.getCompositeClass()==null) return;
+		ReflectionManager reflectionManager = new ReflectionManager(field.getFieldClass());
+		field.setChildrenFilterList(new ArrayList<Field>());
+		for (Field childrenField: reflectionManager.getFieldList())
+		{
+			if (ReflectionManager.hasFilter(childrenField))
+				field.getChildrenFilterList().add(childrenField);
+		}
+	}
 	
 	public List<Field> getFieldList()
 	{
@@ -120,7 +143,7 @@ public class ReflectionManager {
 		{
 			Class fieldClass= null;
 			JClass jClass=null;
-			Class repositoryClass=null;
+			JDefinedClass repositoryClass=null;
 			Boolean isEnum=field.getType().isEnum();
 			List<String> enumValuesList= new ArrayList<String>();
 			if (isKnownClass(field.getType()))
@@ -147,10 +170,9 @@ public class ReflectionManager {
 							try {
 								fieldClass=Class.forName(elementType.getTypeName());
 								jClass=jClass.narrow(fieldClass);
-								repositoryClass=Class.forName(elementType.getTypeName().replace(".model.", ".repository.")+"Repository");
+								repositoryClass=Generator.repositoryMap.get(elementType.getTypeName());
 							} catch (ClassNotFoundException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
+								//e.printStackTrace();
 							}
 						}
 					}else
@@ -163,6 +185,7 @@ public class ReflectionManager {
 			myField.setAnnotationList(field.getAnnotations());
 			myField.setIsEnum(isEnum);
 			myField.setEnumValuesList(enumValuesList);
+			myField.setOwnerClass(classClass);
 			fieldList.add(myField);
 		}
 		return fieldList;
@@ -323,13 +346,22 @@ public class ReflectionManager {
 		String className = parseName();
 		for (Field field: fields)
 		{
-			if (ReflectionManager.hasDateBetween(field))
+			if (ReflectionManager.hasBetween(field))
 			{
 				string=string+manageSingleParam(className, field,  field.getName()+"From");
 				string=string+manageSingleParam(className, field,  field.getName()+"To");
 			}else
 				string=string+manageSingleParam(className, field,  field.getName());
-		
+			addChildrenFilter(field);
+			if (field.getChildrenFilterList()!=null)
+				for (Field filterField: field.getChildrenFilterList())
+				{
+					ReflectionManager reflectionManager = new ReflectionManager(filterField.getOwnerClass());
+					String filterFieldName=reflectionManager.parseName(filterField.getOwnerClass().getName())+Utility.getFirstUpper(filterField.getName());
+					string = string+manageSingleParam(className, filterField, filterFieldName);
+					
+				}
+			
 		}
 		return string.substring(0, string.length()-1);
 	}
@@ -418,6 +450,16 @@ public class ReflectionManager {
 	}
 	
 	
+	public static Boolean hasId(Field field)
+	{
+		return hasAnnotation(field, javax.persistence.Id.class);
+	}
+	
+	public static Boolean hasFilter(Field field)
+	{
+		return hasAnnotation(field, Filter.class);
+	}
+	
 	public static Boolean hasExcelExport(Field field)
 	{
 		return hasAnnotation(field, ExcelExport.class);
@@ -438,7 +480,7 @@ public class ReflectionManager {
 		return hasAnnotation(field, ManyToMany.class);
 	}
 	
-	public static Boolean hasDateBetween(Field field)
+	public static Boolean hasBetween(Field field)
 	{
 		return hasAnnotation(field, Between.class);
 	}

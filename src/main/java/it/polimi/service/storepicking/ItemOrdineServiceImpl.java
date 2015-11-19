@@ -6,7 +6,7 @@ import it.polimi.model.storepicking.ItemOrdine;
 import it.polimi.repository.storepicking.ItemOrdineCodiceRepository;
 import it.polimi.repository.storepicking.ItemOrdineRepository;
 import it.polimi.searchbean.storepicking.ItemOrdineSearchBean;
-import org.springframework.beans.factory.annotation.Autowired;
+import it.polimi.service.storepicking.ItemOrdineService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,9 +15,9 @@ public class ItemOrdineServiceImpl
     implements ItemOrdineService
 {
 
-    @Autowired
+    @org.springframework.beans.factory.annotation.Autowired
     public ItemOrdineRepository itemOrdineRepository;
-    @Autowired
+    @org.springframework.beans.factory.annotation.Autowired
     public ItemOrdineCodiceRepository itemOrdineCodiceRepository;
 
     @Override

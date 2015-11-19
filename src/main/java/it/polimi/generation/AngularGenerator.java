@@ -197,7 +197,7 @@ public class AngularGenerator {
 						{
 
 
-							if (field.getCompositeClass().fullName().contains("java.util.List"))
+							if (ReflectionManager.isListField(field))
 							{ //list
 								
 								HtmlCanvas downloadCanvas= new HtmlCanvas();
@@ -460,9 +460,10 @@ public class AngularGenerator {
 			for (String tabName: tabNameList)
 			{
 				html.li((new HtmlAttributes()).add("role", "presentation"))
-				.a((new HtmlAttributes()).add("href", "#"+entityName+"-"+tabName).add("aria-controls", tabName).add("role", "tab").add("data-toggle", "tab").add("ng-click",JsGenerator.resetTableTab(tabName,classClass)))
+				.a((new HtmlAttributes()).add("href", "#"+entityName+"-"+tabName.replace(' ','-' )).add("aria-controls", tabName.replace(' ','-' )).add("role", "tab").add("data-toggle", "tab").add("ng-click","refreshTable"+Utility.getFirstUpper(tabName.replaceAll(" ", ""))+"()"))
 				.content(tabName);
 				html._li();
+				html.script((new HtmlAttributes()).add("type", "text/javascript")).content(JsGenerator.scriptResizeTableTab(tabName, entityName),false);
 			}
 			html._ul();
 			html.div((new HtmlAttributes()).add("class", "tab-content"));
@@ -473,7 +474,7 @@ public class AngularGenerator {
 		{
 			 //<div role="tabpanel" class="tab-pane fade in active" id="home">
 			if (!search)
-				html.div((new HtmlAttributes()).add("role", "tabpanel").add("class", "tab-pane fade").add("id", entityName+"-"+tabName));
+				html.div((new HtmlAttributes()).add("role", "tabpanel").add("class", "tab-pane fade").add("id", entityName+"-"+tabName.replace(' ','-' )));
 			
 			String style="";
 			if (entityName.equals("mountain"))
@@ -481,7 +482,7 @@ public class AngularGenerator {
 			for (Field field: reflectionManager.getFieldByTabName(tabName))
 			{
 
-				if (ReflectionManager.hasDateBetween(field)&& (search))
+				if (ReflectionManager.hasBetween(field)&& (search))
 				{
 					field.setName(field.getName()+"From");
 					renderField(html, field, search, style, baseEntity);
@@ -489,6 +490,20 @@ public class AngularGenerator {
 					renderField(html, field, search, style, baseEntity);
 				}else
 					renderField(html, field, search, style, baseEntity);
+				
+				if (search)
+				{
+					reflectionManager.addChildrenFilter(field);
+					if (field.getChildrenFilterList()!=null)
+						for (Field filterField: field.getChildrenFilterList())
+						{
+							String filterFieldName=reflectionManager.parseName(filterField.getOwnerClass().getName())+Utility.getFirstUpper(filterField.getName());
+							filterField.setName(filterFieldName);
+							renderField(html, filterField, search, style, baseEntity);
+							
+						}
+				}
+				
 			}
 			
 			
@@ -599,7 +614,7 @@ public class AngularGenerator {
 					{
 
 
-						if (field.getCompositeClass().fullName().contains("java.util.List"))
+						if (ReflectionManager.isListField(field))
 						{ //list
 							
 							HtmlCanvas downloadCanvas= new HtmlCanvas();

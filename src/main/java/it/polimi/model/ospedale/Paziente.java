@@ -1,7 +1,9 @@
 package it.polimi.model.ospedale;
 
+import it.polimi.utils.annotation.Between;
 import it.polimi.utils.annotation.DescriptionField;
 import it.polimi.utils.annotation.IgnoreSearch;
+import it.polimi.utils.annotation.Tab;
 
 import java.util.Date;
 import java.util.List;
@@ -26,19 +28,24 @@ public class Paziente {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name ="id_paziente")
 	@DescriptionField
+	@Tab(name="Dati anagrafici")
 	private Long pazienteId;
 	
+	@Tab(name="Dati anagrafici")
 	private String nome;
 	
+	@Tab(name="Dati anagrafici")
 	private String cognome;
 	
 	@IgnoreSearch
+	@Tab(name="Dati anagrafici")
 	private Date birthDate;
 	
 	@OneToMany(fetch=FetchType.EAGER)
 	//@Cascade({CascadeType.ALL})
 	@Type(type="it.polimi.model.ospedale.Fascicolo")
 	@JoinColumn(name="paziente_id_paziente")
+	@Tab(name="rel")
 	private List<Fascicolo> fascicoloList;
 
 	@ManyToMany(fetch=FetchType.EAGER)
@@ -49,6 +56,7 @@ public class Paziente {
 			@JoinColumn(name="ambulatorio_id")
 			
 	})
+	@Tab(name="rel")
 	private List<Ambulatorio> ambulatorioList;
 	
 	/**

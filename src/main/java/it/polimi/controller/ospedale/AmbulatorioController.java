@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -32,7 +31,7 @@ public class AmbulatorioController {
     @ResponseBody
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ResponseEntity search(
-        @RequestBody
+        @org.springframework.web.bind.annotation.RequestBody
         AmbulatorioSearchBean ambulatorio) {
         List<Ambulatorio> ambulatorioList;
         if (ambulatorio.getAmbulatorioId()!=null)
@@ -68,8 +67,9 @@ public class AmbulatorioController {
     @ResponseBody
     @RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity insertambulatorio(
-        @RequestBody
+        @org.springframework.web.bind.annotation.RequestBody
         Ambulatorio ambulatorio) {
+        if (ambulatorio.getAmbulatorioId()!=null)
         log.info("Inserting ambulatorio like {}", ambulatorio.getAmbulatorioId());
         Ambulatorio insertedambulatorio=ambulatorioService.insert(ambulatorio);
         getRightMapping(insertedambulatorio);
@@ -80,7 +80,7 @@ public class AmbulatorioController {
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity updateambulatorio(
-        @RequestBody
+        @org.springframework.web.bind.annotation.RequestBody
         Ambulatorio ambulatorio) {
         log.info("Updating ambulatorio with id {}",ambulatorio.getAmbulatorioId());
         Ambulatorio updatedambulatorio=ambulatorioService.update(ambulatorio);

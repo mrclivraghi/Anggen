@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -32,7 +31,7 @@ public class FascicoloController {
     @ResponseBody
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ResponseEntity search(
-        @RequestBody
+        @org.springframework.web.bind.annotation.RequestBody
         FascicoloSearchBean fascicolo) {
         List<Fascicolo> fascicoloList;
         if (fascicolo.getFascicoloId()!=null)
@@ -68,8 +67,9 @@ public class FascicoloController {
     @ResponseBody
     @RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity insertfascicolo(
-        @RequestBody
+        @org.springframework.web.bind.annotation.RequestBody
         Fascicolo fascicolo) {
+        if (fascicolo.getFascicoloId()!=null)
         log.info("Inserting fascicolo like {}", fascicolo.getFascicoloId());
         Fascicolo insertedfascicolo=fascicoloService.insert(fascicolo);
         getRightMapping(insertedfascicolo);
@@ -80,7 +80,7 @@ public class FascicoloController {
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity updatefascicolo(
-        @RequestBody
+        @org.springframework.web.bind.annotation.RequestBody
         Fascicolo fascicolo) {
         log.info("Updating fascicolo with id {}",fascicolo.getFascicoloId());
         Fascicolo updatedfascicolo=fascicoloService.update(fascicolo);

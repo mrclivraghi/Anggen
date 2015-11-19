@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -32,7 +31,7 @@ public class MountainController {
     @ResponseBody
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ResponseEntity search(
-        @RequestBody
+        @org.springframework.web.bind.annotation.RequestBody
         MountainSearchBean mountain) {
         List<Mountain> mountainList;
         if (mountain.getMountainId()!=null)
@@ -68,8 +67,9 @@ public class MountainController {
     @ResponseBody
     @RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity insertmountain(
-        @RequestBody
+        @org.springframework.web.bind.annotation.RequestBody
         Mountain mountain) {
+        if (mountain.getMountainId()!=null)
         log.info("Inserting mountain like {}", mountain.getMountainId()+' '+ mountain.getName());
         Mountain insertedmountain=mountainService.insert(mountain);
         getRightMapping(insertedmountain);
@@ -80,7 +80,7 @@ public class MountainController {
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity updatemountain(
-        @RequestBody
+        @org.springframework.web.bind.annotation.RequestBody
         Mountain mountain) {
         log.info("Updating mountain with id {}",mountain.getMountainId());
         Mountain updatedmountain=mountainService.update(mountain);

@@ -72,6 +72,7 @@ public class Photo {
 	private String socialId;
 	
 
+	@Column(name="related_post")
 	private String relatedPost;
 	
 	//RELATIONSHIPS

@@ -6,7 +6,7 @@ import it.polimi.model.mountain.Mountain;
 import it.polimi.repository.mountain.MountainRepository;
 import it.polimi.repository.mountain.SeedQueryRepository;
 import it.polimi.searchbean.mountain.MountainSearchBean;
-import org.springframework.beans.factory.annotation.Autowired;
+import it.polimi.service.mountain.MountainService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,9 +15,9 @@ public class MountainServiceImpl
     implements MountainService
 {
 
-    @Autowired
+    @org.springframework.beans.factory.annotation.Autowired
     public MountainRepository mountainRepository;
-    @Autowired
+    @org.springframework.beans.factory.annotation.Autowired
     public SeedQueryRepository seedQueryRepository;
 
     @Override
@@ -27,7 +27,7 @@ public class MountainServiceImpl
 
     @Override
     public List<Mountain> find(MountainSearchBean mountain) {
-        return mountainRepository.findByMountainIdAndNameAndHeightAndSeedQuery(mountain.getMountainId(),mountain.getName(),mountain.getHeight(),mountain.getSeedQueryList()==null? null :mountain.getSeedQueryList().get(0));
+        return mountainRepository.findByMountainIdAndNameAndHeightAndSeedQueryAndSeedKeyword(mountain.getMountainId(),mountain.getName(),mountain.getHeight(),mountain.getSeedQueryList()==null? null :mountain.getSeedQueryList().get(0),mountain.getSeedQuerySeedKeyword());
     }
 
     @Override

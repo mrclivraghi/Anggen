@@ -76,7 +76,7 @@ public class JsGenerator {
 		.append("this.selectedEntity= 	{show: false \n");
 		for (Field field: fieldList)
 		{
-			if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List"))
+			if (ReflectionManager.isListField(field))
 				sb.append(","+field.getName()+"List: []");
 		}
 		sb.append("};\n")
@@ -160,7 +160,7 @@ public class JsGenerator {
 		//searchOne
 
 		sb.append("this.searchOne=function(entity) {\n");
-		sb.append("this.setSelectedEntity(null);\n");
+		//sb.append("this.setSelectedEntity(null);\n");
 		sb.append("var promise= $http.get(\"../"+entityName+"/\"+entity."+entityName+"Id);\n");
 		//sb.append(".then( function(response) {\n");
 		//sb.append("return response.data;\n");
@@ -330,7 +330,7 @@ public class JsGenerator {
 		if (childrenList!=null)
 			for (Field field: childrenList)
 			{
-				if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List"))
+				if (ReflectionManager.isListField(field))
 				{
 					sb.append(""+entityName+"Service.searchBean."+field.getName()+"List=[];\n");
 					sb.append(""+entityName+"Service.searchBean."+field.getName()+"List.push("+entityName+"Service.searchBean."+field.getName()+");\n");
@@ -494,6 +494,14 @@ public class JsGenerator {
 		manageRestError(sb);
 		sb.append("});\n");
 		sb.append("};\n");
+		ReflectionManager reflectionManager = new ReflectionManager(classClass);
+		for (String tabName: reflectionManager.getTabsName())
+		{
+			sb.append("$scope.refreshTable"+Utility.getFirstUpper(tabName.replaceAll(" ", ""))+"= function() \n");
+			sb.append("{\n");
+		sb.append(JsGenerator.resetTableTab(tabName,classClass));
+		sb.append("};\n");
+		}
 		sb.append("$scope.trueFalseValues=[true,false];\n");
 		//if (isParent)
 		{
@@ -602,7 +610,7 @@ public class JsGenerator {
 			sb.append(getPagination());
 		for (Field field: childrenList)
 		{
-			if (field.getCompositeClass().fullName().contains("java.util.List"))
+			if (ReflectionManager.isListField(field))
 			{
 				JsGenerator jsGenerator = new JsGenerator(field.getFieldClass(), false, field.getCompositeClass(), entityName);
 				sb.append(jsGenerator.getPagination());
@@ -633,7 +641,7 @@ public class JsGenerator {
 		
 		for (Field field: childrenList)
 		{
-			if (field.getCompositeClass().fullName().contains("java.util.List"))
+			if (ReflectionManager.isListField(field))
 			{
 				sb.append("$scope.saveLinked"+Utility.getFirstUpper(field.getName())+"= function() {\n");
 				sb.append(entityName+"Service.selectedEntity."+field.getName()+"List.push("+entityName+"Service.selectedEntity."+field.getName()+");\n");
@@ -648,7 +656,6 @@ public class JsGenerator {
 			sb.append("};\n");
 			
 			exportFields="";
-			ReflectionManager reflectionManager = new ReflectionManager(field.getFieldClass());
 			for (Field childrenField: reflectionManager.getChildrenFieldList())
 			{
 				if (ReflectionManager.hasExcelExport(childrenField))
@@ -700,7 +707,7 @@ public class JsGenerator {
 						sb.append("{ name: '"+field.getName()+"'},\n");
 				}
 			}
-			else if (!field.getCompositeClass().fullName().contains("java.util.List") && isParent)
+			else if (!ReflectionManager.isListField(field) && isParent)
 			{
 				sb.append("{ name: '"+field.getName()+"."+field.getName()+"Id', displayName: '"+field.getName()+"'},\n");
 			}
@@ -834,11 +841,25 @@ public class JsGenerator {
 		ReflectionManager reflectionManager = new ReflectionManager(entityClass);
 		for (Field field: reflectionManager.getFieldByTabName(tabName))
 		{
-			if (field.getCompositeClass()!= null && field.getCompositeClass().fullName().contains("java.util.List"))
-				resetTableTabString=resetTableTabString+" $scope."+field.getName()+"GridApi.core.handleWindowResize(); ";
+			if (ReflectionManager.isListField(field))
+				resetTableTabString=resetTableTabString+" $scope."+field.getName()+"GridApi.core.handleWindowResize(); \n";
 				//$scope.seedQueryGridApi.core.handleWindowResize();
 		}
+		//resetTableTabString = resetTableTabString+" alert('done');";
 		return resetTableTabString;
+	}
+	public static String scriptResizeTableTab(String tabName,String entityName)
+	{
+		StringBuilder sb= new StringBuilder();
+
+		sb.append("$('a[href=\"#"+entityName+"-"+tabName+"\"]').on('shown.bs.tab', function (e) {\n");
+		sb.append("var target = $(e.target).attr(\"href\"); // activated tab\n");
+		sb.append("//console.log(target);\n");
+		sb.append("if (angular.element($('#"+entityName+"Tabs')).scope()!=null && angular.element($('#"+entityName+"Tabs')).scope()!=undefined) \n");
+		sb.append("angular.element($('#"+entityName+"Tabs')).scope().refreshTable"+Utility.getFirstUpper(tabName.replaceAll(" ",""))+"();\n");
+		sb.append("});\n");
+
+		return sb.toString();
 	}
 	
 	

@@ -5,6 +5,7 @@ import java.util.List;
 import it.polimi.model.test.Place;
 import it.polimi.repository.test.PlaceRepository;
 import it.polimi.searchbean.test.PlaceSearchBean;
+import it.polimi.service.test.PlaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

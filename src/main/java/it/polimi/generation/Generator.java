@@ -1,6 +1,5 @@
 package it.polimi.generation;
 
-import it.polimi.repository.security.UserRepository;
 import it.polimi.utils.Field;
 import it.polimi.utils.ReflectionManager;
 import it.polimi.utils.Utility;

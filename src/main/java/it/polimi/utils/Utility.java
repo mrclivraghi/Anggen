@@ -34,11 +34,28 @@ public class Utility {
 		return string.replaceFirst(string.substring(0, 1), string.substring(0, 1).toUpperCase());
 	}
 	
+	public static String getEntityCallName(String string)
+	{
+		Integer cut=string.length();
+		for (int i=0; i<string.length(); i++)
+		{
+			if (Character.isUpperCase(string.charAt(i)))
+			{
+				cut=i;
+				break;
+			}
+		}
+		return string.substring(0, cut);
+	}
+	
+	
 	public static void main (String[] args)
 	{
 		Date myDate= new Date();
 		Time myTime= new Time(myDate.getTime());
 		System.out.println(Utility.formatTime(myTime));
+		System.out.println(Utility.getEntityCallName("entityTarget"));
+		
 	}
 
 	

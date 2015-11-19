@@ -3,9 +3,6 @@ package it.polimi.utils;
 import it.polimi.generation.Generator;
 import it.polimi.model.Example;
 import it.polimi.model.Sex;
-import it.polimi.model.mountain.Mountain;
-import it.polimi.model.ospedale.Ambulatorio;
-import it.polimi.model.ospedale.Paziente;
 import it.polimi.utils.annotation.Between;
 import it.polimi.utils.annotation.DescriptionField;
 import it.polimi.utils.annotation.ExcelExport;
@@ -274,15 +271,15 @@ public class ReflectionManager {
 	
 	public String getDescriptionField()
 	{
-		return getDescriptionField(classClass,false);
+		return getDescriptionField(classClass,false,parseName());
 	}
 	
 	public String getDescriptionField(Boolean withGetter)
 	{
-		return getDescriptionField(classClass,withGetter);
+		return getDescriptionField(classClass,withGetter,parseName());
 	}
 	
-	public String getDescriptionField(Class classClass,Boolean withGetter)
+	public String getDescriptionField(Class classClass,Boolean withGetter,String entityName)
 	{
 		String descriptionFields="";
 		String entity=parseName(classClass.getName());
@@ -300,9 +297,9 @@ public class ReflectionManager {
 				if (annotation.annotationType()==DescriptionField.class)
 				{
 					if (withGetter)
-						descriptionFields=descriptionFields+" "+entity+".get"+Utility.getFirstUpper(field.getName())+"()+' '+";
+						descriptionFields=descriptionFields+" "+entityName+".get"+Utility.getFirstUpper(field.getName())+"()+' '+";
 					else
-						descriptionFields=descriptionFields+" "+entity+"."+field.getName()+"+' '+";
+						descriptionFields=descriptionFields+" "+entityName+"."+field.getName()+"+' '+";
 
 				}
 			}
@@ -677,10 +674,10 @@ public class ReflectionManager {
 		}
 		
 		
-		System.out.println(reflectionManager.getDescriptionField(Mountain.class, false));
-		System.out.println(reflectionManager.getDescriptionField(Mountain.class, true));
+	//	System.out.println(reflectionManager.getDescriptionField(Mountain.class, false));
+	//	System.out.println(reflectionManager.getDescriptionField(Mountain.class, true));
 		
 		System.out.println("-----");
-		System.out.println(ReflectionManager.hasManyToManyAssociation(Paziente.class, Ambulatorio.class.getName()));
+	//	System.out.println(ReflectionManager.hasManyToManyAssociation(Paziente.class, Ambulatorio.class.getName()));
 	}
 }

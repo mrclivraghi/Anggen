@@ -100,7 +100,6 @@ public class UserController {
         if (user.getRole()!=null)
         {
         user.getRole().setUserList(null);
-        user.getRole().setEntityList(null);
         }
     }
 

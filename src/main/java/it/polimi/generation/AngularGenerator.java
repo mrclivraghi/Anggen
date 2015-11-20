@@ -190,7 +190,7 @@ public class AngularGenerator {
 						
 							html.select(CssGenerator.getSelect("").add("ng-model", baseEntity+"."+field.getName()+"."+field.getName()+"Id")
 									.add("id", field.getName())
-									.add("ng-options", field.getName()+"."+field.getName()+"Id as "+reflectionManager.getDescriptionField(field.getFieldClass(),false)+" for "+field.getName()+" in childrenList."+field.getName()+"List").enctype("UTF-8"))
+									.add("ng-options", field.getName()+"."+field.getName()+"Id as "+reflectionManager.getDescriptionField(field.getFieldClass(),false,field.getName())+" for "+field.getName()+" in childrenList."+field.getName()+"List").enctype("UTF-8"))
 									._select();
 							html._div()._div();
 						} else
@@ -233,7 +233,7 @@ public class AngularGenerator {
 								html.select(CssGenerator.getSelect("").add("ng-model", "selectedEntity."+field.getName())
 										.add("id", field.getName())
 										.add("name", field.getName())
-										.add("ng-options", field.getName()+" as "+reflectionManager.getDescriptionField(field.getFieldClass(),false)+" for "+field.getName()+" in childrenList."+field.getName()+"List track by "+field.getName()+"."+field.getName()+"Id").enctype("UTF-8"))
+										.add("ng-options", field.getName()+" as "+reflectionManager.getDescriptionField(field.getFieldClass(),false,field.getName())+" for "+field.getName()+" in childrenList."+field.getName()+"List track by "+field.getName()+"."+field.getName()+"Id").enctype("UTF-8"))
 										._select();
 								renderValidator(html,field);
 								html.span((new HtmlAttributes()).add("class", "input-group-btn"))
@@ -607,7 +607,7 @@ public class AngularGenerator {
 					
 						html.select(CssGenerator.getSelect("").add("ng-model", baseEntity+"."+field.getName()+"."+field.getName()+"Id")
 								.add("id", field.getName())
-								.add("ng-options", field.getName()+"."+field.getName()+"Id as "+reflectionManager.getDescriptionField(field.getFieldClass(),false)+" for "+field.getName()+" in childrenList."+field.getName()+"List").enctype("UTF-8"))
+								.add("ng-options", field.getName()+"."+field.getName()+"Id as "+reflectionManager.getDescriptionField(field.getFieldClass(),false,field.getName())+" for "+field.getName()+" in childrenList."+field.getName()+"List").enctype("UTF-8"))
 								._select();
 						html._div()._div();
 					} else
@@ -660,7 +660,7 @@ public class AngularGenerator {
 							html.select(CssGenerator.getSelect("").add("ng-model", "selectedEntity."+field.getName())
 									.add("id", field.getName())
 									.add("name", field.getName())
-									.add("ng-options", field.getName()+" as "+reflectionManager.getDescriptionField(field.getFieldClass(),false)+" for "+field.getName()+" in childrenList."+field.getName()+"List track by "+field.getName()+"."+field.getName()+"Id").enctype("UTF-8"))
+									.add("ng-options", field.getName()+" as "+reflectionManager.getDescriptionField(field.getFieldClass(),false,field.getName())+" for "+field.getName()+" in childrenList."+field.getName()+"List track by "+field.getName()+"."+Utility.getEntityCallName(field.getName())+"Id").enctype("UTF-8"))
 									._select();
 							renderValidator(html,field);
 							html.span((new HtmlAttributes()).add("class", "input-group-btn"))
@@ -712,7 +712,7 @@ public class AngularGenerator {
 			html.select(CssGenerator.getSelect("").add("ng-model", "selectedEntity."+field.getName())
 					.add("id", field.getName())
 					.add("name", field.getName())
-					.add("ng-options", field.getName()+" as "+reflectionManager.getDescriptionField(field.getFieldClass(),false)+" for "+field.getName()+" in childrenList."+field.getName()+"List track by "+field.getName()+"."+field.getName()+"Id").enctype("UTF-8"))
+					.add("ng-options", field.getName()+" as "+reflectionManager.getDescriptionField(field.getFieldClass(),false,field.getName())+" for "+field.getName()+" in childrenList."+field.getName()+"List track by "+field.getName()+"."+field.getName()+"Id").enctype("UTF-8"))
 					._select();
 			renderValidator(html,field);
 			html.span((new HtmlAttributes()).add("class", "input-group-btn"))

@@ -104,13 +104,6 @@ public class RoleController {
 
         user.setRole(null);
         }
-        if (role.getEntityList()!=null)
-        for (it.polimi.model.security.Entity entity :role.getEntityList())
-
-        {
-
-        entity.setRoleList(null);
-        }
     }
 
 }

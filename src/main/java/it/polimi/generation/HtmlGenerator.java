@@ -256,30 +256,30 @@ public class HtmlGenerator {
 				String ulContent="";
 				for (Class myClass: packageClassList)
 				{
-					ulContent=ulContent+"<c:forEach var=\"entity\" items=\"${entityList}\">";
-					ulContent=ulContent+"<c:if test=\"${entity.entityName=='"+reflectionManager.parseName(myClass.getName())+"'}\">";
+					//ulContent=ulContent+"<c:forEach var=\"entity\" items=\"${entityList}\">";
+					//ulContent=ulContent+"<c:if test=\"${entity.entityName=='"+reflectionManager.parseName(myClass.getName())+"'}\">";
 					ulContent=ulContent+"<li><a href=\"../"+reflectionManager.parseName(myClass.getName())+"/\">"+reflectionManager.parseName(myClass.getName())+"</a></li>";
-					ulContent=ulContent+"</c:if>";
-					ulContent=ulContent+"</c:forEach>";
+					//ulContent=ulContent+"</c:if>";
+					//ulContent=ulContent+"</c:forEach>";
 				}
 				ulHtml.content(ulContent,false);
 				//html._ul();
 				ulHtml._li();
-				ulContent="<c:set var=\"fill\" value=\"0\"/>";
-				ulContent=ulContent+"<c:forEach var=\"entity\" items=\"${entityList}\">";
+				//ulContent="<c:set var=\"fill\" value=\"0\"/>";
+				//ulContent=ulContent+"<c:forEach var=\"entity\" items=\"${entityList}\">";
 				String condition="";
 				for (Class myClass: packageClassList)
 				{
 					condition=condition+"entity.entityName=='"+reflectionManager.parseName(myClass.getName())+"' ||";
 				}
 				condition=condition.substring(0, condition.length()-3);
-				ulContent=ulContent+"<c:if test=\"${"+condition+"}\">";
-				ulContent=ulContent+"<c:set var=\"fill\" value=\"1\"/>";
-				ulContent=ulContent+"</c:if>";
-				ulContent=ulContent+"</c:forEach>";
-				ulContent=ulContent+"<c:if test=\"${fill==1}\">";
+				//ulContent=ulContent+"<c:if test=\"${"+condition+"}\">";
+				//ulContent=ulContent+"<c:set var=\"fill\" value=\"1\"/>";
+				//ulContent=ulContent+"</c:if>";
+				//ulContent=ulContent+"</c:forEach>";
+				//ulContent=ulContent+"<c:if test=\"${fill==1}\">";
 				ulContent=ulContent+ulHtml.toHtml();
-				ulContent=ulContent+"</c:if>";
+				//ulContent=ulContent+"</c:if>";
 				sb.append(ulContent);
 				
 			}
@@ -288,11 +288,13 @@ public class HtmlGenerator {
 			{
 				if (theClass.getPackage().getName().equals(Generator.modelPackage))
 				{
-					String ulContent="<c:forEach var=\"entity\" items=\"${entityList}\">";
-					ulContent=ulContent+"<c:if test=\"${entity.entityName=='"+reflectionManager.parseName(theClass.getName())+"'}\">";
+					String ulContent="";
+					
+					//ulContent=ulContent+"<c:forEach var=\"entity\" items=\"${entityList}\">";
+					//ulContent=ulContent+"<c:if test=\"${entity.entityName=='"+reflectionManager.parseName(theClass.getName())+"'}\">";
 					ulContent=ulContent+"<li><a href=\"../"+reflectionManager.parseName(theClass.getName())+"/\">"+reflectionManager.parseName(theClass.getName())+"</a></li>";
-					ulContent=ulContent+"</c:if>";
-					ulContent=ulContent+"</c:forEach>";
+					//ulContent=ulContent+"</c:if>";
+					//ulContent=ulContent+"</c:forEach>";
 					sb.append(ulContent);
 				}
 			}

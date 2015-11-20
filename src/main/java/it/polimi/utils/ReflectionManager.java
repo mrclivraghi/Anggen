@@ -3,9 +3,6 @@ package it.polimi.utils;
 import it.polimi.generation.Generator;
 import it.polimi.model.Example;
 import it.polimi.model.Sex;
-import it.polimi.model.mountain.Mountain;
-import it.polimi.model.ospedale.Ambulatorio;
-import it.polimi.model.ospedale.Paziente;
 import it.polimi.utils.annotation.Between;
 import it.polimi.utils.annotation.DescriptionField;
 import it.polimi.utils.annotation.ExcelExport;
@@ -26,6 +23,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -42,57 +40,51 @@ import com.sun.codemodel.JAnnotationUse;
 import com.sun.codemodel.JClass;
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JDefinedClass;
+import com.sun.codemodel.JFieldVar;
 import com.sun.codemodel.JType;
 import com.sun.codemodel.JVar;
 
 public class ReflectionManager {
 	
-	private Class classClass;
+	private JDefinedClass classClass;
 	
 	private Object obj;
 
 	
-	public ReflectionManager(Class myClass)
+	public ReflectionManager(JType myClass)
 	{
-		this.classClass=myClass;
-		try {
-			this.obj=this.classClass.newInstance();
-		} catch (InstantiationException | IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		this.classClass= (myClass instanceof JDefinedClass)? (JDefinedClass) myClass : null;
 	}
 	
+
 	public Boolean isKnownClass()
 	{
 		return isKnownClass(classClass);
 	}
 	
-	public Boolean isKnownClass(Class myClass)
+	public Boolean isKnownClass(JType myClass)
 	{
-		if (myClass==Long.class) return true;
-		if (myClass==String.class) return true;
-		if (myClass==Date.class) return true;
-		if (myClass==java.sql.Date.class) return true;
-		if (myClass==Integer.class) return true;
-		if (myClass==int.class) return true;
-		if (myClass==double.class) return true;
-		if (myClass==Double.class) return true;
-		if (myClass==BigDecimal.class) return true;
-		if (myClass==Boolean.class) return true;
-		if (myClass==Time.class) return true;
+		if (myClass.fullName().equals("java.lang.Long")) return true;
+		if (myClass.fullName().equals("java.lang.String")) return true;
+		if (myClass.fullName().equals("java.util.Date")) return true;
+		if (myClass.fullName().equals("java.sql.Date")) return true;
+		if (myClass.fullName().equals("java.lang.Integer")) return true;
 		
+		if (myClass.fullName().equals("java.lang.Double")) return true;
+		if (myClass.fullName().equals("java.math.BigDecimal")) return true;
+		if (myClass.fullName().equals("java.lang.Boolean")) return true;
+		if (myClass.fullName().equals("java.sql.Time")) return true;
 		return false;
 	}
 
 	public static Boolean isListField(Field field)
 	{
-		return (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List"));
+		return (field.getFieldClass().fullName().contains("java.util.List"));
 	}
 	
 	public String parseName()
 	{
-		return parseName(classClass.getName());
+		return parseName(classClass.fullName());
 	}
 	
 	public String parseName(String name)
@@ -111,7 +103,7 @@ public class ReflectionManager {
 		List<Field> childrenList = new ArrayList<Field>();
 		for (Field field: fieldList)
 		{
-			if (field.getCompositeClass()!=null)
+			if (!isKnownClass(field.getFieldClass()))
 			{
 				addChildrenFilter(field);
 				childrenList.add(field);
@@ -122,7 +114,7 @@ public class ReflectionManager {
 	
 	public void addChildrenFilter(Field field)
 	{
-		if (field.getCompositeClass()==null) return;
+		if (!isListField(field)) return;
 		ReflectionManager reflectionManager = new ReflectionManager(field.getFieldClass());
 		field.setChildrenFilterList(new ArrayList<Field>());
 		for (Field childrenField: reflectionManager.getFieldList())
@@ -134,93 +126,47 @@ public class ReflectionManager {
 	
 	public List<Field> getFieldList()
 	{
-		java.lang.reflect.Field[] fields=obj.getClass().getDeclaredFields();
 		
 		List<Field> fieldList=new ArrayList<Field>();
-		JCodeModel	codeModel = new JCodeModel();
+
+		Map<String,JFieldVar> fieldMap=classClass.fields();
 		
-		for (java.lang.reflect.Field field : fields)
+		for (JFieldVar field : fieldMap.values())
 		{
-			Class fieldClass= null;
-			JClass jClass=null;
-			JDefinedClass repositoryClass=null;
-			Boolean isEnum=field.getType().isEnum();
-			List<String> enumValuesList= new ArrayList<String>();
-			if (isKnownClass(field.getType()))
-				fieldClass=field.getType();
-			else
-			{
-				if (isEnum)
-				{
-					Object[] enumValues=field.getType().getEnumConstants();
-					for (int i=0; i<enumValues.length; i++)
-						enumValuesList.add(enumValues[i].toString());
-					
-					fieldClass=field.getType();
-					
-				} else
-				{
-					jClass=codeModel.ref(field.getType());
-					if (field.getType()==List.class)
-					{//entityList
-						Type type=field.getGenericType();
-						if (type instanceof ParameterizedType)
-						{
-							Type elementType= ((ParameterizedType)type).getActualTypeArguments()[0];
-							try {
-								fieldClass=Class.forName(elementType.getTypeName());
-								jClass=jClass.narrow(fieldClass);
-								repositoryClass=Generator.repositoryMap.get(elementType.getTypeName());
-							} catch (ClassNotFoundException e) {
-								//e.printStackTrace();
-							}
-						}
-					}else
-					{//entity
-						fieldClass=field.getType();
-					}
-				}
-			}
-			Field myField= new Field(parseName(field.getName()), fieldClass, jClass, repositoryClass);
-			myField.setAnnotationList(field.getAnnotations());
-			myField.setIsEnum(isEnum);
-			myField.setEnumValuesList(enumValuesList);
+			
+			Field myField= new Field(field.name(),field.type(),null);
+			myField.setName(field.name());
+			myField.setFieldClass(field.type());
 			myField.setOwnerClass(classClass);
-			fieldList.add(myField);
+			for (JAnnotationUse annotation: field.annotations())
+			{
+				annotation.toString();
+			}
 		}
+		
+		
 		return fieldList;
 	}
 	
 	public Boolean hasList()
 	{
-		Boolean hasList=false;
 
-		java.lang.reflect.Field[] fields=obj.getClass().getDeclaredFields();
 
-		List<Field> fieldList=new ArrayList<Field>();
-
-		for (java.lang.reflect.Field field : fields)
+		List<Field> fieldList= getFieldList();
+		for (Field field : fieldList)
 		{
-			if (!isKnownClass(field.getType()))
-			{
-				if (field.getType()==List.class)
-				{
-					hasList=true;
-					break;
-
-				}
-			}
+				if (isListField(field)) return true;
 		}
-		return hasList;
+		return false;
 	}
 	
-	public List<Class> getChildrenClasses()
+	public List<JType> getChildrenClasses()
 	{
-		List<Class> classList= new ArrayList<Class>();
+		List<JType> classList= new ArrayList<JType>();
 		List<Field> fieldList= getFieldList();
 		for (Field field: fieldList)
 		{
-			if (field.getCompositeClass()!=null)
+			if (!(isKnownClass(field.getFieldClass())))
 				classList.add(field.getFieldClass());
 		}
 		
@@ -229,7 +175,7 @@ public class ReflectionManager {
 	}
 	
 	//recursive
-	public static List<ClassDetail> getDescendantClassList(Class theClass,List<Class> parentClassList)
+	public static List<ClassDetail> getDescendantClassList(JType theClass,List<JType> parentClassList)
 	{
 		ReflectionManager reflectionManager = new ReflectionManager(theClass);
 		List<ClassDetail> returnedClassList = new ArrayList<ClassDetail>();
@@ -243,7 +189,6 @@ public class ReflectionManager {
 			{
 				ClassDetail classDetail = new ClassDetail();
 				classDetail.setClassClass(field.getFieldClass());
-				classDetail.setCompositeClass(field.getCompositeClass());
 				classDetail.setParentName(reflectionManager.parseName());;
 				returnedClassList.add(classDetail);
 				parentClassList.add(field.getFieldClass());
@@ -266,7 +211,7 @@ public class ReflectionManager {
 	public List<ClassDetail> getSubClassList()
 	{
 		List<ClassDetail> subClassList = null;
-		List<Class> parentClassList = new ArrayList<Class>();
+		List<JType> parentClassList = new ArrayList<JType>();
 		parentClassList.add(classClass);
 		subClassList=ReflectionManager.getDescendantClassList(classClass,parentClassList);
 		return subClassList;
@@ -274,18 +219,18 @@ public class ReflectionManager {
 	
 	public String getDescriptionField()
 	{
-		return getDescriptionField(classClass,false);
+		return getDescriptionField(classClass,false,parseName());
 	}
 	
 	public String getDescriptionField(Boolean withGetter)
 	{
-		return getDescriptionField(classClass,withGetter);
+		return getDescriptionField(classClass,withGetter,parseName());
 	}
 	
-	public String getDescriptionField(Class classClass,Boolean withGetter)
+	public String getDescriptionField(JDefinedClass classClass,Boolean withGetter,String entityName)
 	{
 		String descriptionFields="";
-		String entity=parseName(classClass.getName());
+		String entity=parseName(classClass.fullName());
 		List<Field> fieldList = null;
 		if (classClass!=this.classClass)
 		{
@@ -300,9 +245,9 @@ public class ReflectionManager {
 				if (annotation.annotationType()==DescriptionField.class)
 				{
 					if (withGetter)
-						descriptionFields=descriptionFields+" "+entity+".get"+Utility.getFirstUpper(field.getName())+"()+' '+";
+						descriptionFields=descriptionFields+" "+entityName+".get"+Utility.getFirstUpper(field.getName())+"()+' '+";
 					else
-						descriptionFields=descriptionFields+" "+entity+"."+field.getName()+"+' '+";
+						descriptionFields=descriptionFields+" "+entityName+"."+field.getName()+"+' '+";
 
 				}
 			}
@@ -357,7 +302,7 @@ public class ReflectionManager {
 				for (Field filterField: field.getChildrenFilterList())
 				{
 					ReflectionManager reflectionManager = new ReflectionManager(filterField.getOwnerClass());
-					String filterFieldName=reflectionManager.parseName(filterField.getOwnerClass().getName())+Utility.getFirstUpper(filterField.getName());
+					String filterFieldName=reflectionManager.parseName(filterField.getOwnerClass().fullName())+Utility.getFirstUpper(filterField.getName());
 					string = string+manageSingleParam(className, filterField, filterFieldName);
 					
 				}
@@ -385,7 +330,7 @@ public class ReflectionManager {
 					string=string+"it.polimi.utils.Utility.formatDate("+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(fieldName)+"()),";
 				}else
 				{
-					if (field.getCompositeClass()!=null && field.getCompositeClass().fullName().contains("java.util.List"))
+					if (isListField(field))
 						string=string+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(fieldName)+"List()==null? null :"+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(fieldName)+"List().get(0),";
 					else
 						string=string+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(fieldName)+"(),";
@@ -403,7 +348,9 @@ public class ReflectionManager {
 			if (annotationList[i].annotationType()==Temporal.class)
 				return true;
 		}
-		if (field.getFieldClass()==Date.class || field.getFieldClass()==java.sql.Date.class || field.getFieldClass()==Time.class)
+		if (     field.getFieldClass().fullName().equals("java.util.Date") || 
+				field.getFieldClass().fullName().equals("java.sql.Date") || 
+				field.getFieldClass().fullName().equals("java.sql.Time"))
 			return true;
 		return false;
 	}
@@ -435,7 +382,7 @@ public class ReflectionManager {
 				}
 		}*/
 		}
-		if (field.getFieldClass()==Time.class) return true;
+		if (field.getFieldClass().fullName().equals("java.sql.Time")) return true;
 		return false;
 	}
 	
@@ -496,13 +443,13 @@ public class ReflectionManager {
 		return false;
 	}
 	
-	public static Boolean hasManyToManyAssociation (Class theClass,String parentClass)
+	public static Boolean hasManyToManyAssociation (JDefinedClass theClass,String parentClass)
 	{
 		ReflectionManager reflectionManager = new ReflectionManager(theClass);
 		
 		for (Field field: reflectionManager.getFieldList())
 		{
-			if ((reflectionManager.parseName(field.getFieldClass().getName()).equals(parentClass) || field.getFieldClass().getName().equals(parentClass))&& ReflectionManager.hasManyToMany(field))
+			if ((reflectionManager.parseName(field.getFieldClass().fullName()).equals(parentClass) || field.getFieldClass().fullName().equals(parentClass))&& ReflectionManager.hasManyToMany(field))
 				return true;
 		}
 		return false;
@@ -526,7 +473,7 @@ public class ReflectionManager {
 	{
 		List<String> packageList= ReflectionManager.getSubPackages(mainPackage);
 		List<String> menuItemList= new ArrayList<String>();
-		ReflectionManager reflectionManager= new ReflectionManager(Object.class);
+		ReflectionManager reflectionManager= new ReflectionManager(null);
 		for (String myPackage: packageList)
 		{
 			menuItemList.add(reflectionManager.parseName(myPackage));
@@ -537,12 +484,19 @@ public class ReflectionManager {
 	
 
 
-	public static Class getRightParamClass(Field field) {
+	public static JType getRightParamClass(Field field) {
+		JCodeModel codeModel = new JCodeModel();
 		if (field.getIsEnum())
-			return Integer.class;
+		{
+			Class integer = Integer.class;
+			return codeModel.ref(integer);
+		}
 		
 		if (ReflectionManager.isDateField(field))
-			return String.class;
+		{
+			Class string = String.class;
+			return codeModel.ref(string);
+		}
 		
 		return field.getFieldClass();
 	}
@@ -556,11 +510,11 @@ public class ReflectionManager {
 	}
 	
 	
-	public Boolean containFieldWithClass(Class fieldClass)
+	public Boolean containFieldWithClass(JDefinedClass fieldClass)
 	{
 		List<Field> fieldList = getFieldList();
 		for (Field field: fieldList)
-			if (field.getFieldClass()==fieldClass)
+			if (field.getFieldClass().fullName().equals(fieldClass.fullName()))
 				return true;
 		
 		return false;
@@ -638,7 +592,7 @@ public class ReflectionManager {
 	
 	public static void main(String[] args)
 	{
-		ReflectionManager reflectionManager= new ReflectionManager(Example.class);
+		/*ReflectionManager reflectionManager= new ReflectionManager(Example.class);
 		for (Field field: reflectionManager.getFieldList())
 		{
 			//System.out.println(field.getName()+"-"+reflectionManager.isTimeField(field));
@@ -677,10 +631,10 @@ public class ReflectionManager {
 		}
 		
 		
-		System.out.println(reflectionManager.getDescriptionField(Mountain.class, false));
-		System.out.println(reflectionManager.getDescriptionField(Mountain.class, true));
+	//	System.out.println(reflectionManager.getDescriptionField(Mountain.class, false));
+	//	System.out.println(reflectionManager.getDescriptionField(Mountain.class, true));
 		
 		System.out.println("-----");
-		System.out.println(ReflectionManager.hasManyToManyAssociation(Paziente.class, Ambulatorio.class.getName()));
+	//	System.out.println(ReflectionManager.hasManyToManyAssociation(Paziente.class, Ambulatorio.class.getName()));
 	}
 }

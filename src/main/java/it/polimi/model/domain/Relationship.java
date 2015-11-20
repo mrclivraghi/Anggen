@@ -101,4 +101,11 @@ public class Relationship {
 		this.relationshipType = relationshipType;
 	}
 	
+	
+	/* custom methods */
+	public Boolean isList()
+	{
+		return !(relationshipType==RelationshipType.ONE_TO_ONE || relationshipType==RelationshipType.MANY_TO_ONE);
+	}
+	
 }

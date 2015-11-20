@@ -1,4 +1,4 @@
-package it.polimi.generation;
+package it.polimi.service;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -43,15 +43,11 @@ import com.sun.codemodel.JMod;
 import com.sun.codemodel.JVar;
 
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes= Application.class)
+@Service
 public class ModelGeneratorService {
 	
 	@Autowired
 	EntityRepository entityRepository;
-	
-	@Autowired
-	RelationshipRepository relationshipRepository;
 	
 	
 	private void generateGetterAndSetter(JDefinedClass myClass, String varName, Class varClass)
@@ -106,8 +102,8 @@ public class ModelGeneratorService {
 		return fieldClass;
 	}
 	
-	@Test
-	public void getModelClass()
+	
+	public Map<String,JDefinedClass> getModelClass()
 	{
 		Map<String,JDefinedClass> modelClassMap= new HashMap<String,JDefinedClass>();
 		Iterable<Entity> entityIterable = entityRepository.findAll();
@@ -120,13 +116,12 @@ public class ModelGeneratorService {
 			String lowerClassName = Utility.getFirstLower(className);
 			JDefinedClass myClass= null;
 			try {
-				myClass = codeModel._class("it.polimi.model.dbdomain."+className, ClassType.CLASS);
+				myClass = codeModel._class("it.generated.domain."+className, ClassType.CLASS);
 				modelClassMap.put(tempEntity.getName(), myClass);
 			} catch (JClassAlreadyExistsException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
 		}
 		entityIterator = entityIterable.iterator();
 		while (entityIterator.hasNext())
@@ -153,7 +148,7 @@ public class ModelGeneratorService {
 		}
 		
 		
-		//return modelClassList;
+		return modelClassMap;
 	}
 
 }

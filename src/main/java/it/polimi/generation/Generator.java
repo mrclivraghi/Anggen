@@ -19,6 +19,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
@@ -174,6 +175,35 @@ public class Generator {
 			}
 	}
 	
+	
+	public void generate(Map<String,JDefinedClass> modelClassMap)
+	{
+		for (JDefinedClass modelClass: modelClassMap.values())
+		{
+			RestGenerator restGenerator = new RestGenerator(modelClass);
+			//restGenerator.generateRESTClasses(dependencyClass, true);
+		}
+		for (JDefinedClass modelClass: modelClassMap.values())
+		{
+			HtmlGenerator htmlGenerator = new HtmlGenerator(modelClass);
+			try {
+				htmlGenerator.generateJSP();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+		if (Generator.bootstrapMenu)
+			HtmlGenerator.GenerateMenu();
+		else
+		{
+			if (Generator.easyTreeMenu)
+				HtmlGenerator.GenerateEasyTreeMenu();
+			else //DEFAULTS
+				HtmlGenerator.GenerateMenu();
+		}
+	}
 	
 	
 	public static void main(String[] args) {

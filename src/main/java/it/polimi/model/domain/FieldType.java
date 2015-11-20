@@ -4,7 +4,9 @@ public enum FieldType {
 	STRING(0),
 	INTEGER(1),
 	DATE(2),
-	DOUBLE(3);
+	DOUBLE(3),
+	TIME(4),
+	ENUM(5);
 	
 	private final int value;
 	

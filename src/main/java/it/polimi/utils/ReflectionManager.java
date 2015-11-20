@@ -51,9 +51,9 @@ public class ReflectionManager {
 	private Object obj;
 
 	
-	public ReflectionManager(JDefinedClass myClass)
+	public ReflectionManager(JType myClass)
 	{
-		this.classClass=myClass;
+		this.classClass= (myClass instanceof JDefinedClass)? (JDefinedClass) myClass : null;
 	}
 	
 
@@ -62,7 +62,7 @@ public class ReflectionManager {
 		return isKnownClass(classClass);
 	}
 	
-	public Boolean isKnownClass(JDefinedClass myClass)
+	public Boolean isKnownClass(JType myClass)
 	{
 		if (myClass.fullName().equals("java.lang.Long")) return true;
 		if (myClass.fullName().equals("java.lang.String")) return true;
@@ -134,8 +134,14 @@ public class ReflectionManager {
 		for (JFieldVar field : fieldMap.values())
 		{
 			
-			Field myField= new Field(field.name(),field.type());
-			
+			Field myField= new Field(field.name(),field.type(),null);
+			myField.setName(field.name());
+			myField.setFieldClass(field.type());
+			myField.setOwnerClass(classClass);
+			for (JAnnotationUse annotation: field.annotations())
+			{
+				annotation.toString();
+			}
 		}
 		
 		
@@ -154,9 +160,9 @@ public class ReflectionManager {
 		return false;
 	}
 	
-	public List<JDefinedClass> getChildrenClasses()
+	public List<JType> getChildrenClasses()
 	{
-		List<JDefinedClass> classList= new ArrayList<JDefinedClass>();
+		List<JType> classList= new ArrayList<JType>();
 		List<Field> fieldList= getFieldList();
 		for (Field field: fieldList)
 		{
@@ -169,7 +175,7 @@ public class ReflectionManager {
 	}
 	
 	//recursive
-	public static List<ClassDetail> getDescendantClassList(JDefinedClass theClass,List<JDefinedClass> parentClassList)
+	public static List<ClassDetail> getDescendantClassList(JType theClass,List<JType> parentClassList)
 	{
 		ReflectionManager reflectionManager = new ReflectionManager(theClass);
 		List<ClassDetail> returnedClassList = new ArrayList<ClassDetail>();
@@ -205,7 +211,7 @@ public class ReflectionManager {
 	public List<ClassDetail> getSubClassList()
 	{
 		List<ClassDetail> subClassList = null;
-		List<JDefinedClass> parentClassList = new ArrayList<JDefinedClass>();
+		List<JType> parentClassList = new ArrayList<JType>();
 		parentClassList.add(classClass);
 		subClassList=ReflectionManager.getDescendantClassList(classClass,parentClassList);
 		return subClassList;
@@ -478,7 +484,7 @@ public class ReflectionManager {
 	
 
 
-	public static JClass getRightParamClass(Field field) {
+	public static JType getRightParamClass(Field field) {
 		JCodeModel codeModel = new JCodeModel();
 		if (field.getIsEnum())
 		{

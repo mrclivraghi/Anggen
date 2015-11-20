@@ -4,6 +4,7 @@ import it.polimi.model.domain.Entity;
 import it.polimi.model.domain.Field;
 import it.polimi.model.domain.FieldType;
 import it.polimi.model.domain.Relationship;
+import it.polimi.model.domain.RelationshipType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,6 +82,22 @@ public class EntityManagerImpl implements EntityManager{
 
 	@Override
 	public List<Field> getFieldByTab() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Boolean hasManyToMany() {
+		for (Relationship relationship : entity.getRelationshipList())
+		{
+			if (relationship.getRelationshipType()==RelationshipType.MANY_TO_MANY)
+				return true;
+		}
+		return false;
+	}
+
+	@Override
+	public List<String> getTabsName() {
 		// TODO Auto-generated method stub
 		return null;
 	}

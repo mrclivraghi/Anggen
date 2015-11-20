@@ -1,7 +1,13 @@
 package it.polimi.generation;
 
+import it.polimi.model.domain.Entity;
+import it.polimi.model.domain.Field;
+import it.polimi.model.domain.FieldType;
+import it.polimi.model.domain.Relationship;
+import it.polimi.model.domain.RelationshipType;
+import it.polimi.reflection.EntityManager;
+import it.polimi.reflection.EntityManagerImpl;
 import it.polimi.utils.ClassDetail;
-import it.polimi.utils.Field;
 import it.polimi.utils.ReflectionManager;
 import it.polimi.utils.Utility;
 
@@ -9,6 +15,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.io.ObjectInputStream.GetField;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,22 +30,25 @@ import com.sun.codemodel.JClass;
  */
 public class JsGenerator {
 
-	private Class classClass;
+	private Entity entity;
 
-	private String entityName;
-
+	
+	private EntityManager entityManager;
+	
 	private String parentEntityName;
 
 	private Boolean isParent;
 
-	private List<Field> childrenList;
-
-	private Boolean entityList;
-
+	private String entityName;
+	
 	private List<Field> fieldList;
-
-	private List<ClassDetail> descendantClassList;
-
+	
+	private List<Relationship> relationshipList;
+	
+	private List<Entity> descendantEntityList;
+	
+	private Boolean entityList;
+	
 	/**
 	 * Constructor
 	 * @param classClass
@@ -46,22 +56,27 @@ public class JsGenerator {
 	 * @param compositeClass
 	 * @param parentEntityName
 	 */
-	public JsGenerator(Class classClass,Boolean isParent,JClass compositeClass,String parentEntityName)
+	public JsGenerator(Entity entity,Boolean isParent,String parentEntityName,Boolean entityList)
 	{
-		this.classClass=classClass;
-		ReflectionManager reflectionManager = new ReflectionManager(classClass);
-		this.entityName=reflectionManager.parseName();
+		this.entity=entity;
 		this.parentEntityName=parentEntityName;
 		this.isParent=isParent;
-		this.fieldList=reflectionManager.getFieldList();
-		this.childrenList=reflectionManager.getChildrenFieldList();
-		List<Class> parentClassList = new ArrayList<Class>();
+		this.entityList=entityList;
+		entityManager = new EntityManagerImpl(entity);
+		
+		this.entityName=entity.getName();
+		
+		this.fieldList=entity.getFieldList();
+		
+		this.relationshipList=entity.getRelationshipList();
+		
+		/*List<Class> parentClassList = new ArrayList<Class>();
 		parentClassList.add(classClass);
 		this.descendantClassList=reflectionManager.getDescendantClassList(classClass, parentClassList);
 		if (compositeClass!=null && compositeClass.fullName().contains("java.util.List"))
 			entityList=true;
 		else
-			entityList=false;
+			entityList=false;*/
 	}
 	/**
 	 * Generate the service code for the entity
@@ -74,10 +89,10 @@ public class JsGenerator {
 		.append("{\n")
 		.append("this.entityList =		[];\n")
 		.append("this.selectedEntity= 	{show: false \n");
-		for (Field field: fieldList)
+		for (Relationship relationship : relationshipList)
 		{
-			if (ReflectionManager.isListField(field))
-				sb.append(","+field.getName()+"List: []");
+			if (relationship.isList())
+				sb.append(","+relationship.getName()+"List: []");
 		}
 		sb.append("};\n")
 		.append("this.childrenList=[]; \n")
@@ -212,14 +227,14 @@ public class JsGenerator {
 		
 		
 		
-		if (childrenList!=null)
-			for (Field field: childrenList)
+		if (relationshipList!=null)
+			for (Relationship relationship: relationshipList)
 			{
 
-				sb.append(" this.init"+Utility.getFirstUpper(field.getName())+"List= function()\n");
+				sb.append(" this.init"+Utility.getFirstUpper(relationship.getName())+"List= function()\n");
 				sb.append("{\n");
 				sb.append("var promise= $http\n");
-				sb.append(".post(\"../"+Utility.getEntityCallName(field.getName())+"/search\",\n");
+				sb.append(".post(\"../"+Utility.getEntityCallName(relationship.getName())+"/search\",\n");
 				sb.append("{});\n");
 				/*sb.append(".then(\n");
 				sb.append("function(response) {\n");
@@ -254,11 +269,10 @@ public class JsGenerator {
 		}
 		else
 		{
-			if (childrenList!=null && childrenList.size()>0)
-				for (Field field: childrenList)
+			if (relationshipList!=null && relationshipList.size()>0)
+				for (Entity relationship: relationshipList)
 				{
-					ReflectionManager reflectionManager = new ReflectionManager(field.getFieldClass());
-					stringBuilder.append(Utility.getEntityCallName(reflectionManager.parseName())+"Service.selectedEntity.show="+show.toString()+";");
+					stringBuilder.append(relationship.getName()+"Service.selectedEntity.show="+show.toString()+";");
 				}
 
 		}
@@ -327,14 +341,14 @@ public class JsGenerator {
 		sb.append("$scope.search=function()\n");
 		sb.append("{\n");
 		sb.append(""+Utility.getEntityCallName(entityName)+"Service.selectedEntity.show=false;\n");
-		if (childrenList!=null)
-			for (Field field: childrenList)
+		if (relationshipList!=null)
+			for (Relationship relationship: relationshipList)
 			{
-				if (ReflectionManager.isListField(field))
+				if (relationship.isList())
 				{
-					sb.append(""+Utility.getEntityCallName(entityName)+"Service.searchBean."+field.getName()+"List=[];\n");
-					sb.append(""+Utility.getEntityCallName(entityName)+"Service.searchBean."+field.getName()+"List.push("+entityName+"Service.searchBean."+field.getName()+");\n");
-					sb.append("delete "+Utility.getEntityCallName(entityName)+"Service.searchBean."+field.getName()+"; \n");
+					sb.append(""+Utility.getEntityCallName(entityName)+"Service.searchBean."+relationship.getName()+"List=[];\n");
+					sb.append(""+Utility.getEntityCallName(entityName)+"Service.searchBean."+relationship.getName()+"List.push("+entityName+"Service.searchBean."+relationship.getName()+");\n");
+					sb.append("delete "+Utility.getEntityCallName(entityName)+"Service.searchBean."+relationship.getName()+"; \n");
 				}
 			}
 
@@ -364,7 +378,7 @@ public class JsGenerator {
 			/*sb.append(entityName+"Service.insert().then(function(data) { });\n");*/
 			sb.append(Utility.getEntityCallName(entityName)+"Service.selectedEntity.show=false;\n");
 			//TODO 
-			if (ReflectionManager.hasManyToManyAssociation(classClass, parentEntityName))
+			if (entityList)
 			{
 				sb.append(Utility.getEntityCallName(entityName)+"Service.selectedEntity."+parentEntityName+"List.push("+parentEntityName+"Service.selectedEntity);\n");
 			}else
@@ -494,33 +508,32 @@ public class JsGenerator {
 		manageRestError(sb);
 		sb.append("});\n");
 		sb.append("};\n");
-		ReflectionManager reflectionManager = new ReflectionManager(classClass);
-		for (String tabName: reflectionManager.getTabsName())
+		for (String tabName: entityManager.getTabsName())
 		{
 			sb.append("$scope.refreshTable"+Utility.getFirstUpper(tabName.replaceAll(" ", ""))+"= function() \n");
 			sb.append("{\n");
-		sb.append(JsGenerator.resetTableTab(tabName,classClass));
+		sb.append(JsGenerator.resetTableTab(tabName,entity));
 		sb.append("};\n");
 		}
 		sb.append("$scope.trueFalseValues=[true,false];\n");
 		//if (isParent)
 		{
-			for (Field field: childrenList)
+			for (Relationship relationship: relationshipList)
 			{
 				
 				
 				
-				sb.append("$scope.show"+Utility.getFirstUpper(field.getName())+"Detail= function(index)\n");
+				sb.append("$scope.show"+Utility.getFirstUpper(relationship.getName())+"Detail= function(index)\n");
 				sb.append("{\n");
 				sb.append("if (index!=null)\n");
 				//sb.append(field.getName()+"Service.setSelectedEntity("+entityName+"Service.selectedEntity."+field.getName()+"List[index]);\n");
 				sb.append("{\n");
-				sb.append(field.getName()+"Service.searchOne("+entityName+"Service.selectedEntity."+field.getName()+"List[index]).then(\n");
+				sb.append(relationship.getName()+"Service.searchOne("+entityName+"Service.selectedEntity."+relationship.getName()+"List[index]).then(\n");
 				sb.append("function successCallback(response) {\n");
 				sb.append("console.log(\"response-ok\");\n");
 				sb.append("console.log(response);\n");
-				sb.append(Utility.getEntityCallName(field.getName())+"Service.setSelectedEntity(response.data[0]);\n");
-				sb.append(Utility.getEntityCallName(field.getName())+"Service.selectedEntity.show=true;\n");
+				sb.append(Utility.getEntityCallName(relationship.getName())+"Service.setSelectedEntity(response.data[0]);\n");
+				sb.append(Utility.getEntityCallName(relationship.getName())+"Service.selectedEntity.show=true;\n");
 
 				sb.append("  }, function errorCallback(response) {\n");
 				// called asynchronously if an error occurs
@@ -539,20 +552,20 @@ public class JsGenerator {
 				sb.append("}\n");
 				sb.append("else \n");
 				sb.append("{\n");
-				sb.append("if ("+Utility.getEntityCallName(entityName)+"Service.selectedEntity."+field.getName()+"==null || "+entityName+"Service.selectedEntity."+field.getName()+"==undefined)\n");
+				sb.append("if ("+Utility.getEntityCallName(entityName)+"Service.selectedEntity."+relationship.getName()+"==null || "+entityName+"Service.selectedEntity."+relationship.getName()+"==undefined)\n");
 				sb.append("{\n");
-				sb.append(Utility.getEntityCallName(field.getName())+"Service.setSelectedEntity(null); \n");
-				sb.append(Utility.getEntityCallName(field.getName())+"Service.selectedEntity.show=true; \n");
+				sb.append(Utility.getEntityCallName(relationship.getName())+"Service.setSelectedEntity(null); \n");
+				sb.append(Utility.getEntityCallName(relationship.getName())+"Service.selectedEntity.show=true; \n");
 				//TODO set owner, list or entity?
 				sb.append("}\n");
 				sb.append("else\n");
-				sb.append(Utility.getEntityCallName(field.getName())+"Service.searchOne("+entityName+"Service.selectedEntity."+field.getName()+").then(\n");
+				sb.append(Utility.getEntityCallName(relationship.getName())+"Service.searchOne("+entityName+"Service.selectedEntity."+relationship.getName()+").then(\n");
 				
 				sb.append("function successCallback(response) {\n");
 				//sb.append("console.log(\"response-ok\");\n");
 				//sb.append("console.log(response);\n");
-				sb.append(Utility.getEntityCallName(field.getName())+"Service.setSelectedEntity(response.data[0]);\n");
-				sb.append(Utility.getEntityCallName(field.getName())+"Service.selectedEntity.show=true;\n");
+				sb.append(Utility.getEntityCallName(relationship.getName())+"Service.setSelectedEntity(response.data[0]);\n");
+				sb.append(Utility.getEntityCallName(relationship.getName())+"Service.selectedEntity.show=true;\n");
 
 				sb.append("  }, function errorCallback(response) {\n");
 				// called asynchronously if an error occurs
@@ -569,26 +582,26 @@ public class JsGenerator {
 
 
 				sb.append("}\n");
-				sb.append("$('#"+field.getName()+"Tabs li:eq(0) a').tab('show');\n");
+				sb.append("$('#"+relationship.getName()+"Tabs li:eq(0) a').tab('show');\n");
 				sb.append("};\n");
 
 			}
 			//INIT CHILDREN LIST
 			sb.append("$scope.init=function()\n")
 			.append("{\n");
-			if (childrenList!=null)
-				for (Field field: childrenList)
+			if (relationshipList!=null)
+				for (Relationship relationship: relationshipList)
 				{
 
-					sb.append(Utility.getEntityCallName(entityName)+"Service.init"+Utility.getFirstUpper(field.getName())+"List().then(function successCallback(response) {\n");
-					sb.append(Utility.getEntityCallName(entityName)+"Service.childrenList."+Utility.getFirstLower(field.getName())+"List=response.data;\n");
+					sb.append(Utility.getEntityCallName(entityName)+"Service.init"+Utility.getFirstUpper(relationship.getName())+"List().then(function successCallback(response) {\n");
+					sb.append(Utility.getEntityCallName(entityName)+"Service.childrenList."+Utility.getFirstLower(relationship.getName())+"List=response.data;\n");
 					sb.append("},function errorCallback(response) { \n");
 					manageRestError(sb);
 					sb.append("});\n");
 				}
 				for (Field field: fieldList)
 				{
-					if (field.getIsEnum())
+					if (field.getFieldType()==FieldType.ENUM)
 					{
 						sb.append(""+Utility.getEntityCallName(entityName)+"Service.childrenList."+field.getName()+"List=[");
 						for (String string: field.getEnumValuesList())
@@ -608,13 +621,10 @@ public class JsGenerator {
 		//pagination
 		if (isParent)
 			sb.append(getPagination());
-		for (Field field: childrenList)
+		for (Relationship relationship: relationshipList)
 		{
-			if (ReflectionManager.isListField(field))
-			{
-				JsGenerator jsGenerator = new JsGenerator(field.getFieldClass(), false, field.getCompositeClass(), entityName);
-				sb.append(jsGenerator.getPagination());
-			}
+			JsGenerator jsGenerator = new JsGenerator(relationship.getEntityTarget(), false, entityName,true);
+			sb.append(jsGenerator.getPagination());
 		}
 		sb.append("$scope.downloadEntityList=function()\n");
 		sb.append("{\n");
@@ -626,7 +636,7 @@ public class JsGenerator {
 		String exportFields="";
 		for (Field field: fieldList)
 		{
-			if (ReflectionManager.hasExcelExport(field))
+			if (field.getExcelExport())
 				exportFields=exportFields+field.getName()+",";
 		}
 		
@@ -639,16 +649,16 @@ public class JsGenerator {
 		sb.append("};\n");
 		
 		
-		for (Field field: childrenList)
+		for (Relationship relationship: relationshipList)
 		{
-			if (ReflectionManager.isListField(field))
+			if (relationship.isList())
 			{
-				sb.append("$scope.saveLinked"+Utility.getFirstUpper(field.getName())+"= function() {\n");
-				sb.append(Utility.getEntityCallName(entityName)+"Service.selectedEntity."+field.getName()+"List.push("+Utility.getEntityCallName(entityName)+"Service.selectedEntity."+field.getName()+");\n");
+				sb.append("$scope.saveLinked"+Utility.getFirstUpper(relationship.getName())+"= function() {\n");
+				sb.append(Utility.getEntityCallName(entityName)+"Service.selectedEntity."+relationship.getName()+"List.push("+Utility.getEntityCallName(entityName)+"Service.selectedEntity."+relationship.getName()+");\n");
 				sb.append("}\n");
 			}
 			
-			sb.append("$scope.download"+Utility.getFirstUpper(field.getName())+"List=function()\n");
+			sb.append("$scope.download"+Utility.getFirstUpper(relationship.getName())+"List=function()\n");
 			sb.append("{\n");
 			sb.append("var mystyle = {\n");
 			sb.append(" headers:true, \n");
@@ -656,10 +666,10 @@ public class JsGenerator {
 			sb.append("};\n");
 			
 			exportFields="";
-			for (Field childrenField: reflectionManager.getChildrenFieldList())
+			for (Field field : fieldList)
 			{
-				if (ReflectionManager.hasExcelExport(childrenField))
-					exportFields=exportFields+field.getName()+",";
+				if (field.getExcelExport())
+					exportFields=exportFields+relationship.getName()+",";
 			}
 			
 			if (exportFields.length()>0)
@@ -667,7 +677,7 @@ public class JsGenerator {
 				exportFields=exportFields.substring(0, exportFields.length()-1);
 			} else
 				exportFields="*";
-			sb.append("alasql('SELECT "+exportFields+" INTO XLSXML(\""+field.getName()+".xls\",?) FROM ?',[mystyle,$scope.selectedEntity."+field.getName()+"List]);\n");
+			sb.append("alasql('SELECT "+exportFields+" INTO XLSXML(\""+relationship.getName()+".xls\",?) FROM ?',[mystyle,$scope.selectedEntity."+relationship.getName()+"List]);\n");
 			sb.append("};\n");
 		}
 
@@ -757,8 +767,8 @@ public class JsGenerator {
 	 * @return
 	 */
 	private String getServices() {
-		List<Class> parentClassList= new ArrayList<Class>();
-		parentClassList.add(classClass);
+		List<Entity> parentClassList= new ArrayList<Entity>();
+		parentClassList.add(entity);
 		String services="";
 		services=services+","+entityName+"Service";
 		for (ClassDetail classDetail : descendantClassList)
@@ -777,12 +787,12 @@ public class JsGenerator {
 	{
 		StringBuilder buildJS= new StringBuilder();
 		buildJS.append("var "+entityName+"App=angular.module(\""+entityName+"App\",['ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter'])\n");
-		JsGenerator jsGenerator = new JsGenerator(classClass, true,null,null);
+		JsGenerator jsGenerator = new JsGenerator(entity, true,null,null);
 		buildJS.append(jsGenerator.generateService());
 		buildJS.append(jsGenerator.generateController());
-		List<Class> parentClass= new ArrayList<Class>();
-		parentClass.add(classClass);
-		List<ClassDetail> descendantClassList = ReflectionManager.getDescendantClassList(classClass, parentClass);
+		List<Entity> parentClass= new ArrayList<Entity>();
+		parentClass.add(entity);
+		List<ClassDetail> descendantClassList = ReflectionManager.getDescendantClassList(entity, parentClass);
 		for (ClassDetail theClass : descendantClassList)
 		{
 			jsGenerator = new JsGenerator(theClass.getClassClass(),false,theClass.getCompositeClass(),theClass.getParentName());

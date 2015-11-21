@@ -1,8 +1,11 @@
 package it.polimi.test;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import it.polimi.Application;
+import it.polimi.generation.AngularGenerator;
+import it.polimi.generation.HtmlGenerator;
 import it.polimi.generation.JsGenerator;
 import it.polimi.model.domain.Entity;
 import it.polimi.repository.domain.EntityRepository;
@@ -30,9 +33,17 @@ public class JsDbGenerationTest {
 	{
 		Entity entity = entityRepository.findByEntityId((long)10).get(0);
 		System.out.println(entity.getName());
-		JsGenerator jsGenerator = new JsGenerator(entity, true, null, false);
+		//JsGenerator jsGenerator = new JsGenerator(entity, true, null, false);
 		File file = new File("");
-		jsGenerator.saveJsToFile(file.getAbsolutePath()+"/src/main/webapp/js/angular/");
+		//jsGenerator.saveJsToFile(file.getAbsolutePath()+"/src/main/webapp/js/angular/");
+		//AngularGenerator angularGenerator = new AngularGenerator(entity, true, new ArrayList<Entity>());
+		HtmlGenerator htmlGenerator = new HtmlGenerator(entity);
+		try {
+			htmlGenerator.generateJSP();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

@@ -18,7 +18,7 @@ public interface EntityManager {
 	public FieldType getKeyClass();
 	public String getAllParam();
 	public Boolean containFieldOfEntity(Entity targetEntity);
-	public List<Field> getFieldByTab();
+	public List<EntityAttribute> getFieldByTab();
 	public Boolean hasManyToMany();
 	public List<String> getTabsName();
 }

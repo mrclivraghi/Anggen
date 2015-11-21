@@ -6,7 +6,8 @@ public enum FieldType {
 	DATE(2),
 	DOUBLE(3),
 	TIME(4),
-	ENUM(5);
+	BOOLEAN(5),
+	ENUM(6);
 	
 	private final int value;
 	

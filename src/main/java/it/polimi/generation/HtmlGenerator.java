@@ -114,7 +114,7 @@ public class HtmlGenerator {
 	{
 		HtmlCanvas html = new HtmlCanvas();
 		HtmlAttributes htmlAttributes= new HtmlAttributes();
-		JsGenerator jsGenerator = new JsGenerator(entity, true, null, null);
+		JsGenerator jsGenerator = new JsGenerator(entity, true, null, false);
 		
 		try {
 			html.render(docType);
@@ -132,10 +132,11 @@ public class HtmlGenerator {
 			
 			//TODO switch
 			String loadMenuScript="loadMenu(); ";
-			if (Generator.bootstrapMenu)
+			/*if (Generator.bootstrapMenu)
 				loadMenuScript=loadMenuScript+" activeMenu(\""+entityName+"\");";
 			else
 				loadMenuScript=loadMenuScript+" $('#menu').easytree(easyTreeOption);";
+			*/
 			html.script((new HtmlAttributes()).add("type", "text/javascript")).content(loadMenuScript,false);
 			html._body()._html();
 		} catch (IOException e) {

@@ -117,9 +117,8 @@ public class EntityManagerImpl implements EntityManager{
 	}
 
 	@Override
-	public List<Field> getFieldByTab() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<EntityAttribute> getFieldByTab() {
+		return getAttributeList();
 	}
 
 	@Override

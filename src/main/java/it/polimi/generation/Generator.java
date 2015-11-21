@@ -55,9 +55,9 @@ public class Generator {
 	
 	public static String menuDirectory;
 	
-	public static String angularDirectory;
+	public static String angularDirectory="/src/main/webapp/js/angular/";
 	
-	public static String htmlDirectory;
+	public static String htmlDirectory="/src/main/webapp/WEB-INF/jsp/";
 	
 	public static String applicationName;
 	

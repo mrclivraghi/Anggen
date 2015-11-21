@@ -18,7 +18,7 @@ import org.hibernate.annotations.Type;
 
 @javax.persistence.Entity
 @Table(schema="mustle", name="relationship")
-public class Relationship {
+public class Relationship extends EntityAttribute{
 	
 
 	@Id
@@ -26,7 +26,9 @@ public class Relationship {
 	@Column(name ="id_relationship")
 	private Long relationshipId;
 	
+	@Column(name="name")
 	private String name;
+	
 	
 	@OneToOne(fetch=FetchType.EAGER)
 	@Type(type="it.polimi.model.domain.Entity")
@@ -40,6 +42,29 @@ public class Relationship {
 	
 	@Column(name ="relationship_type")
 	private RelationshipType relationshipType;
+	
+	
+	@Column(name="description_field")
+	private Boolean descriptionField;
+	
+	@Column(name="excel_export")
+	private Boolean excelExport;
+	
+	private Boolean filter;
+	
+	@Column(name="ignore_search")
+	private Boolean ignoreSearch;
+	
+	@Column(name="ignore_table_list")
+	private Boolean ignoreTableList;
+	
+	@Column(name="ignore_update")
+	private Boolean ignoreUpdate;
+	
+	@Column(name="between_filter")
+	private Boolean betweenFilter;
+	
+	
 	/**
 	 * @return the relationshipId
 	 */
@@ -51,18 +76,6 @@ public class Relationship {
 	 */
 	public void setRelationshipId(Long relationshipId) {
 		this.relationshipId = relationshipId;
-	}
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
-	/**
-	 * @param name the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
 	}
 	/**
 	 * @return the entitySource
@@ -100,6 +113,7 @@ public class Relationship {
 	public void setRelationshipType(RelationshipType relationshipType) {
 		this.relationshipType = relationshipType;
 	}
+	
 	
 	
 	/* custom methods */

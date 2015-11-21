@@ -13,7 +13,7 @@ import javax.persistence.Table;
 
 @javax.persistence.Entity
 @Table(schema="mustle", name="field")
-public class Field {
+public class Field extends EntityAttribute{
 
 
 	@Id
@@ -21,6 +21,7 @@ public class Field {
 	@Column(name ="id_field")
 	private Long fieldId;
 	
+	@Column(name="name")
 	private String name;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
@@ -30,6 +31,7 @@ public class Field {
 	@Column(name ="field_type")
 	private FieldType fieldType;
 	
+	@Column(name="primary_key")
 	private Boolean primaryKey;
 	
 	@Column(name="description_field")
@@ -39,6 +41,8 @@ public class Field {
 	private Boolean excelExport;
 	
 	private Boolean filter;
+	
+	private Boolean list;
 	
 	@Column(name="ignore_search")
 	private Boolean ignoreSearch;
@@ -64,18 +68,6 @@ public class Field {
 	 */
 	public void setFieldId(Long fieldId) {
 		this.fieldId = fieldId;
-	}
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
-	/**
-	 * @param name the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
 	}
 	/**
 	 * @return the entity
@@ -113,88 +105,18 @@ public class Field {
 	public void setPrimaryKey(Boolean primaryKey) {
 		this.primaryKey = primaryKey;
 	}
+	
 	/**
-	 * @return the descriptionField
+	 * @return the list
 	 */
-	public Boolean getDescriptionField() {
-		return descriptionField;
+	public Boolean getList() {
+		return list;
 	}
 	/**
-	 * @param descriptionField the descriptionField to set
+	 * @param list the list to set
 	 */
-	public void setDescriptionField(Boolean descriptionField) {
-		this.descriptionField = descriptionField;
+	public void setList(Boolean list) {
+		this.list = list;
 	}
-	/**
-	 * @return the excelExport
-	 */
-	public Boolean getExcelExport() {
-		return excelExport;
-	}
-	/**
-	 * @param excelExport the excelExport to set
-	 */
-	public void setExcelExport(Boolean excelExport) {
-		this.excelExport = excelExport;
-	}
-	/**
-	 * @return the filter
-	 */
-	public Boolean getFilter() {
-		return filter;
-	}
-	/**
-	 * @param filter the filter to set
-	 */
-	public void setFilter(Boolean filter) {
-		this.filter = filter;
-	}
-	/**
-	 * @return the ignoreSearch
-	 */
-	public Boolean getIgnoreSearch() {
-		return ignoreSearch;
-	}
-	/**
-	 * @param ignoreSearch the ignoreSearch to set
-	 */
-	public void setIgnoreSearch(Boolean ignoreSearch) {
-		this.ignoreSearch = ignoreSearch;
-	}
-	/**
-	 * @return the ignoreTableList
-	 */
-	public Boolean getIgnoreTableList() {
-		return ignoreTableList;
-	}
-	/**
-	 * @param ignoreTableList the ignoreTableList to set
-	 */
-	public void setIgnoreTableList(Boolean ignoreTableList) {
-		this.ignoreTableList = ignoreTableList;
-	}
-	/**
-	 * @return the ignoreUpdate
-	 */
-	public Boolean getIgnoreUpdate() {
-		return ignoreUpdate;
-	}
-	/**
-	 * @param ignoreUpdate the ignoreUpdate to set
-	 */
-	public void setIgnoreUpdate(Boolean ignoreUpdate) {
-		this.ignoreUpdate = ignoreUpdate;
-	}
-	/**
-	 * @return the betweenFilter
-	 */
-	public Boolean getBetweenFilter() {
-		return betweenFilter;
-	}
-	/**
-	 * @param betweenFilter the betweenFilter to set
-	 */
-	public void setBetweenFilter(Boolean betweenFilter) {
-		this.betweenFilter = betweenFilter;
-	}
+	
 }

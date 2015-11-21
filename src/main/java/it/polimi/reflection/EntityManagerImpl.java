@@ -38,8 +38,8 @@ public class EntityManagerImpl implements EntityManager{
 		return entityList;
 	}
 
-	
-	private List<Entity> getDescendantEntities(Entity entity, List<Entity> parentEntities)
+	@Override
+	public List<Entity> getDescendantEntities(Entity entity, List<Entity> parentEntities)
 	{
 		List<Entity> descendantEntities = new ArrayList<Entity>();
 		for (Relationship relationship: entity.getRelationshipList())

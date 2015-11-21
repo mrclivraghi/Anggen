@@ -1,5 +1,9 @@
 package it.polimi.generation;
 
+import it.polimi.model.domain.Entity;
+import it.polimi.model.domain.EntityAttribute;
+import it.polimi.reflection.EntityManager;
+import it.polimi.reflection.EntityManagerImpl;
 import it.polimi.utils.ClassDetail;
 import it.polimi.utils.Field;
 import it.polimi.utils.ReflectionManager;
@@ -31,25 +35,25 @@ public class AngularGenerator {
 
 	private Boolean isParent;
 
-	private List<Field> fieldList;
+	private List<EntityAttribute> attributeList;
 
-	private ReflectionManager reflectionManager;
+	private EntityManager entityManager;
 
-	private List<Class> parentClass;
+	private List<Entity> parentEntity;
 
-	private Class classClass;
+	private Entity entity;
 	
 
-	public AngularGenerator(Class myClass,Boolean isParent, List<Class> parentClass)
+	public AngularGenerator(Entity entity,Boolean isParent, List<Entity> parentEntity)
 	{
-		this.reflectionManager= new ReflectionManager(myClass);
-		this.entityName=reflectionManager.parseName();
+		this.entityManager= new EntityManagerImpl(entity);
+		this.entityName=entity.getName();
 		this.isParent=isParent;
-		this.fieldList= reflectionManager.getFieldList();
-		this.parentClass=parentClass;
-		if (this.parentClass!=null)
-			this.parentClass.add(myClass);
-		this.classClass=myClass;
+		this.attributeList= entityManager.getAttributeList();
+		this.parentEntity=parentEntity;
+		if (this.parentEntity!=null)
+			this.parentEntity.add(entity);
+		this.entity=entity;
 		
 	}
 
@@ -103,13 +107,13 @@ public class AngularGenerator {
 		html._div();
 		if (isParent)
 		{
-			ArrayList<Class> oldParentClassList = (ArrayList<Class>) ((ArrayList<Class>) parentClass).clone();
-			List<ClassDetail> descendantClassList = ReflectionManager.getDescendantClassList(classClass, parentClass);
-			parentClass=oldParentClassList;
-			if (descendantClassList==null || descendantClassList.size()==0) return;
-			for (ClassDetail theClass: descendantClassList)
+			ArrayList<Entity> oldParentClassList = (ArrayList<Entity>) ((ArrayList<Entity>) parentEntity).clone();
+			List<Entity> descendantEntityList = entityManager.getDescendantEntities(entity, parentEntity);
+			parentEntity=oldParentClassList;
+			if (descendantEntityList==null || descendantEntityList.size()==0) return;
+			for (Entity descendantEntity: descendantEntityList)
 			{
-				AngularGenerator angularGenerator = new AngularGenerator(theClass.getClassClass(), false, parentClass);
+				AngularGenerator angularGenerator = new AngularGenerator(descendantEntity, false, parentEntity);
 				angularGenerator.generateEntityView(html);
 			}
 		}
@@ -140,45 +144,46 @@ public class AngularGenerator {
 		}
 		html.div(CssGenerator.getPanelBody());
 		String style="";
-		for (Field field: fieldList)
+		for (EntityAttribute entityAttribute: attributeList)
 		{
-			if (search && ReflectionManager.hasIgnoreSearch(field)) continue;
-			if (!search && ReflectionManager.hasIgnoreUpdate(field)) continue;
+			if (search && entityAttribute.getIgnoreSearch()) continue;
+			if (!search && entityAttribute.getIgnoreUpdate()) continue;
 			
 			style= style.equals("pull-left")? "pull-right": "pull-left";
-			if (field.getIsEnum())
+			
+			/*if (entityAttribute.getIsEnum())
 			{
-				html.div(CssGenerator.getExternalFieldPanel(style, search, entityName, field));
+				html.div(CssGenerator.getExternalFieldPanel(style, search, entityName, entityAttribute));
 				
 				html.div(CssGenerator.getInputGroup());
-				html.span((new HtmlAttributes()).add("class","input-group-addon")).content(field.getName());
-				html.select(getFieldHtmlAttributes(field, baseEntity, !search, style)
-				.add("ng-options", field.getName()+ " as "+field.getName()+" for "+field.getName()+" in childrenList."+field.getName()+"List").enctype("UTF-8"));
+				html.span((new HtmlAttributes()).add("class","input-group-addon")).content(entityAttribute.getName());
+				html.select(getFieldHtmlAttributes(entityAttribute, baseEntity, !search, style)
+				.add("ng-options", entityAttribute.getName()+ " as "+entityAttribute.getName()+" for "+entityAttribute.getName()+" in childrenList."+entityAttribute.getName()+"List").enctype("UTF-8"));
 				html._select();
 				html._div();
 				if (!search)
-				renderValidator(html, field);
+				renderValidator(html, entityAttribute);
 				html._div();
 			}
-			else
+			else*/
 			{
-				if (reflectionManager.isKnownClass(field.getFieldClass()))
+				if (entityManager.isKnownClass(entityAttribute.getFieldClass()))
 				{
-					html.div(CssGenerator.getExternalFieldPanel(style, search, entityName, field));
+					html.div(CssGenerator.getExternalFieldPanel(style, search, entityName, entityAttribute));
 					html.div(CssGenerator.getInputGroup());
-					html.span((new HtmlAttributes()).add("class","input-group-addon")).content(field.getName());
-					if (getInputType(field).equals("checkbox"))
+					html.span((new HtmlAttributes()).add("class","input-group-addon")).content(entityAttribute.getName());
+					if (getInputType(entityAttribute).equals("checkbox"))
 					{
-						html.select(getFieldHtmlAttributes(field, baseEntity, !search, "").add("ng-options", "value for value in trueFalseValues"))
+						html.select(getFieldHtmlAttributes(entityAttribute, baseEntity, !search, "").add("ng-options", "value for value in trueFalseValues"))
 						._select();
 					}else
-						html.input(getFieldHtmlAttributes(field,baseEntity,!search,""));
+						html.input(getFieldHtmlAttributes(entityAttribute,baseEntity,!search,""));
 					html._div();
 					if (!search)
-					renderValidator(html,field);
+					renderValidator(html,entityAttribute);
 					html._div();
 				} else
-					if (field.getCompositeClass()!=null  && !(parentClass.contains(field.getFieldClass())))
+					if (entityAttribute.getCompositeClass()!=null  && !(parentEntity.contains(entityAttribute.getFieldClass())))
 					{ // entity or list!
 
 						if (search)
@@ -186,25 +191,25 @@ public class AngularGenerator {
 							html.div((new HtmlAttributes()).add("class", style+" right-input").add("style","height: 59px;"));
 							
 							html.div((new HtmlAttributes()).add("class", "input-group"));
-							html.span((new HtmlAttributes()).add("class","input-group-addon")).content(field.getName());
+							html.span((new HtmlAttributes()).add("class","input-group-addon")).content(entityAttribute.getName());
 						
-							html.select(CssGenerator.getSelect("").add("ng-model", baseEntity+"."+field.getName()+"."+field.getName()+"Id")
-									.add("id", field.getName())
-									.add("ng-options", field.getName()+"."+field.getName()+"Id as "+reflectionManager.getDescriptionField(field.getFieldClass(),false,field.getName())+" for "+field.getName()+" in childrenList."+field.getName()+"List").enctype("UTF-8"))
+							html.select(CssGenerator.getSelect("").add("ng-model", baseEntity+"."+entityAttribute.getName()+"."+entityAttribute.getName()+"Id")
+									.add("id", entityAttribute.getName())
+									.add("ng-options", entityAttribute.getName()+"."+entityAttribute.getName()+"Id as "+entityManager.getDescriptionField(entityAttribute.getFieldClass(),false,entityAttribute.getName())+" for "+entityAttribute.getName()+" in childrenList."+entityAttribute.getName()+"List").enctype("UTF-8"))
 									._select();
 							html._div()._div();
 						} else
 						{
 
 
-							if (ReflectionManager.isListField(field))
+							if (ReflectionManager.isListField(entityAttribute))
 							{ //list
 								
 								HtmlCanvas downloadCanvas= new HtmlCanvas();
 								downloadCanvas
-								.button(CssGenerator.getButton("show"+Utility.getFirstUpper(field.getName())+"Detail"," pull-right").add("style", "margin-top: -7px"))
-								.content("Add new "+field.getName())
-								.button(CssGenerator.getButton("download"+Utility.getFirstUpper(field.getName())+"List","pull-right").add("style", "margin-top:-7px"))
+								.button(CssGenerator.getButton("show"+Utility.getFirstUpper(entityAttribute.getName())+"Detail"," pull-right").add("style", "margin-top: -7px"))
+								.content("Add new "+entityAttribute.getName())
+								.button(CssGenerator.getButton("download"+Utility.getFirstUpper(entityAttribute.getName())+"List","pull-right").add("style", "margin-top:-7px"))
 								.span((new HtmlAttributes()).add("class", "glyphicon glyphicon-download-alt").add("aria-hidden", "true"))
 								._span()
 								._button();
@@ -212,34 +217,34 @@ public class AngularGenerator {
 								html._div();
 								html.div(CssGenerator.getPanel())
 								.div(CssGenerator.getPanelHeader())
-								.content(field.getName()+downloadCanvas.toHtml(),false);
-								html.div(CssGenerator.getPanelBody().add("ng-class","{'has-error': !"+entityName+"DetailForm."+field.getName()+".$valid, 'has-success': "+entityName+"DetailForm."+field.getName()+".$valid}"))
-								.label((new HtmlAttributes()).add("id", field.getName())).content(field.getName());
+								.content(entityAttribute.getName()+downloadCanvas.toHtml(),false);
+								html.div(CssGenerator.getPanelBody().add("ng-class","{'has-error': !"+entityName+"DetailForm."+entityAttribute.getName()+".$valid, 'has-success': "+entityName+"DetailForm."+entityAttribute.getName()+".$valid}"))
+								.label((new HtmlAttributes()).add("id", entityAttribute.getName())).content(entityAttribute.getName());
 								//.button(CssGenerator.getButton("show"+Utility.getFirstUpper(field.getName())+"Detail"))
 								//.content("Add new "+field.getName());
-								html.div((new HtmlAttributes()).add("id",field.getName()).add("ng-if", "selectedEntity."+field.getName()+"List.length>0"))
-								.div((new HtmlAttributes()).add("style","top: 100px").add("ui-grid", field.getName()+"ListGridOptions").add("ui-grid-pagination", "").add("ui-grid-selection",""))
+								html.div((new HtmlAttributes()).add("id",entityAttribute.getName()).add("ng-if", "selectedEntity."+entityAttribute.getName()+"List.length>0"))
+								.div((new HtmlAttributes()).add("style","top: 100px").add("ui-grid", entityAttribute.getName()+"ListGridOptions").add("ui-grid-pagination", "").add("ui-grid-selection",""))
 								._div();
-								renderValidator(html,field);
+								renderValidator(html,entityAttribute);
 								html._div()._div();
 								
 								html._div();
 								html.div(CssGenerator.getPanelBody());
 							}else
 							{//entity
-								html.div(CssGenerator.getExternalFieldPanel(style, search, entityName, field));
+								html.div(CssGenerator.getExternalFieldPanel(style, search, entityName, entityAttribute));
 								html.div((new HtmlAttributes()).add("class", "input-group"));
-								html.span((new HtmlAttributes()).add("class", "input-group-addon")).content(field.getName());
-								html.select(CssGenerator.getSelect("").add("ng-model", "selectedEntity."+field.getName())
-										.add("id", field.getName())
-										.add("name", field.getName())
-										.add("ng-options", field.getName()+" as "+reflectionManager.getDescriptionField(field.getFieldClass(),false,field.getName())+" for "+field.getName()+" in childrenList."+field.getName()+"List track by "+field.getName()+"."+field.getName()+"Id").enctype("UTF-8"))
+								html.span((new HtmlAttributes()).add("class", "input-group-addon")).content(entityAttribute.getName());
+								html.select(CssGenerator.getSelect("").add("ng-model", "selectedEntity."+entityAttribute.getName())
+										.add("id", entityAttribute.getName())
+										.add("name", entityAttribute.getName())
+										.add("ng-options", entityAttribute.getName()+" as "+entityManager.getDescriptionField(entityAttribute.getFieldClass(),false,entityAttribute.getName())+" for "+entityAttribute.getName()+" in childrenList."+entityAttribute.getName()+"List track by "+entityAttribute.getName()+"."+entityAttribute.getName()+"Id").enctype("UTF-8"))
 										._select();
-								renderValidator(html,field);
+								renderValidator(html,entityAttribute);
 								html.span((new HtmlAttributes()).add("class", "input-group-btn"))
-								.button(CssGenerator.getButton("show"+Utility.getFirstUpper(field.getName())+"Detail").add("id",field.getName()).add("ng-if", "selectedEntity."+field.getName()+"==null"))
-								.content("Add new "+field.getName())
-								.button(CssGenerator.getButton("show"+Utility.getFirstUpper(field.getName())+"Detail").add("id",field.getName()).add("ng-if", "selectedEntity."+field.getName()+"!=null"))
+								.button(CssGenerator.getButton("show"+Utility.getFirstUpper(entityAttribute.getName())+"Detail").add("id",entityAttribute.getName()).add("ng-if", "selectedEntity."+entityAttribute.getName()+"==null"))
+								.content("Add new "+entityAttribute.getName())
+								.button(CssGenerator.getButton("show"+Utility.getFirstUpper(entityAttribute.getName())+"Detail").add("id",entityAttribute.getName()).add("ng-if", "selectedEntity."+entityAttribute.getName()+"!=null"))
 								.content("Show detail")
 								._span();
 								html._div();
@@ -452,7 +457,7 @@ public class AngularGenerator {
 			tabNameList=new ArrayList<String>();
 			tabNameList.add("Detail");
 		} else
-			tabNameList=reflectionManager.getTabsName();
+			tabNameList=entityManager.getTabsName();
 		
 		if (!search)
 		{
@@ -479,7 +484,7 @@ public class AngularGenerator {
 			String style="";
 			if (entityName.equals("mountain"))
 				System.out.println("");
-			for (Field field: reflectionManager.getFieldByTabName(tabName))
+			for (Field field: entityManager.getFieldByTabName(tabName))
 			{
 
 				if (ReflectionManager.hasBetween(field)&& (search))
@@ -493,11 +498,11 @@ public class AngularGenerator {
 				
 				if (search)
 				{
-					reflectionManager.addChildrenFilter(field);
+					entityManager.addChildrenFilter(field);
 					if (field.getChildrenFilterList()!=null)
 						for (Field filterField: field.getChildrenFilterList())
 						{
-							String filterFieldName=reflectionManager.parseName(filterField.getOwnerClass().getName())+Utility.getFirstUpper(filterField.getName());
+							String filterFieldName=entityManager.parseName(filterField.getOwnerClass().getName())+Utility.getFirstUpper(filterField.getName());
 							filterField.setName(filterFieldName);
 							renderField(html, filterField, search, style, baseEntity);
 							
@@ -575,7 +580,7 @@ public class AngularGenerator {
 		}
 		else
 		{
-			if (reflectionManager.isKnownClass(field.getFieldClass()))
+			if (entityManager.isKnownClass(field.getFieldClass()))
 			{
 				
 				
@@ -595,7 +600,7 @@ public class AngularGenerator {
 				html._div();
 				
 			} else
-				if (field.getCompositeClass()!=null  && !(parentClass.contains(field.getFieldClass())))
+				if (field.getCompositeClass()!=null  && !(parentEntity.contains(field.getFieldClass())))
 				{ // entity or list!
 
 					if (search)
@@ -607,7 +612,7 @@ public class AngularGenerator {
 					
 						html.select(CssGenerator.getSelect("").add("ng-model", baseEntity+"."+field.getName()+"."+field.getName()+"Id")
 								.add("id", field.getName())
-								.add("ng-options", field.getName()+"."+field.getName()+"Id as "+reflectionManager.getDescriptionField(field.getFieldClass(),false,field.getName())+" for "+field.getName()+" in childrenList."+field.getName()+"List").enctype("UTF-8"))
+								.add("ng-options", field.getName()+"."+field.getName()+"Id as "+entityManager.getDescriptionField(field.getFieldClass(),false,field.getName())+" for "+field.getName()+" in childrenList."+field.getName()+"List").enctype("UTF-8"))
 								._select();
 						html._div()._div();
 					} else
@@ -660,7 +665,7 @@ public class AngularGenerator {
 							html.select(CssGenerator.getSelect("").add("ng-model", "selectedEntity."+field.getName())
 									.add("id", field.getName())
 									.add("name", field.getName())
-									.add("ng-options", field.getName()+" as "+reflectionManager.getDescriptionField(field.getFieldClass(),false,field.getName())+" for "+field.getName()+" in childrenList."+field.getName()+"List track by "+field.getName()+"."+Utility.getEntityCallName(field.getName())+"Id").enctype("UTF-8"))
+									.add("ng-options", field.getName()+" as "+entityManager.getDescriptionField(field.getFieldClass(),false,field.getName())+" for "+field.getName()+" in childrenList."+field.getName()+"List track by "+field.getName()+"."+Utility.getEntityCallName(field.getName())+"Id").enctype("UTF-8"))
 									._select();
 							renderValidator(html,field);
 							html.span((new HtmlAttributes()).add("class", "input-group-btn"))
@@ -712,7 +717,7 @@ public class AngularGenerator {
 			html.select(CssGenerator.getSelect("").add("ng-model", "selectedEntity."+field.getName())
 					.add("id", field.getName())
 					.add("name", field.getName())
-					.add("ng-options", field.getName()+" as "+reflectionManager.getDescriptionField(field.getFieldClass(),false,field.getName())+" for "+field.getName()+" in childrenList."+field.getName()+"List track by "+field.getName()+"."+field.getName()+"Id").enctype("UTF-8"))
+					.add("ng-options", field.getName()+" as "+entityManager.getDescriptionField(field.getFieldClass(),false,field.getName())+" for "+field.getName()+" in childrenList."+field.getName()+"List track by "+field.getName()+"."+field.getName()+"Id").enctype("UTF-8"))
 					._select();
 			renderValidator(html,field);
 			html.span((new HtmlAttributes()).add("class", "input-group-btn"))

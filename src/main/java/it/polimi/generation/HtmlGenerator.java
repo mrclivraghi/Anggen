@@ -1,6 +1,10 @@
 package it.polimi.generation;
 
-import it.polimi.utils.Field;
+import it.polimi.model.domain.Entity;
+import it.polimi.model.domain.EntityAttribute;
+import it.polimi.model.domain.Field;
+import it.polimi.reflection.EntityManager;
+import it.polimi.reflection.EntityManagerImpl;
 import it.polimi.utils.ReflectionManager;
 import it.polimi.utils.Utility;
 
@@ -15,8 +19,6 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
-import javax.persistence.Entity;
-
 import org.rendersnake.DocType;
 import org.rendersnake.HtmlAttributes;
 import org.rendersnake.HtmlCanvas;
@@ -27,9 +29,9 @@ import org.springframework.beans.factory.annotation.Value;
  *
  */
 public class HtmlGenerator {
-	private List<Field> fieldList;
+	private List<EntityAttribute> attributeList;
 	
-	private List<Field> childrenField;
+	private List<Entity> childrenEntity;
 	
 	private String entityName;
 
@@ -37,20 +39,20 @@ public class HtmlGenerator {
 	
 	private static String directoryAngularFiles;
 	
-	private ReflectionManager reflectionManager;
+	private EntityManager entityManager;
 	
-	private Class classClass;
+	private Entity entity;
 	
 	private DocType docType= DocType.HTML5;
 	
 	
-	public HtmlGenerator(Class classClass)
+	public HtmlGenerator(Entity entity)
 	{
-		this.classClass=classClass;
-		this.reflectionManager = new ReflectionManager(classClass);
-		this.entityName=reflectionManager.parseName();
-		this.fieldList=reflectionManager.getFieldList();
-		this.childrenField=reflectionManager.getChildrenFieldList();
+		this.entity=entity;
+		this.entityManager = new EntityManagerImpl(entity);
+		this.entityName=entity.getName();
+		this.attributeList=entityManager.getAttributeList();
+		this.childrenEntity=entityManager.getChildrenEntities();
 		File file = new File(""); 
 		directoryViewPages = file.getAbsolutePath()+Generator.htmlDirectory;
 		directoryAngularFiles=file.getAbsolutePath()+Generator.angularDirectory;
@@ -112,7 +114,7 @@ public class HtmlGenerator {
 	{
 		HtmlCanvas html = new HtmlCanvas();
 		HtmlAttributes htmlAttributes= new HtmlAttributes();
-		JsGenerator jsGenerator = new JsGenerator(classClass, true, null, null);
+		JsGenerator jsGenerator = new JsGenerator(entity, true, null, null);
 		
 		try {
 			html.render(docType);
@@ -125,7 +127,7 @@ public class HtmlGenerator {
 			jsGenerator.saveJsToFile(directoryAngularFiles);
 			html._head()
 			.body(htmlAttributes.add("ng-app", Utility.getFirstLower(entityName)+"App"));
-			AngularGenerator angularGenerator= new AngularGenerator(classClass, true,new ArrayList<Class>());
+			AngularGenerator angularGenerator= new AngularGenerator(entity, true,new ArrayList<Entity>());
 			angularGenerator.generateEntityView(html);
 			
 			//TODO switch
@@ -140,7 +142,7 @@ public class HtmlGenerator {
 			e.printStackTrace();
 		}
 		
-		File myJsp=new File(directoryViewPages+reflectionManager.parseName(classClass.getName())+".jsp");
+		File myJsp=new File(directoryViewPages+entityName+".jsp");
 		PrintWriter writer;
 		try {
 			System.out.println("Written "+myJsp.getAbsolutePath());
@@ -155,8 +157,7 @@ public class HtmlGenerator {
 	
 	public static void GenerateEasyTreeMenu()
 	{
-		HtmlCanvas html= new HtmlCanvas();
-		ReflectionManager reflectionManager = new ReflectionManager(Object.class);
+/*		HtmlCanvas html= new HtmlCanvas();
 		try {
 			html.div((new HtmlAttributes()).add("id", "menu").add("style", "width: 250px;"))
 			.ul();
@@ -186,12 +187,7 @@ public class HtmlGenerator {
 			}
 			
 			html._ul()._div();
-			/*
-			 * <script>
-        $('#demo_menu').easytree();
-    </script>
-			 * 
-			 */
+
 			html.script().content("function stateChanged(nodes, nodesJson) {var t = nodes[0].text; $.cookie('menu', nodesJson); }; var easyTreeOption={data: $.cookie('menu'), stateChanged: stateChanged};",false);
 			
 		} catch (IOException e) {
@@ -211,13 +207,13 @@ public class HtmlGenerator {
 		} catch (FileNotFoundException | UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 	}
 	
 	/**
 	 * Generate the html menu
 	 */
-	public static void GenerateMenu()
+	/*public static void GenerateMenu()
 	{
 		HtmlCanvas html = new HtmlCanvas();
 		ReflectionManager reflectionManager = new ReflectionManager(Object.class);
@@ -323,6 +319,6 @@ public class HtmlGenerator {
 			e.printStackTrace();
 		}
 		
-	}
+	}*/
 	
 }

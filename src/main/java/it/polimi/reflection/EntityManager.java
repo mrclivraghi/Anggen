@@ -13,6 +13,7 @@ public interface EntityManager {
 	public Boolean hasList();
 	public List<Entity> getChildrenEntities();
 	public List<Entity> getDescendantEntities();
+	public List<Entity> getDescendantEntities(Entity entity, List<Entity> parentEntities);
 	public List<Field> getDescriptionField();
 	public FieldType getKeyClass();
 	public String getAllParam();

@@ -1,5 +1,6 @@
 package it.polimi.generation;
 
+import it.polimi.model.domain.EntityAttribute;
 import it.polimi.utils.Field;
 
 import org.rendersnake.HtmlAttributes;
@@ -114,16 +115,16 @@ public  class CssGenerator {
 	 * @param style
 	 * @param search
 	 * @param entityName
-	 * @param field
+	 * @param entityAttribute
 	 * @return
 	 */
-	public static HtmlAttributes getExternalFieldPanel(String style,Boolean search, String entityName,Field field)
+	public static HtmlAttributes getExternalFieldPanel(String style,Boolean search, String entityName,EntityAttribute entityAttribute)
 	{
 		HtmlAttributes htmlAttributes= new HtmlAttributes();
 		htmlAttributes.add("class", style+" right-input");
 		if (!search)
 		{
-			htmlAttributes.add("ng-class","{'has-error': !"+entityName+"DetailForm."+field.getName()+".$valid, 'has-success': "+entityName+"DetailForm."+field.getName()+".$valid}");
+			htmlAttributes.add("ng-class","{'has-error': !"+entityName+"DetailForm."+entityAttribute.getName()+".$valid, 'has-success': "+entityName+"DetailForm."+entityAttribute.getName()+".$valid}");
 			htmlAttributes.add("style", "height:59px");
 		}
 		

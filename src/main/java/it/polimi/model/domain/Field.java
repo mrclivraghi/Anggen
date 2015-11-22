@@ -2,6 +2,8 @@ package it.polimi.model.domain;
 
 import it.polimi.utils.annotation.Tab;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -13,7 +15,10 @@ import javax.persistence.Table;
 
 @javax.persistence.Entity
 @Table(schema="mustle", name="field")
-public class Field {
+@AttributeOverrides({
+    @AttributeOverride(name="name", column=@Column(name="name"))
+})
+public class Field extends EntityAttribute{
 
 
 	@Id
@@ -21,6 +26,7 @@ public class Field {
 	@Column(name ="id_field")
 	private Long fieldId;
 	
+	@Column(name="name")
 	private String name;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
@@ -30,6 +36,7 @@ public class Field {
 	@Column(name ="field_type")
 	private FieldType fieldType;
 	
+	@Column(name="primary_key")
 	private Boolean primaryKey;
 	
 	@Column(name="description_field")
@@ -39,6 +46,8 @@ public class Field {
 	private Boolean excelExport;
 	
 	private Boolean filter;
+	
+	private Boolean list;
 	
 	@Column(name="ignore_search")
 	private Boolean ignoreSearch;
@@ -64,18 +73,6 @@ public class Field {
 	 */
 	public void setFieldId(Long fieldId) {
 		this.fieldId = fieldId;
-	}
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
-	/**
-	 * @param name the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
 	}
 	/**
 	 * @return the entity
@@ -113,10 +110,25 @@ public class Field {
 	public void setPrimaryKey(Boolean primaryKey) {
 		this.primaryKey = primaryKey;
 	}
+	
+	/**
+	 * @return the list
+	 */
+	public Boolean getList() {
+		return list;
+	}
+	/**
+	 * @param list the list to set
+	 */
+	public void setList(Boolean list) {
+		this.list = list;
+	}
+	
 	/**
 	 * @return the descriptionField
 	 */
 	public Boolean getDescriptionField() {
+		if (descriptionField==null) return false;
 		return descriptionField;
 	}
 	/**
@@ -129,6 +141,7 @@ public class Field {
 	 * @return the excelExport
 	 */
 	public Boolean getExcelExport() {
+		if (excelExport==null) return false;
 		return excelExport;
 	}
 	/**
@@ -141,6 +154,7 @@ public class Field {
 	 * @return the filter
 	 */
 	public Boolean getFilter() {
+		if (filter==null) return false;
 		return filter;
 	}
 	/**
@@ -153,6 +167,7 @@ public class Field {
 	 * @return the ignoreSearch
 	 */
 	public Boolean getIgnoreSearch() {
+		if (ignoreSearch==null) return false;
 		return ignoreSearch;
 	}
 	/**
@@ -165,6 +180,7 @@ public class Field {
 	 * @return the ignoreTableList
 	 */
 	public Boolean getIgnoreTableList() {
+		if (ignoreTableList==null) return false;
 		return ignoreTableList;
 	}
 	/**
@@ -177,6 +193,7 @@ public class Field {
 	 * @return the ignoreUpdate
 	 */
 	public Boolean getIgnoreUpdate() {
+		if (ignoreUpdate==null) return false;
 		return ignoreUpdate;
 	}
 	/**
@@ -189,6 +206,7 @@ public class Field {
 	 * @return the betweenFilter
 	 */
 	public Boolean getBetweenFilter() {
+		if (betweenFilter==null) return false;
 		return betweenFilter;
 	}
 	/**
@@ -197,4 +215,14 @@ public class Field {
 	public void setBetweenFilter(Boolean betweenFilter) {
 		this.betweenFilter = betweenFilter;
 	}
+	
+	
+	
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+	
 }

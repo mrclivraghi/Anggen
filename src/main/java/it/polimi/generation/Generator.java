@@ -144,6 +144,8 @@ public class Generator {
 			String thePackage="it.generated.domain.";
 			if (className.endsWith("SearchBean"))
 				thePackage="it.generated.searchbean.";
+			if (className.endsWith("Repository"))
+				thePackage="it.generated.repository.";
 			myClass = codeModel._class(thePackage+Utility.getFirstUpper(className), ClassType.CLASS);
 		} catch (JClassAlreadyExistsException e) {
 			e.printStackTrace();
@@ -163,15 +165,9 @@ public class Generator {
 		
 			for (Entity modelEntity: modelEntityList)
 			{
-				RestGenerator restGenerator = new RestGenerator(modelEntity,modelEntityClasses,repositoryMap);
-				restGenerator.generateRESTClasses(modelDependencyList, true);
+				RestGenerator restGenerator = new RestGenerator(modelEntity);
+				restGenerator.generateRESTClasses();
 			}
-			for (Entity modelEntity:modelDependencyList)
-			{
-				RestGenerator restGenerator = new RestGenerator(modelEntity,modelEntityClasses,repositoryMap);
-				restGenerator.generateRESTClasses(modelDependencyList, false);
-			}
-			
 			for (Entity modelEntity: modelEntityList)
 			{
 				HtmlGenerator htmlGenerator = new HtmlGenerator(modelEntity);

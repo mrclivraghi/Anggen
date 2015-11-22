@@ -24,7 +24,6 @@ import com.sun.codemodel.JDefinedClass;
 public class EntityAttribute {
 
 	
-	
 	//bad, violating encapsulating
 	@JsonIgnore
 	public void setName(String name)
@@ -97,6 +96,12 @@ public class EntityAttribute {
 		return this instanceof Relationship;
 	}
 	@JsonIgnore
+	public Boolean isEnumField()
+	{
+		return this instanceof EnumField;
+	}
+	
+	@JsonIgnore
 	public Relationship asRelationship()
 	{
 		if (isRelationship())
@@ -114,9 +119,18 @@ public class EntityAttribute {
 	}
 	
 	@JsonIgnore
+	public EnumField asEnumField()
+	{
+		if (isEnumField())
+			return (EnumField) this;
+		else
+			return null;
+	}
+	
+	@JsonIgnore
 	public JClass getFieldClass()
 	{
-		if (this.asField()!=null)
+		if (this.isField())
 		{
 			JCodeModel codeModel = new JCodeModel();
 			switch (this.asField().getFieldType())
@@ -131,16 +145,21 @@ public class EntityAttribute {
 			}
 		} else
 		{
-			return Generator.getJDefinedClass(this.asRelationship().getEntityTarget().getName());
+			if (this.isEnumField())
+			{
+				return Generator.getJDefinedClass(this.asEnumField().getName());
+			}else
+			{
+				return Generator.getJDefinedClass(this.asRelationship().getEntityTarget().getName());
+			}
 		}
 	}
 	@JsonIgnore
 	public JClass getRightParamClass()
 	{
-		//TODO enum
-	//	if (field.getIsEnum())
-	//		return Integer.class;
 		JCodeModel codeModel= new JCodeModel();
+		if (isEnumField())
+			return codeModel.ref(Integer.class);
 		if (this.asField()!=null && this.asField().getFieldType()==FieldType.DATE)
 			return codeModel.ref(String.class);
 		

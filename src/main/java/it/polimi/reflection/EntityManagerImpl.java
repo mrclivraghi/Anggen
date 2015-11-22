@@ -253,4 +253,11 @@ public class EntityManagerImpl implements EntityManager{
 	
 	}
 
+	@Override
+	public List<EntityAttribute> getAllAttribute() {
+		List<EntityAttribute> tempList = getAttributeList();
+		tempList.addAll(entity.getEnumFieldList());
+		return tempList;
+	}
+
 }

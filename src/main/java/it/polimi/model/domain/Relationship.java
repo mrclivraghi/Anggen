@@ -1,5 +1,7 @@
 package it.polimi.model.domain;
 
+import java.util.List;
+
 import it.polimi.utils.annotation.IgnoreSearch;
 
 import javax.persistence.CascadeType;
@@ -10,14 +12,19 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Type;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 @javax.persistence.Entity
 @Table(schema="mustle", name="relationship")
+@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="relationshipId")
 public class Relationship extends EntityAttribute{
 	
 
@@ -44,26 +51,10 @@ public class Relationship extends EntityAttribute{
 	private RelationshipType relationshipType;
 	
 	
-	@Column(name="description_field")
-	private Boolean descriptionField;
-	
-	@Column(name="excel_export")
-	private Boolean excelExport;
-	
-	private Boolean filter;
-	
-	@Column(name="ignore_search")
-	private Boolean ignoreSearch;
-	
-	@Column(name="ignore_table_list")
-	private Boolean ignoreTableList;
-	
-	@Column(name="ignore_update")
-	private Boolean ignoreUpdate;
-	
-	@Column(name="between_filter")
-	private Boolean betweenFilter;
-	
+	@OneToMany(fetch=FetchType.EAGER)
+	@Type(type="it.polimi.model.domain.Annotation")
+	@JoinColumn(name="relationship_id_relationship")
+	private List<Annotation> annotationList;
 	
 	/**
 	 * @return the relationshipId
@@ -114,104 +105,6 @@ public class Relationship extends EntityAttribute{
 		this.relationshipType = relationshipType;
 	}
 	
-	
-	
-	
-	
-	/**
-	 * @return the descriptionField
-	 */
-	public Boolean getDescriptionField() {
-		if (descriptionField==null) return false;
-		return descriptionField;
-	}
-	/**
-	 * @param descriptionField the descriptionField to set
-	 */
-	public void setDescriptionField(Boolean descriptionField) {
-		this.descriptionField = descriptionField;
-	}
-	/**
-	 * @return the excelExport
-	 */
-	public Boolean getExcelExport() {
-		if (excelExport==null) return false;
-		return excelExport;
-	}
-	/**
-	 * @param excelExport the excelExport to set
-	 */
-	public void setExcelExport(Boolean excelExport) {
-		this.excelExport = excelExport;
-	}
-	/**
-	 * @return the filter
-	 */
-	public Boolean getFilter() {
-		if (filter==null) return false;
-		return filter;
-	}
-	/**
-	 * @param filter the filter to set
-	 */
-	public void setFilter(Boolean filter) {
-		this.filter = filter;
-	}
-	/**
-	 * @return the ignoreSearch
-	 */
-	public Boolean getIgnoreSearch() {
-		if (ignoreSearch==null) return false;
-		return ignoreSearch;
-	}
-	/**
-	 * @param ignoreSearch the ignoreSearch to set
-	 */
-	public void setIgnoreSearch(Boolean ignoreSearch) {
-		this.ignoreSearch = ignoreSearch;
-	}
-	/**
-	 * @return the ignoreTableList
-	 */
-	public Boolean getIgnoreTableList() {
-		if (ignoreTableList==null) return false;
-		return ignoreTableList;
-	}
-	/**
-	 * @param ignoreTableList the ignoreTableList to set
-	 */
-	public void setIgnoreTableList(Boolean ignoreTableList) {
-		this.ignoreTableList = ignoreTableList;
-	}
-	/**
-	 * @return the ignoreUpdate
-	 */
-	public Boolean getIgnoreUpdate() {
-		if (ignoreUpdate==null) return false;
-		return ignoreUpdate;
-	}
-	/**
-	 * @param ignoreUpdate the ignoreUpdate to set
-	 */
-	public void setIgnoreUpdate(Boolean ignoreUpdate) {
-		this.ignoreUpdate = ignoreUpdate;
-	}
-	/**
-	 * @return the betweenFilter
-	 */
-	public Boolean getBetweenFilter() {
-		if (betweenFilter==null) return false;
-		return betweenFilter;
-	}
-	/**
-	 * @param betweenFilter the betweenFilter to set
-	 */
-	public void setBetweenFilter(Boolean betweenFilter) {
-		this.betweenFilter = betweenFilter;
-	}
-	
-	
-	
 	/**
 	 * @return the name
 	 */
@@ -219,12 +112,27 @@ public class Relationship extends EntityAttribute{
 		return name;
 	}
 	
+	public void setName(String name) {
+		this.name=name;
+	}
 	
 	
 	/* custom methods */
 	public Boolean isList()
 	{
 		return !(relationshipType==RelationshipType.ONE_TO_ONE || relationshipType==RelationshipType.MANY_TO_ONE);
+	}
+	/**
+	 * @return the annotationList
+	 */
+	public List<Annotation> getAnnotationList() {
+		return annotationList;
+	}
+	/**
+	 * @param annotationList the annotationList to set
+	 */
+	public void setAnnotationList(List<Annotation> annotationList) {
+		this.annotationList = annotationList;
 	}
 	
 }

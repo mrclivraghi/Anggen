@@ -145,7 +145,7 @@ public class AngularGenerator {
 		}
 		html.div(CssGenerator.getPanelBody());
 		String style="";
-		for (EntityAttribute entityAttribute: attributeList)
+		for (EntityAttribute entityAttribute: entityManager.getAllAttribute())
 		{
 			if (search && entityAttribute.getIgnoreSearch()) continue;
 			if (!search && entityAttribute.getIgnoreUpdate()) continue;
@@ -154,7 +154,7 @@ public class AngularGenerator {
 			
 			
 			
-			/*if (entityAttribute.getIsEnum())
+			if (entityAttribute.isEnumField())
 			{
 				html.div(CssGenerator.getExternalFieldPanel(style, search, entityName, entityAttribute));
 				
@@ -168,7 +168,7 @@ public class AngularGenerator {
 				renderValidator(html, entityAttribute);
 				html._div();
 			}
-			else*/
+			else
 			{
 				if (entityAttribute.asField()!=null)
 				{
@@ -577,7 +577,7 @@ public class AngularGenerator {
 		if (!search && entityAttribute.getIgnoreUpdate()) return;
 		
 		style= style.equals("pull-left")? "pull-right": "pull-left";
-		/*if (entityAttribute.getIsEnum())
+		if (entityAttribute.isEnumField())
 		{
 			html.div(CssGenerator.getExternalFieldPanel(style, search, entityName, entityAttribute));
 			
@@ -591,7 +591,7 @@ public class AngularGenerator {
 			renderValidator(html, entityAttribute);
 			html._div();
 		}
-		else*/
+		else
 		{
 			if (entityAttribute.asField()!=null)
 			{

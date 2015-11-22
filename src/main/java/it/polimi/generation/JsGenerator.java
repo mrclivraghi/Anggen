@@ -3,6 +3,8 @@ package it.polimi.generation;
 import it.polimi.Application;
 import it.polimi.model.domain.Entity;
 import it.polimi.model.domain.EntityAttribute;
+import it.polimi.model.domain.EnumField;
+import it.polimi.model.domain.EnumValue;
 import it.polimi.model.domain.Field;
 import it.polimi.model.domain.FieldType;
 import it.polimi.model.domain.Relationship;
@@ -180,12 +182,6 @@ public class JsGenerator {
 		sb.append("this.search = function() {\n");
 		sb.append("this.setSelectedEntity(null);\n");
 		sb.append("var promise= $http.post(\"../"+entityName+"/search\",this.searchBean);\n");
-		/*sb.append(".then( function(response) {\n");
-		sb.append("return response.data;\n");
-		sb.append("})\n");
-		sb.append(".catch(function() {\n");
-		sb.append("alert(\"error\");\n");
-		sb.append("});\n");*/
 		sb.append("return promise; \n");
 		sb.append("};\n");
 		//searchOne
@@ -193,12 +189,6 @@ public class JsGenerator {
 		sb.append("this.searchOne=function(entity) {\n");
 		//sb.append("this.setSelectedEntity(null);\n");
 		sb.append("var promise= $http.get(\"../"+entityName+"/\"+entity."+entityName+"Id);\n");
-		//sb.append(".then( function(response) {\n");
-		//sb.append("return response.data;\n");
-		//sb.append("})\n");
-		//sb.append(".catch(function() {\n");
-		//sb.append("alert(\"error\");\n");
-		//sb.append("});\n");
 		sb.append("return promise; \n");
 		sb.append("};\n");
 
@@ -206,37 +196,17 @@ public class JsGenerator {
 		//insert
 		sb.append("this.insert = function() {\n");
 		sb.append("var promise= $http.put(\"../"+entityName+"/\",this.selectedEntity);\n");
-		/*sb.append(".then( function(response) \n");
-		sb.append("{\n");
-		sb.append("return response.data;\n");
-		sb.append("})\n");
-		sb.append(".catch(function() \n");
-		sb.append("{ \n");
-		sb.append("alert(\"error\");\n");
-		sb.append("});\n");*/
 		sb.append("return promise; \n");
 		sb.append("};\n");
 		//update
 		sb.append("this.update = function() {\n");
 		sb.append("var promise= $http.post(\"../"+entityName+"/\",this.selectedEntity);\n");
-		/*sb.append(".then( function(response) {\n");
-		sb.append("return response.data;\n");
-		sb.append("})\n");
-		sb.append(".catch(function() { \n");
-		sb.append("alert(\"error\");\n");
-		sb.append("});\n");*/
 		sb.append("return promise; \n");
 		sb.append("}\n");
 		//delete
 		sb.append("this.del = function() {\n");
 		sb.append("var url=\"../"+entityName+"/\"+this.selectedEntity."+entityName+"Id;\n");
 		sb.append("var promise= $http[\"delete\"](url);\n");
-		/*sb.append(".then( function(response) {\n");
-		sb.append("return response.data;\n");
-		sb.append("})\n");
-		sb.append(".catch(function() {\n"); 
-		sb.append("alert(\"error\");\n");
-		sb.append("});\n");*/
 		sb.append("return promise; \n");
 		sb.append("}\n");
 
@@ -252,12 +222,6 @@ public class JsGenerator {
 				sb.append("var promise= $http\n");
 				sb.append(".post(\"../"+Utility.getEntityCallName(relationship.getEntityTarget().getName())+"/search\",\n");
 				sb.append("{});\n");
-				/*sb.append(".then(\n");
-				sb.append("function(response) {\n");
-				sb.append("return response.data;\n");
-				sb.append("}).catch(function() {\n");
-				sb.append("alert(\"error\");\n");
-				sb.append("});\n");*/
 				sb.append("return promise;\n");
 				sb.append("};\n");
 			}
@@ -558,11 +522,6 @@ public class JsGenerator {
 				manageRestError(sb);
 				sb.append("  }	\n");
 
-				//+ "function(data) { \n");
-				//sb.append("console.log(data[0]);\n");
-				//sb.append(field.getName()+"Service.setSelectedEntity(data[0]);\n");
-				//sb.append(field.getName()+"Service.selectedEntity.show=true;\n");
-
 				sb.append(");\n");
 				sb.append("}\n");
 				sb.append("else \n");
@@ -583,15 +542,8 @@ public class JsGenerator {
 				sb.append(Utility.getEntityCallName(relationship.getEntityTarget().getName())+"Service.selectedEntity.show=true;\n");
 
 				sb.append("  }, function errorCallback(response) {\n");
-				// called asynchronously if an error occurs
-				// or server returns response with an error status.
-				//sb.append(" console.log(\"response-error-controller\");\n");
-				//sb.append("console.log(response);\n");
 				manageRestError(sb);
 				sb.append("  }	\n");
-				
-				//sb.append("console.log(data[0]);\n");
-				//sb.append(field.getName()+"Service.setSelectedEntity(data[0]);\n");
 				
 				sb.append(");\n");
 
@@ -614,19 +566,15 @@ public class JsGenerator {
 					manageRestError(sb);
 					sb.append("});\n");
 				}
-				for (Field field: fieldList)
+				for (EnumField enumField: entity.getEnumFieldList())
 				{
-					//TODO enum mgmt
-					/*if (field.getFieldType()==FieldType.ENUM)
+					sb.append(""+Utility.getEntityCallName(entityName)+"Service.childrenList."+enumField.getName()+"List=[");
+					for (EnumValue enumValue: enumField.getEnumValueList())
 					{
-						sb.append(""+Utility.getEntityCallName(entityName)+"Service.childrenList."+field.getName()+"List=[");
-						for (String string: field.getEnumValuesList())
-						{
-							sb.append("\""+string+"\",");
-						}
-						sb.append("];\n");
-						
-					}*/
+						sb.append("\""+enumValue.getName()+"\",");
+					}
+					sb.append("];\n");
+
 				}
 			sb.append("}; \n");
 			//if (isParent)
@@ -717,9 +665,10 @@ public class JsGenerator {
 		sb.append("enableGridMenu: true,\n");
 		//generate dynamically
 		sb.append("columnDefs: [\n");
+		//TODO add enum fields?
 		for (EntityAttribute entityAttribute: entityManager.getAttributeList())
 		{
-			if ((entityAttribute.asRelationship()!=null && entityAttribute.asRelationship().getIgnoreTableList()) || (entityAttribute.asField()!=null && entityAttribute.asField().getIgnoreTableList())) continue;
+			if ((entityAttribute.asRelationship()!=null && entityAttribute.getIgnoreTableList()) || (entityAttribute.asField()!=null && entityAttribute.asField().getIgnoreTableList())) continue;
 			
 			if (entityAttribute.asField()!= null )
 			{

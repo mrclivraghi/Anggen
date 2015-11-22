@@ -16,6 +16,7 @@ import javax.persistence.Table;
 
 import org.springframework.cache.aspectj.JCacheCacheAspect;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.codemodel.JClass;
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JDefinedClass;
@@ -25,6 +26,7 @@ public class EntityAttribute {
 	
 	
 	//bad, violating encapsulating
+	@JsonIgnore
 	public void setName(String name)
 	{
 		if (isField())
@@ -32,48 +34,48 @@ public class EntityAttribute {
 		else
 			this.asRelationship().setName(name);
 	}
-	
+	@JsonIgnore
 	public String getName()
 	{
 		if (isField())
 			return this.asField().getName();
 		return this.asRelationship().getEntityTarget().getName();
 	}
-	
+	@JsonIgnore
 	public Boolean getIgnoreSearch() {
 		if (isField())
 			return this.asField().getIgnoreSearch();
 		return this.asRelationship().getIgnoreSearch();
 	}
-
+	@JsonIgnore
 	public Boolean getIgnoreUpdate() {
 		if (isField())
 			return this.asField().getIgnoreUpdate();
 		return this.asRelationship().getIgnoreUpdate();
 	}
-
+	@JsonIgnore
 	public Boolean getBetweenFilter() {
 		if (isField())
 			return this.asField().getBetweenFilter();
 		return this.asRelationship().getBetweenFilter();
 	}
-	
+	@JsonIgnore
 	public Boolean getDescriptionField() {
 		if (isField())
 			return this.asField().getDescriptionField();
 		return this.asRelationship().getDescriptionField();
 	}
-	
+	@JsonIgnore
 	public Boolean isField()
 	{
 		return this instanceof Field;
 	}
-	
+	@JsonIgnore
 	public Boolean isRelationship()
 	{
 		return this instanceof Relationship;
 	}
-	
+	@JsonIgnore
 	public Relationship asRelationship()
 	{
 		if (isRelationship())
@@ -81,6 +83,7 @@ public class EntityAttribute {
 		else
 			return null;
 	}
+	@JsonIgnore
 	public Field asField()
 	{
 		if (isField())
@@ -89,7 +92,7 @@ public class EntityAttribute {
 			return null;
 	}
 	
-	
+	@JsonIgnore
 	public JClass getFieldClass()
 	{
 		if (this.asField()!=null)
@@ -110,7 +113,7 @@ public class EntityAttribute {
 			return Generator.getJDefinedClass(this.asRelationship().getEntityTarget().getName());
 		}
 	}
-
+	@JsonIgnore
 	public JClass getRightParamClass()
 	{
 		//TODO enum

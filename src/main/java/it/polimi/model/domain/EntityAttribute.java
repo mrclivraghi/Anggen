@@ -41,6 +41,9 @@ public class EntityAttribute {
 			return this.asField().getName();
 		return this.asRelationship().getEntityTarget().getName();
 	}
+	
+	
+	
 	@JsonIgnore
 	public Boolean getIgnoreSearch() {
 		if (isField())
@@ -65,6 +68,24 @@ public class EntityAttribute {
 			return this.asField().getDescriptionField();
 		return this.asRelationship().getDescriptionField();
 	}
+	
+	@JsonIgnore
+	public Boolean getExcelExport() {
+		return false;
+	}
+	
+	@JsonIgnore
+	public Boolean getIgnoreTableList(){
+		return false;
+	}
+	@JsonIgnore
+	public Boolean getPrimaryKey(){
+		return false;
+	}
+	
+	
+	
+	/*  check */
 	@JsonIgnore
 	public Boolean isField()
 	{

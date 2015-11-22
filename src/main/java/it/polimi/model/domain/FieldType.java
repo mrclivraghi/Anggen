@@ -3,6 +3,8 @@ package it.polimi.model.domain;
 import java.sql.Time;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public enum FieldType {
 	STRING(0),
 	INTEGER(1),
@@ -24,6 +26,7 @@ public enum FieldType {
 		return this.value;
 	}
 	
+	@JsonIgnore
 	public String getName()
 	{
 		switch (this.value)
@@ -38,6 +41,7 @@ public enum FieldType {
 		return "String";
 	}
 	
+	@JsonIgnore
 	public Class getFieldClass()
 	{
 		switch (this.value)

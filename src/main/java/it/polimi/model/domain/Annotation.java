@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -30,6 +31,14 @@ public class Annotation {
 	@Type(type="it.polimi.model.domain.AnnotationAttribute")
 	@JoinColumn(name="annotation_id_annotation")
 	private List<AnnotationAttribute> attributeList;
+	
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="field_id_field")
+	private Field field;
+	
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="relationship_id_relationship")
+	private Relationship relationship;
 	
 	public Annotation() {
 		// TODO Auto-generated constructor stub
@@ -81,6 +90,38 @@ public class Annotation {
 	 */
 	public void setAttributeList(List<AnnotationAttribute> attributeList) {
 		this.attributeList = attributeList;
+	}
+
+
+	/**
+	 * @return the field
+	 */
+	public Field getField() {
+		return field;
+	}
+
+
+	/**
+	 * @param field the field to set
+	 */
+	public void setField(Field field) {
+		this.field = field;
+	}
+
+
+	/**
+	 * @return the relationship
+	 */
+	public Relationship getRelationship() {
+		return relationship;
+	}
+
+
+	/**
+	 * @param relationship the relationship to set
+	 */
+	public void setRelationship(Relationship relationship) {
+		this.relationship = relationship;
 	}
 
 }

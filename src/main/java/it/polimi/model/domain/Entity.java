@@ -40,7 +40,10 @@ public class Entity {
 	@JoinColumn(name="entity_id_entity")
 	private List<Relationship> relationshipList;
 	
-	
+	@OneToMany(fetch=FetchType.EAGER)
+	@Type(type="it.polimi.model.domain.EnumValueField")
+	@JoinColumn(name="entity_id_entity")
+	private List<EnumField> enumFieldList;
 	
 	
 	/**

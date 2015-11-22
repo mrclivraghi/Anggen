@@ -167,7 +167,7 @@ public class ReflectionManager {
 							try {
 								fieldClass=Class.forName(elementType.getTypeName());
 								jClass=jClass.narrow(fieldClass);
-								repositoryClass=Generator.repositoryMap.get(elementType.getTypeName());
+								repositoryClass=Generator.getJDefinedClass(elementType.getTypeName());
 							} catch (ClassNotFoundException e) {
 								//e.printStackTrace();
 							}

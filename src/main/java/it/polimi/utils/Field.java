@@ -5,22 +5,23 @@ import java.util.List;
 
 import com.sun.codemodel.JClass;
 import com.sun.codemodel.JDefinedClass;
-import com.sun.codemodel.JType;
 
 public class Field{
 	private String name;
-	private JType fieldClass;
+	private Class fieldClass;
+	private JClass compositeClass;
 	private JDefinedClass repositoryClass;
 	private Annotation[] annotationList;
 	private Boolean isEnum;
 	private List<String> enumValuesList;
 	private List<Field> childrenFilterList;
-	private JDefinedClass ownerClass;
+	private Class ownerClass;
 	
-	public Field(String name, JType fieldClass, JDefinedClass repositoryClass2)
+	public Field(String name, Class fieldClass, JClass compositeClass,JDefinedClass repositoryClass2)
 	{
 		this.name=name;
 		this.fieldClass=fieldClass;
+		this.setCompositeClass(compositeClass);
 		this.setRepositoryClass(repositoryClass2);
 	}
 	
@@ -30,11 +31,17 @@ public class Field{
 	public void setName(String name) {
 		this.name = name;
 	}
-	public JType getFieldClass() {
+	public Class getFieldClass() {
 		return fieldClass;
 	}
-	public void setFieldClass(JType fieldClass) {
+	public void setFieldClass(Class fieldClass) {
 		this.fieldClass = fieldClass;
+	}
+	public JClass getCompositeClass() {
+		return compositeClass;
+	}
+	public void setCompositeClass(JClass compositeClass) {
+		this.compositeClass = compositeClass;
 	}
 	public JDefinedClass getRepositoryClass() {
 		return repositoryClass;
@@ -96,14 +103,14 @@ public class Field{
 	/**
 	 * @return the ownerClass
 	 */
-	public JDefinedClass getOwnerClass() {
+	public Class getOwnerClass() {
 		return ownerClass;
 	}
 
 	/**
 	 * @param ownerClass the ownerClass to set
 	 */
-	public void setOwnerClass(JDefinedClass ownerClass) {
+	public void setOwnerClass(Class ownerClass) {
 		this.ownerClass = ownerClass;
 	}
 

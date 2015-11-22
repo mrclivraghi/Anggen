@@ -1,5 +1,6 @@
 package it.polimi.generation;
 
+import it.polimi.model.domain.Entity;
 import it.polimi.utils.Field;
 import it.polimi.utils.ReflectionManager;
 import it.polimi.utils.Utility;
@@ -22,8 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-
-import javax.persistence.Entity;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.reflections.Reflections;
@@ -61,18 +60,20 @@ public class Generator {
 	
 	public static String applicationName;
 	
-	private Set<Class<?>> allClasses;
+	private List<Entity> modelEntityList;
 	
 	private Reflections reflections;
 	
-	public List<Class> dependencyClass;
+	public List<Entity> modelDependencyList;
 	
-	public static HashMap<String, JDefinedClass> repositoryMap = new HashMap<String, JDefinedClass>();
+	private HashMap<String, JDefinedClass> repositoryMap = new HashMap<String, JDefinedClass>();
+	
+	private HashMap<String, JDefinedClass> entityMap = new HashMap<String, JDefinedClass>();
 	
 	
-	
-	public Generator()
+	public Generator(List<Entity> entities)
 	{
+		modelEntityList=entities;
 		init();
 	}
 	
@@ -105,9 +106,7 @@ public class Generator {
 			e.printStackTrace();
 		}
 		
-		reflections = new Reflections(Generator.modelPackage);
-		 allClasses = reflections.getTypesAnnotatedWith(Entity.class);
-		 dependencyClass = new ArrayList<Class>();
+		 modelDependencyList = new ArrayList<Entity>();
 		
 		
 	}
@@ -115,7 +114,7 @@ public class Generator {
 	
 	private void checkModel() throws Exception
 	{
-		for (Class myClass: allClasses)
+		/*for (Class myClass: allClasses)
 		{
 			if (myClass.getName().contains("Example"))
 				System.out.println("");
@@ -134,28 +133,48 @@ public class Generator {
 					throw new Exception(myClass.getName()+": Between annotation is invalid for type "+field.getFieldClass().getName());
 				
 			}
-		}
+		}*/
 	}
 	
-
+	public static JDefinedClass getJDefinedClass(String className)
+	{
+		JCodeModel	codeModel = new JCodeModel();
+		JDefinedClass myClass= null;
+		try {
+			String thePackage="it.generated.domain.";
+			if (className.endsWith("SearchBean"))
+				thePackage="it.generated.searchbean.";
+			myClass = codeModel._class(thePackage+Utility.getFirstUpper(className), ClassType.CLASS);
+		} catch (JClassAlreadyExistsException e) {
+			e.printStackTrace();
+		}
+		return myClass;
+	}
 	
 		
 	public void generate()
 	{
-			for (Class modelClass: allClasses)
+		Map<String,JDefinedClass> modelEntityClasses = new HashMap<String, JDefinedClass>();
+			for (Entity modelEntity: modelEntityList)
 			{
-				RestGenerator restGenerator = new RestGenerator(modelClass);
-				//restGenerator.generateRESTClasses(dependencyClass, true);
+				EntityGenerator entityGenerator = new EntityGenerator(modelEntity);
+				modelEntityClasses.put(modelEntity.getName(), entityGenerator.getModelClass());
 			}
-			for (Class modelClass:dependencyClass)
+		
+			for (Entity modelEntity: modelEntityList)
 			{
-				RestGenerator restGenerator = new RestGenerator(modelClass);
-				//restGenerator.generateRESTClasses(dependencyClass, false);
+				RestGenerator restGenerator = new RestGenerator(modelEntity,modelEntityClasses,repositoryMap);
+				restGenerator.generateRESTClasses(modelDependencyList, true);
+			}
+			for (Entity modelEntity:modelDependencyList)
+			{
+				RestGenerator restGenerator = new RestGenerator(modelEntity,modelEntityClasses,repositoryMap);
+				restGenerator.generateRESTClasses(modelDependencyList, false);
 			}
 			
-			for (Class modelClass: allClasses)
+			for (Entity modelEntity: modelEntityList)
 			{
-				HtmlGenerator htmlGenerator = new HtmlGenerator(modelClass);
+				HtmlGenerator htmlGenerator = new HtmlGenerator(modelEntity);
 				try {
 					htmlGenerator.generateJSP();
 				} catch (IllegalAccessException e) {
@@ -164,7 +183,7 @@ public class Generator {
 				}
 
 			}
-			if (Generator.bootstrapMenu)
+			/*if (Generator.bootstrapMenu)
 				HtmlGenerator.GenerateMenu();
 			else
 			{
@@ -172,52 +191,10 @@ public class Generator {
 					HtmlGenerator.GenerateEasyTreeMenu();
 				else //DEFAULTS
 					HtmlGenerator.GenerateMenu();
-			}
+			}*/
 	}
 	
 	
-	public void generate(Map<String,JDefinedClass> modelClassMap)
-	{
-		for (JDefinedClass modelClass: modelClassMap.values())
-		{
-			RestGenerator restGenerator = new RestGenerator(modelClass);
-			//restGenerator.generateRESTClasses(dependencyClass, true);
-		}
-		for (JDefinedClass modelClass: modelClassMap.values())
-		{
-			HtmlGenerator htmlGenerator = new HtmlGenerator(modelClass);
-			try {
-				htmlGenerator.generateJSP();
-			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-		}
-		if (Generator.bootstrapMenu)
-			HtmlGenerator.GenerateMenu();
-		else
-		{
-			if (Generator.easyTreeMenu)
-				HtmlGenerator.GenerateEasyTreeMenu();
-			else //DEFAULTS
-				HtmlGenerator.GenerateMenu();
-		}
-	}
 	
-	
-	public static void main(String[] args) {
-		
-		Generator generator = new Generator();
-		try {
-			generator.checkModel();
-			generator.generate();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
-
 
 }

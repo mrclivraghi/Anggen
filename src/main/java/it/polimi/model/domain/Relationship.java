@@ -116,11 +116,6 @@ public class Relationship extends EntityAttribute{
 	
 	
 	
-	/* custom methods */
-	public Boolean isList()
-	{
-		return !(relationshipType==RelationshipType.ONE_TO_ONE || relationshipType==RelationshipType.MANY_TO_ONE);
-	}
 	
 	
 	/**
@@ -223,4 +218,13 @@ public class Relationship extends EntityAttribute{
 	public String getName() {
 		return name;
 	}
+	
+	
+	
+	/* custom methods */
+	public Boolean isList()
+	{
+		return !(relationshipType==RelationshipType.ONE_TO_ONE || relationshipType==RelationshipType.MANY_TO_ONE);
+	}
+	
 }

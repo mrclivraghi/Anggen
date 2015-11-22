@@ -3,6 +3,7 @@ package it.polimi.generation;
 import it.polimi.model.domain.Entity;
 import it.polimi.model.domain.Field;
 import it.polimi.model.domain.Relationship;
+import it.polimi.model.domain.RelationshipType;
 import it.polimi.utils.Utility;
 
 import java.io.File;
@@ -64,6 +65,7 @@ public class EntityGenerator {
 		try {
 				File file = new File(""); 
 				String directory = file.getAbsolutePath()+"\\src\\main\\java";
+				System.out.println(directory);
 			   codeModel.build(new File (directory));
 			} catch (Exception ex) {
 			   ex.printStackTrace();
@@ -86,6 +88,7 @@ public class EntityGenerator {
 	}
 	
 	
+	
 	public JDefinedClass getModelClass()
 	{
 		JCodeModel	codeModel = new JCodeModel();
@@ -106,12 +109,22 @@ public class EntityGenerator {
 		}
 		for (Relationship relationship : entity.getRelationshipList())
 		{
-			JClass listClass = codeModel.ref(List.class).narrow(myClass);
-			JVar listField = myClass.field(JMod.PRIVATE, listClass, relationship.getEntityTarget().getName()+"List");
-			generateGetterAndSetter(myClass, relationship.getEntityTarget().getName()+"List", listClass);
+			if (relationship.isList())
+			{
+				JClass listClass = codeModel.ref(List.class).narrow(Generator.getJDefinedClass(relationship.getEntityTarget().getName()));
+				JVar listField = myClass.field(JMod.PRIVATE, listClass, relationship.getEntityTarget().getName()+"List");
+				generateGetterAndSetter(myClass, relationship.getEntityTarget().getName()+"List", listClass);
+			}
+			else
+			{
+				JVar listField = myClass.field(JMod.PRIVATE, Generator.getJDefinedClass(relationship.getEntityTarget().getName()), relationship.getEntityTarget().getName());
+				generateGetterAndSetter(myClass, relationship.getEntityTarget().getName(), Generator.getJDefinedClass(relationship.getEntityTarget().getName()));
+			}
 		}
 		saveFile(codeModel);
 		return myClass;
 	}
+
+
 
 }

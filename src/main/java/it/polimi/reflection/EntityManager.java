@@ -21,4 +21,7 @@ public interface EntityManager {
 	public List<EntityAttribute> getFieldByTab();
 	public Boolean hasManyToMany();
 	public List<String> getTabsName();
+	public String getDescription();
+	public String getDescription(Boolean withGetter);
+	public String getDescription(Boolean withGetter, String fieldName);
 }

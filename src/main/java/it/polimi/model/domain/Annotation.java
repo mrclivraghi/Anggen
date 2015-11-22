@@ -40,6 +40,10 @@ public class Annotation {
 	@JoinColumn(name="relationship_id_relationship")
 	private Relationship relationship;
 	
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="enum_field_id_enum_field")
+	private EnumField enumField;
+	
 	public Annotation() {
 		// TODO Auto-generated constructor stub
 	}
@@ -122,6 +126,22 @@ public class Annotation {
 	 */
 	public void setRelationship(Relationship relationship) {
 		this.relationship = relationship;
+	}
+
+
+	/**
+	 * @return the enumField
+	 */
+	public EnumField getEnumField() {
+		return enumField;
+	}
+
+
+	/**
+	 * @param enumField the enumField to set
+	 */
+	public void setEnumField(EnumField enumField) {
+		this.enumField = enumField;
 	}
 
 }

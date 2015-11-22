@@ -34,6 +34,12 @@ public class EnumField extends EntityAttribute {
 	@JoinColumn(name="entity_id_entity")
 	private Entity entity;
 	
+	@OneToMany(fetch=FetchType.EAGER)
+	@Type(type="it.polimi.model.domain.Annotation")
+	@JoinColumn(name="enum_field_id_enum_field")
+	private List<Annotation> annotationList;
+	
+	
 	public EnumField() {
 		// TODO Auto-generated constructor stub
 	}
@@ -100,6 +106,22 @@ public class EnumField extends EntityAttribute {
 	 */
 	public void setEntity(Entity entity) {
 		this.entity = entity;
+	}
+
+
+	/**
+	 * @return the annotationList
+	 */
+	public List<Annotation> getAnnotationList() {
+		return annotationList;
+	}
+
+
+	/**
+	 * @param annotationList the annotationList to set
+	 */
+	public void setAnnotationList(List<Annotation> annotationList) {
+		this.annotationList = annotationList;
 	}
 
 }

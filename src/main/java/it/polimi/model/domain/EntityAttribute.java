@@ -5,6 +5,7 @@ import it.polimi.utils.ReflectionManager;
 
 import java.sql.Time;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -164,6 +165,13 @@ public class EntityAttribute {
 			return codeModel.ref(String.class);
 		
 		return getFieldClass();
+	}
+	public List<Annotation> getAnnotationList() {
+		if (isEnumField())
+			return asEnumField().getAnnotationList();
+		if (isRelationship())
+			return asRelationship().getAnnotationList();
+		return asField().getAnnotationList();
 	}
 	
 

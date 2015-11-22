@@ -9,7 +9,8 @@ public enum AnnotationType {
 	EXCEL_EXPORT(5),
 	FILTER_FIELD(6),
 	IGNORE_SEARCH(7),
-	IGNORE_UPDATE(8);
+	IGNORE_UPDATE(8),
+	IGNORE_TABLE_LIST(9);
 	
 	private final int value;
 	

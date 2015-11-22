@@ -1,12 +1,20 @@
 package it.polimi.generation;
 
 import it.polimi.boot.OracleNamingStrategy;
+import it.polimi.model.domain.Annotation;
 import it.polimi.model.domain.Entity;
 import it.polimi.model.domain.EntityAttribute;
 import it.polimi.model.domain.Field;
 import it.polimi.model.domain.Relationship;
 import it.polimi.model.domain.RelationshipType;
 import it.polimi.utils.Utility;
+import it.polimi.utils.annotation.Between;
+import it.polimi.utils.annotation.DescriptionField;
+import it.polimi.utils.annotation.ExcelExport;
+import it.polimi.utils.annotation.Filter;
+import it.polimi.utils.annotation.IgnoreSearch;
+import it.polimi.utils.annotation.IgnoreTableList;
+import it.polimi.utils.annotation.IgnoreUpdate;
 
 import java.io.File;
 import java.util.Date;
@@ -17,6 +25,9 @@ import java.util.Map;
 
 import javax.persistence.Column;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -24,8 +35,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Type;
+import org.hibernate.validator.constraints.NotBlank;
 
 import com.sun.codemodel.ClassType;
 import com.sun.codemodel.JAnnotationUse;
@@ -212,7 +225,40 @@ public class EntityGenerator {
 
 
 	private void addValidationAnnotation(EntityAttribute entityAttribute, JVar classField) {
-		// TODO Auto-generated method stub
+		for (Annotation annotation : entityAttribute.getAnnotationList())
+		{
+			JAnnotationUse annotationUse;
+			switch (annotation.getAnnotationType())
+			{
+			case BETWEEN_FILTER:	annotationUse = classField.annotate(Between.class);
+			break;
+			case BOT_BLANK: annotationUse = classField.annotate(NotBlank.class);
+			break;
+			case DESCRIPTION_FIELD: annotationUse = classField.annotate(DescriptionField.class);
+			break;
+			case EXCEL_EXPORT: annotationUse = classField.annotate(ExcelExport.class);
+			break;
+			case FILTER_FIELD: annotationUse = classField.annotate(Filter.class);
+			break;
+			case IGNORE_SEARCH: annotationUse = classField.annotate(IgnoreSearch.class);
+			break;
+			case IGNORE_UPDATE: annotationUse = classField.annotate(IgnoreUpdate.class);
+			break;
+			case NOT_NULL:	annotationUse = classField.annotate(NotNull.class);
+			break;
+			case IGNORE_TABLE_LIST: annotationUse = classField.annotate(IgnoreTableList.class);
+			break;
+			default:
+			case PRIMARY_KEY: 	annotationUse=classField.annotate(Id.class);
+			JAnnotationUse generatedValue= classField.annotate(GeneratedValue.class);
+			generatedValue.param("strategy", GenerationType.SEQUENCE);
+			if (!entityAttribute.getDescriptionField())
+			{
+				JAnnotationUse descrField= classField.annotate(DescriptionField.class);
+			}
+			break;
+			}
+		}
 		
 	}
 

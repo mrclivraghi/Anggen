@@ -1090,7 +1090,7 @@ return promise;
  this.initEntityTargetList= function()
 {
 var promise= $http
-.post("../entityTarget/search",
+.post("../entity/search",
 {});
 return promise;
 };
@@ -1245,12 +1245,12 @@ $scope.showEntityTargetDetail= function(index)
 {
 if (index!=null)
 {
-entityTargetService.searchOne(relationshipService.selectedEntity.entityTargetList[index]).then(
+entityService.searchOne(relationshipService.selectedEntity.entityTargetList[index]).then(
 function successCallback(response) {
 console.log("response-ok");
 console.log(response);
-entityTargetService.setSelectedEntity(response.data[0]);
-entityTargetService.selectedEntity.show=true;
+entityService.setSelectedEntity(response.data[0]);
+entityService.selectedEntity.show=true;
   }, function errorCallback(response) {
 alert("error");
 return; 
@@ -1261,14 +1261,14 @@ else
 {
 if (relationshipService.selectedEntity.entityTarget==null || relationshipService.selectedEntity.entityTarget==undefined)
 {
-entityTargetService.setSelectedEntity(null); 
-entityTargetService.selectedEntity.show=true; 
+entityService.setSelectedEntity(null); 
+entityService.selectedEntity.show=true; 
 }
 else
-entityTargetService.searchOne(relationshipService.selectedEntity.entityTarget).then(
+entityService.searchOne(relationshipService.selectedEntity.entityTarget).then(
 function successCallback(response) {
-entityTargetService.setSelectedEntity(response.data[0]);
-entityTargetService.selectedEntity.show=true;
+entityService.setSelectedEntity(response.data[0]);
+entityService.selectedEntity.show=true;
   }, function errorCallback(response) {
 alert("error");
 return; 

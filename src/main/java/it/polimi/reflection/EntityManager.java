@@ -24,4 +24,5 @@ public interface EntityManager {
 	public String getDescription();
 	public String getDescription(Boolean withGetter);
 	public String getDescription(Boolean withGetter, String fieldName);
+	public List<EntityAttribute> getAllAttribute();
 }

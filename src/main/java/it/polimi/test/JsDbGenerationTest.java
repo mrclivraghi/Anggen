@@ -9,7 +9,7 @@ import it.polimi.generation.Generator;
 import it.polimi.generation.HtmlGenerator;
 import it.polimi.generation.JsGenerator;
 import it.polimi.model.domain.Entity;
-import it.polimi.repository.domain.EntityRepository;
+import it.polimi.repository.EntityRepository;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,7 +40,7 @@ public class JsDbGenerationTest {
 		File file = new File("");
 		//jsGenerator.saveJsToFile(file.getAbsolutePath()+"/src/main/webapp/js/angular/");
 		//AngularGenerator angularGenerator = new AngularGenerator(entity, true, new ArrayList<Entity>());
-		java.util.List<Entity> entityList = entityRepository.findByEntityIdAndNameAndFieldAndRelationship(null, null, null, null);
+		java.util.List<Entity> entityList = entityRepository.findByEntityIdAndNameAndFieldAndRelationshipAndEnumField(null, null, null, null, null);
 		entityList.add(mountain);
 		Generator generator = new Generator(entityList);
 		generator.generate();

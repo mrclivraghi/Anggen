@@ -1,9 +1,9 @@
-var fieldApp=angular.module("fieldApp",['ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter'])
-.service("fieldService", function($http)
+var annotationAttributeApp=angular.module("annotationAttributeApp",['ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter'])
+.service("annotationAttributeService", function($http)
 {
 this.entityList =		[];
 this.selectedEntity= 	{show: false 
-,annotationList: []};
+};
 this.childrenList=[]; 
 this.addEntity=function (entity)
 {
@@ -26,6 +26,655 @@ this.searchBean = 		new Object();
 this.resetSearchBean= function()
 {
 this.searchBean={};
+};
+this.setSelectedEntity= function (entity)
+{ 
+if (entity == null) {
+entity = {};
+this.selectedEntity.show = false;
+} //else
+var keyList = Object.keys(entity);
+if (keyList.length == 0)
+keyList = Object.keys(this.selectedEntity);
+for (i = 0; i < keyList.length; i++) {
+var val = keyList[i];
+if (val != undefined) {
+if (val.toLowerCase().indexOf("list") > -1
+&& (typeof entity[val] == "object" || typeof this.selectedEntity[val]=="object")) {
+if (entity[val] != null
+&& entity[val] != undefined) {
+if (this.selectedEntity[val]!=undefined)
+while (this.selectedEntity[val].length > 0)
+this.selectedEntity[val].pop();
+if (entity[val] != null)
+for (j = 0; j < entity[val].length; j++)
+this.selectedEntity[val]
+.push(entity[val][j]);
+} else 
+this.emptyList(this.selectedEntity[val]);
+} else {
+if (val.toLowerCase().indexOf("time") > -1
+&& typeof val == "string") {
+var date = new Date(entity[val]);
+this.selectedEntity[val] = new Date(entity[val]);
+} else {
+this.selectedEntity[val] = entity[val];
+}
+}
+}
+};
+};
+this.search = function() {
+this.setSelectedEntity(null);
+var promise= $http.post("../annotationAttribute/search",this.searchBean);
+return promise; 
+};
+this.searchOne=function(entity) {
+var promise= $http.get("../annotationAttribute/"+entity.annotationAttributeId);
+return promise; 
+};
+this.insert = function() {
+var promise= $http.put("../annotationAttribute/",this.selectedEntity);
+return promise; 
+};
+this.update = function() {
+var promise= $http.post("../annotationAttribute/",this.selectedEntity);
+return promise; 
+}
+this.del = function() {
+var url="../annotationAttribute/"+this.selectedEntity.annotationAttributeId;
+var promise= $http["delete"](url);
+return promise; 
+}
+ this.initAnnotationList= function()
+{
+var promise= $http
+.post("../annotation/search",
+{});
+return promise;
+};
+})
+.controller("annotationAttributeController",function($scope,$http,annotationAttributeService,annotationService,fieldService,relationshipService,entityService,enumFieldService,enumValueService)
+{
+//null
+$scope.searchBean=annotationAttributeService.searchBean;
+$scope.entityList=annotationAttributeService.entityList;
+$scope.selectedEntity=annotationAttributeService.selectedEntity;
+$scope.childrenList=annotationAttributeService.childrenList; 
+$scope.reset = function()
+{
+annotationAttributeService.resetSearchBean();
+$scope.searchBean=annotationAttributeService.searchBean;annotationAttributeService.setSelectedEntity(null);
+annotationAttributeService.selectedEntity.show=false;
+annotationAttributeService.setEntityList(null); 
+annotationService.selectedEntity.show=false;fieldService.selectedEntity.show=false;relationshipService.selectedEntity.show=false;entityService.selectedEntity.show=false;enumFieldService.selectedEntity.show=false;enumValueService.selectedEntity.show=false;}
+$scope.addNew= function()
+{
+annotationAttributeService.setSelectedEntity(null);
+annotationAttributeService.setEntityList(null);
+annotationAttributeService.selectedEntity.show=true;
+annotationService.selectedEntity.show=false;fieldService.selectedEntity.show=false;relationshipService.selectedEntity.show=false;entityService.selectedEntity.show=false;enumFieldService.selectedEntity.show=false;enumValueService.selectedEntity.show=false;$('#annotationAttributeTabs li:eq(0) a').tab('show');
+};
+		
+$scope.search=function()
+{
+annotationAttributeService.selectedEntity.show=false;
+annotationAttributeService.search().then(function successCallback(response) {
+annotationAttributeService.setEntityList(response.data);
+},function errorCallback(response) { 
+alert("error");
+return; 
+});
+};
+$scope.insert=function()
+{
+if (!$scope.annotationAttributeDetailForm.$valid) return; 
+annotationAttributeService.insert().then(function successCallback(response) { 
+$scope.search();
+},function errorCallback(response) { 
+alert("error");
+return; 
+});
+};
+$scope.update=function()
+{
+if (!$scope.annotationAttributeDetailForm.$valid) return; 
+annotationService.selectedEntity.show=false;fieldService.selectedEntity.show=false;relationshipService.selectedEntity.show=false;entityService.selectedEntity.show=false;enumFieldService.selectedEntity.show=false;enumValueService.selectedEntity.show=false;annotationAttributeService.update().then(function successCallback(response) { 
+$scope.search();
+},function errorCallback(response) { 
+alert("error");
+return; 
+});
+};
+$scope.del=function()
+{
+nullService.selectedEntity.annotationAttribute=null;
+annotationAttributeService.del().then(function successCallback(response) { 
+$scope.search();
+},function errorCallback(response) { 
+alert("error");
+return; 
+});
+};
+$scope.refreshTableDetail= function() 
+{
+};
+$scope.trueFalseValues=[true,false];
+$scope.showAnnotationDetail= function(index)
+{
+if (index!=null)
+{
+annotationService.searchOne(annotationAttributeService.selectedEntity.annotationList[index]).then(
+function successCallback(response) {
+console.log("response-ok");
+console.log(response);
+annotationService.setSelectedEntity(response.data[0]);
+annotationService.selectedEntity.show=true;
+  }, function errorCallback(response) {
+alert("error");
+return; 
+  }	
+);
+}
+else 
+{
+if (annotationAttributeService.selectedEntity.annotation==null || annotationAttributeService.selectedEntity.annotation==undefined)
+{
+annotationService.setSelectedEntity(null); 
+annotationService.selectedEntity.show=true; 
+}
+else
+annotationService.searchOne(annotationAttributeService.selectedEntity.annotation).then(
+function successCallback(response) {
+annotationService.setSelectedEntity(response.data[0]);
+annotationService.selectedEntity.show=true;
+  }, function errorCallback(response) {
+alert("error");
+return; 
+  }	
+);
+}
+$('#annotationTabs li:eq(0) a').tab('show');
+};
+$scope.init=function()
+{
+annotationAttributeService.initAnnotationList().then(function successCallback(response) {
+annotationAttributeService.childrenList.annotationList=response.data;
+},function errorCallback(response) { 
+alert("error");
+return; 
+});
+}; 
+$scope.init();
+$scope.annotationAttributeGridOptions = {
+enablePaginationControls: true,
+multiSelect: false,
+enableSelectAll: false,
+paginationPageSizes: [2, 4, 6],
+paginationPageSize: 2,
+enableGridMenu: true,
+columnDefs: [
+{ name: 'annotationAttributeId'},
+{ name: 'property'},
+{ name: 'value'},
+{ name: 'annotation.annotationId', displayName: 'annotation'} 
+]
+,data: annotationAttributeService.entityList
+ };
+$scope.annotationAttributeGridOptions.onRegisterApi = function(gridApi){
+$scope.annotationAttributeGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
+annotationService.selectedEntity.show=false;fieldService.selectedEntity.show=false;relationshipService.selectedEntity.show=false;entityService.selectedEntity.show=false;enumFieldService.selectedEntity.show=false;enumValueService.selectedEntity.show=false;if (row.isSelected)
+{
+annotationAttributeService.setSelectedEntity(row.entity);
+$('#annotationAttributeTabs li:eq(0) a').tab('show');
+}
+else 
+annotationAttributeService.setSelectedEntity(null);
+annotationAttributeService.selectedEntity.show = row.isSelected;
+});
+  };
+$scope.downloadEntityList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("annotationAttribute.xls",?) FROM ?',[mystyle,$scope.entityList]);
+};
+$scope.downloadAnnotationList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("annotation.xls",?) FROM ?',[mystyle,$scope.selectedEntity.annotationList]);
+};
+})
+.service("annotationService", function($http)
+{
+this.entityList =		[];
+this.selectedEntity= 	{show: false 
+,annotationAttributeList: []};
+this.childrenList=[]; 
+this.addEntity=function (entity)
+{
+this.entityList.push(entity);
+};
+this.emptyList= function(list)
+{
+while (list.length>0)
+list.pop();
+}
+this.setEntityList= function(entityList)
+{ 
+while (this.entityList.length>0)
+this.entityList.pop();
+if (entityList!=null)
+for (i=0; i<entityList.length; i++)
+this.entityList.push(entityList[i]);
+};
+this.setSelectedEntity= function (entity)
+{ 
+if (entity == null) {
+entity = {};
+this.selectedEntity.show = false;
+} //else
+var keyList = Object.keys(entity);
+if (keyList.length == 0)
+keyList = Object.keys(this.selectedEntity);
+for (i = 0; i < keyList.length; i++) {
+var val = keyList[i];
+if (val != undefined) {
+if (val.toLowerCase().indexOf("list") > -1
+&& (typeof entity[val] == "object" || typeof this.selectedEntity[val]=="object")) {
+if (entity[val] != null
+&& entity[val] != undefined) {
+if (this.selectedEntity[val]!=undefined)
+while (this.selectedEntity[val].length > 0)
+this.selectedEntity[val].pop();
+if (entity[val] != null)
+for (j = 0; j < entity[val].length; j++)
+this.selectedEntity[val]
+.push(entity[val][j]);
+} else 
+this.emptyList(this.selectedEntity[val]);
+} else {
+if (val.toLowerCase().indexOf("time") > -1
+&& typeof val == "string") {
+var date = new Date(entity[val]);
+this.selectedEntity[val] = new Date(entity[val]);
+} else {
+this.selectedEntity[val] = entity[val];
+}
+}
+}
+};
+};
+this.search = function() {
+this.setSelectedEntity(null);
+var promise= $http.post("../annotation/search",this.searchBean);
+return promise; 
+};
+this.searchOne=function(entity) {
+var promise= $http.get("../annotation/"+entity.annotationId);
+return promise; 
+};
+this.insert = function() {
+var promise= $http.put("../annotation/",this.selectedEntity);
+return promise; 
+};
+this.update = function() {
+var promise= $http.post("../annotation/",this.selectedEntity);
+return promise; 
+}
+this.del = function() {
+var url="../annotation/"+this.selectedEntity.annotationId;
+var promise= $http["delete"](url);
+return promise; 
+}
+ this.initAnnotationAttributeList= function()
+{
+var promise= $http
+.post("../annotationAttribute/search",
+{});
+return promise;
+};
+ this.initFieldList= function()
+{
+var promise= $http
+.post("../field/search",
+{});
+return promise;
+};
+ this.initRelationshipList= function()
+{
+var promise= $http
+.post("../relationship/search",
+{});
+return promise;
+};
+})
+.controller("annotationController",function($scope,$http,annotationService,annotationAttributeService,fieldService,relationshipService,entityService,enumFieldService,enumValueService)
+{
+//annotationAttribute
+$scope.searchBean=annotationService.searchBean;
+$scope.entityList=annotationService.entityList;
+$scope.selectedEntity=annotationService.selectedEntity;
+$scope.childrenList=annotationService.childrenList; 
+$scope.reset = function()
+{
+annotationService.resetSearchBean();
+$scope.searchBean=annotationService.searchBean;annotationService.setSelectedEntity(null);
+annotationService.selectedEntity.show=false;
+annotationService.setEntityList(null); 
+}
+$scope.updateParent = function(toDo)
+{
+annotationAttributeService.update().then(function successCallback(response) {
+annotationAttributeService.setSelectedEntity(response);
+if (toDo != null)
+toDo();
+},function errorCallback(response) {      
+alert("error");
+return; 
+}
+);
+};
+$scope.addNew= function()
+{
+annotationService.setSelectedEntity(null);
+annotationService.setEntityList(null);
+annotationService.selectedEntity.show=true;
+$('#annotationTabs li:eq(0) a').tab('show');
+};
+		
+$scope.search=function()
+{
+annotationService.selectedEntity.show=false;
+annotationService.searchBean.annotationAttributeList=[];
+annotationService.searchBean.annotationAttributeList.push(annotationService.searchBean.annotationAttribute);
+delete annotationService.searchBean.annotationAttribute; 
+annotationService.search().then(function successCallback(response) {
+annotationService.setEntityList(response.data);
+},function errorCallback(response) { 
+alert("error");
+return; 
+});
+};
+$scope.insert=function()
+{
+if (!$scope.annotationDetailForm.$valid) return; 
+annotationService.selectedEntity.show=false;
+annotationService.selectedEntity.annotationAttribute={};
+annotationService.selectedEntity.annotationAttribute.annotationAttributeId=annotationAttributeService.selectedEntity.annotationAttributeId;
+annotationService.insert().then(function successCallBack(response) { 
+annotationAttributeService.selectedEntity.annotation=response.data;
+annotationAttributeService.initAnnotationList().then(function(response) {
+annotationAttributeService.childrenList.annotationList=response.data;
+});
+},function errorCallback(response) { 
+alert("error");
+return; 
+});
+};
+$scope.update=function()
+{
+if (!$scope.annotationDetailForm.$valid) return; 
+annotationService.selectedEntity.show=false;
+
+annotationAttributeService.selectedEntity.annotation=annotationService.selectedEntity;
+
+annotationService.update().then(function successCallback(response){
+annotationService.setSelectedEntity(response.data);
+},function errorCallback(response) { 
+alert("error");
+return; 
+});
+};
+$scope.remove= function()
+{
+annotationService.selectedEntity.show=false;
+annotationAttributeService.selectedEntity.annotation=null;
+annotationService.setSelectedEntity(null);
+$scope.updateParent();
+};
+$scope.del=function()
+{
+annotationAttributeService.selectedEntity.annotation=null;
+$scope.updateParent();
+annotationService.del().then(function successCallback(response) { 
+annotationService.setSelectedEntity(null);
+annotationAttributeService.initAnnotationList().then(function(response) {
+annotationAttributeService.childrenList.annotationList=response.data;
+});
+},function errorCallback(response) { 
+alert("error");
+return; 
+});
+};
+$scope.refreshTableDetail= function() 
+{
+ $scope.annotationAttributeGridApi.core.handleWindowResize(); 
+};
+$scope.trueFalseValues=[true,false];
+$scope.showAnnotationAttributeDetail= function(index)
+{
+if (index!=null)
+{
+annotationAttributeService.searchOne(annotationService.selectedEntity.annotationAttributeList[index]).then(
+function successCallback(response) {
+console.log("response-ok");
+console.log(response);
+annotationAttributeService.setSelectedEntity(response.data[0]);
+annotationAttributeService.selectedEntity.show=true;
+  }, function errorCallback(response) {
+alert("error");
+return; 
+  }	
+);
+}
+else 
+{
+if (annotationService.selectedEntity.annotationAttribute==null || annotationService.selectedEntity.annotationAttribute==undefined)
+{
+annotationAttributeService.setSelectedEntity(null); 
+annotationAttributeService.selectedEntity.show=true; 
+}
+else
+annotationAttributeService.searchOne(annotationService.selectedEntity.annotationAttribute).then(
+function successCallback(response) {
+annotationAttributeService.setSelectedEntity(response.data[0]);
+annotationAttributeService.selectedEntity.show=true;
+  }, function errorCallback(response) {
+alert("error");
+return; 
+  }	
+);
+}
+$('#annotationAttributeTabs li:eq(0) a').tab('show');
+};
+$scope.showFieldDetail= function(index)
+{
+if (index!=null)
+{
+fieldService.searchOne(annotationService.selectedEntity.fieldList[index]).then(
+function successCallback(response) {
+console.log("response-ok");
+console.log(response);
+fieldService.setSelectedEntity(response.data[0]);
+fieldService.selectedEntity.show=true;
+  }, function errorCallback(response) {
+alert("error");
+return; 
+  }	
+);
+}
+else 
+{
+if (annotationService.selectedEntity.field==null || annotationService.selectedEntity.field==undefined)
+{
+fieldService.setSelectedEntity(null); 
+fieldService.selectedEntity.show=true; 
+}
+else
+fieldService.searchOne(annotationService.selectedEntity.field).then(
+function successCallback(response) {
+fieldService.setSelectedEntity(response.data[0]);
+fieldService.selectedEntity.show=true;
+  }, function errorCallback(response) {
+alert("error");
+return; 
+  }	
+);
+}
+$('#fieldTabs li:eq(0) a').tab('show');
+};
+$scope.showRelationshipDetail= function(index)
+{
+if (index!=null)
+{
+relationshipService.searchOne(annotationService.selectedEntity.relationshipList[index]).then(
+function successCallback(response) {
+console.log("response-ok");
+console.log(response);
+relationshipService.setSelectedEntity(response.data[0]);
+relationshipService.selectedEntity.show=true;
+  }, function errorCallback(response) {
+alert("error");
+return; 
+  }	
+);
+}
+else 
+{
+if (annotationService.selectedEntity.relationship==null || annotationService.selectedEntity.relationship==undefined)
+{
+relationshipService.setSelectedEntity(null); 
+relationshipService.selectedEntity.show=true; 
+}
+else
+relationshipService.searchOne(annotationService.selectedEntity.relationship).then(
+function successCallback(response) {
+relationshipService.setSelectedEntity(response.data[0]);
+relationshipService.selectedEntity.show=true;
+  }, function errorCallback(response) {
+alert("error");
+return; 
+  }	
+);
+}
+$('#relationshipTabs li:eq(0) a').tab('show');
+};
+$scope.init=function()
+{
+annotationService.initAnnotationAttributeList().then(function successCallback(response) {
+annotationService.childrenList.annotationAttributeList=response.data;
+},function errorCallback(response) { 
+alert("error");
+return; 
+});
+annotationService.initFieldList().then(function successCallback(response) {
+annotationService.childrenList.fieldList=response.data;
+},function errorCallback(response) { 
+alert("error");
+return; 
+});
+annotationService.initRelationshipList().then(function successCallback(response) {
+annotationService.childrenList.relationshipList=response.data;
+},function errorCallback(response) { 
+alert("error");
+return; 
+});
+annotationService.childrenList.annotationTypeList=["PRIMARY_KEY","NOT_NULL","BOT_BLANK","DESCRIPTION_FIELD","BETWEEN_FILTER","EXCEL_EXPORT","FILTER_FIELD","IGNORE_SEARCH","IGNORE_UPDATE",];
+}; 
+$scope.init();
+$scope.annotationAttributeListGridOptions = {
+enablePaginationControls: true,
+multiSelect: false,
+enableSelectAll: false,
+paginationPageSizes: [2, 4, 6],
+paginationPageSize: 2,
+enableGridMenu: true,
+columnDefs: [
+{ name: 'annotationAttributeId'},
+{ name: 'property'},
+{ name: 'value'} 
+]
+,data: $scope.selectedEntity.annotationAttributeList
+ };
+$scope.annotationAttributeListGridOptions.onRegisterApi = function(gridApi){
+$scope.annotationAttributeGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
+if (row.isSelected)
+{
+annotationAttributeService.searchOne(row.entity).then(function(response) { 
+console.log(response.data);
+annotationAttributeService.setSelectedEntity(response.data[0]);
+});
+$('#annotationAttributeTabs li:eq(0) a').tab('show');
+}
+else 
+annotationAttributeService.setSelectedEntity(null);
+annotationAttributeService.selectedEntity.show = row.isSelected;
+});
+  };
+$scope.downloadEntityList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("annotation.xls",?) FROM ?',[mystyle,$scope.entityList]);
+};
+$scope.saveLinkedAnnotationAttribute= function() {
+annotationService.selectedEntity.annotationAttributeList.push(annotationService.selectedEntity.annotationAttribute);
+}
+$scope.downloadAnnotationAttributeList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("annotationAttribute.xls",?) FROM ?',[mystyle,$scope.selectedEntity.annotationAttributeList]);
+};
+$scope.downloadFieldList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("field.xls",?) FROM ?',[mystyle,$scope.selectedEntity.fieldList]);
+};
+$scope.downloadRelationshipList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("relationship.xls",?) FROM ?',[mystyle,$scope.selectedEntity.relationshipList]);
+};
+})
+.service("fieldService", function($http)
+{
+this.entityList =		[];
+this.selectedEntity= 	{show: false 
+,annotationList: []};
+this.childrenList=[]; 
+this.addEntity=function (entity)
+{
+this.entityList.push(entity);
+};
+this.emptyList= function(list)
+{
+while (list.length>0)
+list.pop();
+}
+this.setEntityList= function(entityList)
+{ 
+while (this.entityList.length>0)
+this.entityList.pop();
+if (entityList!=null)
+for (i=0; i<entityList.length; i++)
+this.entityList.push(entityList[i]);
 };
 this.setSelectedEntity= function (entity)
 { 
@@ -103,7 +752,7 @@ return promise;
 })
 .controller("fieldController",function($scope,$http,fieldService,entityService,annotationService,relationshipService,enumFieldService,enumValueService,annotationAttributeService)
 {
-//null
+//annotation
 $scope.searchBean=fieldService.searchBean;
 $scope.entityList=fieldService.entityList;
 $scope.selectedEntity=fieldService.selectedEntity;
@@ -114,13 +763,25 @@ fieldService.resetSearchBean();
 $scope.searchBean=fieldService.searchBean;fieldService.setSelectedEntity(null);
 fieldService.selectedEntity.show=false;
 fieldService.setEntityList(null); 
-entityService.selectedEntity.show=false;annotationService.selectedEntity.show=false;relationshipService.selectedEntity.show=false;enumFieldService.selectedEntity.show=false;enumValueService.selectedEntity.show=false;annotationAttributeService.selectedEntity.show=false;}
+}
+$scope.updateParent = function(toDo)
+{
+annotationService.update().then(function successCallback(response) {
+annotationService.setSelectedEntity(response);
+if (toDo != null)
+toDo();
+},function errorCallback(response) {      
+alert("error");
+return; 
+}
+);
+};
 $scope.addNew= function()
 {
 fieldService.setSelectedEntity(null);
 fieldService.setEntityList(null);
 fieldService.selectedEntity.show=true;
-entityService.selectedEntity.show=false;annotationService.selectedEntity.show=false;relationshipService.selectedEntity.show=false;enumFieldService.selectedEntity.show=false;enumValueService.selectedEntity.show=false;annotationAttributeService.selectedEntity.show=false;$('#fieldTabs li:eq(0) a').tab('show');
+$('#fieldTabs li:eq(0) a').tab('show');
 };
 		
 $scope.search=function()
@@ -139,8 +800,14 @@ return;
 $scope.insert=function()
 {
 if (!$scope.fieldDetailForm.$valid) return; 
-fieldService.insert().then(function successCallback(response) { 
-$scope.search();
+fieldService.selectedEntity.show=false;
+fieldService.selectedEntity.annotation={};
+fieldService.selectedEntity.annotation.annotationId=annotationService.selectedEntity.annotationId;
+fieldService.insert().then(function successCallBack(response) { 
+annotationService.selectedEntity.field=response.data;
+annotationService.initFieldList().then(function(response) {
+annotationService.childrenList.fieldList=response.data;
+});
 },function errorCallback(response) { 
 alert("error");
 return; 
@@ -149,18 +816,33 @@ return;
 $scope.update=function()
 {
 if (!$scope.fieldDetailForm.$valid) return; 
-entityService.selectedEntity.show=false;annotationService.selectedEntity.show=false;relationshipService.selectedEntity.show=false;enumFieldService.selectedEntity.show=false;enumValueService.selectedEntity.show=false;annotationAttributeService.selectedEntity.show=false;fieldService.update().then(function successCallback(response) { 
-$scope.search();
+fieldService.selectedEntity.show=false;
+
+annotationService.selectedEntity.field=fieldService.selectedEntity;
+
+fieldService.update().then(function successCallback(response){
+fieldService.setSelectedEntity(response.data);
 },function errorCallback(response) { 
 alert("error");
 return; 
 });
 };
+$scope.remove= function()
+{
+fieldService.selectedEntity.show=false;
+annotationService.selectedEntity.field=null;
+fieldService.setSelectedEntity(null);
+$scope.updateParent();
+};
 $scope.del=function()
 {
-nullService.selectedEntity.field=null;
+annotationService.selectedEntity.field=null;
+$scope.updateParent();
 fieldService.del().then(function successCallback(response) { 
-$scope.search();
+fieldService.setSelectedEntity(null);
+annotationService.initFieldList().then(function(response) {
+annotationService.childrenList.fieldList=response.data;
+});
 },function errorCallback(response) { 
 alert("error");
 return; 
@@ -260,33 +942,6 @@ return;
 fieldService.childrenList.fieldTypeList=["STRING","INTEGER","DATE","DOUBLE","TIME","BOOLEAN","ENUM",];
 }; 
 $scope.init();
-$scope.fieldGridOptions = {
-enablePaginationControls: true,
-multiSelect: false,
-enableSelectAll: false,
-paginationPageSizes: [2, 4, 6],
-paginationPageSize: 2,
-enableGridMenu: true,
-columnDefs: [
-{ name: 'fieldId'},
-{ name: 'name'},
-{ name: 'entity.entityId', displayName: 'entity'},
-{ name: 'fieldType'} 
-]
-,data: fieldService.entityList
- };
-$scope.fieldGridOptions.onRegisterApi = function(gridApi){
-$scope.fieldGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
-entityService.selectedEntity.show=false;annotationService.selectedEntity.show=false;relationshipService.selectedEntity.show=false;enumFieldService.selectedEntity.show=false;enumValueService.selectedEntity.show=false;annotationAttributeService.selectedEntity.show=false;if (row.isSelected)
-{
-fieldService.setSelectedEntity(row.entity);
-$('#fieldTabs li:eq(0) a').tab('show');
-}
-else 
-fieldService.setSelectedEntity(null);
-fieldService.selectedEntity.show = row.isSelected;
-});
-  };
 $scope.annotationListGridOptions = {
 enablePaginationControls: true,
 multiSelect: false,
@@ -333,6 +988,408 @@ alasql('SELECT * INTO XLSXML("entity.xls",?) FROM ?',[mystyle,$scope.selectedEnt
 };
 $scope.saveLinkedAnnotation= function() {
 fieldService.selectedEntity.annotationList.push(fieldService.selectedEntity.annotation);
+}
+$scope.downloadAnnotationList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("annotation.xls",?) FROM ?',[mystyle,$scope.selectedEntity.annotationList]);
+};
+})
+.service("relationshipService", function($http)
+{
+this.entityList =		[];
+this.selectedEntity= 	{show: false 
+,annotationList: []};
+this.childrenList=[]; 
+this.addEntity=function (entity)
+{
+this.entityList.push(entity);
+};
+this.emptyList= function(list)
+{
+while (list.length>0)
+list.pop();
+}
+this.setEntityList= function(entityList)
+{ 
+while (this.entityList.length>0)
+this.entityList.pop();
+if (entityList!=null)
+for (i=0; i<entityList.length; i++)
+this.entityList.push(entityList[i]);
+};
+this.setSelectedEntity= function (entity)
+{ 
+if (entity == null) {
+entity = {};
+this.selectedEntity.show = false;
+} //else
+var keyList = Object.keys(entity);
+if (keyList.length == 0)
+keyList = Object.keys(this.selectedEntity);
+for (i = 0; i < keyList.length; i++) {
+var val = keyList[i];
+if (val != undefined) {
+if (val.toLowerCase().indexOf("list") > -1
+&& (typeof entity[val] == "object" || typeof this.selectedEntity[val]=="object")) {
+if (entity[val] != null
+&& entity[val] != undefined) {
+if (this.selectedEntity[val]!=undefined)
+while (this.selectedEntity[val].length > 0)
+this.selectedEntity[val].pop();
+if (entity[val] != null)
+for (j = 0; j < entity[val].length; j++)
+this.selectedEntity[val]
+.push(entity[val][j]);
+} else 
+this.emptyList(this.selectedEntity[val]);
+} else {
+if (val.toLowerCase().indexOf("time") > -1
+&& typeof val == "string") {
+var date = new Date(entity[val]);
+this.selectedEntity[val] = new Date(entity[val]);
+} else {
+this.selectedEntity[val] = entity[val];
+}
+}
+}
+};
+};
+this.search = function() {
+this.setSelectedEntity(null);
+var promise= $http.post("../relationship/search",this.searchBean);
+return promise; 
+};
+this.searchOne=function(entity) {
+var promise= $http.get("../relationship/"+entity.relationshipId);
+return promise; 
+};
+this.insert = function() {
+var promise= $http.put("../relationship/",this.selectedEntity);
+return promise; 
+};
+this.update = function() {
+var promise= $http.post("../relationship/",this.selectedEntity);
+return promise; 
+}
+this.del = function() {
+var url="../relationship/"+this.selectedEntity.relationshipId;
+var promise= $http["delete"](url);
+return promise; 
+}
+ this.initEntityList= function()
+{
+var promise= $http
+.post("../entity/search",
+{});
+return promise;
+};
+ this.initEntityTargetList= function()
+{
+var promise= $http
+.post("../entityTarget/search",
+{});
+return promise;
+};
+ this.initAnnotationList= function()
+{
+var promise= $http
+.post("../annotation/search",
+{});
+return promise;
+};
+})
+.controller("relationshipController",function($scope,$http,relationshipService,entityService,annotationService,fieldService,enumFieldService,enumValueService,annotationAttributeService)
+{
+//annotation
+$scope.searchBean=relationshipService.searchBean;
+$scope.entityList=relationshipService.entityList;
+$scope.selectedEntity=relationshipService.selectedEntity;
+$scope.childrenList=relationshipService.childrenList; 
+$scope.reset = function()
+{
+relationshipService.resetSearchBean();
+$scope.searchBean=relationshipService.searchBean;relationshipService.setSelectedEntity(null);
+relationshipService.selectedEntity.show=false;
+relationshipService.setEntityList(null); 
+}
+$scope.updateParent = function(toDo)
+{
+annotationService.update().then(function successCallback(response) {
+annotationService.setSelectedEntity(response);
+if (toDo != null)
+toDo();
+},function errorCallback(response) {      
+alert("error");
+return; 
+}
+);
+};
+$scope.addNew= function()
+{
+relationshipService.setSelectedEntity(null);
+relationshipService.setEntityList(null);
+relationshipService.selectedEntity.show=true;
+$('#relationshipTabs li:eq(0) a').tab('show');
+};
+		
+$scope.search=function()
+{
+relationshipService.selectedEntity.show=false;
+relationshipService.searchBean.annotationList=[];
+relationshipService.searchBean.annotationList.push(relationshipService.searchBean.annotation);
+delete relationshipService.searchBean.annotation; 
+relationshipService.search().then(function successCallback(response) {
+relationshipService.setEntityList(response.data);
+},function errorCallback(response) { 
+alert("error");
+return; 
+});
+};
+$scope.insert=function()
+{
+if (!$scope.relationshipDetailForm.$valid) return; 
+relationshipService.selectedEntity.show=false;
+relationshipService.selectedEntity.annotation={};
+relationshipService.selectedEntity.annotation.annotationId=annotationService.selectedEntity.annotationId;
+relationshipService.insert().then(function successCallBack(response) { 
+annotationService.selectedEntity.relationship=response.data;
+annotationService.initRelationshipList().then(function(response) {
+annotationService.childrenList.relationshipList=response.data;
+});
+},function errorCallback(response) { 
+alert("error");
+return; 
+});
+};
+$scope.update=function()
+{
+if (!$scope.relationshipDetailForm.$valid) return; 
+relationshipService.selectedEntity.show=false;
+
+annotationService.selectedEntity.relationship=relationshipService.selectedEntity;
+
+relationshipService.update().then(function successCallback(response){
+relationshipService.setSelectedEntity(response.data);
+},function errorCallback(response) { 
+alert("error");
+return; 
+});
+};
+$scope.remove= function()
+{
+relationshipService.selectedEntity.show=false;
+annotationService.selectedEntity.relationship=null;
+relationshipService.setSelectedEntity(null);
+$scope.updateParent();
+};
+$scope.del=function()
+{
+annotationService.selectedEntity.relationship=null;
+$scope.updateParent();
+relationshipService.del().then(function successCallback(response) { 
+relationshipService.setSelectedEntity(null);
+annotationService.initRelationshipList().then(function(response) {
+annotationService.childrenList.relationshipList=response.data;
+});
+},function errorCallback(response) { 
+alert("error");
+return; 
+});
+};
+$scope.refreshTableDetail= function() 
+{
+ $scope.annotationGridApi.core.handleWindowResize(); 
+};
+$scope.trueFalseValues=[true,false];
+$scope.showEntityDetail= function(index)
+{
+if (index!=null)
+{
+entityService.searchOne(relationshipService.selectedEntity.entityList[index]).then(
+function successCallback(response) {
+console.log("response-ok");
+console.log(response);
+entityService.setSelectedEntity(response.data[0]);
+entityService.selectedEntity.show=true;
+  }, function errorCallback(response) {
+alert("error");
+return; 
+  }	
+);
+}
+else 
+{
+if (relationshipService.selectedEntity.entity==null || relationshipService.selectedEntity.entity==undefined)
+{
+entityService.setSelectedEntity(null); 
+entityService.selectedEntity.show=true; 
+}
+else
+entityService.searchOne(relationshipService.selectedEntity.entity).then(
+function successCallback(response) {
+entityService.setSelectedEntity(response.data[0]);
+entityService.selectedEntity.show=true;
+  }, function errorCallback(response) {
+alert("error");
+return; 
+  }	
+);
+}
+$('#entityTabs li:eq(0) a').tab('show');
+};
+$scope.showEntityTargetDetail= function(index)
+{
+if (index!=null)
+{
+entityTargetService.searchOne(relationshipService.selectedEntity.entityTargetList[index]).then(
+function successCallback(response) {
+console.log("response-ok");
+console.log(response);
+entityTargetService.setSelectedEntity(response.data[0]);
+entityTargetService.selectedEntity.show=true;
+  }, function errorCallback(response) {
+alert("error");
+return; 
+  }	
+);
+}
+else 
+{
+if (relationshipService.selectedEntity.entityTarget==null || relationshipService.selectedEntity.entityTarget==undefined)
+{
+entityTargetService.setSelectedEntity(null); 
+entityTargetService.selectedEntity.show=true; 
+}
+else
+entityTargetService.searchOne(relationshipService.selectedEntity.entityTarget).then(
+function successCallback(response) {
+entityTargetService.setSelectedEntity(response.data[0]);
+entityTargetService.selectedEntity.show=true;
+  }, function errorCallback(response) {
+alert("error");
+return; 
+  }	
+);
+}
+$('#entityTargetTabs li:eq(0) a').tab('show');
+};
+$scope.showAnnotationDetail= function(index)
+{
+if (index!=null)
+{
+annotationService.searchOne(relationshipService.selectedEntity.annotationList[index]).then(
+function successCallback(response) {
+console.log("response-ok");
+console.log(response);
+annotationService.setSelectedEntity(response.data[0]);
+annotationService.selectedEntity.show=true;
+  }, function errorCallback(response) {
+alert("error");
+return; 
+  }	
+);
+}
+else 
+{
+if (relationshipService.selectedEntity.annotation==null || relationshipService.selectedEntity.annotation==undefined)
+{
+annotationService.setSelectedEntity(null); 
+annotationService.selectedEntity.show=true; 
+}
+else
+annotationService.searchOne(relationshipService.selectedEntity.annotation).then(
+function successCallback(response) {
+annotationService.setSelectedEntity(response.data[0]);
+annotationService.selectedEntity.show=true;
+  }, function errorCallback(response) {
+alert("error");
+return; 
+  }	
+);
+}
+$('#annotationTabs li:eq(0) a').tab('show');
+};
+$scope.init=function()
+{
+relationshipService.initEntityList().then(function successCallback(response) {
+relationshipService.childrenList.entityList=response.data;
+},function errorCallback(response) { 
+alert("error");
+return; 
+});
+relationshipService.initEntityTargetList().then(function successCallback(response) {
+relationshipService.childrenList.entityTargetList=response.data;
+},function errorCallback(response) { 
+alert("error");
+return; 
+});
+relationshipService.initAnnotationList().then(function successCallback(response) {
+relationshipService.childrenList.annotationList=response.data;
+},function errorCallback(response) { 
+alert("error");
+return; 
+});
+relationshipService.childrenList.relationshipTypeList=["ONE_TO_ONE","ONE_TO_MANY","MANY_TO_ONE","MANY_TO_MANY",];
+}; 
+$scope.init();
+$scope.annotationListGridOptions = {
+enablePaginationControls: true,
+multiSelect: false,
+enableSelectAll: false,
+paginationPageSizes: [2, 4, 6],
+paginationPageSize: 2,
+enableGridMenu: true,
+columnDefs: [
+{ name: 'annotationId'},
+{ name: 'annotationType'} 
+]
+,data: $scope.selectedEntity.annotationList
+ };
+$scope.annotationListGridOptions.onRegisterApi = function(gridApi){
+$scope.annotationGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
+if (row.isSelected)
+{
+annotationService.searchOne(row.entity).then(function(response) { 
+console.log(response.data);
+annotationService.setSelectedEntity(response.data[0]);
+});
+$('#annotationTabs li:eq(0) a').tab('show');
+}
+else 
+annotationService.setSelectedEntity(null);
+annotationService.selectedEntity.show = row.isSelected;
+});
+  };
+$scope.downloadEntityList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("relationship.xls",?) FROM ?',[mystyle,$scope.entityList]);
+};
+$scope.downloadEntityList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("entity.xls",?) FROM ?',[mystyle,$scope.selectedEntity.entityList]);
+};
+$scope.downloadEntityTargetList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("entityTarget.xls",?) FROM ?',[mystyle,$scope.selectedEntity.entityTargetList]);
+};
+$scope.saveLinkedAnnotation= function() {
+relationshipService.selectedEntity.annotationList.push(relationshipService.selectedEntity.annotation);
 }
 $scope.downloadAnnotationList=function()
 {
@@ -814,841 +1871,6 @@ var mystyle = {
 column: {style:{Font:{Bold:"1"}}}
 };
 alasql('SELECT * INTO XLSXML("enumField.xls",?) FROM ?',[mystyle,$scope.selectedEntity.enumFieldList]);
-};
-})
-.service("annotationService", function($http)
-{
-this.entityList =		[];
-this.selectedEntity= 	{show: false 
-,annotationAttributeList: []};
-this.childrenList=[]; 
-this.addEntity=function (entity)
-{
-this.entityList.push(entity);
-};
-this.emptyList= function(list)
-{
-while (list.length>0)
-list.pop();
-}
-this.setEntityList= function(entityList)
-{ 
-while (this.entityList.length>0)
-this.entityList.pop();
-if (entityList!=null)
-for (i=0; i<entityList.length; i++)
-this.entityList.push(entityList[i]);
-};
-this.setSelectedEntity= function (entity)
-{ 
-if (entity == null) {
-entity = {};
-this.selectedEntity.show = false;
-} //else
-var keyList = Object.keys(entity);
-if (keyList.length == 0)
-keyList = Object.keys(this.selectedEntity);
-for (i = 0; i < keyList.length; i++) {
-var val = keyList[i];
-if (val != undefined) {
-if (val.toLowerCase().indexOf("list") > -1
-&& (typeof entity[val] == "object" || typeof this.selectedEntity[val]=="object")) {
-if (entity[val] != null
-&& entity[val] != undefined) {
-if (this.selectedEntity[val]!=undefined)
-while (this.selectedEntity[val].length > 0)
-this.selectedEntity[val].pop();
-if (entity[val] != null)
-for (j = 0; j < entity[val].length; j++)
-this.selectedEntity[val]
-.push(entity[val][j]);
-} else 
-this.emptyList(this.selectedEntity[val]);
-} else {
-if (val.toLowerCase().indexOf("time") > -1
-&& typeof val == "string") {
-var date = new Date(entity[val]);
-this.selectedEntity[val] = new Date(entity[val]);
-} else {
-this.selectedEntity[val] = entity[val];
-}
-}
-}
-};
-};
-this.search = function() {
-this.setSelectedEntity(null);
-var promise= $http.post("../annotation/search",this.searchBean);
-return promise; 
-};
-this.searchOne=function(entity) {
-var promise= $http.get("../annotation/"+entity.annotationId);
-return promise; 
-};
-this.insert = function() {
-var promise= $http.put("../annotation/",this.selectedEntity);
-return promise; 
-};
-this.update = function() {
-var promise= $http.post("../annotation/",this.selectedEntity);
-return promise; 
-}
-this.del = function() {
-var url="../annotation/"+this.selectedEntity.annotationId;
-var promise= $http["delete"](url);
-return promise; 
-}
- this.initAnnotationAttributeList= function()
-{
-var promise= $http
-.post("../annotationAttribute/search",
-{});
-return promise;
-};
- this.initFieldList= function()
-{
-var promise= $http
-.post("../field/search",
-{});
-return promise;
-};
- this.initRelationshipList= function()
-{
-var promise= $http
-.post("../relationship/search",
-{});
-return promise;
-};
-})
-.controller("annotationController",function($scope,$http,annotationService,annotationAttributeService,fieldService,relationshipService,entityService,enumFieldService,enumValueService)
-{
-//field
-$scope.searchBean=annotationService.searchBean;
-$scope.entityList=annotationService.entityList;
-$scope.selectedEntity=annotationService.selectedEntity;
-$scope.childrenList=annotationService.childrenList; 
-$scope.reset = function()
-{
-annotationService.resetSearchBean();
-$scope.searchBean=annotationService.searchBean;annotationService.setSelectedEntity(null);
-annotationService.selectedEntity.show=false;
-annotationService.setEntityList(null); 
-}
-$scope.updateParent = function(toDo)
-{
-fieldService.update().then(function successCallback(response) {
-fieldService.setSelectedEntity(response);
-if (toDo != null)
-toDo();
-},function errorCallback(response) {      
-alert("error");
-return; 
-}
-);
-};
-$scope.addNew= function()
-{
-annotationService.setSelectedEntity(null);
-annotationService.setEntityList(null);
-annotationService.selectedEntity.show=true;
-$('#annotationTabs li:eq(0) a').tab('show');
-};
-		
-$scope.search=function()
-{
-annotationService.selectedEntity.show=false;
-annotationService.searchBean.annotationAttributeList=[];
-annotationService.searchBean.annotationAttributeList.push(annotationService.searchBean.annotationAttribute);
-delete annotationService.searchBean.annotationAttribute; 
-annotationService.search().then(function successCallback(response) {
-annotationService.setEntityList(response.data);
-},function errorCallback(response) { 
-alert("error");
-return; 
-});
-};
-$scope.insert=function()
-{
-if (!$scope.annotationDetailForm.$valid) return; 
-annotationService.selectedEntity.show=false;
-annotationService.selectedEntity.field={};
-annotationService.selectedEntity.field.fieldId=fieldService.selectedEntity.fieldId;
-annotationService.insert().then(function successCallBack(response) { 
-fieldService.selectedEntity.annotationList.push(response.data);
-},function errorCallback(response) { 
-alert("error");
-return; 
-});
-};
-$scope.update=function()
-{
-if (!$scope.annotationDetailForm.$valid) return; 
-annotationService.selectedEntity.show=false;
-
-for (i=0; i<fieldService.selectedEntity.annotationList.length; i++)
-
-{
-
-if (fieldService.selectedEntity.annotationList[i].annotationId==annotationService.selectedEntity.annotationId)
-
-fieldService.selectedEntity.annotationList.splice(i,1);
-
-}
-
-fieldService.selectedEntity.annotationList.push(annotationService.selectedEntity);
-
-annotationService.update().then(function successCallback(response){
-annotationService.setSelectedEntity(response.data);
-},function errorCallback(response) { 
-alert("error");
-return; 
-});
-};
-$scope.remove= function()
-{
-annotationService.selectedEntity.show=false;
-for (i=0; i<fieldService.selectedEntity.annotationList.length; i++)
-{
-if (fieldService.selectedEntity.annotationList[i].annotationId==annotationService.selectedEntity.annotationId)
-fieldService.selectedEntity.annotationList.splice(i,1);
-}
-annotationService.setSelectedEntity(null);
-$scope.updateParent();
-};
-$scope.del=function()
-{
-for (i=0; i<fieldService.selectedEntity.annotationList.length; i++)
-{
-if (fieldService.selectedEntity.annotationList[i].annotationId==annotationService.selectedEntity.annotationId)
-fieldService.selectedEntity.annotationList.splice(i,1);
-}
-$scope.updateParent();
-annotationService.del().then(function successCallback(response) { 
-annotationService.setSelectedEntity(null);
-fieldService.initAnnotationList().then(function(response) {
-fieldService.childrenList.annotationList=response.data;
-});
-},function errorCallback(response) { 
-alert("error");
-return; 
-});
-};
-$scope.refreshTableDetail= function() 
-{
- $scope.annotationAttributeGridApi.core.handleWindowResize(); 
-};
-$scope.trueFalseValues=[true,false];
-$scope.showAnnotationAttributeDetail= function(index)
-{
-if (index!=null)
-{
-annotationAttributeService.searchOne(annotationService.selectedEntity.annotationAttributeList[index]).then(
-function successCallback(response) {
-console.log("response-ok");
-console.log(response);
-annotationAttributeService.setSelectedEntity(response.data[0]);
-annotationAttributeService.selectedEntity.show=true;
-  }, function errorCallback(response) {
-alert("error");
-return; 
-  }	
-);
-}
-else 
-{
-if (annotationService.selectedEntity.annotationAttribute==null || annotationService.selectedEntity.annotationAttribute==undefined)
-{
-annotationAttributeService.setSelectedEntity(null); 
-annotationAttributeService.selectedEntity.show=true; 
-}
-else
-annotationAttributeService.searchOne(annotationService.selectedEntity.annotationAttribute).then(
-function successCallback(response) {
-annotationAttributeService.setSelectedEntity(response.data[0]);
-annotationAttributeService.selectedEntity.show=true;
-  }, function errorCallback(response) {
-alert("error");
-return; 
-  }	
-);
-}
-$('#annotationAttributeTabs li:eq(0) a').tab('show');
-};
-$scope.showFieldDetail= function(index)
-{
-if (index!=null)
-{
-fieldService.searchOne(annotationService.selectedEntity.fieldList[index]).then(
-function successCallback(response) {
-console.log("response-ok");
-console.log(response);
-fieldService.setSelectedEntity(response.data[0]);
-fieldService.selectedEntity.show=true;
-  }, function errorCallback(response) {
-alert("error");
-return; 
-  }	
-);
-}
-else 
-{
-if (annotationService.selectedEntity.field==null || annotationService.selectedEntity.field==undefined)
-{
-fieldService.setSelectedEntity(null); 
-fieldService.selectedEntity.show=true; 
-}
-else
-fieldService.searchOne(annotationService.selectedEntity.field).then(
-function successCallback(response) {
-fieldService.setSelectedEntity(response.data[0]);
-fieldService.selectedEntity.show=true;
-  }, function errorCallback(response) {
-alert("error");
-return; 
-  }	
-);
-}
-$('#fieldTabs li:eq(0) a').tab('show');
-};
-$scope.showRelationshipDetail= function(index)
-{
-if (index!=null)
-{
-relationshipService.searchOne(annotationService.selectedEntity.relationshipList[index]).then(
-function successCallback(response) {
-console.log("response-ok");
-console.log(response);
-relationshipService.setSelectedEntity(response.data[0]);
-relationshipService.selectedEntity.show=true;
-  }, function errorCallback(response) {
-alert("error");
-return; 
-  }	
-);
-}
-else 
-{
-if (annotationService.selectedEntity.relationship==null || annotationService.selectedEntity.relationship==undefined)
-{
-relationshipService.setSelectedEntity(null); 
-relationshipService.selectedEntity.show=true; 
-}
-else
-relationshipService.searchOne(annotationService.selectedEntity.relationship).then(
-function successCallback(response) {
-relationshipService.setSelectedEntity(response.data[0]);
-relationshipService.selectedEntity.show=true;
-  }, function errorCallback(response) {
-alert("error");
-return; 
-  }	
-);
-}
-$('#relationshipTabs li:eq(0) a').tab('show');
-};
-$scope.init=function()
-{
-annotationService.initAnnotationAttributeList().then(function successCallback(response) {
-annotationService.childrenList.annotationAttributeList=response.data;
-},function errorCallback(response) { 
-alert("error");
-return; 
-});
-annotationService.initFieldList().then(function successCallback(response) {
-annotationService.childrenList.fieldList=response.data;
-},function errorCallback(response) { 
-alert("error");
-return; 
-});
-annotationService.initRelationshipList().then(function successCallback(response) {
-annotationService.childrenList.relationshipList=response.data;
-},function errorCallback(response) { 
-alert("error");
-return; 
-});
-annotationService.childrenList.annotationTypeList=["PRIMARY_KEY","NOT_NULL","BOT_BLANK","DESCRIPTION_FIELD","BETWEEN_FILTER","EXCEL_EXPORT","FILTER_FIELD","IGNORE_SEARCH","IGNORE_UPDATE",];
-}; 
-$scope.init();
-$scope.annotationAttributeListGridOptions = {
-enablePaginationControls: true,
-multiSelect: false,
-enableSelectAll: false,
-paginationPageSizes: [2, 4, 6],
-paginationPageSize: 2,
-enableGridMenu: true,
-columnDefs: [
-{ name: 'annotationAttributeId'},
-{ name: 'property'},
-{ name: 'value'} 
-]
-,data: $scope.selectedEntity.annotationAttributeList
- };
-$scope.annotationAttributeListGridOptions.onRegisterApi = function(gridApi){
-$scope.annotationAttributeGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
-if (row.isSelected)
-{
-annotationAttributeService.searchOne(row.entity).then(function(response) { 
-console.log(response.data);
-annotationAttributeService.setSelectedEntity(response.data[0]);
-});
-$('#annotationAttributeTabs li:eq(0) a').tab('show');
-}
-else 
-annotationAttributeService.setSelectedEntity(null);
-annotationAttributeService.selectedEntity.show = row.isSelected;
-});
-  };
-$scope.downloadEntityList=function()
-{
-var mystyle = {
- headers:true, 
-column: {style:{Font:{Bold:"1"}}}
-};
-alasql('SELECT * INTO XLSXML("annotation.xls",?) FROM ?',[mystyle,$scope.entityList]);
-};
-$scope.saveLinkedAnnotationAttribute= function() {
-annotationService.selectedEntity.annotationAttributeList.push(annotationService.selectedEntity.annotationAttribute);
-}
-$scope.downloadAnnotationAttributeList=function()
-{
-var mystyle = {
- headers:true, 
-column: {style:{Font:{Bold:"1"}}}
-};
-alasql('SELECT * INTO XLSXML("annotationAttribute.xls",?) FROM ?',[mystyle,$scope.selectedEntity.annotationAttributeList]);
-};
-$scope.downloadFieldList=function()
-{
-var mystyle = {
- headers:true, 
-column: {style:{Font:{Bold:"1"}}}
-};
-alasql('SELECT * INTO XLSXML("field.xls",?) FROM ?',[mystyle,$scope.selectedEntity.fieldList]);
-};
-$scope.downloadRelationshipList=function()
-{
-var mystyle = {
- headers:true, 
-column: {style:{Font:{Bold:"1"}}}
-};
-alasql('SELECT * INTO XLSXML("relationship.xls",?) FROM ?',[mystyle,$scope.selectedEntity.relationshipList]);
-};
-})
-.service("relationshipService", function($http)
-{
-this.entityList =		[];
-this.selectedEntity= 	{show: false 
-,annotationList: []};
-this.childrenList=[]; 
-this.addEntity=function (entity)
-{
-this.entityList.push(entity);
-};
-this.emptyList= function(list)
-{
-while (list.length>0)
-list.pop();
-}
-this.setEntityList= function(entityList)
-{ 
-while (this.entityList.length>0)
-this.entityList.pop();
-if (entityList!=null)
-for (i=0; i<entityList.length; i++)
-this.entityList.push(entityList[i]);
-};
-this.setSelectedEntity= function (entity)
-{ 
-if (entity == null) {
-entity = {};
-this.selectedEntity.show = false;
-} //else
-var keyList = Object.keys(entity);
-if (keyList.length == 0)
-keyList = Object.keys(this.selectedEntity);
-for (i = 0; i < keyList.length; i++) {
-var val = keyList[i];
-if (val != undefined) {
-if (val.toLowerCase().indexOf("list") > -1
-&& (typeof entity[val] == "object" || typeof this.selectedEntity[val]=="object")) {
-if (entity[val] != null
-&& entity[val] != undefined) {
-if (this.selectedEntity[val]!=undefined)
-while (this.selectedEntity[val].length > 0)
-this.selectedEntity[val].pop();
-if (entity[val] != null)
-for (j = 0; j < entity[val].length; j++)
-this.selectedEntity[val]
-.push(entity[val][j]);
-} else 
-this.emptyList(this.selectedEntity[val]);
-} else {
-if (val.toLowerCase().indexOf("time") > -1
-&& typeof val == "string") {
-var date = new Date(entity[val]);
-this.selectedEntity[val] = new Date(entity[val]);
-} else {
-this.selectedEntity[val] = entity[val];
-}
-}
-}
-};
-};
-this.search = function() {
-this.setSelectedEntity(null);
-var promise= $http.post("../relationship/search",this.searchBean);
-return promise; 
-};
-this.searchOne=function(entity) {
-var promise= $http.get("../relationship/"+entity.relationshipId);
-return promise; 
-};
-this.insert = function() {
-var promise= $http.put("../relationship/",this.selectedEntity);
-return promise; 
-};
-this.update = function() {
-var promise= $http.post("../relationship/",this.selectedEntity);
-return promise; 
-}
-this.del = function() {
-var url="../relationship/"+this.selectedEntity.relationshipId;
-var promise= $http["delete"](url);
-return promise; 
-}
- this.initEntityList= function()
-{
-var promise= $http
-.post("../entity/search",
-{});
-return promise;
-};
- this.initEntityTargetList= function()
-{
-var promise= $http
-.post("../entityTarget/search",
-{});
-return promise;
-};
- this.initAnnotationList= function()
-{
-var promise= $http
-.post("../annotation/search",
-{});
-return promise;
-};
-})
-.controller("relationshipController",function($scope,$http,relationshipService,entityService,annotationService,fieldService,enumFieldService,enumValueService,annotationAttributeService)
-{
-//entity
-$scope.searchBean=relationshipService.searchBean;
-$scope.entityList=relationshipService.entityList;
-$scope.selectedEntity=relationshipService.selectedEntity;
-$scope.childrenList=relationshipService.childrenList; 
-$scope.reset = function()
-{
-relationshipService.resetSearchBean();
-$scope.searchBean=relationshipService.searchBean;relationshipService.setSelectedEntity(null);
-relationshipService.selectedEntity.show=false;
-relationshipService.setEntityList(null); 
-}
-$scope.updateParent = function(toDo)
-{
-entityService.update().then(function successCallback(response) {
-entityService.setSelectedEntity(response);
-if (toDo != null)
-toDo();
-},function errorCallback(response) {      
-alert("error");
-return; 
-}
-);
-};
-$scope.addNew= function()
-{
-relationshipService.setSelectedEntity(null);
-relationshipService.setEntityList(null);
-relationshipService.selectedEntity.show=true;
-$('#relationshipTabs li:eq(0) a').tab('show');
-};
-		
-$scope.search=function()
-{
-relationshipService.selectedEntity.show=false;
-relationshipService.searchBean.annotationList=[];
-relationshipService.searchBean.annotationList.push(relationshipService.searchBean.annotation);
-delete relationshipService.searchBean.annotation; 
-relationshipService.search().then(function successCallback(response) {
-relationshipService.setEntityList(response.data);
-},function errorCallback(response) { 
-alert("error");
-return; 
-});
-};
-$scope.insert=function()
-{
-if (!$scope.relationshipDetailForm.$valid) return; 
-relationshipService.selectedEntity.show=false;
-relationshipService.selectedEntity.entity={};
-relationshipService.selectedEntity.entity.entityId=entityService.selectedEntity.entityId;
-relationshipService.insert().then(function successCallBack(response) { 
-entityService.selectedEntity.relationshipList.push(response.data);
-},function errorCallback(response) { 
-alert("error");
-return; 
-});
-};
-$scope.update=function()
-{
-if (!$scope.relationshipDetailForm.$valid) return; 
-relationshipService.selectedEntity.show=false;
-
-for (i=0; i<entityService.selectedEntity.relationshipList.length; i++)
-
-{
-
-if (entityService.selectedEntity.relationshipList[i].relationshipId==relationshipService.selectedEntity.relationshipId)
-
-entityService.selectedEntity.relationshipList.splice(i,1);
-
-}
-
-entityService.selectedEntity.relationshipList.push(relationshipService.selectedEntity);
-
-relationshipService.update().then(function successCallback(response){
-relationshipService.setSelectedEntity(response.data);
-},function errorCallback(response) { 
-alert("error");
-return; 
-});
-};
-$scope.remove= function()
-{
-relationshipService.selectedEntity.show=false;
-for (i=0; i<entityService.selectedEntity.relationshipList.length; i++)
-{
-if (entityService.selectedEntity.relationshipList[i].relationshipId==relationshipService.selectedEntity.relationshipId)
-entityService.selectedEntity.relationshipList.splice(i,1);
-}
-relationshipService.setSelectedEntity(null);
-$scope.updateParent();
-};
-$scope.del=function()
-{
-for (i=0; i<entityService.selectedEntity.relationshipList.length; i++)
-{
-if (entityService.selectedEntity.relationshipList[i].relationshipId==relationshipService.selectedEntity.relationshipId)
-entityService.selectedEntity.relationshipList.splice(i,1);
-}
-$scope.updateParent();
-relationshipService.del().then(function successCallback(response) { 
-relationshipService.setSelectedEntity(null);
-entityService.initRelationshipList().then(function(response) {
-entityService.childrenList.relationshipList=response.data;
-});
-},function errorCallback(response) { 
-alert("error");
-return; 
-});
-};
-$scope.refreshTableDetail= function() 
-{
- $scope.annotationGridApi.core.handleWindowResize(); 
-};
-$scope.trueFalseValues=[true,false];
-$scope.showEntityDetail= function(index)
-{
-if (index!=null)
-{
-entityService.searchOne(relationshipService.selectedEntity.entityList[index]).then(
-function successCallback(response) {
-console.log("response-ok");
-console.log(response);
-entityService.setSelectedEntity(response.data[0]);
-entityService.selectedEntity.show=true;
-  }, function errorCallback(response) {
-alert("error");
-return; 
-  }	
-);
-}
-else 
-{
-if (relationshipService.selectedEntity.entity==null || relationshipService.selectedEntity.entity==undefined)
-{
-entityService.setSelectedEntity(null); 
-entityService.selectedEntity.show=true; 
-}
-else
-entityService.searchOne(relationshipService.selectedEntity.entity).then(
-function successCallback(response) {
-entityService.setSelectedEntity(response.data[0]);
-entityService.selectedEntity.show=true;
-  }, function errorCallback(response) {
-alert("error");
-return; 
-  }	
-);
-}
-$('#entityTabs li:eq(0) a').tab('show');
-};
-$scope.showEntityTargetDetail= function(index)
-{
-if (index!=null)
-{
-entityTargetService.searchOne(relationshipService.selectedEntity.entityTargetList[index]).then(
-function successCallback(response) {
-console.log("response-ok");
-console.log(response);
-entityTargetService.setSelectedEntity(response.data[0]);
-entityTargetService.selectedEntity.show=true;
-  }, function errorCallback(response) {
-alert("error");
-return; 
-  }	
-);
-}
-else 
-{
-if (relationshipService.selectedEntity.entityTarget==null || relationshipService.selectedEntity.entityTarget==undefined)
-{
-entityTargetService.setSelectedEntity(null); 
-entityTargetService.selectedEntity.show=true; 
-}
-else
-entityTargetService.searchOne(relationshipService.selectedEntity.entityTarget).then(
-function successCallback(response) {
-entityTargetService.setSelectedEntity(response.data[0]);
-entityTargetService.selectedEntity.show=true;
-  }, function errorCallback(response) {
-alert("error");
-return; 
-  }	
-);
-}
-$('#entityTargetTabs li:eq(0) a').tab('show');
-};
-$scope.showAnnotationDetail= function(index)
-{
-if (index!=null)
-{
-annotationService.searchOne(relationshipService.selectedEntity.annotationList[index]).then(
-function successCallback(response) {
-console.log("response-ok");
-console.log(response);
-annotationService.setSelectedEntity(response.data[0]);
-annotationService.selectedEntity.show=true;
-  }, function errorCallback(response) {
-alert("error");
-return; 
-  }	
-);
-}
-else 
-{
-if (relationshipService.selectedEntity.annotation==null || relationshipService.selectedEntity.annotation==undefined)
-{
-annotationService.setSelectedEntity(null); 
-annotationService.selectedEntity.show=true; 
-}
-else
-annotationService.searchOne(relationshipService.selectedEntity.annotation).then(
-function successCallback(response) {
-annotationService.setSelectedEntity(response.data[0]);
-annotationService.selectedEntity.show=true;
-  }, function errorCallback(response) {
-alert("error");
-return; 
-  }	
-);
-}
-$('#annotationTabs li:eq(0) a').tab('show');
-};
-$scope.init=function()
-{
-relationshipService.initEntityList().then(function successCallback(response) {
-relationshipService.childrenList.entityList=response.data;
-},function errorCallback(response) { 
-alert("error");
-return; 
-});
-relationshipService.initEntityTargetList().then(function successCallback(response) {
-relationshipService.childrenList.entityTargetList=response.data;
-},function errorCallback(response) { 
-alert("error");
-return; 
-});
-relationshipService.initAnnotationList().then(function successCallback(response) {
-relationshipService.childrenList.annotationList=response.data;
-},function errorCallback(response) { 
-alert("error");
-return; 
-});
-relationshipService.childrenList.relationshipTypeList=["ONE_TO_ONE","ONE_TO_MANY","MANY_TO_ONE","MANY_TO_MANY",];
-}; 
-$scope.init();
-$scope.annotationListGridOptions = {
-enablePaginationControls: true,
-multiSelect: false,
-enableSelectAll: false,
-paginationPageSizes: [2, 4, 6],
-paginationPageSize: 2,
-enableGridMenu: true,
-columnDefs: [
-{ name: 'annotationId'},
-{ name: 'annotationType'} 
-]
-,data: $scope.selectedEntity.annotationList
- };
-$scope.annotationListGridOptions.onRegisterApi = function(gridApi){
-$scope.annotationGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
-if (row.isSelected)
-{
-annotationService.searchOne(row.entity).then(function(response) { 
-console.log(response.data);
-annotationService.setSelectedEntity(response.data[0]);
-});
-$('#annotationTabs li:eq(0) a').tab('show');
-}
-else 
-annotationService.setSelectedEntity(null);
-annotationService.selectedEntity.show = row.isSelected;
-});
-  };
-$scope.downloadEntityList=function()
-{
-var mystyle = {
- headers:true, 
-column: {style:{Font:{Bold:"1"}}}
-};
-alasql('SELECT * INTO XLSXML("relationship.xls",?) FROM ?',[mystyle,$scope.entityList]);
-};
-$scope.downloadEntityList=function()
-{
-var mystyle = {
- headers:true, 
-column: {style:{Font:{Bold:"1"}}}
-};
-alasql('SELECT * INTO XLSXML("entity.xls",?) FROM ?',[mystyle,$scope.selectedEntity.entityList]);
-};
-$scope.downloadEntityTargetList=function()
-{
-var mystyle = {
- headers:true, 
-column: {style:{Font:{Bold:"1"}}}
-};
-alasql('SELECT * INTO XLSXML("entityTarget.xls",?) FROM ?',[mystyle,$scope.selectedEntity.entityTargetList]);
-};
-$scope.saveLinkedAnnotation= function() {
-relationshipService.selectedEntity.annotationList.push(relationshipService.selectedEntity.annotation);
-}
-$scope.downloadAnnotationList=function()
-{
-var mystyle = {
- headers:true, 
-column: {style:{Font:{Bold:"1"}}}
-};
-alasql('SELECT * INTO XLSXML("annotation.xls",?) FROM ?',[mystyle,$scope.selectedEntity.annotationList]);
 };
 })
 .service("enumFieldService", function($http)
@@ -2276,273 +2498,6 @@ var mystyle = {
 column: {style:{Font:{Bold:"1"}}}
 };
 alasql('SELECT * INTO XLSXML("enumField.xls",?) FROM ?',[mystyle,$scope.selectedEntity.enumFieldList]);
-};
-})
-.service("annotationAttributeService", function($http)
-{
-this.entityList =		[];
-this.selectedEntity= 	{show: false 
-};
-this.childrenList=[]; 
-this.addEntity=function (entity)
-{
-this.entityList.push(entity);
-};
-this.emptyList= function(list)
-{
-while (list.length>0)
-list.pop();
-}
-this.setEntityList= function(entityList)
-{ 
-while (this.entityList.length>0)
-this.entityList.pop();
-if (entityList!=null)
-for (i=0; i<entityList.length; i++)
-this.entityList.push(entityList[i]);
-};
-this.setSelectedEntity= function (entity)
-{ 
-if (entity == null) {
-entity = {};
-this.selectedEntity.show = false;
-} //else
-var keyList = Object.keys(entity);
-if (keyList.length == 0)
-keyList = Object.keys(this.selectedEntity);
-for (i = 0; i < keyList.length; i++) {
-var val = keyList[i];
-if (val != undefined) {
-if (val.toLowerCase().indexOf("list") > -1
-&& (typeof entity[val] == "object" || typeof this.selectedEntity[val]=="object")) {
-if (entity[val] != null
-&& entity[val] != undefined) {
-if (this.selectedEntity[val]!=undefined)
-while (this.selectedEntity[val].length > 0)
-this.selectedEntity[val].pop();
-if (entity[val] != null)
-for (j = 0; j < entity[val].length; j++)
-this.selectedEntity[val]
-.push(entity[val][j]);
-} else 
-this.emptyList(this.selectedEntity[val]);
-} else {
-if (val.toLowerCase().indexOf("time") > -1
-&& typeof val == "string") {
-var date = new Date(entity[val]);
-this.selectedEntity[val] = new Date(entity[val]);
-} else {
-this.selectedEntity[val] = entity[val];
-}
-}
-}
-};
-};
-this.search = function() {
-this.setSelectedEntity(null);
-var promise= $http.post("../annotationAttribute/search",this.searchBean);
-return promise; 
-};
-this.searchOne=function(entity) {
-var promise= $http.get("../annotationAttribute/"+entity.annotationAttributeId);
-return promise; 
-};
-this.insert = function() {
-var promise= $http.put("../annotationAttribute/",this.selectedEntity);
-return promise; 
-};
-this.update = function() {
-var promise= $http.post("../annotationAttribute/",this.selectedEntity);
-return promise; 
-}
-this.del = function() {
-var url="../annotationAttribute/"+this.selectedEntity.annotationAttributeId;
-var promise= $http["delete"](url);
-return promise; 
-}
- this.initAnnotationList= function()
-{
-var promise= $http
-.post("../annotation/search",
-{});
-return promise;
-};
-})
-.controller("annotationAttributeController",function($scope,$http,annotationAttributeService,annotationService,fieldService,relationshipService,entityService,enumFieldService,enumValueService)
-{
-//annotation
-$scope.searchBean=annotationAttributeService.searchBean;
-$scope.entityList=annotationAttributeService.entityList;
-$scope.selectedEntity=annotationAttributeService.selectedEntity;
-$scope.childrenList=annotationAttributeService.childrenList; 
-$scope.reset = function()
-{
-annotationAttributeService.resetSearchBean();
-$scope.searchBean=annotationAttributeService.searchBean;annotationAttributeService.setSelectedEntity(null);
-annotationAttributeService.selectedEntity.show=false;
-annotationAttributeService.setEntityList(null); 
-}
-$scope.updateParent = function(toDo)
-{
-annotationService.update().then(function successCallback(response) {
-annotationService.setSelectedEntity(response);
-if (toDo != null)
-toDo();
-},function errorCallback(response) {      
-alert("error");
-return; 
-}
-);
-};
-$scope.addNew= function()
-{
-annotationAttributeService.setSelectedEntity(null);
-annotationAttributeService.setEntityList(null);
-annotationAttributeService.selectedEntity.show=true;
-$('#annotationAttributeTabs li:eq(0) a').tab('show');
-};
-		
-$scope.search=function()
-{
-annotationAttributeService.selectedEntity.show=false;
-annotationAttributeService.search().then(function successCallback(response) {
-annotationAttributeService.setEntityList(response.data);
-},function errorCallback(response) { 
-alert("error");
-return; 
-});
-};
-$scope.insert=function()
-{
-if (!$scope.annotationAttributeDetailForm.$valid) return; 
-annotationAttributeService.selectedEntity.show=false;
-annotationAttributeService.selectedEntity.annotation={};
-annotationAttributeService.selectedEntity.annotation.annotationId=annotationService.selectedEntity.annotationId;
-annotationAttributeService.insert().then(function successCallBack(response) { 
-annotationService.selectedEntity.annotationAttributeList.push(response.data);
-},function errorCallback(response) { 
-alert("error");
-return; 
-});
-};
-$scope.update=function()
-{
-if (!$scope.annotationAttributeDetailForm.$valid) return; 
-annotationAttributeService.selectedEntity.show=false;
-
-for (i=0; i<annotationService.selectedEntity.annotationAttributeList.length; i++)
-
-{
-
-if (annotationService.selectedEntity.annotationAttributeList[i].annotationAttributeId==annotationAttributeService.selectedEntity.annotationAttributeId)
-
-annotationService.selectedEntity.annotationAttributeList.splice(i,1);
-
-}
-
-annotationService.selectedEntity.annotationAttributeList.push(annotationAttributeService.selectedEntity);
-
-annotationAttributeService.update().then(function successCallback(response){
-annotationAttributeService.setSelectedEntity(response.data);
-},function errorCallback(response) { 
-alert("error");
-return; 
-});
-};
-$scope.remove= function()
-{
-annotationAttributeService.selectedEntity.show=false;
-for (i=0; i<annotationService.selectedEntity.annotationAttributeList.length; i++)
-{
-if (annotationService.selectedEntity.annotationAttributeList[i].annotationAttributeId==annotationAttributeService.selectedEntity.annotationAttributeId)
-annotationService.selectedEntity.annotationAttributeList.splice(i,1);
-}
-annotationAttributeService.setSelectedEntity(null);
-$scope.updateParent();
-};
-$scope.del=function()
-{
-for (i=0; i<annotationService.selectedEntity.annotationAttributeList.length; i++)
-{
-if (annotationService.selectedEntity.annotationAttributeList[i].annotationAttributeId==annotationAttributeService.selectedEntity.annotationAttributeId)
-annotationService.selectedEntity.annotationAttributeList.splice(i,1);
-}
-$scope.updateParent();
-annotationAttributeService.del().then(function successCallback(response) { 
-annotationAttributeService.setSelectedEntity(null);
-annotationService.initAnnotationAttributeList().then(function(response) {
-annotationService.childrenList.annotationAttributeList=response.data;
-});
-},function errorCallback(response) { 
-alert("error");
-return; 
-});
-};
-$scope.refreshTableDetail= function() 
-{
-};
-$scope.trueFalseValues=[true,false];
-$scope.showAnnotationDetail= function(index)
-{
-if (index!=null)
-{
-annotationService.searchOne(annotationAttributeService.selectedEntity.annotationList[index]).then(
-function successCallback(response) {
-console.log("response-ok");
-console.log(response);
-annotationService.setSelectedEntity(response.data[0]);
-annotationService.selectedEntity.show=true;
-  }, function errorCallback(response) {
-alert("error");
-return; 
-  }	
-);
-}
-else 
-{
-if (annotationAttributeService.selectedEntity.annotation==null || annotationAttributeService.selectedEntity.annotation==undefined)
-{
-annotationService.setSelectedEntity(null); 
-annotationService.selectedEntity.show=true; 
-}
-else
-annotationService.searchOne(annotationAttributeService.selectedEntity.annotation).then(
-function successCallback(response) {
-annotationService.setSelectedEntity(response.data[0]);
-annotationService.selectedEntity.show=true;
-  }, function errorCallback(response) {
-alert("error");
-return; 
-  }	
-);
-}
-$('#annotationTabs li:eq(0) a').tab('show');
-};
-$scope.init=function()
-{
-annotationAttributeService.initAnnotationList().then(function successCallback(response) {
-annotationAttributeService.childrenList.annotationList=response.data;
-},function errorCallback(response) { 
-alert("error");
-return; 
-});
-}; 
-$scope.init();
-$scope.downloadEntityList=function()
-{
-var mystyle = {
- headers:true, 
-column: {style:{Font:{Bold:"1"}}}
-};
-alasql('SELECT * INTO XLSXML("annotationAttribute.xls",?) FROM ?',[mystyle,$scope.entityList]);
-};
-$scope.downloadAnnotationList=function()
-{
-var mystyle = {
- headers:true, 
-column: {style:{Font:{Bold:"1"}}}
-};
-alasql('SELECT * INTO XLSXML("annotation.xls",?) FROM ?',[mystyle,$scope.selectedEntity.annotationList]);
 };
 })
 ;

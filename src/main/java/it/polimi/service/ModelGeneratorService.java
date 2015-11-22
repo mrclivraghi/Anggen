@@ -15,8 +15,7 @@ import it.polimi.model.domain.Entity;
 import it.polimi.model.domain.Field;
 import it.polimi.model.domain.FieldType;
 import it.polimi.model.domain.Relationship;
-import it.polimi.repository.domain.EntityRepository;
-import it.polimi.repository.domain.RelationshipRepository;
+import it.polimi.repository.EntityRepository;
 import it.polimi.utils.Utility;
 
 import org.junit.Test;

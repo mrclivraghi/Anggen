@@ -4,10 +4,6 @@ package it.polimi.security;
 import java.security.Principal;
 import java.util.List;
 
-import it.polimi.model.Example;
-import it.polimi.searchbean.ExampleSearchBean;
-import it.polimi.service.ExampleService;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +20,6 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/auth")
 public class LoginController {
 
-    @Autowired
-    public ExampleService exampleService;
-    private final static Logger log = LoggerFactory.getLogger(Example.class);
 
     /*@RequestMapping(method = RequestMethod.GET)
     public String manage() {

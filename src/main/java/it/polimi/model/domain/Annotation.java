@@ -30,7 +30,7 @@ public class Annotation {
 	@OneToMany(fetch=FetchType.EAGER)
 	@Type(type="it.polimi.model.domain.AnnotationAttribute")
 	@JoinColumn(name="annotation_id_annotation")
-	private List<AnnotationAttribute> attributeList;
+	private List<AnnotationAttribute> annotationAttributeList;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="field_id_field")
@@ -80,16 +80,16 @@ public class Annotation {
 	/**
 	 * @return the attributeList
 	 */
-	public List<AnnotationAttribute> getAttributeList() {
-		return attributeList;
+	public List<AnnotationAttribute> getAnnotationAttributeList() {
+		return annotationAttributeList;
 	}
 
 
 	/**
 	 * @param attributeList the attributeList to set
 	 */
-	public void setAttributeList(List<AnnotationAttribute> attributeList) {
-		this.attributeList = attributeList;
+	public void setAnnotationAttributeList(List<AnnotationAttribute> annotationAttributeList) {
+		this.annotationAttributeList = annotationAttributeList;
 	}
 
 

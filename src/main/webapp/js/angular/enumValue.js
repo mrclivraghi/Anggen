@@ -1,9 +1,9 @@
-var relationshipApp=angular.module("relationshipApp",['ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter'])
-.service("relationshipService", function($http)
+var enumValueApp=angular.module("enumValueApp",['ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter'])
+.service("enumValueService", function($http)
 {
 this.entityList =		[];
 this.selectedEntity= 	{show: false 
-,annotationList: []};
+};
 this.childrenList=[]; 
 this.addEntity=function (entity)
 {
@@ -66,78 +66,61 @@ this.selectedEntity[val] = entity[val];
 };
 this.search = function() {
 this.setSelectedEntity(null);
-var promise= $http.post("../relationship/search",this.searchBean);
+var promise= $http.post("../enumValue/search",this.searchBean);
 return promise; 
 };
 this.searchOne=function(entity) {
-var promise= $http.get("../relationship/"+entity.relationshipId);
+var promise= $http.get("../enumValue/"+entity.enumValueId);
 return promise; 
 };
 this.insert = function() {
-var promise= $http.put("../relationship/",this.selectedEntity);
+var promise= $http.put("../enumValue/",this.selectedEntity);
 return promise; 
 };
 this.update = function() {
-var promise= $http.post("../relationship/",this.selectedEntity);
+var promise= $http.post("../enumValue/",this.selectedEntity);
 return promise; 
 }
 this.del = function() {
-var url="../relationship/"+this.selectedEntity.relationshipId;
+var url="../enumValue/"+this.selectedEntity.enumValueId;
 var promise= $http["delete"](url);
 return promise; 
 }
- this.initEntityList= function()
+ this.initEnumFieldList= function()
 {
 var promise= $http
-.post("../entity/search",
-{});
-return promise;
-};
- this.initEntityTargetList= function()
-{
-var promise= $http
-.post("../entityTarget/search",
-{});
-return promise;
-};
- this.initAnnotationList= function()
-{
-var promise= $http
-.post("../annotation/search",
+.post("../enumField/search",
 {});
 return promise;
 };
 })
-.controller("relationshipController",function($scope,$http,relationshipService,entityService,annotationService,fieldService,enumFieldService,enumValueService,annotationAttributeService)
+.controller("enumValueController",function($scope,$http,enumValueService,enumFieldService,entityService,fieldService,relationshipService,annotationService,annotationAttributeService)
 {
 //null
-$scope.searchBean=relationshipService.searchBean;
-$scope.entityList=relationshipService.entityList;
-$scope.selectedEntity=relationshipService.selectedEntity;
-$scope.childrenList=relationshipService.childrenList; 
+$scope.searchBean=enumValueService.searchBean;
+$scope.entityList=enumValueService.entityList;
+$scope.selectedEntity=enumValueService.selectedEntity;
+$scope.childrenList=enumValueService.childrenList; 
 $scope.reset = function()
 {
-relationshipService.resetSearchBean();
-$scope.searchBean=relationshipService.searchBean;relationshipService.setSelectedEntity(null);
-relationshipService.selectedEntity.show=false;
-relationshipService.setEntityList(null); 
-entityService.selectedEntity.show=false;annotationService.selectedEntity.show=false;fieldService.selectedEntity.show=false;enumFieldService.selectedEntity.show=false;enumValueService.selectedEntity.show=false;annotationAttributeService.selectedEntity.show=false;}
+enumValueService.resetSearchBean();
+$scope.searchBean=enumValueService.searchBean;enumValueService.setSelectedEntity(null);
+enumValueService.selectedEntity.show=false;
+enumValueService.setEntityList(null); 
+enumFieldService.selectedEntity.show=false;entityService.selectedEntity.show=false;fieldService.selectedEntity.show=false;relationshipService.selectedEntity.show=false;annotationService.selectedEntity.show=false;annotationAttributeService.selectedEntity.show=false;}
 $scope.addNew= function()
 {
-relationshipService.setSelectedEntity(null);
-relationshipService.setEntityList(null);
-relationshipService.selectedEntity.show=true;
-entityService.selectedEntity.show=false;annotationService.selectedEntity.show=false;fieldService.selectedEntity.show=false;enumFieldService.selectedEntity.show=false;enumValueService.selectedEntity.show=false;annotationAttributeService.selectedEntity.show=false;$('#relationshipTabs li:eq(0) a').tab('show');
+enumValueService.setSelectedEntity(null);
+enumValueService.setEntityList(null);
+enumValueService.selectedEntity.show=true;
+enumFieldService.selectedEntity.show=false;entityService.selectedEntity.show=false;fieldService.selectedEntity.show=false;relationshipService.selectedEntity.show=false;annotationService.selectedEntity.show=false;annotationAttributeService.selectedEntity.show=false;$('#enumValueTabs li:eq(0) a').tab('show');
 };
 		
 $scope.search=function()
 {
-relationshipService.selectedEntity.show=false;
-relationshipService.searchBean.annotationList=[];
-relationshipService.searchBean.annotationList.push(relationshipService.searchBean.annotation);
-delete relationshipService.searchBean.annotation; 
-relationshipService.search().then(function successCallback(response) {
-relationshipService.setEntityList(response.data);
+enumValueService.selectedEntity.show=false;
+enumValueService.search().then(function successCallback(response) {
+enumValueService.setEntityList(response.data);
 },function errorCallback(response) { 
 alert("error");
 return; 
@@ -145,8 +128,8 @@ return;
 };
 $scope.insert=function()
 {
-if (!$scope.relationshipDetailForm.$valid) return; 
-relationshipService.insert().then(function successCallback(response) { 
+if (!$scope.enumValueDetailForm.$valid) return; 
+enumValueService.insert().then(function successCallback(response) { 
 $scope.search();
 },function errorCallback(response) { 
 alert("error");
@@ -155,8 +138,8 @@ return;
 };
 $scope.update=function()
 {
-if (!$scope.relationshipDetailForm.$valid) return; 
-entityService.selectedEntity.show=false;annotationService.selectedEntity.show=false;fieldService.selectedEntity.show=false;enumFieldService.selectedEntity.show=false;enumValueService.selectedEntity.show=false;annotationAttributeService.selectedEntity.show=false;relationshipService.update().then(function successCallback(response) { 
+if (!$scope.enumValueDetailForm.$valid) return; 
+enumFieldService.selectedEntity.show=false;entityService.selectedEntity.show=false;fieldService.selectedEntity.show=false;relationshipService.selectedEntity.show=false;annotationService.selectedEntity.show=false;annotationAttributeService.selectedEntity.show=false;enumValueService.update().then(function successCallback(response) { 
 $scope.search();
 },function errorCallback(response) { 
 alert("error");
@@ -165,8 +148,8 @@ return;
 };
 $scope.del=function()
 {
-nullService.selectedEntity.relationship=null;
-relationshipService.del().then(function successCallback(response) { 
+nullService.selectedEntity.enumValue=null;
+enumValueService.del().then(function successCallback(response) { 
 $scope.search();
 },function errorCallback(response) { 
 alert("error");
@@ -175,14 +158,339 @@ return;
 };
 $scope.refreshTableDetail= function() 
 {
- $scope.annotationGridApi.core.handleWindowResize(); 
 };
 $scope.trueFalseValues=[true,false];
+$scope.showEnumFieldDetail= function(index)
+{
+if (index!=null)
+{
+enumFieldService.searchOne(enumValueService.selectedEntity.enumFieldList[index]).then(
+function successCallback(response) {
+console.log("response-ok");
+console.log(response);
+enumFieldService.setSelectedEntity(response.data[0]);
+enumFieldService.selectedEntity.show=true;
+  }, function errorCallback(response) {
+alert("error");
+return; 
+  }	
+);
+}
+else 
+{
+if (enumValueService.selectedEntity.enumField==null || enumValueService.selectedEntity.enumField==undefined)
+{
+enumFieldService.setSelectedEntity(null); 
+enumFieldService.selectedEntity.show=true; 
+}
+else
+enumFieldService.searchOne(enumValueService.selectedEntity.enumField).then(
+function successCallback(response) {
+enumFieldService.setSelectedEntity(response.data[0]);
+enumFieldService.selectedEntity.show=true;
+  }, function errorCallback(response) {
+alert("error");
+return; 
+  }	
+);
+}
+$('#enumFieldTabs li:eq(0) a').tab('show');
+};
+$scope.init=function()
+{
+enumValueService.initEnumFieldList().then(function successCallback(response) {
+enumValueService.childrenList.enumFieldList=response.data;
+},function errorCallback(response) { 
+alert("error");
+return; 
+});
+}; 
+$scope.init();
+$scope.enumValueGridOptions = {
+enablePaginationControls: true,
+multiSelect: false,
+enableSelectAll: false,
+paginationPageSizes: [2, 4, 6],
+paginationPageSize: 2,
+enableGridMenu: true,
+columnDefs: [
+{ name: 'enumValueId'},
+{ name: 'value'},
+{ name: 'name'},
+{ name: 'enumField.enumFieldId', displayName: 'enumField'} 
+]
+,data: enumValueService.entityList
+ };
+$scope.enumValueGridOptions.onRegisterApi = function(gridApi){
+$scope.enumValueGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
+enumFieldService.selectedEntity.show=false;entityService.selectedEntity.show=false;fieldService.selectedEntity.show=false;relationshipService.selectedEntity.show=false;annotationService.selectedEntity.show=false;annotationAttributeService.selectedEntity.show=false;if (row.isSelected)
+{
+enumValueService.setSelectedEntity(row.entity);
+$('#enumValueTabs li:eq(0) a').tab('show');
+}
+else 
+enumValueService.setSelectedEntity(null);
+enumValueService.selectedEntity.show = row.isSelected;
+});
+  };
+$scope.downloadEntityList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("enumValue.xls",?) FROM ?',[mystyle,$scope.entityList]);
+};
+$scope.downloadEnumFieldList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("enumField.xls",?) FROM ?',[mystyle,$scope.selectedEntity.enumFieldList]);
+};
+})
+.service("enumFieldService", function($http)
+{
+this.entityList =		[];
+this.selectedEntity= 	{show: false 
+,enumValueList: []};
+this.childrenList=[]; 
+this.addEntity=function (entity)
+{
+this.entityList.push(entity);
+};
+this.emptyList= function(list)
+{
+while (list.length>0)
+list.pop();
+}
+this.setEntityList= function(entityList)
+{ 
+while (this.entityList.length>0)
+this.entityList.pop();
+if (entityList!=null)
+for (i=0; i<entityList.length; i++)
+this.entityList.push(entityList[i]);
+};
+this.setSelectedEntity= function (entity)
+{ 
+if (entity == null) {
+entity = {};
+this.selectedEntity.show = false;
+} //else
+var keyList = Object.keys(entity);
+if (keyList.length == 0)
+keyList = Object.keys(this.selectedEntity);
+for (i = 0; i < keyList.length; i++) {
+var val = keyList[i];
+if (val != undefined) {
+if (val.toLowerCase().indexOf("list") > -1
+&& (typeof entity[val] == "object" || typeof this.selectedEntity[val]=="object")) {
+if (entity[val] != null
+&& entity[val] != undefined) {
+if (this.selectedEntity[val]!=undefined)
+while (this.selectedEntity[val].length > 0)
+this.selectedEntity[val].pop();
+if (entity[val] != null)
+for (j = 0; j < entity[val].length; j++)
+this.selectedEntity[val]
+.push(entity[val][j]);
+} else 
+this.emptyList(this.selectedEntity[val]);
+} else {
+if (val.toLowerCase().indexOf("time") > -1
+&& typeof val == "string") {
+var date = new Date(entity[val]);
+this.selectedEntity[val] = new Date(entity[val]);
+} else {
+this.selectedEntity[val] = entity[val];
+}
+}
+}
+};
+};
+this.search = function() {
+this.setSelectedEntity(null);
+var promise= $http.post("../enumField/search",this.searchBean);
+return promise; 
+};
+this.searchOne=function(entity) {
+var promise= $http.get("../enumField/"+entity.enumFieldId);
+return promise; 
+};
+this.insert = function() {
+var promise= $http.put("../enumField/",this.selectedEntity);
+return promise; 
+};
+this.update = function() {
+var promise= $http.post("../enumField/",this.selectedEntity);
+return promise; 
+}
+this.del = function() {
+var url="../enumField/"+this.selectedEntity.enumFieldId;
+var promise= $http["delete"](url);
+return promise; 
+}
+ this.initEnumValueList= function()
+{
+var promise= $http
+.post("../enumValue/search",
+{});
+return promise;
+};
+ this.initEntityList= function()
+{
+var promise= $http
+.post("../entity/search",
+{});
+return promise;
+};
+})
+.controller("enumFieldController",function($scope,$http,enumFieldService,enumValueService,entityService,fieldService,relationshipService,annotationService,annotationAttributeService)
+{
+//enumValue
+$scope.searchBean=enumFieldService.searchBean;
+$scope.entityList=enumFieldService.entityList;
+$scope.selectedEntity=enumFieldService.selectedEntity;
+$scope.childrenList=enumFieldService.childrenList; 
+$scope.reset = function()
+{
+enumFieldService.resetSearchBean();
+$scope.searchBean=enumFieldService.searchBean;enumFieldService.setSelectedEntity(null);
+enumFieldService.selectedEntity.show=false;
+enumFieldService.setEntityList(null); 
+}
+$scope.updateParent = function(toDo)
+{
+enumValueService.update().then(function successCallback(response) {
+enumValueService.setSelectedEntity(response);
+if (toDo != null)
+toDo();
+},function errorCallback(response) {      
+alert("error");
+return; 
+}
+);
+};
+$scope.addNew= function()
+{
+enumFieldService.setSelectedEntity(null);
+enumFieldService.setEntityList(null);
+enumFieldService.selectedEntity.show=true;
+$('#enumFieldTabs li:eq(0) a').tab('show');
+};
+		
+$scope.search=function()
+{
+enumFieldService.selectedEntity.show=false;
+enumFieldService.searchBean.enumValueList=[];
+enumFieldService.searchBean.enumValueList.push(enumFieldService.searchBean.enumValue);
+delete enumFieldService.searchBean.enumValue; 
+enumFieldService.search().then(function successCallback(response) {
+enumFieldService.setEntityList(response.data);
+},function errorCallback(response) { 
+alert("error");
+return; 
+});
+};
+$scope.insert=function()
+{
+if (!$scope.enumFieldDetailForm.$valid) return; 
+enumFieldService.selectedEntity.show=false;
+enumFieldService.selectedEntity.enumValue={};
+enumFieldService.selectedEntity.enumValue.enumValueId=enumValueService.selectedEntity.enumValueId;
+enumFieldService.insert().then(function successCallBack(response) { 
+enumValueService.selectedEntity.enumField=response.data;
+enumValueService.initEnumFieldList().then(function(response) {
+enumValueService.childrenList.enumFieldList=response.data;
+});
+},function errorCallback(response) { 
+alert("error");
+return; 
+});
+};
+$scope.update=function()
+{
+if (!$scope.enumFieldDetailForm.$valid) return; 
+enumFieldService.selectedEntity.show=false;
+
+enumValueService.selectedEntity.enumField=enumFieldService.selectedEntity;
+
+enumFieldService.update().then(function successCallback(response){
+enumFieldService.setSelectedEntity(response.data);
+},function errorCallback(response) { 
+alert("error");
+return; 
+});
+};
+$scope.remove= function()
+{
+enumFieldService.selectedEntity.show=false;
+enumValueService.selectedEntity.enumField=null;
+enumFieldService.setSelectedEntity(null);
+$scope.updateParent();
+};
+$scope.del=function()
+{
+enumValueService.selectedEntity.enumField=null;
+$scope.updateParent();
+enumFieldService.del().then(function successCallback(response) { 
+enumFieldService.setSelectedEntity(null);
+enumValueService.initEnumFieldList().then(function(response) {
+enumValueService.childrenList.enumFieldList=response.data;
+});
+},function errorCallback(response) { 
+alert("error");
+return; 
+});
+};
+$scope.refreshTableDetail= function() 
+{
+ $scope.enumValueGridApi.core.handleWindowResize(); 
+};
+$scope.trueFalseValues=[true,false];
+$scope.showEnumValueDetail= function(index)
+{
+if (index!=null)
+{
+enumValueService.searchOne(enumFieldService.selectedEntity.enumValueList[index]).then(
+function successCallback(response) {
+console.log("response-ok");
+console.log(response);
+enumValueService.setSelectedEntity(response.data[0]);
+enumValueService.selectedEntity.show=true;
+  }, function errorCallback(response) {
+alert("error");
+return; 
+  }	
+);
+}
+else 
+{
+if (enumFieldService.selectedEntity.enumValue==null || enumFieldService.selectedEntity.enumValue==undefined)
+{
+enumValueService.setSelectedEntity(null); 
+enumValueService.selectedEntity.show=true; 
+}
+else
+enumValueService.searchOne(enumFieldService.selectedEntity.enumValue).then(
+function successCallback(response) {
+enumValueService.setSelectedEntity(response.data[0]);
+enumValueService.selectedEntity.show=true;
+  }, function errorCallback(response) {
+alert("error");
+return; 
+  }	
+);
+}
+$('#enumValueTabs li:eq(0) a').tab('show');
+};
 $scope.showEntityDetail= function(index)
 {
 if (index!=null)
 {
-entityService.searchOne(relationshipService.selectedEntity.entityList[index]).then(
+entityService.searchOne(enumFieldService.selectedEntity.entityList[index]).then(
 function successCallback(response) {
 console.log("response-ok");
 console.log(response);
@@ -196,13 +504,13 @@ return;
 }
 else 
 {
-if (relationshipService.selectedEntity.entity==null || relationshipService.selectedEntity.entity==undefined)
+if (enumFieldService.selectedEntity.entity==null || enumFieldService.selectedEntity.entity==undefined)
 {
 entityService.setSelectedEntity(null); 
 entityService.selectedEntity.show=true; 
 }
 else
-entityService.searchOne(relationshipService.selectedEntity.entity).then(
+entityService.searchOne(enumFieldService.selectedEntity.entity).then(
 function successCallback(response) {
 entityService.setSelectedEntity(response.data[0]);
 entityService.selectedEntity.show=true;
@@ -214,102 +522,23 @@ return;
 }
 $('#entityTabs li:eq(0) a').tab('show');
 };
-$scope.showEntityTargetDetail= function(index)
-{
-if (index!=null)
-{
-entityTargetService.searchOne(relationshipService.selectedEntity.entityTargetList[index]).then(
-function successCallback(response) {
-console.log("response-ok");
-console.log(response);
-entityTargetService.setSelectedEntity(response.data[0]);
-entityTargetService.selectedEntity.show=true;
-  }, function errorCallback(response) {
-alert("error");
-return; 
-  }	
-);
-}
-else 
-{
-if (relationshipService.selectedEntity.entityTarget==null || relationshipService.selectedEntity.entityTarget==undefined)
-{
-entityTargetService.setSelectedEntity(null); 
-entityTargetService.selectedEntity.show=true; 
-}
-else
-entityTargetService.searchOne(relationshipService.selectedEntity.entityTarget).then(
-function successCallback(response) {
-entityTargetService.setSelectedEntity(response.data[0]);
-entityTargetService.selectedEntity.show=true;
-  }, function errorCallback(response) {
-alert("error");
-return; 
-  }	
-);
-}
-$('#entityTargetTabs li:eq(0) a').tab('show');
-};
-$scope.showAnnotationDetail= function(index)
-{
-if (index!=null)
-{
-annotationService.searchOne(relationshipService.selectedEntity.annotationList[index]).then(
-function successCallback(response) {
-console.log("response-ok");
-console.log(response);
-annotationService.setSelectedEntity(response.data[0]);
-annotationService.selectedEntity.show=true;
-  }, function errorCallback(response) {
-alert("error");
-return; 
-  }	
-);
-}
-else 
-{
-if (relationshipService.selectedEntity.annotation==null || relationshipService.selectedEntity.annotation==undefined)
-{
-annotationService.setSelectedEntity(null); 
-annotationService.selectedEntity.show=true; 
-}
-else
-annotationService.searchOne(relationshipService.selectedEntity.annotation).then(
-function successCallback(response) {
-annotationService.setSelectedEntity(response.data[0]);
-annotationService.selectedEntity.show=true;
-  }, function errorCallback(response) {
-alert("error");
-return; 
-  }	
-);
-}
-$('#annotationTabs li:eq(0) a').tab('show');
-};
 $scope.init=function()
 {
-relationshipService.initEntityList().then(function successCallback(response) {
-relationshipService.childrenList.entityList=response.data;
+enumFieldService.initEnumValueList().then(function successCallback(response) {
+enumFieldService.childrenList.enumValueList=response.data;
 },function errorCallback(response) { 
 alert("error");
 return; 
 });
-relationshipService.initEntityTargetList().then(function successCallback(response) {
-relationshipService.childrenList.entityTargetList=response.data;
+enumFieldService.initEntityList().then(function successCallback(response) {
+enumFieldService.childrenList.entityList=response.data;
 },function errorCallback(response) { 
 alert("error");
 return; 
 });
-relationshipService.initAnnotationList().then(function successCallback(response) {
-relationshipService.childrenList.annotationList=response.data;
-},function errorCallback(response) { 
-alert("error");
-return; 
-});
-relationshipService.childrenList.relationshipTypeList=["ONE_TO_ONE","ONE_TO_MANY","MANY_TO_ONE","MANY_TO_MANY",];
 }; 
 $scope.init();
-$scope.relationshipGridOptions = {
+$scope.enumValueListGridOptions = {
 enablePaginationControls: true,
 multiSelect: false,
 enableSelectAll: false,
@@ -317,52 +546,25 @@ paginationPageSizes: [2, 4, 6],
 paginationPageSize: 2,
 enableGridMenu: true,
 columnDefs: [
-{ name: 'relationshipId'},
-{ name: 'name'},
-{ name: 'entity.entityId', displayName: 'entity'},
-{ name: 'entityTarget.entityTargetId', displayName: 'entityTarget'},
-{ name: 'relationshipType'} 
+{ name: 'enumValueId'},
+{ name: 'value'},
+{ name: 'name'} 
 ]
-,data: relationshipService.entityList
+,data: $scope.selectedEntity.enumValueList
  };
-$scope.relationshipGridOptions.onRegisterApi = function(gridApi){
-$scope.relationshipGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
-entityService.selectedEntity.show=false;annotationService.selectedEntity.show=false;fieldService.selectedEntity.show=false;enumFieldService.selectedEntity.show=false;enumValueService.selectedEntity.show=false;annotationAttributeService.selectedEntity.show=false;if (row.isSelected)
-{
-relationshipService.setSelectedEntity(row.entity);
-$('#relationshipTabs li:eq(0) a').tab('show');
-}
-else 
-relationshipService.setSelectedEntity(null);
-relationshipService.selectedEntity.show = row.isSelected;
-});
-  };
-$scope.annotationListGridOptions = {
-enablePaginationControls: true,
-multiSelect: false,
-enableSelectAll: false,
-paginationPageSizes: [2, 4, 6],
-paginationPageSize: 2,
-enableGridMenu: true,
-columnDefs: [
-{ name: 'annotationId'},
-{ name: 'annotationType'} 
-]
-,data: $scope.selectedEntity.annotationList
- };
-$scope.annotationListGridOptions.onRegisterApi = function(gridApi){
-$scope.annotationGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
+$scope.enumValueListGridOptions.onRegisterApi = function(gridApi){
+$scope.enumValueGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
-annotationService.searchOne(row.entity).then(function(response) { 
+enumValueService.searchOne(row.entity).then(function(response) { 
 console.log(response.data);
-annotationService.setSelectedEntity(response.data[0]);
+enumValueService.setSelectedEntity(response.data[0]);
 });
-$('#annotationTabs li:eq(0) a').tab('show');
+$('#enumValueTabs li:eq(0) a').tab('show');
 }
 else 
-annotationService.setSelectedEntity(null);
-annotationService.selectedEntity.show = row.isSelected;
+enumValueService.setSelectedEntity(null);
+enumValueService.selectedEntity.show = row.isSelected;
 });
   };
 $scope.downloadEntityList=function()
@@ -371,7 +573,18 @@ var mystyle = {
  headers:true, 
 column: {style:{Font:{Bold:"1"}}}
 };
-alasql('SELECT * INTO XLSXML("relationship.xls",?) FROM ?',[mystyle,$scope.entityList]);
+alasql('SELECT * INTO XLSXML("enumField.xls",?) FROM ?',[mystyle,$scope.entityList]);
+};
+$scope.saveLinkedEnumValue= function() {
+enumFieldService.selectedEntity.enumValueList.push(enumFieldService.selectedEntity.enumValue);
+}
+$scope.downloadEnumValueList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("enumValue.xls",?) FROM ?',[mystyle,$scope.selectedEntity.enumValueList]);
 };
 $scope.downloadEntityList=function()
 {
@@ -380,25 +593,6 @@ var mystyle = {
 column: {style:{Font:{Bold:"1"}}}
 };
 alasql('SELECT * INTO XLSXML("entity.xls",?) FROM ?',[mystyle,$scope.selectedEntity.entityList]);
-};
-$scope.downloadEntityTargetList=function()
-{
-var mystyle = {
- headers:true, 
-column: {style:{Font:{Bold:"1"}}}
-};
-alasql('SELECT * INTO XLSXML("entityTarget.xls",?) FROM ?',[mystyle,$scope.selectedEntity.entityTargetList]);
-};
-$scope.saveLinkedAnnotation= function() {
-relationshipService.selectedEntity.annotationList.push(relationshipService.selectedEntity.annotation);
-}
-$scope.downloadAnnotationList=function()
-{
-var mystyle = {
- headers:true, 
-column: {style:{Font:{Bold:"1"}}}
-};
-alasql('SELECT * INTO XLSXML("annotation.xls",?) FROM ?',[mystyle,$scope.selectedEntity.annotationList]);
 };
 })
 .service("entityService", function($http)
@@ -507,7 +701,7 @@ return promise;
 })
 .controller("entityController",function($scope,$http,entityService,fieldService,relationshipService,enumFieldService,annotationService,annotationAttributeService,enumValueService)
 {
-//relationship
+//enumField
 $scope.searchBean=entityService.searchBean;
 $scope.entityList=entityService.entityList;
 $scope.selectedEntity=entityService.selectedEntity;
@@ -521,8 +715,8 @@ entityService.setEntityList(null);
 }
 $scope.updateParent = function(toDo)
 {
-relationshipService.update().then(function successCallback(response) {
-relationshipService.setSelectedEntity(response);
+enumFieldService.update().then(function successCallback(response) {
+enumFieldService.setSelectedEntity(response);
 if (toDo != null)
 toDo();
 },function errorCallback(response) {      
@@ -562,12 +756,12 @@ $scope.insert=function()
 {
 if (!$scope.entityDetailForm.$valid) return; 
 entityService.selectedEntity.show=false;
-entityService.selectedEntity.relationship={};
-entityService.selectedEntity.relationship.relationshipId=relationshipService.selectedEntity.relationshipId;
+entityService.selectedEntity.enumField={};
+entityService.selectedEntity.enumField.enumFieldId=enumFieldService.selectedEntity.enumFieldId;
 entityService.insert().then(function successCallBack(response) { 
-relationshipService.selectedEntity.entity=response.data;
-relationshipService.initEntityList().then(function(response) {
-relationshipService.childrenList.entityList=response.data;
+enumFieldService.selectedEntity.entity=response.data;
+enumFieldService.initEntityList().then(function(response) {
+enumFieldService.childrenList.entityList=response.data;
 });
 },function errorCallback(response) { 
 alert("error");
@@ -579,7 +773,7 @@ $scope.update=function()
 if (!$scope.entityDetailForm.$valid) return; 
 entityService.selectedEntity.show=false;
 
-relationshipService.selectedEntity.entity=entityService.selectedEntity;
+enumFieldService.selectedEntity.entity=entityService.selectedEntity;
 
 entityService.update().then(function successCallback(response){
 entityService.setSelectedEntity(response.data);
@@ -591,18 +785,18 @@ return;
 $scope.remove= function()
 {
 entityService.selectedEntity.show=false;
-relationshipService.selectedEntity.entity=null;
+enumFieldService.selectedEntity.entity=null;
 entityService.setSelectedEntity(null);
 $scope.updateParent();
 };
 $scope.del=function()
 {
-relationshipService.selectedEntity.entity=null;
+enumFieldService.selectedEntity.entity=null;
 $scope.updateParent();
 entityService.del().then(function successCallback(response) { 
 entityService.setSelectedEntity(null);
-relationshipService.initEntityList().then(function(response) {
-relationshipService.childrenList.entityList=response.data;
+enumFieldService.initEntityList().then(function(response) {
+enumFieldService.childrenList.entityList=response.data;
 });
 },function errorCallback(response) { 
 alert("error");
@@ -872,424 +1066,6 @@ var mystyle = {
 column: {style:{Font:{Bold:"1"}}}
 };
 alasql('SELECT * INTO XLSXML("enumField.xls",?) FROM ?',[mystyle,$scope.selectedEntity.enumFieldList]);
-};
-})
-.service("annotationService", function($http)
-{
-this.entityList =		[];
-this.selectedEntity= 	{show: false 
-,annotationAttributeList: []};
-this.childrenList=[]; 
-this.addEntity=function (entity)
-{
-this.entityList.push(entity);
-};
-this.emptyList= function(list)
-{
-while (list.length>0)
-list.pop();
-}
-this.setEntityList= function(entityList)
-{ 
-while (this.entityList.length>0)
-this.entityList.pop();
-if (entityList!=null)
-for (i=0; i<entityList.length; i++)
-this.entityList.push(entityList[i]);
-};
-this.setSelectedEntity= function (entity)
-{ 
-if (entity == null) {
-entity = {};
-this.selectedEntity.show = false;
-} //else
-var keyList = Object.keys(entity);
-if (keyList.length == 0)
-keyList = Object.keys(this.selectedEntity);
-for (i = 0; i < keyList.length; i++) {
-var val = keyList[i];
-if (val != undefined) {
-if (val.toLowerCase().indexOf("list") > -1
-&& (typeof entity[val] == "object" || typeof this.selectedEntity[val]=="object")) {
-if (entity[val] != null
-&& entity[val] != undefined) {
-if (this.selectedEntity[val]!=undefined)
-while (this.selectedEntity[val].length > 0)
-this.selectedEntity[val].pop();
-if (entity[val] != null)
-for (j = 0; j < entity[val].length; j++)
-this.selectedEntity[val]
-.push(entity[val][j]);
-} else 
-this.emptyList(this.selectedEntity[val]);
-} else {
-if (val.toLowerCase().indexOf("time") > -1
-&& typeof val == "string") {
-var date = new Date(entity[val]);
-this.selectedEntity[val] = new Date(entity[val]);
-} else {
-this.selectedEntity[val] = entity[val];
-}
-}
-}
-};
-};
-this.search = function() {
-this.setSelectedEntity(null);
-var promise= $http.post("../annotation/search",this.searchBean);
-return promise; 
-};
-this.searchOne=function(entity) {
-var promise= $http.get("../annotation/"+entity.annotationId);
-return promise; 
-};
-this.insert = function() {
-var promise= $http.put("../annotation/",this.selectedEntity);
-return promise; 
-};
-this.update = function() {
-var promise= $http.post("../annotation/",this.selectedEntity);
-return promise; 
-}
-this.del = function() {
-var url="../annotation/"+this.selectedEntity.annotationId;
-var promise= $http["delete"](url);
-return promise; 
-}
- this.initAnnotationAttributeList= function()
-{
-var promise= $http
-.post("../annotationAttribute/search",
-{});
-return promise;
-};
- this.initFieldList= function()
-{
-var promise= $http
-.post("../field/search",
-{});
-return promise;
-};
- this.initRelationshipList= function()
-{
-var promise= $http
-.post("../relationship/search",
-{});
-return promise;
-};
-})
-.controller("annotationController",function($scope,$http,annotationService,annotationAttributeService,fieldService,relationshipService,entityService,enumFieldService,enumValueService)
-{
-//relationship
-$scope.searchBean=annotationService.searchBean;
-$scope.entityList=annotationService.entityList;
-$scope.selectedEntity=annotationService.selectedEntity;
-$scope.childrenList=annotationService.childrenList; 
-$scope.reset = function()
-{
-annotationService.resetSearchBean();
-$scope.searchBean=annotationService.searchBean;annotationService.setSelectedEntity(null);
-annotationService.selectedEntity.show=false;
-annotationService.setEntityList(null); 
-}
-$scope.updateParent = function(toDo)
-{
-relationshipService.update().then(function successCallback(response) {
-relationshipService.setSelectedEntity(response);
-if (toDo != null)
-toDo();
-},function errorCallback(response) {      
-alert("error");
-return; 
-}
-);
-};
-$scope.addNew= function()
-{
-annotationService.setSelectedEntity(null);
-annotationService.setEntityList(null);
-annotationService.selectedEntity.show=true;
-$('#annotationTabs li:eq(0) a').tab('show');
-};
-		
-$scope.search=function()
-{
-annotationService.selectedEntity.show=false;
-annotationService.searchBean.annotationAttributeList=[];
-annotationService.searchBean.annotationAttributeList.push(annotationService.searchBean.annotationAttribute);
-delete annotationService.searchBean.annotationAttribute; 
-annotationService.search().then(function successCallback(response) {
-annotationService.setEntityList(response.data);
-},function errorCallback(response) { 
-alert("error");
-return; 
-});
-};
-$scope.insert=function()
-{
-if (!$scope.annotationDetailForm.$valid) return; 
-annotationService.selectedEntity.show=false;
-annotationService.selectedEntity.relationship={};
-annotationService.selectedEntity.relationship.relationshipId=relationshipService.selectedEntity.relationshipId;
-annotationService.insert().then(function successCallBack(response) { 
-relationshipService.selectedEntity.annotationList.push(response.data);
-},function errorCallback(response) { 
-alert("error");
-return; 
-});
-};
-$scope.update=function()
-{
-if (!$scope.annotationDetailForm.$valid) return; 
-annotationService.selectedEntity.show=false;
-
-for (i=0; i<relationshipService.selectedEntity.annotationList.length; i++)
-
-{
-
-if (relationshipService.selectedEntity.annotationList[i].annotationId==annotationService.selectedEntity.annotationId)
-
-relationshipService.selectedEntity.annotationList.splice(i,1);
-
-}
-
-relationshipService.selectedEntity.annotationList.push(annotationService.selectedEntity);
-
-annotationService.update().then(function successCallback(response){
-annotationService.setSelectedEntity(response.data);
-},function errorCallback(response) { 
-alert("error");
-return; 
-});
-};
-$scope.remove= function()
-{
-annotationService.selectedEntity.show=false;
-for (i=0; i<relationshipService.selectedEntity.annotationList.length; i++)
-{
-if (relationshipService.selectedEntity.annotationList[i].annotationId==annotationService.selectedEntity.annotationId)
-relationshipService.selectedEntity.annotationList.splice(i,1);
-}
-annotationService.setSelectedEntity(null);
-$scope.updateParent();
-};
-$scope.del=function()
-{
-for (i=0; i<relationshipService.selectedEntity.annotationList.length; i++)
-{
-if (relationshipService.selectedEntity.annotationList[i].annotationId==annotationService.selectedEntity.annotationId)
-relationshipService.selectedEntity.annotationList.splice(i,1);
-}
-$scope.updateParent();
-annotationService.del().then(function successCallback(response) { 
-annotationService.setSelectedEntity(null);
-relationshipService.initAnnotationList().then(function(response) {
-relationshipService.childrenList.annotationList=response.data;
-});
-},function errorCallback(response) { 
-alert("error");
-return; 
-});
-};
-$scope.refreshTableDetail= function() 
-{
- $scope.annotationAttributeGridApi.core.handleWindowResize(); 
-};
-$scope.trueFalseValues=[true,false];
-$scope.showAnnotationAttributeDetail= function(index)
-{
-if (index!=null)
-{
-annotationAttributeService.searchOne(annotationService.selectedEntity.annotationAttributeList[index]).then(
-function successCallback(response) {
-console.log("response-ok");
-console.log(response);
-annotationAttributeService.setSelectedEntity(response.data[0]);
-annotationAttributeService.selectedEntity.show=true;
-  }, function errorCallback(response) {
-alert("error");
-return; 
-  }	
-);
-}
-else 
-{
-if (annotationService.selectedEntity.annotationAttribute==null || annotationService.selectedEntity.annotationAttribute==undefined)
-{
-annotationAttributeService.setSelectedEntity(null); 
-annotationAttributeService.selectedEntity.show=true; 
-}
-else
-annotationAttributeService.searchOne(annotationService.selectedEntity.annotationAttribute).then(
-function successCallback(response) {
-annotationAttributeService.setSelectedEntity(response.data[0]);
-annotationAttributeService.selectedEntity.show=true;
-  }, function errorCallback(response) {
-alert("error");
-return; 
-  }	
-);
-}
-$('#annotationAttributeTabs li:eq(0) a').tab('show');
-};
-$scope.showFieldDetail= function(index)
-{
-if (index!=null)
-{
-fieldService.searchOne(annotationService.selectedEntity.fieldList[index]).then(
-function successCallback(response) {
-console.log("response-ok");
-console.log(response);
-fieldService.setSelectedEntity(response.data[0]);
-fieldService.selectedEntity.show=true;
-  }, function errorCallback(response) {
-alert("error");
-return; 
-  }	
-);
-}
-else 
-{
-if (annotationService.selectedEntity.field==null || annotationService.selectedEntity.field==undefined)
-{
-fieldService.setSelectedEntity(null); 
-fieldService.selectedEntity.show=true; 
-}
-else
-fieldService.searchOne(annotationService.selectedEntity.field).then(
-function successCallback(response) {
-fieldService.setSelectedEntity(response.data[0]);
-fieldService.selectedEntity.show=true;
-  }, function errorCallback(response) {
-alert("error");
-return; 
-  }	
-);
-}
-$('#fieldTabs li:eq(0) a').tab('show');
-};
-$scope.showRelationshipDetail= function(index)
-{
-if (index!=null)
-{
-relationshipService.searchOne(annotationService.selectedEntity.relationshipList[index]).then(
-function successCallback(response) {
-console.log("response-ok");
-console.log(response);
-relationshipService.setSelectedEntity(response.data[0]);
-relationshipService.selectedEntity.show=true;
-  }, function errorCallback(response) {
-alert("error");
-return; 
-  }	
-);
-}
-else 
-{
-if (annotationService.selectedEntity.relationship==null || annotationService.selectedEntity.relationship==undefined)
-{
-relationshipService.setSelectedEntity(null); 
-relationshipService.selectedEntity.show=true; 
-}
-else
-relationshipService.searchOne(annotationService.selectedEntity.relationship).then(
-function successCallback(response) {
-relationshipService.setSelectedEntity(response.data[0]);
-relationshipService.selectedEntity.show=true;
-  }, function errorCallback(response) {
-alert("error");
-return; 
-  }	
-);
-}
-$('#relationshipTabs li:eq(0) a').tab('show');
-};
-$scope.init=function()
-{
-annotationService.initAnnotationAttributeList().then(function successCallback(response) {
-annotationService.childrenList.annotationAttributeList=response.data;
-},function errorCallback(response) { 
-alert("error");
-return; 
-});
-annotationService.initFieldList().then(function successCallback(response) {
-annotationService.childrenList.fieldList=response.data;
-},function errorCallback(response) { 
-alert("error");
-return; 
-});
-annotationService.initRelationshipList().then(function successCallback(response) {
-annotationService.childrenList.relationshipList=response.data;
-},function errorCallback(response) { 
-alert("error");
-return; 
-});
-annotationService.childrenList.annotationTypeList=["PRIMARY_KEY","NOT_NULL","BOT_BLANK","DESCRIPTION_FIELD","BETWEEN_FILTER","EXCEL_EXPORT","FILTER_FIELD","IGNORE_SEARCH","IGNORE_UPDATE",];
-}; 
-$scope.init();
-$scope.annotationAttributeListGridOptions = {
-enablePaginationControls: true,
-multiSelect: false,
-enableSelectAll: false,
-paginationPageSizes: [2, 4, 6],
-paginationPageSize: 2,
-enableGridMenu: true,
-columnDefs: [
-{ name: 'annotationAttributeId'},
-{ name: 'property'},
-{ name: 'value'} 
-]
-,data: $scope.selectedEntity.annotationAttributeList
- };
-$scope.annotationAttributeListGridOptions.onRegisterApi = function(gridApi){
-$scope.annotationAttributeGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
-if (row.isSelected)
-{
-annotationAttributeService.searchOne(row.entity).then(function(response) { 
-console.log(response.data);
-annotationAttributeService.setSelectedEntity(response.data[0]);
-});
-$('#annotationAttributeTabs li:eq(0) a').tab('show');
-}
-else 
-annotationAttributeService.setSelectedEntity(null);
-annotationAttributeService.selectedEntity.show = row.isSelected;
-});
-  };
-$scope.downloadEntityList=function()
-{
-var mystyle = {
- headers:true, 
-column: {style:{Font:{Bold:"1"}}}
-};
-alasql('SELECT * INTO XLSXML("annotation.xls",?) FROM ?',[mystyle,$scope.entityList]);
-};
-$scope.saveLinkedAnnotationAttribute= function() {
-annotationService.selectedEntity.annotationAttributeList.push(annotationService.selectedEntity.annotationAttribute);
-}
-$scope.downloadAnnotationAttributeList=function()
-{
-var mystyle = {
- headers:true, 
-column: {style:{Font:{Bold:"1"}}}
-};
-alasql('SELECT * INTO XLSXML("annotationAttribute.xls",?) FROM ?',[mystyle,$scope.selectedEntity.annotationAttributeList]);
-};
-$scope.downloadFieldList=function()
-{
-var mystyle = {
- headers:true, 
-column: {style:{Font:{Bold:"1"}}}
-};
-alasql('SELECT * INTO XLSXML("field.xls",?) FROM ?',[mystyle,$scope.selectedEntity.fieldList]);
-};
-$scope.downloadRelationshipList=function()
-{
-var mystyle = {
- headers:true, 
-column: {style:{Font:{Bold:"1"}}}
-};
-alasql('SELECT * INTO XLSXML("relationship.xls",?) FROM ?',[mystyle,$scope.selectedEntity.relationshipList]);
 };
 })
 .service("fieldService", function($http)
@@ -1652,11 +1428,11 @@ column: {style:{Font:{Bold:"1"}}}
 alasql('SELECT * INTO XLSXML("annotation.xls",?) FROM ?',[mystyle,$scope.selectedEntity.annotationList]);
 };
 })
-.service("enumFieldService", function($http)
+.service("relationshipService", function($http)
 {
 this.entityList =		[];
 this.selectedEntity= 	{show: false 
-,enumValueList: []};
+,annotationList: []};
 this.childrenList=[]; 
 this.addEntity=function (entity)
 {
@@ -1714,33 +1490,26 @@ this.selectedEntity[val] = entity[val];
 };
 this.search = function() {
 this.setSelectedEntity(null);
-var promise= $http.post("../enumField/search",this.searchBean);
+var promise= $http.post("../relationship/search",this.searchBean);
 return promise; 
 };
 this.searchOne=function(entity) {
-var promise= $http.get("../enumField/"+entity.enumFieldId);
+var promise= $http.get("../relationship/"+entity.relationshipId);
 return promise; 
 };
 this.insert = function() {
-var promise= $http.put("../enumField/",this.selectedEntity);
+var promise= $http.put("../relationship/",this.selectedEntity);
 return promise; 
 };
 this.update = function() {
-var promise= $http.post("../enumField/",this.selectedEntity);
+var promise= $http.post("../relationship/",this.selectedEntity);
 return promise; 
 }
 this.del = function() {
-var url="../enumField/"+this.selectedEntity.enumFieldId;
+var url="../relationship/"+this.selectedEntity.relationshipId;
 var promise= $http["delete"](url);
 return promise; 
 }
- this.initEnumValueList= function()
-{
-var promise= $http
-.post("../enumValue/search",
-{});
-return promise;
-};
  this.initEntityList= function()
 {
 var promise= $http
@@ -1748,20 +1517,34 @@ var promise= $http
 {});
 return promise;
 };
+ this.initEntityTargetList= function()
+{
+var promise= $http
+.post("../entityTarget/search",
+{});
+return promise;
+};
+ this.initAnnotationList= function()
+{
+var promise= $http
+.post("../annotation/search",
+{});
+return promise;
+};
 })
-.controller("enumFieldController",function($scope,$http,enumFieldService,enumValueService,entityService,fieldService,relationshipService,annotationService,annotationAttributeService)
+.controller("relationshipController",function($scope,$http,relationshipService,entityService,annotationService,fieldService,enumFieldService,enumValueService,annotationAttributeService)
 {
 //entity
-$scope.searchBean=enumFieldService.searchBean;
-$scope.entityList=enumFieldService.entityList;
-$scope.selectedEntity=enumFieldService.selectedEntity;
-$scope.childrenList=enumFieldService.childrenList; 
+$scope.searchBean=relationshipService.searchBean;
+$scope.entityList=relationshipService.entityList;
+$scope.selectedEntity=relationshipService.selectedEntity;
+$scope.childrenList=relationshipService.childrenList; 
 $scope.reset = function()
 {
-enumFieldService.resetSearchBean();
-$scope.searchBean=enumFieldService.searchBean;enumFieldService.setSelectedEntity(null);
-enumFieldService.selectedEntity.show=false;
-enumFieldService.setEntityList(null); 
+relationshipService.resetSearchBean();
+$scope.searchBean=relationshipService.searchBean;relationshipService.setSelectedEntity(null);
+relationshipService.selectedEntity.show=false;
+relationshipService.setEntityList(null); 
 }
 $scope.updateParent = function(toDo)
 {
@@ -1777,20 +1560,20 @@ return;
 };
 $scope.addNew= function()
 {
-enumFieldService.setSelectedEntity(null);
-enumFieldService.setEntityList(null);
-enumFieldService.selectedEntity.show=true;
-$('#enumFieldTabs li:eq(0) a').tab('show');
+relationshipService.setSelectedEntity(null);
+relationshipService.setEntityList(null);
+relationshipService.selectedEntity.show=true;
+$('#relationshipTabs li:eq(0) a').tab('show');
 };
 		
 $scope.search=function()
 {
-enumFieldService.selectedEntity.show=false;
-enumFieldService.searchBean.enumValueList=[];
-enumFieldService.searchBean.enumValueList.push(enumFieldService.searchBean.enumValue);
-delete enumFieldService.searchBean.enumValue; 
-enumFieldService.search().then(function successCallback(response) {
-enumFieldService.setEntityList(response.data);
+relationshipService.selectedEntity.show=false;
+relationshipService.searchBean.annotationList=[];
+relationshipService.searchBean.annotationList.push(relationshipService.searchBean.annotation);
+delete relationshipService.searchBean.annotation; 
+relationshipService.search().then(function successCallback(response) {
+relationshipService.setEntityList(response.data);
 },function errorCallback(response) { 
 alert("error");
 return; 
@@ -1798,12 +1581,12 @@ return;
 };
 $scope.insert=function()
 {
-if (!$scope.enumFieldDetailForm.$valid) return; 
-enumFieldService.selectedEntity.show=false;
-enumFieldService.selectedEntity.entity={};
-enumFieldService.selectedEntity.entity.entityId=entityService.selectedEntity.entityId;
-enumFieldService.insert().then(function successCallBack(response) { 
-entityService.selectedEntity.enumFieldList.push(response.data);
+if (!$scope.relationshipDetailForm.$valid) return; 
+relationshipService.selectedEntity.show=false;
+relationshipService.selectedEntity.entity={};
+relationshipService.selectedEntity.entity.entityId=entityService.selectedEntity.entityId;
+relationshipService.insert().then(function successCallBack(response) { 
+entityService.selectedEntity.relationshipList.push(response.data);
 },function errorCallback(response) { 
 alert("error");
 return; 
@@ -1811,23 +1594,23 @@ return;
 };
 $scope.update=function()
 {
-if (!$scope.enumFieldDetailForm.$valid) return; 
-enumFieldService.selectedEntity.show=false;
+if (!$scope.relationshipDetailForm.$valid) return; 
+relationshipService.selectedEntity.show=false;
 
-for (i=0; i<entityService.selectedEntity.enumFieldList.length; i++)
+for (i=0; i<entityService.selectedEntity.relationshipList.length; i++)
 
 {
 
-if (entityService.selectedEntity.enumFieldList[i].enumFieldId==enumFieldService.selectedEntity.enumFieldId)
+if (entityService.selectedEntity.relationshipList[i].relationshipId==relationshipService.selectedEntity.relationshipId)
 
-entityService.selectedEntity.enumFieldList.splice(i,1);
+entityService.selectedEntity.relationshipList.splice(i,1);
 
 }
 
-entityService.selectedEntity.enumFieldList.push(enumFieldService.selectedEntity);
+entityService.selectedEntity.relationshipList.push(relationshipService.selectedEntity);
 
-enumFieldService.update().then(function successCallback(response){
-enumFieldService.setSelectedEntity(response.data);
+relationshipService.update().then(function successCallback(response){
+relationshipService.setSelectedEntity(response.data);
 },function errorCallback(response) { 
 alert("error");
 return; 
@@ -1835,27 +1618,27 @@ return;
 };
 $scope.remove= function()
 {
-enumFieldService.selectedEntity.show=false;
-for (i=0; i<entityService.selectedEntity.enumFieldList.length; i++)
+relationshipService.selectedEntity.show=false;
+for (i=0; i<entityService.selectedEntity.relationshipList.length; i++)
 {
-if (entityService.selectedEntity.enumFieldList[i].enumFieldId==enumFieldService.selectedEntity.enumFieldId)
-entityService.selectedEntity.enumFieldList.splice(i,1);
+if (entityService.selectedEntity.relationshipList[i].relationshipId==relationshipService.selectedEntity.relationshipId)
+entityService.selectedEntity.relationshipList.splice(i,1);
 }
-enumFieldService.setSelectedEntity(null);
+relationshipService.setSelectedEntity(null);
 $scope.updateParent();
 };
 $scope.del=function()
 {
-for (i=0; i<entityService.selectedEntity.enumFieldList.length; i++)
+for (i=0; i<entityService.selectedEntity.relationshipList.length; i++)
 {
-if (entityService.selectedEntity.enumFieldList[i].enumFieldId==enumFieldService.selectedEntity.enumFieldId)
-entityService.selectedEntity.enumFieldList.splice(i,1);
+if (entityService.selectedEntity.relationshipList[i].relationshipId==relationshipService.selectedEntity.relationshipId)
+entityService.selectedEntity.relationshipList.splice(i,1);
 }
 $scope.updateParent();
-enumFieldService.del().then(function successCallback(response) { 
-enumFieldService.setSelectedEntity(null);
-entityService.initEnumFieldList().then(function(response) {
-entityService.childrenList.enumFieldList=response.data;
+relationshipService.del().then(function successCallback(response) { 
+relationshipService.setSelectedEntity(null);
+entityService.initRelationshipList().then(function(response) {
+entityService.childrenList.relationshipList=response.data;
 });
 },function errorCallback(response) { 
 alert("error");
@@ -1864,50 +1647,14 @@ return;
 };
 $scope.refreshTableDetail= function() 
 {
- $scope.enumValueGridApi.core.handleWindowResize(); 
+ $scope.annotationGridApi.core.handleWindowResize(); 
 };
 $scope.trueFalseValues=[true,false];
-$scope.showEnumValueDetail= function(index)
-{
-if (index!=null)
-{
-enumValueService.searchOne(enumFieldService.selectedEntity.enumValueList[index]).then(
-function successCallback(response) {
-console.log("response-ok");
-console.log(response);
-enumValueService.setSelectedEntity(response.data[0]);
-enumValueService.selectedEntity.show=true;
-  }, function errorCallback(response) {
-alert("error");
-return; 
-  }	
-);
-}
-else 
-{
-if (enumFieldService.selectedEntity.enumValue==null || enumFieldService.selectedEntity.enumValue==undefined)
-{
-enumValueService.setSelectedEntity(null); 
-enumValueService.selectedEntity.show=true; 
-}
-else
-enumValueService.searchOne(enumFieldService.selectedEntity.enumValue).then(
-function successCallback(response) {
-enumValueService.setSelectedEntity(response.data[0]);
-enumValueService.selectedEntity.show=true;
-  }, function errorCallback(response) {
-alert("error");
-return; 
-  }	
-);
-}
-$('#enumValueTabs li:eq(0) a').tab('show');
-};
 $scope.showEntityDetail= function(index)
 {
 if (index!=null)
 {
-entityService.searchOne(enumFieldService.selectedEntity.entityList[index]).then(
+entityService.searchOne(relationshipService.selectedEntity.entityList[index]).then(
 function successCallback(response) {
 console.log("response-ok");
 console.log(response);
@@ -1921,13 +1668,13 @@ return;
 }
 else 
 {
-if (enumFieldService.selectedEntity.entity==null || enumFieldService.selectedEntity.entity==undefined)
+if (relationshipService.selectedEntity.entity==null || relationshipService.selectedEntity.entity==undefined)
 {
 entityService.setSelectedEntity(null); 
 entityService.selectedEntity.show=true; 
 }
 else
-entityService.searchOne(enumFieldService.selectedEntity.entity).then(
+entityService.searchOne(relationshipService.selectedEntity.entity).then(
 function successCallback(response) {
 entityService.setSelectedEntity(response.data[0]);
 entityService.selectedEntity.show=true;
@@ -1939,23 +1686,102 @@ return;
 }
 $('#entityTabs li:eq(0) a').tab('show');
 };
+$scope.showEntityTargetDetail= function(index)
+{
+if (index!=null)
+{
+entityTargetService.searchOne(relationshipService.selectedEntity.entityTargetList[index]).then(
+function successCallback(response) {
+console.log("response-ok");
+console.log(response);
+entityTargetService.setSelectedEntity(response.data[0]);
+entityTargetService.selectedEntity.show=true;
+  }, function errorCallback(response) {
+alert("error");
+return; 
+  }	
+);
+}
+else 
+{
+if (relationshipService.selectedEntity.entityTarget==null || relationshipService.selectedEntity.entityTarget==undefined)
+{
+entityTargetService.setSelectedEntity(null); 
+entityTargetService.selectedEntity.show=true; 
+}
+else
+entityTargetService.searchOne(relationshipService.selectedEntity.entityTarget).then(
+function successCallback(response) {
+entityTargetService.setSelectedEntity(response.data[0]);
+entityTargetService.selectedEntity.show=true;
+  }, function errorCallback(response) {
+alert("error");
+return; 
+  }	
+);
+}
+$('#entityTargetTabs li:eq(0) a').tab('show');
+};
+$scope.showAnnotationDetail= function(index)
+{
+if (index!=null)
+{
+annotationService.searchOne(relationshipService.selectedEntity.annotationList[index]).then(
+function successCallback(response) {
+console.log("response-ok");
+console.log(response);
+annotationService.setSelectedEntity(response.data[0]);
+annotationService.selectedEntity.show=true;
+  }, function errorCallback(response) {
+alert("error");
+return; 
+  }	
+);
+}
+else 
+{
+if (relationshipService.selectedEntity.annotation==null || relationshipService.selectedEntity.annotation==undefined)
+{
+annotationService.setSelectedEntity(null); 
+annotationService.selectedEntity.show=true; 
+}
+else
+annotationService.searchOne(relationshipService.selectedEntity.annotation).then(
+function successCallback(response) {
+annotationService.setSelectedEntity(response.data[0]);
+annotationService.selectedEntity.show=true;
+  }, function errorCallback(response) {
+alert("error");
+return; 
+  }	
+);
+}
+$('#annotationTabs li:eq(0) a').tab('show');
+};
 $scope.init=function()
 {
-enumFieldService.initEnumValueList().then(function successCallback(response) {
-enumFieldService.childrenList.enumValueList=response.data;
+relationshipService.initEntityList().then(function successCallback(response) {
+relationshipService.childrenList.entityList=response.data;
 },function errorCallback(response) { 
 alert("error");
 return; 
 });
-enumFieldService.initEntityList().then(function successCallback(response) {
-enumFieldService.childrenList.entityList=response.data;
+relationshipService.initEntityTargetList().then(function successCallback(response) {
+relationshipService.childrenList.entityTargetList=response.data;
 },function errorCallback(response) { 
 alert("error");
 return; 
 });
+relationshipService.initAnnotationList().then(function successCallback(response) {
+relationshipService.childrenList.annotationList=response.data;
+},function errorCallback(response) { 
+alert("error");
+return; 
+});
+relationshipService.childrenList.relationshipTypeList=["ONE_TO_ONE","ONE_TO_MANY","MANY_TO_ONE","MANY_TO_MANY",];
 }; 
 $scope.init();
-$scope.enumValueListGridOptions = {
+$scope.annotationListGridOptions = {
 enablePaginationControls: true,
 multiSelect: false,
 enableSelectAll: false,
@@ -1963,25 +1789,24 @@ paginationPageSizes: [2, 4, 6],
 paginationPageSize: 2,
 enableGridMenu: true,
 columnDefs: [
-{ name: 'enumValueId'},
-{ name: 'value'},
-{ name: 'name'} 
+{ name: 'annotationId'},
+{ name: 'annotationType'} 
 ]
-,data: $scope.selectedEntity.enumValueList
+,data: $scope.selectedEntity.annotationList
  };
-$scope.enumValueListGridOptions.onRegisterApi = function(gridApi){
-$scope.enumValueGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
+$scope.annotationListGridOptions.onRegisterApi = function(gridApi){
+$scope.annotationGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
-enumValueService.searchOne(row.entity).then(function(response) { 
+annotationService.searchOne(row.entity).then(function(response) { 
 console.log(response.data);
-enumValueService.setSelectedEntity(response.data[0]);
+annotationService.setSelectedEntity(response.data[0]);
 });
-$('#enumValueTabs li:eq(0) a').tab('show');
+$('#annotationTabs li:eq(0) a').tab('show');
 }
 else 
-enumValueService.setSelectedEntity(null);
-enumValueService.selectedEntity.show = row.isSelected;
+annotationService.setSelectedEntity(null);
+annotationService.selectedEntity.show = row.isSelected;
 });
   };
 $scope.downloadEntityList=function()
@@ -1990,18 +1815,7 @@ var mystyle = {
  headers:true, 
 column: {style:{Font:{Bold:"1"}}}
 };
-alasql('SELECT * INTO XLSXML("enumField.xls",?) FROM ?',[mystyle,$scope.entityList]);
-};
-$scope.saveLinkedEnumValue= function() {
-enumFieldService.selectedEntity.enumValueList.push(enumFieldService.selectedEntity.enumValue);
-}
-$scope.downloadEnumValueList=function()
-{
-var mystyle = {
- headers:true, 
-column: {style:{Font:{Bold:"1"}}}
-};
-alasql('SELECT * INTO XLSXML("enumValue.xls",?) FROM ?',[mystyle,$scope.selectedEntity.enumValueList]);
+alasql('SELECT * INTO XLSXML("relationship.xls",?) FROM ?',[mystyle,$scope.entityList]);
 };
 $scope.downloadEntityList=function()
 {
@@ -2011,12 +1825,31 @@ column: {style:{Font:{Bold:"1"}}}
 };
 alasql('SELECT * INTO XLSXML("entity.xls",?) FROM ?',[mystyle,$scope.selectedEntity.entityList]);
 };
+$scope.downloadEntityTargetList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("entityTarget.xls",?) FROM ?',[mystyle,$scope.selectedEntity.entityTargetList]);
+};
+$scope.saveLinkedAnnotation= function() {
+relationshipService.selectedEntity.annotationList.push(relationshipService.selectedEntity.annotation);
+}
+$scope.downloadAnnotationList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("annotation.xls",?) FROM ?',[mystyle,$scope.selectedEntity.annotationList]);
+};
 })
-.service("enumValueService", function($http)
+.service("annotationService", function($http)
 {
 this.entityList =		[];
 this.selectedEntity= 	{show: false 
-};
+,annotationAttributeList: []};
 this.childrenList=[]; 
 this.addEntity=function (entity)
 {
@@ -2074,52 +1907,66 @@ this.selectedEntity[val] = entity[val];
 };
 this.search = function() {
 this.setSelectedEntity(null);
-var promise= $http.post("../enumValue/search",this.searchBean);
+var promise= $http.post("../annotation/search",this.searchBean);
 return promise; 
 };
 this.searchOne=function(entity) {
-var promise= $http.get("../enumValue/"+entity.enumValueId);
+var promise= $http.get("../annotation/"+entity.annotationId);
 return promise; 
 };
 this.insert = function() {
-var promise= $http.put("../enumValue/",this.selectedEntity);
+var promise= $http.put("../annotation/",this.selectedEntity);
 return promise; 
 };
 this.update = function() {
-var promise= $http.post("../enumValue/",this.selectedEntity);
+var promise= $http.post("../annotation/",this.selectedEntity);
 return promise; 
 }
 this.del = function() {
-var url="../enumValue/"+this.selectedEntity.enumValueId;
+var url="../annotation/"+this.selectedEntity.annotationId;
 var promise= $http["delete"](url);
 return promise; 
 }
- this.initEnumFieldList= function()
+ this.initAnnotationAttributeList= function()
 {
 var promise= $http
-.post("../enumField/search",
+.post("../annotationAttribute/search",
+{});
+return promise;
+};
+ this.initFieldList= function()
+{
+var promise= $http
+.post("../field/search",
+{});
+return promise;
+};
+ this.initRelationshipList= function()
+{
+var promise= $http
+.post("../relationship/search",
 {});
 return promise;
 };
 })
-.controller("enumValueController",function($scope,$http,enumValueService,enumFieldService,entityService,fieldService,relationshipService,annotationService,annotationAttributeService)
+.controller("annotationController",function($scope,$http,annotationService,annotationAttributeService,fieldService,relationshipService,entityService,enumFieldService,enumValueService)
 {
-//enumField
-$scope.searchBean=enumValueService.searchBean;
-$scope.entityList=enumValueService.entityList;
-$scope.selectedEntity=enumValueService.selectedEntity;
-$scope.childrenList=enumValueService.childrenList; 
+//field
+$scope.searchBean=annotationService.searchBean;
+$scope.entityList=annotationService.entityList;
+$scope.selectedEntity=annotationService.selectedEntity;
+$scope.childrenList=annotationService.childrenList; 
 $scope.reset = function()
 {
-enumValueService.resetSearchBean();
-$scope.searchBean=enumValueService.searchBean;enumValueService.setSelectedEntity(null);
-enumValueService.selectedEntity.show=false;
-enumValueService.setEntityList(null); 
+annotationService.resetSearchBean();
+$scope.searchBean=annotationService.searchBean;annotationService.setSelectedEntity(null);
+annotationService.selectedEntity.show=false;
+annotationService.setEntityList(null); 
 }
 $scope.updateParent = function(toDo)
 {
-enumFieldService.update().then(function successCallback(response) {
-enumFieldService.setSelectedEntity(response);
+fieldService.update().then(function successCallback(response) {
+fieldService.setSelectedEntity(response);
 if (toDo != null)
 toDo();
 },function errorCallback(response) {      
@@ -2130,17 +1977,20 @@ return;
 };
 $scope.addNew= function()
 {
-enumValueService.setSelectedEntity(null);
-enumValueService.setEntityList(null);
-enumValueService.selectedEntity.show=true;
-$('#enumValueTabs li:eq(0) a').tab('show');
+annotationService.setSelectedEntity(null);
+annotationService.setEntityList(null);
+annotationService.selectedEntity.show=true;
+$('#annotationTabs li:eq(0) a').tab('show');
 };
 		
 $scope.search=function()
 {
-enumValueService.selectedEntity.show=false;
-enumValueService.search().then(function successCallback(response) {
-enumValueService.setEntityList(response.data);
+annotationService.selectedEntity.show=false;
+annotationService.searchBean.annotationAttributeList=[];
+annotationService.searchBean.annotationAttributeList.push(annotationService.searchBean.annotationAttribute);
+delete annotationService.searchBean.annotationAttribute; 
+annotationService.search().then(function successCallback(response) {
+annotationService.setEntityList(response.data);
 },function errorCallback(response) { 
 alert("error");
 return; 
@@ -2148,12 +1998,12 @@ return;
 };
 $scope.insert=function()
 {
-if (!$scope.enumValueDetailForm.$valid) return; 
-enumValueService.selectedEntity.show=false;
-enumValueService.selectedEntity.enumField={};
-enumValueService.selectedEntity.enumField.enumFieldId=enumFieldService.selectedEntity.enumFieldId;
-enumValueService.insert().then(function successCallBack(response) { 
-enumFieldService.selectedEntity.enumValueList.push(response.data);
+if (!$scope.annotationDetailForm.$valid) return; 
+annotationService.selectedEntity.show=false;
+annotationService.selectedEntity.field={};
+annotationService.selectedEntity.field.fieldId=fieldService.selectedEntity.fieldId;
+annotationService.insert().then(function successCallBack(response) { 
+fieldService.selectedEntity.annotationList.push(response.data);
 },function errorCallback(response) { 
 alert("error");
 return; 
@@ -2161,23 +2011,23 @@ return;
 };
 $scope.update=function()
 {
-if (!$scope.enumValueDetailForm.$valid) return; 
-enumValueService.selectedEntity.show=false;
+if (!$scope.annotationDetailForm.$valid) return; 
+annotationService.selectedEntity.show=false;
 
-for (i=0; i<enumFieldService.selectedEntity.enumValueList.length; i++)
+for (i=0; i<fieldService.selectedEntity.annotationList.length; i++)
 
 {
 
-if (enumFieldService.selectedEntity.enumValueList[i].enumValueId==enumValueService.selectedEntity.enumValueId)
+if (fieldService.selectedEntity.annotationList[i].annotationId==annotationService.selectedEntity.annotationId)
 
-enumFieldService.selectedEntity.enumValueList.splice(i,1);
+fieldService.selectedEntity.annotationList.splice(i,1);
 
 }
 
-enumFieldService.selectedEntity.enumValueList.push(enumValueService.selectedEntity);
+fieldService.selectedEntity.annotationList.push(annotationService.selectedEntity);
 
-enumValueService.update().then(function successCallback(response){
-enumValueService.setSelectedEntity(response.data);
+annotationService.update().then(function successCallback(response){
+annotationService.setSelectedEntity(response.data);
 },function errorCallback(response) { 
 alert("error");
 return; 
@@ -2185,27 +2035,27 @@ return;
 };
 $scope.remove= function()
 {
-enumValueService.selectedEntity.show=false;
-for (i=0; i<enumFieldService.selectedEntity.enumValueList.length; i++)
+annotationService.selectedEntity.show=false;
+for (i=0; i<fieldService.selectedEntity.annotationList.length; i++)
 {
-if (enumFieldService.selectedEntity.enumValueList[i].enumValueId==enumValueService.selectedEntity.enumValueId)
-enumFieldService.selectedEntity.enumValueList.splice(i,1);
+if (fieldService.selectedEntity.annotationList[i].annotationId==annotationService.selectedEntity.annotationId)
+fieldService.selectedEntity.annotationList.splice(i,1);
 }
-enumValueService.setSelectedEntity(null);
+annotationService.setSelectedEntity(null);
 $scope.updateParent();
 };
 $scope.del=function()
 {
-for (i=0; i<enumFieldService.selectedEntity.enumValueList.length; i++)
+for (i=0; i<fieldService.selectedEntity.annotationList.length; i++)
 {
-if (enumFieldService.selectedEntity.enumValueList[i].enumValueId==enumValueService.selectedEntity.enumValueId)
-enumFieldService.selectedEntity.enumValueList.splice(i,1);
+if (fieldService.selectedEntity.annotationList[i].annotationId==annotationService.selectedEntity.annotationId)
+fieldService.selectedEntity.annotationList.splice(i,1);
 }
 $scope.updateParent();
-enumValueService.del().then(function successCallback(response) { 
-enumValueService.setSelectedEntity(null);
-enumFieldService.initEnumValueList().then(function(response) {
-enumFieldService.childrenList.enumValueList=response.data;
+annotationService.del().then(function successCallback(response) { 
+annotationService.setSelectedEntity(null);
+fieldService.initAnnotationList().then(function(response) {
+fieldService.childrenList.annotationList=response.data;
 });
 },function errorCallback(response) { 
 alert("error");
@@ -2214,18 +2064,19 @@ return;
 };
 $scope.refreshTableDetail= function() 
 {
+ $scope.annotationAttributeGridApi.core.handleWindowResize(); 
 };
 $scope.trueFalseValues=[true,false];
-$scope.showEnumFieldDetail= function(index)
+$scope.showAnnotationAttributeDetail= function(index)
 {
 if (index!=null)
 {
-enumFieldService.searchOne(enumValueService.selectedEntity.enumFieldList[index]).then(
+annotationAttributeService.searchOne(annotationService.selectedEntity.annotationAttributeList[index]).then(
 function successCallback(response) {
 console.log("response-ok");
 console.log(response);
-enumFieldService.setSelectedEntity(response.data[0]);
-enumFieldService.selectedEntity.show=true;
+annotationAttributeService.setSelectedEntity(response.data[0]);
+annotationAttributeService.selectedEntity.show=true;
   }, function errorCallback(response) {
 alert("error");
 return; 
@@ -2234,49 +2085,182 @@ return;
 }
 else 
 {
-if (enumValueService.selectedEntity.enumField==null || enumValueService.selectedEntity.enumField==undefined)
+if (annotationService.selectedEntity.annotationAttribute==null || annotationService.selectedEntity.annotationAttribute==undefined)
 {
-enumFieldService.setSelectedEntity(null); 
-enumFieldService.selectedEntity.show=true; 
+annotationAttributeService.setSelectedEntity(null); 
+annotationAttributeService.selectedEntity.show=true; 
 }
 else
-enumFieldService.searchOne(enumValueService.selectedEntity.enumField).then(
+annotationAttributeService.searchOne(annotationService.selectedEntity.annotationAttribute).then(
 function successCallback(response) {
-enumFieldService.setSelectedEntity(response.data[0]);
-enumFieldService.selectedEntity.show=true;
+annotationAttributeService.setSelectedEntity(response.data[0]);
+annotationAttributeService.selectedEntity.show=true;
   }, function errorCallback(response) {
 alert("error");
 return; 
   }	
 );
 }
-$('#enumFieldTabs li:eq(0) a').tab('show');
+$('#annotationAttributeTabs li:eq(0) a').tab('show');
+};
+$scope.showFieldDetail= function(index)
+{
+if (index!=null)
+{
+fieldService.searchOne(annotationService.selectedEntity.fieldList[index]).then(
+function successCallback(response) {
+console.log("response-ok");
+console.log(response);
+fieldService.setSelectedEntity(response.data[0]);
+fieldService.selectedEntity.show=true;
+  }, function errorCallback(response) {
+alert("error");
+return; 
+  }	
+);
+}
+else 
+{
+if (annotationService.selectedEntity.field==null || annotationService.selectedEntity.field==undefined)
+{
+fieldService.setSelectedEntity(null); 
+fieldService.selectedEntity.show=true; 
+}
+else
+fieldService.searchOne(annotationService.selectedEntity.field).then(
+function successCallback(response) {
+fieldService.setSelectedEntity(response.data[0]);
+fieldService.selectedEntity.show=true;
+  }, function errorCallback(response) {
+alert("error");
+return; 
+  }	
+);
+}
+$('#fieldTabs li:eq(0) a').tab('show');
+};
+$scope.showRelationshipDetail= function(index)
+{
+if (index!=null)
+{
+relationshipService.searchOne(annotationService.selectedEntity.relationshipList[index]).then(
+function successCallback(response) {
+console.log("response-ok");
+console.log(response);
+relationshipService.setSelectedEntity(response.data[0]);
+relationshipService.selectedEntity.show=true;
+  }, function errorCallback(response) {
+alert("error");
+return; 
+  }	
+);
+}
+else 
+{
+if (annotationService.selectedEntity.relationship==null || annotationService.selectedEntity.relationship==undefined)
+{
+relationshipService.setSelectedEntity(null); 
+relationshipService.selectedEntity.show=true; 
+}
+else
+relationshipService.searchOne(annotationService.selectedEntity.relationship).then(
+function successCallback(response) {
+relationshipService.setSelectedEntity(response.data[0]);
+relationshipService.selectedEntity.show=true;
+  }, function errorCallback(response) {
+alert("error");
+return; 
+  }	
+);
+}
+$('#relationshipTabs li:eq(0) a').tab('show');
 };
 $scope.init=function()
 {
-enumValueService.initEnumFieldList().then(function successCallback(response) {
-enumValueService.childrenList.enumFieldList=response.data;
+annotationService.initAnnotationAttributeList().then(function successCallback(response) {
+annotationService.childrenList.annotationAttributeList=response.data;
 },function errorCallback(response) { 
 alert("error");
 return; 
 });
+annotationService.initFieldList().then(function successCallback(response) {
+annotationService.childrenList.fieldList=response.data;
+},function errorCallback(response) { 
+alert("error");
+return; 
+});
+annotationService.initRelationshipList().then(function successCallback(response) {
+annotationService.childrenList.relationshipList=response.data;
+},function errorCallback(response) { 
+alert("error");
+return; 
+});
+annotationService.childrenList.annotationTypeList=["PRIMARY_KEY","NOT_NULL","BOT_BLANK","DESCRIPTION_FIELD","BETWEEN_FILTER","EXCEL_EXPORT","FILTER_FIELD","IGNORE_SEARCH","IGNORE_UPDATE",];
 }; 
 $scope.init();
+$scope.annotationAttributeListGridOptions = {
+enablePaginationControls: true,
+multiSelect: false,
+enableSelectAll: false,
+paginationPageSizes: [2, 4, 6],
+paginationPageSize: 2,
+enableGridMenu: true,
+columnDefs: [
+{ name: 'annotationAttributeId'},
+{ name: 'property'},
+{ name: 'value'} 
+]
+,data: $scope.selectedEntity.annotationAttributeList
+ };
+$scope.annotationAttributeListGridOptions.onRegisterApi = function(gridApi){
+$scope.annotationAttributeGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
+if (row.isSelected)
+{
+annotationAttributeService.searchOne(row.entity).then(function(response) { 
+console.log(response.data);
+annotationAttributeService.setSelectedEntity(response.data[0]);
+});
+$('#annotationAttributeTabs li:eq(0) a').tab('show');
+}
+else 
+annotationAttributeService.setSelectedEntity(null);
+annotationAttributeService.selectedEntity.show = row.isSelected;
+});
+  };
 $scope.downloadEntityList=function()
 {
 var mystyle = {
  headers:true, 
 column: {style:{Font:{Bold:"1"}}}
 };
-alasql('SELECT * INTO XLSXML("enumValue.xls",?) FROM ?',[mystyle,$scope.entityList]);
+alasql('SELECT * INTO XLSXML("annotation.xls",?) FROM ?',[mystyle,$scope.entityList]);
 };
-$scope.downloadEnumFieldList=function()
+$scope.saveLinkedAnnotationAttribute= function() {
+annotationService.selectedEntity.annotationAttributeList.push(annotationService.selectedEntity.annotationAttribute);
+}
+$scope.downloadAnnotationAttributeList=function()
 {
 var mystyle = {
  headers:true, 
 column: {style:{Font:{Bold:"1"}}}
 };
-alasql('SELECT * INTO XLSXML("enumField.xls",?) FROM ?',[mystyle,$scope.selectedEntity.enumFieldList]);
+alasql('SELECT * INTO XLSXML("annotationAttribute.xls",?) FROM ?',[mystyle,$scope.selectedEntity.annotationAttributeList]);
+};
+$scope.downloadFieldList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("field.xls",?) FROM ?',[mystyle,$scope.selectedEntity.fieldList]);
+};
+$scope.downloadRelationshipList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("relationship.xls",?) FROM ?',[mystyle,$scope.selectedEntity.relationshipList]);
 };
 })
 .service("annotationAttributeService", function($http)

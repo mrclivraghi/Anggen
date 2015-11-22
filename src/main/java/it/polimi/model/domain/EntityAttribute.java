@@ -46,41 +46,33 @@ public class EntityAttribute {
 	
 	@JsonIgnore
 	public Boolean getIgnoreSearch() {
-		if (isField())
-			return this.asField().getIgnoreSearch();
-		return this.asRelationship().getIgnoreSearch();
+		return hasAnnotation(AnnotationType.IGNORE_SEARCH);
 	}
 	@JsonIgnore
 	public Boolean getIgnoreUpdate() {
-		if (isField())
-			return this.asField().getIgnoreUpdate();
-		return this.asRelationship().getIgnoreUpdate();
+		return hasAnnotation(AnnotationType.IGNORE_UPDATE);
 	}
 	@JsonIgnore
 	public Boolean getBetweenFilter() {
-		if (isField())
-			return this.asField().getBetweenFilter();
-		return this.asRelationship().getBetweenFilter();
+		return hasAnnotation(AnnotationType.BETWEEN_FILTER);
 	}
 	@JsonIgnore
 	public Boolean getDescriptionField() {
-		if (isField())
-			return this.asField().getDescriptionField();
-		return this.asRelationship().getDescriptionField();
+		return hasAnnotation(AnnotationType.DESCRIPTION_FIELD);
 	}
 	
 	@JsonIgnore
 	public Boolean getExcelExport() {
-		return false;
+		return hasAnnotation(AnnotationType.EXCEL_EXPORT);
 	}
 	
 	@JsonIgnore
 	public Boolean getIgnoreTableList(){
-		return false;
+		return hasAnnotation(AnnotationType.IGNORE_TABLE_LIST);
 	}
 	@JsonIgnore
 	public Boolean getPrimaryKey(){
-		return false;
+		return hasAnnotation(AnnotationType.PRIMARY_KEY);
 	}
 	
 	
@@ -166,12 +158,23 @@ public class EntityAttribute {
 		
 		return getFieldClass();
 	}
+	@JsonIgnore
 	public List<Annotation> getAnnotationList() {
 		if (isEnumField())
 			return asEnumField().getAnnotationList();
 		if (isRelationship())
 			return asRelationship().getAnnotationList();
 		return asField().getAnnotationList();
+	}
+	@JsonIgnore
+	public Boolean hasAnnotation(AnnotationType annotationType)
+	{
+		for (Annotation annotation: getAnnotationList())
+		{
+			if (annotation.getAnnotationType()==annotationType)
+				return true;
+		}
+		return false;
 	}
 	
 

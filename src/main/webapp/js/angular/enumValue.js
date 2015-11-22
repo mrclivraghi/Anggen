@@ -1778,7 +1778,7 @@ relationshipService.childrenList.annotationList=response.data;
 alert("error");
 return; 
 });
-relationshipService.childrenList.relationshipTypeList=["ONE_TO_ONE","ONE_TO_MANY","MANY_TO_ONE","MANY_TO_MANY",];
+relationshipService.childrenList.relationshipTypeList=["ONE_TO_ONE","ONE_TO_MANY","MANY_TO_ONE","MANY_TO_MANY","MANY_TO_MANY_BACK"];
 }; 
 $scope.init();
 $scope.annotationListGridOptions = {

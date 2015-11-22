@@ -1,26 +1,24 @@
 package it.polimi.utils;
 
 import com.sun.codemodel.JClass;
-import com.sun.codemodel.JDefinedClass;
-import com.sun.codemodel.JType;
 
 public class ClassDetail {
-	private JType classClass;
+	private Class classClass;
 	
-	private JType compositeClass;
+	private JClass compositeClass;
 	
 	private String parentName;
 	
-	public JType getClassClass() {
+	public Class getClassClass() {
 		return classClass;
 	}
-	public void setClassClass(JType classClass) {
+	public void setClassClass(Class classClass) {
 		this.classClass = classClass;
 	}
-	public JType getCompositeClass() {
+	public JClass getCompositeClass() {
 		return compositeClass;
 	}
-	public void setCompositeClass(JType compositeClass) {
+	public void setCompositeClass(JClass compositeClass) {
 		this.compositeClass = compositeClass;
 	}
 	public String getParentName() {

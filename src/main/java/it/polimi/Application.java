@@ -74,7 +74,7 @@ public class Application extends SpringBootServletInitializer{
     }
     
     public static void saveEntities(ServletContext servletContext)
-    {
+    {/*
     	String filePath="src/main/resources/application.properties";
     	if (servletContext!=null)
     		filePath=servletContext.getRealPath("/")+"/WEB-INF/classes/application.properties";
@@ -148,6 +148,6 @@ public class Application extends SpringBootServletInitializer{
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-    }
+    */}
 
 }

@@ -719,7 +719,7 @@ public class JsGenerator {
 		sb.append("columnDefs: [\n");
 		for (EntityAttribute entityAttribute: entityManager.getAttributeList())
 		{
-			if ((entityAttribute.asRelationship()!=null && entityAttribute.asRelationship().getIgnoreTableList()) || (entityAttribute.asField()!=null && entityAttribute.asField().getIgnoreTableList())) continue;
+			if ((entityAttribute.asRelationship()!=null && entityAttribute.getIgnoreTableList()) || (entityAttribute.asField()!=null && entityAttribute.asField().getIgnoreTableList())) continue;
 			
 			if (entityAttribute.asField()!= null )
 			{

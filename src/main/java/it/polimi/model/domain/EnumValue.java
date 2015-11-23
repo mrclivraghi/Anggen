@@ -18,7 +18,7 @@ public class EnumValue{
 	@Column(name ="id_enum_value")
 	private Long enumValueId;
 	
-	private Long value;
+	private Integer value;
 	
 	private String name;
 	
@@ -50,7 +50,7 @@ public class EnumValue{
 	/**
 	 * @return the value
 	 */
-	public Long getValue() {
+	public Integer getValue() {
 		return value;
 	}
 
@@ -58,7 +58,7 @@ public class EnumValue{
 	/**
 	 * @param value the value to set
 	 */
-	public void setValue(Long value) {
+	public void setValue(Integer value) {
 		this.value = value;
 	}
 

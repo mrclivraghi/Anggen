@@ -511,15 +511,13 @@ public class AngularGenerator {
 				if (search)
 				{
 					
-					/*entityManager.addChildrenFilter(entityAttribute);
-					if (entityAttribute.getChildrenFilterList()!=null)
-						for (Field filterField: entityAttribute.getChildrenFilterList())
+						for (EntityAttribute filterField: entityAttribute.getFilterField())
 						{
-							String filterFieldName=entityManager.parseName(filterField.getOwnerClass().getName())+Utility.getFirstUpper(filterField.getName());
+							String filterFieldName=filterField.getParent().getName()+Utility.getFirstUpper(filterField.getName());
 							filterField.setName(filterFieldName);
 							renderField(html, filterField, search, style, baseEntity);
 							
-						}*/
+						}
 				}
 				
 			}

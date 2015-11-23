@@ -1,6 +1,7 @@
 package it.polimi.generation;
 
 import it.polimi.model.domain.Entity;
+import it.polimi.model.domain.EnumField;
 import it.polimi.utils.Field;
 import it.polimi.utils.ReflectionManager;
 import it.polimi.utils.Utility;
@@ -62,18 +63,14 @@ public class Generator {
 	
 	private List<Entity> modelEntityList;
 	
-	private Reflections reflections;
-	
-	public List<Entity> modelDependencyList;
-	
-	private HashMap<String, JDefinedClass> repositoryMap = new HashMap<String, JDefinedClass>();
-	
-	private HashMap<String, JDefinedClass> entityMap = new HashMap<String, JDefinedClass>();
+	private List<EnumField> enumFieldList;
 	
 	
-	public Generator(List<Entity> entities)
+	
+	public Generator(List<Entity> entities,List<EnumField> enumFieldList)
 	{
-		modelEntityList=entities;
+		this.modelEntityList=entities;
+		this.enumFieldList=enumFieldList;
 		init();
 	}
 	
@@ -105,9 +102,6 @@ public class Generator {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		 modelDependencyList = new ArrayList<Entity>();
-		
 		
 	}
 
@@ -156,11 +150,15 @@ public class Generator {
 		
 	public void generate()
 	{
-		Map<String,JDefinedClass> modelEntityClasses = new HashMap<String, JDefinedClass>();
+		for (EnumField enumField: enumFieldList)
+		{
+			EnumClassGenerator enumClassGenerator = new EnumClassGenerator(enumField);
+			enumClassGenerator.getModelClass();
+		}
 			for (Entity modelEntity: modelEntityList)
 			{
 				EntityGenerator entityGenerator = new EntityGenerator(modelEntity);
-				modelEntityClasses.put(modelEntity.getName(), entityGenerator.getModelClass());
+				entityGenerator.getModelClass();
 			}
 		
 			for (Entity modelEntity: modelEntityList)

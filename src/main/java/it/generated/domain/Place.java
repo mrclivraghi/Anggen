@@ -1,7 +1,6 @@
 
 package it.generated.domain;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -17,31 +16,31 @@ import it.polimi.utils.annotation.Filter;
 @Table(schema = "public", name = "place")
 public class Place {
 
-    @Column(name = "place_id")
+    @javax.persistence.Column(name = "place_id")
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @DescriptionField
-    private Boolean placeId;
-    @Column(name = "place_name")
+    private Integer placeId;
+    @javax.persistence.Column(name = "place_name")
     @Filter
-    private Boolean placeName;
+    private String placeName;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "example_id_example")
     private it.generated.domain.Example example;
 
-    public Boolean getPlaceId() {
+    public Integer getPlaceId() {
         return this.placeId;
     }
 
-    public void setPlaceId(Boolean placeId) {
+    public void setPlaceId(Integer placeId) {
         this.placeId=placeId;
     }
 
-    public Boolean getPlaceName() {
+    public String getPlaceName() {
         return this.placeName;
     }
 
-    public void setPlaceName(Boolean placeName) {
+    public void setPlaceName(String placeName) {
         this.placeName=placeName;
     }
 

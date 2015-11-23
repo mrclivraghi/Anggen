@@ -23,7 +23,7 @@ public interface ExampleRepository
 
     public List<it.generated.domain.Example> findByExampleType(java.lang.Integer exampleType);
 
-    @Query("select e from Example e where  (:exampleId is null or cast(:exampleId as string)=cast(e.exampleId as string)) and (:exampleDate is null or cast(:exampleDate as string)=cast(date(e.exampleDate) as string)) and (:age is null or cast(:age as string)=cast(e.age as string)) and (:male is null or cast(:male as string)=cast(e.male as string)) and (:place in elements(e.placeList)  or :place is null) and (:exampleType is null or cast(:exampleType as string)=cast(e.exampleType as string)) and (:placePlaceName is null or :placePlaceName='' or cast(:placePlaceName as string)=e.place.placeName) ")
+    @Query("select e from Example e where  (:exampleId is null or cast(:exampleId as string)=cast(e.exampleId as string)) and (:exampleDate is null or cast(:exampleDate as string)=cast(date(e.exampleDate) as string)) and (:age is null or cast(:age as string)=cast(e.age as string)) and (:male is null or cast(:male as string)=cast(e.male as string)) and (:place in elements(e.placeList)  or :place is null) and (:exampleType is null or cast(:exampleType as string)=cast(e.exampleType as string)) and ( :placePlaceName is null or cast(:placePlaceName as string)='' or e in (select p.example from Place p where p.placeName=cast(:placePlaceName as string))) ")
     public List<it.generated.domain.Example> findByExampleIdAndExampleDateAndAgeAndMaleAndPlaceAndExampleTypeAndPlaceName(
         @org.springframework.data.repository.query.Param("exampleId")
         java.lang.Integer exampleId,

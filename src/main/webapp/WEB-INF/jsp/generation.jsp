@@ -21,7 +21,7 @@
 <link rel="stylesheet" href="../css/main.css" />
 <link rel="stylesheet" href="../css/jquery-ui.css" />
 <link rel="stylesheet" href="../css/easytree/skin-win8/ui.easytree.css" />
-<link rel="import" href="../menu.html" />
+<link rel="import" href="../menu.jsp" />
 </head>
 <body>
 Generation ok

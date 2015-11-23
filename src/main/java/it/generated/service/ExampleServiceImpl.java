@@ -26,7 +26,7 @@ public class ExampleServiceImpl
 
     @Override
     public List<it.generated.domain.Example> find(ExampleSearchBean example) {
-        return exampleRepository.findByExampleIdAndExampleDateAndAgeAndMaleAndPlaceAndExampleTypeAndPlaceName(example.getExampleId(),it.polimi.utils.Utility.formatDate(example.getExampleDate()),example.getAge(),example.getMale(),example.getPlaceList()==null? null :example.getPlaceList().get(0),example.getExampleType().getValue(),example.getPlacePlaceName());
+        return exampleRepository.findByExampleIdAndExampleDateAndAgeAndMaleAndPlaceAndExampleTypeAndPlaceName(example.getExampleId(),it.polimi.utils.Utility.formatDate(example.getExampleDate()),example.getAge(),example.getMale(),example.getPlaceList()==null? null :example.getPlaceList().get(0), (example.getExampleType()==null)? null : example.getExampleType().getValue(),example.getPlacePlaceName());
     }
 
     @Override

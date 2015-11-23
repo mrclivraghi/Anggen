@@ -1,6 +1,7 @@
 
 package it.generated.domain;
 
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -23,11 +24,11 @@ public class Example {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @DescriptionField
-    private Boolean exampleId;
+    private java.lang.Integer exampleId;
     @javax.persistence.Column(name = "example_date")
-    private Boolean exampleDate;
+    private Date exampleDate;
     @javax.persistence.Column(name = "age")
-    private Boolean age;
+    private java.lang.Integer age;
     @javax.persistence.Column(name = "male")
     private Boolean male;
     @OneToMany(fetch = FetchType.EAGER)
@@ -37,27 +38,27 @@ public class Example {
     @javax.persistence.Column(name = "example_type")
     private ExampleType exampleType;
 
-    public Boolean getExampleId() {
+    public java.lang.Integer getExampleId() {
         return this.exampleId;
     }
 
-    public void setExampleId(Boolean exampleId) {
+    public void setExampleId(java.lang.Integer exampleId) {
         this.exampleId=exampleId;
     }
 
-    public Boolean getExampleDate() {
+    public Date getExampleDate() {
         return this.exampleDate;
     }
 
-    public void setExampleDate(Boolean exampleDate) {
+    public void setExampleDate(Date exampleDate) {
         this.exampleDate=exampleDate;
     }
 
-    public Boolean getAge() {
+    public java.lang.Integer getAge() {
         return this.age;
     }
 
-    public void setAge(Boolean age) {
+    public void setAge(java.lang.Integer age) {
         this.age=age;
     }
 

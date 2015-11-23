@@ -26,20 +26,27 @@ public class EntityAttribute {
 
 	
 	//bad, violating encapsulating
-	@JsonIgnore
+	//@JsonIgnore
 	public void setName(String name)
 	{
 		if (isField())
 			this.asField().setName(name);
 		else
-			this.asRelationship().setName(name);
+		{
+			if (isRelationship())
+				this.asRelationship().setName(name);
+			else
+				this.asEnumField().setName(name);
+		}
 	}
-	@JsonIgnore
+	//@JsonIgnore
 	public String getName()
 	{
 		if (isField())
 			return this.asField().getName();
-		return this.asRelationship().getEntityTarget().getName();
+		if (this.isRelationship())
+			this.asRelationship().getEntityTarget().getName();
+		return this.asEnumField().getName();
 	}
 	
 	
@@ -158,7 +165,7 @@ public class EntityAttribute {
 		
 		return getFieldClass();
 	}
-	@JsonIgnore
+	//@JsonIgnore
 	public List<Annotation> getAnnotationList() {
 		if (isEnumField())
 			return asEnumField().getAnnotationList();

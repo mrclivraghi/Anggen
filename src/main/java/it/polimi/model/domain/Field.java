@@ -90,6 +90,10 @@ public class Field extends EntityAttribute{
 	public String getName() {
 		return name;
 	}
+	public void setName(String name)
+	{
+		this.name=name;
+	}
 	/**
 	 * @return the annotationList
 	 */

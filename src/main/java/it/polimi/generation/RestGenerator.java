@@ -1,8 +1,5 @@
 package it.polimi.generation;
 
-import it.polimi.model.mountain.Mountain;
-import it.polimi.model.ospedale.Ambulatorio;
-import it.polimi.model.ospedale.Paziente;
 import it.polimi.utils.Field;
 import it.polimi.utils.ReflectionManager;
 import it.polimi.utils.Utility;
@@ -157,7 +154,7 @@ public class RestGenerator {
 					String aliasFilterOwnerClass= reflectionManager.parseName(filterField.getOwnerClass().getName()).substring(0, 1);
 					
 					query=query+" ( :"+filterFieldName+" is null or cast(:"+filterFieldName+" as string)='' or "+alias+" in (select "+aliasFilterOwnerClass+"."+reflectionManager.parseName(className)+" from "+Utility.getFirstUpper(reflectionManager.parseName(filterField.getOwnerClass().getName()))+" "+aliasFilterOwnerClass+" where "+aliasFilterOwnerClass+"."+filterField.getName()+"=cast(:"+filterFieldName+" as string))) and";
-				}else // cerco quel campo nell'ìentità collegata
+				}else // cerco quel campo nell'ï¿½entitï¿½ collegata
 				{
 					hibernateField=""+alias+"."+reflectionManager.parseName(filterField.getOwnerClass().getName())+"."+filterField.getName();
 					query=query+getFieldSearchQuery(filterField, filterFieldName,hibernateField,"=");
@@ -222,7 +219,7 @@ public class RestGenerator {
 					String aliasFilterOwnerClass= reflectionManager.parseName(filterField.getOwnerClass().getName()).substring(0, 1);
 					
 					query=query+" ( :"+filterFieldName+" is null or cast(:"+filterFieldName+" as string)='' or "+alias+" in (select "+aliasFilterOwnerClass+"."+reflectionManager.parseName(className)+" from "+Utility.getFirstUpper(reflectionManager.parseName(filterField.getOwnerClass().getName()))+" "+aliasFilterOwnerClass+" where "+aliasFilterOwnerClass+"."+filterField.getName()+"=cast(:"+filterFieldName+" as string))) and";
-				}else // cerco quel campo nell'ìentità collegata
+				}else // cerco quel campo nell'ï¿½entitï¿½ collegata
 				{
 					hibernateField=""+alias+"."+reflectionManager.parseName(filterField.getOwnerClass().getName())+"."+filterField.getName();
 					query=query+getFieldSearchQuery(filterField, filterFieldName,hibernateField,"=");

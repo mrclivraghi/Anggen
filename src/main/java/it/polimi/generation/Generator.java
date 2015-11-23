@@ -1,6 +1,5 @@
 package it.polimi.generation;
 
-import it.polimi.repository.security.UserRepository;
 import it.polimi.utils.Field;
 import it.polimi.utils.ReflectionManager;
 import it.polimi.utils.Utility;
@@ -76,6 +75,24 @@ public class Generator {
 		init();
 	}
 	
+	public static JDefinedClass getJDefinedClass(String className)
+	{
+		JCodeModel	codeModel = new JCodeModel();
+		JDefinedClass myClass= null;
+		try {
+			String thePackage="it.generated.domain.";
+			if (className.endsWith("SearchBean"))
+				thePackage="it.generated.searchbean.";
+			if (className.endsWith("Repository"))
+				thePackage="it.generated.repository.";
+			myClass = codeModel._class(thePackage+Utility.getFirstUpper(className), ClassType.CLASS);
+		} catch (JClassAlreadyExistsException e) {
+			e.printStackTrace();
+		}
+		return myClass;
+	}
+
+	
 	private void init()
 	{
 		File file = new File("src/main/resources/application.properties");
@@ -145,12 +162,12 @@ public class Generator {
 			for (Class modelClass: allClasses)
 			{
 				RestGenerator restGenerator = new RestGenerator(modelClass);
-				//restGenerator.generateRESTClasses(dependencyClass, true);
+				restGenerator.generateRESTClasses(dependencyClass, true);
 			}
 			for (Class modelClass:dependencyClass)
 			{
 				RestGenerator restGenerator = new RestGenerator(modelClass);
-				//restGenerator.generateRESTClasses(dependencyClass, false);
+				restGenerator.generateRESTClasses(dependencyClass, false);
 			}
 			
 			for (Class modelClass: allClasses)

@@ -39,6 +39,9 @@ public class EnumField extends EntityAttribute {
 	@JoinColumn(name="enum_field_id_enum_field")
 	private List<Annotation> annotationList;
 	
+	@ManyToOne
+	@JoinColumn(name="tab_id_tab")
+	private Tab tab;
 	
 	public EnumField() {
 		// TODO Auto-generated constructor stub
@@ -122,6 +125,22 @@ public class EnumField extends EntityAttribute {
 	 */
 	public void setAnnotationList(List<Annotation> annotationList) {
 		this.annotationList = annotationList;
+	}
+
+
+	/**
+	 * @return the tab
+	 */
+	public Tab getTab() {
+		return tab;
+	}
+
+
+	/**
+	 * @param tab the tab to set
+	 */
+	public void setTab(Tab tab) {
+		this.tab = tab;
 	}
 
 }

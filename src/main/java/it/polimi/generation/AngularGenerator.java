@@ -68,8 +68,7 @@ public class AngularGenerator {
 	public void generateEntityView(HtmlCanvas html) throws IOException {
 		HtmlAttributes mainControllerAttributes = new HtmlAttributes();
 		mainControllerAttributes.add("ng-controller", entityName+"Controller");
-		//TODO
-		if (Generator.easyTreeMenu!=null)
+		if (Generator.easyTreeMenu)
 		{
 			mainControllerAttributes.add("style", "position: absolute; left: 250px; width:80%; top: 30px;");
 		}
@@ -401,8 +400,8 @@ public class AngularGenerator {
 	private HtmlAttributes getFieldHtmlAttributes(EntityAttribute entityAttribute,String baseEntity, Boolean validation, String style)
 	{
 		String readOnly="false";
-		String entityAttributeName= (entityAttribute.asField()!=null? entityAttribute.asField().getName() : entityAttribute.asRelationship().getEntityTarget().getName());
-		
+		String entityAttributeName= entityAttribute.asField()!=null ? entityAttribute.getName() : (entityAttribute.isRelationship()? entityAttribute.asRelationship().getEntityTarget().getName(): entityAttribute.asEnumField().getName());
+				
 		
 		if (entityAttributeName.equals(entityName+"Id")&&validation)
 			readOnly="true";

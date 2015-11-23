@@ -189,7 +189,7 @@ public class EntityManagerImpl implements EntityManager{
 
 	@Override
 	public List<EntityAttribute> getFieldByTab() {
-		return getAttributeList();
+		return getAllAttribute();
 	}
 
 	@Override

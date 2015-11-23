@@ -4,6 +4,7 @@ import it.polimi.model.domain.Entity;
 import it.polimi.model.domain.EntityAttribute;
 import it.polimi.model.domain.Field;
 import it.polimi.model.domain.FieldType;
+import it.polimi.model.domain.Tab;
 
 import java.util.List;
 
@@ -18,9 +19,9 @@ public interface EntityManager {
 	public FieldType getKeyClass();
 	public String getAllParam();
 	public Boolean containFieldOfEntity(Entity targetEntity);
-	public List<EntityAttribute> getFieldByTab();
+	public List<EntityAttribute> getFieldByTab(Tab tab);
+	public List<Tab> getTabList();
 	public Boolean hasManyToMany();
-	public List<String> getTabsName();
 	public String getDescription();
 	public String getDescription(Boolean withGetter);
 	public String getDescription(Boolean withGetter, String fieldName);

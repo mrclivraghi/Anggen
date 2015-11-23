@@ -45,6 +45,11 @@ public class Entity {
 	@JoinColumn(name="entity_id_entity")
 	private List<EnumField> enumFieldList;
 	
+	@OneToMany(fetch=FetchType.EAGER)
+	@Type(type="it.polimi.model.domain.Tab")
+	@JoinColumn(name="entity_id_entity")
+	private List<it.polimi.model.domain.Tab> tabList;
+	
 	
 	/**
 	 * @return the entityId
@@ -105,5 +110,11 @@ public class Entity {
 	 */
 	public void setEnumFieldList(List<EnumField> enumFieldList) {
 		this.enumFieldList = enumFieldList;
+	}
+	public List<it.polimi.model.domain.Tab> getTabList() {
+		return tabList;
+	}
+	public void setTabList(List<it.polimi.model.domain.Tab> tabList) {
+		this.tabList = tabList;
 	}
 }

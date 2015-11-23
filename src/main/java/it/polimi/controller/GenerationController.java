@@ -1,11 +1,14 @@
 package it.polimi.controller;
 
 import java.io.File;
+import java.util.List;
 
 import it.polimi.generation.Generator;
 import it.polimi.model.domain.Entity;
+import it.polimi.model.domain.EnumField;
 import it.polimi.model.domain.Relationship;
 import it.polimi.repository.EntityRepository;
+import it.polimi.repository.EnumFieldRepository;
 import it.polimi.service.RelationshipService;
 
 import org.slf4j.Logger;
@@ -21,6 +24,9 @@ public class GenerationController {
 	@Autowired
 	EntityRepository entityRepository;
 	
+	@Autowired
+	EnumFieldRepository enumFieldRepository;
+	
     @RequestMapping(method = RequestMethod.GET)
     public String manage() {
     	//Entity mountain = entityRepository.findByEntityId((long)80).get(0);
@@ -29,8 +35,10 @@ public class GenerationController {
 		//File file = new File("");
 		//jsGenerator.saveJsToFile(file.getAbsolutePath()+"/src/main/webapp/js/angular/");
 		//AngularGenerator angularGenerator = new AngularGenerator(entity, true, new ArrayList<Entity>());
-		java.util.List<Entity> entityList = entityRepository.findByEntityIdAndNameAndFieldAndRelationshipAndEnumField(null, null, null, null, null);
-		Generator generator = new Generator(entityList);
+    	List<Entity> entityList = entityRepository.findByEntityIdAndNameAndFieldAndRelationshipAndEnumField(null, null, null, null, null);
+		List<EnumField> enumFieldList = enumFieldRepository.findByEnumFieldIdAndNameAndEnumValueAndEntity(null, null, null, null);
+		
+		Generator generator = new Generator(entityList,enumFieldList);
 		generator.generate();
 		return "generation";
     }

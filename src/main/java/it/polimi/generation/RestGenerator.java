@@ -145,28 +145,26 @@ public class RestGenerator {
 				query=query+getFieldSearchQuery(entityAttribute, entityAttributeName,alias+"."+entityAttributeName,"=");
 			}
 			
-			//TODO filter field
-			/*if (entityAttribute.getChildrenFilterList()!=null)
-			for (Field filterField: entityAttribute.getChildrenFilterList())
+			for (EntityAttribute filterField: entityAttribute.getFilterField())
 			{
-				String filterFieldName=entityManager.parseName(filterField.getOwnerClass().getName())+Utility.getFirstUpper(filterField.getName());
+				String filterFieldName=(filterField.getParent().getName())+Utility.getFirstUpper(filterField.getName());
 				
-				JVar param = method.param(ReflectionManager.getRightParamClass(filterField), filterFieldName);
+				JVar param = method.param(filterField.getRightParamClass(), filterFieldName);
 				JAnnotationUse annotationParam= param.annotate(Param.class);
 				annotationParam.param("value", filterFieldName);
 				String hibernateField="";
 				
-				if (ReflectionManager.isListField(entityAttribute))
+				if (filterField.isRelationship() && filterField.asRelationship().isList())
 				{// cerco quel campo in una lista
-					String aliasFilterOwnerClass= entityManager.parseName(filterField.getOwnerClass().getName()).substring(0, 1);
+					String aliasFilterOwnerClass= (filterField.getParent().getName()).substring(0, 1);
 					
-					query=query+" ( :"+filterFieldName+" is null or cast(:"+filterFieldName+" as string)='' or "+alias+" in (select "+aliasFilterOwnerClass+"."+entityManager.parseName(className)+" from "+Utility.getFirstUpper(entityManager.parseName(filterField.getOwnerClass().getName()))+" "+aliasFilterOwnerClass+" where "+aliasFilterOwnerClass+"."+filterField.getName()+"=cast(:"+filterFieldName+" as string))) and";
+					query=query+" ( :"+filterFieldName+" is null or cast(:"+filterFieldName+" as string)='' or "+alias+" in (select "+aliasFilterOwnerClass+"."+(className)+" from "+Utility.getFirstUpper((filterField.getParent().getName()))+" "+aliasFilterOwnerClass+" where "+aliasFilterOwnerClass+"."+filterField.getName()+"=cast(:"+filterFieldName+" as string))) and";
 				}else // cerco quel campo nell'�entit� collegata
 				{
-					hibernateField=""+alias+"."+entityManager.parseName(filterField.getOwnerClass().getName())+"."+filterField.getName();
+					hibernateField=""+alias+"."+(filterField.getParent().getName())+"."+filterField.getName();
 					query=query+getFieldSearchQuery(filterField, filterFieldName,hibernateField,"=");
 				}
-			}*/
+			}
 			
 			
 		}
@@ -387,7 +385,6 @@ public class RestGenerator {
 				//TODO childre filter
 				//entityManager.addChildrenFilter(entityAttribute);
 			}
-			
 			searchMethod=getRepositorySearchMethod();
 			JMethod method=myClass.method(JMod.PUBLIC, listClass, searchMethod);
 			String alias=className.substring(0, 1).toLowerCase();
@@ -446,12 +443,10 @@ public class RestGenerator {
 				searchMethod=searchMethod+"GreaterThan"+Utility.getFirstUpper(entityAttributeName)+"FromAndLessThan"+Utility.getFirstUpper(entityAttributeName)+"ToAnd";
 			} else
 			searchMethod=searchMethod+Utility.getFirstUpper(entityAttributeName)+"And";
-			//TODO childre filter
-		/*	if (entityAttribute.getChildrenFilterList()!=null)
-				for (Field filterField: entityAttribute.getChildrenFilterList())
-				{
-					searchMethod=searchMethod+Utility.getFirstUpper(filterField.getName())+"And";
-				}*/
+		}
+		for(EntityAttribute entityAttribute: entityManager.getChildrenFilter())
+		{
+			searchMethod=searchMethod+Utility.getFirstUpper(entityAttribute.getName())+"And";
 		}
 		searchMethod=searchMethod.substring(0,searchMethod.length()-3);
 		return searchMethod;

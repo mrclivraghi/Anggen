@@ -17,6 +17,7 @@ import it.polimi.utils.annotation.IgnoreTableList;
 import it.polimi.utils.annotation.IgnoreUpdate;
 
 import java.io.File;
+import java.sql.Time;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -110,6 +111,10 @@ public class EntityGenerator {
 			case INTEGER: fieldClass=Integer.class;
 			case DATE : fieldClass = Date.class;
 			case DOUBLE : fieldClass= Double.class;
+		case BOOLEAN: fieldClass= Boolean.class;
+			break;
+		case TIME: fieldClass = Time.class;
+			break;
 
 		}
 		return fieldClass;

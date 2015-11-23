@@ -9,7 +9,9 @@ import it.polimi.generation.Generator;
 import it.polimi.generation.HtmlGenerator;
 import it.polimi.generation.JsGenerator;
 import it.polimi.model.domain.Entity;
+import it.polimi.model.domain.EnumField;
 import it.polimi.repository.EntityRepository;
+import it.polimi.repository.EnumFieldRepository;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,7 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import antlr.collections.List;
+import java.util.List;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -27,6 +29,9 @@ public class JsDbGenerationTest {
 	@Autowired
 	EntityRepository entityRepository;
 	
+	@Autowired
+	EnumFieldRepository enumFieldRepository;
+	
 	public JsDbGenerationTest() {
 		// TODO Auto-generated constructor stub
 	}
@@ -34,15 +39,16 @@ public class JsDbGenerationTest {
 	@Test
 	public void createJs()
 	{
-		Entity mountain = entityRepository.findByEntityId((long)10).get(0);
+		Entity mountain = entityRepository.findByEntityId((long)80).get(0);
 		System.out.println(mountain.getName());
 		//JsGenerator jsGenerator = new JsGenerator(entity, true, null, false);
 		File file = new File("");
 		//jsGenerator.saveJsToFile(file.getAbsolutePath()+"/src/main/webapp/js/angular/");
 		//AngularGenerator angularGenerator = new AngularGenerator(entity, true, new ArrayList<Entity>());
-		java.util.List<Entity> entityList = entityRepository.findByEntityIdAndNameAndFieldAndRelationshipAndEnumField(null, null, null, null, null);
-		entityList.add(mountain);
-		Generator generator = new Generator(entityList);
+		List<Entity> entityList = entityRepository.findByEntityIdAndNameAndFieldAndRelationshipAndEnumField(null, null, null, null, null);
+		List<EnumField> enumFieldList = enumFieldRepository.findByEnumFieldIdAndNameAndEnumValueAndEntity(null, null, null, null);
+		
+		Generator generator = new Generator(entityList,enumFieldList);
 		generator.generate();
 		
 	}

@@ -27,7 +27,7 @@ public class RestrictionServiceImpl
 
     @Override
     public List<Restriction> find(RestrictionSearchBean restriction) {
-        return restrictionRepository.findByRestrictionIdAndCreateAndUpdateAndSearchAndDeleteAndRoleAndEntity(restriction.getRestrictionId(),restriction.getCreate(),restriction.getUpdate(),restriction.getSearch(),restriction.getDelete(),restriction.getRole(),restriction.getEntity());
+        return restrictionRepository.findByRestrictionIdAndCanCreateAndCanUpdateAndCanSearchAndCanDeleteAndRoleAndEntity(restriction.getRestrictionId(),restriction.getCanCreate(),restriction.getCanUpdate(),restriction.getCanSearch(),restriction.getCanDelete(),restriction.getRole(),restriction.getEntity());
     }
 
     @Override

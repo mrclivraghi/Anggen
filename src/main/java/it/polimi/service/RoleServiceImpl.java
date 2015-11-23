@@ -21,12 +21,11 @@ public class RoleServiceImpl
 
     @org.springframework.beans.factory.annotation.Autowired
     public RoleRepository roleRepository;
-    
-    @Autowired
-    public UserRepository userRepository;
-    
     @org.springframework.beans.factory.annotation.Autowired
     public RestrictionRepository restrictionRepository;
+    
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public List<Role> findById(Integer roleId) {

@@ -2,7 +2,6 @@ package it.generated.boot;
 
 
 import it.generated.repository.security.UserRepository;
-import it.polimi.model.security.Role;
 
 import java.util.ArrayList;
 import java.util.HashSet;

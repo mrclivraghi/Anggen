@@ -29,7 +29,6 @@
 									<li><a href="../tab/">tab</a></li>
 									<li><a href="../user/">user</a></li>
 						</ul></li>
-				</c:if>
 			</ul>
 		</div>
 	</div>

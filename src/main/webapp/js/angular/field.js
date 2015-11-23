@@ -975,10 +975,10 @@ paginationPageSize: 2,
 enableGridMenu: true,
 columnDefs: [
 { name: 'restrictionId'},
-{ name: 'create'},
-{ name: 'update'},
-{ name: 'search'},
-{ name: 'delete'} 
+{ name: 'canCreate'},
+{ name: 'canUpdate'},
+{ name: 'canSearch'},
+{ name: 'canDelete'} 
 ]
 ,data: $scope.selectedEntity.restrictionList
  };
@@ -2158,7 +2158,7 @@ return promise;
  this.initEntityTargetList= function()
 {
 var promise= $http
-.post("../entityTarget/search",
+.post("../entity/search",
 {});
 return promise;
 };
@@ -3971,10 +3971,10 @@ paginationPageSize: 2,
 enableGridMenu: true,
 columnDefs: [
 { name: 'restrictionId'},
-{ name: 'create'},
-{ name: 'update'},
-{ name: 'search'},
-{ name: 'delete'} 
+{ name: 'canCreate'},
+{ name: 'canUpdate'},
+{ name: 'canSearch'},
+{ name: 'canDelete'} 
 ]
 ,data: $scope.selectedEntity.restrictionList
  };

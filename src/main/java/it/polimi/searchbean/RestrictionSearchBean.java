@@ -7,10 +7,10 @@ import it.polimi.model.domain.Role;
 public class RestrictionSearchBean {
 
     public Long restrictionId;
-    public Boolean create;
-    public Boolean update;
-    public Boolean search;
-    public Boolean delete;
+    public Boolean canCreate;
+    public Boolean canUpdate;
+    public Boolean canSearch;
+    public Boolean canDelete;
     public Role role;
     public Entity entity;
 
@@ -22,36 +22,36 @@ public class RestrictionSearchBean {
         this.restrictionId=restrictionId;
     }
 
-    public Boolean getCreate() {
-        return this.create;
+    public Boolean getCanCreate() {
+        return this.canCreate;
     }
 
-    public void setCreate(Boolean create) {
-        this.create=create;
+    public void setCanCreate(Boolean canCreate) {
+        this.canCreate=canCreate;
     }
 
-    public Boolean getUpdate() {
-        return this.update;
+    public Boolean getCanUpdate() {
+        return this.canUpdate;
     }
 
-    public void setUpdate(Boolean update) {
-        this.update=update;
+    public void setCanUpdate(Boolean canUpdate) {
+        this.canUpdate=canUpdate;
     }
 
-    public Boolean getSearch() {
-        return this.search;
+    public Boolean getCanSearch() {
+        return this.canSearch;
     }
 
-    public void setSearch(Boolean search) {
-        this.search=search;
+    public void setCanSearch(Boolean canSearch) {
+        this.canSearch=canSearch;
     }
 
-    public Boolean getDelete() {
-        return this.delete;
+    public Boolean getCanDelete() {
+        return this.canDelete;
     }
 
-    public void setDelete(Boolean delete) {
-        this.delete=delete;
+    public void setCanDelete(Boolean canDelete) {
+        this.canDelete=canDelete;
     }
 
     public Role getRole() {

@@ -18,30 +18,30 @@ public interface RestrictionRepository
 
     public List<Restriction> findByRestrictionId(Long restrictionId);
 
-    public List<Restriction> findByCreate(Boolean create);
+    public List<Restriction> findByCanCreate(Boolean canCreate);
 
-    public List<Restriction> findByUpdate(Boolean update);
+    public List<Restriction> findByCanUpdate(Boolean canUpdate);
 
-    public List<Restriction> findBySearch(Boolean search);
+    public List<Restriction> findByCanSearch(Boolean canSearch);
 
-    public List<Restriction> findByDelete(Boolean delete);
+    public List<Restriction> findByCanDelete(Boolean canDelete);
 
     public List<Restriction> findByRole(Role role);
 
     public List<Restriction> findByEntity(Entity entity);
 
-    @Query("select r from Restriction r where  (:restrictionId is null or cast(:restrictionId as string)=cast(r.restrictionId as string)) and (:create is null or cast(:create as string)=cast(r.create as string)) and (:update is null or cast(:update as string)=cast(r.update as string)) and (:search is null or cast(:search as string)=cast(r.search as string)) and (:delete is null or cast(:delete as string)=cast(r.delete as string)) and (:role=r.role or :role is null) and (:entity=r.entity or :entity is null) ")
-    public List<Restriction> findByRestrictionIdAndCreateAndUpdateAndSearchAndDeleteAndRoleAndEntity(
+    @Query("select r from Restriction r where  (:restrictionId is null or cast(:restrictionId as string)=cast(r.restrictionId as string)) and (:canCreate is null or cast(:canCreate as string)=cast(r.canCreate as string)) and (:canUpdate is null or cast(:canUpdate as string)=cast(r.canUpdate as string)) and (:canSearch is null or cast(:canSearch as string)=cast(r.canSearch as string)) and (:canDelete is null or cast(:canDelete as string)=cast(r.canDelete as string)) and (:role=r.role or :role is null) and (:entity=r.entity or :entity is null) ")
+    public List<Restriction> findByRestrictionIdAndCanCreateAndCanUpdateAndCanSearchAndCanDeleteAndRoleAndEntity(
         @Param("restrictionId")
         Long restrictionId,
-        @Param("create")
-        Boolean create,
-        @Param("update")
-        Boolean update,
-        @Param("search")
-        Boolean search,
-        @Param("delete")
-        Boolean delete,
+        @Param("canCreate")
+        Boolean canCreate,
+        @Param("canUpdate")
+        Boolean canUpdate,
+        @Param("canSearch")
+        Boolean canSearch,
+        @Param("canDelete")
+        Boolean canDelete,
         @Param("role")
         Role role,
         @Param("entity")

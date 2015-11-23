@@ -19,12 +19,16 @@ public class Restriction {
 	@Column(name = "restriction_id")
 	private Long restrictionId;
 	
+	@Column(name="can_create")
 	private Boolean canCreate;
 	
+	@Column(name="can_update")
 	private Boolean canUpdate;
 	
+	@Column(name="can_search")
 	private Boolean canSearch;
 	
+	@Column(name="can_delete")
 	private Boolean canDelete;
 	
 	@ManyToOne(fetch=FetchType.EAGER)

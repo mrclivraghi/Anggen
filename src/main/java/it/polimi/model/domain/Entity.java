@@ -50,6 +50,10 @@ public class Entity {
 	@JoinColumn(name="entity_id_entity")
 	private List<it.polimi.model.domain.Tab> tabList;
 	
+	@OneToMany(fetch=FetchType.EAGER)
+	@Type(type="it.polimi.model.domain.Restriction")
+	@JoinColumn(name="entity_id_entity")
+	private List<Restriction> restrictionList;
 	
 	/**
 	 * @return the entityId
@@ -116,5 +120,11 @@ public class Entity {
 	}
 	public void setTabList(List<it.polimi.model.domain.Tab> tabList) {
 		this.tabList = tabList;
+	}
+	public List<Restriction> getRestrictionList() {
+		return restrictionList;
+	}
+	public void setRestrictionList(List<Restriction> restrictionList) {
+		this.restrictionList = restrictionList;
 	}
 }

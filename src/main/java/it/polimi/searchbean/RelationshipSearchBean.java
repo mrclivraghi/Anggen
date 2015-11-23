@@ -1,11 +1,11 @@
 
 package it.polimi.searchbean;
 
+import java.util.List;
 import it.polimi.model.domain.Annotation;
 import it.polimi.model.domain.Entity;
 import it.polimi.model.domain.RelationshipType;
-
-import java.util.List;
+import it.polimi.model.domain.Tab;
 
 public class RelationshipSearchBean {
 
@@ -15,6 +15,7 @@ public class RelationshipSearchBean {
     public Entity entityTarget;
     public RelationshipType relationshipType;
     public List<Annotation> annotationList;
+    public Tab tab;
 
     public Long getRelationshipId() {
         return this.relationshipId;
@@ -62,6 +63,14 @@ public class RelationshipSearchBean {
 
     public void setAnnotationList(List<Annotation> annotationList) {
         this.annotationList=annotationList;
+    }
+
+    public Tab getTab() {
+        return this.tab;
+    }
+
+    public void setTab(Tab tab) {
+        this.tab=tab;
     }
 
 }

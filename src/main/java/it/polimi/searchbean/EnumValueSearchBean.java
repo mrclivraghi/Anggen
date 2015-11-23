@@ -3,11 +3,10 @@ package it.polimi.searchbean;
 
 import it.polimi.model.domain.EnumField;
 
-
 public class EnumValueSearchBean {
 
     public Long enumValueId;
-    public Long value;
+    public Integer value;
     public String name;
     public EnumField enumField;
 
@@ -19,11 +18,11 @@ public class EnumValueSearchBean {
         this.enumValueId=enumValueId;
     }
 
-    public Long getValue() {
+    public Integer getValue() {
         return this.value;
     }
 
-    public void setValue(Long value) {
+    public void setValue(Integer value) {
         this.value=value;
     }
 

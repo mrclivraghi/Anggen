@@ -4,7 +4,6 @@ package it.polimi.controller;
 import java.util.List;
 
 import it.polimi.model.domain.EnumField;
-import it.polimi.model.domain.EnumValue;
 import it.polimi.searchbean.EnumFieldSearchBean;
 import it.polimi.service.EnumFieldService;
 
@@ -101,7 +100,7 @@ public class EnumFieldController {
 
     private void getRightMapping(EnumField enumField) {
         if (enumField.getEnumValueList()!=null)
-        for (EnumValue enumValue :enumField.getEnumValueList())
+        for (it.polimi.model.domain.EnumValue enumValue :enumField.getEnumValueList())
 
         {
 
@@ -112,6 +111,25 @@ public class EnumFieldController {
         enumField.getEntity().setFieldList(null);
         enumField.getEntity().setRelationshipList(null);
         enumField.getEntity().setEnumFieldList(null);
+        enumField.getEntity().setTabList(null);
+        enumField.getEntity().setRestrictionList(null);
+        }
+        if (enumField.getAnnotationList()!=null)
+        for (it.polimi.model.domain.Annotation annotation :enumField.getAnnotationList())
+
+        {
+
+        annotation.setAnnotationAttributeList(null);
+        annotation.setField(null);
+        annotation.setRelationship(null);
+        annotation.setEnumField(null);
+        }
+        if (enumField.getTab()!=null)
+        {
+        enumField.getTab().setEntity(null);
+        enumField.getTab().setFieldList(null);
+        enumField.getTab().setRelationshipList(null);
+        enumField.getTab().setEnumFieldList(null);
         }
     }
 

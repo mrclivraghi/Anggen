@@ -3,7 +3,6 @@ package it.polimi.searchbean;
 
 import it.polimi.model.domain.Annotation;
 
-
 public class AnnotationAttributeSearchBean {
 
     public Long annotationAttributeId;

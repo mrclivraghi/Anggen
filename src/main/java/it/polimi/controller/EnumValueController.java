@@ -103,6 +103,8 @@ public class EnumValueController {
         {
         enumValue.getEnumField().setEnumValueList(null);
         enumValue.getEnumField().setEntity(null);
+        enumValue.getEnumField().setAnnotationList(null);
+        enumValue.getEnumField().setTab(null);
         }
     }
 

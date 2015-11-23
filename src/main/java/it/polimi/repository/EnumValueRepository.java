@@ -1,11 +1,9 @@
 
 package it.polimi.repository;
 
+import java.util.List;
 import it.polimi.model.domain.EnumField;
 import it.polimi.model.domain.EnumValue;
-
-import java.util.List;
-
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -19,7 +17,7 @@ public interface EnumValueRepository
 
     public List<EnumValue> findByEnumValueId(Long enumValueId);
 
-    public List<EnumValue> findByValue(Long value);
+    public List<EnumValue> findByValue(Integer value);
 
     public List<EnumValue> findByName(String name);
 
@@ -30,7 +28,7 @@ public interface EnumValueRepository
         @Param("enumValueId")
         Long enumValueId,
         @Param("value")
-        Long value,
+        Integer value,
         @Param("name")
         String name,
         @Param("enumField")

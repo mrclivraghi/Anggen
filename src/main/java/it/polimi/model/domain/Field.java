@@ -2,8 +2,6 @@ package it.polimi.model.domain;
 
 import java.util.List;
 
-import it.polimi.utils.annotation.Tab;
-
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;

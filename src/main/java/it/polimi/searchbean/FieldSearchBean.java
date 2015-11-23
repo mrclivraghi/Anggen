@@ -1,11 +1,11 @@
 
 package it.polimi.searchbean;
 
+import java.util.List;
 import it.polimi.model.domain.Annotation;
 import it.polimi.model.domain.Entity;
 import it.polimi.model.domain.FieldType;
-
-import java.util.List;
+import it.polimi.model.domain.Tab;
 
 public class FieldSearchBean {
 
@@ -14,6 +14,7 @@ public class FieldSearchBean {
     public Entity entity;
     public FieldType fieldType;
     public List<Annotation> annotationList;
+    public Tab tab;
 
     public Long getFieldId() {
         return this.fieldId;
@@ -53,6 +54,14 @@ public class FieldSearchBean {
 
     public void setAnnotationList(List<Annotation> annotationList) {
         this.annotationList=annotationList;
+    }
+
+    public Tab getTab() {
+        return this.tab;
+    }
+
+    public void setTab(Tab tab) {
+        this.tab=tab;
     }
 
 }

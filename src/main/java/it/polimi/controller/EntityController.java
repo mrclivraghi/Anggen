@@ -4,9 +4,6 @@ package it.polimi.controller;
 import java.util.List;
 
 import it.polimi.model.domain.Entity;
-import it.polimi.model.domain.EnumField;
-import it.polimi.model.domain.Field;
-import it.polimi.model.domain.Relationship;
 import it.polimi.searchbean.EntitySearchBean;
 import it.polimi.service.EntityService;
 
@@ -103,29 +100,51 @@ public class EntityController {
 
     private void getRightMapping(Entity entity) {
         if (entity.getFieldList()!=null)
-        for (Field field :entity.getFieldList())
+        for (it.polimi.model.domain.Field field :entity.getFieldList())
 
         {
 
         field.setEntity(null);
         field.setAnnotationList(null);
+        field.setTab(null);
         }
         if (entity.getRelationshipList()!=null)
-        for (Relationship relationship :entity.getRelationshipList())
+        for (it.polimi.model.domain.Relationship relationship :entity.getRelationshipList())
 
         {
 
         relationship.setEntity(null);
         relationship.setEntityTarget(null);
         relationship.setAnnotationList(null);
+        relationship.setTab(null);
         }
         if (entity.getEnumFieldList()!=null)
-        for (EnumField enumField :entity.getEnumFieldList())
+        for (it.polimi.model.domain.EnumField enumField :entity.getEnumFieldList())
 
         {
 
         enumField.setEnumValueList(null);
         enumField.setEntity(null);
+        enumField.setAnnotationList(null);
+        enumField.setTab(null);
+        }
+        if (entity.getTabList()!=null)
+        for (it.polimi.model.domain.Tab tab :entity.getTabList())
+
+        {
+
+        tab.setEntity(null);
+        tab.setFieldList(null);
+        tab.setRelationshipList(null);
+        tab.setEnumFieldList(null);
+        }
+        if (entity.getRestrictionList()!=null)
+        for (it.polimi.model.domain.Restriction restriction :entity.getRestrictionList())
+
+        {
+
+        restriction.setRole(null);
+        restriction.setEntity(null);
         }
     }
 

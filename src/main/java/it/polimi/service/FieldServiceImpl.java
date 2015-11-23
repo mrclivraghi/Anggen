@@ -3,13 +3,12 @@ package it.polimi.service;
 
 import java.util.List;
 
-import it.polimi.model.domain.Annotation;
 import it.polimi.model.domain.Field;
-import it.polimi.repository.AnnotationRepository;
 import it.polimi.repository.FieldRepository;
 import it.polimi.searchbean.FieldSearchBean;
 import it.polimi.service.FieldService;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,10 +17,8 @@ public class FieldServiceImpl
     implements FieldService
 {
 
-    @org.springframework.beans.factory.annotation.Autowired
+    @Autowired
     public FieldRepository fieldRepository;
-    @org.springframework.beans.factory.annotation.Autowired
-    public AnnotationRepository annotationRepository;
 
     @Override
     public List<Field> findById(Long fieldId) {
@@ -30,7 +27,7 @@ public class FieldServiceImpl
 
     @Override
     public List<Field> find(FieldSearchBean field) {
-        return fieldRepository.findByFieldIdAndNameAndEntityAndFieldTypeAndAnnotation(field.getFieldId(),field.getName(),field.getEntity(), (field.getFieldType()==null)? null : field.getFieldType().getValue(),field.getAnnotationList()==null? null :field.getAnnotationList().get(0));
+        return fieldRepository.findByFieldIdAndNameAndEntityAndFieldTypeAndAnnotationAndTab(field.getFieldId(),field.getName(),field.getEntity(), (field.getFieldType()==null)? null : field.getFieldType().getValue(),field.getAnnotationList()==null? null :field.getAnnotationList().get(0),field.getTab());
     }
 
     @Override
@@ -48,7 +45,7 @@ public class FieldServiceImpl
     @Transactional
     public Field update(Field field) {
         if (field.getAnnotationList()!=null)
-        for (Annotation annotation: field.getAnnotationList())
+        for (it.polimi.model.domain.Annotation annotation: field.getAnnotationList())
         {
         annotation.setField(field);
         }
@@ -59,6 +56,13 @@ public class FieldServiceImpl
         if (!fieldList.contains(returnedField))
         fieldList.add(returnedField);
         returnedField.getEntity().setFieldList(fieldList);
+        }
+        if (field.getTab()!=null)
+        {
+        List<Field> fieldList = fieldRepository.findByTab( field.getTab());
+        if (!fieldList.contains(returnedField))
+        fieldList.add(returnedField);
+        returnedField.getTab().setFieldList(fieldList);
         }
          return returnedField;
     }

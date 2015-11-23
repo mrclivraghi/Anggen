@@ -3,7 +3,6 @@ package it.polimi.controller;
 
 import java.util.List;
 
-import it.polimi.model.domain.Annotation;
 import it.polimi.model.domain.Relationship;
 import it.polimi.searchbean.RelationshipSearchBean;
 import it.polimi.service.RelationshipService;
@@ -105,20 +104,33 @@ public class RelationshipController {
         relationship.getEntity().setFieldList(null);
         relationship.getEntity().setRelationshipList(null);
         relationship.getEntity().setEnumFieldList(null);
+        relationship.getEntity().setTabList(null);
+        relationship.getEntity().setRestrictionList(null);
         }
         if (relationship.getEntityTarget()!=null)
         {
         relationship.getEntityTarget().setFieldList(null);
         relationship.getEntityTarget().setRelationshipList(null);
         relationship.getEntityTarget().setEnumFieldList(null);
+        relationship.getEntityTarget().setTabList(null);
+        relationship.getEntityTarget().setRestrictionList(null);
         }
         if (relationship.getAnnotationList()!=null)
-        for (Annotation annotation :relationship.getAnnotationList())
+        for (it.polimi.model.domain.Annotation annotation :relationship.getAnnotationList())
+
         {
 
         annotation.setAnnotationAttributeList(null);
         annotation.setField(null);
         annotation.setRelationship(null);
+        annotation.setEnumField(null);
+        }
+        if (relationship.getTab()!=null)
+        {
+        relationship.getTab().setEntity(null);
+        relationship.getTab().setFieldList(null);
+        relationship.getTab().setRelationshipList(null);
+        relationship.getTab().setEnumFieldList(null);
         }
     }
 

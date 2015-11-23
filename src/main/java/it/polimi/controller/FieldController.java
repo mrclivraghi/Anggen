@@ -3,7 +3,6 @@ package it.polimi.controller;
 
 import java.util.List;
 
-import it.polimi.model.domain.Annotation;
 import it.polimi.model.domain.Field;
 import it.polimi.searchbean.FieldSearchBean;
 import it.polimi.service.FieldService;
@@ -105,15 +104,25 @@ public class FieldController {
         field.getEntity().setFieldList(null);
         field.getEntity().setRelationshipList(null);
         field.getEntity().setEnumFieldList(null);
+        field.getEntity().setTabList(null);
+        field.getEntity().setRestrictionList(null);
         }
         if (field.getAnnotationList()!=null)
-        for (Annotation annotation :field.getAnnotationList())
+        for (it.polimi.model.domain.Annotation annotation :field.getAnnotationList())
 
         {
 
         annotation.setAnnotationAttributeList(null);
         annotation.setField(null);
         annotation.setRelationship(null);
+        annotation.setEnumField(null);
+        }
+        if (field.getTab()!=null)
+        {
+        field.getTab().setEntity(null);
+        field.getTab().setFieldList(null);
+        field.getTab().setRelationshipList(null);
+        field.getTab().setEnumFieldList(null);
         }
     }
 

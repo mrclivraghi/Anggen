@@ -2,6 +2,7 @@ package it.polimi.generation;
 
 import it.polimi.boot.OracleNamingStrategy;
 import it.polimi.model.domain.Annotation;
+import it.polimi.model.domain.AnnotationAttribute;
 import it.polimi.model.domain.Entity;
 import it.polimi.model.domain.EntityAttribute;
 import it.polimi.model.domain.EnumField;
@@ -38,6 +39,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotBlank;
@@ -54,7 +56,6 @@ import com.sun.codemodel.JMod;
 import com.sun.codemodel.JVar;
 
 public class EntityGenerator {
-	
 	
 	private Entity entity;
 	
@@ -227,7 +228,7 @@ public class EntityGenerator {
 			{
 			case BETWEEN_FILTER:	annotationUse = classField.annotate(Between.class);
 			break;
-			case BOT_BLANK: annotationUse = classField.annotate(NotBlank.class);
+			case NOT_BLANK: annotationUse = classField.annotate(NotBlank.class);
 			break;
 			case DESCRIPTION_FIELD: annotationUse = classField.annotate(DescriptionField.class);
 			break;
@@ -243,15 +244,20 @@ public class EntityGenerator {
 			break;
 			case IGNORE_TABLE_LIST: annotationUse = classField.annotate(IgnoreTableList.class);
 			break;
-			default:
 			case PRIMARY_KEY: 	annotationUse=classField.annotate(Id.class);
 			JAnnotationUse generatedValue= classField.annotate(GeneratedValue.class);
 			generatedValue.param("strategy", GenerationType.SEQUENCE);
 			if (!entityAttribute.getDescriptionField())
 			{
-				JAnnotationUse descrField= classField.annotate(DescriptionField.class);
+				classField.annotate(DescriptionField.class);
 			}
 			break;
+			case SIZE:	annotationUse=classField.annotate(Size.class);
+				for (AnnotationAttribute annotationAttribute: annotation.getAnnotationAttributeList())
+				{
+					annotationUse.param(annotationAttribute.getProperty(), Integer.valueOf(annotationAttribute.getValue()));
+				}
+				break;
 			}
 		}
 		

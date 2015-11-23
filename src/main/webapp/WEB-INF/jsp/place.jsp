@@ -25,8 +25,7 @@
 <link rel="import" href="../generatedMenu.jsp" />
 </head>
 <body ng-app="placeApp">
-	<div ng-controller="placeController"
-		style="position: absolute; left: 250px; width: 80%; top: 30px;">
+	<div ng-controller="placeController">
 		<form id="placeSearchBean">
 			<div class="panel panel-default default-panel">
 				<div class="panel-heading">Search form place</div>
@@ -133,8 +132,14 @@
 										class="form-control " aria-describedby="sizing-addon3"
 										type="text" id="place-placeName"
 										ng-model="selectedEntity.placeName" ng-readonly="false"
-										name="placeName" placeholder="placeName" />
+										name="placeName" placeholder="placeName" ng-minlength="2"
+										ng-maxlength="10" />
 								</div>
+								<small class="help-block"
+									ng-show="placeDetailForm.placeName.$error.minlength">place:
+									placeName min 2 caratteri</small><small class="help-block"
+									ng-show="placeDetailForm.placeName.$error.maxlength">place:
+									placeName max 10 caratteri</small>
 							</div>
 							<div class="pull-left right-input"
 								ng-class="{&#39;has-error&#39;: !placeDetailForm.place_example.$valid, &#39;has-success&#39;: placeDetailForm.place_example.$valid}"
@@ -176,8 +181,7 @@
 			</div>
 		</form>
 	</div>
-	<div ng-controller="exampleController"
-		style="position: absolute; left: 250px; width: 80%; top: 30px;">
+	<div ng-controller="exampleController">
 		<form id="exampleList" ng-if="entityList.length&gt;0" enctype="UTF-8">
 			<div class="panel panel-default default-panel">
 				<div class="panel-heading">
@@ -264,6 +268,20 @@
 										ng-model="selectedEntity.male" ng-readonly="false" name="male"
 										placeholder="male"
 										ng-options="value for value in trueFalseValues"></select>
+								</div>
+							</div>
+							<div class="pull-left right-input"
+								ng-class="{&#39;has-error&#39;: !exampleDetailForm.exampleType.$valid, &#39;has-success&#39;: exampleDetailForm.exampleType.$valid}"
+								style="height: 59px">
+								<div class="input-group">
+									<span class="input-group-addon">exampleType</span><select
+										class="form-control pull-left"
+										aria-describedby="sizing-addon3" type="text"
+										id="example-exampleType" ng-model="selectedEntity.exampleType"
+										ng-readonly="false" name="exampleType"
+										placeholder="exampleType"
+										ng-options="exampleType as exampleType for exampleType in childrenList.exampleTypeList"
+										enctype="UTF-8"></select>
 								</div>
 							</div>
 						</div>

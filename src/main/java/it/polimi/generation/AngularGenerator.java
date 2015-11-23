@@ -1,5 +1,8 @@
 package it.polimi.generation;
 
+import it.polimi.model.domain.Annotation;
+import it.polimi.model.domain.AnnotationAttribute;
+import it.polimi.model.domain.AnnotationType;
 import it.polimi.model.domain.Entity;
 import it.polimi.model.domain.EntityAttribute;
 import it.polimi.model.domain.FieldType;
@@ -11,7 +14,6 @@ import it.polimi.utils.ReflectionManager;
 import it.polimi.utils.Utility;
 
 import java.io.IOException;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.file.Path;
@@ -306,35 +308,35 @@ public class AngularGenerator {
 	 * @throws IOException
 	 */
 	private void renderValidator(HtmlCanvas html,EntityAttribute entityAttribute) throws IOException
-	{/*
-		Annotation[] annotationList= entityAttribute.getAnnotationList();
+	{
+		List<Annotation> annotationList= entityAttribute.getAnnotationList();
 		Boolean required = false;
-		for (int i=0; i<annotationList.length; i++)
+		for (Annotation annotation: annotationList)
 		{
-			if ((annotationList[i].annotationType()==NotNull.class || annotationList[i].annotationType()==NotBlank.class) && !required)
+			if ((annotation.getAnnotationType()==AnnotationType.NOT_NULL || annotation.getAnnotationType()==AnnotationType.NOT_BLANK) && ! required)
 			{
 				html.small((new HtmlAttributes()).add("class", "help-block").add("ng-show", entityName+"DetailForm."+entityAttribute.getName()+".$error.required"))
 				.content(entityName+": "+entityAttribute.getName()+" required");
 				required=true;
-			}else if (annotationList[i].annotationType()==Size.class)
+			}else 
+				//if (annotationList[i].annotationType()==Size.class)
+			if (annotation.getAnnotationType()==AnnotationType.SIZE)
 			{
-				for (Method method : annotationList[i].annotationType().getDeclaredMethods()) {
-					if (method.getName().equals("min") || method.getName().equals("max"))
+				//for (Method method : annotationList[i].annotationType().getDeclaredMethods())
+					
+				for (AnnotationAttribute annotationAttribute: annotation.getAnnotationAttributeList())
+				{
+					//if (method.getName().equals("min") || method.getName().equals("max"))
+					if (annotationAttribute.getProperty().equals("min") || annotationAttribute.getProperty().equals("max"))
 					{
 						Object value;
-						try {
-							value = method.invoke(annotationList[i], (Object[])null);
-							html.small((new HtmlAttributes()).add("class", "help-block").add("ng-show", entityName+"DetailForm."+entityAttribute.getName()+".$error."+method.getName()+"length"));
-							html.content(entityName+": "+entityAttribute.getName()+" "+method.getName()+" "+value+" caratteri");
-						} catch (IllegalAccessException
-								| IllegalArgumentException
-								| InvocationTargetException e) {
-							e.printStackTrace();
-						}
+							value = annotationAttribute.getValue();
+							html.small((new HtmlAttributes()).add("class", "help-block").add("ng-show", entityName+"DetailForm."+entityAttribute.getName()+".$error."+annotationAttribute.getProperty()+"length"));
+							html.content(entityName+": "+entityAttribute.getName()+" "+annotationAttribute.getProperty()+" "+value+" caratteri");
 					}
 				}
 			}
-		}*/
+		}
 	}
 
 	/**
@@ -345,33 +347,26 @@ public class AngularGenerator {
 	 */
 	private void renderValidatorAttributes(HtmlAttributes htmlAttributes, EntityAttribute entityAttribute)
 	{
-	/*Annotation[] annotationList= entityAttribute.getAnnotationList();
+		List<Annotation> annotationList= entityAttribute.getAnnotationList();
 		Boolean required = false;
-		for (int i=0; i<annotationList.length; i++)
+		for (Annotation annotation: annotationList)
 		{
-			if ((annotationList[i].annotationType()==NotNull.class || annotationList[i].annotationType()==NotBlank.class) && !required)
-			{
+			if ((annotation.getAnnotationType()==AnnotationType.NOT_NULL || annotation.getAnnotationType()==AnnotationType.NOT_BLANK) && ! required)
+				{
 				htmlAttributes.add("ng-required", "true");
 				required=true;
-			}else if (annotationList[i].annotationType()==Size.class)
+			}else if (annotation.getAnnotationType()==AnnotationType.SIZE)
 			{
-				for (Method method : annotationList[i].annotationType().getDeclaredMethods()) {
-					if (method.getName().equals("min") || method.getName().equals("max"))
-					{
-						Object value;
-						try {
-							value = method.invoke(annotationList[i], (Object[])null);
-							htmlAttributes.add("ng-"+method.getName()+"length", value.toString());
-						} catch (IllegalAccessException
-								| IllegalArgumentException
-								| InvocationTargetException e) {
-							e.printStackTrace();
-						}
+				for (AnnotationAttribute annotationAttribute: annotation.getAnnotationAttributeList())
+					if (annotationAttribute.getProperty().equals("min") || annotationAttribute.getProperty().equals("max"))
+						{
+						String value;
+							value = annotationAttribute.getValue();
+							htmlAttributes.add("ng-"+annotationAttribute.getProperty()+"length", value.toString());
 					}
 				}
 			}
-		}*/
-	}
+		}
 
 	/**
 	 * Return the type of the html input based on the field.

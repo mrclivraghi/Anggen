@@ -491,7 +491,7 @@ public class JsGenerator {
 		{
 			sb.append("$scope.refreshTable"+Utility.getFirstUpper(tabName.replaceAll(" ", ""))+"= function() \n");
 			sb.append("{\n");
-		//sb.append(JsGenerator.resetTableTab(tabName,entity));
+			sb.append(resetTableTab(tabName,entity));
 		sb.append("};\n");
 		}
 		sb.append("$scope.trueFalseValues=[true,false];\n");
@@ -811,12 +811,12 @@ public class JsGenerator {
 			e.printStackTrace();
 		}
 	}
-	private String resetTableTab(String tabName,Class entityClass) {
+	private String resetTableTab(String tabName,Entity entity) {
 		String resetTableTabString="";
-		for (EntityAttribute entityAttribute: entityManager.getAttributeList())
+		for (Relationship relationship: entity.getRelationshipList())
 		{
-			if (entityAttribute.asRelationship()!=null)
-				resetTableTabString=resetTableTabString+" $scope."+entityAttribute.getName()+"GridApi.core.handleWindowResize(); \n";
+			resetTableTabString=resetTableTabString+"if ($scope."+relationship.getEntityTarget().getName()+"GridApi!=undefined && $scope."+relationship.getEntityTarget().getName()+"GridApi!=null)\n";
+			resetTableTabString=resetTableTabString+" $scope."+relationship.getEntityTarget().getName()+"GridApi.core.handleWindowResize(); \n";
 				//$scope.seedQueryGridApi.core.handleWindowResize();
 		}
 		//resetTableTabString = resetTableTabString+" alert('done');";

@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 import it.polimi.utils.annotation.DescriptionField;
 import it.polimi.utils.annotation.Filter;
 
@@ -23,7 +24,9 @@ public class Place {
     private Integer placeId;
     @javax.persistence.Column(name = "place_name")
     @Filter
+    @Size(min = 2, max = 10)
     private String placeName;
+    
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "example_id_example")
     private it.generated.domain.Example example;

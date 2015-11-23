@@ -104,7 +104,7 @@ public class RestGenerator {
 		entityManager= new EntityManagerImpl(entity);
 		this.className=Utility.getFirstUpper(entity.getName());
 		this.alias=this.className.substring(0,1).toLowerCase();
-		this.entityAttributeList=entityManager.getAttributeList();
+		this.entityAttributeList=entityManager.getAllAttribute();
 		keyClass= entityManager.getKeyClass();
 		
 	}
@@ -120,8 +120,8 @@ public class RestGenerator {
 		for (EntityAttribute entityAttribute: entityAttributeList)
 		{
 			
-			String entityAttributeName= entityAttribute.asField()!=null ? entityAttribute.getName() : entityAttribute.asRelationship().getEntityTarget().getName();
-			
+			String entityAttributeName= entityAttribute.asField()!=null ? entityAttribute.getName() : (entityAttribute.isRelationship()? entityAttribute.asRelationship().getEntityTarget().getName(): entityAttribute.asEnumField().getName());
+						
 			if (entityAttribute.getBetweenFilter())
 			{
 				JVar param = method.param(entityAttribute.getRightParamClass(), entityAttributeName+"From");
@@ -145,28 +145,29 @@ public class RestGenerator {
 				query=query+getFieldSearchQuery(entityAttribute, entityAttributeName,alias+"."+entityAttributeName,"=");
 			}
 			
-			for (EntityAttribute filterField: entityAttribute.getFilterField())
+			
+			
+			
+		}
+		for (EntityAttribute filterField: entityManager.getChildrenFilter())
+		{
+			String filterFieldName=(filterField.getParent().getName())+Utility.getFirstUpper(filterField.getName());
+			
+			JVar param = method.param(filterField.getRightParamClass(), filterFieldName);
+			JAnnotationUse annotationParam= param.annotate(Param.class);
+			annotationParam.param("value", filterFieldName);
+			String hibernateField="";
+			
+			if (filterField.isRelationship() && filterField.asRelationship().isList())
+			{// cerco quel campo in una lista
+				String aliasFilterOwnerClass= (filterField.getParent().getName()).substring(0, 1);
+				
+				query=query+" ( :"+filterFieldName+" is null or cast(:"+filterFieldName+" as string)='' or "+alias+" in (select "+aliasFilterOwnerClass+"."+(className)+" from "+Utility.getFirstUpper((filterField.getParent().getName()))+" "+aliasFilterOwnerClass+" where "+aliasFilterOwnerClass+"."+filterField.getName()+"=cast(:"+filterFieldName+" as string))) and";
+			}else // cerco quel campo nell'�entit� collegata
 			{
-				String filterFieldName=(filterField.getParent().getName())+Utility.getFirstUpper(filterField.getName());
-				
-				JVar param = method.param(filterField.getRightParamClass(), filterFieldName);
-				JAnnotationUse annotationParam= param.annotate(Param.class);
-				annotationParam.param("value", filterFieldName);
-				String hibernateField="";
-				
-				if (filterField.isRelationship() && filterField.asRelationship().isList())
-				{// cerco quel campo in una lista
-					String aliasFilterOwnerClass= (filterField.getParent().getName()).substring(0, 1);
-					
-					query=query+" ( :"+filterFieldName+" is null or cast(:"+filterFieldName+" as string)='' or "+alias+" in (select "+aliasFilterOwnerClass+"."+(className)+" from "+Utility.getFirstUpper((filterField.getParent().getName()))+" "+aliasFilterOwnerClass+" where "+aliasFilterOwnerClass+"."+filterField.getName()+"=cast(:"+filterFieldName+" as string))) and";
-				}else // cerco quel campo nell'�entit� collegata
-				{
-					hibernateField=""+alias+"."+(filterField.getParent().getName())+"."+filterField.getName();
-					query=query+getFieldSearchQuery(filterField, filterFieldName,hibernateField,"=");
-				}
+				hibernateField=""+alias+"."+(filterField.getParent().getName())+"."+filterField.getName();
+				query=query+getFieldSearchQuery(filterField, filterFieldName,hibernateField,"=");
 			}
-			
-			
 		}
 		query=query.substring(0,query.length()-3);
 		return query;
@@ -272,8 +273,8 @@ public class RestGenerator {
 				myClass = codeModel._class(""+fullClassName.replace(".domain.", ".searchbean.")+"SearchBean", ClassType.CLASS);
 				for (EntityAttribute entityAttribute: entityAttributeList)
 				{
-					String entityAttributeName= entityAttribute.asField()!=null ? entityAttribute.getName() : entityAttribute.asRelationship().getEntityTarget().getName();
-					
+					String entityAttributeName= entityAttribute.asField()!=null ? entityAttribute.getName() : (entityAttribute.isRelationship()? entityAttribute.asRelationship().getEntityTarget().getName(): entityAttribute.asEnumField().getName());
+										
 					if (entityAttribute.getBetweenFilter())
 					{
 						JVar fieldFromVar = myClass.field(JMod.PUBLIC, entityAttribute.getFieldClass(), entityAttributeName+"From");
@@ -369,6 +370,12 @@ public class RestGenerator {
 					method.param(entityAttribute.getRightParamClass(), entityAttribute.getName());
 				} else
 				{
+					if (entityAttribute.isEnumField())
+					{
+						JMethod method= myClass.method(JMod.PUBLIC, listClass, "findBy"+Utility.getFirstUpper(entityAttribute.asEnumField().getName()));
+						method.param(entityAttribute.getRightParamClass(), entityAttribute.asEnumField().getName());
+						
+					}else
 					if (!entityAttribute.asRelationship().isList())
 					{ // find by entity
 						JMethod method= myClass.method(JMod.PUBLIC, listClass, "findBy"+Utility.getFirstUpper(entityAttribute.asRelationship().getEntityTarget().getName()));
@@ -437,7 +444,7 @@ public class RestGenerator {
 		String searchMethod="findBy";
 		for (EntityAttribute entityAttribute: entityAttributeList)
 		{
-			String entityAttributeName= entityAttribute.asField()!=null ? entityAttribute.getName() : entityAttribute.asRelationship().getEntityTarget().getName();
+			String entityAttributeName= entityAttribute.asField()!=null ? entityAttribute.getName() : (entityAttribute.isRelationship()? entityAttribute.asRelationship().getEntityTarget().getName(): entityAttribute.asEnumField().getName());
 			if (entityAttribute.getBetweenFilter())
 			{
 				searchMethod=searchMethod+"GreaterThan"+Utility.getFirstUpper(entityAttributeName)+"FromAndLessThan"+Utility.getFirstUpper(entityAttributeName)+"ToAnd";

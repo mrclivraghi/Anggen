@@ -109,12 +109,12 @@ public class EntityManagerImpl implements EntityManager{
 	public String getAllParam()
 	{
 		String string="";
-		List<EntityAttribute> entityAttributeList = getAttributeList();
+		List<EntityAttribute> entityAttributeList = getAllAttribute();
 		String className = entity.getName();
 		for (EntityAttribute entityAttribute: entityAttributeList)
 		{
 			
-			String entityAttributeName= entityAttribute.asField()!=null ? entityAttribute.getName() : entityAttribute.asRelationship().getEntityTarget().getName();
+			String entityAttributeName= entityAttribute.asField()!=null ? entityAttribute.getName() : (entityAttribute.isRelationship()? entityAttribute.asRelationship().getEntityTarget().getName(): entityAttribute.asEnumField().getName());
 			
 			if (entityAttribute.getBetweenFilter())
 			{
@@ -166,7 +166,12 @@ public class EntityManagerImpl implements EntityManager{
 					if (entityAttribute.asRelationship()!=null && entityAttribute.asRelationship().isList())
 						string=string+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(fieldName)+"List()==null? null :"+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(fieldName)+"List().get(0),";
 					else
+					{
+						if (entityAttribute.isEnumField())
+							string=string+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(fieldName)+"().getValue(),";
+						else
 						string=string+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(fieldName)+"(),";
+					}
 				}
 			}}
 		return string;
@@ -261,6 +266,9 @@ public class EntityManagerImpl implements EntityManager{
 	
 	}
 
+	/**
+	 * return even enumField
+	 */
 	@Override
 	public List<EntityAttribute> getAllAttribute() {
 		List<EntityAttribute> tempList = getAttributeList();

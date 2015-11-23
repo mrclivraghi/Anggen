@@ -1,4 +1,4 @@
-package it.polimi.boot.config;
+package it.generated.boot.config;
 
 
 import java.util.Properties;

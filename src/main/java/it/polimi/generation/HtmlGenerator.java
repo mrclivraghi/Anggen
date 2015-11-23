@@ -50,7 +50,7 @@ public class HtmlGenerator {
 	{
 		this.entity=entity;
 		this.entityManager = new EntityManagerImpl(entity);
-		this.entityName=entity.getName();
+		this.entityName=Utility.getFirstLower(entity.getName());
 		this.attributeList=entityManager.getAttributeList();
 		this.childrenEntity=entityManager.getChildrenEntities();
 		File file = new File(""); 
@@ -98,7 +98,7 @@ public class HtmlGenerator {
 			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../css/main.css"))
 			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../css/jquery-ui.css"))
 			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../css/easytree/skin-win8/ui.easytree.css"))
-			.link((new HtmlAttributes()).add("rel","import").add("href", "../menu.html"));
+			.link((new HtmlAttributes()).add("rel","import").add("href", "../"+Generator.menuName+".html"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -156,15 +156,17 @@ public class HtmlGenerator {
 		
 	}
 	
-	public static void GenerateEasyTreeMenu()
+	public static void GenerateEasyTreeMenu(List<Entity> entityList)
 	{
-/*		HtmlCanvas html= new HtmlCanvas();
+		HtmlCanvas html= new HtmlCanvas();
 		try {
 			html.div((new HtmlAttributes()).add("id", "menu").add("style", "width: 250px;"))
 			.ul();
 			List<String> packageList= ReflectionManager.getSubPackages(Generator.modelPackage);
 			
-			for (String myPackage: packageList)
+			//TODO manage drop down
+			
+			/*for (String myPackage: packageList)
 			{
 				html.li((new HtmlAttributes()).add("class", "isFolder"));
 				Set<Class<?>> packageClassList = ReflectionManager.getClassInPackage(myPackage);
@@ -177,14 +179,13 @@ public class HtmlGenerator {
 				folderHtml._ul();
 				html.content(reflectionManager.parseName(myPackage)+folderHtml.toHtml(),false);
 				
-			}
-			Set<Class<?>> packageClassList = ReflectionManager.getClassInPackage(Generator.modelPackage);
-			for (Class theClass: packageClassList)
+			}*/
+			for (Entity entity: entityList)
 			{
-				if (theClass.getPackage().getName().equals(Generator.modelPackage))
-				{
-					html.li().a((new HtmlAttributes()).add("href", "../"+reflectionManager.parseName(theClass.getName())+"/")).content(reflectionManager.parseName(theClass.getName()))._li();
-				}
+				//if (theClass.getPackage().getName().equals(Generator.modelPackage))
+				//{
+					html.li().a((new HtmlAttributes()).add("href", "../"+Utility.getFirstLower(entity.getName())+"/")).content(Utility.getFirstUpper(entity.getName()))._li();
+				//}
 			}
 			
 			html._ul()._div();
@@ -198,7 +199,7 @@ public class HtmlGenerator {
 		
 		File file = new File(""); 
 		String directoryViewPages = file.getAbsolutePath()+Generator.menuDirectory;
-		File menuFile=new File(directoryViewPages+"menu.html");
+		File menuFile=new File(directoryViewPages+Generator.menuName+".jsp");
 		PrintWriter writer;
 		try {
 			System.out.println("Written "+menuFile.getAbsolutePath());
@@ -208,16 +209,15 @@ public class HtmlGenerator {
 		} catch (FileNotFoundException | UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}*/
+		}
 	}
 	
 	/**
 	 * Generate the html menu
 	 */
-	/*public static void GenerateMenu()
+	public static void GenerateMenu(List<Entity> entityList)
 	{
 		HtmlCanvas html = new HtmlCanvas();
-		ReflectionManager reflectionManager = new ReflectionManager(Object.class);
 		try {
 			
 			html.nav(CssGenerator.getNav())
@@ -237,7 +237,7 @@ public class HtmlGenerator {
 			.ul((new HtmlAttributes()).add("class", "nav navbar-nav"));
 			List<String> packageList= ReflectionManager.getSubPackages(Generator.modelPackage);
 			StringBuilder sb = new StringBuilder();
-			for (String myPackage: packageList)
+			/*for (String myPackage: packageList)
 			{
 				
 				HtmlCanvas ulHtml= new HtmlCanvas();
@@ -279,21 +279,20 @@ public class HtmlGenerator {
 				//ulContent=ulContent+"</c:if>";
 				sb.append(ulContent);
 				
-			}
-			Set<Class<?>> packageClassList = ReflectionManager.getClassInPackage(Generator.modelPackage);
-			for (Class theClass: packageClassList)
+			}*/
+			for (Entity entity: entityList)
 			{
-				if (theClass.getPackage().getName().equals(Generator.modelPackage))
-				{
+				//if (entity.getPackage().getName().equals(Generator.modelPackage))
+				//{
 					String ulContent="";
 					
 					//ulContent=ulContent+"<c:forEach var=\"entity\" items=\"${entityList}\">";
 					//ulContent=ulContent+"<c:if test=\"${entity.entityName=='"+reflectionManager.parseName(theClass.getName())+"'}\">";
-					ulContent=ulContent+"<li><a href=\"../"+reflectionManager.parseName(theClass.getName())+"/\">"+reflectionManager.parseName(theClass.getName())+"</a></li>";
+					ulContent=ulContent+"<li><a href=\"../"+Utility.getFirstLower(entity.getName())+"/\">"+Utility.getFirstUpper(entity.getName())+"</a></li>";
 					//ulContent=ulContent+"</c:if>";
 					//ulContent=ulContent+"</c:forEach>";
 					sb.append(ulContent);
-				}
+				//}
 			}
 			html.content(sb.toString(),false);
 //			html._ul()
@@ -307,7 +306,7 @@ public class HtmlGenerator {
 		
 		File file = new File(""); 
 		String directoryViewPages = file.getAbsolutePath()+Generator.menuDirectory;
-		File menuFile=new File(directoryViewPages+"menu.jsp");
+		File menuFile=new File(directoryViewPages+Generator.menuName+".jsp");
 		PrintWriter writer;
 		try {
 			System.out.println("Written "+menuFile.getAbsolutePath());
@@ -320,6 +319,6 @@ public class HtmlGenerator {
 			e.printStackTrace();
 		}
 		
-	}*/
+	}
 	
 }

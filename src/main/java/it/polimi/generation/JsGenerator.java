@@ -80,7 +80,7 @@ public class JsGenerator {
 		this.entityList=entityList;
 		entityManager = new EntityManagerImpl(entity);
 		
-		this.entityName=entity.getName();
+		this.entityName=Utility.getFirstLower(entity.getName());
 		
 		this.fieldList=entity.getFieldList();
 		
@@ -799,7 +799,7 @@ public class JsGenerator {
 	 */
 	public void saveJsToFile(String directory)
 	{
-		File file = new File(directory+entityName+".js");
+		File file = new File(directory+Utility.getFirstLower(entityName)+".js");
 		PrintWriter writer;
 		try {
 			writer = new PrintWriter(file, "UTF-8");

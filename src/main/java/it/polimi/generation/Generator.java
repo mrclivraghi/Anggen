@@ -49,9 +49,11 @@ public class Generator {
 	
 	public static String modelPackage;
 	
-	public static Boolean bootstrapMenu;
+	public static Boolean bootstrapMenu=true;
 	
 	public static Boolean easyTreeMenu;
+	
+	public static String menuName;
 	
 	public static String menuDirectory;
 	
@@ -60,6 +62,8 @@ public class Generator {
 	public static String htmlDirectory="/src/main/webapp/WEB-INF/jsp/";
 	
 	public static String applicationName;
+	
+	
 	
 	private List<Entity> modelEntityList;
 	
@@ -91,7 +95,7 @@ public class Generator {
 			Generator.angularDirectory=properties.getProperty("application.angular.directory");
 			Generator.htmlDirectory=properties.getProperty("application.html.directory");
 			Generator.applicationName=properties.getProperty("application.name");
-			
+			Generator.menuName=properties.getProperty("application.menu.name");
 			
 			
 			
@@ -177,15 +181,15 @@ public class Generator {
 				}
 
 			}
-			/*if (Generator.bootstrapMenu)
-				HtmlGenerator.GenerateMenu();
+			if (Generator.bootstrapMenu)
+				HtmlGenerator.GenerateMenu(modelEntityList);
 			else
 			{
 				if (Generator.easyTreeMenu)
-					HtmlGenerator.GenerateEasyTreeMenu();
+					HtmlGenerator.GenerateEasyTreeMenu(modelEntityList);
 				else //DEFAULTS
-					HtmlGenerator.GenerateMenu();
-			}*/
+					HtmlGenerator.GenerateMenu(modelEntityList);
+			}
 	}
 	
 	

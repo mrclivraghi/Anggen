@@ -6,6 +6,7 @@ import it.polimi.model.domain.AnnotationType;
 import it.polimi.model.domain.Entity;
 import it.polimi.model.domain.EntityAttribute;
 import it.polimi.model.domain.FieldType;
+import it.polimi.model.domain.Tab;
 import it.polimi.reflection.EntityManager;
 import it.polimi.reflection.EntityManagerImpl;
 import it.polimi.utils.ClassDetail;
@@ -457,40 +458,42 @@ public class AngularGenerator {
     <li role="presentation"><a href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab">Tab1</a></li>
   </ul> 
 		 */
-		List<String> tabNameList;
+		List<Tab> tabList;
 		if (search)
 		{
-			tabNameList=new ArrayList<String>();
-			tabNameList.add("Detail");
+			tabList=new ArrayList<Tab>();
+			Tab searchTab= new Tab();
+			searchTab.setName("Searchdetails");
+			tabList.add(searchTab);
 		} else
-			tabNameList=entityManager.getTabsName();
+			tabList=entityManager.getTabList();
 		
 		if (!search)
 		{
 			html.ul((new HtmlAttributes()).add("class", "nav nav-tabs").add("role", "tablist").add("id", entityName+"Tabs"));
-			for (String tabName: tabNameList)
+			for (Tab tab: tabList)
 			{
 				html.li((new HtmlAttributes()).add("role", "presentation"))
-				.a((new HtmlAttributes()).add("href", "#"+entityName+"-"+tabName.replace(' ','-' )).add("aria-controls", tabName.replace(' ','-' )).add("role", "tab").add("data-toggle", "tab").add("ng-click","refreshTable"+Utility.getFirstUpper(tabName.replaceAll(" ", ""))+"()"))
-				.content(tabName);
+				.a((new HtmlAttributes()).add("href", "#"+entityName+"-"+tab.getName().replace(' ','-' )).add("aria-controls", tab.getName().replace(' ','-' )).add("role", "tab").add("data-toggle", "tab").add("ng-click","refreshTable"+Utility.getFirstUpper(tab.getName().replaceAll(" ", ""))+"()"))
+				.content(tab.getName());
 				html._li();
-				html.script((new HtmlAttributes()).add("type", "text/javascript")).content(JsGenerator.scriptResizeTableTab(tabName, entityName),false);
+				html.script((new HtmlAttributes()).add("type", "text/javascript")).content(JsGenerator.scriptResizeTableTab(tab.getName(), entityName),false);
 			}
 			html._ul();
 			html.div((new HtmlAttributes()).add("class", "tab-content"));
 		}
 		
 		
-		for (String tabName: tabNameList)
+		for (Tab tab: tabList)
 		{
 			 //<div role="tabpanel" class="tab-pane fade in active" id="home">
 			if (!search)
-				html.div((new HtmlAttributes()).add("role", "tabpanel").add("class", "tab-pane fade").add("id", entityName+"-"+tabName.replace(' ','-' )));
+				html.div((new HtmlAttributes()).add("role", "tabpanel").add("class", "tab-pane fade").add("id", entityName+"-"+tab.getName().replace(' ','-' )));
 			
 			String style="";
 			if (entityName.equals("mountain"))
 				System.out.println("");
-			for (EntityAttribute entityAttribute: entityManager.getFieldByTab())
+			for (EntityAttribute entityAttribute: entityManager.getFieldByTab(tab))
 			{
 
 				if (entityAttribute.getBetweenFilter() && (search))

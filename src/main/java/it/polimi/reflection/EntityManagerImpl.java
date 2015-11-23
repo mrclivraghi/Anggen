@@ -7,6 +7,7 @@ import it.polimi.model.domain.Field;
 import it.polimi.model.domain.FieldType;
 import it.polimi.model.domain.Relationship;
 import it.polimi.model.domain.RelationshipType;
+import it.polimi.model.domain.Tab;
 import it.polimi.utils.ReflectionManager;
 import it.polimi.utils.Utility;
 import it.polimi.utils.annotation.DescriptionField;
@@ -188,8 +189,13 @@ public class EntityManagerImpl implements EntityManager{
 	}
 
 	@Override
-	public List<EntityAttribute> getFieldByTab() {
-		return getAllAttribute();
+	public List<EntityAttribute> getFieldByTab(Tab tab) {
+		if (tab==null || tab.getName().equals("Searchdetails")) return getAllAttribute();
+		List<EntityAttribute> entityAttributeList= new ArrayList<EntityAttribute>();
+		entityAttributeList.addAll(tab.getFieldList());
+		entityAttributeList.addAll(tab.getRelationshipList());
+		entityAttributeList.addAll(tab.getEnumFieldList());
+		return entityAttributeList;
 	}
 
 	@Override
@@ -203,10 +209,8 @@ public class EntityManagerImpl implements EntityManager{
 	}
 
 	@Override
-	public List<String> getTabsName() {
-		List<String> tabNameList = new ArrayList<String>();
-		tabNameList.add("Default");
-		return tabNameList;
+	public List<Tab> getTabList() {
+		return entity.getTabList();
 	}
 
 	@Override

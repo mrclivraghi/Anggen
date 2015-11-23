@@ -9,6 +9,7 @@ import it.polimi.model.domain.Field;
 import it.polimi.model.domain.FieldType;
 import it.polimi.model.domain.Relationship;
 import it.polimi.model.domain.RelationshipType;
+import it.polimi.model.domain.Tab;
 import it.polimi.reflection.EntityManager;
 import it.polimi.reflection.EntityManagerImpl;
 import it.polimi.utils.ClassDetail;
@@ -487,11 +488,11 @@ public class JsGenerator {
 		manageRestError(sb);
 		sb.append("});\n");
 		sb.append("};\n");
-		for (String tabName: entityManager.getTabsName())
+		for (Tab tab: entityManager.getTabList())
 		{
-			sb.append("$scope.refreshTable"+Utility.getFirstUpper(tabName.replaceAll(" ", ""))+"= function() \n");
+			sb.append("$scope.refreshTable"+Utility.getFirstUpper(tab.getName().replaceAll(" ", ""))+"= function() \n");
 			sb.append("{\n");
-			sb.append(resetTableTab(tabName,entity));
+			sb.append(resetTableTab(tab.getName(),entity));
 		sb.append("};\n");
 		}
 		sb.append("$scope.trueFalseValues=[true,false];\n");

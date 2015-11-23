@@ -24,7 +24,7 @@ import org.springframework.web.servlet.view.JstlView;
 
 @Configuration
 @EnableAutoConfiguration
-@ComponentScan({ "it.polimi.*" })
+@ComponentScan({ "it.generated.*" })
 public class AppConfig {
 	
 
@@ -70,7 +70,7 @@ public class AppConfig {
 	 public SessionFactory sessionFactory() {
 		 LocalSessionFactoryBuilder builder = 
 			new LocalSessionFactoryBuilder(dataSource());
-                builder.scanPackages("it.polimi")
+                builder.scanPackages("it.generated")
                       .addProperties(getHibernateProperties());
 
               return builder.buildSessionFactory();

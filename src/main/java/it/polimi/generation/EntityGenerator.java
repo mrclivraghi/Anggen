@@ -4,6 +4,7 @@ import it.polimi.boot.OracleNamingStrategy;
 import it.polimi.model.domain.Annotation;
 import it.polimi.model.domain.Entity;
 import it.polimi.model.domain.EntityAttribute;
+import it.polimi.model.domain.EnumField;
 import it.polimi.model.domain.Field;
 import it.polimi.model.domain.Relationship;
 import it.polimi.model.domain.RelationshipType;
@@ -223,6 +224,15 @@ public class EntityGenerator {
 				generateGetterAndSetter(myClass, relationship.getEntityTarget().getName(), Generator.getJDefinedClass(relationship.getEntityTarget().getName()));
 			}
 			addValidationAnnotation(relationship,listField);
+		}
+		for (EnumField enumField: entity.getEnumFieldList())
+		{
+			JClass fieldClass = enumField.getFieldClass();
+			JVar classField = myClass.field(JMod.PRIVATE, fieldClass, enumField.getName());
+			JAnnotationUse columnAnnotation = classField.annotate(Column.class);
+			columnAnnotation.param("name", namingStrategy.classToTableName(enumField.getName()));
+			generateGetterAndSetter(myClass, enumField.getName(), fieldClass);
+			addValidationAnnotation(enumField,classField);
 		}
 		saveFile(codeModel);
 		return myClass;

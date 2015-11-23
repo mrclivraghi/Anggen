@@ -57,7 +57,7 @@ public class JsGenerator {
 		this.childrenList=reflectionManager.getChildrenFieldList();
 		List<Class> parentClassList = new ArrayList<Class>();
 		parentClassList.add(classClass);
-		this.descendantClassList=reflectionManager.getDescendantClassList(this.classClass, parentClassList);
+		this.descendantClassList=reflectionManager.getDescendantClassList(classClass, parentClassList);
 		if (compositeClass!=null && compositeClass.fullName().contains("java.util.List"))
 			entityList=true;
 		else

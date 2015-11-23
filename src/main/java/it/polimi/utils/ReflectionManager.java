@@ -1,6 +1,11 @@
 package it.polimi.utils;
 
 import it.polimi.generation.Generator;
+import it.polimi.model.Example;
+import it.polimi.model.Sex;
+import it.polimi.model.mountain.Mountain;
+import it.polimi.model.ospedale.Ambulatorio;
+import it.polimi.model.ospedale.Paziente;
 import it.polimi.utils.annotation.Between;
 import it.polimi.utils.annotation.DescriptionField;
 import it.polimi.utils.annotation.ExcelExport;
@@ -632,7 +637,7 @@ public class ReflectionManager {
 	
 	
 	public static void main(String[] args)
-	{/*
+	{
 		ReflectionManager reflectionManager= new ReflectionManager(Example.class);
 		for (Field field: reflectionManager.getFieldList())
 		{
@@ -659,10 +664,10 @@ public class ReflectionManager {
 		for (int i=0; i<sec.length; i++)
 			System.out.println("EC: "+sec[i].toString());
 		
-		for (java.lang.reflect.Field field : fields)
+		/*for (java.lang.reflect.Field field : fields)
 		{
 			System.out.println(field.getName());
-		} 
+		}*/ 
 
 		//Reflections reflections = new Reflections("it.polimi.model");
 		List<String> subPackage= ReflectionManager.getMainMenuItem("it.polimi.model");
@@ -677,5 +682,5 @@ public class ReflectionManager {
 		
 		System.out.println("-----");
 		System.out.println(ReflectionManager.hasManyToManyAssociation(Paziente.class, Ambulatorio.class.getName()));
-	*/}
+	}
 }

@@ -158,11 +158,10 @@ public class RestGenerator {
 			annotationParam.param("value", filterFieldName);
 			String hibernateField="";
 			
-			if (filterField.isRelationship() && filterField.asRelationship().isList())
+			if (filterField.getParent().getEntityId()!=entity.getEntityId())
 			{// cerco quel campo in una lista
 				String aliasFilterOwnerClass= (filterField.getParent().getName()).substring(0, 1);
-				
-				query=query+" ( :"+filterFieldName+" is null or cast(:"+filterFieldName+" as string)='' or "+alias+" in (select "+aliasFilterOwnerClass+"."+(className)+" from "+Utility.getFirstUpper((filterField.getParent().getName()))+" "+aliasFilterOwnerClass+" where "+aliasFilterOwnerClass+"."+filterField.getName()+"=cast(:"+filterFieldName+" as string))) and";
+				query=query+" ( :"+filterFieldName+" is null or cast(:"+filterFieldName+" as string)='' or "+alias+" in (select "+aliasFilterOwnerClass+"."+Utility.getFirstLower(entity.getName())+" from "+Utility.getFirstUpper((filterField.getParent().getName()))+" "+aliasFilterOwnerClass+" where "+aliasFilterOwnerClass+"."+filterField.getName()+"=cast(:"+filterFieldName+" as string))) and";
 			}else // cerco quel campo nell'�entit� collegata
 			{
 				hibernateField=""+alias+"."+(filterField.getParent().getName())+"."+filterField.getName();

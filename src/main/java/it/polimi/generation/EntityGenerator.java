@@ -103,26 +103,6 @@ public class EntityGenerator {
 		
 	}
 	
-	private Class getFieldClass(Field field)
-	{
-		Class fieldClass=null;
-		switch (field.getFieldType())
-		{
-			case STRING: fieldClass= String.class;
-			case INTEGER: fieldClass=Integer.class;
-			case DATE : fieldClass = Date.class;
-			case DOUBLE : fieldClass= Double.class;
-		case BOOLEAN: fieldClass= Boolean.class;
-			break;
-		case TIME: fieldClass = Time.class;
-			break;
-
-		}
-		return fieldClass;
-	}
-	
-	
-	
 	public JDefinedClass getModelClass()
 	{
 		JCodeModel	codeModel = new JCodeModel();
@@ -142,7 +122,7 @@ public class EntityGenerator {
 		annotationTable.param("name", namingStrategy.classToTableName(entity.getName()));
 		for (Field field : entity.getFieldList())
 		{
-			Class fieldClass = getFieldClass(field);
+			JClass fieldClass = field.getFieldClass();
 			JVar classField = myClass.field(JMod.PRIVATE, fieldClass, field.getName());
 			JAnnotationUse columnAnnotation = classField.annotate(Column.class);
 			columnAnnotation.param("name", namingStrategy.classToTableName(field.getName()));

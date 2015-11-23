@@ -19,13 +19,13 @@ public class Restriction {
 	@Column(name = "restriction_id")
 	private Long restrictionId;
 	
-	private Boolean create;
+	private Boolean canCreate;
 	
-	private Boolean update;
+	private Boolean canUpdate;
 	
-	private Boolean search;
+	private Boolean canSearch;
 	
-	private Boolean delete;
+	private Boolean canDelete;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="role_id_role")
@@ -49,41 +49,49 @@ public class Restriction {
 		this.restrictionId = restrictionId;
 	}
 
-	public Boolean getCreate() {
-		return create;
-	}
-
-	public void setCreate(Boolean create) {
-		this.create = create;
-	}
-
-	public Boolean getUpdate() {
-		return update;
-	}
-
-	public void setUpdate(Boolean update) {
-		this.update = update;
-	}
-
-	public Boolean getSearch() {
-		return search;
-	}
-
-	public void setSearch(Boolean search) {
-		this.search = search;
-	}
-
-	public Boolean getDelete() {
-		return delete;
-	}
-
-	public void setDelete(Boolean delete) {
-		this.delete = delete;
-	}
-
 	public Role getRole() {
 		return role;
 	}
+
+	public Boolean getCanCreate() {
+		return canCreate;
+	}
+
+
+	public void setCanCreate(Boolean canCreate) {
+		this.canCreate = canCreate;
+	}
+
+
+	public Boolean getCanUpdate() {
+		return canUpdate;
+	}
+
+
+	public void setCanUpdate(Boolean canUpdate) {
+		this.canUpdate = canUpdate;
+	}
+
+
+	public Boolean getCanSearch() {
+		return canSearch;
+	}
+
+
+	public void setCanSearch(Boolean canSearch) {
+		this.canSearch = canSearch;
+	}
+
+
+	public Boolean getCanDelete() {
+		return canDelete;
+	}
+
+
+	public void setCanDelete(Boolean canDelete) {
+		this.canDelete = canDelete;
+	}
+
 
 	public void setRole(Role role) {
 		this.role = role;

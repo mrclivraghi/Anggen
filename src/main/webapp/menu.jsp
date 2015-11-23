@@ -1,4 +1,5 @@
-<nav class="navbar navbar-default">
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%><nav
+	class="navbar navbar-default">
 	<div class="container-fluid">
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle collapsed"
@@ -12,14 +13,23 @@
 		<div class="collapse navbar-collapse"
 			id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
-				<li><a href="../entity/">entity</a></li>
-				<li><a href="../field/">field</a></li>
-				<li><a href="../relationship/">relationship</a></li>
-				<li><a href="../enumField/">enumfield</a></li>
-				<li><a href="../enumValue/">enumvalue</a></li>
-				<li><a href="../annotation/">annotation</a></li>
-				<li><a href="../annotationAttribute/">annotation attribute</a></li>
-				<li><a href="../generation/">generation</a></li>
+					<li class="dropdown"><a href="#" class="dropdown-toggle"
+						data-toggle="dropdown" role="button" aria-haspopup="true"
+						aria-expanded="false">domain<span class="caret"></span></a>
+					<ul class="dropdown-menu">
+									<li><a href="../role/">role</a></li>
+									<li><a href="../field/">field</a></li>
+									<li><a href="../entity/">entity</a></li>
+									<li><a href="../relationship/">relationship</a></li>
+									<li><a href="../enumValue/">enumValue</a></li>
+									<li><a href="../enumField/">enumField</a></li>
+									<li><a href="../annotation/">annotation</a></li>
+									<li><a href="../restriction/">restriction</a></li>
+									<li><a href="../annotationAttribute/">annotationAttribute</a></li>
+									<li><a href="../tab/">tab</a></li>
+									<li><a href="../user/">user</a></li>
+						</ul></li>
+				</c:if>
 			</ul>
 		</div>
 	</div>

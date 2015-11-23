@@ -2,6 +2,7 @@ package it.polimi.generation;
 
 import it.polimi.boot.OracleNamingStrategy;
 import it.polimi.model.domain.Annotation;
+import it.polimi.model.domain.AnnotationAttribute;
 import it.polimi.model.domain.Entity;
 import it.polimi.model.domain.EntityAttribute;
 import it.polimi.model.domain.EnumField;
@@ -55,7 +56,6 @@ import com.sun.codemodel.JMod;
 import com.sun.codemodel.JVar;
 
 public class EntityGenerator {
-	
 	
 	private Entity entity;
 	
@@ -249,10 +249,14 @@ public class EntityGenerator {
 			generatedValue.param("strategy", GenerationType.SEQUENCE);
 			if (!entityAttribute.getDescriptionField())
 			{
-				JAnnotationUse descrField= classField.annotate(DescriptionField.class);
+				classField.annotate(DescriptionField.class);
 			}
 			break;
 			case SIZE:	annotationUse=classField.annotate(Size.class);
+				for (AnnotationAttribute annotationAttribute: annotation.getAnnotationAttributeList())
+				{
+					annotationUse.param(annotationAttribute.getProperty(), Integer.valueOf(annotationAttribute.getValue()));
+				}
 				break;
 			}
 		}

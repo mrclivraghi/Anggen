@@ -11,6 +11,7 @@ public class ExampleSearchBean {
     public java.lang.Integer age;
     public java.lang.Boolean male;
     public List<Place> placeList;
+    public it.generated.domain.ExampleType exampleType;
     public java.lang.String placePlaceName;
 
     public java.lang.Integer getExampleId() {
@@ -51,6 +52,14 @@ public class ExampleSearchBean {
 
     public void setPlaceList(List<Place> placeList) {
         this.placeList=placeList;
+    }
+
+    public it.generated.domain.ExampleType getExampleType() {
+        return this.exampleType;
+    }
+
+    public void setExampleType(it.generated.domain.ExampleType exampleType) {
+        this.exampleType=exampleType;
     }
 
     public java.lang.String getPlacePlaceName() {

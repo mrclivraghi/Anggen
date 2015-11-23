@@ -4,8 +4,8 @@ package it.generated.domain;
 
 public enum ExampleType {
 
-    TYPE1(0),
-    TYPE2(1);
+    TYPE2(1),
+    TYPE1(0);
     private final int value;
 
     private ExampleType(int value) {

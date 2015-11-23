@@ -298,9 +298,9 @@ public class RestGenerator {
 							JVar fieldVar = myClass.field(JMod.PUBLIC, entityAttribute.getFieldClass(), entityAttributeName);
 							generateGetterAndSetter(myClass, entityAttributeName, entityAttribute.getFieldClass());
 						}
-						//filter modification
+						/*//filter modification
 						if (entityAttribute.asRelationship()!=null)
-						{/*
+						{
 							entityManager.addChildrenFilter(entityAttribute);
 							for (Field filterField: entityAttribute.getChildrenFilterList())
 							{
@@ -308,9 +308,16 @@ public class RestGenerator {
 								JVar fieldVar = myClass.field(JMod.PUBLIC, filterField.getFieldClass(), filterFieldName);
 								generateGetterAndSetter(myClass, filterFieldName, filterField.getFieldClass());
 							}
-							*/
-						}
+							
+						}*/
 					}
+				}
+				for (EntityAttribute entityAttribute: entityManager.getChildrenFilter())
+				{
+					String filterFieldName=entityAttribute.getParent().getName()+Utility.getFirstUpper(entityAttribute.getName());
+					JVar fieldVar = myClass.field(JMod.PUBLIC, entityAttribute.getFieldClass(), filterFieldName);
+					generateGetterAndSetter(myClass, filterFieldName, entityAttribute.getFieldClass());
+				
 				}
 				saveFile(codeModel);
 				searchBeanClass=myClass;

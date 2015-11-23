@@ -1,9 +1,12 @@
 package it.polimi.model.domain;
 
 import it.polimi.generation.Generator;
+import it.polimi.reflection.EntityManager;
+import it.polimi.reflection.EntityManagerImpl;
 import it.polimi.utils.ReflectionManager;
 
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -182,6 +185,30 @@ public class EntityAttribute {
 				return true;
 		}
 		return false;
+	}
+	@JsonIgnore
+	public Entity getParent() {
+		if (isField())
+			return asField().getEntity();
+		if (isRelationship())
+			return asRelationship().getEntity();
+		return asEnumField().getEntity();
+	}
+	@JsonIgnore
+	public List<EntityAttribute> getFilterField()
+	{
+		List<EntityAttribute> childrenAttributeList = new ArrayList<EntityAttribute>();
+		if (isRelationship())
+		{
+			EntityManager targetManager = new EntityManagerImpl(asRelationship().getEntityTarget());
+			for (EntityAttribute entityAttribute: targetManager.getAllAttribute())
+			{
+				if (entityAttribute.hasAnnotation(AnnotationType.FILTER_FIELD))
+				childrenAttributeList.add(entityAttribute);
+			}
+		}
+		
+		return childrenAttributeList;
 	}
 	
 

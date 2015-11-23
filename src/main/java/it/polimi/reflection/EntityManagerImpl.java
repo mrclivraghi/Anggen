@@ -1,5 +1,6 @@
 package it.polimi.reflection;
 
+import it.polimi.model.domain.AnnotationType;
 import it.polimi.model.domain.Entity;
 import it.polimi.model.domain.EntityAttribute;
 import it.polimi.model.domain.Field;
@@ -122,16 +123,23 @@ public class EntityManagerImpl implements EntityManager{
 			}else
 				string=string+manageSingleParam(className, entityAttribute,  entityAttributeName);
 			
-			/*addChildrenFilter(entityAttribute);
-			if (entityAttribute.getChildrenFilterList()!=null)
+			/*if (entityAttribute.getChildrenFilterList()!=null)
 				for (Field filterField: entityAttribute.getChildrenFilterList())
 				{
 					ReflectionManager reflectionManager = new ReflectionManager(filterField.getOwnerClass());
 					String filterFieldName=reflectionManager.parseName(filterField.getOwnerClass().getName())+Utility.getFirstUpper(filterField.getName());
 					string = string+manageSingleParam(className, filterField, filterFieldName);
 					
-				}
-			*/
+				}*/
+			
+			
+		}
+		//children filter
+		for (EntityAttribute filterAttribute: getChildrenFilter())
+		{
+			String filterFieldName=filterAttribute.getParent().getName()+Utility.getFirstUpper(filterAttribute.getName());
+			string = string+manageSingleParam(className, filterAttribute, filterFieldName);
+		
 		}
 		return string.substring(0, string.length()-1);
 	}
@@ -258,6 +266,24 @@ public class EntityManagerImpl implements EntityManager{
 		List<EntityAttribute> tempList = getAttributeList();
 		tempList.addAll(entity.getEnumFieldList());
 		return tempList;
+	}
+
+	@Override
+	public List<EntityAttribute> getChildrenFilter() {
+		List<EntityAttribute> childrenFilterList = new ArrayList<EntityAttribute>();
+		for (Relationship relationship: entity.getRelationshipList())
+		{
+			EntityManager childrenEntityManager = new EntityManagerImpl(relationship.getEntityTarget());
+			
+			for (EntityAttribute childrenEntityAttribute: childrenEntityManager.getAllAttribute())
+			{
+				if (childrenEntityAttribute.hasAnnotation(AnnotationType.FILTER_FIELD))
+					childrenFilterList.add(childrenEntityAttribute);
+			}
+		}
+		
+		
+		return childrenFilterList;
 	}
 
 }

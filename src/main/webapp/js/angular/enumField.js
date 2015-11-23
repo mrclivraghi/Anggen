@@ -2209,7 +2209,7 @@ annotationService.childrenList.relationshipList=response.data;
 alert("error");
 return; 
 });
-annotationService.childrenList.annotationTypeList=["PRIMARY_KEY","NOT_NULL","BOT_BLANK","DESCRIPTION_FIELD","BETWEEN_FILTER","EXCEL_EXPORT","FILTER_FIELD","IGNORE_SEARCH","IGNORE_UPDATE",];
+annotationService.childrenList.annotationTypeList=["PRIMARY_KEY","NOT_NULL","NOT_BLANK","DESCRIPTION_FIELD","BETWEEN_FILTER","EXCEL_EXPORT","FILTER_FIELD","IGNORE_SEARCH","IGNORE_UPDATE","SIZE"];
 }; 
 $scope.init();
 $scope.annotationAttributeListGridOptions = {

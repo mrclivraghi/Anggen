@@ -51,6 +51,8 @@ import com.sun.codemodel.JClass;
 import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JDefinedClass;
+import com.sun.codemodel.JExpr;
+import com.sun.codemodel.JExpression;
 import com.sun.codemodel.JMethod;
 import com.sun.codemodel.JMod;
 import com.sun.codemodel.JVar;
@@ -120,6 +122,10 @@ public class EntityGenerator {
 		JAnnotationUse annotationTable= myClass.annotate(Table.class);
 		//from properties
 		annotationTable.param("schema", "public");
+		
+		JVar entityId= myClass.field(JMod.PUBLIC+JMod.STATIC+JMod.FINAL, Long.class, "entityId");
+		entityId.init(JExpr.lit(entity.getEntityId()));
+		
 		OracleNamingStrategy namingStrategy = new OracleNamingStrategy();
 		annotationTable.param("name", namingStrategy.classToTableName(entity.getName()));
 		for (Field field : entity.getFieldList())

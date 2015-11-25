@@ -17,4 +17,17 @@ public enum RestrictionType {
 	{
 		return this.value;
 	}
+	
+	@Override
+	public String toString()
+	{
+		switch (this)
+		{
+		case DELETE:	return "DELETE";
+		case INSERT:	return "INSERT";
+		case SEARCH:	return "SEARCH";
+		case UPDATE:	return "UPDATE";
+		default:	return null;
+		}
+	}
 }

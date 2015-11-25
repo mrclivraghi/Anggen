@@ -21,7 +21,7 @@ import javax.persistence.UniqueConstraint;
 import org.hibernate.annotations.Type;
 
 @Entity
-@Table(name = "role", schema = "mustle")
+@Table(name = "role", schema = "sso")
 public class Role{
 
 	@Id

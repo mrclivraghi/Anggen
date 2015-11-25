@@ -1,5 +1,7 @@
 package it.generated.boot.config;
 
+import it.generated.boot.CsrfHeaderFilter;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.*;
@@ -43,12 +45,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		// http.authorizeRequests().anyRequest().permitAll();
 		http
 			.authorizeRequests()
-			.antMatchers("/css/**","/img/**","/js/**","/auth/**","/login/**","/**").permitAll()
+			.antMatchers("/css/**","/img/**","/js/**","/auth/**","/login/**").permitAll()
 				.and()
 				.authorizeRequests().anyRequest().fullyAuthenticated().and()
-				.formLogin().and().csrf().disable();
-				//.csrfTokenRepository(csrfTokenRepository()).and()
-				//.addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class);
+				.formLogin().and().csrf()
+				.csrfTokenRepository(csrfTokenRepository()).and()
+				.addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class);
 	}
 	
 	 

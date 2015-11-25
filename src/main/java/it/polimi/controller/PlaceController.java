@@ -1,9 +1,9 @@
 
-package it.generated.controller;
+package it.polimi.controller;
 
 import java.util.List;
-import it.generated.searchbean.PlaceSearchBean;
-import it.generated.service.PlaceService;
+import it.polimi.searchbean.PlaceSearchBean;
+import it.polimi.service.PlaceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ public class PlaceController {
 
     @Autowired
     public PlaceService placeService;
-    private final static Logger log = LoggerFactory.getLogger(it.generated.domain.Place.class);
+    private final static Logger log = LoggerFactory.getLogger(it.polimi.domain.Place.class);
 
     @RequestMapping(method = RequestMethod.GET)
     public String manage() {
@@ -32,7 +32,7 @@ public class PlaceController {
     public ResponseEntity search(
         @org.springframework.web.bind.annotation.RequestBody
         PlaceSearchBean place) {
-        List<it.generated.domain.Place> placeList;
+        List<it.polimi.domain.Place> placeList;
         if (place.getPlaceId()!=null)
          log.info("Searching place like {}",place.toString());
         placeList=placeService.find(place);
@@ -47,7 +47,7 @@ public class PlaceController {
         @PathVariable
         String placeId) {
         log.info("Searching place with id {}",placeId);
-        List<it.generated.domain.Place> placeList=placeService.findById(Integer.valueOf(placeId));
+        List<it.polimi.domain.Place> placeList=placeService.findById(Integer.valueOf(placeId));
         getRightMapping(placeList);
          log.info("Search: returning {} place.",placeList.size());
         return ResponseEntity.ok().body(placeList);
@@ -67,10 +67,10 @@ public class PlaceController {
     @RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity insertPlace(
         @org.springframework.web.bind.annotation.RequestBody
-        it.generated.domain.Place place) {
+        it.polimi.domain.Place place) {
         if (place.getPlaceId()!=null)
         log.info("Inserting place like {}",place.toString());
-        it.generated.domain.Place insertedPlace=placeService.insert(place);
+        it.polimi.domain.Place insertedPlace=placeService.insert(place);
         getRightMapping(insertedPlace);
         log.info("Inserted place with id {}",insertedPlace.getPlaceId());
         return ResponseEntity.ok().body(insertedPlace);
@@ -80,22 +80,22 @@ public class PlaceController {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity updatePlace(
         @org.springframework.web.bind.annotation.RequestBody
-        it.generated.domain.Place place) {
+        it.polimi.domain.Place place) {
         log.info("Updating place with id {}",place.getPlaceId());
-        it.generated.domain.Place updatedPlace=placeService.update(place);
+        it.polimi.domain.Place updatedPlace=placeService.update(place);
         getRightMapping(updatedPlace);
         return ResponseEntity.ok().body(updatedPlace);
     }
 
-    private List<it.generated.domain.Place> getRightMapping(List<it.generated.domain.Place> placeList) {
-        for (it.generated.domain.Place place: placeList)
+    private List<it.polimi.domain.Place> getRightMapping(List<it.polimi.domain.Place> placeList) {
+        for (it.polimi.domain.Place place: placeList)
         {
         getRightMapping(place);
         }
         return placeList;
     }
 
-    private void getRightMapping(it.generated.domain.Place place) {
+    private void getRightMapping(it.polimi.domain.Place place) {
         if (place.getExample()!=null)
         {
         place.getExample().setPlaceList(null);

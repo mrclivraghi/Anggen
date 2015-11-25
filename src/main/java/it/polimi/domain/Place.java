@@ -1,5 +1,5 @@
 
-package it.generated.domain;
+package it.polimi.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;

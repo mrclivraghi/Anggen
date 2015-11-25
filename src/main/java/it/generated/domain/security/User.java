@@ -1,5 +1,6 @@
 package it.generated.domain.security;
 import static javax.persistence.GenerationType.IDENTITY;
+import it.polimi.model.domain.Restriction;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -20,8 +21,10 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
-@Table(name = "user", schema = "sso")
+@Table(name = "user", schema = "mustle")
 public class User {
 
 	@Id
@@ -35,8 +38,10 @@ public class User {
 	private Boolean enabled;
 	
 
-	@ManyToOne(fetch=FetchType.EAGER)
-	private Role role;
+	@ManyToMany(fetch=FetchType.EAGER)
+	@Type(type="it.polimi.model.domain.Role")
+	@JoinTable(name="user_role", schema="mustle",joinColumns={@JoinColumn(name="user_id")},inverseJoinColumns={@JoinColumn(name="role_id")})
+	private List<Role> roleList;
 
 	public User() {
 	}
@@ -104,18 +109,27 @@ public class User {
 		this.enabled = enabled;
 	}
 
-	/**
-	 * @return the role
-	 */
-	public Role getRole() {
-		return role;
+	public List<Role> getRoleList() {
+		return roleList;
 	}
 
-	/**
-	 * @param role the role to set
-	 */
-	public void setRole(Role role) {
-		this.role = role;
+	public void setRoleList(List<Role> roleList) {
+		this.roleList = roleList;
+	}
+
+	public Boolean getEnabled() {
+		return enabled;
+	}
+
+	
+	@JsonIgnore
+	public List<Restriction> getRestrictionList(){
+		List<Restriction> restrictionList = new ArrayList<Restriction>();
+		for (Role role: roleList)
+		{
+			restrictionList.addAll(role.getRestrictionList());
+		}
+		return restrictionList;
 	}
 
 }

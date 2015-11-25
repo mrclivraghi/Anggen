@@ -127,4 +127,11 @@ public class Entity {
 	public void setRestrictionList(List<Restriction> restrictionList) {
 		this.restrictionList = restrictionList;
 	}
+	
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Entity)) return false;
+		return ((Entity) obj).getEntityId()==entityId;
+	}
 }

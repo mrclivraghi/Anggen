@@ -1,12 +1,18 @@
 
-package it.generated.controller;
+package it.polimi.controller;
 
 import java.util.List;
-import it.generated.searchbean.ExampleSearchBean;
-import it.generated.service.ExampleService;
+
+import it.generated.domain.Example;
+import it.polimi.model.domain.RestrictionType;
+import it.polimi.searchbean.ExampleSearchBean;
+import it.polimi.service.ExampleService;
+import it.polimi.service.SecurityService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,7 +26,11 @@ public class ExampleController {
 
     @Autowired
     public ExampleService exampleService;
-    private final static Logger log = LoggerFactory.getLogger(it.generated.domain.Example.class);
+    
+    @Autowired
+    public SecurityService securityService;
+    
+    private final static Logger log = LoggerFactory.getLogger(it.polimi.domain.Example.class);
 
     @RequestMapping(method = RequestMethod.GET)
     public String manage() {
@@ -32,7 +42,12 @@ public class ExampleController {
     public ResponseEntity search(
         @org.springframework.web.bind.annotation.RequestBody
         ExampleSearchBean example) {
-        List<it.generated.domain.Example> exampleList;
+    	
+    	if (securityService.isAllowed(it.polimi.domain.Example.entityId, RestrictionType.SEARCH))
+    		return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    	
+    	
+        List<it.polimi.domain.Example> exampleList;
         if (example.getExampleId()!=null)
          log.info("Searching example like {}",example.toString());
         exampleList=exampleService.find(example);
@@ -47,7 +62,7 @@ public class ExampleController {
         @PathVariable
         String exampleId) {
         log.info("Searching example with id {}",exampleId);
-        List<it.generated.domain.Example> exampleList=exampleService.findById(Integer.valueOf(exampleId));
+        List<it.polimi.domain.Example> exampleList=exampleService.findById(Integer.valueOf(exampleId));
         getRightMapping(exampleList);
          log.info("Search: returning {} example.",exampleList.size());
         return ResponseEntity.ok().body(exampleList);
@@ -67,10 +82,10 @@ public class ExampleController {
     @RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity insertExample(
         @org.springframework.web.bind.annotation.RequestBody
-        it.generated.domain.Example example) {
+        it.polimi.domain.Example example) {
         if (example.getExampleId()!=null)
         log.info("Inserting example like {}",example.toString());
-        it.generated.domain.Example insertedExample=exampleService.insert(example);
+        it.polimi.domain.Example insertedExample=exampleService.insert(example);
         getRightMapping(insertedExample);
         log.info("Inserted example with id {}",insertedExample.getExampleId());
         return ResponseEntity.ok().body(insertedExample);
@@ -80,24 +95,24 @@ public class ExampleController {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity updateExample(
         @org.springframework.web.bind.annotation.RequestBody
-        it.generated.domain.Example example) {
+        it.polimi.domain.Example example) {
         log.info("Updating example with id {}",example.getExampleId());
-        it.generated.domain.Example updatedExample=exampleService.update(example);
+        it.polimi.domain.Example updatedExample=exampleService.update(example);
         getRightMapping(updatedExample);
         return ResponseEntity.ok().body(updatedExample);
     }
 
-    private List<it.generated.domain.Example> getRightMapping(List<it.generated.domain.Example> exampleList) {
-        for (it.generated.domain.Example example: exampleList)
+    private List<it.polimi.domain.Example> getRightMapping(List<it.polimi.domain.Example> exampleList) {
+        for (it.polimi.domain.Example example: exampleList)
         {
         getRightMapping(example);
         }
         return exampleList;
     }
 
-    private void getRightMapping(it.generated.domain.Example example) {
+    private void getRightMapping(it.polimi.domain.Example example) {
         if (example.getPlaceList()!=null)
-        for (it.generated.domain.Place place :example.getPlaceList())
+        for (it.polimi.domain.Place place :example.getPlaceList())
 
         {
 

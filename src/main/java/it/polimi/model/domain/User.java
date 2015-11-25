@@ -20,8 +20,10 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
-@Table(name = "user", schema = "mustle")
+@Table(name = "user", schema = "sso")
 public class User {
 
 	@Id
@@ -118,5 +120,15 @@ public class User {
 		return enabled;
 	}
 
+	
+	@JsonIgnore
+	public List<Restriction> getRestrictionList(){
+		List<Restriction> restrictionList = new ArrayList<Restriction>();
+		for (Role role: roleList)
+		{
+			restrictionList.addAll(role.getRestrictionList());
+		}
+		return restrictionList;
+	}
 
 }

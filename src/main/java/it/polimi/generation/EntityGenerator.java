@@ -111,7 +111,8 @@ public class EntityGenerator {
 		String lowerClassName = Utility.getFirstLower(className);
 		JDefinedClass myClass= null;
 		try {
-			myClass = codeModel._class("it.generated.domain."+className, ClassType.CLASS);
+			//TODO fix
+			myClass = codeModel._class("it.polimi.domain."+className, ClassType.CLASS);
 		} catch (JClassAlreadyExistsException e) {
 			e.printStackTrace();
 		}

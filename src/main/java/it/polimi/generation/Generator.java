@@ -139,11 +139,11 @@ public class Generator {
 		JCodeModel	codeModel = new JCodeModel();
 		JDefinedClass myClass= null;
 		try {
-			String thePackage="it.generated.domain.";
+			String thePackage="it.polimi.domain.";
 			if (className.endsWith("SearchBean"))
-				thePackage="it.generated.searchbean.";
+				thePackage="it.polimi.searchbean.";
 			if (className.endsWith("Repository"))
-				thePackage="it.generated.repository.";
+				thePackage="it.polimi.repository.";
 			myClass = codeModel._class(thePackage+Utility.getFirstUpper(className), ClassType.CLASS);
 		} catch (JClassAlreadyExistsException e) {
 			e.printStackTrace();

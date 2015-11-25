@@ -98,7 +98,7 @@ public class RestGenerator {
 	public RestGenerator(Entity entity)
 	{
 		this.entity=entity;
-		this.fullClassName="it.generated.domain."+Utility.getFirstUpper(entity.getName());
+		this.fullClassName="it.polimi.domain."+Utility.getFirstUpper(entity.getName());
 		File file = new File(""); 
 		this.directory = file.getAbsolutePath()+"\\src\\main\\java";
 		entityManager= new EntityManagerImpl(entity);
@@ -602,10 +602,10 @@ public class RestGenerator {
 			//declare service
 			JVar repository = myClass.field(JMod.PUBLIC, serviceInterfaceClass, lowerClass+"Service");
 			repository.annotate(Autowired.class);
-			//private final static Logger log = LoggerFactory.getLogger(Mountain.class);
+			
+			
 			JClass factory = codeModel.directClass("org.slf4j.LoggerFactory");
 			JVar log = myClass.field(JMod.PRIVATE+JMod.STATIC+JMod.FINAL, Logger.class, "log");
-			//TODO fix logger
 			JClass jClassClass =Generator.getJDefinedClass(entity.getName());
 			log.init(factory.staticInvoke("getLogger").arg(jClassClass.dotclass()));
 			//log.assign(factory.staticInvoke("getLogger"));

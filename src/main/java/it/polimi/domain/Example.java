@@ -1,8 +1,9 @@
 
-package it.generated.domain;
+package it.polimi.domain;
 
 import java.util.Date;
 import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -11,15 +12,19 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
 import it.polimi.domain.ExampleType;
 import it.polimi.domain.Place;
 import it.polimi.utils.annotation.DescriptionField;
+
 import org.hibernate.annotations.Type;
 
 @Entity
 @Table(schema = "public", name = "example")
 public class Example {
 
+	
+	public static final Long entityId= 80L;
 	
 	
     @javax.persistence.Column(name = "male")

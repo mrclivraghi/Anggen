@@ -1,10 +1,10 @@
 
-package it.generated.service;
+package it.polimi.service;
 
 import java.util.List;
-import it.generated.repository.PlaceRepository;
-import it.generated.searchbean.PlaceSearchBean;
-import it.generated.service.PlaceService;
+import it.polimi.repository.PlaceRepository;
+import it.polimi.searchbean.PlaceSearchBean;
+import it.polimi.service.PlaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,12 +18,12 @@ public class PlaceServiceImpl
     public PlaceRepository placeRepository;
 
     @Override
-    public List<it.generated.domain.Place> findById(Integer placeId) {
+    public List<it.polimi.domain.Place> findById(Integer placeId) {
         return placeRepository.findByPlaceId(placeId);
     }
 
     @Override
-    public List<it.generated.domain.Place> find(PlaceSearchBean place) {
+    public List<it.polimi.domain.Place> find(PlaceSearchBean place) {
         return placeRepository.findByPlaceIdAndPlaceNameAndExample(place.getPlaceId(),place.getPlaceName(),place.getExample());
     }
 
@@ -34,17 +34,17 @@ public class PlaceServiceImpl
     }
 
     @Override
-    public it.generated.domain.Place insert(it.generated.domain.Place place) {
+    public it.polimi.domain.Place insert(it.polimi.domain.Place place) {
         return placeRepository.save(place);
     }
 
     @Override
     @Transactional
-    public it.generated.domain.Place update(it.generated.domain.Place place) {
-        it.generated.domain.Place returnedPlace=placeRepository.save(place);
+    public it.polimi.domain.Place update(it.polimi.domain.Place place) {
+        it.polimi.domain.Place returnedPlace=placeRepository.save(place);
         if (place.getExample()!=null)
         {
-        List<it.generated.domain.Place> placeList = placeRepository.findByExample( place.getExample());
+        List<it.polimi.domain.Place> placeList = placeRepository.findByExample( place.getExample());
         if (!placeList.contains(returnedPlace))
         placeList.add(returnedPlace);
         returnedPlace.getExample().setPlaceList(placeList);

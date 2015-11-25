@@ -1,12 +1,12 @@
 
-package it.generated.searchbean;
+package it.polimi.searchbean;
 
 
 public class PlaceSearchBean {
 
     public java.lang.Integer placeId;
     public java.lang.String placeName;
-    public it.generated.domain.Example example;
+    public it.polimi.domain.Example example;
 
     public java.lang.Integer getPlaceId() {
         return this.placeId;
@@ -24,11 +24,11 @@ public class PlaceSearchBean {
         this.placeName=placeName;
     }
 
-    public it.generated.domain.Example getExample() {
+    public it.polimi.domain.Example getExample() {
         return this.example;
     }
 
-    public void setExample(it.generated.domain.Example example) {
+    public void setExample(it.polimi.domain.Example example) {
         this.example=example;
     }
 

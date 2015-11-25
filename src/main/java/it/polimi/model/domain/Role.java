@@ -42,6 +42,11 @@ public class Role{
 	private List<Restriction> restrictionList;
 	
 	
+	@OneToMany(fetch=FetchType.EAGER)
+	@Type(type="it.polimi.model.domain.ValidationRestriction")
+	@JoinColumn(name="role_id_role")
+	private List<ValidationRestriction> validationRestrictionList;
+	
 	public Role() {
 	}
 
@@ -93,6 +98,21 @@ public class Role{
 	 */
 	public void setRestrictionList(List<Restriction> restrictionList) {
 		this.restrictionList = restrictionList;
+	}
+
+	/**
+	 * @return the validationRestrictionList
+	 */
+	public List<ValidationRestriction> getValidationRestrictionList() {
+		return validationRestrictionList;
+	}
+
+	/**
+	 * @param validationRestrictionList the validationRestrictionList to set
+	 */
+	public void setValidationRestrictionList(
+			List<ValidationRestriction> validationRestrictionList) {
+		this.validationRestrictionList = validationRestrictionList;
 	}
 
 

@@ -45,6 +45,13 @@ public class Field extends EntityAttribute{
 	@JoinColumn(name="field_id_field")
 	private List<Annotation> annotationList;
 	
+	
+	@OneToMany(fetch=FetchType.EAGER)
+	@Type(type="it.polimi.model.domain.ValidationRestriction")
+	@JoinColumn(name="field_id_field")
+	private List<ValidationRestriction> validationRestrictionList;
+	
+	
 	@ManyToOne
 	@JoinColumn(name="tab_id_tab")
 	private Tab tab;
@@ -118,6 +125,19 @@ public class Field extends EntityAttribute{
 	 */
 	public void setTab(Tab tab) {
 		this.tab = tab;
+	}
+	/**
+	 * @return the validationRestrictionList
+	 */
+	public List<ValidationRestriction> getValidationRestrictionList() {
+		return validationRestrictionList;
+	}
+	/**
+	 * @param validationRestrictionList the validationRestrictionList to set
+	 */
+	public void setValidationRestrictionList(
+			List<ValidationRestriction> validationRestrictionList) {
+		this.validationRestrictionList = validationRestrictionList;
 	}
 	
 }

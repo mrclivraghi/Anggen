@@ -39,7 +39,7 @@ public class User {
 
 	@ManyToMany(fetch=FetchType.EAGER)
 	@Type(type="it.polimi.model.domain.Role")
-	@JoinTable(name="user_role", schema="mustle",joinColumns={@JoinColumn(name="user_id")},inverseJoinColumns={@JoinColumn(name="role_id")})
+	@JoinTable(name="user_role", schema="sso",joinColumns={@JoinColumn(name="user_id")},inverseJoinColumns={@JoinColumn(name="role_id")})
 	private List<Role> roleList;
 
 	public User() {

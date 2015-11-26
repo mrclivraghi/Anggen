@@ -538,21 +538,21 @@ public class AngularGenerator {
 		{
 			html.div((new HtmlAttributes()).add("class", "pull-left"))
 			.form((new HtmlAttributes()).add("id", entityName+"ActionButton").add("ng-if", "selectedEntity.show"))
-			.button(CssGenerator.getButton("insert").add("ng-if", "selectedEntity."+entityName+"Id==undefined"))
+			.button(CssGenerator.getButton("insert").add("ng-if", "selectedEntity."+entityName+"Id==undefined").add("ng-show",checkSecurity(entityName, "create")))
 			.content("Insert")
-			.button(CssGenerator.getButton("update").add("ng-if", "selectedEntity."+entityName+"Id>0"))
+			.button(CssGenerator.getButton("update").add("ng-if", "selectedEntity."+entityName+"Id>0").add("ng-show",checkSecurity(entityName, "update")))
 			.content("Update")
-			.button(CssGenerator.getButton("del").add("ng-if", "selectedEntity."+entityName+"Id>0"))
+			.button(CssGenerator.getButton("del").add("ng-if", "selectedEntity."+entityName+"Id>0").add("ng-show",checkSecurity(entityName, "delete")))
 			.content("Delete");
 			if (!isParent)
-				html.button(CssGenerator.getButton("remove").add("ng-if", "selectedEntity."+entityName+"Id>0"))
+				html.button(CssGenerator.getButton("remove").add("ng-if", "selectedEntity."+entityName+"Id>0").add("ng-show",checkSecurity(entityName, "delete")))
 				.content("Remove");
 			html._form()._div();
 		} else
 		{
 			html.div(CssGenerator.getPanelBody());
 			html.div((new HtmlAttributes()).add("class", "pull-left right-input"))
-			.button(CssGenerator.getButton("addNew"))
+			.button(CssGenerator.getButton("addNew").add("ng-show",checkSecurity(entityName, "create")))
 			.content("Add new")
 			.button(CssGenerator.getButton("search"))
 			.content("Find")
@@ -614,7 +614,7 @@ public class AngularGenerator {
 					EntityManager entityAttributeManager = new EntityManagerImpl(entityAttribute.asRelationship().getEntityTarget());
 					if (search)
 					{
-						html.div((new HtmlAttributes()).add("class", style+" right-input").add("style","height: 59px;"));
+						html.div((new HtmlAttributes()).add("class", style+" right-input").add("style","height: 59px;").add("ng-show",checkSecurity(entityAttribute.asRelationship().getEntityTarget().getName(),"search")));
 						
 						html.div((new HtmlAttributes()).add("class", "input-group"));
 						html.span((new HtmlAttributes()).add("class","input-group-addon")).content(entityAttribute.getName());
@@ -748,6 +748,14 @@ public class AngularGenerator {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	
+	private String checkSecurity(String entity,String action)
+	{
+		StringBuilder sb = new StringBuilder();
+		sb.append("(restrictionList."+entity+"==undefined || restrictionList."+entity+".can"+Utility.getFirstUpper(action)+")");
+		return sb.toString();
 	}
 	
 	/*private void renderSearchForm(HtmlCanvas html,String baseEntity)

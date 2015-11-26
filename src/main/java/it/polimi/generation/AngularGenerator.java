@@ -466,7 +466,15 @@ public class AngularGenerator {
 			searchTab.setName("Searchdetails");
 			tabList.add(searchTab);
 		} else
+		{
 			tabList=entityManager.getTabList();
+			if (tabList.size()==0)
+			{
+				Tab searchTab= new Tab();
+				searchTab.setName("Searchdetails");
+				tabList.add(searchTab);
+			}
+		}
 		
 		if (!search)
 		{
@@ -572,9 +580,18 @@ public class AngularGenerator {
 		if (!search && entityAttribute.getIgnoreUpdate()) return;
 		
 		style= style.equals("pull-left")? "pull-right": "pull-left";
+		
+		String securityCondition="true ";
+		if (!entityAttribute.getParent().equals(entity))
+			securityCondition=checkSecurity(entityAttribute.getParent().getName(), "search") ;
+		
+		
+		
+		//	securityCondition="true ";
+		
 		if (entityAttribute.isEnumField())
 		{
-			html.div(CssGenerator.getExternalFieldPanel(style, search, entityName, entityAttribute));
+			html.div(CssGenerator.getExternalFieldPanel(style, search, entityName, entityAttribute).add("ng-show", securityCondition,false));
 			
 			html.div(CssGenerator.getInputGroup());
 			html.span((new HtmlAttributes()).add("class","input-group-addon")).content(entityAttribute.getName());
@@ -593,7 +610,7 @@ public class AngularGenerator {
 				
 				
 				
-				html.div(CssGenerator.getExternalFieldPanel(style, search, entityName, entityAttribute));
+				html.div(CssGenerator.getExternalFieldPanel(style, search, entityName, entityAttribute).add("ng-show", securityCondition,false));
 				html.div(CssGenerator.getInputGroup());
 				html.span((new HtmlAttributes()).add("class","input-group-addon")).content(entityAttribute.getName());
 				if (getInputType(entityAttribute).equals("checkbox"))
@@ -614,7 +631,7 @@ public class AngularGenerator {
 					EntityManager entityAttributeManager = new EntityManagerImpl(entityAttribute.asRelationship().getEntityTarget());
 					if (search)
 					{
-						html.div((new HtmlAttributes()).add("class", style+" right-input").add("style","height: 59px;").add("ng-show",checkSecurity(entityAttribute.asRelationship().getEntityTarget().getName(),"search")));
+						html.div((new HtmlAttributes()).add("class", style+" right-input").add("style","height: 59px;").add("ng-show",securityCondition+(securityCondition.equals("")?"":" && ")+ checkSecurity(entityAttribute.asRelationship().getEntityTarget().getName(),"search"),false));
 						
 						html.div((new HtmlAttributes()).add("class", "input-group"));
 						html.span((new HtmlAttributes()).add("class","input-group-addon")).content(entityAttribute.getName());
@@ -633,7 +650,7 @@ public class AngularGenerator {
 							
 							HtmlCanvas downloadCanvas= new HtmlCanvas();
 							downloadCanvas
-							.button(CssGenerator.getButton("show"+Utility.getFirstUpper(entityAttribute.getName())+"Detail"," pull-right").add("style", "margin-top: -7px"))
+							.button(CssGenerator.getButton("show"+Utility.getFirstUpper(entityAttribute.getName())+"Detail"," pull-right").add("style", "margin-top: -7px").add("ng-show",checkSecurity(entityAttribute.asRelationship().getEntityTarget().getName(),"create"),false))
 							.content("Add new "+entityAttribute.getName())
 							//<button type="button" class="btn btn-info btn-lg" data-toggle="modal" 
 							//data-target="#myModal">Open Modal</button>
@@ -646,7 +663,7 @@ public class AngularGenerator {
 							style="pull-left";
 							renderModalInsertExistingPanel(html,entityAttribute);
 							html.br().br();
-							html.div((new HtmlAttributes()).add("class", style).add("style", "width: 100%"));
+							html.div((new HtmlAttributes()).add("class", style).add("style", "width: 100%").add("ng-show", securityCondition+(securityCondition.equals("")?"":" && ")+checkSecurity(entityAttribute.asRelationship().getEntityTarget().getName(),"search"),false));
 							//html._div();
 							html.div(CssGenerator.getPanel())
 							.div(CssGenerator.getPanelHeader())
@@ -668,7 +685,7 @@ public class AngularGenerator {
 							//html.div(CssGenerator.getPanelBody());
 						}else
 						{//entity
-							html.div(CssGenerator.getExternalFieldPanel(style, search, entityName, entityAttribute));
+							html.div(CssGenerator.getExternalFieldPanel(style, search, entityName, entityAttribute).add("ng-show", securityCondition,false));
 							html.div((new HtmlAttributes()).add("class", "input-group"));
 							html.span((new HtmlAttributes()).add("class", "input-group-addon")).content(entityAttribute.getName());
 							html.select(CssGenerator.getSelect("").add("ng-model", "selectedEntity."+entityAttribute.getName())
@@ -754,7 +771,7 @@ public class AngularGenerator {
 	private String checkSecurity(String entity,String action)
 	{
 		StringBuilder sb = new StringBuilder();
-		sb.append("(restrictionList."+entity+"==undefined || restrictionList."+entity+".can"+Utility.getFirstUpper(action)+")");
+		sb.append("(restrictionList."+entity+"==undefined || restrictionList."+entity+".can"+Utility.getFirstUpper(action)+"==true)");
 		return sb.toString();
 	}
 	

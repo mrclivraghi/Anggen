@@ -689,17 +689,17 @@ public class AngularGenerator {
 						{//entity
 							html.div(CssGenerator.getExternalFieldPanel(style, search, entityName, entityAttribute).add("ng-show", securityCondition,false));
 							html.div((new HtmlAttributes()).add("class", "input-group"));
-							html.span((new HtmlAttributes()).add("class", "input-group-addon")).content(entityAttribute.getName());
-							html.select(CssGenerator.getSelect("").add("ng-model", "selectedEntity."+entityAttribute.getName())
-									.add("id", entityAttribute.getName())
-									.add("name", entityAttribute.getName())
-									.add("ng-options", entityAttribute.getName()+" as "+entityAttributeManager.getDescription()+" for "+entityAttribute.getName()+" in childrenList."+entityAttribute.getName()+"List track by "+entityAttribute.getName()+"."+Utility.getEntityCallName(entityAttribute.getName())+"Id").enctype("UTF-8"))
+							html.span((new HtmlAttributes()).add("class", "input-group-addon")).content(entityAttribute.asRelationship().getEntityTarget().getName());
+							html.select(CssGenerator.getSelect("").add("ng-model", "selectedEntity."+entityAttribute.asRelationship().getEntityTarget().getName())
+									.add("id", entityAttribute.asRelationship().getEntityTarget().getName())
+									.add("name", entityAttribute.asRelationship().getEntityTarget().getName())
+									.add("ng-options", entityAttribute.asRelationship().getEntityTarget().getName()+" as "+entityAttributeManager.getDescription()+" for "+entityAttribute.asRelationship().getEntityTarget().getName()+" in childrenList."+entityAttribute.asRelationship().getEntityTarget().getName()+"List track by "+entityAttribute.asRelationship().getEntityTarget().getName()+"."+Utility.getEntityCallName(entityAttribute.asRelationship().getEntityTarget().getName())+"Id").enctype("UTF-8"))
 									._select();
 							renderValidator(html,entityAttribute);
 							html.span((new HtmlAttributes()).add("class", "input-group-btn"))
-							.button(CssGenerator.getButton("show"+Utility.getFirstUpper(entityAttribute.getName())+"Detail").add("id",entityAttribute.getName()).add("ng-if", "selectedEntity."+entityAttribute.getName()+"==null"))
+							.button(CssGenerator.getButton("show"+Utility.getFirstUpper(entityAttribute.asRelationship().getEntityTarget().getName())+"Detail").add("id",entityAttribute.asRelationship().getEntityTarget().getName()).add("ng-if", "selectedEntity."+entityAttribute.asRelationship().getEntityTarget().getName()+"==null"))
 							.content("Add new "+entityAttribute.getName())
-							.button(CssGenerator.getButton("show"+Utility.getFirstUpper(entityAttribute.getName())+"Detail").add("id",entityAttribute.getName()).add("ng-if", "selectedEntity."+entityAttribute.getName()+"!=null"))
+							.button(CssGenerator.getButton("show"+Utility.getFirstUpper(entityAttribute.asRelationship().getEntityTarget().getName())+"Detail").add("id",entityAttribute.asRelationship().getEntityTarget().getName()).add("ng-if", "selectedEntity."+entityAttribute.asRelationship().getEntityTarget().getName()+"!=null"))
 							.content("Show detail")
 							._span();
 							html._div();

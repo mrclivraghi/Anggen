@@ -732,7 +732,7 @@ public class JsGenerator {
 	private String checkSecurity(String entity,String action)
 	{
 		StringBuilder sb = new StringBuilder();
-		sb.append("if (!(securityService.restrictionList."+entity+"!=undefined && securityService.restrictionList."+entity+".can"+Utility.getFirstUpper(action)+"))\n");
+		sb.append("if (securityService.restrictionList."+entity+"!=undefined && securityService.restrictionList."+entity+".can"+Utility.getFirstUpper(action)+")\n");
 		return sb.toString();
 	}
 	
@@ -742,6 +742,7 @@ public class JsGenerator {
 			for (Relationship relationship: entity.getRelationshipList())
 			{
 
+				sb.append(checkSecurity(relationship.getEntityTarget().getName(), "search"));
 				sb.append(entity.getName()+"Service.init"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List().then(function successCallback(response) {\n");
 				sb.append(entity.getName()+"Service.childrenList."+Utility.getFirstLower(relationship.getEntityTarget().getName())+"List=response.data;\n");
 				sb.append("},function errorCallback(response) { \n");

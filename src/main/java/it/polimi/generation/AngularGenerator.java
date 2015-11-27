@@ -736,10 +736,10 @@ public class AngularGenerator {
 			.div((new HtmlAttributes()).add("class", "modal-content"))
 			.div((new HtmlAttributes()).add("class", "modal-header"))
 			.button((new HtmlAttributes()).add("type", "button").add("class", "close").add("data-dismiss", "modal")).content("&times;",false)
-			.h4((new HtmlAttributes()).add("class", "modal-title")).content("Modal header")
+			.h4((new HtmlAttributes()).add("class", "modal-title")).content("Link existing "+entityAttribute.asRelationship().getEntityTarget().getName())
 			._div()
 			.div((new HtmlAttributes()).add("class", "modal-body"))
-			.p().content("some text");
+			.p().content("");
 			
 			html.div((new HtmlAttributes()).add("class", "input-group"));
 			html.span((new HtmlAttributes()).add("class", "input-group-addon")).content(entityAttribute.asRelationship().getEntityTarget().getName());

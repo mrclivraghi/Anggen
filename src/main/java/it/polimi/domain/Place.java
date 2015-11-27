@@ -17,6 +17,7 @@ import it.polimi.utils.annotation.Filter;
 @Table(schema = "public", name = "place")
 public class Place {
 
+    public final static Long entityId = 130L;
     @javax.persistence.Column(name = "place_id")
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

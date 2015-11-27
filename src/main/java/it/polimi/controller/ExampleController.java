@@ -2,17 +2,11 @@
 package it.polimi.controller;
 
 import java.util.List;
-
-import it.generated.domain.Example;
-import it.polimi.model.domain.RestrictionType;
 import it.polimi.searchbean.ExampleSearchBean;
 import it.polimi.service.ExampleService;
 import it.polimi.service.SecurityService;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,16 +18,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/example")
 public class ExampleController {
 
-    @Autowired
-    public ExampleService exampleService;
-    
-    @Autowired
-    public SecurityService securityService;
-    
+    @org.springframework.beans.factory.annotation.Autowired
+    private ExampleService exampleService;
+    @org.springframework.beans.factory.annotation.Autowired
+    private SecurityService securityService;
     private final static Logger log = LoggerFactory.getLogger(it.polimi.domain.Example.class);
 
     @RequestMapping(method = RequestMethod.GET)
     public String manage() {
+        if (!securityService.isAllowed(it.polimi.domain.Example.entityId, it.polimi.model.domain.RestrictionType.SEARCH)) 
+return "forbidden"; 
+
         return "example";
     }
 
@@ -42,16 +37,15 @@ public class ExampleController {
     public ResponseEntity search(
         @org.springframework.web.bind.annotation.RequestBody
         ExampleSearchBean example) {
-    	
-    	if (securityService.isAllowed(it.polimi.domain.Example.entityId, RestrictionType.SEARCH))
-    		return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-    	
-    	
+        if (!securityService.isAllowed(it.polimi.domain.Example.entityId, it.polimi.model.domain.RestrictionType.SEARCH)) 
+return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
+
         List<it.polimi.domain.Example> exampleList;
         if (example.getExampleId()!=null)
          log.info("Searching example like {}",example.toString());
         exampleList=exampleService.find(example);
         getRightMapping(exampleList);
+        getSecurityMapping(exampleList);
          log.info("Search: returning {} example.",exampleList.size());
         return ResponseEntity.ok().body(exampleList);
     }
@@ -61,6 +55,9 @@ public class ExampleController {
     public ResponseEntity getExampleById(
         @PathVariable
         String exampleId) {
+        if (!securityService.isAllowed(it.polimi.domain.Example.entityId, it.polimi.model.domain.RestrictionType.SEARCH)) 
+return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
+
         log.info("Searching example with id {}",exampleId);
         List<it.polimi.domain.Example> exampleList=exampleService.findById(Integer.valueOf(exampleId));
         getRightMapping(exampleList);
@@ -73,6 +70,9 @@ public class ExampleController {
     public ResponseEntity deleteExampleById(
         @PathVariable
         String exampleId) {
+        if (!securityService.isAllowed(it.polimi.domain.Example.entityId, it.polimi.model.domain.RestrictionType.DELETE)) 
+return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
+
         log.info("Deleting example with id {}",exampleId);
         exampleService.deleteById(Integer.valueOf(exampleId));
         return ResponseEntity.ok().build();
@@ -83,6 +83,9 @@ public class ExampleController {
     public ResponseEntity insertExample(
         @org.springframework.web.bind.annotation.RequestBody
         it.polimi.domain.Example example) {
+        if (!securityService.isAllowed(it.polimi.domain.Example.entityId, it.polimi.model.domain.RestrictionType.INSERT)) 
+return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
+
         if (example.getExampleId()!=null)
         log.info("Inserting example like {}",example.toString());
         it.polimi.domain.Example insertedExample=exampleService.insert(example);
@@ -96,9 +99,14 @@ public class ExampleController {
     public ResponseEntity updateExample(
         @org.springframework.web.bind.annotation.RequestBody
         it.polimi.domain.Example example) {
+        if (!securityService.isAllowed(it.polimi.domain.Example.entityId, it.polimi.model.domain.RestrictionType.UPDATE)) 
+return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
+
         log.info("Updating example with id {}",example.getExampleId());
+        rebuildSecurityMapping(example);
         it.polimi.domain.Example updatedExample=exampleService.update(example);
         getRightMapping(updatedExample);
+        getSecurityMapping(updatedExample);
         return ResponseEntity.ok().body(updatedExample);
     }
 
@@ -118,6 +126,25 @@ public class ExampleController {
 
         place.setExample(null);
         }
+    }
+
+    private void rebuildSecurityMapping(it.polimi.domain.Example example) {
+        if (!securityService.isAllowed(it.polimi.domain.Place.entityId, it.polimi.model.domain.RestrictionType.SEARCH))
+        example.setPlaceList(exampleService.findById(example.getExampleId()).get(0).getPlaceList());
+    }
+
+    private List<it.polimi.domain.Example> getSecurityMapping(List<it.polimi.domain.Example> exampleList) {
+        for (it.polimi.domain.Example example: exampleList)
+        {
+        getSecurityMapping(example);
+        }
+        return exampleList;
+    }
+
+    private void getSecurityMapping(it.polimi.domain.Example example) {
+        if (example.getPlaceList()!=null && !securityService.isAllowed(it.polimi.domain.Place.entityId, it.polimi.model.domain.RestrictionType.SEARCH) )
+        example.setPlaceList(null);
+
     }
 
 }

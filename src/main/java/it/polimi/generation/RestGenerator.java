@@ -1,5 +1,7 @@
 package it.polimi.generation;
 
+import it.polimi.domain.Example;
+import it.polimi.domain.Place;
 import it.polimi.model.domain.Entity;
 import it.polimi.model.domain.EntityAttribute;
 import it.polimi.model.domain.FieldType;
@@ -647,6 +649,7 @@ public class RestGenerator {
 			searchBlock.directStatement(" log.info(\"Searching "+lowerClass+" like {}\","+entityManager.getDescription(true)+");");
 			searchBlock.directStatement(""+lowerClass+"List="+lowerClass+"Service.find("+lowerClass+");");
 			searchBlock.directStatement("getRightMapping("+lowerClass+"List);");
+			searchBlock.directStatement("getSecurityMapping("+lowerClass+"List);");
 			searchBlock.directStatement(" log.info(\"Search: returning {} "+lowerClass+".\","+lowerClass+"List.size());");
 			searchBlock.directStatement("return "+response+".body("+lowerClass+"List);");
 			//getById  
@@ -708,9 +711,10 @@ public class RestGenerator {
 			JBlock updateBlock= update.body();
 			updateBlock.directStatement(addSecurityCheck(RestrictionType.UPDATE));
 			updateBlock.directStatement("log.info(\"Updating "+lowerClass+" with id {}\","+lowerClass+".get"+Utility.getFirstUpper(lowerClass)+"Id());");
-			
+			updateBlock.directStatement("rebuildSecurityMapping("+lowerClass+");");
 			updateBlock.directStatement(Generator.getJDefinedClass(Utility.getFirstUpper(className)).fullName()+" updated"+className+"="+lowerClass+"Service.update("+lowerClass+");");
 			updateBlock.directStatement("getRightMapping(updated"+className+");");
+			updateBlock.directStatement("getSecurityMapping(updated"+className+");");
 			updateBlock.directStatement("return "+response+".body(updated"+className+");");
 			
 			//get Right Mapping -List
@@ -729,6 +733,43 @@ public class RestGenerator {
 			
 			RestGenerator.generateRightMapping_v3(entity, getRightMappingBlock);
 			
+			// rebuild
+			/*
+			 *   private void rebuildSecurityMapping(Example example)
+    			{
+    				List<Place> placeList=exampleService.findById(example.getExampleId()).get(0).getPlaceList();
+    				example.setPlaceList(placeList);
+    			}
+			 * 
+			 */
+			JMethod reBuildMethod = myClass.method(JMod.PRIVATE, void.class, "rebuildSecurityMapping");
+			reBuildMethod.param(Generator.getJDefinedClass(entity.getName()), lowerClass);
+			JBlock reBuildBlock=reBuildMethod.body();
+			for (Relationship relationship: entity.getRelationshipList())
+			{
+				//!securityService.isAllowed(Place.entityId, RestrictionType.SEARCH)
+				reBuildBlock.directStatement("if (!securityService.isAllowed("+Generator.getJDefinedClass(relationship.getEntityTarget().getName()).fullName()+".entityId, "+RestrictionType.class.getName()+".SEARCH))");
+				if (relationship.isList())
+					reBuildBlock.directStatement(entity.getName()+".set"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List("+entity.getName()+"Service.findById("+entity.getName()+".get"+Utility.getFirstUpper(entity.getName())+"Id()).get(0).get"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List());");
+				else
+					reBuildBlock.directStatement(entity.getName()+".set"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"("+entity.getName()+"Service.findById("+entity.getName()+".get"+Utility.getFirstUpper(entity.getName())+"Id()).get(0).get"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"());");
+			}
+			
+			//get security Mapping -List
+			JMethod getSecurityMappingList = myClass.method(JMod.PRIVATE, listClass, "getSecurityMapping");
+			getSecurityMappingList.param(listClass, lowerClass+"List");
+			JBlock getSecurityMappingListBlock = getSecurityMappingList.body();
+			getSecurityMappingListBlock.directStatement("for ("+Generator.getJDefinedClass(Utility.getFirstUpper(className)).fullName()+" "+lowerClass+": "+lowerClass+"List)");
+			getSecurityMappingListBlock.directStatement("{");
+			getSecurityMappingListBlock.directStatement("getSecurityMapping("+lowerClass+");");
+			getSecurityMappingListBlock.directStatement("}");
+			getSecurityMappingListBlock.directStatement("return "+lowerClass+"List;");
+			
+			JMethod getSecurityMapping= myClass.method(JMod.PRIVATE, void.class, "getSecurityMapping");
+			getSecurityMapping.param(Generator.getJDefinedClass(entity.getName()), lowerClass);
+			JBlock getSecurityMappingBlock = getSecurityMapping.body();
+			
+			RestGenerator.generateSecurityMapping(entity,getSecurityMappingBlock);
 			
 		} catch (JClassAlreadyExistsException e) {
 			e.printStackTrace();
@@ -791,6 +832,30 @@ public class RestGenerator {
 			
 			block.directStatement("}");
 			
+		}
+	}
+	
+	
+	private static void generateSecurityMapping(Entity entity, JBlock block)
+	{
+		EntityManager entityManager = new EntityManagerImpl(entity);
+		String lowerClass= "";
+		// if (example.getPlaceList()!=null && !securityService.isAllowed(Place.entityId, RestrictionType.SEARCH))
+		for (Relationship relationship: entity.getRelationshipList())
+			
+		{
+			lowerClass=entity.getName();
+			if (relationship.isList())
+			{
+				block.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List()!=null && !securityService.isAllowed("+Generator.getJDefinedClass(relationship.getEntityTarget().getName()).fullName()+".entityId, "+RestrictionType.class.getName()+".SEARCH) )");
+				block.directStatement(""+lowerClass+".set"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List(null);\n");
+			}
+			 else
+			 {
+				 
+				 block.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"()!=null  && !securityService.isAllowed("+Generator.getJDefinedClass(relationship.getEntityTarget().getName()).fullName()+".entityId, "+RestrictionType.class.getName()+".SEARCH) )");
+				block.directStatement(""+lowerClass+".set"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"(null);\n");
+			 }
 		}
 	}
 	

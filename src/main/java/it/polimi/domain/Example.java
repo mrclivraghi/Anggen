@@ -34,7 +34,7 @@ public class Example {
     private java.lang.Integer exampleId;
     @OneToMany(fetch = FetchType.EAGER)
     @Type(type = "it.polimi.domain.Place")
-    @JoinColumn(name = "place_id_place")
+    @JoinColumn(name = "example_id_example")
     private List<Place> placeList;
     @javax.persistence.Column(name = "example_type")
     private ExampleType exampleType;

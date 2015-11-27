@@ -232,30 +232,7 @@ public class JsGenerator {
 		
 		
 		
-		//INIT CHILDREN LIST
-		sb.append("this.init=function()\n")
-		.append("{\n");
-		if (relationshipList!=null)
-			for (Relationship relationship: relationshipList)
-			{
-
-				sb.append("this.init"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List().then(function successCallback(response) {\n");
-				sb.append("this.childrenList."+Utility.getFirstLower(relationship.getEntityTarget().getName())+"List=response.data;\n");
-				sb.append("},function errorCallback(response) { \n");
-				manageRestError(sb);
-				sb.append("});\n");
-			}
-			for (EnumField enumField: entity.getEnumFieldList())
-			{
-				sb.append("this.childrenList."+enumField.getName()+"List=[");
-				for (EnumValue enumValue: enumField.getEnumValueList())
-				{
-					sb.append("\""+enumValue.getName()+"\",");
-				}
-				sb.append("];\n");
-
-			}
-		sb.append("}; \n");
+		
 		
 		
 		sb.append("})\n");
@@ -542,6 +519,7 @@ public class JsGenerator {
 				sb.append("function successCallback(response) {\n");
 				sb.append("console.log(\"response-ok\");\n");
 				sb.append("console.log(response);\n");
+				initChildrenList(sb, relationship.getEntityTarget());
 				sb.append(Utility.getEntityCallName(relationship.getEntityTarget().getName())+"Service.setSelectedEntity(response.data[0]);\n");
 				sb.append(Utility.getEntityCallName(relationship.getEntityTarget().getName())+"Service.selectedEntity.show=true;\n");
 
@@ -559,6 +537,7 @@ public class JsGenerator {
 				sb.append("{\n");
 				sb.append("if ("+Utility.getEntityCallName(entityName)+"Service.selectedEntity."+relationship.getEntityTarget().getName()+"==null || "+entityName+"Service.selectedEntity."+relationship.getEntityTarget().getName()+"==undefined)\n");
 				sb.append("{\n");
+				initChildrenList(sb, relationship.getEntityTarget());
 				sb.append(Utility.getEntityCallName(relationship.getEntityTarget().getName())+"Service.setSelectedEntity(null); \n");
 				sb.append(Utility.getEntityCallName(relationship.getEntityTarget().getName())+"Service.selectedEntity.show=true; \n");
 				//TODO set owner, list or entity?
@@ -569,6 +548,7 @@ public class JsGenerator {
 				sb.append("function successCallback(response) {\n");
 				//sb.append("console.log(\"response-ok\");\n");
 				//sb.append("console.log(response);\n");
+				initChildrenList(sb, relationship.getEntityTarget());
 				sb.append(Utility.getEntityCallName(relationship.getEntityTarget().getName())+"Service.setSelectedEntity(response.data[0]);\n");
 				sb.append(Utility.getEntityCallName(relationship.getEntityTarget().getName())+"Service.selectedEntity.show=true;\n");
 
@@ -584,10 +564,6 @@ public class JsGenerator {
 				sb.append("};\n");
 
 			}
-			
-			//if (isParent)
-				//sb.append("$scope.init();\n");
-
 
 		}
 		//pagination
@@ -760,6 +736,32 @@ public class JsGenerator {
 		return sb.toString();
 	}
 	
+	private void initChildrenList(StringBuilder sb,Entity entity)
+	{
+		if (entity.getRelationshipList()!=null)
+			for (Relationship relationship: entity.getRelationshipList())
+			{
+
+				sb.append(entity.getName()+"Service.init"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List().then(function successCallback(response) {\n");
+				sb.append(entity.getName()+"Service.childrenList."+Utility.getFirstLower(relationship.getEntityTarget().getName())+"List=response.data;\n");
+				sb.append("},function errorCallback(response) { \n");
+				manageRestError(sb);
+				sb.append("});\n");
+			}
+		if (entity.getEnumFieldList()!=null)
+			for (EnumField enumField: entity.getEnumFieldList())
+			{
+				sb.append(entity.getName()+"Service.childrenList."+enumField.getName()+"List=[");
+				for (EnumValue enumValue: enumField.getEnumValueList())
+				{
+					sb.append("\""+enumValue.getName()+"\",");
+				}
+				sb.append("];\n");
+
+			}
+	}
+	
+	
 	private String getSecurity()
 	{
 		StringBuilder sb = new StringBuilder();
@@ -782,10 +784,13 @@ public class JsGenerator {
 		sb.append("$rootScope.restrictionList=response.data;\n");
 		sb.append("console.log($rootScope.restrictionList);\n");
 		String[] serviceArray=services.split(",");
-		for (int i=0; i<serviceArray.length; i++)
-			if (!serviceArray[i].equals("") && !serviceArray[i].trim().equals("securityService"))
+		//for (int i=0; i<serviceArray.length; i++)
+		//	if (!serviceArray[i].equals("") && !serviceArray[i].trim().equals("securityService"))
 		{
-			sb.append("//"+serviceArray[i].trim()+".init();\n");
+			//sb.append("//"+serviceArray[i].trim()+".init();\n");
+			
+			initChildrenList(sb, entity);
+				
 		}
 		
 		sb.append("});\n");

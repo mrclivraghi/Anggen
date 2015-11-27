@@ -732,7 +732,7 @@ public class JsGenerator {
 	private String checkSecurity(String entity,String action)
 	{
 		StringBuilder sb = new StringBuilder();
-		sb.append("if (securityService.restrictionList."+entity+"!=undefined && securityService.restrictionList."+entity+".can"+Utility.getFirstUpper(action)+")\n");
+		sb.append("if (securityService.restrictionList."+entity+"==undefined || securityService.restrictionList."+entity+".can"+Utility.getFirstUpper(action)+")\n");
 		return sb.toString();
 	}
 	

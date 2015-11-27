@@ -397,7 +397,8 @@ public class AngularGenerator {
 	{
 		String readOnly="false";
 		String entityAttributeName= entityAttribute.asField()!=null ? entityAttribute.getName() : (entityAttribute.isRelationship()? entityAttribute.asRelationship().getEntityTarget().getName(): entityAttribute.asEnumField().getName());
-				
+		if (entityAttributeName.equals("placePlaceName"))
+			System.out.println("ERR");
 		
 		if (entityAttributeName.equals(entityName+"Id")&&validation)
 			readOnly="true";
@@ -499,7 +500,7 @@ public class AngularGenerator {
 				html.div((new HtmlAttributes()).add("role", "tabpanel").add("class", "tab-pane fade").add("id", entityName+"-"+tab.getName().replace(' ','-' )));
 			
 			String style="";
-			if (entityName.equals("mountain"))
+			if (entityName.toLowerCase().equals("place"))
 				System.out.println("");
 			for (EntityAttribute entityAttribute: entityManager.getFieldByTab(tab))
 			{
@@ -518,10 +519,11 @@ public class AngularGenerator {
 					
 						for (EntityAttribute filterField: entityAttribute.getFilterField())
 						{
+							String oldfieldName=filterField.getName();
 							String filterFieldName=filterField.getParent().getName()+Utility.getFirstUpper(filterField.getName());
 							filterField.setName(filterFieldName);
 							renderField(html, filterField, search, style, baseEntity);
-							
+							filterField.setName(oldfieldName);
 						}
 				}
 				
@@ -634,11 +636,11 @@ public class AngularGenerator {
 						html.div((new HtmlAttributes()).add("class", style+" right-input").add("style","height: 59px;").add("ng-show",securityCondition+(securityCondition.equals("")?"":" && ")+ checkSecurity(entityAttribute.asRelationship().getEntityTarget().getName(),"search"),false));
 						
 						html.div((new HtmlAttributes()).add("class", "input-group"));
-						html.span((new HtmlAttributes()).add("class","input-group-addon")).content(entityAttribute.getName());
+						html.span((new HtmlAttributes()).add("class","input-group-addon")).content(entityAttribute.asRelationship().getEntityTarget().getName());
 					
-						html.select(CssGenerator.getSelect("").add("ng-model", baseEntity+"."+entityAttribute.getName()+"."+entityAttribute.getName()+"Id")
+						html.select(CssGenerator.getSelect("").add("ng-model", baseEntity+"."+entityAttribute.asRelationship().getEntityTarget().getName()+"."+entityAttribute.asRelationship().getEntityTarget().getName()+"Id")
 								.add("id", entityAttribute.getName())
-								.add("ng-options", entityAttribute.getName()+"."+entityAttribute.getName()+"Id as "+entityAttributeManager.getDescriptionField()+" for "+entityAttribute.getName()+" in childrenList."+entityAttribute.getName()+"List").enctype("UTF-8"))
+								.add("ng-options", entityAttribute.asRelationship().getEntityTarget().getName()+"."+entityAttribute.asRelationship().getEntityTarget().getName()+"Id as "+entityAttributeManager.getDescription()+" for "+entityAttribute.asRelationship().getEntityTarget().getName()+" in childrenList."+entityAttribute.asRelationship().getEntityTarget().getName()+"List").enctype("UTF-8"))
 								._select();
 						html._div()._div();
 					} else
@@ -650,13 +652,13 @@ public class AngularGenerator {
 							
 							HtmlCanvas downloadCanvas= new HtmlCanvas();
 							downloadCanvas
-							.button(CssGenerator.getButton("show"+Utility.getFirstUpper(entityAttribute.getName())+"Detail"," pull-right").add("style", "margin-top: -7px").add("ng-show",checkSecurity(entityAttribute.asRelationship().getEntityTarget().getName(),"create"),false))
-							.content("Add new "+entityAttribute.getName())
+							.button(CssGenerator.getButton("show"+Utility.getFirstUpper(entityAttribute.asRelationship().getEntityTarget().getName())+"Detail"," pull-right").add("style", "margin-top: -7px").add("ng-show",checkSecurity(entityAttribute.asRelationship().getEntityTarget().getName(),"create"),false))
+							.content("Add new "+entityAttribute.asRelationship().getEntityTarget().getName())
 							//<button type="button" class="btn btn-info btn-lg" data-toggle="modal" 
 							//data-target="#myModal">Open Modal</button>
-							.button((new HtmlAttributes()).add("type", "button").add("class", "btn btn-default pull-right").add("style", "margin-top: -7px").add("data-toggle", "modal").add("data-target", "#"+entityName+"-"+entityAttribute.getName()))
+							.button((new HtmlAttributes()).add("type", "button").add("class", "btn btn-default pull-right").add("style", "margin-top: -7px").add("data-toggle", "modal").add("data-target", "#"+entityName+"-"+entityAttribute.asRelationship().getEntityTarget().getName()))
 							.content("Link existing")
-							.button(CssGenerator.getButton("download"+Utility.getFirstUpper(entityAttribute.getName())+"List","pull-right").add("style", "margin-top:-7px"))
+							.button(CssGenerator.getButton("download"+Utility.getFirstUpper(entityAttribute.asRelationship().getEntityTarget().getName())+"List","pull-right").add("style", "margin-top:-7px"))
 							.span((new HtmlAttributes()).add("class", "glyphicon glyphicon-download-alt").add("aria-hidden", "true"))
 							._span()
 							._button();
@@ -667,13 +669,13 @@ public class AngularGenerator {
 							//html._div();
 							html.div(CssGenerator.getPanel())
 							.div(CssGenerator.getPanelHeader())
-							.content(entityAttribute.getName()+downloadCanvas.toHtml(),false);
-							html.div(CssGenerator.getPanelBody().add("ng-class","{'has-error': !"+entityName+"DetailForm."+entityAttribute.getName()+".$valid, 'has-success': "+entityName+"DetailForm."+entityAttribute.getName()+".$valid}"))
-							.label((new HtmlAttributes()).add("id", entityAttribute.getName())).content(entityAttribute.getName());
+							.content(entityAttribute.asRelationship().getEntityTarget().getName()+downloadCanvas.toHtml(),false);
+							html.div(CssGenerator.getPanelBody().add("ng-class","{'has-error': !"+entityName+"DetailForm."+entityAttribute.getName()+".$valid, 'has-success': "+entityName+"DetailForm."+entityAttribute.asRelationship().getEntityTarget().getName()+".$valid}"))
+							.label((new HtmlAttributes()).add("id", entityAttribute.asRelationship().getEntityTarget().getName())).content(entityAttribute.getName());
 							//.button(CssGenerator.getButton("show"+Utility.getFirstUpper(field.getName())+"Detail"))
 							//.content("Add new "+field.getName());
-							html.div((new HtmlAttributes()).add("id",entityAttribute.getName()).add("ng-if", "selectedEntity."+entityAttribute.getName()+"List.length>0"))
-							.div((new HtmlAttributes()).add("style","top: 100px").add("ui-grid", entityAttribute.getName()+"ListGridOptions").add("ui-grid-pagination", "").add("ui-grid-selection",""))
+							html.div((new HtmlAttributes()).add("id",entityAttribute.asRelationship().getEntityTarget().getName()).add("ng-if", "selectedEntity."+entityAttribute.asRelationship().getEntityTarget().getName()+"List.length>0"))
+							.div((new HtmlAttributes()).add("style","top: 100px").add("ui-grid",entityAttribute.asRelationship().getEntityTarget().getName()+"ListGridOptions").add("ui-grid-pagination", "").add("ui-grid-selection",""))
 							._div();
 							renderValidator(html,entityAttribute);
 							html._div()._div();
@@ -691,7 +693,7 @@ public class AngularGenerator {
 							html.select(CssGenerator.getSelect("").add("ng-model", "selectedEntity."+entityAttribute.getName())
 									.add("id", entityAttribute.getName())
 									.add("name", entityAttribute.getName())
-									.add("ng-options", entityAttribute.getName()+" as "+entityAttributeManager.getDescriptionField()+" for "+entityAttribute.getName()+" in childrenList."+entityAttribute.getName()+"List track by "+entityAttribute.getName()+"."+Utility.getEntityCallName(entityAttribute.getName())+"Id").enctype("UTF-8"))
+									.add("ng-options", entityAttribute.getName()+" as "+entityAttributeManager.getDescription()+" for "+entityAttribute.getName()+" in childrenList."+entityAttribute.getName()+"List track by "+entityAttribute.getName()+"."+Utility.getEntityCallName(entityAttribute.getName())+"Id").enctype("UTF-8"))
 									._select();
 							renderValidator(html,entityAttribute);
 							html.span((new HtmlAttributes()).add("class", "input-group-btn"))
@@ -729,7 +731,7 @@ public class AngularGenerator {
 </div>*/
 		try {
 			EntityManager entityAttributeManager = new EntityManagerImpl(entityAttribute.asRelationship().getEntityTarget());
-			html.div((new HtmlAttributes()).add("id", entityName+"-"+entityAttribute.getName()).add("class", "modal fade").add("role", "dialog"))
+			html.div((new HtmlAttributes()).add("id", entityName+"-"+entityAttribute.asRelationship().getEntityTarget().getName()).add("class", "modal fade").add("role", "dialog"))
 			.div((new HtmlAttributes()).add("class", "modal-dialog"))
 			.div((new HtmlAttributes()).add("class", "modal-content"))
 			.div((new HtmlAttributes()).add("class", "modal-header"))
@@ -740,15 +742,15 @@ public class AngularGenerator {
 			.p().content("some text");
 			
 			html.div((new HtmlAttributes()).add("class", "input-group"));
-			html.span((new HtmlAttributes()).add("class", "input-group-addon")).content(entityAttribute.getName());
-			html.select(CssGenerator.getSelect("").add("ng-model", "selectedEntity."+entityAttribute.getName())
-					.add("id", entityAttribute.getName())
-					.add("name", entityAttribute.getName())
-					.add("ng-options", entityAttribute.getName()+" as "+entityAttributeManager.getDescriptionField()+" for "+entityAttribute.getName()+" in childrenList."+entityAttribute.getName()+"List track by "+entityAttribute.getName()+"."+entityAttribute.getName()+"Id").enctype("UTF-8"))
+			html.span((new HtmlAttributes()).add("class", "input-group-addon")).content(entityAttribute.asRelationship().getEntityTarget().getName());
+			html.select(CssGenerator.getSelect("").add("ng-model", "selectedEntity."+entityAttribute.asRelationship().getEntityTarget().getName())
+					.add("id", entityAttribute.asRelationship().getEntityTarget().getName())
+					.add("name", entityAttribute.asRelationship().getEntityTarget().getName())
+					.add("ng-options", entityAttribute.asRelationship().getEntityTarget().getName()+" as "+entityAttributeManager.getDescription()+" for "+entityAttribute.asRelationship().getEntityTarget().getName()+" in childrenList."+entityAttribute.asRelationship().getEntityTarget().getName()+"List track by "+entityAttribute.asRelationship().getEntityTarget().getName()+"."+entityAttribute.asRelationship().getEntityTarget().getName()+"Id").enctype("UTF-8"))
 					._select();
 			renderValidator(html,entityAttribute);
 			html.span((new HtmlAttributes()).add("class", "input-group-btn"))
-			.button(CssGenerator.getButton("saveLinked"+Utility.getFirstUpper(entityAttribute.getName())+"").add("id",entityAttribute.getName()))
+			.button(CssGenerator.getButton("saveLinked"+Utility.getFirstUpper(entityAttribute.asRelationship().getEntityTarget().getName())+"").add("id",entityAttribute.asRelationship().getEntityTarget().getName()))
 			.content("Save")
 			._span();
 			html._div();

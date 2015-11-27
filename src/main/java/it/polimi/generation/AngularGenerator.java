@@ -311,13 +311,16 @@ public class AngularGenerator {
 	private void renderValidator(HtmlCanvas html,EntityAttribute entityAttribute) throws IOException
 	{
 		List<Annotation> annotationList= entityAttribute.getAnnotationList();
+		
+		String entityAttributeName= (entityAttribute.isRelationship()? entityAttribute.asRelationship().getEntityTarget().getName(): entityAttribute.getName());
+		
 		Boolean required = false;
 		for (Annotation annotation: annotationList)
 		{
 			if ((annotation.getAnnotationType()==AnnotationType.NOT_NULL || annotation.getAnnotationType()==AnnotationType.NOT_BLANK) && ! required)
 			{
-				html.small((new HtmlAttributes()).add("class", "help-block").add("ng-show", entityName+"DetailForm."+entityAttribute.getName()+".$error.required"))
-				.content(entityName+": "+entityAttribute.getName()+" required");
+				html.small((new HtmlAttributes()).add("class", "help-block").add("ng-show", entityName+"DetailForm."+entityAttributeName+".$error.required"))
+				.content(entityName+": "+entityAttributeName+" required");
 				required=true;
 			}else 
 				//if (annotationList[i].annotationType()==Size.class)
@@ -332,8 +335,8 @@ public class AngularGenerator {
 					{
 						Object value;
 							value = annotationAttribute.getValue();
-							html.small((new HtmlAttributes()).add("class", "help-block").add("ng-show", entityName+"DetailForm."+entityAttribute.getName()+".$error."+annotationAttribute.getProperty()+"length"));
-							html.content(entityName+": "+entityAttribute.getName()+" "+annotationAttribute.getProperty()+" "+value+" caratteri");
+							html.small((new HtmlAttributes()).add("class", "help-block").add("ng-show", entityName+"DetailForm."+entityAttributeName+".$error."+annotationAttribute.getProperty()+"length"));
+							html.content(entityName+": "+entityAttributeName+" "+annotationAttribute.getProperty()+" "+value+" caratteri");
 					}
 				}
 			}

@@ -65,7 +65,8 @@ public class EnumClassGenerator {
 		String lowerClassName = Utility.getFirstLower(className);
 		JDefinedClass myClass= null;
 		try {
-			myClass = codeModel._class("it.generated.domain."+className, ClassType.ENUM);
+			//TODO fix
+			myClass = codeModel._class("it.polimi.domain."+className, ClassType.ENUM);
 		} catch (JClassAlreadyExistsException e) {
 			e.printStackTrace();
 		}

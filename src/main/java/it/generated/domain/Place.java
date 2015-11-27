@@ -26,10 +26,9 @@ public class Place {
     @Filter
     @Size(min = 2, max = 10)
     private String placeName;
-    
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "example_id_example")
-    private it.generated.domain.Example example;
+    private it.polimi.domain.Example example;
 
     public Integer getPlaceId() {
         return this.placeId;
@@ -47,11 +46,11 @@ public class Place {
         this.placeName=placeName;
     }
 
-    public it.generated.domain.Example getExample() {
+    public it.polimi.domain.Example getExample() {
         return this.example;
     }
 
-    public void setExample(it.generated.domain.Example example) {
+    public void setExample(it.polimi.domain.Example example) {
         this.example=example;
     }
 

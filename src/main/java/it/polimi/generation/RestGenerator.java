@@ -1,11 +1,15 @@
 package it.polimi.generation;
 
+import it.polimi.domain.Example;
+import it.polimi.domain.Place;
 import it.polimi.model.domain.Entity;
 import it.polimi.model.domain.EntityAttribute;
 import it.polimi.model.domain.FieldType;
 import it.polimi.model.domain.Relationship;
+import it.polimi.model.domain.RestrictionType;
 import it.polimi.reflection.EntityManager;
 import it.polimi.reflection.EntityManagerImpl;
+import it.polimi.service.SecurityService;
 import it.polimi.utils.Field;
 import it.polimi.utils.ReflectionManager;
 import it.polimi.utils.Utility;
@@ -28,6 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
@@ -98,7 +103,7 @@ public class RestGenerator {
 	public RestGenerator(Entity entity)
 	{
 		this.entity=entity;
-		this.fullClassName="it.generated.domain."+Utility.getFirstUpper(entity.getName());
+		this.fullClassName="it.polimi.domain."+Utility.getFirstUpper(entity.getName());
 		File file = new File(""); 
 		this.directory = file.getAbsolutePath()+"\\src\\main\\java";
 		entityManager= new EntityManagerImpl(entity);
@@ -600,12 +605,14 @@ public class RestGenerator {
 			JAnnotationUse requestMappingClass = myClass.annotate(RequestMapping.class);
 			requestMappingClass.param("value", "/"+lowerClass);
 			//declare service
-			JVar repository = myClass.field(JMod.PUBLIC, serviceInterfaceClass, lowerClass+"Service");
+			JVar repository = myClass.field(JMod.PRIVATE, serviceInterfaceClass, lowerClass+"Service");
 			repository.annotate(Autowired.class);
-			//private final static Logger log = LoggerFactory.getLogger(Mountain.class);
+			
+			JVar securityService= myClass.field(JMod.PRIVATE,SecurityService.class, "securityService");
+			securityService.annotate(Autowired.class);
+			
 			JClass factory = codeModel.directClass("org.slf4j.LoggerFactory");
 			JVar log = myClass.field(JMod.PRIVATE+JMod.STATIC+JMod.FINAL, Logger.class, "log");
-			//TODO fix logger
 			JClass jClassClass =Generator.getJDefinedClass(entity.getName());
 			log.init(factory.staticInvoke("getLogger").arg(jClassClass.dotclass()));
 			//log.assign(factory.staticInvoke("getLogger"));
@@ -616,6 +623,11 @@ public class RestGenerator {
 			JAnnotationUse requestMappingManage = manage.annotate(RequestMapping.class);
 			requestMappingManage.param("method", RequestMethod.GET);
 			JBlock manageBlock = manage.body();
+			String check= "if (!securityService.isAllowed("+Generator.getJDefinedClass(entity.getName()).fullName()+".entityId, "+RestrictionType.class.getName()+"."+RestrictionType.SEARCH.toString()+")) \n";
+			check+="return \"forbidden\"; \n";
+
+			manageBlock.directStatement(check);
+			
 			manageBlock.directStatement("return \""+lowerClass+"\";");
 			
 			
@@ -628,6 +640,8 @@ public class RestGenerator {
 			JVar orderParam= search.param(searchBeanClass,lowerClass);
 			orderParam.annotate(RequestBody.class);
 			JBlock searchBlock= search.body();
+			searchBlock.directStatement(addSecurityCheck(RestrictionType.SEARCH));
+			
 			JVar entityList= searchBlock.decl(listClass, lowerClass+"List");
 			// log.info("Searching mountain like {}",mountain);
 			//TODO ,anage null on description field
@@ -635,6 +649,7 @@ public class RestGenerator {
 			searchBlock.directStatement(" log.info(\"Searching "+lowerClass+" like {}\","+entityManager.getDescription(true)+");");
 			searchBlock.directStatement(""+lowerClass+"List="+lowerClass+"Service.find("+lowerClass+");");
 			searchBlock.directStatement("getRightMapping("+lowerClass+"List);");
+			searchBlock.directStatement("getSecurityMapping("+lowerClass+"List);");
 			searchBlock.directStatement(" log.info(\"Search: returning {} "+lowerClass+".\","+lowerClass+"List.size());");
 			searchBlock.directStatement("return "+response+".body("+lowerClass+"List);");
 			//getById  
@@ -646,6 +661,7 @@ public class RestGenerator {
 			orderParam= getById.param(String.class,lowerClass+"Id");
 			orderParam.annotate(PathVariable.class);
 			JBlock getByIdBlock= getById.body();
+			getByIdBlock.directStatement(addSecurityCheck(RestrictionType.SEARCH));
 			getByIdBlock.directStatement("log.info(\"Searching "+lowerClass+" with id {}\","+lowerClass+"Id);");
 			getByIdBlock.directStatement("List<"+Generator.getJDefinedClass(Utility.getFirstUpper(className)).fullName()+"> "+lowerClass+"List="+lowerClass+"Service.findById("+keyClass.getName()+".valueOf("+lowerClass+"Id));");
 			getByIdBlock.directStatement("getRightMapping("+lowerClass+"List);");
@@ -661,6 +677,8 @@ public class RestGenerator {
 			orderParam= delete.param(String.class,lowerClass+"Id");
 			orderParam.annotate(PathVariable.class);
 			JBlock deleteBlock= delete.body();
+			deleteBlock.directStatement(addSecurityCheck(RestrictionType.DELETE));
+			
 			deleteBlock.directStatement("log.info(\"Deleting "+lowerClass+" with id {}\","+lowerClass+"Id);");
 			
 			deleteBlock.directStatement(lowerClass+"Service.deleteById("+keyClass.getName()+".valueOf("+lowerClass+"Id));");
@@ -674,6 +692,8 @@ public class RestGenerator {
 			orderParam= insert.param(Generator.getJDefinedClass(entity.getName()),lowerClass+"");
 			orderParam.annotate(RequestBody.class);
 			JBlock insertBlock= insert.body();
+			insertBlock.directStatement(addSecurityCheck(RestrictionType.INSERT));
+			
 			insertBlock.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(lowerClass)+"Id()!=null)");
 			insertBlock.directStatement("log.info(\"Inserting "+lowerClass+" like {}\","+entityManager.getDescription(true)+");");
 			insertBlock.directStatement(Generator.getJDefinedClass(Utility.getFirstUpper(className)).fullName()+" inserted"+className+"="+lowerClass+"Service.insert("+lowerClass+");");
@@ -689,10 +709,12 @@ public class RestGenerator {
 			orderParam= update.param(Generator.getJDefinedClass(entity.getName()),lowerClass+"");
 			orderParam.annotate(RequestBody.class);
 			JBlock updateBlock= update.body();
+			updateBlock.directStatement(addSecurityCheck(RestrictionType.UPDATE));
 			updateBlock.directStatement("log.info(\"Updating "+lowerClass+" with id {}\","+lowerClass+".get"+Utility.getFirstUpper(lowerClass)+"Id());");
-			
+			updateBlock.directStatement("rebuildSecurityMapping("+lowerClass+");");
 			updateBlock.directStatement(Generator.getJDefinedClass(Utility.getFirstUpper(className)).fullName()+" updated"+className+"="+lowerClass+"Service.update("+lowerClass+");");
 			updateBlock.directStatement("getRightMapping(updated"+className+");");
+			updateBlock.directStatement("getSecurityMapping(updated"+className+");");
 			updateBlock.directStatement("return "+response+".body(updated"+className+");");
 			
 			//get Right Mapping -List
@@ -711,6 +733,43 @@ public class RestGenerator {
 			
 			RestGenerator.generateRightMapping_v3(entity, getRightMappingBlock);
 			
+			// rebuild
+			/*
+			 *   private void rebuildSecurityMapping(Example example)
+    			{
+    				List<Place> placeList=exampleService.findById(example.getExampleId()).get(0).getPlaceList();
+    				example.setPlaceList(placeList);
+    			}
+			 * 
+			 */
+			JMethod reBuildMethod = myClass.method(JMod.PRIVATE, void.class, "rebuildSecurityMapping");
+			reBuildMethod.param(Generator.getJDefinedClass(entity.getName()), lowerClass);
+			JBlock reBuildBlock=reBuildMethod.body();
+			for (Relationship relationship: entity.getRelationshipList())
+			{
+				//!securityService.isAllowed(Place.entityId, RestrictionType.SEARCH)
+				reBuildBlock.directStatement("if (!securityService.isAllowed("+Generator.getJDefinedClass(relationship.getEntityTarget().getName()).fullName()+".entityId, "+RestrictionType.class.getName()+".SEARCH))");
+				if (relationship.isList())
+					reBuildBlock.directStatement(entity.getName()+".set"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List("+entity.getName()+"Service.findById("+entity.getName()+".get"+Utility.getFirstUpper(entity.getName())+"Id()).get(0).get"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List());");
+				else
+					reBuildBlock.directStatement(entity.getName()+".set"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"("+entity.getName()+"Service.findById("+entity.getName()+".get"+Utility.getFirstUpper(entity.getName())+"Id()).get(0).get"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"());");
+			}
+			
+			//get security Mapping -List
+			JMethod getSecurityMappingList = myClass.method(JMod.PRIVATE, listClass, "getSecurityMapping");
+			getSecurityMappingList.param(listClass, lowerClass+"List");
+			JBlock getSecurityMappingListBlock = getSecurityMappingList.body();
+			getSecurityMappingListBlock.directStatement("for ("+Generator.getJDefinedClass(Utility.getFirstUpper(className)).fullName()+" "+lowerClass+": "+lowerClass+"List)");
+			getSecurityMappingListBlock.directStatement("{");
+			getSecurityMappingListBlock.directStatement("getSecurityMapping("+lowerClass+");");
+			getSecurityMappingListBlock.directStatement("}");
+			getSecurityMappingListBlock.directStatement("return "+lowerClass+"List;");
+			
+			JMethod getSecurityMapping= myClass.method(JMod.PRIVATE, void.class, "getSecurityMapping");
+			getSecurityMapping.param(Generator.getJDefinedClass(entity.getName()), lowerClass);
+			JBlock getSecurityMappingBlock = getSecurityMapping.body();
+			
+			RestGenerator.generateSecurityMapping(entity,getSecurityMappingBlock);
 			
 		} catch (JClassAlreadyExistsException e) {
 			e.printStackTrace();
@@ -718,6 +777,12 @@ public class RestGenerator {
 		saveFile(codeModel);
 	
 	}
+	private String addSecurityCheck(RestrictionType restrictionType) {
+		String check= "if (!securityService.isAllowed("+Generator.getJDefinedClass(entity.getName()).fullName()+".entityId, "+RestrictionType.class.getName()+"."+restrictionType.toString()+")) \n";
+		check+="return ResponseEntity.status("+HttpStatus.class.getName()+".FORBIDDEN).build(); \n";
+		return check;
+	}
+
 	/**
 	 * Save codeModel to file
 	 * @param codeModel
@@ -767,6 +832,30 @@ public class RestGenerator {
 			
 			block.directStatement("}");
 			
+		}
+	}
+	
+	
+	private static void generateSecurityMapping(Entity entity, JBlock block)
+	{
+		EntityManager entityManager = new EntityManagerImpl(entity);
+		String lowerClass= "";
+		// if (example.getPlaceList()!=null && !securityService.isAllowed(Place.entityId, RestrictionType.SEARCH))
+		for (Relationship relationship: entity.getRelationshipList())
+			
+		{
+			lowerClass=entity.getName();
+			if (relationship.isList())
+			{
+				block.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List()!=null && !securityService.isAllowed("+Generator.getJDefinedClass(relationship.getEntityTarget().getName()).fullName()+".entityId, "+RestrictionType.class.getName()+".SEARCH) )");
+				block.directStatement(""+lowerClass+".set"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List(null);\n");
+			}
+			 else
+			 {
+				 
+				 block.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"()!=null  && !securityService.isAllowed("+Generator.getJDefinedClass(relationship.getEntityTarget().getName()).fullName()+".entityId, "+RestrictionType.class.getName()+".SEARCH) )");
+				block.directStatement(""+lowerClass+".set"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"(null);\n");
+			 }
 		}
 	}
 	

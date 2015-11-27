@@ -4,7 +4,6 @@ package it.polimi.service;
 import java.util.List;
 
 import it.polimi.model.domain.Annotation;
-import it.polimi.model.domain.AnnotationAttribute;
 import it.polimi.repository.AnnotationAttributeRepository;
 import it.polimi.repository.AnnotationRepository;
 import it.polimi.searchbean.AnnotationSearchBean;
@@ -30,7 +29,7 @@ public class AnnotationServiceImpl
 
     @Override
     public List<Annotation> find(AnnotationSearchBean annotation) {
-        return annotationRepository.findByAnnotationIdAndAnnotationTypeAndAnnotationAttributeAndFieldAndRelationship(annotation.getAnnotationId(), (annotation.getAnnotationType()==null)? null : annotation.getAnnotationType().getValue(),annotation.getAnnotationAttributeList()==null? null :annotation.getAnnotationAttributeList().get(0),annotation.getField(),annotation.getRelationship());
+        return annotationRepository.findByAnnotationIdAndAnnotationTypeAndAnnotationAttributeAndFieldAndRelationshipAndEnumField(annotation.getAnnotationId(), (annotation.getAnnotationType()==null)? null : annotation.getAnnotationType().getValue(),annotation.getAnnotationAttributeList()==null? null :annotation.getAnnotationAttributeList().get(0),annotation.getField(),annotation.getRelationship(),annotation.getEnumField());
     }
 
     @Override
@@ -48,7 +47,7 @@ public class AnnotationServiceImpl
     @Transactional
     public Annotation update(Annotation annotation) {
         if (annotation.getAnnotationAttributeList()!=null)
-        for (AnnotationAttribute annotationAttribute: annotation.getAnnotationAttributeList())
+        for (it.polimi.model.domain.AnnotationAttribute annotationAttribute: annotation.getAnnotationAttributeList())
         {
         annotationAttribute.setAnnotation(annotation);
         }
@@ -66,6 +65,13 @@ public class AnnotationServiceImpl
         if (!annotationList.contains(returnedAnnotation))
         annotationList.add(returnedAnnotation);
         returnedAnnotation.getRelationship().setAnnotationList(annotationList);
+        }
+        if (annotation.getEnumField()!=null)
+        {
+        List<Annotation> annotationList = annotationRepository.findByEnumField( annotation.getEnumField());
+        if (!annotationList.contains(returnedAnnotation))
+        annotationList.add(returnedAnnotation);
+        returnedAnnotation.getEnumField().setAnnotationList(annotationList);
         }
          return returnedAnnotation;
     }

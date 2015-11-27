@@ -51,6 +51,8 @@ import com.sun.codemodel.JClass;
 import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JDefinedClass;
+import com.sun.codemodel.JExpr;
+import com.sun.codemodel.JExpression;
 import com.sun.codemodel.JMethod;
 import com.sun.codemodel.JMod;
 import com.sun.codemodel.JVar;
@@ -111,7 +113,8 @@ public class EntityGenerator {
 		String lowerClassName = Utility.getFirstLower(className);
 		JDefinedClass myClass= null;
 		try {
-			myClass = codeModel._class("it.generated.domain."+className, ClassType.CLASS);
+			//TODO fix
+			myClass = codeModel._class("it.polimi.domain."+className, ClassType.CLASS);
 		} catch (JClassAlreadyExistsException e) {
 			e.printStackTrace();
 		}
@@ -119,6 +122,10 @@ public class EntityGenerator {
 		JAnnotationUse annotationTable= myClass.annotate(Table.class);
 		//from properties
 		annotationTable.param("schema", "public");
+		
+		JVar entityId= myClass.field(JMod.PUBLIC+JMod.STATIC+JMod.FINAL, Long.class, "entityId");
+		entityId.init(JExpr.lit(entity.getEntityId()));
+		
 		OracleNamingStrategy namingStrategy = new OracleNamingStrategy();
 		annotationTable.param("name", namingStrategy.classToTableName(entity.getName()));
 		for (Field field : entity.getFieldList())
@@ -146,7 +153,7 @@ public class EntityGenerator {
 					JAnnotationUse type = listField.annotate(Type.class);
 					type.param("type", Generator.getJDefinedClass(relationship.getEntityTarget().getName()).fullName());
 					JAnnotationUse joinColumn = listField.annotate(JoinColumn.class);
-					joinColumn.param("name", namingStrategy.classToTableName(relationship.getEntityTarget().getName())+"_id_"+namingStrategy.classToTableName(relationship.getEntityTarget().getName()));
+					joinColumn.param("name", namingStrategy.classToTableName(entity.getName())+"_id_"+namingStrategy.classToTableName(entity.getName()));
 				}
 
 				if (relationship.getRelationshipType()==RelationshipType.MANY_TO_MANY)

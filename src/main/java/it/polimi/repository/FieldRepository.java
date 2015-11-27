@@ -1,12 +1,11 @@
 
 package it.polimi.repository;
 
+import java.util.List;
 import it.polimi.model.domain.Annotation;
 import it.polimi.model.domain.Entity;
 import it.polimi.model.domain.Field;
-
-import java.util.List;
-
+import it.polimi.model.domain.Tab;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -26,8 +25,10 @@ public interface FieldRepository
 
     public List<Field> findByFieldType(Integer fieldType);
 
-    @Query("select f from Field f where  (:fieldId is null or cast(:fieldId as string)=cast(f.fieldId as string)) and (:name is null or :name='' or cast(:name as string)=f.name) and (:entity=f.entity or :entity is null) and (:fieldType is null or cast(:fieldType as string)=cast(f.fieldType as string)) and (:annotation in elements(f.annotationList)  or :annotation is null) ")
-    public List<Field> findByFieldIdAndNameAndEntityAndFieldTypeAndAnnotation(
+    public List<Field> findByTab(Tab tab);
+
+    @Query("select f from Field f where  (:fieldId is null or cast(:fieldId as string)=cast(f.fieldId as string)) and (:name is null or :name='' or cast(:name as string)=f.name) and (:entity=f.entity or :entity is null) and (:fieldType is null or cast(:fieldType as string)=cast(f.fieldType as string)) and (:annotation in elements(f.annotationList)  or :annotation is null) and (:tab=f.tab or :tab is null) ")
+    public List<Field> findByFieldIdAndNameAndEntityAndFieldTypeAndAnnotationAndTab(
         @Param("fieldId")
         Long fieldId,
         @Param("name")
@@ -37,6 +38,8 @@ public interface FieldRepository
         @Param("fieldType")
         Integer fieldType,
         @Param("annotation")
-        Annotation annotation);
+        Annotation annotation,
+        @Param("tab")
+        Tab tab);
 
 }

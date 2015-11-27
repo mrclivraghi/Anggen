@@ -3,13 +3,12 @@ package it.polimi.service;
 
 import java.util.List;
 
-import it.polimi.model.domain.Annotation;
 import it.polimi.model.domain.Relationship;
-import it.polimi.repository.AnnotationRepository;
 import it.polimi.repository.RelationshipRepository;
 import it.polimi.searchbean.RelationshipSearchBean;
 import it.polimi.service.RelationshipService;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,10 +17,8 @@ public class RelationshipServiceImpl
     implements RelationshipService
 {
 
-    @org.springframework.beans.factory.annotation.Autowired
+    @Autowired
     public RelationshipRepository relationshipRepository;
-    @org.springframework.beans.factory.annotation.Autowired
-    public AnnotationRepository annotationRepository;
 
     @Override
     public List<Relationship> findById(Long relationshipId) {
@@ -30,7 +27,7 @@ public class RelationshipServiceImpl
 
     @Override
     public List<Relationship> find(RelationshipSearchBean relationship) {
-        return relationshipRepository.findByRelationshipIdAndNameAndEntityAndEntityTargetAndRelationshipTypeAndAnnotation(relationship.getRelationshipId(),relationship.getName(),relationship.getEntity(),relationship.getEntityTarget(), (relationship.getRelationshipType()==null)? null : relationship.getRelationshipType().getValue(),relationship.getAnnotationList()==null? null :relationship.getAnnotationList().get(0));
+        return relationshipRepository.findByRelationshipIdAndNameAndEntityAndEntityTargetAndRelationshipTypeAndAnnotationAndTab(relationship.getRelationshipId(),relationship.getName(),relationship.getEntity(),relationship.getEntityTarget(), (relationship.getRelationshipType()==null)? null : relationship.getRelationshipType().getValue(),relationship.getAnnotationList()==null? null :relationship.getAnnotationList().get(0),relationship.getTab());
     }
 
     @Override
@@ -48,7 +45,7 @@ public class RelationshipServiceImpl
     @Transactional
     public Relationship update(Relationship relationship) {
         if (relationship.getAnnotationList()!=null)
-        for (Annotation annotation: relationship.getAnnotationList())
+        for (it.polimi.model.domain.Annotation annotation: relationship.getAnnotationList())
         {
         annotation.setRelationship(relationship);
         }
@@ -66,6 +63,13 @@ public class RelationshipServiceImpl
         if (!relationshipList.contains(returnedRelationship))
         relationshipList.add(returnedRelationship);
         returnedRelationship.getEntityTarget().setRelationshipList(relationshipList);
+        }
+        if (relationship.getTab()!=null)
+        {
+        List<Relationship> relationshipList = relationshipRepository.findByTab( relationship.getTab());
+        if (!relationshipList.contains(returnedRelationship))
+        relationshipList.add(returnedRelationship);
+        returnedRelationship.getTab().setRelationshipList(relationshipList);
         }
          return returnedRelationship;
     }

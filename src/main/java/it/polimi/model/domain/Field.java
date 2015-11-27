@@ -2,8 +2,6 @@ package it.polimi.model.domain;
 
 import java.util.List;
 
-import it.polimi.utils.annotation.Tab;
-
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -46,6 +44,13 @@ public class Field extends EntityAttribute{
 	@Type(type="it.polimi.model.domain.Annotation")
 	@JoinColumn(name="field_id_field")
 	private List<Annotation> annotationList;
+	
+	
+	@OneToMany(fetch=FetchType.EAGER)
+	@Type(type="it.polimi.model.domain.ValidationRestriction")
+	@JoinColumn(name="field_id_field")
+	private List<ValidationRestriction> validationRestrictionList;
+	
 	
 	@ManyToOne
 	@JoinColumn(name="tab_id_tab")
@@ -120,6 +125,19 @@ public class Field extends EntityAttribute{
 	 */
 	public void setTab(Tab tab) {
 		this.tab = tab;
+	}
+	/**
+	 * @return the validationRestrictionList
+	 */
+	public List<ValidationRestriction> getValidationRestrictionList() {
+		return validationRestrictionList;
+	}
+	/**
+	 * @param validationRestrictionList the validationRestrictionList to set
+	 */
+	public void setValidationRestrictionList(
+			List<ValidationRestriction> validationRestrictionList) {
+		this.validationRestrictionList = validationRestrictionList;
 	}
 	
 }

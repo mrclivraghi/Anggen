@@ -1,7 +1,12 @@
 package it.polimi.model.domain;
 
+import static javax.persistence.GenerationType.IDENTITY;
+
 import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -13,6 +18,10 @@ import org.hibernate.annotations.Type;
 @Table(schema="mustle",name="tab")
 public class Tab {
 
+	@Id
+	@GeneratedValue(strategy = IDENTITY)
+	@Column(name = "tab_id") 
+	
 	private Long tabId;
 	
 	private String name;

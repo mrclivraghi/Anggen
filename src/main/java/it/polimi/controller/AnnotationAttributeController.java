@@ -104,6 +104,7 @@ public class AnnotationAttributeController {
         annotationAttribute.getAnnotation().setAnnotationAttributeList(null);
         annotationAttribute.getAnnotation().setField(null);
         annotationAttribute.getAnnotation().setRelationship(null);
+        annotationAttribute.getAnnotation().setEnumField(null);
         }
     }
 

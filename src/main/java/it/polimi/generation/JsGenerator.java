@@ -229,7 +229,14 @@ public class JsGenerator {
 		
 		
 		
+		
+		
+		
+		
+		
+		
 		sb.append("})\n");
+		
 		return sb.toString();
 	}
 	/**
@@ -512,6 +519,7 @@ public class JsGenerator {
 				sb.append("function successCallback(response) {\n");
 				sb.append("console.log(\"response-ok\");\n");
 				sb.append("console.log(response);\n");
+				initChildrenList(sb, relationship.getEntityTarget());
 				sb.append(Utility.getEntityCallName(relationship.getEntityTarget().getName())+"Service.setSelectedEntity(response.data[0]);\n");
 				sb.append(Utility.getEntityCallName(relationship.getEntityTarget().getName())+"Service.selectedEntity.show=true;\n");
 
@@ -529,6 +537,7 @@ public class JsGenerator {
 				sb.append("{\n");
 				sb.append("if ("+Utility.getEntityCallName(entityName)+"Service.selectedEntity."+relationship.getEntityTarget().getName()+"==null || "+entityName+"Service.selectedEntity."+relationship.getEntityTarget().getName()+"==undefined)\n");
 				sb.append("{\n");
+				initChildrenList(sb, relationship.getEntityTarget());
 				sb.append(Utility.getEntityCallName(relationship.getEntityTarget().getName())+"Service.setSelectedEntity(null); \n");
 				sb.append(Utility.getEntityCallName(relationship.getEntityTarget().getName())+"Service.selectedEntity.show=true; \n");
 				//TODO set owner, list or entity?
@@ -539,6 +548,7 @@ public class JsGenerator {
 				sb.append("function successCallback(response) {\n");
 				//sb.append("console.log(\"response-ok\");\n");
 				//sb.append("console.log(response);\n");
+				initChildrenList(sb, relationship.getEntityTarget());
 				sb.append(Utility.getEntityCallName(relationship.getEntityTarget().getName())+"Service.setSelectedEntity(response.data[0]);\n");
 				sb.append(Utility.getEntityCallName(relationship.getEntityTarget().getName())+"Service.selectedEntity.show=true;\n");
 
@@ -554,33 +564,6 @@ public class JsGenerator {
 				sb.append("};\n");
 
 			}
-			//INIT CHILDREN LIST
-			sb.append("$scope.init=function()\n")
-			.append("{\n");
-			if (relationshipList!=null)
-				for (Relationship relationship: relationshipList)
-				{
-
-					sb.append(Utility.getEntityCallName(entityName)+"Service.init"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List().then(function successCallback(response) {\n");
-					sb.append(Utility.getEntityCallName(entityName)+"Service.childrenList."+Utility.getFirstLower(relationship.getEntityTarget().getName())+"List=response.data;\n");
-					sb.append("},function errorCallback(response) { \n");
-					manageRestError(sb);
-					sb.append("});\n");
-				}
-				for (EnumField enumField: entity.getEnumFieldList())
-				{
-					sb.append(""+Utility.getEntityCallName(entityName)+"Service.childrenList."+enumField.getName()+"List=[");
-					for (EnumValue enumValue: enumField.getEnumValueList())
-					{
-						sb.append("\""+enumValue.getName()+"\",");
-					}
-					sb.append("];\n");
-
-				}
-			sb.append("}; \n");
-			//if (isParent)
-				sb.append("$scope.init();\n");
-
 
 		}
 		//pagination
@@ -737,7 +720,7 @@ public class JsGenerator {
 		List<Entity> parentClassList= new ArrayList<Entity>();
 		parentClassList.add(entity);
 		String services="";
-		services=services+","+entityName+"Service";
+		services=services+","+entityName+"Service, securityService ";
 		for (Entity descendantEntity : descendantEntityList)
 		{
 			services=services+","+descendantEntity.getName()+"Service";
@@ -745,6 +728,82 @@ public class JsGenerator {
 		}
 		return services;
 	}
+	
+	private String checkSecurity(String entity,String action)
+	{
+		StringBuilder sb = new StringBuilder();
+		sb.append("if (securityService.restrictionList."+entity+"==undefined || securityService.restrictionList."+entity+".can"+Utility.getFirstUpper(action)+")\n");
+		return sb.toString();
+	}
+	
+	private void initChildrenList(StringBuilder sb,Entity entity)
+	{
+		if (entity.getRelationshipList()!=null)
+			for (Relationship relationship: entity.getRelationshipList())
+			{
+
+				sb.append(checkSecurity(relationship.getEntityTarget().getName(), "search"));
+				sb.append(entity.getName()+"Service.init"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List().then(function successCallback(response) {\n");
+				sb.append(entity.getName()+"Service.childrenList."+Utility.getFirstLower(relationship.getEntityTarget().getName())+"List=response.data;\n");
+				sb.append("},function errorCallback(response) { \n");
+				manageRestError(sb);
+				sb.append("});\n");
+			}
+		if (entity.getEnumFieldList()!=null)
+			for (EnumField enumField: entity.getEnumFieldList())
+			{
+				sb.append(entity.getName()+"Service.childrenList."+enumField.getName()+"List=[");
+				for (EnumValue enumValue: enumField.getEnumValueList())
+				{
+					sb.append("\""+enumValue.getName()+"\",");
+				}
+				sb.append("];\n");
+
+			}
+	}
+	
+	
+	private String getSecurity()
+	{
+		StringBuilder sb = new StringBuilder();
+		sb.append(".service(\"securityService\",function($http)\n");
+		sb.append("{\n");
+		sb.append("this.restrictionList;\n");
+		sb.append("this.init= function() {\n");
+		sb.append("var promise= $http.get(\"../authentication/\");\n");
+		sb.append("return promise; \n");
+
+		sb.append("};\n");
+
+		sb.append("})\n");
+		String services = getServices();
+		
+		sb.append(".run(function($rootScope,securityService"+services+"){\n");
+
+		sb.append("securityService.init().then(function successCallback(response) {\n");
+		sb.append("securityService.restrictionList=response.data;\n");
+		sb.append("$rootScope.restrictionList=response.data;\n");
+		sb.append("console.log($rootScope.restrictionList);\n");
+		String[] serviceArray=services.split(",");
+		//for (int i=0; i<serviceArray.length; i++)
+		//	if (!serviceArray[i].equals("") && !serviceArray[i].trim().equals("securityService"))
+		{
+			//sb.append("//"+serviceArray[i].trim()+".init();\n");
+			
+			initChildrenList(sb, entity);
+				
+		}
+		
+		sb.append("});\n");
+
+		
+		
+		sb.append("})\n");
+
+
+		return sb.toString();
+	}
+	
 	/**
 	 * Create the JS string
 	 * @return
@@ -754,6 +813,7 @@ public class JsGenerator {
 		StringBuilder buildJS= new StringBuilder();
 		buildJS.append("var "+entityName+"App=angular.module(\""+entityName+"App\",['ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter'])\n");
 		//JsGenerator jsGenerator = new JsGenerator(entity, true,null,null);
+		buildJS.append(getSecurity());
 		buildJS.append(generateService());
 		buildJS.append(generateController());
 		List<Entity> parentClass= new ArrayList<Entity>();

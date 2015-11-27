@@ -121,10 +121,11 @@ public  class CssGenerator {
 	public static HtmlAttributes getExternalFieldPanel(String style,Boolean search, String entityName,EntityAttribute entityAttribute)
 	{
 		HtmlAttributes htmlAttributes= new HtmlAttributes();
+		String entityAttributeName= (entityAttribute.isRelationship()? entityAttribute.asRelationship().getEntityTarget().getName(): entityAttribute.getName());
 		htmlAttributes.add("class", style+" right-input");
 		if (!search)
 		{
-			htmlAttributes.add("ng-class","{'has-error': !"+entityName+"DetailForm."+entityAttribute.getName()+".$valid, 'has-success': "+entityName+"DetailForm."+entityAttribute.getName()+".$valid}");
+			htmlAttributes.add("ng-class","{'has-error': !"+entityName+"DetailForm."+entityAttributeName+".$valid, 'has-success': "+entityName+"DetailForm."+entityAttributeName+".$valid}");
 			htmlAttributes.add("style", "height:59px");
 		}
 		

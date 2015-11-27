@@ -11,8 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import it.generated.domain.ExampleType;
-import it.generated.domain.Place;
+import it.polimi.domain.ExampleType;
+import it.polimi.domain.Place;
 import it.polimi.utils.annotation.DescriptionField;
 import org.hibernate.annotations.Type;
 
@@ -20,38 +20,32 @@ import org.hibernate.annotations.Type;
 @Table(schema = "public", name = "example")
 public class Example {
 
+	
+	
+    @javax.persistence.Column(name = "male")
+    private Boolean male;
+    @javax.persistence.Column(name = "age")
+    private java.lang.Integer age;
+    @javax.persistence.Column(name = "example_date")
+    private Date exampleDate;
     @javax.persistence.Column(name = "example_id")
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @DescriptionField
     private java.lang.Integer exampleId;
-    @javax.persistence.Column(name = "example_date")
-    private Date exampleDate;
-    @javax.persistence.Column(name = "age")
-    private java.lang.Integer age;
-    @javax.persistence.Column(name = "male")
-    private Boolean male;
     @OneToMany(fetch = FetchType.EAGER)
-    @Type(type = "it.generated.domain.Place")
+    @Type(type = "it.polimi.domain.Place")
     @JoinColumn(name = "place_id_place")
     private List<Place> placeList;
     @javax.persistence.Column(name = "example_type")
     private ExampleType exampleType;
 
-    public java.lang.Integer getExampleId() {
-        return this.exampleId;
+    public Boolean getMale() {
+        return this.male;
     }
 
-    public void setExampleId(java.lang.Integer exampleId) {
-        this.exampleId=exampleId;
-    }
-
-    public Date getExampleDate() {
-        return this.exampleDate;
-    }
-
-    public void setExampleDate(Date exampleDate) {
-        this.exampleDate=exampleDate;
+    public void setMale(Boolean male) {
+        this.male=male;
     }
 
     public java.lang.Integer getAge() {
@@ -62,12 +56,20 @@ public class Example {
         this.age=age;
     }
 
-    public Boolean getMale() {
-        return this.male;
+    public Date getExampleDate() {
+        return this.exampleDate;
     }
 
-    public void setMale(Boolean male) {
-        this.male=male;
+    public void setExampleDate(Date exampleDate) {
+        this.exampleDate=exampleDate;
+    }
+
+    public java.lang.Integer getExampleId() {
+        return this.exampleId;
+    }
+
+    public void setExampleId(java.lang.Integer exampleId) {
+        this.exampleId=exampleId;
     }
 
     public List<Place> getPlaceList() {

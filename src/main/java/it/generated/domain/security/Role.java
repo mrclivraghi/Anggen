@@ -2,6 +2,7 @@ package it.generated.domain.security;
 
 
 import static javax.persistence.GenerationType.IDENTITY;
+import it.polimi.model.domain.Restriction;
 
 import java.util.List;
 
@@ -21,7 +22,7 @@ import javax.persistence.UniqueConstraint;
 import org.hibernate.annotations.Type;
 
 @Entity
-@Table(name = "role", schema = "sso")
+@Table(name = "role", schema = "mustle")
 public class Role{
 
 	@Id
@@ -32,13 +33,14 @@ public class Role{
 	
 	private String role;
 	
-	@OneToMany(fetch=FetchType.EAGER)
-	//@Cascade({CascadeType.ALL})
-	@Type(type="it.polimi.model.security.User")
-	@JoinColumn(name="role_role_id")
+	@ManyToMany(fetch=FetchType.EAGER,mappedBy="roleList")
 	private List<User> userList;
 
 
+	@OneToMany(fetch=FetchType.EAGER)
+	@Type(type="it.polimi.model.domain.Restriction")
+	@JoinColumn(name="role_id_role")
+	private List<Restriction> restrictionList;
 	
 	
 	public Role() {
@@ -78,6 +80,20 @@ public class Role{
 	 */
 	public void setUserList(List<User> userList) {
 		this.userList = userList;
+	}
+
+	/**
+	 * @return the restrictionList
+	 */
+	public List<Restriction> getRestrictionList() {
+		return restrictionList;
+	}
+
+	/**
+	 * @param restrictionList the restrictionList to set
+	 */
+	public void setRestrictionList(List<Restriction> restrictionList) {
+		this.restrictionList = restrictionList;
 	}
 
 

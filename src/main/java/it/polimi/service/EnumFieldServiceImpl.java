@@ -4,7 +4,6 @@ package it.polimi.service;
 import java.util.List;
 
 import it.polimi.model.domain.EnumField;
-import it.polimi.model.domain.EnumValue;
 import it.polimi.repository.EnumFieldRepository;
 import it.polimi.repository.EnumValueRepository;
 import it.polimi.searchbean.EnumFieldSearchBean;
@@ -30,7 +29,7 @@ public class EnumFieldServiceImpl
 
     @Override
     public List<EnumField> find(EnumFieldSearchBean enumField) {
-        return enumFieldRepository.findByEnumFieldIdAndNameAndEnumValueAndEntity(enumField.getEnumFieldId(),enumField.getName(),enumField.getEnumValueList()==null? null :enumField.getEnumValueList().get(0),enumField.getEntity());
+        return enumFieldRepository.findByEnumFieldIdAndNameAndEnumValueAndEntityAndAnnotationAndTab(enumField.getEnumFieldId(),enumField.getName(),enumField.getEnumValueList()==null? null :enumField.getEnumValueList().get(0),enumField.getEntity(),enumField.getAnnotationList()==null? null :enumField.getAnnotationList().get(0),enumField.getTab());
     }
 
     @Override
@@ -48,9 +47,14 @@ public class EnumFieldServiceImpl
     @Transactional
     public EnumField update(EnumField enumField) {
         if (enumField.getEnumValueList()!=null)
-        for (EnumValue enumValue: enumField.getEnumValueList())
+        for (it.polimi.model.domain.EnumValue enumValue: enumField.getEnumValueList())
         {
         enumValue.setEnumField(enumField);
+        }
+        if (enumField.getAnnotationList()!=null)
+        for (it.polimi.model.domain.Annotation annotation: enumField.getAnnotationList())
+        {
+        annotation.setEnumField(enumField);
         }
         EnumField returnedEnumField=enumFieldRepository.save(enumField);
         if (enumField.getEntity()!=null)
@@ -59,6 +63,13 @@ public class EnumFieldServiceImpl
         if (!enumFieldList.contains(returnedEnumField))
         enumFieldList.add(returnedEnumField);
         returnedEnumField.getEntity().setEnumFieldList(enumFieldList);
+        }
+        if (enumField.getTab()!=null)
+        {
+        List<EnumField> enumFieldList = enumFieldRepository.findByTab( enumField.getTab());
+        if (!enumFieldList.contains(returnedEnumField))
+        enumFieldList.add(returnedEnumField);
+        returnedEnumField.getTab().setEnumFieldList(enumFieldList);
         }
          return returnedEnumField;
     }

@@ -4,7 +4,6 @@ package it.polimi.controller;
 import java.util.List;
 
 import it.polimi.model.domain.Annotation;
-import it.polimi.model.domain.AnnotationAttribute;
 import it.polimi.searchbean.AnnotationSearchBean;
 import it.polimi.service.AnnotationService;
 
@@ -101,7 +100,7 @@ public class AnnotationController {
 
     private void getRightMapping(Annotation annotation) {
         if (annotation.getAnnotationAttributeList()!=null)
-        for (AnnotationAttribute annotationAttribute :annotation.getAnnotationAttributeList())
+        for (it.polimi.model.domain.AnnotationAttribute annotationAttribute :annotation.getAnnotationAttributeList())
 
         {
 
@@ -111,12 +110,21 @@ public class AnnotationController {
         {
         annotation.getField().setEntity(null);
         annotation.getField().setAnnotationList(null);
+        annotation.getField().setTab(null);
         }
         if (annotation.getRelationship()!=null)
         {
         annotation.getRelationship().setEntity(null);
         annotation.getRelationship().setEntityTarget(null);
         annotation.getRelationship().setAnnotationList(null);
+        annotation.getRelationship().setTab(null);
+        }
+        if (annotation.getEnumField()!=null)
+        {
+        annotation.getEnumField().setEnumValueList(null);
+        annotation.getEnumField().setEntity(null);
+        annotation.getEnumField().setAnnotationList(null);
+        annotation.getEnumField().setTab(null);
         }
     }
 

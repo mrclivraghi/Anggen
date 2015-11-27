@@ -90,7 +90,7 @@ public class EntityManagerImpl implements EntityManager{
 		List<Field> fieldList= new ArrayList<Field>();
 		for (Field field: getFieldList())
 		{
-			if (field.getDescriptionField())
+			if (field.getDescriptionField() || field.getPrimaryKey())
 				fieldList.add(field);
 		}
 		return fieldList;

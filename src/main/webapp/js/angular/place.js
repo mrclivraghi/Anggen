@@ -1,4 +1,26 @@
 var placeApp=angular.module("placeApp",['ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter'])
+.service("securityService",function($http)
+{
+this.restrictionList;
+this.init= function() {
+var promise= $http.get("../authentication/");
+return promise; 
+};
+})
+.run(function($rootScope,securityService,placeService, securityService ,exampleService){
+securityService.init().then(function successCallback(response) {
+securityService.restrictionList=response.data;
+$rootScope.restrictionList=response.data;
+console.log($rootScope.restrictionList);
+if (securityService.restrictionList.example==undefined || securityService.restrictionList.example.canSearch)
+placeService.initExampleList().then(function successCallback(response) {
+placeService.childrenList.exampleList=response.data;
+},function errorCallback(response) { 
+alert("error");
+return; 
+});
+});
+})
 .service("placeService", function($http)
 {
 this.entityList =		[];
@@ -94,7 +116,7 @@ var promise= $http
 return promise;
 };
 })
-.controller("placeController",function($scope,$http,placeService,exampleService)
+.controller("placeController",function($scope,$http,placeService, securityService ,exampleService)
 {
 //null
 $scope.searchBean=placeService.searchBean;
@@ -156,11 +178,6 @@ alert("error");
 return; 
 });
 };
-$scope.refreshTableDefault= function() 
-{
-if ($scope.exampleGridApi!=undefined && $scope.exampleGridApi!=null)
- $scope.exampleGridApi.core.handleWindowResize(); 
-};
 $scope.trueFalseValues=[true,false];
 $scope.showExampleDetail= function(index)
 {
@@ -170,6 +187,14 @@ exampleService.searchOne(placeService.selectedEntity.exampleList[index]).then(
 function successCallback(response) {
 console.log("response-ok");
 console.log(response);
+if (securityService.restrictionList.place==undefined || securityService.restrictionList.place.canSearch)
+exampleService.initPlaceList().then(function successCallback(response) {
+exampleService.childrenList.placeList=response.data;
+},function errorCallback(response) { 
+alert("error");
+return; 
+});
+exampleService.childrenList.exampleTypeList=["TYPE1","TYPE2",];
 exampleService.setSelectedEntity(response.data[0]);
 exampleService.selectedEntity.show=true;
   }, function errorCallback(response) {
@@ -182,12 +207,28 @@ else
 {
 if (placeService.selectedEntity.example==null || placeService.selectedEntity.example==undefined)
 {
+if (securityService.restrictionList.place==undefined || securityService.restrictionList.place.canSearch)
+exampleService.initPlaceList().then(function successCallback(response) {
+exampleService.childrenList.placeList=response.data;
+},function errorCallback(response) { 
+alert("error");
+return; 
+});
+exampleService.childrenList.exampleTypeList=["TYPE1","TYPE2",];
 exampleService.setSelectedEntity(null); 
 exampleService.selectedEntity.show=true; 
 }
 else
 exampleService.searchOne(placeService.selectedEntity.example).then(
 function successCallback(response) {
+if (securityService.restrictionList.place==undefined || securityService.restrictionList.place.canSearch)
+exampleService.initPlaceList().then(function successCallback(response) {
+exampleService.childrenList.placeList=response.data;
+},function errorCallback(response) { 
+alert("error");
+return; 
+});
+exampleService.childrenList.exampleTypeList=["TYPE1","TYPE2",];
 exampleService.setSelectedEntity(response.data[0]);
 exampleService.selectedEntity.show=true;
   }, function errorCallback(response) {
@@ -198,16 +239,6 @@ return;
 }
 $('#exampleTabs li:eq(0) a').tab('show');
 };
-$scope.init=function()
-{
-placeService.initExampleList().then(function successCallback(response) {
-placeService.childrenList.exampleList=response.data;
-},function errorCallback(response) { 
-alert("error");
-return; 
-});
-}; 
-$scope.init();
 $scope.placeGridOptions = {
 enablePaginationControls: true,
 multiSelect: false,
@@ -242,10 +273,10 @@ paginationPageSizes: [2, 4, 6],
 paginationPageSize: 2,
 enableGridMenu: true,
 columnDefs: [
-{ name: 'exampleId'},
-{ name: 'exampleDate', cellFilter: "date:'dd-MM-yyyy'"},
+{ name: 'male'},
 { name: 'age'},
-{ name: 'male'} 
+{ name: 'exampleDate', cellFilter: "date:'dd-MM-yyyy'"},
+{ name: 'exampleId'} 
 ]
 ,data: $scope.selectedEntity.exampleList
  };
@@ -371,7 +402,7 @@ var promise= $http
 return promise;
 };
 })
-.controller("exampleController",function($scope,$http,exampleService,placeService)
+.controller("exampleController",function($scope,$http,exampleService, securityService ,placeService)
 {
 //place
 $scope.searchBean=exampleService.searchBean;
@@ -483,11 +514,6 @@ alert("error");
 return; 
 });
 };
-$scope.refreshTableDefault= function() 
-{
-if ($scope.placeGridApi!=undefined && $scope.placeGridApi!=null)
- $scope.placeGridApi.core.handleWindowResize(); 
-};
 $scope.trueFalseValues=[true,false];
 $scope.showPlaceDetail= function(index)
 {
@@ -497,6 +523,13 @@ placeService.searchOne(exampleService.selectedEntity.placeList[index]).then(
 function successCallback(response) {
 console.log("response-ok");
 console.log(response);
+if (securityService.restrictionList.example==undefined || securityService.restrictionList.example.canSearch)
+placeService.initExampleList().then(function successCallback(response) {
+placeService.childrenList.exampleList=response.data;
+},function errorCallback(response) { 
+alert("error");
+return; 
+});
 placeService.setSelectedEntity(response.data[0]);
 placeService.selectedEntity.show=true;
   }, function errorCallback(response) {
@@ -509,12 +542,26 @@ else
 {
 if (exampleService.selectedEntity.place==null || exampleService.selectedEntity.place==undefined)
 {
+if (securityService.restrictionList.example==undefined || securityService.restrictionList.example.canSearch)
+placeService.initExampleList().then(function successCallback(response) {
+placeService.childrenList.exampleList=response.data;
+},function errorCallback(response) { 
+alert("error");
+return; 
+});
 placeService.setSelectedEntity(null); 
 placeService.selectedEntity.show=true; 
 }
 else
 placeService.searchOne(exampleService.selectedEntity.place).then(
 function successCallback(response) {
+if (securityService.restrictionList.example==undefined || securityService.restrictionList.example.canSearch)
+placeService.initExampleList().then(function successCallback(response) {
+placeService.childrenList.exampleList=response.data;
+},function errorCallback(response) { 
+alert("error");
+return; 
+});
 placeService.setSelectedEntity(response.data[0]);
 placeService.selectedEntity.show=true;
   }, function errorCallback(response) {
@@ -525,17 +572,6 @@ return;
 }
 $('#placeTabs li:eq(0) a').tab('show');
 };
-$scope.init=function()
-{
-exampleService.initPlaceList().then(function successCallback(response) {
-exampleService.childrenList.placeList=response.data;
-},function errorCallback(response) { 
-alert("error");
-return; 
-});
-exampleService.childrenList.exampleTypeList=["TYPE1","TYPE2",];
-}; 
-$scope.init();
 $scope.placeListGridOptions = {
 enablePaginationControls: true,
 multiSelect: false,

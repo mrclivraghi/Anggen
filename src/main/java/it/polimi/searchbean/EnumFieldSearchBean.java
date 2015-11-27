@@ -1,10 +1,11 @@
 
 package it.polimi.searchbean;
 
+import java.util.List;
+import it.polimi.model.domain.Annotation;
 import it.polimi.model.domain.Entity;
 import it.polimi.model.domain.EnumValue;
-
-import java.util.List;
+import it.polimi.model.domain.Tab;
 
 public class EnumFieldSearchBean {
 
@@ -12,6 +13,8 @@ public class EnumFieldSearchBean {
     public String name;
     public List<EnumValue> enumValueList;
     public Entity entity;
+    public List<Annotation> annotationList;
+    public Tab tab;
 
     public Long getEnumFieldId() {
         return this.enumFieldId;
@@ -43,6 +46,22 @@ public class EnumFieldSearchBean {
 
     public void setEntity(Entity entity) {
         this.entity=entity;
+    }
+
+    public List<Annotation> getAnnotationList() {
+        return this.annotationList;
+    }
+
+    public void setAnnotationList(List<Annotation> annotationList) {
+        this.annotationList=annotationList;
+    }
+
+    public Tab getTab() {
+        return this.tab;
+    }
+
+    public void setTab(Tab tab) {
+        this.tab=tab;
     }
 
 }

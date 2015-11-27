@@ -1,12 +1,12 @@
 
 package it.polimi.searchbean;
 
+import java.util.List;
 import it.polimi.model.domain.AnnotationAttribute;
 import it.polimi.model.domain.AnnotationType;
+import it.polimi.model.domain.EnumField;
 import it.polimi.model.domain.Field;
 import it.polimi.model.domain.Relationship;
-
-import java.util.List;
 
 public class AnnotationSearchBean {
 
@@ -15,6 +15,7 @@ public class AnnotationSearchBean {
     public List<AnnotationAttribute> annotationAttributeList;
     public Field field;
     public Relationship relationship;
+    public EnumField enumField;
 
     public Long getAnnotationId() {
         return this.annotationId;
@@ -54,6 +55,14 @@ public class AnnotationSearchBean {
 
     public void setRelationship(Relationship relationship) {
         this.relationship=relationship;
+    }
+
+    public EnumField getEnumField() {
+        return this.enumField;
+    }
+
+    public void setEnumField(EnumField enumField) {
+        this.enumField=enumField;
     }
 
 }

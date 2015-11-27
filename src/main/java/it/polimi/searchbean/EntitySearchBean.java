@@ -1,11 +1,12 @@
 
 package it.polimi.searchbean;
 
+import java.util.List;
 import it.polimi.model.domain.EnumField;
 import it.polimi.model.domain.Field;
 import it.polimi.model.domain.Relationship;
-
-import java.util.List;
+import it.polimi.model.domain.Restriction;
+import it.polimi.model.domain.Tab;
 
 public class EntitySearchBean {
 
@@ -14,6 +15,8 @@ public class EntitySearchBean {
     public List<Field> fieldList;
     public List<Relationship> relationshipList;
     public List<EnumField> enumFieldList;
+    public List<Tab> tabList;
+    public List<Restriction> restrictionList;
 
     public Long getEntityId() {
         return this.entityId;
@@ -53,6 +56,22 @@ public class EntitySearchBean {
 
     public void setEnumFieldList(List<EnumField> enumFieldList) {
         this.enumFieldList=enumFieldList;
+    }
+
+    public List<Tab> getTabList() {
+        return this.tabList;
+    }
+
+    public void setTabList(List<Tab> tabList) {
+        this.tabList=tabList;
+    }
+
+    public List<Restriction> getRestrictionList() {
+        return this.restrictionList;
+    }
+
+    public void setRestrictionList(List<Restriction> restrictionList) {
+        this.restrictionList=restrictionList;
     }
 
 }

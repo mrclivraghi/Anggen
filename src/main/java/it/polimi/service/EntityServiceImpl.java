@@ -4,12 +4,9 @@ package it.polimi.service;
 import java.util.List;
 
 import it.polimi.model.domain.Entity;
-import it.polimi.model.domain.EnumField;
-import it.polimi.model.domain.Field;
-import it.polimi.model.domain.Relationship;
 import it.polimi.repository.EntityRepository;
-import it.polimi.repository.EnumFieldRepository;
-import it.polimi.repository.RelationshipRepository;
+import it.polimi.repository.FieldRepository;
+import it.polimi.repository.RestrictionRepository;
 import it.polimi.searchbean.EntitySearchBean;
 import it.polimi.service.EntityService;
 
@@ -24,9 +21,9 @@ public class EntityServiceImpl
     @org.springframework.beans.factory.annotation.Autowired
     public EntityRepository entityRepository;
     @org.springframework.beans.factory.annotation.Autowired
-    public RelationshipRepository relationshipRepository;
+    public FieldRepository fieldRepository;
     @org.springframework.beans.factory.annotation.Autowired
-    public EnumFieldRepository enumFieldRepository;
+    public RestrictionRepository restrictionRepository;
 
     @Override
     public List<Entity> findById(Long entityId) {
@@ -35,7 +32,7 @@ public class EntityServiceImpl
 
     @Override
     public List<Entity> find(EntitySearchBean entity) {
-        return entityRepository.findByEntityIdAndNameAndFieldAndRelationshipAndEnumField(entity.getEntityId(),entity.getName(),entity.getFieldList()==null? null :entity.getFieldList().get(0),entity.getRelationshipList()==null? null :entity.getRelationshipList().get(0),entity.getEnumFieldList()==null? null :entity.getEnumFieldList().get(0));
+        return entityRepository.findByEntityIdAndNameAndFieldAndRelationshipAndEnumFieldAndTabAndRestriction(entity.getEntityId(),entity.getName(),entity.getFieldList()==null? null :entity.getFieldList().get(0),entity.getRelationshipList()==null? null :entity.getRelationshipList().get(0),entity.getEnumFieldList()==null? null :entity.getEnumFieldList().get(0),entity.getTabList()==null? null :entity.getTabList().get(0),entity.getRestrictionList()==null? null :entity.getRestrictionList().get(0));
     }
 
     @Override
@@ -53,19 +50,29 @@ public class EntityServiceImpl
     @Transactional
     public Entity update(Entity entity) {
         if (entity.getFieldList()!=null)
-        for (Field field: entity.getFieldList())
+        for (it.polimi.model.domain.Field field: entity.getFieldList())
         {
         field.setEntity(entity);
         }
         if (entity.getRelationshipList()!=null)
-        for (Relationship relationship: entity.getRelationshipList())
+        for (it.polimi.model.domain.Relationship relationship: entity.getRelationshipList())
         {
         relationship.setEntity(entity);
         }
         if (entity.getEnumFieldList()!=null)
-        for (EnumField enumField: entity.getEnumFieldList())
+        for (it.polimi.model.domain.EnumField enumField: entity.getEnumFieldList())
         {
         enumField.setEntity(entity);
+        }
+        if (entity.getTabList()!=null)
+        for (it.polimi.model.domain.Tab tab: entity.getTabList())
+        {
+        tab.setEntity(entity);
+        }
+        if (entity.getRestrictionList()!=null)
+        for (it.polimi.model.domain.Restriction restriction: entity.getRestrictionList())
+        {
+        restriction.setEntity(entity);
         }
         Entity returnedEntity=entityRepository.save(entity);
          return returnedEntity;

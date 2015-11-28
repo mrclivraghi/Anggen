@@ -2,6 +2,7 @@ package it.polimi.generation;
 
 import it.polimi.model.domain.Entity;
 import it.polimi.model.domain.EntityAttribute;
+import it.polimi.model.domain.EntityGroup;
 import it.polimi.model.domain.Field;
 import it.polimi.reflection.EntityManager;
 import it.polimi.reflection.EntityManagerImpl;
@@ -83,6 +84,7 @@ public class HtmlGenerator {
 			.macros().javascript("../js/date.js")
 			.macros().javascript("../js/utility.js")
 			.macros().javascript("../js/jquery.easytree.js")
+			.macros().javascript("../js/jquery.cookie.js")
 			.macros().javascript("../js/bootstrap.min.js")
 			.macros().javascript("../js/alasql.min.js");
 			} catch (IOException e) {
@@ -138,6 +140,8 @@ public class HtmlGenerator {
 				loadMenuScript=loadMenuScript+" $('#menu').easytree(easyTreeOption);";
 			*/
 			html.script((new HtmlAttributes()).add("type", "text/javascript")).content(loadMenuScript,false);
+			if (Generator.easyTreeMenu)
+				html.script().content("function stateChanged(nodes, nodesJson) {var t = nodes[0].text; $.cookie('menu', nodesJson); };  var easyTree = $('#menu').easytree({data: ($.cookie('menu')!=null? $.cookie('menu') : null), stateChanged: stateChanged});",false);
 			html._body()._html();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -156,41 +160,26 @@ public class HtmlGenerator {
 		
 	}
 	
-	public static void GenerateEasyTreeMenu(List<Entity> entityList)
+	public static void GenerateEasyTreeMenu(List<EntityGroup> entityGroupList)
 	{
 		HtmlCanvas html= new HtmlCanvas();
 		try {
 			html.div((new HtmlAttributes()).add("id", "menu").add("style", "width: 250px;"))
 			.ul();
-			List<String> packageList= ReflectionManager.getSubPackages(Generator.modelPackage);
 			
-			//TODO manage drop down
-			
-			/*for (String myPackage: packageList)
+			for (EntityGroup entityGroup: entityGroupList)
 			{
 				html.li((new HtmlAttributes()).add("class", "isFolder"));
-				Set<Class<?>> packageClassList = ReflectionManager.getClassInPackage(myPackage);
 				HtmlCanvas folderHtml = new HtmlCanvas();
 				folderHtml.ul();
-				for (Class myClass: packageClassList)
+				for (Entity entity: entityGroup.getEntityList())
 				{
-					folderHtml.li().a((new HtmlAttributes()).add("href", "../"+reflectionManager.parseName(myClass.getName())+"/")).content(reflectionManager.parseName(myClass.getName()))._li();
+						folderHtml.li().a((new HtmlAttributes()).add("href", "../"+Utility.getFirstLower(entity.getName())+"/")).content(Utility.getFirstUpper(entity.getName()))._li();
 				}
 				folderHtml._ul();
-				html.content(reflectionManager.parseName(myPackage)+folderHtml.toHtml(),false);
-				
-			}*/
-			for (Entity entity: entityList)
-			{
-				//if (theClass.getPackage().getName().equals(Generator.modelPackage))
-				//{
-					html.li().a((new HtmlAttributes()).add("href", "../"+Utility.getFirstLower(entity.getName())+"/")).content(Utility.getFirstUpper(entity.getName()))._li();
-				//}
+				html.content(entityGroup.getName()+folderHtml.toHtml(),false);
 			}
-			
 			html._ul()._div();
-
-			html.script().content("function stateChanged(nodes, nodesJson) {var t = nodes[0].text; $.cookie('menu', nodesJson); }; var easyTreeOption={data: $.cookie('menu'), stateChanged: stateChanged};",false);
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -215,7 +204,7 @@ public class HtmlGenerator {
 	/**
 	 * Generate the html menu
 	 */
-	public static void GenerateMenu(List<Entity> entityList)
+	public static void GenerateMenu(List<EntityGroup> entityGroupList)
 	{
 		HtmlCanvas html = new HtmlCanvas();
 		try {
@@ -235,11 +224,9 @@ public class HtmlGenerator {
 			._div()//end header
 			.div((new HtmlAttributes()).add("class", "collapse navbar-collapse").add("id", "bs-example-navbar-collapse-1")) //start real nav menu
 			.ul((new HtmlAttributes()).add("class", "nav navbar-nav"));
-			List<String> packageList= ReflectionManager.getSubPackages(Generator.modelPackage);
 			StringBuilder sb = new StringBuilder();
-			/*for (String myPackage: packageList)
+			for (EntityGroup entityGroup: entityGroupList)
 			{
-				
 				HtmlCanvas ulHtml= new HtmlCanvas();
 				ulHtml.li((new HtmlAttributes()).add("class", "dropdown"))
 				.a((new HtmlAttributes()).add("href", "#").add("class", "dropdown-toggle").add("data-toggle", "dropdown").add("role", "button").add("aria-haspopup", "true").add("aria-expanded", "false"));
@@ -247,55 +234,20 @@ public class HtmlGenerator {
 				
 				caretHtml.span((new HtmlAttributes()).add("class", "caret"))
 				._span();
-				ulHtml.content(reflectionManager.parseName(myPackage)+caretHtml.toHtml(),false);
-				Set<Class<?>> packageClassList = ReflectionManager.getClassInPackage(myPackage);
+				ulHtml.content(entityGroup.getName()+caretHtml.toHtml(),false);
 				ulHtml.ul((new HtmlAttributes()).add("class", "dropdown-menu"));
-				String ulContent="";
-				for (Class myClass: packageClassList)
-				{
-					//ulContent=ulContent+"<c:forEach var=\"entity\" items=\"${entityList}\">";
-					//ulContent=ulContent+"<c:if test=\"${entity.entityName=='"+reflectionManager.parseName(myClass.getName())+"'}\">";
-					ulContent=ulContent+"<li><a href=\"../"+reflectionManager.parseName(myClass.getName())+"/\">"+reflectionManager.parseName(myClass.getName())+"</a></li>";
-					//ulContent=ulContent+"</c:if>";
-					//ulContent=ulContent+"</c:forEach>";
-				}
-				ulHtml.content(ulContent,false);
-				//html._ul();
-				ulHtml._li();
-				//ulContent="<c:set var=\"fill\" value=\"0\"/>";
-				//ulContent=ulContent+"<c:forEach var=\"entity\" items=\"${entityList}\">";
-				String condition="";
-				for (Class myClass: packageClassList)
-				{
-					condition=condition+"entity.entityName=='"+reflectionManager.parseName(myClass.getName())+"' ||";
-				}
-				condition=condition.substring(0, condition.length()-3);
-				//ulContent=ulContent+"<c:if test=\"${"+condition+"}\">";
-				//ulContent=ulContent+"<c:set var=\"fill\" value=\"1\"/>";
-				//ulContent=ulContent+"</c:if>";
-				//ulContent=ulContent+"</c:forEach>";
-				//ulContent=ulContent+"<c:if test=\"${fill==1}\">";
-				ulContent=ulContent+ulHtml.toHtml();
-				//ulContent=ulContent+"</c:if>";
-				sb.append(ulContent);
 				
-			}*/
-			for (Entity entity: entityList)
-			{
-				//if (entity.getPackage().getName().equals(Generator.modelPackage))
-				//{
-					String ulContent="";
-					
-					//ulContent=ulContent+"<c:forEach var=\"entity\" items=\"${entityList}\">";
-					//ulContent=ulContent+"<c:if test=\"${entity.entityName=='"+reflectionManager.parseName(theClass.getName())+"'}\">";
-					ulContent=ulContent+"<li><a href=\"../"+Utility.getFirstLower(entity.getName())+"/\">"+Utility.getFirstUpper(entity.getName())+"</a></li>";
-					//ulContent=ulContent+"</c:if>";
-					//ulContent=ulContent+"</c:forEach>";
-					sb.append(ulContent);
-				//}
+				String ulContent="";
+				for (Entity entity: entityGroup.getEntityList())
+				{
+					ulContent=ulContent+"<li ng-if=\"restrictionList."+entity.getName()+".canSearch || restrictionList."+entity.getName()+"==undefined\"><a href=\"../"+Utility.getFirstLower(entity.getName())+"/\">"+Utility.getFirstUpper(entity.getName())+"</a></li>";
+				}
+				
+				ulHtml.content(ulContent,false);
+				ulHtml._li();
+				sb.append(ulHtml.toHtml());
 			}
 			html.content(sb.toString(),false);
-//			html._ul()
 			html._div() //end real nav menu
 			._div()
 			._nav();

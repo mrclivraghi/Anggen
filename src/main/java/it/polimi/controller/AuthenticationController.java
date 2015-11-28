@@ -84,10 +84,10 @@ public class AuthenticationController {
 				if (restrictionEntity.getEntity().getEntityGroup().getEntityGroupId().equals(restrictionEntityGroup.getEntityGroup().getEntityGroupId()))
 				{
 					fakeRestrictionItem= new RestrictionItem();
-					fakeRestrictionItem.setCanCreate(fakeRestrictionItem.getCanCreate() && restrictionEntityGroup.getCanCreate());
-					fakeRestrictionItem.setCanDelete(fakeRestrictionItem.getCanDelete() && restrictionEntityGroup.getCanDelete());
-					fakeRestrictionItem.setCanUpdate(fakeRestrictionItem.getCanUpdate() && restrictionEntityGroup.getCanUpdate());
-					fakeRestrictionItem.setCanSearch(fakeRestrictionItem.getCanSearch() && restrictionEntityGroup.getCanSearch());
+					fakeRestrictionItem.setCanCreate(restrictionEntity.getCanCreate() && restrictionEntityGroup.getCanCreate());
+					fakeRestrictionItem.setCanDelete(restrictionEntity.getCanDelete() && restrictionEntityGroup.getCanDelete());
+					fakeRestrictionItem.setCanUpdate(restrictionEntity.getCanUpdate() && restrictionEntityGroup.getCanUpdate());
+					fakeRestrictionItem.setCanSearch(restrictionEntity.getCanSearch() && restrictionEntityGroup.getCanSearch());
 					fakeRestrictionItem.setEntity(restrictionEntity.getEntity());
 					break;
 				}

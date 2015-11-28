@@ -6,6 +6,7 @@ import java.util.List;
 import it.polimi.model.domain.User;
 import it.polimi.searchbean.UserSearchBean;
 import it.polimi.service.UserService;
+import it.polimi.utils.Utility;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,6 +74,7 @@ public class UserController {
         User user) {
         if (user.getUserId()!=null)
         log.info("Inserting user like {}",user.toString());
+        user.setPassword(Utility.encodePassword(user.getPassword()));
         User inserteduser=userService.insert(user);
         getRightMapping(inserteduser);
         log.info("Inserted user with id {}",inserteduser.getUserId());

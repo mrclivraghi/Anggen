@@ -12,7 +12,7 @@ public enum FieldType {
 	DOUBLE(3),
 	TIME(4),
 	BOOLEAN(5),
-	ENUM(6);
+	LONG(6);
 	
 	private final int value;
 	

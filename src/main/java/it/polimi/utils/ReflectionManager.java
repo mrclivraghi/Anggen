@@ -491,6 +491,17 @@ public class ReflectionManager {
 		return false;
 	}
 	
+	public Annotation getAnnotation(Field field, Class annotationClass)
+	{
+		Annotation[] annotationList= field.getAnnotationList();
+		for (int i=0; i<annotationList.length; i++)
+		{
+			if (annotationList[i].annotationType()==annotationClass)
+				return annotationList[i];
+		}
+		return null;
+	}
+	
 	public static Boolean hasManyToManyAssociation (Class theClass,String parentClass)
 	{
 		ReflectionManager reflectionManager = new ReflectionManager(theClass);

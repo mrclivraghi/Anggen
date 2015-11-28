@@ -400,11 +400,11 @@ public class AngularGenerator {
 	{
 		String readOnly="false";
 		String entityAttributeName= entityAttribute.asField()!=null ? entityAttribute.getName() : (entityAttribute.isRelationship()? entityAttribute.asRelationship().getEntityTarget().getName(): entityAttribute.asEnumField().getName());
-		if (entityAttributeName.equals("placePlaceName"))
-			System.out.println("ERR");
 		
 		if (entityAttributeName.equals(entityName+"Id")&&validation)
 			readOnly="true";
+		if (readOnly.equals("false")&&validation)
+			readOnly="restrictionList."+entityName+".restrictionFieldMap."+entityAttributeName;
 		String fieldForm=baseEntity+"."+Utility.getFirstLower(entityAttributeName);
 		String type= getInputType(entityAttribute);
 		HtmlAttributes htmlAttributes = CssGenerator.getInput(style);

@@ -79,7 +79,7 @@ public class SecurityManagerImpl implements SecurityManager{
 		List<User> userList = userRepository.findByUsername(principal.getUsername());
 		if (userList==null || userList.size()==0) return false;
 		User user = userList.get(0);
-		for (Restriction restriction: user.getRestrictionList())
+		for (Restriction restriction: user.getRestrictionEntityList())
 		{
 			if (restriction.getEntity().getEntityId().equals(entityId) && (!restriction.isAllowed(restrictionType))) return false;
 		}

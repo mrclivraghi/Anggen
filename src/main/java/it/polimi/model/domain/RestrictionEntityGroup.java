@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 @javax.persistence.Entity
 @Table(schema="mustle",name="restriction_entity_group")
 public class RestrictionEntityGroup {
@@ -115,6 +117,17 @@ public class RestrictionEntityGroup {
 	 */
 	public void setRole(Role role) {
 		this.role = role;
+	}
+	
+	@JsonIgnore
+	public Boolean isAllowed(RestrictionType restrictionType)
+	{
+		if (restrictionType==RestrictionType.SEARCH && !canSearch) return false;
+		if (restrictionType==RestrictionType.DELETE && !canDelete) return false;
+		if (restrictionType==RestrictionType.INSERT && !canCreate) return false;
+		if (restrictionType==RestrictionType.UPDATE && !canUpdate) return false;
+		
+		return true;
 	}
 
 }

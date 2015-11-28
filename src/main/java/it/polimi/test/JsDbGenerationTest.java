@@ -39,12 +39,6 @@ public class JsDbGenerationTest {
 	@Test
 	public void createJs()
 	{
-		Entity mountain = entityRepository.findByEntityId((long)80).get(0);
-		System.out.println(mountain.getName());
-		//JsGenerator jsGenerator = new JsGenerator(entity, true, null, false);
-		File file = new File("");
-		//jsGenerator.saveJsToFile(file.getAbsolutePath()+"/src/main/webapp/js/angular/");
-		//AngularGenerator angularGenerator = new AngularGenerator(entity, true, new ArrayList<Entity>());
 		List<Entity> entityList = entityRepository.findByEntityIdAndNameAndFieldAndRelationshipAndEnumFieldAndTabAndRestrictionEntityAndEntityGroup(null, null, null, null, null, null, null, null);
 		List<EnumField> enumFieldList = enumFieldRepository.findByEnumFieldIdAndNameAndEnumValueAndEntityAndAnnotationAndTab(null, null, null, null, null, null);
 		

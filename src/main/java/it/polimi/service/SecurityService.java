@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import it.polimi.model.domain.Entity;
 import it.polimi.model.domain.RestrictionEntity;
+import it.polimi.model.domain.RestrictionEntityGroup;
 import it.polimi.model.domain.RestrictionType;
 import it.polimi.model.domain.User;
 import it.polimi.repository.UserRepository;
@@ -60,14 +61,19 @@ public class SecurityService{
 
 	public Boolean isAllowed(Long entityId, RestrictionType restrictionType) {
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		if (userRepository==null)
-		{
-			System.out.println("userrepository is null");
-		}
 		List<User> userList = userRepository.findByUsername(username);
 		if (userList==null || userList.size()==0) return false;
 		User user = userList.get(0);
-		for (RestrictionEntity restrictionEntity: user.getRestrictionList())
+		//check entity group restriction
+		for (RestrictionEntityGroup restrictionEntityGroup: user.getRestrictionEntityGroupList())
+		{
+			for (Entity entity: restrictionEntityGroup.getEntityGroup().getEntityList())
+			{
+				if (entity.getEntityId().equals(entityId) && (!restrictionEntityGroup.isAllowed(restrictionType))) 
+					return false;
+			}
+		}
+		for (RestrictionEntity restrictionEntity: user.getRestrictionEntityList())
 		{
 			if (restrictionEntity.getEntity().getEntityId().equals(entityId) && (!restrictionEntity.isAllowed(restrictionType))) return false;
 		}

@@ -37,12 +37,12 @@ public class Entity {
 	private List<Field> fieldList;
 	
 	@OneToMany(fetch=FetchType.EAGER)
-	@Type(type="it.polimi.model.domain.RelationShip")
+	@Type(type="it.polimi.model.domain.Relationship")
 	@JoinColumn(name="entity_id_entity")
 	private List<Relationship> relationshipList;
 	
 	@OneToMany(fetch=FetchType.EAGER)
-	@Type(type="it.polimi.model.domain.EnumValueField")
+	@Type(type="it.polimi.model.domain.EnumField")
 	@JoinColumn(name="entity_id_entity")
 	private List<EnumField> enumFieldList;
 	

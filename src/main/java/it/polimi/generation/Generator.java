@@ -1,6 +1,7 @@
 package it.polimi.generation;
 
 import it.polimi.model.domain.Entity;
+import it.polimi.model.domain.EntityGroup;
 import it.polimi.model.domain.EnumField;
 import it.polimi.utils.Field;
 import it.polimi.utils.ReflectionManager;
@@ -69,12 +70,18 @@ public class Generator {
 	
 	private List<EnumField> enumFieldList;
 	
+	private List<EntityGroup> entityGroupList;
 	
 	
-	public Generator(List<Entity> entities,List<EnumField> enumFieldList)
+	public Generator(List<EntityGroup> entityGroupList,List<EnumField> enumFieldList)
 	{
-		this.modelEntityList=entities;
+		this.entityGroupList=entityGroupList;
 		this.enumFieldList=enumFieldList;
+		this.modelEntityList=new ArrayList<Entity>();
+		for (EntityGroup entityGroup: entityGroupList)
+		{
+			this.modelEntityList.addAll(entityGroup.getEntityList());
+		}
 		init();
 	}
 	
@@ -182,13 +189,13 @@ public class Generator {
 
 			}
 			if (Generator.bootstrapMenu)
-				HtmlGenerator.GenerateMenu(modelEntityList);
+				HtmlGenerator.GenerateMenu(entityGroupList);
 			else
 			{
 				if (Generator.easyTreeMenu)
-					HtmlGenerator.GenerateEasyTreeMenu(modelEntityList);
+					HtmlGenerator.GenerateEasyTreeMenu(entityGroupList);
 				else //DEFAULTS
-					HtmlGenerator.GenerateMenu(modelEntityList);
+					HtmlGenerator.GenerateMenu(entityGroupList);
 			}
 	}
 	

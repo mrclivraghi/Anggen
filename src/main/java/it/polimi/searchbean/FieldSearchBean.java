@@ -5,6 +5,7 @@ import java.util.List;
 import it.polimi.model.domain.Annotation;
 import it.polimi.model.domain.Entity;
 import it.polimi.model.domain.FieldType;
+import it.polimi.model.domain.RestrictionField;
 import it.polimi.model.domain.Tab;
 
 public class FieldSearchBean {
@@ -14,6 +15,7 @@ public class FieldSearchBean {
     public Entity entity;
     public FieldType fieldType;
     public List<Annotation> annotationList;
+    public List<RestrictionField> restrictionFieldList;
     public Tab tab;
 
     public Long getFieldId() {
@@ -54,6 +56,14 @@ public class FieldSearchBean {
 
     public void setAnnotationList(List<Annotation> annotationList) {
         this.annotationList=annotationList;
+    }
+
+    public List<RestrictionField> getRestrictionFieldList() {
+        return this.restrictionFieldList;
+    }
+
+    public void setRestrictionFieldList(List<RestrictionField> restrictionFieldList) {
+        this.restrictionFieldList=restrictionFieldList;
     }
 
     public Tab getTab() {

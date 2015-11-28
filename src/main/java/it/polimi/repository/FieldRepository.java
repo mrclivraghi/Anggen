@@ -5,6 +5,7 @@ import java.util.List;
 import it.polimi.model.domain.Annotation;
 import it.polimi.model.domain.Entity;
 import it.polimi.model.domain.Field;
+import it.polimi.model.domain.RestrictionField;
 import it.polimi.model.domain.Tab;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -27,8 +28,8 @@ public interface FieldRepository
 
     public List<Field> findByTab(Tab tab);
 
-    @Query("select f from Field f where  (:fieldId is null or cast(:fieldId as string)=cast(f.fieldId as string)) and (:name is null or :name='' or cast(:name as string)=f.name) and (:entity=f.entity or :entity is null) and (:fieldType is null or cast(:fieldType as string)=cast(f.fieldType as string)) and (:annotation in elements(f.annotationList)  or :annotation is null) and (:tab=f.tab or :tab is null) ")
-    public List<Field> findByFieldIdAndNameAndEntityAndFieldTypeAndAnnotationAndTab(
+    @Query("select f from Field f where  (:fieldId is null or cast(:fieldId as string)=cast(f.fieldId as string)) and (:name is null or :name='' or cast(:name as string)=f.name) and (:entity=f.entity or :entity is null) and (:fieldType is null or cast(:fieldType as string)=cast(f.fieldType as string)) and (:annotation in elements(f.annotationList)  or :annotation is null) and (:restrictionField in elements(f.restrictionFieldList)  or :restrictionField is null) and (:tab=f.tab or :tab is null) ")
+    public List<Field> findByFieldIdAndNameAndEntityAndFieldTypeAndAnnotationAndRestrictionFieldAndTab(
         @Param("fieldId")
         Long fieldId,
         @Param("name")
@@ -39,6 +40,8 @@ public interface FieldRepository
         Integer fieldType,
         @Param("annotation")
         Annotation annotation,
+        @Param("restrictionField")
+        RestrictionField restrictionField,
         @Param("tab")
         Tab tab);
 

@@ -45,7 +45,7 @@ public class JsDbGenerationTest {
 		File file = new File("");
 		//jsGenerator.saveJsToFile(file.getAbsolutePath()+"/src/main/webapp/js/angular/");
 		//AngularGenerator angularGenerator = new AngularGenerator(entity, true, new ArrayList<Entity>());
-		List<Entity> entityList = entityRepository.findByEntityIdAndNameAndFieldAndRelationshipAndEnumFieldAndTabAndRestriction(null, null, null, null, null, null, null);
+		List<Entity> entityList = entityRepository.findByEntityIdAndNameAndFieldAndRelationshipAndEnumFieldAndTabAndRestrictionEntityAndEntityGroup(null, null, null, null, null, null, null, null);
 		List<EnumField> enumFieldList = enumFieldRepository.findByEnumFieldIdAndNameAndEnumValueAndEntityAndAnnotationAndTab(null, null, null, null, null, null);
 		
 		Generator generator = new Generator(entityList,enumFieldList);

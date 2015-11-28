@@ -1,25 +1,25 @@
 
 package it.polimi.searchbean;
 
-import it.polimi.model.domain.Entity;
+import it.polimi.model.domain.EntityGroup;
 import it.polimi.model.domain.Role;
 
-public class RestrictionSearchBean {
+public class RestrictionEntityGroupSearchBean {
 
-    public Long restrictionId;
+    public Long restrictionEntityGroupId;
     public Boolean canCreate;
     public Boolean canUpdate;
     public Boolean canSearch;
     public Boolean canDelete;
+    public EntityGroup entityGroup;
     public Role role;
-    public Entity entity;
 
-    public Long getRestrictionId() {
-        return this.restrictionId;
+    public Long getRestrictionEntityGroupId() {
+        return this.restrictionEntityGroupId;
     }
 
-    public void setRestrictionId(Long restrictionId) {
-        this.restrictionId=restrictionId;
+    public void setRestrictionEntityGroupId(Long restrictionEntityGroupId) {
+        this.restrictionEntityGroupId=restrictionEntityGroupId;
     }
 
     public Boolean getCanCreate() {
@@ -54,20 +54,20 @@ public class RestrictionSearchBean {
         this.canDelete=canDelete;
     }
 
+    public EntityGroup getEntityGroup() {
+        return this.entityGroup;
+    }
+
+    public void setEntityGroup(EntityGroup entityGroup) {
+        this.entityGroup=entityGroup;
+    }
+
     public Role getRole() {
         return this.role;
     }
 
     public void setRole(Role role) {
         this.role=role;
-    }
-
-    public Entity getEntity() {
-        return this.entity;
-    }
-
-    public void setEntity(Entity entity) {
-        this.entity=entity;
     }
 
 }

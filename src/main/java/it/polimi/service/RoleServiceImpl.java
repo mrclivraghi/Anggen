@@ -4,7 +4,9 @@ package it.polimi.service;
 import java.util.List;
 
 import it.polimi.model.domain.Role;
-import it.polimi.repository.RestrictionRepository;
+import it.polimi.repository.RestrictionEntityGroupRepository;
+import it.polimi.repository.RestrictionEntityRepository;
+import it.polimi.repository.RestrictionFieldRepository;
 import it.polimi.repository.RoleRepository;
 import it.polimi.repository.UserRepository;
 import it.polimi.searchbean.RoleSearchBean;
@@ -22,10 +24,15 @@ public class RoleServiceImpl
     @org.springframework.beans.factory.annotation.Autowired
     public RoleRepository roleRepository;
     @org.springframework.beans.factory.annotation.Autowired
-    public RestrictionRepository restrictionRepository;
+    public RestrictionEntityRepository restrictionEntityRepository;
     
     @Autowired
-    private UserRepository userRepository;
+    public UserRepository userRepository;
+    
+    @org.springframework.beans.factory.annotation.Autowired
+    public RestrictionFieldRepository restrictionFieldRepository;
+    @org.springframework.beans.factory.annotation.Autowired
+    public RestrictionEntityGroupRepository restrictionEntityGroupRepository;
 
     @Override
     public List<Role> findById(Integer roleId) {
@@ -34,7 +41,7 @@ public class RoleServiceImpl
 
     @Override
     public List<Role> find(RoleSearchBean role) {
-        return roleRepository.findByRoleIdAndRoleAndUserAndRestriction(role.getRoleId(),role.getRole(),role.getUserList()==null? null :role.getUserList().get(0),role.getRestrictionList()==null? null :role.getRestrictionList().get(0));
+        return roleRepository.findByRoleIdAndRoleAndUserAndRestrictionEntityAndRestrictionFieldAndRestrictionEntityGroup(role.getRoleId(),role.getRole(),role.getUserList()==null? null :role.getUserList().get(0),role.getRestrictionEntityList()==null? null :role.getRestrictionEntityList().get(0),role.getRestrictionFieldList()==null? null :role.getRestrictionFieldList().get(0),role.getRestrictionEntityGroupList()==null? null :role.getRestrictionEntityGroupList().get(0));
     }
 
     @Override
@@ -67,10 +74,20 @@ public class RoleServiceImpl
         if (!found)
         savedUser.getRoleList().add(role);
         }
-        if (role.getRestrictionList()!=null)
-        for (it.polimi.model.domain.Restriction restriction: role.getRestrictionList())
+        if (role.getRestrictionEntityList()!=null)
+        for (it.polimi.model.domain.RestrictionEntity restrictionEntity: role.getRestrictionEntityList())
         {
-        restriction.setRole(role);
+        restrictionEntity.setRole(role);
+        }
+        if (role.getRestrictionFieldList()!=null)
+        for (it.polimi.model.domain.RestrictionField restrictionField: role.getRestrictionFieldList())
+        {
+        restrictionField.setRole(role);
+        }
+        if (role.getRestrictionEntityGroupList()!=null)
+        for (it.polimi.model.domain.RestrictionEntityGroup restrictionEntityGroup: role.getRestrictionEntityGroupList())
+        {
+        restrictionEntityGroup.setRole(role);
         }
         Role returnedRole=roleRepository.save(role);
          return returnedRole;

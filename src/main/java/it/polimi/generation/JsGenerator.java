@@ -473,9 +473,8 @@ public class JsGenerator {
 			sb.append("}\n");
 
 		}else
-		{
-			sb.append(parentEntityName+"Service.selectedEntity."+entityName+"=null;\n");
-		}
+			if (!isParent)
+				sb.append(parentEntityName+"Service.selectedEntity."+entityName+"=null;\n");
 
 		if (!isParent)
 			sb.append("$scope.updateParent();\n");

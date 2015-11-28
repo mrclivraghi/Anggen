@@ -105,7 +105,8 @@ public class FieldController {
         field.getEntity().setRelationshipList(null);
         field.getEntity().setEnumFieldList(null);
         field.getEntity().setTabList(null);
-        field.getEntity().setRestrictionList(null);
+        field.getEntity().setRestrictionEntityList(null);
+        field.getEntity().setEntityGroup(null);
         }
         if (field.getAnnotationList()!=null)
         for (it.polimi.model.domain.Annotation annotation :field.getAnnotationList())
@@ -116,6 +117,14 @@ public class FieldController {
         annotation.setField(null);
         annotation.setRelationship(null);
         annotation.setEnumField(null);
+        }
+        if (field.getRestrictionFieldList()!=null)
+        for (it.polimi.model.domain.RestrictionField restrictionField :field.getRestrictionFieldList())
+
+        {
+
+        restrictionField.setField(null);
+        restrictionField.setRole(null);
         }
         if (field.getTab()!=null)
         {

@@ -112,7 +112,8 @@ public class EnumFieldController {
         enumField.getEntity().setRelationshipList(null);
         enumField.getEntity().setEnumFieldList(null);
         enumField.getEntity().setTabList(null);
-        enumField.getEntity().setRestrictionList(null);
+        enumField.getEntity().setRestrictionEntityList(null);
+        enumField.getEntity().setEntityGroup(null);
         }
         if (enumField.getAnnotationList()!=null)
         for (it.polimi.model.domain.Annotation annotation :enumField.getAnnotationList())

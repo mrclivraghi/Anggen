@@ -5,8 +5,6 @@ import java.util.List;
 
 import it.polimi.model.domain.Tab;
 import it.polimi.repository.EnumFieldRepository;
-import it.polimi.repository.FieldRepository;
-import it.polimi.repository.RelationshipRepository;
 import it.polimi.repository.TabRepository;
 import it.polimi.searchbean.TabSearchBean;
 import it.polimi.service.TabService;
@@ -21,10 +19,6 @@ public class TabServiceImpl
 
     @org.springframework.beans.factory.annotation.Autowired
     public TabRepository tabRepository;
-    @org.springframework.beans.factory.annotation.Autowired
-    public FieldRepository fieldRepository;
-    @org.springframework.beans.factory.annotation.Autowired
-    public RelationshipRepository relationshipRepository;
     @org.springframework.beans.factory.annotation.Autowired
     public EnumFieldRepository enumFieldRepository;
 

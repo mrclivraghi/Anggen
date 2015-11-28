@@ -110,6 +110,7 @@ public class AnnotationController {
         {
         annotation.getField().setEntity(null);
         annotation.getField().setAnnotationList(null);
+        annotation.getField().setRestrictionFieldList(null);
         annotation.getField().setTab(null);
         }
         if (annotation.getRelationship()!=null)

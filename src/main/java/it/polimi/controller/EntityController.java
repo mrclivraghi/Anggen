@@ -106,6 +106,7 @@ public class EntityController {
 
         field.setEntity(null);
         field.setAnnotationList(null);
+        field.setRestrictionFieldList(null);
         field.setTab(null);
         }
         if (entity.getRelationshipList()!=null)
@@ -138,13 +139,18 @@ public class EntityController {
         tab.setRelationshipList(null);
         tab.setEnumFieldList(null);
         }
-        if (entity.getRestrictionList()!=null)
-        for (it.polimi.model.domain.Restriction restriction :entity.getRestrictionList())
+        if (entity.getRestrictionEntityList()!=null)
+        for (it.polimi.model.domain.RestrictionEntity restrictionEntity :entity.getRestrictionEntityList())
 
         {
 
-        restriction.setRole(null);
-        restriction.setEntity(null);
+        restrictionEntity.setRole(null);
+        restrictionEntity.setEntity(null);
+        }
+        if (entity.getEntityGroup()!=null)
+        {
+        entity.getEntityGroup().setEntityList(null);
+        entity.getEntityGroup().setRestrictionEntityGroupList(null);
         }
     }
 

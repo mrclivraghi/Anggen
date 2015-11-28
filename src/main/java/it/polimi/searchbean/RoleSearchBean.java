@@ -2,7 +2,9 @@
 package it.polimi.searchbean;
 
 import java.util.List;
-import it.polimi.model.domain.Restriction;
+import it.polimi.model.domain.RestrictionEntity;
+import it.polimi.model.domain.RestrictionEntityGroup;
+import it.polimi.model.domain.RestrictionField;
 import it.polimi.model.domain.User;
 
 public class RoleSearchBean {
@@ -10,7 +12,9 @@ public class RoleSearchBean {
     public Integer roleId;
     public String role;
     public List<User> userList;
-    public List<Restriction> restrictionList;
+    public List<RestrictionEntity> restrictionEntityList;
+    public List<RestrictionField> restrictionFieldList;
+    public List<RestrictionEntityGroup> restrictionEntityGroupList;
 
     public Integer getRoleId() {
         return this.roleId;
@@ -36,12 +40,28 @@ public class RoleSearchBean {
         this.userList=userList;
     }
 
-    public List<Restriction> getRestrictionList() {
-        return this.restrictionList;
+    public List<RestrictionEntity> getRestrictionEntityList() {
+        return this.restrictionEntityList;
     }
 
-    public void setRestrictionList(List<Restriction> restrictionList) {
-        this.restrictionList=restrictionList;
+    public void setRestrictionEntityList(List<RestrictionEntity> restrictionEntityList) {
+        this.restrictionEntityList=restrictionEntityList;
+    }
+
+    public List<RestrictionField> getRestrictionFieldList() {
+        return this.restrictionFieldList;
+    }
+
+    public void setRestrictionFieldList(List<RestrictionField> restrictionFieldList) {
+        this.restrictionFieldList=restrictionFieldList;
+    }
+
+    public List<RestrictionEntityGroup> getRestrictionEntityGroupList() {
+        return this.restrictionEntityGroupList;
+    }
+
+    public void setRestrictionEntityGroupList(List<RestrictionEntityGroup> restrictionEntityGroupList) {
+        this.restrictionEntityGroupList=restrictionEntityGroupList;
     }
 
 }

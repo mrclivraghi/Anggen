@@ -5,10 +5,10 @@ import java.util.List;
 
 import it.polimi.model.domain.Field;
 import it.polimi.repository.FieldRepository;
+import it.polimi.repository.RestrictionFieldRepository;
 import it.polimi.searchbean.FieldSearchBean;
 import it.polimi.service.FieldService;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,8 +17,10 @@ public class FieldServiceImpl
     implements FieldService
 {
 
-    @Autowired
+    @org.springframework.beans.factory.annotation.Autowired
     public FieldRepository fieldRepository;
+    @org.springframework.beans.factory.annotation.Autowired
+    public RestrictionFieldRepository restrictionFieldRepository;
 
     @Override
     public List<Field> findById(Long fieldId) {
@@ -27,7 +29,7 @@ public class FieldServiceImpl
 
     @Override
     public List<Field> find(FieldSearchBean field) {
-        return fieldRepository.findByFieldIdAndNameAndEntityAndFieldTypeAndAnnotationAndTab(field.getFieldId(),field.getName(),field.getEntity(), (field.getFieldType()==null)? null : field.getFieldType().getValue(),field.getAnnotationList()==null? null :field.getAnnotationList().get(0),field.getTab());
+        return fieldRepository.findByFieldIdAndNameAndEntityAndFieldTypeAndAnnotationAndRestrictionFieldAndTab(field.getFieldId(),field.getName(),field.getEntity(), (field.getFieldType()==null)? null : field.getFieldType().getValue(),field.getAnnotationList()==null? null :field.getAnnotationList().get(0),field.getRestrictionFieldList()==null? null :field.getRestrictionFieldList().get(0),field.getTab());
     }
 
     @Override
@@ -48,6 +50,11 @@ public class FieldServiceImpl
         for (it.polimi.model.domain.Annotation annotation: field.getAnnotationList())
         {
         annotation.setField(field);
+        }
+        if (field.getRestrictionFieldList()!=null)
+        for (it.polimi.model.domain.RestrictionField restrictionField: field.getRestrictionFieldList())
+        {
+        restrictionField.setField(field);
         }
         Field returnedField=fieldRepository.save(field);
         if (field.getEntity()!=null)

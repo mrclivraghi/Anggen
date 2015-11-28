@@ -1,11 +1,10 @@
 package it.polimi.controller;
 
 import it.polimi.model.domain.Annotation;
-import it.polimi.model.domain.Restriction;
+import it.polimi.model.domain.RestrictionEntity;
 import it.polimi.model.domain.User;
 import it.polimi.searchbean.AnnotationSearchBean;
 import it.polimi.searchbean.UserSearchBean;
-import it.polimi.service.SecurityService;
 import it.polimi.service.UserService;
 
 import java.util.HashMap;
@@ -50,16 +49,16 @@ public class AuthenticationController {
 			return ResponseEntity.status(HttpStatus.ACCEPTED).body(buildRestrictionMap(null));
 	}
 	
-	private Map<String,Restriction> buildRestrictionMap(List<Restriction> restrictionList)
+	private Map<String,RestrictionEntity> buildRestrictionMap(List<RestrictionEntity> restrictionEntityList)
 	{
-		Map<String,Restriction> restrictionMap= new HashMap<String, Restriction>();
-		if (restrictionList!=null)
-		for (Restriction restriction: restrictionList)
+		Map<String,RestrictionEntity> restrictionMap= new HashMap<String, RestrictionEntity>();
+		if (restrictionEntityList!=null)
+		for (RestrictionEntity restrictionEntity: restrictionEntityList)
 		{
-			String entityName=restriction.getEntity().getName();
-			restriction.setEntity(null);
-			restriction.setRole(null);
-			restrictionMap.put(entityName, restriction);
+			String entityName=restrictionEntity.getEntity().getName();
+			restrictionEntity.setEntity(null);
+			restrictionEntity.setRole(null);
+			restrictionMap.put(entityName, restrictionEntity);
 		}
 		return restrictionMap;
 	}

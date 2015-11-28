@@ -105,7 +105,9 @@ public class UserController {
         {
 
         role.setUserList(null);
-        role.setRestrictionList(null);
+        role.setRestrictionEntityList(null);
+        role.setRestrictionFieldList(null);
+        role.setRestrictionEntityGroupList(null);
         }
     }
 

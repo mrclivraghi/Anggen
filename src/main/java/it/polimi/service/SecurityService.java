@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import it.polimi.model.domain.Entity;
-import it.polimi.model.domain.Restriction;
+import it.polimi.model.domain.RestrictionEntity;
 import it.polimi.model.domain.RestrictionType;
 import it.polimi.model.domain.User;
 import it.polimi.repository.UserRepository;
@@ -67,9 +67,9 @@ public class SecurityService{
 		List<User> userList = userRepository.findByUsername(username);
 		if (userList==null || userList.size()==0) return false;
 		User user = userList.get(0);
-		for (Restriction restriction: user.getRestrictionList())
+		for (RestrictionEntity restrictionEntity: user.getRestrictionList())
 		{
-			if (restriction.getEntity().getEntityId().equals(entityId) && (!restriction.isAllowed(restrictionType))) return false;
+			if (restrictionEntity.getEntity().getEntityId().equals(entityId) && (!restrictionEntity.isAllowed(restrictionType))) return false;
 		}
 		return true;
 	}

@@ -106,13 +106,29 @@ public class RoleController {
 
         user.setRoleList(null);
         }
-        if (role.getRestrictionList()!=null)
-        for (it.polimi.model.domain.Restriction restriction :role.getRestrictionList())
+        if (role.getRestrictionEntityList()!=null)
+        for (it.polimi.model.domain.RestrictionEntity restrictionEntity :role.getRestrictionEntityList())
 
         {
 
-        restriction.setRole(null);
-        restriction.setEntity(null);
+        restrictionEntity.setRole(null);
+        restrictionEntity.setEntity(null);
+        }
+        if (role.getRestrictionFieldList()!=null)
+        for (it.polimi.model.domain.RestrictionField restrictionField :role.getRestrictionFieldList())
+
+        {
+
+        restrictionField.setField(null);
+        restrictionField.setRole(null);
+        }
+        if (role.getRestrictionEntityGroupList()!=null)
+        for (it.polimi.model.domain.RestrictionEntityGroup restrictionEntityGroup :role.getRestrictionEntityGroupList())
+
+        {
+
+        restrictionEntityGroup.setEntityGroup(null);
+        restrictionEntityGroup.setRole(null);
         }
     }
 

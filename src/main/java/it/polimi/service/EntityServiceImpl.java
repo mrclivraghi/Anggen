@@ -5,8 +5,7 @@ import java.util.List;
 
 import it.polimi.model.domain.Entity;
 import it.polimi.repository.EntityRepository;
-import it.polimi.repository.FieldRepository;
-import it.polimi.repository.RestrictionRepository;
+import it.polimi.repository.RestrictionEntityRepository;
 import it.polimi.searchbean.EntitySearchBean;
 import it.polimi.service.EntityService;
 
@@ -21,9 +20,7 @@ public class EntityServiceImpl
     @org.springframework.beans.factory.annotation.Autowired
     public EntityRepository entityRepository;
     @org.springframework.beans.factory.annotation.Autowired
-    public FieldRepository fieldRepository;
-    @org.springframework.beans.factory.annotation.Autowired
-    public RestrictionRepository restrictionRepository;
+    public RestrictionEntityRepository restrictionEntityRepository;
 
     @Override
     public List<Entity> findById(Long entityId) {
@@ -32,7 +29,7 @@ public class EntityServiceImpl
 
     @Override
     public List<Entity> find(EntitySearchBean entity) {
-        return entityRepository.findByEntityIdAndNameAndFieldAndRelationshipAndEnumFieldAndTabAndRestriction(entity.getEntityId(),entity.getName(),entity.getFieldList()==null? null :entity.getFieldList().get(0),entity.getRelationshipList()==null? null :entity.getRelationshipList().get(0),entity.getEnumFieldList()==null? null :entity.getEnumFieldList().get(0),entity.getTabList()==null? null :entity.getTabList().get(0),entity.getRestrictionList()==null? null :entity.getRestrictionList().get(0));
+        return entityRepository.findByEntityIdAndNameAndFieldAndRelationshipAndEnumFieldAndTabAndRestrictionEntityAndEntityGroup(entity.getEntityId(),entity.getName(),entity.getFieldList()==null? null :entity.getFieldList().get(0),entity.getRelationshipList()==null? null :entity.getRelationshipList().get(0),entity.getEnumFieldList()==null? null :entity.getEnumFieldList().get(0),entity.getTabList()==null? null :entity.getTabList().get(0),entity.getRestrictionEntityList()==null? null :entity.getRestrictionEntityList().get(0),entity.getEntityGroup());
     }
 
     @Override
@@ -69,12 +66,19 @@ public class EntityServiceImpl
         {
         tab.setEntity(entity);
         }
-        if (entity.getRestrictionList()!=null)
-        for (it.polimi.model.domain.Restriction restriction: entity.getRestrictionList())
+        if (entity.getRestrictionEntityList()!=null)
+        for (it.polimi.model.domain.RestrictionEntity restrictionEntity: entity.getRestrictionEntityList())
         {
-        restriction.setEntity(entity);
+        restrictionEntity.setEntity(entity);
         }
         Entity returnedEntity=entityRepository.save(entity);
+        if (entity.getEntityGroup()!=null)
+        {
+        List<Entity> entityList = entityRepository.findByEntityGroup( entity.getEntityGroup());
+        if (!entityList.contains(returnedEntity))
+        entityList.add(returnedEntity);
+        returnedEntity.getEntityGroup().setEntityList(entityList);
+        }
          return returnedEntity;
     }
 

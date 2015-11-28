@@ -105,7 +105,8 @@ public class TabController {
         tab.getEntity().setRelationshipList(null);
         tab.getEntity().setEnumFieldList(null);
         tab.getEntity().setTabList(null);
-        tab.getEntity().setRestrictionList(null);
+        tab.getEntity().setRestrictionEntityList(null);
+        tab.getEntity().setEntityGroup(null);
         }
         if (tab.getFieldList()!=null)
         for (it.polimi.model.domain.Field field :tab.getFieldList())
@@ -114,6 +115,7 @@ public class TabController {
 
         field.setEntity(null);
         field.setAnnotationList(null);
+        field.setRestrictionFieldList(null);
         field.setTab(null);
         }
         if (tab.getRelationshipList()!=null)

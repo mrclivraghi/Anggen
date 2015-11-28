@@ -105,7 +105,8 @@ public class RelationshipController {
         relationship.getEntity().setRelationshipList(null);
         relationship.getEntity().setEnumFieldList(null);
         relationship.getEntity().setTabList(null);
-        relationship.getEntity().setRestrictionList(null);
+        relationship.getEntity().setRestrictionEntityList(null);
+        relationship.getEntity().setEntityGroup(null);
         }
         if (relationship.getEntityTarget()!=null)
         {
@@ -113,7 +114,8 @@ public class RelationshipController {
         relationship.getEntityTarget().setRelationshipList(null);
         relationship.getEntityTarget().setEnumFieldList(null);
         relationship.getEntityTarget().setTabList(null);
-        relationship.getEntityTarget().setRestrictionList(null);
+        relationship.getEntityTarget().setRestrictionEntityList(null);
+        relationship.getEntityTarget().setEntityGroup(null);
         }
         if (relationship.getAnnotationList()!=null)
         for (it.polimi.model.domain.Annotation annotation :relationship.getAnnotationList())

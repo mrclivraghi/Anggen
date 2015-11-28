@@ -2,7 +2,7 @@ package it.generated.domain.security;
 
 
 import static javax.persistence.GenerationType.IDENTITY;
-import it.polimi.model.domain.Restriction;
+import it.polimi.model.domain.RestrictionEntity;
 
 import java.util.List;
 
@@ -40,7 +40,7 @@ public class Role{
 	@OneToMany(fetch=FetchType.EAGER)
 	@Type(type="it.polimi.model.domain.Restriction")
 	@JoinColumn(name="role_id_role")
-	private List<Restriction> restrictionList;
+	private List<RestrictionEntity> restrictionList;
 	
 	
 	public Role() {
@@ -85,14 +85,14 @@ public class Role{
 	/**
 	 * @return the restrictionList
 	 */
-	public List<Restriction> getRestrictionList() {
+	public List<RestrictionEntity> getRestrictionList() {
 		return restrictionList;
 	}
 
 	/**
 	 * @param restrictionList the restrictionList to set
 	 */
-	public void setRestrictionList(List<Restriction> restrictionList) {
+	public void setRestrictionList(List<RestrictionEntity> restrictionList) {
 		this.restrictionList = restrictionList;
 	}
 

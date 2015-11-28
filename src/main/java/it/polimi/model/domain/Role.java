@@ -37,15 +37,20 @@ public class Role{
 
 
 	@OneToMany(fetch=FetchType.EAGER)
-	@Type(type="it.polimi.model.domain.Restriction")
+	@Type(type="it.polimi.model.domain.RestrictionEntity")
 	@JoinColumn(name="role_id_role")
-	private List<Restriction> restrictionList;
+	private List<RestrictionEntity> restrictionEntityList;
 	
 	
 	@OneToMany(fetch=FetchType.EAGER)
-	@Type(type="it.polimi.model.domain.ValidationRestriction")
+	@Type(type="it.polimi.model.domain.RestrictionField")
 	@JoinColumn(name="role_id_role")
-	private List<ValidationRestriction> validationRestrictionList;
+	private List<RestrictionField> restrictionFieldList;
+	
+	@OneToMany(fetch=FetchType.EAGER)
+	@Type(type="it.polimi.model.domain.RestrictionEntityGroup")
+	@JoinColumn(name="role_id_role")
+	private List<RestrictionEntityGroup> restrictionEntityGroupList;
 	
 	public Role() {
 	}
@@ -89,30 +94,45 @@ public class Role{
 	/**
 	 * @return the restrictionList
 	 */
-	public List<Restriction> getRestrictionList() {
-		return restrictionList;
+	public List<RestrictionEntity> getRestrictionEntityList() {
+		return restrictionEntityList;
 	}
 
 	/**
 	 * @param restrictionList the restrictionList to set
 	 */
-	public void setRestrictionList(List<Restriction> restrictionList) {
-		this.restrictionList = restrictionList;
+	public void setRestrictionEntityList(List<RestrictionEntity> restrictionEntityList) {
+		this.restrictionEntityList = restrictionEntityList;
 	}
 
 	/**
 	 * @return the validationRestrictionList
 	 */
-	public List<ValidationRestriction> getValidationRestrictionList() {
-		return validationRestrictionList;
+	public List<RestrictionField> getRestrictionFieldList() {
+		return restrictionFieldList;
 	}
 
 	/**
 	 * @param validationRestrictionList the validationRestrictionList to set
 	 */
-	public void setValidationRestrictionList(
-			List<ValidationRestriction> validationRestrictionList) {
-		this.validationRestrictionList = validationRestrictionList;
+	public void setRestrictionFieldList(
+			List<RestrictionField> restrictionFieldList) {
+		this.restrictionFieldList = restrictionFieldList;
+	}
+
+	/**
+	 * @return the restrictionEntityGroupList
+	 */
+	public List<RestrictionEntityGroup> getRestrictionEntityGroupList() {
+		return restrictionEntityGroupList;
+	}
+
+	/**
+	 * @param restrictionEntityGroupList the restrictionEntityGroupList to set
+	 */
+	public void setRestrictionEntityGroupList(
+			List<RestrictionEntityGroup> restrictionEntityGroupList) {
+		this.restrictionEntityGroupList = restrictionEntityGroupList;
 	}
 
 

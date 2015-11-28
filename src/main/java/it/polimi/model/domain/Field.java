@@ -47,9 +47,9 @@ public class Field extends EntityAttribute{
 	
 	
 	@OneToMany(fetch=FetchType.EAGER)
-	@Type(type="it.polimi.model.domain.ValidationRestriction")
+	@Type(type="it.polimi.model.domain.RestrictionField")
 	@JoinColumn(name="field_id_field")
-	private List<ValidationRestriction> validationRestrictionList;
+	private List<RestrictionField> restrictionFieldList;
 	
 	
 	@ManyToOne
@@ -129,15 +129,15 @@ public class Field extends EntityAttribute{
 	/**
 	 * @return the validationRestrictionList
 	 */
-	public List<ValidationRestriction> getValidationRestrictionList() {
-		return validationRestrictionList;
+	public List<RestrictionField> getRestrictionFieldList() {
+		return restrictionFieldList;
 	}
 	/**
 	 * @param validationRestrictionList the validationRestrictionList to set
 	 */
-	public void setValidationRestrictionList(
-			List<ValidationRestriction> validationRestrictionList) {
-		this.validationRestrictionList = validationRestrictionList;
+	public void setRestrictionFieldList(
+			List<RestrictionField> restrictionFieldList) {
+		this.restrictionFieldList = restrictionFieldList;
 	}
 	
 }

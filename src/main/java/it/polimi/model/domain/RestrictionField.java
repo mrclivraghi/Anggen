@@ -10,13 +10,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @javax.persistence.Entity
-@Table(schema="sso", name="validation_restriction")
-public class ValidationRestriction {
+@Table(schema="sso", name="restriction_field")
+public class RestrictionField {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	@Column(name ="id_validation_restriction")
-	private Long validationRestrictionId;
+	@Column(name ="id_restriction_field")
+	private Long restrictionFieldId;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="field_id_field")
@@ -32,15 +32,15 @@ public class ValidationRestriction {
 	/**
 	 * @return the validationRestrictionId
 	 */
-	public Long getValidationRestrictionId() {
-		return validationRestrictionId;
+	public Long getRestrictionFieldId() {
+		return restrictionFieldId;
 	}
 
 	/**
 	 * @param validationRestrictionId the validationRestrictionId to set
 	 */
-	public void setValidationRestrictionId(Long validationRestrictionId) {
-		this.validationRestrictionId = validationRestrictionId;
+	public void setRestrictionFieldId(Long restrictionFieldId) {
+		this.restrictionFieldId = restrictionFieldId;
 	}
 
 	/**

@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -51,9 +52,14 @@ public class Entity {
 	private List<it.polimi.model.domain.Tab> tabList;
 	
 	@OneToMany(fetch=FetchType.EAGER)
-	@Type(type="it.polimi.model.domain.Restriction")
+	@Type(type="it.polimi.model.domain.RestrictionEntity")
 	@JoinColumn(name="entity_id_entity")
-	private List<Restriction> restrictionList;
+	private List<RestrictionEntity> restrictionEntityList;
+	
+	
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="entity_group_id_entity_group")
+	private EntityGroup entityGroup;
 	
 	/**
 	 * @return the entityId
@@ -121,14 +127,26 @@ public class Entity {
 	public void setTabList(List<it.polimi.model.domain.Tab> tabList) {
 		this.tabList = tabList;
 	}
-	public List<Restriction> getRestrictionList() {
-		return restrictionList;
+	public List<RestrictionEntity> getRestrictionEntityList() {
+		return restrictionEntityList;
 	}
-	public void setRestrictionList(List<Restriction> restrictionList) {
-		this.restrictionList = restrictionList;
+	public void setRestrictionEntityList(List<RestrictionEntity> restrictionEntityList) {
+		this.restrictionEntityList = restrictionEntityList;
 	}
 	
 	
+	/**
+	 * @return the entityGroup
+	 */
+	public EntityGroup getEntityGroup() {
+		return entityGroup;
+	}
+	/**
+	 * @param entityGroup the entityGroup to set
+	 */
+	public void setEntityGroup(EntityGroup entityGroup) {
+		this.entityGroup = entityGroup;
+	}
 	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof Entity)) return false;

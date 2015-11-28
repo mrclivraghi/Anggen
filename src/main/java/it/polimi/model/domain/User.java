@@ -122,11 +122,11 @@ public class User {
 
 	
 	@JsonIgnore
-	public List<Restriction> getRestrictionList(){
-		List<Restriction> restrictionList = new ArrayList<Restriction>();
+	public List<RestrictionEntity> getRestrictionList(){
+		List<RestrictionEntity> restrictionList = new ArrayList<RestrictionEntity>();
 		for (Role role: roleList)
 		{
-			restrictionList.addAll(role.getRestrictionList());
+			restrictionList.addAll(role.getRestrictionEntityList());
 		}
 		return restrictionList;
 	}

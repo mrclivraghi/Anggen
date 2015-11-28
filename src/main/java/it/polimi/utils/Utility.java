@@ -4,6 +4,8 @@ import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 public class Utility {
 	public static String formatDate(java.sql.Date date){
 		if (date==null) return null;
@@ -48,6 +50,11 @@ public class Utility {
 		return string.substring(0, cut);
 	}
 	
+	public static String encodePassword(String password)
+	{
+		BCryptPasswordEncoder passwordEncoder= new BCryptPasswordEncoder();
+		return passwordEncoder.encode(password);
+	}
 	
 	public static void main (String[] args)
 	{

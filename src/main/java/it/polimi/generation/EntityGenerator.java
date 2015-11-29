@@ -123,7 +123,7 @@ public class EntityGenerator {
 		myClass.annotate(javax.persistence.Entity.class);
 		JAnnotationUse annotationTable= myClass.annotate(Table.class);
 		//from properties
-		annotationTable.param("schema", "public");
+		annotationTable.param("schema", Generator.schema);
 		
 		JVar entityId= myClass.field(JMod.PUBLIC+JMod.STATIC+JMod.FINAL, Long.class, "staticEntityId");
 		entityId.init(JExpr.lit(entity.getEntityId()));
@@ -137,8 +137,6 @@ public class EntityGenerator {
 		{
 			JClass fieldClass = field.getFieldClass();
 			String fieldName= field.getName();
-			if (fieldName.equals("entityId"))
-				System.out.println("ERR");
 			JVar classField = myClass.field(JMod.PRIVATE, fieldClass, field.getName());
 			JAnnotationUse columnAnnotation = classField.annotate(Column.class);
 			columnAnnotation.param("name", namingStrategy.classToTableName(field.getName()));
@@ -161,16 +159,11 @@ public class EntityGenerator {
 					JAnnotationUse type = listField.annotate(Type.class);
 					type.param("type", Generator.getJDefinedClass(relationship.getEntityTarget()).fullName());
 					JAnnotationUse joinColumn = listField.annotate(JoinColumn.class);
-					joinColumn.param("name", namingStrategy.classToTableName(entity.getName())+"_id_"+namingStrategy.classToTableName(entity.getName()));
+					joinColumn.param("name", namingStrategy.classToTableName(entity.getName())+"_id_"+namingStrategy.classToTableName(relationship.getName()));
 				}
 
 				if (relationship.getRelationshipType()==RelationshipType.MANY_TO_MANY)
 				{
-				    /*
-				     * joinColumns={@JoinColumn(name="user_id")},inverseJoinColumns={@JoinColumn(name="role_id")}
-				     * 
-				     * 
-				     */
 					JAnnotationUse manyToMany = listField.annotate(ManyToMany.class);
 					manyToMany.param("fetch", FetchType.EAGER);
 					JAnnotationUse type = listField.annotate(Type.class);
@@ -182,7 +175,7 @@ public class EntityGenerator {
 					listJoinColumns.annotate(JoinColumn.class).param("name", relationship.getEntity().getName().toLowerCase()+"_id");
 					
 					JAnnotationArrayMember listInverseJoinColumns = joinTable.paramArray("inverseJoinColumns");
-					listInverseJoinColumns.annotate(JoinColumn.class).param("name", relationship.getEntity().getName().toLowerCase()+"_id");
+					listInverseJoinColumns.annotate(JoinColumn.class).param("name", relationship.getEntityTarget().getName().toLowerCase()+"_id");
 					
 					
 
@@ -205,7 +198,7 @@ public class EntityGenerator {
 					JAnnotationUse manyToOne = listField.annotate(ManyToOne.class);
 					manyToOne.param("fetch", FetchType.EAGER);
 					JAnnotationUse joinColumn = listField.annotate(JoinColumn.class);
-					joinColumn.param("name", namingStrategy.classToTableName(relationship.getEntityTarget().getName())+"_id_"+namingStrategy.classToTableName(relationship.getEntityTarget().getName()));
+					joinColumn.param("name", namingStrategy.classToTableName(relationship.getEntityTarget().getName())+"_id_"+namingStrategy.classToTableName(relationship.getName()));
 				
 				}
 				if (relationship.getRelationshipType()==RelationshipType.ONE_TO_ONE)
@@ -215,7 +208,7 @@ public class EntityGenerator {
 					JAnnotationUse type = listField.annotate(Type.class);
 					type.param("type", Generator.getJDefinedClass(relationship.getEntityTarget()).fullName());
 					JAnnotationUse joinColumn = listField.annotate(JoinColumn.class);
-					joinColumn.param("name", namingStrategy.classToTableName(relationship.getEntityTarget().getName())+"_id_"+namingStrategy.classToTableName(relationship.getEntityTarget().getName()));
+					joinColumn.param("name", namingStrategy.classToTableName(relationship.getEntityTarget().getName())+"_id_"+namingStrategy.classToTableName(relationship.getName()));
 				
 				}
 				generateGetterAndSetter(myClass, relationship.getName(), Generator.getJDefinedClass(relationship.getEntityTarget()));

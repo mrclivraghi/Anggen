@@ -39,7 +39,8 @@ public class User {
 
 	@ManyToMany(fetch=FetchType.EAGER)
 	@Type(type="it.polimi.model.Role")
-	@JoinTable(name="user_role", schema="sso",joinColumns={@JoinColumn(name="user_id")},inverseJoinColumns={@JoinColumn(name="role_id")})
+	@JoinTable(name="user_role", schema="sso",
+	joinColumns=@JoinColumn(name="user_id"),inverseJoinColumns={@JoinColumn(name="role_id")})
 	private List<Role> roleList;
 
 	public User() {
@@ -121,34 +122,6 @@ public class User {
 	}
 
 	
-	@JsonIgnore
-	public List<RestrictionEntity> getRestrictionEntityList(){
-		List<RestrictionEntity> restrictionList = new ArrayList<RestrictionEntity>();
-		for (Role role: roleList)
-		{
-			restrictionList.addAll(role.getRestrictionEntityList());
-		}
-		return restrictionList;
-	}
 	
-	@JsonIgnore
-	public List<RestrictionEntityGroup> getRestrictionEntityGroupList(){
-		List<RestrictionEntityGroup> restrictionList = new ArrayList<RestrictionEntityGroup>();
-		for (Role role: roleList)
-		{
-			restrictionList.addAll(role.getRestrictionEntityGroupList());
-		}
-		return restrictionList;
-	}
-
-	@JsonIgnore
-	public List<RestrictionField> getRestrictionFieldList() {
-		List<RestrictionField> restrictionList = new ArrayList<RestrictionField>();
-		for (Role role: roleList)
-		{
-			restrictionList.addAll(role.getRestrictionFieldList());
-		}
-		return restrictionList;
-	}
 
 }

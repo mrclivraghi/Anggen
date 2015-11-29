@@ -2,9 +2,11 @@
 package it.polimi.controller;
 
 import java.util.List;
+
 import it.polimi.searchbean.ExampleSearchBean;
+import it.polimi.security.SecurityService;
 import it.polimi.service.ExampleService;
-import it.polimi.service.SecurityService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;

@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -34,6 +35,11 @@ public class EntityGroup {
 	@JoinColumn(name="entity_group_id_entity_group")
 	private List<RestrictionEntityGroup> restrictionEntityGroupList;
 	
+	
+	@ManyToOne(fetch=FetchType.EAGER)
+	@Type(type="it.polimi.model.domain.Project")
+	@JoinColumn(name="project_id_project")
+	private Project project;
 	
 	public EntityGroup() {
 		// TODO Auto-generated constructor stub
@@ -102,6 +108,16 @@ public class EntityGroup {
 	public void setRestrictionEntityGroupList(
 			List<RestrictionEntityGroup> restrictionEntityGroupList) {
 		this.restrictionEntityGroupList = restrictionEntityGroupList;
+	}
+
+
+	public Project getProject() {
+		return project;
+	}
+
+
+	public void setProject(Project project) {
+		this.project = project;
 	}
 
 }

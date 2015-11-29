@@ -22,7 +22,7 @@ public class Annotation {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	@Column(name ="id_annotation")
+	@Column(name ="annotation_id")
 	private Long annotationId;
 	
 	@Column(name="annotation_type")

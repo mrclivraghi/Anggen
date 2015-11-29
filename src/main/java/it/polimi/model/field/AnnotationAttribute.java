@@ -15,7 +15,7 @@ public class AnnotationAttribute {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	@Column(name ="id_annotation_attribute")
+	@Column(name ="annotation_attribute_id")
 	private Long annotationAttributeId;
 	
 	private String property;

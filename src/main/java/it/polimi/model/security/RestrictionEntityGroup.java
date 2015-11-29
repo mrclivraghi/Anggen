@@ -18,7 +18,7 @@ public class RestrictionEntityGroup {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	@Column(name ="id_restriction_entity_group")
+	@Column(name ="restriction_entity_group_id")
 	private Long restrictionEntityGroupId;
 	
 	

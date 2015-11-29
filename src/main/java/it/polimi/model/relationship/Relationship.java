@@ -34,7 +34,7 @@ public class Relationship extends EntityAttribute{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	@Column(name ="id_relationship")
+	@Column(name ="relationship_id")
 	private Long relationshipId;
 	
 	@Column(name="name")

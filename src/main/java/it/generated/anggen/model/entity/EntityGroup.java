@@ -22,10 +22,10 @@ public class EntityGroup {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @DescriptionField
     private java.lang.Long entityGroupId;
-    @javax.persistence.Column(name = "entity_id")
-    private java.lang.Long entityId;
     @javax.persistence.Column(name = "name")
     private String name;
+    @javax.persistence.Column(name = "entity_id")
+    private java.lang.Long entityId;
     @OneToMany(fetch = javax.persistence.FetchType.EAGER)
     @Type(type = "it.generated.anggen.model.entity.Entity")
     @javax.persistence.JoinColumn(name = "entity_group_id_entity")
@@ -46,20 +46,20 @@ public class EntityGroup {
         this.entityGroupId=entityGroupId;
     }
 
-    public java.lang.Long getEntityId() {
-        return this.entityId;
-    }
-
-    public void setEntityId(java.lang.Long entityId) {
-        this.entityId=entityId;
-    }
-
     public String getName() {
         return this.name;
     }
 
     public void setName(String name) {
         this.name=name;
+    }
+
+    public java.lang.Long getEntityId() {
+        return this.entityId;
+    }
+
+    public void setEntityId(java.lang.Long entityId) {
+        this.entityId=entityId;
     }
 
     public List<it.generated.anggen.model.entity.Entity> getEntityList() {

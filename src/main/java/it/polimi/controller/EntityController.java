@@ -151,6 +151,7 @@ public class EntityController {
         {
         entity.getEntityGroup().setEntityList(null);
         entity.getEntityGroup().setRestrictionEntityGroupList(null);
+        entity.getEntityGroup().setProject(null);
         }
     }
 

@@ -17,7 +17,7 @@ public class RestrictionField {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	@Column(name ="id_restriction_field")
+	@Column(name ="restriction_field_id")
 	private Long restrictionFieldId;
 	
 	@ManyToOne(fetch=FetchType.EAGER)

@@ -24,7 +24,7 @@ public class EnumField extends EntityAttribute {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	@Column(name ="id_enum_field")
+	@Column(name ="enum_field_id")
 	private Long enumFieldId;
 	
 	private String name;

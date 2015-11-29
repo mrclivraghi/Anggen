@@ -28,7 +28,7 @@ public class Entity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	@Column(name ="id_entity")
+	@Column(name ="entity_id")
 	@DescriptionField
 	private Long entityId;
 	

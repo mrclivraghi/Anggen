@@ -19,19 +19,27 @@ import org.hibernate.annotations.Type;
 public class Project {
 
     public final static java.lang.Long staticEntityId = 4722L;
-    @javax.persistence.Column(name = "name")
-    private String name;
-    @javax.persistence.Column(name = "entity_id")
-    private java.lang.Long entityId;
     @javax.persistence.Column(name = "project_id")
     @DescriptionField
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer projectId;
+    @javax.persistence.Column(name = "name")
+    private String name;
+    @javax.persistence.Column(name = "entity_id")
+    private java.lang.Long entityId;
     @OneToMany(fetch = FetchType.EAGER)
     @Type(type = "it.generated.anggen.model.entity.EntityGroup")
     @JoinColumn(name = "project_id_entity_group")
     private List<EntityGroup> entityGroupList;
+
+    public Integer getProjectId() {
+        return this.projectId;
+    }
+
+    public void setProjectId(Integer projectId) {
+        this.projectId=projectId;
+    }
 
     public String getName() {
         return this.name;
@@ -47,14 +55,6 @@ public class Project {
 
     public void setEntityId(java.lang.Long entityId) {
         this.entityId=entityId;
-    }
-
-    public Integer getProjectId() {
-        return this.projectId;
-    }
-
-    public void setProjectId(Integer projectId) {
-        this.projectId=projectId;
     }
 
     public List<EntityGroup> getEntityGroupList() {

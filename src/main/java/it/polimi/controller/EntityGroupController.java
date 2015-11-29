@@ -119,6 +119,10 @@ public class EntityGroupController {
         restrictionEntityGroup.setEntityGroup(null);
         restrictionEntityGroup.setRole(null);
         }
+        if (entityGroup.getProject()!=null)
+        {
+        	entityGroup.getProject().setEntityGroupList(null);
+        }
     }
 
 }

@@ -15,7 +15,7 @@ public class EnumValue{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	@Column(name ="id_enum_value")
+	@Column(name ="enum_value_id")
 	private Long enumValueId;
 	
 	private Integer value;

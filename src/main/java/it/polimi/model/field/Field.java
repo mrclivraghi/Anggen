@@ -31,7 +31,7 @@ public class Field extends EntityAttribute{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	@Column(name ="id_field")
+	@Column(name ="field_id")
 	private Long fieldId;
 	
 	@Column(name="name")

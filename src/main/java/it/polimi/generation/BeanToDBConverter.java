@@ -112,13 +112,14 @@ public class BeanToDBConverter {
 		}
 		
 		Project project = new Project();
-		project.setName(projectName);
+		ReflectionManager temp = new ReflectionManager(Object.class);
+		project.setName(temp.parseName(projectName));
 		projectRepository.save(project);
 		
 		for (String myPackage: packageList)
 		{
 				EntityGroup entityGroup= new EntityGroup();
-				entityGroup.setName(myPackage);
+				entityGroup.setName(temp.parseName(myPackage));
 				//entityGroupRepository.save(entityGroup);
 				entityGroupRepository.save(entityGroup);
 				Set<Class<?>> packageClassSet = ReflectionManager.getClassInPackage(myPackage);

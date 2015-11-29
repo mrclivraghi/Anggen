@@ -816,8 +816,6 @@ public class JsGenerator {
 		buildJS.append(getSecurity());
 		buildJS.append(generateService());
 		buildJS.append(generateController());
-		List<Entity> parentClass= new ArrayList<Entity>();
-		parentClass.add(entity);
 		List<Entity> descendantEntityList = entityManager.getDescendantEntities();
 		Set<Entity> descendantEntitySet = new HashSet<Entity>();
 		descendantEntitySet.addAll(descendantEntityList);

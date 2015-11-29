@@ -59,30 +59,26 @@ public class EntityManagerImpl implements EntityManager{
 		return descendantEntities;
 	}
 	
-	@Override
-	public List<Entity> getDescendantEntities() {
-
-		List<Entity> parentEntity = new ArrayList<Entity>();
-		List<Entity> descendantEntity = new ArrayList<Entity>();
-		parentEntity.add(entity);
+	private void addDescentantEntities(Entity entity, List<Entity> descendantEntityList)
+	{
 		for (Relationship relationship: entity.getRelationshipList())
 		{
-			if (!parentEntity.contains(relationship.getEntityTarget()))
+			if (!descendantEntityList.contains(relationship.getEntityTarget()) && (!relationship.getEntityTarget().equals(this.entity)))
 			{
-				descendantEntity.add(relationship.getEntityTarget());
+				descendantEntityList.add(relationship.getEntityTarget());
+				addDescentantEntities(relationship.getEntityTarget(), descendantEntityList);
 			}
+				
 		}
-		for (Relationship relationship : entity.getRelationshipList())
-		{
-			if (!parentEntity.contains(relationship.getEntityTarget()))
-			{
-				parentEntity.add(relationship.getEntityTarget());
-				descendantEntity.addAll(getDescendantEntities(relationship.getEntityTarget(),parentEntity));
-			}
-		}
+	}
+	
+	@Override
+	public List<Entity> getDescendantEntities() {
 		
+		List<Entity> descendantEntityList = new ArrayList<Entity>();
+		addDescentantEntities(entity, descendantEntityList);		
+		return descendantEntityList;
 		
-		return descendantEntity;
 	}
 
 	@Override

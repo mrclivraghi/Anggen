@@ -46,6 +46,7 @@ import it.polimi.utils.annotation.Filter;
 import it.polimi.utils.annotation.IgnoreSearch;
 import it.polimi.utils.annotation.IgnoreTableList;
 import it.polimi.utils.annotation.IgnoreUpdate;
+import it.polimi.utils.annotation.Password;
 import it.polimi.utils.annotation.Tab;
 
 import org.hibernate.type.MetaType;
@@ -339,6 +340,10 @@ public class BeanToDBConverter {
 			if (annotationArray[i].annotationType()==NotBlank.class)
 			{
 				annotationType=AnnotationType.NOT_BLANK;
+			}
+			if (annotationArray[i].annotationType()==Password.class)
+			{
+				annotationType=AnnotationType.PASSWORD;
 			}
 			
 			if (annotationType!=null)

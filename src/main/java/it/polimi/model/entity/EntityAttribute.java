@@ -83,6 +83,11 @@ public class EntityAttribute {
 	}
 	
 	@JsonIgnore
+	public boolean getPassword() {
+		return hasAnnotation(AnnotationType.PASSWORD);
+	}
+	
+	@JsonIgnore
 	public Boolean getIgnoreTableList(){
 		return hasAnnotation(AnnotationType.IGNORE_TABLE_LIST);
 	}
@@ -217,6 +222,7 @@ public class EntityAttribute {
 		
 		return childrenAttributeList;
 	}
+	
 	
 
 }

@@ -382,7 +382,8 @@ public class AngularGenerator {
 	{
 		if (entityAttribute.asField()!=null && entityAttribute.asField().getFieldType()==FieldType.BOOLEAN) return "checkbox";
 		if (entityAttribute.asField()!=null && entityAttribute.asField().getFieldType()==FieldType.TIME) return "time";
-		
+		if (entityAttribute.asField()!=null && entityAttribute.getPassword()) 
+			return "password";
 		return "text";
 	}
 	
@@ -583,6 +584,7 @@ public class AngularGenerator {
 
 		if (search && entityAttribute.getIgnoreSearch()) return;
 		if (!search && entityAttribute.getIgnoreUpdate()) return;
+		if (search && entityAttribute.getPassword()) return;
 		
 		style= style.equals("pull-left")? "pull-right": "pull-left";
 		

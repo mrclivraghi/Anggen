@@ -656,6 +656,10 @@ public class JsGenerator {
 			
 			if (entityAttribute.asField()!= null )
 			{
+				if (entityAttribute.getPassword())
+				{
+					continue;
+				}
 				if (entityAttribute.asField().getFieldType()==FieldType.TIME)
 				{
 					sb.append("{ name: '"+entityAttribute.getName()+"', cellFilter: \"date:\'HH:mm\'\"},\n");

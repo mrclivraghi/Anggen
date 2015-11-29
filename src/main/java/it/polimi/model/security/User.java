@@ -1,5 +1,6 @@
 package it.polimi.model.security;
 import static javax.persistence.GenerationType.IDENTITY;
+import it.polimi.utils.annotation.Password;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -33,6 +34,7 @@ public class User {
 	private Long userId;
 	
 	private String username;
+	@Password
 	private String password;
 	private Boolean enabled;
 	

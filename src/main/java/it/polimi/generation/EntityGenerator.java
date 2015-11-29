@@ -17,8 +17,10 @@ import it.polimi.utils.annotation.Filter;
 import it.polimi.utils.annotation.IgnoreSearch;
 import it.polimi.utils.annotation.IgnoreTableList;
 import it.polimi.utils.annotation.IgnoreUpdate;
+import it.polimi.utils.annotation.Password;
 
 import java.io.File;
+import java.net.PasswordAuthentication;
 import java.sql.Time;
 import java.util.Date;
 import java.util.HashMap;
@@ -270,6 +272,9 @@ public class EntityGenerator {
 					annotationUse.param(annotationAttribute.getProperty(), Integer.valueOf(annotationAttribute.getValue()));
 				}
 				break;
+			case PASSWORD: annotationUse=classField.annotate(Password.class);
+				break;
+				
 			}
 		}
 		

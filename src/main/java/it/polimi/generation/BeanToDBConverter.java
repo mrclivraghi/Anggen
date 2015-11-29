@@ -7,7 +7,9 @@ import java.math.BigDecimal;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.Id;
@@ -24,6 +26,7 @@ import it.polimi.model.domain.EnumValue;
 import it.polimi.model.domain.Field;
 import it.polimi.model.domain.FieldType;
 import it.polimi.model.domain.Relationship;
+import it.polimi.model.domain.RelationshipType;
 import it.polimi.repository.AnnotationAttributeRepository;
 import it.polimi.repository.AnnotationRepository;
 import it.polimi.repository.EntityGroupRepository;
@@ -87,6 +90,19 @@ public class BeanToDBConverter {
 	public void convert(String mainPackage)
 	{
 		List<String> packageList= ReflectionManager.getSubPackages(mainPackage);
+		Map<String,Entity> entityMap = new HashMap<String,Entity>();
+		Set<Class<?>> mainPackageClassSet = ReflectionManager.getClassInPackage(mainPackage);
+		// init entities
+		for (Class myClass: mainPackageClassSet)
+		{
+			ReflectionManager reflectionManager = new ReflectionManager(myClass);
+			Entity entity = new Entity();
+			entity.setName(reflectionManager.parseName());
+			entityRepository.save(entity);
+			entityMap.put(reflectionManager.parseName(), entity);
+		}
+		
+		
 		for (String myPackage: packageList)
 		{
 				EntityGroup entityGroup= new EntityGroup();
@@ -99,7 +115,7 @@ public class BeanToDBConverter {
 				{
 					ReflectionManager reflectionManager = new ReflectionManager(myClass);
 					
-					Entity entity = new Entity();
+					Entity entity = entityMap.get(reflectionManager.parseName());
 					entity.setName(reflectionManager.parseName());
 					entity.setEntityGroup(entityGroup);
 					//entityRepository.save(entity);
@@ -161,6 +177,7 @@ public class BeanToDBConverter {
 								List<it.polimi.model.domain.Annotation> annotationList = new ArrayList<it.polimi.model.domain.Annotation>();
 								convertAnnotation(field, enumField, annotationList);
 								List<String> enumValueList = field.getEnumValuesList();
+								List<EnumValue> metaEnumValueList = new ArrayList<EnumValue>();
 								for (int i=0; i<enumValueList.size(); i++)
 								{
 									EnumValue metaEnumValue= new EnumValue();
@@ -168,7 +185,9 @@ public class BeanToDBConverter {
 									metaEnumValue.setEnumField(enumField);
 									metaEnumValue.setValue(i);
 									enumValueRepository.save(metaEnumValue);
+									metaEnumValueList.add(metaEnumValue);
 								}
+								enumField.setEnumValueList(metaEnumValueList);
 								enumFieldRepository.save(enumField);
 								enumFieldList.add(enumField);
 								tabEnumFieldList.add(enumField);
@@ -177,32 +196,34 @@ public class BeanToDBConverter {
 							{ //relationship
 								Relationship relationship = new Relationship();
 								relationship.setEntity(entity);
+								relationship.setName(entity.getName()+"_"+reflectionManager.parseName(field.getCompositeClass().fullName()));
 								relationshipRepository.save(relationship);
 								List<it.polimi.model.domain.Annotation> annotationList = new ArrayList<it.polimi.model.domain.Annotation>();
 								convertAnnotation(field, relationship, annotationList);
-								if (reflectionManager.hasOneToOne(field))
+								RelationshipType relationshipType = null;
+								if (ReflectionManager.hasOneToOne(field))
 								{
-									
+									relationshipType=RelationshipType.ONE_TO_ONE;
 								}
-								if (reflectionManager.hasOneToMany(field))
+								if (ReflectionManager.hasOneToMany(field))
 								{
-									
+									relationshipType=RelationshipType.ONE_TO_MANY;
 								}
-								if (reflectionManager.hasManyToOne(field))
+								if (ReflectionManager.hasManyToOne(field))
 								{
-									
+									relationshipType=RelationshipType.MANY_TO_ONE;
 								}
-								if (reflectionManager.hasManyToMany(field))
+								if (ReflectionManager.hasManyToMany(field))
 								{
-									
+									relationshipType=RelationshipType.MANY_TO_MANY;
 								}
-								if (reflectionManager.hasBackManyToMany(field))
+								if (ReflectionManager.hasBackManyToMany(field))
 								{
-									
+									relationshipType=RelationshipType.MANY_TO_MANY_BACK;
 								}
+								relationship.setEntityTarget(entityMap.get(reflectionManager.parseName(field.getCompositeClass().fullName())));
 								
-								
-								
+								relationship.setRelationshipType(relationshipType);
 								relationshipRepository.save(relationship);
 								
 								relationshipList.add(relationship);

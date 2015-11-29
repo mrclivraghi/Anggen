@@ -1,5 +1,6 @@
 package it.polimi.test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import it.polimi.Application;
@@ -30,6 +31,7 @@ public class DBConverterTest {
 	@Test
 	public void createDbEntities()
 	{
+		Generator generator = new Generator(new ArrayList<EntityGroup>(), null);
 		beanToDBConverter.convert(Generator.modelPackage);
 	}
 }

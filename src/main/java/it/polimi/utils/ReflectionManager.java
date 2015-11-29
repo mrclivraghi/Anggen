@@ -99,6 +99,8 @@ public class ReflectionManager {
 			name=name.substring(name.indexOf(".")+1,name.length());
 		if (name.indexOf("List")==name.length()-4 && name.length()>3)
 			name=name.substring(0,name.length()-4);
+		if (name.endsWith(">"))
+			name=name.substring(0, name.length()-1);
 		return Utility.getFirstLower(name);
 		
 	}

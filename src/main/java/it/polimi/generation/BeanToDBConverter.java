@@ -17,6 +17,7 @@ import javax.validation.constraints.Size;
 import it.polimi.model.domain.AnnotationAttribute;
 import it.polimi.model.domain.AnnotationType;
 import it.polimi.model.domain.Entity;
+import it.polimi.model.domain.EntityAttribute;
 import it.polimi.model.domain.EntityGroup;
 import it.polimi.model.domain.EnumField;
 import it.polimi.model.domain.Field;
@@ -141,116 +142,28 @@ public class BeanToDBConverter {
 									fieldType=FieldType.TIME;
 								metaField.setFieldType(fieldType);
 								metaField.setEntity(entity);
-								Annotation[] annotationArray = field.getAnnotationList();
 								List<it.polimi.model.domain.Annotation> annotationList = new ArrayList<it.polimi.model.domain.Annotation>();
-								for (int i=0; i<annotationArray.length; i++)
-								{
-									it.polimi.model.domain.Annotation metaAnnotation = new it.polimi.model.domain.Annotation();
-									AnnotationType annotationType= null;
-									if (annotationArray[i].annotationType()==Id.class)
-									{
-										annotationType=AnnotationType.PRIMARY_KEY;
-									}
-									if (annotationArray[i].annotationType()==Between.class)
-									{
-										annotationType=AnnotationType.BETWEEN_FILTER;
-									}
-									if (annotationArray[i].annotationType()==DescriptionField.class)
-									{
-										annotationType=AnnotationType.DESCRIPTION_FIELD;
-									}
-									if (annotationArray[i].annotationType()==ExcelExport.class)
-									{
-										annotationType=AnnotationType.EXCEL_EXPORT;
-									}
-									if (annotationArray[i].annotationType()==Filter.class)
-									{
-										annotationType=AnnotationType.FILTER_FIELD;
-									}
-									if (annotationArray[i].annotationType()==IgnoreSearch.class)
-									{
-										annotationType=AnnotationType.IGNORE_SEARCH;
-									}
-									if (annotationArray[i].annotationType()==IgnoreTableList.class)
-									{
-										annotationType=AnnotationType.IGNORE_TABLE_LIST;
-									}
-									if (annotationArray[i].annotationType()==IgnoreUpdate.class)
-									{
-										annotationType=AnnotationType.IGNORE_UPDATE;
-									}
-									if (annotationArray[i].annotationType()==Size.class)
-									{
-										annotationType=AnnotationType.SIZE;
-										List<AnnotationAttribute> annotationAttributeList = new ArrayList<AnnotationAttribute>();
-										for (Method method : annotationArray[i].annotationType().getDeclaredMethods()) {
-											if (method.getName().equals("min") || method.getName().equals("max"))
-											{
-												Object value= null;
-												try {
-													value=  method.invoke(annotationArray[i], (Object[])null);
-													AnnotationAttribute annotationAttribute = new AnnotationAttribute();
-													annotationAttribute.setProperty(method.getName());
-													annotationAttribute.setValue(value.toString());
-													annotationAttribute.setAnnotation(metaAnnotation);
-													annotationAttributeRepository.save(annotationAttribute);
-													annotationAttributeList.add(annotationAttribute);
-												} catch (IllegalAccessException
-														| IllegalArgumentException
-														| InvocationTargetException e) {
-													// TODO Auto-generated catch block
-													e.printStackTrace();
-												}
-											}
-										}
-										metaAnnotation.setAnnotationAttributeList(annotationAttributeList);
-									}
-									if (annotationArray[i].annotationType()==NotNull.class)
-									{
-										annotationType=AnnotationType.NOT_NULL;
-									}
-									if (annotationArray[i].annotationType()==NotBlank.class)
-									{
-										annotationType=AnnotationType.NOT_BLANK;
-									}
-									if (annotationArray[i].annotationType()==Tab.class)
-									{/*
-										it.polimi.model.domain.Tab metaTab = new it.polimi.model.domain.Tab();
-										for (Method method : annotationList[i].annotationType().getDeclaredMethods()) {
-											if (method.getName().equals("name"))
-											{
-												Object value=null;
-												try {
-													value = method.invoke(annotationList[i], (Object[])null);
-													metaTab.setName("name");
-													metaField.setTab(metaTab);
-												} catch (IllegalAccessException
-														| IllegalArgumentException
-														| InvocationTargetException e) {
-													// TODO Auto-generated catch block
-													e.printStackTrace();
-												}
-
-											}
-										}
-
-									*/}
-									if (annotationType!=null)
-									{
-										metaAnnotation.setAnnotationType(annotationType);
-										metaAnnotation.setField(metaField);
-										//annotationRepository.save(metaAnnotation);
-									}
-									annotationRepository.save(metaAnnotation);
-									annotationList.add(metaAnnotation);
-								}
-								
-								metaField.setAnnotationList(annotationList);
+								convertAnnotation(field, metaField, annotationList);
 								fieldRepository.save(metaField);
 								fieldList.add(metaField);
 								tabFieldList.add(metaField);
+								continue;
 							} // fine is known class
-							
+							if(field.getIsEnum())
+							{
+								EnumField enumField = new EnumField();
+								enumField.setName(field.getName());
+								enumField.setEntity(entity);
+								enumFieldRepository.save(enumField);
+								List<it.polimi.model.domain.Annotation> annotationList = new ArrayList<it.polimi.model.domain.Annotation>();
+								convertAnnotation(field, enumField, annotationList);
+								
+								continue;
+							}
+							if (reflectionManager.isListField(field))
+							{ //relationship
+								
+							}
 							
 						}
 						metaTab.setFieldList(tabFieldList);
@@ -269,6 +182,126 @@ public class BeanToDBConverter {
 				entityGroup.setEntityList(entityList);
 				entityGroupRepository.save(entityGroup);
 		}
+	}
+	
+	private void convertAnnotation(it.polimi.utils.Field field,EntityAttribute metaEntityAttribute, List<it.polimi.model.domain.Annotation> annotationList)
+	{
+		Annotation[] annotationArray = field.getAnnotationList();
+		
+		
+		for (int i=0; i<annotationArray.length; i++)
+		{
+			it.polimi.model.domain.Annotation metaAnnotation = new it.polimi.model.domain.Annotation();
+			AnnotationType annotationType= null;
+			if (annotationArray[i].annotationType()==Id.class)
+			{
+				annotationType=AnnotationType.PRIMARY_KEY;
+			}
+			if (annotationArray[i].annotationType()==Between.class)
+			{
+				annotationType=AnnotationType.BETWEEN_FILTER;
+			}
+			if (annotationArray[i].annotationType()==DescriptionField.class)
+			{
+				annotationType=AnnotationType.DESCRIPTION_FIELD;
+			}
+			if (annotationArray[i].annotationType()==ExcelExport.class)
+			{
+				annotationType=AnnotationType.EXCEL_EXPORT;
+			}
+			if (annotationArray[i].annotationType()==Filter.class)
+			{
+				annotationType=AnnotationType.FILTER_FIELD;
+			}
+			if (annotationArray[i].annotationType()==IgnoreSearch.class)
+			{
+				annotationType=AnnotationType.IGNORE_SEARCH;
+			}
+			if (annotationArray[i].annotationType()==IgnoreTableList.class)
+			{
+				annotationType=AnnotationType.IGNORE_TABLE_LIST;
+			}
+			if (annotationArray[i].annotationType()==IgnoreUpdate.class)
+			{
+				annotationType=AnnotationType.IGNORE_UPDATE;
+			}
+			if (annotationArray[i].annotationType()==Size.class)
+			{
+				annotationType=AnnotationType.SIZE;
+				List<AnnotationAttribute> annotationAttributeList = new ArrayList<AnnotationAttribute>();
+				for (Method method : annotationArray[i].annotationType().getDeclaredMethods()) {
+					if (method.getName().equals("min") || method.getName().equals("max"))
+					{
+						Object value= null;
+						try {
+							value=  method.invoke(annotationArray[i], (Object[])null);
+							AnnotationAttribute annotationAttribute = new AnnotationAttribute();
+							annotationAttribute.setProperty(method.getName());
+							annotationAttribute.setValue(value.toString());
+							annotationAttribute.setAnnotation(metaAnnotation);
+							annotationAttributeRepository.save(annotationAttribute);
+							annotationAttributeList.add(annotationAttribute);
+						} catch (IllegalAccessException
+								| IllegalArgumentException
+								| InvocationTargetException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+				metaAnnotation.setAnnotationAttributeList(annotationAttributeList);
+			}
+			if (annotationArray[i].annotationType()==NotNull.class)
+			{
+				annotationType=AnnotationType.NOT_NULL;
+			}
+			if (annotationArray[i].annotationType()==NotBlank.class)
+			{
+				annotationType=AnnotationType.NOT_BLANK;
+			}
+			if (annotationArray[i].annotationType()==Tab.class)
+			{/*
+				it.polimi.model.domain.Tab metaTab = new it.polimi.model.domain.Tab();
+				for (Method method : annotationList[i].annotationType().getDeclaredMethods()) {
+					if (method.getName().equals("name"))
+					{
+						Object value=null;
+						try {
+							value = method.invoke(annotationList[i], (Object[])null);
+							metaTab.setName("name");
+							metaField.setTab(metaTab);
+						} catch (IllegalAccessException
+								| IllegalArgumentException
+								| InvocationTargetException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+					}
+				}
+
+			*/}
+			if (annotationType!=null)
+			{
+				metaAnnotation.setAnnotationType(annotationType);
+				if (metaEntityAttribute.isField())
+					metaAnnotation.setField(metaEntityAttribute.asField());
+				if (metaEntityAttribute.isEnumField())
+					metaAnnotation.setEnumField(metaEntityAttribute.asEnumField());
+				if (metaEntityAttribute.isRelationship())
+					metaAnnotation.setRelationship(metaEntityAttribute.asRelationship());
+				//annotationRepository.save(metaAnnotation);
+			}
+			annotationRepository.save(metaAnnotation);
+			annotationList.add(metaAnnotation);
+		}
+		if (metaEntityAttribute.isField())
+			metaEntityAttribute.asField().setAnnotationList(annotationList);
+		if (metaEntityAttribute.isEnumField())
+			metaEntityAttribute.asEnumField().setAnnotationList(annotationList);
+		if (metaEntityAttribute.isRelationship())
+			metaEntityAttribute.asRelationship().setAnnotationList(annotationList);
+
 	}
 
 }

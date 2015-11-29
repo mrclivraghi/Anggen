@@ -43,7 +43,7 @@ public class Utility {
 		{
 			if (Character.isUpperCase(string.charAt(i)))
 			{
-				cut=i;
+				//cut=i;
 				break;
 			}
 		}

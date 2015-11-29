@@ -1,7 +1,5 @@
 package it.polimi.generation;
 
-import it.polimi.domain.Example;
-import it.polimi.domain.Place;
 import it.polimi.model.entity.Entity;
 import it.polimi.model.entity.EntityAttribute;
 import it.polimi.model.field.FieldType;

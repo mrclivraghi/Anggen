@@ -25,6 +25,9 @@ import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -470,14 +473,34 @@ public class ReflectionManager {
 		return hasAnnotation(field, IgnoreTableList.class);
 	}
 	
-	public static Boolean hasManyToMany(Field field)
-	{
-		return hasAnnotation(field, ManyToMany.class);
-	}
+	
 	
 	public static Boolean hasBetween(Field field)
 	{
 		return hasAnnotation(field, Between.class);
+	}
+	
+	public static Boolean hasOneToOne(Field field)
+	{
+		return hasAnnotation(field, OneToOne.class);
+	}
+	
+	public static boolean hasOneToMany(Field field)
+	{
+		return hasAnnotation(field, OneToMany.class);
+	}
+	
+	public static Boolean hasManyToOne(Field field)
+	{
+		return hasAnnotation(field, ManyToOne.class);
+	}
+	public static Boolean hasManyToMany(Field field)
+	{
+		return hasAnnotation(field, ManyToMany.class);
+	}
+	public static Boolean hasBackManyToMany(Field field)
+	{
+		return hasManyToMany(field);
 	}
 	
 	private static Boolean hasAnnotation(Field field,Class ignoreAnnotationClass)

@@ -20,6 +20,7 @@ import it.polimi.model.domain.Entity;
 import it.polimi.model.domain.EntityAttribute;
 import it.polimi.model.domain.EntityGroup;
 import it.polimi.model.domain.EnumField;
+import it.polimi.model.domain.EnumValue;
 import it.polimi.model.domain.Field;
 import it.polimi.model.domain.FieldType;
 import it.polimi.model.domain.Relationship;
@@ -117,6 +118,8 @@ public class BeanToDBConverter {
 						List<EnumField> enumFieldList = new ArrayList<EnumField>();
 						
 						List<Field> tabFieldList = new ArrayList<Field>();
+						List<EnumField> tabEnumFieldList= new ArrayList<EnumField>();
+						List<Relationship> tabRelationshipList = new ArrayList<Relationship>();
 
 						for (it.polimi.utils.Field field: reflectionManager.getFieldByTabName(tabName))
 						{
@@ -157,17 +160,60 @@ public class BeanToDBConverter {
 								enumFieldRepository.save(enumField);
 								List<it.polimi.model.domain.Annotation> annotationList = new ArrayList<it.polimi.model.domain.Annotation>();
 								convertAnnotation(field, enumField, annotationList);
-								
+								List<String> enumValueList = field.getEnumValuesList();
+								for (int i=0; i<enumValueList.size(); i++)
+								{
+									EnumValue metaEnumValue= new EnumValue();
+									metaEnumValue.setName(enumValueList.get(i));
+									metaEnumValue.setEnumField(enumField);
+									metaEnumValue.setValue(i);
+									enumValueRepository.save(metaEnumValue);
+								}
+								enumFieldRepository.save(enumField);
+								enumFieldList.add(enumField);
+								tabEnumFieldList.add(enumField);
 								continue;
 							}
-							if (reflectionManager.isListField(field))
 							{ //relationship
+								Relationship relationship = new Relationship();
+								relationship.setEntity(entity);
+								relationshipRepository.save(relationship);
+								List<it.polimi.model.domain.Annotation> annotationList = new ArrayList<it.polimi.model.domain.Annotation>();
+								convertAnnotation(field, relationship, annotationList);
+								if (reflectionManager.hasOneToOne(field))
+								{
+									
+								}
+								if (reflectionManager.hasOneToMany(field))
+								{
+									
+								}
+								if (reflectionManager.hasManyToOne(field))
+								{
+									
+								}
+								if (reflectionManager.hasManyToMany(field))
+								{
+									
+								}
+								if (reflectionManager.hasBackManyToMany(field))
+								{
+									
+								}
 								
+								
+								
+								relationshipRepository.save(relationship);
+								
+								relationshipList.add(relationship);
+								tabRelationshipList.add(relationship);
+								continue;
 							}
 							
 						}
 						metaTab.setFieldList(tabFieldList);
-						
+						metaTab.setEnumFieldList(tabEnumFieldList);
+						metaTab.setRelationshipList(tabRelationshipList);
 						tabRepository.save(metaTab);
 						entity.setFieldList(fieldList);
 						entity.setRelationshipList(relationshipList);

@@ -9,7 +9,7 @@ import it.polimi.model.relationship.Relationship;
 import it.polimi.model.security.RestrictionType;
 import it.polimi.reflection.EntityManager;
 import it.polimi.reflection.EntityManagerImpl;
-import it.polimi.service.SecurityService;
+import it.polimi.security.SecurityService;
 import it.polimi.utils.Field;
 import it.polimi.utils.ReflectionManager;
 import it.polimi.utils.Utility;
@@ -604,8 +604,7 @@ public class RestGenerator {
 			//declare service
 			JVar repository = myClass.field(JMod.PRIVATE, serviceInterfaceClass, lowerClass+"Service");
 			repository.annotate(Autowired.class);
-			
-			JVar securityService= myClass.field(JMod.PRIVATE,SecurityService.class, "securityService");
+			JVar securityService= myClass.field(JMod.PRIVATE,Generator.getJDefinedCustomClass("it.generated."+Generator.applicationName+".security.SecurityService"), "securityService");
 			securityService.annotate(Autowired.class);
 			
 			JClass factory = codeModel.directClass("org.slf4j.LoggerFactory");

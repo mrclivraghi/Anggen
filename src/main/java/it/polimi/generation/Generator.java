@@ -41,6 +41,7 @@ import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JMethod;
 import com.sun.codemodel.JMod;
+import com.sun.codemodel.JType;
 import com.sun.codemodel.JVar;
 /**
  * Main class that runs the generation of the files
@@ -54,6 +55,8 @@ public class Generator {
 	public static Boolean bootstrapMenu=true;
 	
 	public static Boolean easyTreeMenu;
+	
+	public static String schema;
 	
 	public static String menuName;
 	
@@ -108,7 +111,7 @@ public class Generator {
 			Generator.htmlDirectory=properties.getProperty("application.html.directory");
 			Generator.applicationName=project.getName().toLowerCase();
 			Generator.menuName=properties.getProperty("application.menu.name");
-			
+			Generator.schema=properties.getProperty("application.schema");
 			
 			
 		} catch (FileNotFoundException e) {
@@ -188,7 +191,20 @@ public class Generator {
 		}
 		return myClass;
 	}
-		
+	public static JType getJDefinedCustomClass(String fullName) {
+		JCodeModel	codeModel = new JCodeModel();
+		JDefinedClass myClass= null;
+		try {
+			
+		//	if (entity.getName().endsWith("Repository"))
+	//			thePackage=thePackage.replace(".model", ".repository.");
+			myClass = codeModel._class(fullName, ClassType.CLASS);
+		} catch (JClassAlreadyExistsException e) {
+			e.printStackTrace();
+		}
+		return myClass;
+	}
+	
 	public void generate()
 	{
 		for (EnumField enumField: enumFieldList)
@@ -228,6 +244,8 @@ public class Generator {
 					HtmlGenerator.GenerateMenu(entityGroupList);
 			}
 	}
+
+	
 	
 	
 	

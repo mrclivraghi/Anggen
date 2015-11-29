@@ -80,7 +80,7 @@ public class HtmlGenerator {
 			.macros().javascript("../js/pdfmake.js")
 			.macros().javascript("../js/vfs_fonts.js")
 			.macros().javascript("../js/ui-grid.js")
-			.macros().javascript("../js/angular/"+entityName+".js")
+			.macros().javascript("../js/angular/"+Generator.applicationName+"/"+entityName+".js")
 			.macros().javascript("../js/date.js")
 			.macros().javascript("../js/utility.js")
 			.macros().javascript("../js/jquery.easytree.js")

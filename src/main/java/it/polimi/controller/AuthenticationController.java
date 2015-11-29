@@ -12,6 +12,7 @@ import it.polimi.reflection.EntityManagerImpl;
 import it.polimi.searchbean.AnnotationSearchBean;
 import it.polimi.searchbean.UserSearchBean;
 import it.polimi.security.RestrictionItem;
+import it.polimi.security.UserManager;
 import it.polimi.service.UserService;
 
 import java.util.HashMap;
@@ -51,7 +52,8 @@ public class AuthenticationController {
 		List<User> loggedUserList=userService.find(usb);
 		if (loggedUserList.size()>0)
 		{
-	       return ResponseEntity.status(HttpStatus.ACCEPTED).body(buildRestrictionMap(loggedUserList.get(0).getRestrictionEntityList(),loggedUserList.get(0).getRestrictionEntityGroupList(),loggedUserList.get(0).getRestrictionFieldList()));
+			UserManager userManager = new UserManager(loggedUserList.get(0));
+	       return ResponseEntity.status(HttpStatus.ACCEPTED).body(buildRestrictionMap(userManager.getRestrictionEntityList(),userManager.getRestrictionEntityGroupList(),userManager.getRestrictionFieldList()));
 		}else
 			return ResponseEntity.status(HttpStatus.ACCEPTED).body(buildRestrictionMap(null,null,null));
 	}

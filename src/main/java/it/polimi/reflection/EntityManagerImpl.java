@@ -148,7 +148,7 @@ public class EntityManagerImpl implements EntityManager{
 	private String manageSingleParam(String className,EntityAttribute entityAttribute, String fieldName)
 	{
 		String string="";
-		if (entityAttribute.asField()!=null && entityAttribute.asField().getFieldType()==FieldType.ENUM)
+		if (entityAttribute.asEnumField()!=null)
 		{
 			string=string+" ("+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(fieldName)+"()==null)? null : "+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(fieldName)+"().getValue(),";
 		}else

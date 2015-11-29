@@ -1,0 +1,1 @@
+﻿truncate table mustle.entity_group cascade;

@@ -47,6 +47,7 @@ import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotBlank;
 
 import com.sun.codemodel.ClassType;
+import com.sun.codemodel.JAnnotationArrayMember;
 import com.sun.codemodel.JAnnotationUse;
 import com.sun.codemodel.JBlock;
 import com.sun.codemodel.JClass;
@@ -177,10 +178,12 @@ public class EntityGenerator {
 					JAnnotationUse joinTable = listField.annotate(JoinTable.class);
 					joinTable.param("name", namingStrategy.classToTableName(relationship.getEntity().getName())+"_"+namingStrategy.classToTableName(relationship.getEntityTarget().getName()));
 					joinTable.param("schema", "public");
-					JClass joinColumn = codeModel.ref(JoinColumn.class);
-					JExpression expr = JExpr.direct("{@JoinColumn(name=\"ciao\")}");
-					joinTable.param("joinColumns",expr);
-					joinTable.param("inverseJoinColumns", "");
+					JAnnotationArrayMember listJoinColumns = joinTable.paramArray("joinColumns");
+					listJoinColumns.annotate(JoinColumn.class).param("name", relationship.getEntity().getName().toLowerCase()+"_id");
+					
+					JAnnotationArrayMember listInverseJoinColumns = joinTable.paramArray("inverseJoinColumns");
+					listInverseJoinColumns.annotate(JoinColumn.class).param("name", relationship.getEntity().getName().toLowerCase()+"_id");
+					
 					
 
 				}

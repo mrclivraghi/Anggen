@@ -24,7 +24,7 @@ public class EntityGroup {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	@Column(name ="id_entity_group")
+	@Column(name ="entity_group_id")
 	private Long entityGroupId;
 	
 	private String name;

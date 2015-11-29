@@ -30,6 +30,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
@@ -818,7 +819,9 @@ public class JsGenerator {
 		List<Entity> parentClass= new ArrayList<Entity>();
 		parentClass.add(entity);
 		List<Entity> descendantEntityList = entityManager.getDescendantEntities();
-		for (Entity descendantEntity : descendantEntityList)
+		Set<Entity> descendantEntitySet = new HashSet<Entity>();
+		descendantEntitySet.addAll(descendantEntityList);
+		for (Entity descendantEntity : descendantEntitySet)
 		{
 			JsGenerator jsGenerator = new JsGenerator(descendantEntity,false,entity.getName(),true);
 			buildJS.append(jsGenerator.generateService());

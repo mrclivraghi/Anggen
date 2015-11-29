@@ -123,7 +123,10 @@ public class EntityGenerator {
 		myClass.annotate(javax.persistence.Entity.class);
 		JAnnotationUse annotationTable= myClass.annotate(Table.class);
 		//from properties
-		annotationTable.param("schema", Generator.schema);
+		if (entity.getEntityGroup().getName().equals("security"))
+			annotationTable.param("schema", "sso");
+		else
+			annotationTable.param("schema", Generator.schema);
 		
 		JVar entityId= myClass.field(JMod.PUBLIC+JMod.STATIC+JMod.FINAL, Long.class, "staticEntityId");
 		entityId.init(JExpr.lit(entity.getEntityId()));

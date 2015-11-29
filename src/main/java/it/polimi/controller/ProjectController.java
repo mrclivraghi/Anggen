@@ -22,11 +22,11 @@ public class ProjectController {
     private ProjectService projectService;
     @org.springframework.beans.factory.annotation.Autowired
     private SecurityService securityService;
-    private final static Logger log = LoggerFactory.getLogger(it.polimi.model.domain.Project.class);
+    private final static Logger log = LoggerFactory.getLogger(it.polimi.model.entity.Project.class);
 
     @RequestMapping(method = RequestMethod.GET)
     public String manage() {
-        if (!securityService.isAllowed(it.polimi.model.domain.Project.entityId, it.polimi.model.domain.RestrictionType.SEARCH)) 
+        if (!securityService.isAllowed(it.polimi.model.entity.Project.entityId, it.polimi.model.security.RestrictionType.SEARCH)) 
 return "forbidden"; 
 
         return "project";
@@ -37,10 +37,10 @@ return "forbidden";
     public ResponseEntity search(
         @org.springframework.web.bind.annotation.RequestBody
         ProjectSearchBean project) {
-        if (!securityService.isAllowed(it.polimi.model.domain.Project.entityId, it.polimi.model.domain.RestrictionType.SEARCH)) 
+        if (!securityService.isAllowed(it.polimi.model.entity.Project.entityId, it.polimi.model.security.RestrictionType.SEARCH)) 
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
-        List<it.polimi.model.domain.Project> projectList;
+        List<it.polimi.model.entity.Project> projectList;
         if (project.getProjectId()!=null)
          log.info("Searching project like {}",project.toString());
         projectList=projectService.find(project);
@@ -55,11 +55,11 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     public ResponseEntity getProjectById(
         @PathVariable
         String projectId) {
-        if (!securityService.isAllowed(it.polimi.model.domain.Project.entityId, it.polimi.model.domain.RestrictionType.SEARCH)) 
+        if (!securityService.isAllowed(it.polimi.model.entity.Project.entityId, it.polimi.model.security.RestrictionType.SEARCH)) 
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
         log.info("Searching project with id {}",projectId);
-        List<it.polimi.model.domain.Project> projectList=projectService.findById(Integer.valueOf(projectId));
+        List<it.polimi.model.entity.Project> projectList=projectService.findById(Integer.valueOf(projectId));
         getRightMapping(projectList);
          log.info("Search: returning {} project.",projectList.size());
         return ResponseEntity.ok().body(projectList);
@@ -70,7 +70,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     public ResponseEntity deleteProjectById(
         @PathVariable
         String projectId) {
-        if (!securityService.isAllowed(it.polimi.model.domain.Project.entityId, it.polimi.model.domain.RestrictionType.DELETE)) 
+        if (!securityService.isAllowed(it.polimi.model.entity.Project.entityId, it.polimi.model.security.RestrictionType.DELETE)) 
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
         log.info("Deleting project with id {}",projectId);
@@ -82,13 +82,13 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     @RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity insertProject(
         @org.springframework.web.bind.annotation.RequestBody
-        it.polimi.model.domain.Project project) {
-        if (!securityService.isAllowed(it.polimi.model.domain.Project.entityId, it.polimi.model.domain.RestrictionType.INSERT)) 
+        it.polimi.model.entity.Project project) {
+        if (!securityService.isAllowed(it.polimi.model.entity.Project.entityId, it.polimi.model.security.RestrictionType.INSERT)) 
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
         if (project.getProjectId()!=null)
         log.info("Inserting project like {}",project.toString());
-        it.polimi.model.domain.Project insertedProject=projectService.insert(project);
+        it.polimi.model.entity.Project insertedProject=projectService.insert(project);
         getRightMapping(insertedProject);
         log.info("Inserted project with id {}",insertedProject.getProjectId());
         return ResponseEntity.ok().body(insertedProject);
@@ -98,49 +98,49 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity updateProject(
         @org.springframework.web.bind.annotation.RequestBody
-        it.polimi.model.domain.Project project) {
-        if (!securityService.isAllowed(it.polimi.model.domain.Project.entityId, it.polimi.model.domain.RestrictionType.UPDATE)) 
+        it.polimi.model.entity.Project project) {
+        if (!securityService.isAllowed(it.polimi.model.entity.Project.entityId, it.polimi.model.security.RestrictionType.UPDATE)) 
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
         log.info("Updating project with id {}",project.getProjectId());
         rebuildSecurityMapping(project);
-        it.polimi.model.domain.Project updatedProject=projectService.update(project);
+        it.polimi.model.entity.Project updatedProject=projectService.update(project);
         getRightMapping(updatedProject);
         getSecurityMapping(updatedProject);
         return ResponseEntity.ok().body(updatedProject);
     }
 
-    private List<it.polimi.model.domain.Project> getRightMapping(List<it.polimi.model.domain.Project> projectList) {
-        for (it.polimi.model.domain.Project project: projectList)
+    private List<it.polimi.model.entity.Project> getRightMapping(List<it.polimi.model.entity.Project> projectList) {
+        for (it.polimi.model.entity.Project project: projectList)
         {
         getRightMapping(project);
         }
         return projectList;
     }
 
-    private void getRightMapping(it.polimi.model.domain.Project project) {
+    private void getRightMapping(it.polimi.model.entity.Project project) {
         if (project.getEntityGroupList()!=null)
-        for (it.polimi.model.domain.EntityGroup entityGroup :project.getEntityGroupList())
+        for (it.polimi.model.entity.EntityGroup entityGroup :project.getEntityGroupList())
         {
         	entityGroup.setProject(null);
         }
     }
 
-    private void rebuildSecurityMapping(it.polimi.model.domain.Project project) {
-        if (!securityService.isAllowed(it.polimi.domain.EntityGroupTest.entityId, it.polimi.model.domain.RestrictionType.SEARCH))
+    private void rebuildSecurityMapping(it.polimi.model.entity.Project project) {
+        if (!securityService.isAllowed(it.polimi.model.entity.EntityGroup.entityId, it.polimi.model.security.RestrictionType.SEARCH))
         project.setEntityGroupList(projectService.findById(project.getProjectId()).get(0).getEntityGroupList());
     }
 
-    private List<it.polimi.model.domain.Project> getSecurityMapping(List<it.polimi.model.domain.Project> projectList) {
-        for (it.polimi.model.domain.Project project: projectList)
+    private List<it.polimi.model.entity.Project> getSecurityMapping(List<it.polimi.model.entity.Project> projectList) {
+        for (it.polimi.model.entity.Project project: projectList)
         {
         getSecurityMapping(project);
         }
         return projectList;
     }
 
-    private void getSecurityMapping(it.polimi.model.domain.Project project) {
-        if (project.getEntityGroupList()!=null && !securityService.isAllowed(it.polimi.domain.EntityGroupTest.entityId, it.polimi.model.domain.RestrictionType.SEARCH) )
+    private void getSecurityMapping(it.polimi.model.entity.Project project) {
+        if (project.getEntityGroupList()!=null && !securityService.isAllowed(it.polimi.model.entity.EntityGroup.entityId, it.polimi.model.security.RestrictionType.SEARCH) )
         project.setEntityGroupList(null);
 
     }

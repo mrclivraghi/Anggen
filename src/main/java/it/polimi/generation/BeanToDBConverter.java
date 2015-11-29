@@ -16,17 +16,18 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import it.polimi.model.domain.AnnotationAttribute;
-import it.polimi.model.domain.AnnotationType;
-import it.polimi.model.domain.Entity;
-import it.polimi.model.domain.EntityAttribute;
-import it.polimi.model.domain.EntityGroup;
-import it.polimi.model.domain.EnumField;
-import it.polimi.model.domain.EnumValue;
-import it.polimi.model.domain.Field;
-import it.polimi.model.domain.FieldType;
-import it.polimi.model.domain.Relationship;
-import it.polimi.model.domain.RelationshipType;
+import it.polimi.model.entity.Entity;
+import it.polimi.model.entity.EntityAttribute;
+import it.polimi.model.entity.EntityGroup;
+import it.polimi.model.entity.Project;
+import it.polimi.model.field.AnnotationAttribute;
+import it.polimi.model.field.AnnotationType;
+import it.polimi.model.field.EnumField;
+import it.polimi.model.field.EnumValue;
+import it.polimi.model.field.Field;
+import it.polimi.model.field.FieldType;
+import it.polimi.model.relationship.Relationship;
+import it.polimi.model.relationship.RelationshipType;
 import it.polimi.repository.AnnotationAttributeRepository;
 import it.polimi.repository.AnnotationRepository;
 import it.polimi.repository.EntityGroupRepository;
@@ -34,6 +35,7 @@ import it.polimi.repository.EntityRepository;
 import it.polimi.repository.EnumFieldRepository;
 import it.polimi.repository.EnumValueRepository;
 import it.polimi.repository.FieldRepository;
+import it.polimi.repository.ProjectRepository;
 import it.polimi.repository.RelationshipRepository;
 import it.polimi.repository.TabRepository;
 import it.polimi.utils.ReflectionManager;
@@ -49,11 +51,18 @@ import it.polimi.utils.annotation.Tab;
 import org.hibernate.type.MetaType;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class BeanToDBConverter {
 
+	@Value("${application.name}")
+	private String projectName;
+	
+	@Autowired
+	ProjectRepository projectRepository;
+	
 	@Autowired
 	EntityGroupRepository entityGroupRepository;
 	
@@ -102,6 +111,9 @@ public class BeanToDBConverter {
 			entityMap.put(reflectionManager.parseName(), entity);
 		}
 		
+		Project project = new Project();
+		project.setName(projectName);
+		projectRepository.save(project);
 		
 		for (String myPackage: packageList)
 		{
@@ -122,10 +134,10 @@ public class BeanToDBConverter {
 					entityRepository.save(entity);
 					
 					List<String> tabNameList=reflectionManager.getTabsName();
-					List<it.polimi.model.domain.Tab> tabList = new ArrayList<it.polimi.model.domain.Tab>();
+					List<it.polimi.model.entity.Tab> tabList = new ArrayList<it.polimi.model.entity.Tab>();
 					for (String tabName: tabNameList)
 					{
-						it.polimi.model.domain.Tab metaTab = new it.polimi.model.domain.Tab();
+						it.polimi.model.entity.Tab metaTab = new it.polimi.model.entity.Tab();
 						metaTab.setName(tabName);
 						metaTab.setEntity(entity);
 						tabRepository.save(metaTab);
@@ -161,7 +173,7 @@ public class BeanToDBConverter {
 									fieldType=FieldType.TIME;
 								metaField.setFieldType(fieldType);
 								metaField.setEntity(entity);
-								List<it.polimi.model.domain.Annotation> annotationList = new ArrayList<it.polimi.model.domain.Annotation>();
+								List<it.polimi.model.field.Annotation> annotationList = new ArrayList<it.polimi.model.field.Annotation>();
 								convertAnnotation(field, metaField, annotationList);
 								fieldRepository.save(metaField);
 								fieldList.add(metaField);
@@ -174,7 +186,7 @@ public class BeanToDBConverter {
 								enumField.setName(field.getName());
 								enumField.setEntity(entity);
 								enumFieldRepository.save(enumField);
-								List<it.polimi.model.domain.Annotation> annotationList = new ArrayList<it.polimi.model.domain.Annotation>();
+								List<it.polimi.model.field.Annotation> annotationList = new ArrayList<it.polimi.model.field.Annotation>();
 								convertAnnotation(field, enumField, annotationList);
 								List<String> enumValueList = field.getEnumValuesList();
 								List<EnumValue> metaEnumValueList = new ArrayList<EnumValue>();
@@ -198,7 +210,7 @@ public class BeanToDBConverter {
 								relationship.setEntity(entity);
 								relationship.setName(entity.getName()+"_"+reflectionManager.parseName(field.getCompositeClass().fullName()));
 								relationshipRepository.save(relationship);
-								List<it.polimi.model.domain.Annotation> annotationList = new ArrayList<it.polimi.model.domain.Annotation>();
+								List<it.polimi.model.field.Annotation> annotationList = new ArrayList<it.polimi.model.field.Annotation>();
 								convertAnnotation(field, relationship, annotationList);
 								RelationshipType relationshipType = null;
 								if (ReflectionManager.hasOneToOne(field))
@@ -247,18 +259,19 @@ public class BeanToDBConverter {
 				}
 				
 				entityGroup.setEntityList(entityList);
+				entityGroup.setProject(project);
 				entityGroupRepository.save(entityGroup);
 		}
 	}
 	
-	private void convertAnnotation(it.polimi.utils.Field field,EntityAttribute metaEntityAttribute, List<it.polimi.model.domain.Annotation> annotationList)
+	private void convertAnnotation(it.polimi.utils.Field field,EntityAttribute metaEntityAttribute, List<it.polimi.model.field.Annotation> annotationList)
 	{
 		Annotation[] annotationArray = field.getAnnotationList();
 		
 		
 		for (int i=0; i<annotationArray.length; i++)
 		{
-			it.polimi.model.domain.Annotation metaAnnotation = new it.polimi.model.domain.Annotation();
+			it.polimi.model.field.Annotation metaAnnotation = new it.polimi.model.field.Annotation();
 			AnnotationType annotationType= null;
 			if (annotationArray[i].annotationType()==Id.class)
 			{
@@ -328,7 +341,7 @@ public class BeanToDBConverter {
 			}
 			if (annotationArray[i].annotationType()==Tab.class)
 			{/*
-				it.polimi.model.domain.Tab metaTab = new it.polimi.model.domain.Tab();
+				it.polimi.model.Tab metaTab = new it.polimi.model.Tab();
 				for (Method method : annotationList[i].annotationType().getDeclaredMethods()) {
 					if (method.getName().equals("name"))
 					{

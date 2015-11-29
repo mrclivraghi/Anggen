@@ -26,7 +26,7 @@ public class PlaceController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String manage() {
-        if (!securityService.isAllowed(it.polimi.domain.Place.entityId, it.polimi.model.domain.RestrictionType.SEARCH)) 
+        if (!securityService.isAllowed(it.polimi.domain.Place.entityId, it.polimi.model.security.RestrictionType.SEARCH)) 
 return "forbidden"; 
 
         return "place";
@@ -37,7 +37,7 @@ return "forbidden";
     public ResponseEntity search(
         @org.springframework.web.bind.annotation.RequestBody
         PlaceSearchBean place) {
-        if (!securityService.isAllowed(it.polimi.domain.Place.entityId, it.polimi.model.domain.RestrictionType.SEARCH)) 
+        if (!securityService.isAllowed(it.polimi.domain.Place.entityId, it.polimi.model.security.RestrictionType.SEARCH)) 
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
         List<it.polimi.domain.Place> placeList;
@@ -55,7 +55,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     public ResponseEntity getPlaceById(
         @PathVariable
         String placeId) {
-        if (!securityService.isAllowed(it.polimi.domain.Place.entityId, it.polimi.model.domain.RestrictionType.SEARCH)) 
+        if (!securityService.isAllowed(it.polimi.domain.Place.entityId, it.polimi.model.security.RestrictionType.SEARCH)) 
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
         log.info("Searching place with id {}",placeId);
@@ -70,7 +70,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     public ResponseEntity deletePlaceById(
         @PathVariable
         String placeId) {
-        if (!securityService.isAllowed(it.polimi.domain.Place.entityId, it.polimi.model.domain.RestrictionType.DELETE)) 
+        if (!securityService.isAllowed(it.polimi.domain.Place.entityId, it.polimi.model.security.RestrictionType.DELETE)) 
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
         log.info("Deleting place with id {}",placeId);
@@ -83,7 +83,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     public ResponseEntity insertPlace(
         @org.springframework.web.bind.annotation.RequestBody
         it.polimi.domain.Place place) {
-        if (!securityService.isAllowed(it.polimi.domain.Place.entityId, it.polimi.model.domain.RestrictionType.INSERT)) 
+        if (!securityService.isAllowed(it.polimi.domain.Place.entityId, it.polimi.model.security.RestrictionType.INSERT)) 
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
         if (place.getPlaceId()!=null)
@@ -99,7 +99,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     public ResponseEntity updatePlace(
         @org.springframework.web.bind.annotation.RequestBody
         it.polimi.domain.Place place) {
-        if (!securityService.isAllowed(it.polimi.domain.Place.entityId, it.polimi.model.domain.RestrictionType.UPDATE)) 
+        if (!securityService.isAllowed(it.polimi.domain.Place.entityId, it.polimi.model.security.RestrictionType.UPDATE)) 
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
         log.info("Updating place with id {}",place.getPlaceId());
@@ -126,7 +126,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     }
 
     private void rebuildSecurityMapping(it.polimi.domain.Place place) {
-        if (!securityService.isAllowed(it.polimi.domain.Example.entityId, it.polimi.model.domain.RestrictionType.SEARCH))
+        if (!securityService.isAllowed(it.polimi.domain.Example.entityId, it.polimi.model.security.RestrictionType.SEARCH))
         place.setExample(placeService.findById(place.getPlaceId()).get(0).getExample());
     }
 
@@ -139,7 +139,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     }
 
     private void getSecurityMapping(it.polimi.domain.Place place) {
-        if (place.getExample()!=null  && !securityService.isAllowed(it.polimi.domain.Example.entityId, it.polimi.model.domain.RestrictionType.SEARCH) )
+        if (place.getExample()!=null  && !securityService.isAllowed(it.polimi.domain.Example.entityId, it.polimi.model.security.RestrictionType.SEARCH) )
         place.setExample(null);
 
     }

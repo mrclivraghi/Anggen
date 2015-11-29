@@ -3,7 +3,7 @@ package it.polimi.service;
 
 import java.util.List;
 
-import it.polimi.model.domain.Entity;
+import it.polimi.model.entity.Entity;
 import it.polimi.searchbean.EntitySearchBean;
 
 public interface EntityService {

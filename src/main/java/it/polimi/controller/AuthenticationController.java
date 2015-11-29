@@ -1,12 +1,12 @@
 package it.polimi.controller;
 
-import it.polimi.model.domain.Annotation;
-import it.polimi.model.domain.Entity;
-import it.polimi.model.domain.Field;
-import it.polimi.model.domain.RestrictionEntity;
-import it.polimi.model.domain.RestrictionEntityGroup;
-import it.polimi.model.domain.RestrictionField;
-import it.polimi.model.domain.User;
+import it.polimi.model.entity.Entity;
+import it.polimi.model.field.Annotation;
+import it.polimi.model.field.Field;
+import it.polimi.model.security.RestrictionEntity;
+import it.polimi.model.security.RestrictionEntityGroup;
+import it.polimi.model.security.RestrictionField;
+import it.polimi.model.security.User;
 import it.polimi.reflection.EntityManager;
 import it.polimi.reflection.EntityManagerImpl;
 import it.polimi.searchbean.AnnotationSearchBean;

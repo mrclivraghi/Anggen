@@ -3,7 +3,7 @@ package it.polimi.controller;
 
 import java.util.List;
 
-import it.polimi.model.domain.Relationship;
+import it.polimi.model.relationship.Relationship;
 import it.polimi.searchbean.RelationshipSearchBean;
 import it.polimi.service.RelationshipService;
 
@@ -118,7 +118,7 @@ public class RelationshipController {
         relationship.getEntityTarget().setEntityGroup(null);
         }
         if (relationship.getAnnotationList()!=null)
-        for (it.polimi.model.domain.Annotation annotation :relationship.getAnnotationList())
+        for (it.polimi.model.field.Annotation annotation :relationship.getAnnotationList())
 
         {
 

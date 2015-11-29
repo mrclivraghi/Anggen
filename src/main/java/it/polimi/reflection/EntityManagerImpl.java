@@ -1,13 +1,13 @@
 package it.polimi.reflection;
 
-import it.polimi.model.domain.AnnotationType;
-import it.polimi.model.domain.Entity;
-import it.polimi.model.domain.EntityAttribute;
-import it.polimi.model.domain.Field;
-import it.polimi.model.domain.FieldType;
-import it.polimi.model.domain.Relationship;
-import it.polimi.model.domain.RelationshipType;
-import it.polimi.model.domain.Tab;
+import it.polimi.model.entity.Entity;
+import it.polimi.model.entity.EntityAttribute;
+import it.polimi.model.entity.Tab;
+import it.polimi.model.field.AnnotationType;
+import it.polimi.model.field.Field;
+import it.polimi.model.field.FieldType;
+import it.polimi.model.relationship.Relationship;
+import it.polimi.model.relationship.RelationshipType;
 import it.polimi.utils.ReflectionManager;
 import it.polimi.utils.Utility;
 import it.polimi.utils.annotation.DescriptionField;

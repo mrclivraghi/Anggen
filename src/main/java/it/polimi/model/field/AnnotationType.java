@@ -1,4 +1,4 @@
-package it.polimi.model.domain;
+package it.polimi.model.field;
 
 public enum AnnotationType {
 	PRIMARY_KEY(0),

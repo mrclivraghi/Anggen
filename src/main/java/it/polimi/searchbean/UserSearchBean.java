@@ -2,7 +2,8 @@
 package it.polimi.searchbean;
 
 import java.util.List;
-import it.polimi.model.domain.Role;
+
+import it.polimi.model.security.Role;
 
 public class UserSearchBean {
 

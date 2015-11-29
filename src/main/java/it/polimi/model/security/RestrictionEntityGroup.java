@@ -1,27 +1,26 @@
-package it.polimi.model.domain;
+package it.polimi.model.security;
 
-import static javax.persistence.GenerationType.IDENTITY;
+import it.polimi.model.entity.EntityGroup;
 
 import javax.persistence.Column;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 @javax.persistence.Entity
-@Table(schema="sso", name="restriction_entity")
-public class RestrictionEntity {
-
-
+@Table(schema="mustle",name="restriction_entity_group")
+public class RestrictionEntityGroup {
 
 	@Id
-	@GeneratedValue(strategy = IDENTITY)
-	@Column(name = "restriction_entity_id")
-	private Long restrictionEntityId;
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@Column(name ="id_restriction_entity_group")
+	private Long restrictionEntityGroupId;
+	
 	
 	@Column(name="can_create")
 	private Boolean canCreate;
@@ -36,83 +35,92 @@ public class RestrictionEntity {
 	private Boolean canDelete;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="entity_group_id_entity_group")
+	private EntityGroup entityGroup;
+	
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="role_id_role")
 	private Role role;
 	
-	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="entity_id_entity")
-	private Entity entity;
 	
-	
-	public RestrictionEntity() {
+	public RestrictionEntityGroup() {
 		// TODO Auto-generated constructor stub
 	}
-	
-	
-	public Long getRestrictionEntityId() {
-		return restrictionEntityId;
+
+	/**
+	 * @return the restrictionEntityGroupId
+	 */
+	public Long getRestrictionEntityGroupId() {
+		return restrictionEntityGroupId;
 	}
 
-	public void setRestrictionEntityId(Long entityrestrictionId) {
-		this.restrictionEntityId = entityrestrictionId;
-	}
-
-	public Role getRole() {
-		return role;
+	/**
+	 * @param restrictionEntityGroupId the restrictionEntityGroupId to set
+	 */
+	public void setRestrictionEntityGroupId(Long restrictionEntityGroupId) {
+		this.restrictionEntityGroupId = restrictionEntityGroupId;
 	}
 
 	public Boolean getCanCreate() {
 		return canCreate;
 	}
 
-
 	public void setCanCreate(Boolean canCreate) {
 		this.canCreate = canCreate;
 	}
-
 
 	public Boolean getCanUpdate() {
 		return canUpdate;
 	}
 
-
 	public void setCanUpdate(Boolean canUpdate) {
 		this.canUpdate = canUpdate;
 	}
-
 
 	public Boolean getCanSearch() {
 		return canSearch;
 	}
 
-
 	public void setCanSearch(Boolean canSearch) {
 		this.canSearch = canSearch;
 	}
-
 
 	public Boolean getCanDelete() {
 		return canDelete;
 	}
 
-
 	public void setCanDelete(Boolean canDelete) {
 		this.canDelete = canDelete;
 	}
 
+	/**
+	 * @return the entityGroup
+	 */
+	public EntityGroup getEntityGroup() {
+		return entityGroup;
+	}
 
+	/**
+	 * @param entityGroup the entityGroup to set
+	 */
+	public void setEntityGroup(EntityGroup entityGroup) {
+		this.entityGroup = entityGroup;
+	}
+
+	/**
+	 * @return the role
+	 */
+	public Role getRole() {
+		return role;
+	}
+
+	/**
+	 * @param role the role to set
+	 */
 	public void setRole(Role role) {
 		this.role = role;
 	}
-
-	public Entity getEntity() {
-		return entity;
-	}
-
-	public void setEntity(Entity entity) {
-		this.entity = entity;
-	}
-
+	
 	@JsonIgnore
 	public Boolean isAllowed(RestrictionType restrictionType)
 	{
@@ -123,7 +131,5 @@ public class RestrictionEntity {
 		
 		return true;
 	}
-	
-
 
 }

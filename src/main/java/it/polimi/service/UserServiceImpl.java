@@ -3,7 +3,7 @@ package it.polimi.service;
 
 import java.util.List;
 
-import it.polimi.model.domain.User;
+import it.polimi.model.security.User;
 import it.polimi.repository.RoleRepository;
 import it.polimi.repository.UserRepository;
 import it.polimi.searchbean.UserSearchBean;
@@ -47,9 +47,9 @@ public class UserServiceImpl
     @Transactional
     public User update(User user) {
         if (user.getRoleList()!=null)
-        for (it.polimi.model.domain.Role role: user.getRoleList())
+        for (it.polimi.model.security.Role role: user.getRoleList())
         {
-        it.polimi.model.domain.Role savedRole = roleRepository.findOne(role.getRoleId());
+        it.polimi.model.security.Role savedRole = roleRepository.findOne(role.getRoleId());
         Boolean found=false; 
         for (User tempUser : savedRole.getUserList())
         {

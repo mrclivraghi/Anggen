@@ -9,11 +9,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import it.polimi.model.domain.Entity;
-import it.polimi.model.domain.RestrictionEntity;
-import it.polimi.model.domain.RestrictionEntityGroup;
-import it.polimi.model.domain.RestrictionType;
-import it.polimi.model.domain.User;
+import it.polimi.model.entity.Entity;
+import it.polimi.model.security.RestrictionEntity;
+import it.polimi.model.security.RestrictionEntityGroup;
+import it.polimi.model.security.RestrictionType;
+import it.polimi.model.security.User;
 import it.polimi.repository.UserRepository;
 
 @Service

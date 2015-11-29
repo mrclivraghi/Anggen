@@ -2,11 +2,11 @@ package it.polimi.generation;
 
 import it.polimi.domain.Example;
 import it.polimi.domain.Place;
-import it.polimi.model.domain.Entity;
-import it.polimi.model.domain.EntityAttribute;
-import it.polimi.model.domain.FieldType;
-import it.polimi.model.domain.Relationship;
-import it.polimi.model.domain.RestrictionType;
+import it.polimi.model.entity.Entity;
+import it.polimi.model.entity.EntityAttribute;
+import it.polimi.model.field.FieldType;
+import it.polimi.model.relationship.Relationship;
+import it.polimi.model.security.RestrictionType;
 import it.polimi.reflection.EntityManager;
 import it.polimi.reflection.EntityManagerImpl;
 import it.polimi.service.SecurityService;

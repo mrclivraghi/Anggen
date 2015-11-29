@@ -3,7 +3,7 @@ package it.polimi.controller;
 
 import java.util.List;
 
-import it.polimi.model.domain.Tab;
+import it.polimi.model.entity.Tab;
 import it.polimi.searchbean.TabSearchBean;
 import it.polimi.service.TabService;
 
@@ -109,7 +109,7 @@ public class TabController {
         tab.getEntity().setEntityGroup(null);
         }
         if (tab.getFieldList()!=null)
-        for (it.polimi.model.domain.Field field :tab.getFieldList())
+        for (it.polimi.model.field.Field field :tab.getFieldList())
 
         {
 
@@ -119,7 +119,7 @@ public class TabController {
         field.setTab(null);
         }
         if (tab.getRelationshipList()!=null)
-        for (it.polimi.model.domain.Relationship relationship :tab.getRelationshipList())
+        for (it.polimi.model.relationship.Relationship relationship :tab.getRelationshipList())
 
         {
 
@@ -129,7 +129,7 @@ public class TabController {
         relationship.setTab(null);
         }
         if (tab.getEnumFieldList()!=null)
-        for (it.polimi.model.domain.EnumField enumField :tab.getEnumFieldList())
+        for (it.polimi.model.field.EnumField enumField :tab.getEnumFieldList())
 
         {
 

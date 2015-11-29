@@ -2,8 +2,10 @@
 package it.polimi.repository;
 
 import java.util.List;
-import it.polimi.model.domain.Role;
-import it.polimi.model.domain.User;
+
+import it.polimi.model.security.Role;
+import it.polimi.model.security.User;
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;

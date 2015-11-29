@@ -3,7 +3,7 @@ package it.polimi.service;
 
 import java.util.List;
 
-import it.polimi.model.domain.Entity;
+import it.polimi.model.entity.Entity;
 import it.polimi.repository.EntityRepository;
 import it.polimi.repository.RestrictionEntityRepository;
 import it.polimi.searchbean.EntitySearchBean;
@@ -47,27 +47,27 @@ public class EntityServiceImpl
     @Transactional
     public Entity update(Entity entity) {
         if (entity.getFieldList()!=null)
-        for (it.polimi.model.domain.Field field: entity.getFieldList())
+        for (it.polimi.model.field.Field field: entity.getFieldList())
         {
         field.setEntity(entity);
         }
         if (entity.getRelationshipList()!=null)
-        for (it.polimi.model.domain.Relationship relationship: entity.getRelationshipList())
+        for (it.polimi.model.relationship.Relationship relationship: entity.getRelationshipList())
         {
         relationship.setEntity(entity);
         }
         if (entity.getEnumFieldList()!=null)
-        for (it.polimi.model.domain.EnumField enumField: entity.getEnumFieldList())
+        for (it.polimi.model.field.EnumField enumField: entity.getEnumFieldList())
         {
         enumField.setEntity(entity);
         }
         if (entity.getTabList()!=null)
-        for (it.polimi.model.domain.Tab tab: entity.getTabList())
+        for (it.polimi.model.entity.Tab tab: entity.getTabList())
         {
         tab.setEntity(entity);
         }
         if (entity.getRestrictionEntityList()!=null)
-        for (it.polimi.model.domain.RestrictionEntity restrictionEntity: entity.getRestrictionEntityList())
+        for (it.polimi.model.security.RestrictionEntity restrictionEntity: entity.getRestrictionEntityList())
         {
         restrictionEntity.setEntity(entity);
         }

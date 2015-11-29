@@ -1,5 +1,5 @@
 
-package it.polimi.model.domain;
+package it.polimi.model.entity;
 
 import java.util.List;
 import javax.persistence.Entity;
@@ -10,7 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import it.polimi.domain.EntityGroupTest;
 import it.polimi.utils.annotation.DescriptionField;
 import org.hibernate.annotations.Type;
 
@@ -31,7 +30,7 @@ public class Project {
     private String name;
     
     @OneToMany(fetch = FetchType.EAGER)
-    @Type(type = "it.polimi.model.domain.EntityGroup")
+    @Type(type = "it.polimi.model.EntityGroup")
     @JoinColumn(name = "project_id_project")
     private List<EntityGroup> entityGroupList;
 

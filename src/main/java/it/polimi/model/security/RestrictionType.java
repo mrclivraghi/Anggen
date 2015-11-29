@@ -1,4 +1,4 @@
-package it.polimi.model.domain;
+package it.polimi.model.security;
 
 public enum RestrictionType {
 	SEARCH(0),

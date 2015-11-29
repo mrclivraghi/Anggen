@@ -2,8 +2,10 @@
 package it.polimi.repository;
 
 import java.util.List;
-import it.polimi.model.domain.EnumField;
-import it.polimi.model.domain.EnumValue;
+
+import it.polimi.model.field.EnumField;
+import it.polimi.model.field.EnumValue;
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;

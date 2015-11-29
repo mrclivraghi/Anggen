@@ -1,4 +1,6 @@
-package it.polimi.model.domain;
+package it.polimi.model.field;
+
+import it.polimi.model.relationship.Relationship;
 
 import java.util.List;
 
@@ -28,7 +30,7 @@ public class Annotation {
 	
 	
 	@OneToMany(fetch=FetchType.EAGER)
-	@Type(type="it.polimi.model.domain.AnnotationAttribute")
+	@Type(type="it.polimi.model.AnnotationAttribute")
 	@JoinColumn(name="annotation_id_annotation")
 	private List<AnnotationAttribute> annotationAttributeList;
 	

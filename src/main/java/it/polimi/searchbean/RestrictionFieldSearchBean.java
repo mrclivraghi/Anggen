@@ -1,8 +1,8 @@
 
 package it.polimi.searchbean;
 
-import it.polimi.model.domain.Field;
-import it.polimi.model.domain.Role;
+import it.polimi.model.field.Field;
+import it.polimi.model.security.Role;
 
 public class RestrictionFieldSearchBean {
 

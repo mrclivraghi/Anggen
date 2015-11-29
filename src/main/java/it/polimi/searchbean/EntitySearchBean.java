@@ -2,12 +2,13 @@
 package it.polimi.searchbean;
 
 import java.util.List;
-import it.polimi.model.domain.EntityGroup;
-import it.polimi.model.domain.EnumField;
-import it.polimi.model.domain.Field;
-import it.polimi.model.domain.Relationship;
-import it.polimi.model.domain.RestrictionEntity;
-import it.polimi.model.domain.Tab;
+
+import it.polimi.model.entity.EntityGroup;
+import it.polimi.model.entity.Tab;
+import it.polimi.model.field.EnumField;
+import it.polimi.model.field.Field;
+import it.polimi.model.relationship.Relationship;
+import it.polimi.model.security.RestrictionEntity;
 
 public class EntitySearchBean {
 

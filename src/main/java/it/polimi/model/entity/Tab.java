@@ -1,6 +1,9 @@
-package it.polimi.model.domain;
+package it.polimi.model.entity;
 
 import static javax.persistence.GenerationType.IDENTITY;
+import it.polimi.model.field.EnumField;
+import it.polimi.model.field.Field;
+import it.polimi.model.relationship.Relationship;
 
 import java.util.List;
 
@@ -31,20 +34,20 @@ public class Tab {
 	private Entity entity;
 	
 	@OneToMany
-	@Type(type="it.polimi.model.domain.Field")
+	@Type(type="it.polimi.model.Field")
 	@JoinColumn(name="tab_id_tab")
 	private List<Field> fieldList;
 	
 
 	@OneToMany
-	@Type(type="it.polimi.model.domain.Relationship")
+	@Type(type="it.polimi.model.Relationship")
 	@JoinColumn(name="tab_id_tab")
 	private List<Relationship> relationshipList;
 	
 	
 
 	@OneToMany
-	@Type(type="it.polimi.model.domain.Enumfield")
+	@Type(type="it.polimi.model.Enumfield")
 	@JoinColumn(name="tab_id_tab")
 	private List<EnumField> enumFieldList;
 	

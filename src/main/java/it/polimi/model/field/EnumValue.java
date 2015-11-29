@@ -1,4 +1,4 @@
-package it.polimi.model.domain;
+package it.polimi.model.field;
 
 import javax.persistence.Column;
 import javax.persistence.FetchType;

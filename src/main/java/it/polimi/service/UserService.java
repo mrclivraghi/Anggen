@@ -3,7 +3,7 @@ package it.polimi.service;
 
 import java.util.List;
 
-import it.polimi.model.domain.User;
+import it.polimi.model.security.User;
 import it.polimi.searchbean.UserSearchBean;
 
 public interface UserService {

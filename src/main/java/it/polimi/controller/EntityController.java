@@ -3,7 +3,7 @@ package it.polimi.controller;
 
 import java.util.List;
 
-import it.polimi.model.domain.Entity;
+import it.polimi.model.entity.Entity;
 import it.polimi.searchbean.EntitySearchBean;
 import it.polimi.service.EntityService;
 
@@ -100,7 +100,7 @@ public class EntityController {
 
     private void getRightMapping(Entity entity) {
         if (entity.getFieldList()!=null)
-        for (it.polimi.model.domain.Field field :entity.getFieldList())
+        for (it.polimi.model.field.Field field :entity.getFieldList())
 
         {
 
@@ -110,7 +110,7 @@ public class EntityController {
         field.setTab(null);
         }
         if (entity.getRelationshipList()!=null)
-        for (it.polimi.model.domain.Relationship relationship :entity.getRelationshipList())
+        for (it.polimi.model.relationship.Relationship relationship :entity.getRelationshipList())
 
         {
 
@@ -120,7 +120,7 @@ public class EntityController {
         relationship.setTab(null);
         }
         if (entity.getEnumFieldList()!=null)
-        for (it.polimi.model.domain.EnumField enumField :entity.getEnumFieldList())
+        for (it.polimi.model.field.EnumField enumField :entity.getEnumFieldList())
 
         {
 
@@ -130,7 +130,7 @@ public class EntityController {
         enumField.setTab(null);
         }
         if (entity.getTabList()!=null)
-        for (it.polimi.model.domain.Tab tab :entity.getTabList())
+        for (it.polimi.model.entity.Tab tab :entity.getTabList())
 
         {
 
@@ -140,7 +140,7 @@ public class EntityController {
         tab.setEnumFieldList(null);
         }
         if (entity.getRestrictionEntityList()!=null)
-        for (it.polimi.model.domain.RestrictionEntity restrictionEntity :entity.getRestrictionEntityList())
+        for (it.polimi.model.security.RestrictionEntity restrictionEntity :entity.getRestrictionEntityList())
 
         {
 

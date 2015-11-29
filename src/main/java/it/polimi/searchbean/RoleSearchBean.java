@@ -2,10 +2,11 @@
 package it.polimi.searchbean;
 
 import java.util.List;
-import it.polimi.model.domain.RestrictionEntity;
-import it.polimi.model.domain.RestrictionEntityGroup;
-import it.polimi.model.domain.RestrictionField;
-import it.polimi.model.domain.User;
+
+import it.polimi.model.security.RestrictionEntity;
+import it.polimi.model.security.RestrictionEntityGroup;
+import it.polimi.model.security.RestrictionField;
+import it.polimi.model.security.User;
 
 public class RoleSearchBean {
 

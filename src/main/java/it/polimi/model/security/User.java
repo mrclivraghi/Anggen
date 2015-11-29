@@ -1,4 +1,4 @@
-package it.polimi.model.domain;
+package it.polimi.model.security;
 import static javax.persistence.GenerationType.IDENTITY;
 
 import java.util.ArrayList;
@@ -38,7 +38,7 @@ public class User {
 	
 
 	@ManyToMany(fetch=FetchType.EAGER)
-	@Type(type="it.polimi.model.domain.Role")
+	@Type(type="it.polimi.model.Role")
 	@JoinTable(name="user_role", schema="sso",joinColumns={@JoinColumn(name="user_id")},inverseJoinColumns={@JoinColumn(name="role_id")})
 	private List<Role> roleList;
 

@@ -1,7 +1,7 @@
 package it.polimi.security;
 
-import it.polimi.model.domain.Entity;
-import it.polimi.model.domain.RestrictionField;
+import it.polimi.model.entity.Entity;
+import it.polimi.model.security.RestrictionField;
 
 import java.util.List;
 import java.util.Map;

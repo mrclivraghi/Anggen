@@ -2,8 +2,9 @@
 package it.polimi.searchbean;
 
 import java.util.List;
-import it.polimi.model.domain.Entity;
-import it.polimi.model.domain.RestrictionEntityGroup;
+
+import it.polimi.model.entity.Entity;
+import it.polimi.model.security.RestrictionEntityGroup;
 
 public class EntityGroupSearchBean {
 

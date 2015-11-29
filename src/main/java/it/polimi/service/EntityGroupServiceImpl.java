@@ -3,7 +3,7 @@ package it.polimi.service;
 
 import java.util.List;
 
-import it.polimi.model.domain.EntityGroup;
+import it.polimi.model.entity.EntityGroup;
 import it.polimi.repository.EntityGroupRepository;
 import it.polimi.repository.EntityRepository;
 import it.polimi.repository.RestrictionEntityGroupRepository;
@@ -50,12 +50,12 @@ public class EntityGroupServiceImpl
     @Transactional
     public EntityGroup update(EntityGroup entityGroup) {
         if (entityGroup.getEntityList()!=null)
-        for (it.polimi.model.domain.Entity entity: entityGroup.getEntityList())
+        for (it.polimi.model.entity.Entity entity: entityGroup.getEntityList())
         {
         entity.setEntityGroup(entityGroup);
         }
         if (entityGroup.getRestrictionEntityGroupList()!=null)
-        for (it.polimi.model.domain.RestrictionEntityGroup restrictionEntityGroup: entityGroup.getRestrictionEntityGroupList())
+        for (it.polimi.model.security.RestrictionEntityGroup restrictionEntityGroup: entityGroup.getRestrictionEntityGroupList())
         {
         restrictionEntityGroup.setEntityGroup(entityGroup);
         }

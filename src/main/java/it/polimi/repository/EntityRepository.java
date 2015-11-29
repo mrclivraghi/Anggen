@@ -2,13 +2,15 @@
 package it.polimi.repository;
 
 import java.util.List;
-import it.polimi.model.domain.Entity;
-import it.polimi.model.domain.EntityGroup;
-import it.polimi.model.domain.EnumField;
-import it.polimi.model.domain.Field;
-import it.polimi.model.domain.Relationship;
-import it.polimi.model.domain.RestrictionEntity;
-import it.polimi.model.domain.Tab;
+
+import it.polimi.model.entity.Entity;
+import it.polimi.model.entity.EntityGroup;
+import it.polimi.model.entity.Tab;
+import it.polimi.model.field.EnumField;
+import it.polimi.model.field.Field;
+import it.polimi.model.relationship.Relationship;
+import it.polimi.model.security.RestrictionEntity;
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;

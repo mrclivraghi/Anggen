@@ -3,7 +3,7 @@ package it.polimi.service;
 
 import java.util.List;
 
-import it.polimi.model.domain.RestrictionEntityGroup;
+import it.polimi.model.security.RestrictionEntityGroup;
 import it.polimi.searchbean.RestrictionEntityGroupSearchBean;
 
 public interface RestrictionEntityGroupService {

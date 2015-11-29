@@ -3,7 +3,7 @@ package it.polimi.service;
 
 import java.util.List;
 
-import it.polimi.model.domain.Annotation;
+import it.polimi.model.field.Annotation;
 import it.polimi.repository.AnnotationAttributeRepository;
 import it.polimi.repository.AnnotationRepository;
 import it.polimi.searchbean.AnnotationSearchBean;
@@ -47,7 +47,7 @@ public class AnnotationServiceImpl
     @Transactional
     public Annotation update(Annotation annotation) {
         if (annotation.getAnnotationAttributeList()!=null)
-        for (it.polimi.model.domain.AnnotationAttribute annotationAttribute: annotation.getAnnotationAttributeList())
+        for (it.polimi.model.field.AnnotationAttribute annotationAttribute: annotation.getAnnotationAttributeList())
         {
         annotationAttribute.setAnnotation(annotation);
         }

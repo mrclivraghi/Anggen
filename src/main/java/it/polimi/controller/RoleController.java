@@ -3,7 +3,7 @@ package it.polimi.controller;
 
 import java.util.List;
 
-import it.polimi.model.domain.Role;
+import it.polimi.model.security.Role;
 import it.polimi.searchbean.RoleSearchBean;
 import it.polimi.service.RoleService;
 
@@ -100,14 +100,14 @@ public class RoleController {
 
     private void getRightMapping(Role role) {
         if (role.getUserList()!=null)
-        for (it.polimi.model.domain.User user :role.getUserList())
+        for (it.polimi.model.security.User user :role.getUserList())
 
         {
 
         user.setRoleList(null);
         }
         if (role.getRestrictionEntityList()!=null)
-        for (it.polimi.model.domain.RestrictionEntity restrictionEntity :role.getRestrictionEntityList())
+        for (it.polimi.model.security.RestrictionEntity restrictionEntity :role.getRestrictionEntityList())
 
         {
 
@@ -115,7 +115,7 @@ public class RoleController {
         restrictionEntity.setEntity(null);
         }
         if (role.getRestrictionFieldList()!=null)
-        for (it.polimi.model.domain.RestrictionField restrictionField :role.getRestrictionFieldList())
+        for (it.polimi.model.security.RestrictionField restrictionField :role.getRestrictionFieldList())
 
         {
 
@@ -123,7 +123,7 @@ public class RoleController {
         restrictionField.setRole(null);
         }
         if (role.getRestrictionEntityGroupList()!=null)
-        for (it.polimi.model.domain.RestrictionEntityGroup restrictionEntityGroup :role.getRestrictionEntityGroupList())
+        for (it.polimi.model.security.RestrictionEntityGroup restrictionEntityGroup :role.getRestrictionEntityGroupList())
 
         {
 

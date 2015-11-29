@@ -1,9 +1,9 @@
 package it.polimi.generation;
 
-import it.polimi.model.domain.Entity;
-import it.polimi.model.domain.EntityAttribute;
-import it.polimi.model.domain.EntityGroup;
-import it.polimi.model.domain.Field;
+import it.polimi.model.entity.Entity;
+import it.polimi.model.entity.EntityAttribute;
+import it.polimi.model.entity.EntityGroup;
+import it.polimi.model.field.Field;
 import it.polimi.reflection.EntityManager;
 import it.polimi.reflection.EntityManagerImpl;
 import it.polimi.utils.ReflectionManager;

@@ -1,6 +1,12 @@
-package it.polimi.model.domain;
+package it.polimi.model.entity;
 
 import it.polimi.generation.Generator;
+import it.polimi.model.field.Annotation;
+import it.polimi.model.field.AnnotationType;
+import it.polimi.model.field.EnumField;
+import it.polimi.model.field.Field;
+import it.polimi.model.field.FieldType;
+import it.polimi.model.relationship.Relationship;
 import it.polimi.reflection.EntityManager;
 import it.polimi.reflection.EntityManagerImpl;
 import it.polimi.utils.ReflectionManager;

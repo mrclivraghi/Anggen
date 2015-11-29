@@ -3,7 +3,7 @@ package it.polimi.service;
 
 import java.util.List;
 
-import it.polimi.model.domain.Annotation;
+import it.polimi.model.field.Annotation;
 import it.polimi.searchbean.AnnotationSearchBean;
 
 public interface AnnotationService {

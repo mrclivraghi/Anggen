@@ -3,7 +3,7 @@ package it.polimi.service;
 
 import java.util.List;
 
-import it.polimi.model.domain.Tab;
+import it.polimi.model.entity.Tab;
 import it.polimi.repository.EnumFieldRepository;
 import it.polimi.repository.TabRepository;
 import it.polimi.searchbean.TabSearchBean;
@@ -47,17 +47,17 @@ public class TabServiceImpl
     @Transactional
     public Tab update(Tab tab) {
         if (tab.getFieldList()!=null)
-        for (it.polimi.model.domain.Field field: tab.getFieldList())
+        for (it.polimi.model.field.Field field: tab.getFieldList())
         {
         field.setTab(tab);
         }
         if (tab.getRelationshipList()!=null)
-        for (it.polimi.model.domain.Relationship relationship: tab.getRelationshipList())
+        for (it.polimi.model.relationship.Relationship relationship: tab.getRelationshipList())
         {
         relationship.setTab(tab);
         }
         if (tab.getEnumFieldList()!=null)
-        for (it.polimi.model.domain.EnumField enumField: tab.getEnumFieldList())
+        for (it.polimi.model.field.EnumField enumField: tab.getEnumFieldList())
         {
         enumField.setTab(tab);
         }

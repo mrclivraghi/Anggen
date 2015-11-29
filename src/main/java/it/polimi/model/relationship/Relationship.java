@@ -1,7 +1,11 @@
-package it.polimi.model.domain;
+package it.polimi.model.relationship;
 
 import java.util.List;
 
+import it.polimi.model.entity.Entity;
+import it.polimi.model.entity.EntityAttribute;
+import it.polimi.model.entity.Tab;
+import it.polimi.model.field.Annotation;
 import it.polimi.utils.annotation.IgnoreSearch;
 
 import javax.persistence.CascadeType;
@@ -38,12 +42,12 @@ public class Relationship extends EntityAttribute{
 	
 	
 	@OneToOne(fetch=FetchType.EAGER)
-	@Type(type="it.polimi.model.domain.Entity")
+	@Type(type="it.polimi.model.Entity")
 	@JoinColumn(name="entity_id_entity")
 	private Entity entity;
 	
 	@OneToOne(fetch=FetchType.EAGER)
-	@Type(type="it.polimi.model.domain.Entity")
+	@Type(type="it.polimi.model.Entity")
 	@JoinColumn(name="entity_id_target_entity")
 	private Entity entityTarget;
 	
@@ -52,7 +56,7 @@ public class Relationship extends EntityAttribute{
 	
 	
 	@OneToMany(fetch=FetchType.EAGER)
-	@Type(type="it.polimi.model.domain.Annotation")
+	@Type(type="it.polimi.model.Annotation")
 	@JoinColumn(name="relationship_id_relationship")
 	private List<Annotation> annotationList;
 	

@@ -1,6 +1,6 @@
 package it.generated.domain.security;
 import static javax.persistence.GenerationType.IDENTITY;
-import it.polimi.model.domain.Restriction;
+import it.polimi.model.Restriction;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -39,7 +39,7 @@ public class User {
 	
 
 	@ManyToMany(fetch=FetchType.EAGER)
-	@Type(type="it.polimi.model.domain.Role")
+	@Type(type="it.polimi.model.Role")
 	@JoinTable(name="user_role", schema="mustle",joinColumns={@JoinColumn(name="user_id")},inverseJoinColumns={@JoinColumn(name="role_id")})
 	private List<Role> roleList;
 

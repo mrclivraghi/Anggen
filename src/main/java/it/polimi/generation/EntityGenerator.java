@@ -1,14 +1,14 @@
 package it.polimi.generation;
 
 import it.polimi.boot.OracleNamingStrategy;
-import it.polimi.model.domain.Annotation;
-import it.polimi.model.domain.AnnotationAttribute;
-import it.polimi.model.domain.Entity;
-import it.polimi.model.domain.EntityAttribute;
-import it.polimi.model.domain.EnumField;
-import it.polimi.model.domain.Field;
-import it.polimi.model.domain.Relationship;
-import it.polimi.model.domain.RelationshipType;
+import it.polimi.model.entity.Entity;
+import it.polimi.model.entity.EntityAttribute;
+import it.polimi.model.field.Annotation;
+import it.polimi.model.field.AnnotationAttribute;
+import it.polimi.model.field.EnumField;
+import it.polimi.model.field.Field;
+import it.polimi.model.relationship.Relationship;
+import it.polimi.model.relationship.RelationshipType;
 import it.polimi.utils.Utility;
 import it.polimi.utils.annotation.Between;
 import it.polimi.utils.annotation.DescriptionField;

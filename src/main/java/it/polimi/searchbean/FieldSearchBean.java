@@ -2,11 +2,12 @@
 package it.polimi.searchbean;
 
 import java.util.List;
-import it.polimi.model.domain.Annotation;
-import it.polimi.model.domain.Entity;
-import it.polimi.model.domain.FieldType;
-import it.polimi.model.domain.RestrictionField;
-import it.polimi.model.domain.Tab;
+
+import it.polimi.model.entity.Entity;
+import it.polimi.model.entity.Tab;
+import it.polimi.model.field.Annotation;
+import it.polimi.model.field.FieldType;
+import it.polimi.model.security.RestrictionField;
 
 public class FieldSearchBean {
 

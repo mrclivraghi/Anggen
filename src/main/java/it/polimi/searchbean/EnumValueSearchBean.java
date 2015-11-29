@@ -1,7 +1,7 @@
 
 package it.polimi.searchbean;
 
-import it.polimi.model.domain.EnumField;
+import it.polimi.model.field.EnumField;
 
 public class EnumValueSearchBean {
 

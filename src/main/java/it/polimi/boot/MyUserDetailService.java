@@ -1,7 +1,7 @@
 package it.polimi.boot;
 
 
-import it.polimi.model.domain.Role;
+import it.polimi.model.security.Role;
 import it.polimi.repository.UserRepository;
 
 import java.util.ArrayList;
@@ -33,10 +33,10 @@ public class MyUserDetailService implements UserDetailsService {
 	public UserDetails loadUserByUsername(final String username) 
 		throws UsernameNotFoundException {
 	
-		List<it.polimi.model.domain.User> userList = userRepository.findByUsername(username);
+		List<it.polimi.model.security.User> userList = userRepository.findByUsername(username);
 		if (userList==null || userList.size()==0)
 			throw new UsernameNotFoundException("Username "+username+" not found");
-		it.polimi.model.domain.User user = userList.get(0);
+		it.polimi.model.security.User user = userList.get(0);
 		List<GrantedAuthority> authorities = 
                                       buildUserAuthority(user.getRoleList());
 		System.out.println("cerco user by "+username);
@@ -46,7 +46,7 @@ public class MyUserDetailService implements UserDetailsService {
 
 	// Converts com.mkyong.users.model.User user to
 	// org.springframework.security.core.userdetails.User
-	private User buildUserForAuthentication(it.polimi.model.domain.User user, 
+	private User buildUserForAuthentication(it.polimi.model.security.User user, 
 		List<GrantedAuthority> authorities) {
 		return new User(user.getUsername(), user.getPassword(), 
 			user.isEnabled(), true, true, true, authorities);

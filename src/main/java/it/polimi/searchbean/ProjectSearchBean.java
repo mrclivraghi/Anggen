@@ -2,13 +2,14 @@
 package it.polimi.searchbean;
 
 import java.util.List;
-import it.polimi.domain.EntityGroupTest;
+
+import it.polimi.model.entity.EntityGroup;
 
 public class ProjectSearchBean {
 
     public java.lang.String name;
     public java.lang.Integer projectId;
-    public List<EntityGroupTest> EntityGroupTestList;
+    public List<EntityGroup> entityGroupList;
 
     public java.lang.String getName() {
         return this.name;
@@ -26,12 +27,12 @@ public class ProjectSearchBean {
         this.projectId=projectId;
     }
 
-    public List<EntityGroupTest> getEntityGroupTestList() {
-        return this.EntityGroupTestList;
+    public List<EntityGroup> getEntityGroupList() {
+        return this.entityGroupList;
     }
 
-    public void setEntityGroupTestList(List<EntityGroupTest> EntityGroupTestList) {
-        this.EntityGroupTestList=EntityGroupTestList;
+    public void setEntityGroupList(List<EntityGroup> entityGroupList) {
+        this.entityGroupList=entityGroupList;
     }
 
 }

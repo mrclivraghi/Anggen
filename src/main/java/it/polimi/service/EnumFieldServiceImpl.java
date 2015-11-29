@@ -3,7 +3,7 @@ package it.polimi.service;
 
 import java.util.List;
 
-import it.polimi.model.domain.EnumField;
+import it.polimi.model.field.EnumField;
 import it.polimi.repository.EnumFieldRepository;
 import it.polimi.repository.EnumValueRepository;
 import it.polimi.searchbean.EnumFieldSearchBean;
@@ -47,12 +47,12 @@ public class EnumFieldServiceImpl
     @Transactional
     public EnumField update(EnumField enumField) {
         if (enumField.getEnumValueList()!=null)
-        for (it.polimi.model.domain.EnumValue enumValue: enumField.getEnumValueList())
+        for (it.polimi.model.field.EnumValue enumValue: enumField.getEnumValueList())
         {
         enumValue.setEnumField(enumField);
         }
         if (enumField.getAnnotationList()!=null)
-        for (it.polimi.model.domain.Annotation annotation: enumField.getAnnotationList())
+        for (it.polimi.model.field.Annotation annotation: enumField.getAnnotationList())
         {
         annotation.setEnumField(enumField);
         }

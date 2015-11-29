@@ -3,7 +3,7 @@ package it.polimi.service;
 
 import java.util.List;
 
-import it.polimi.model.domain.Role;
+import it.polimi.model.security.Role;
 import it.polimi.searchbean.RoleSearchBean;
 
 public interface RoleService {

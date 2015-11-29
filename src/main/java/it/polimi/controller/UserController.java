@@ -3,7 +3,7 @@ package it.polimi.controller;
 
 import java.util.List;
 
-import it.polimi.model.domain.User;
+import it.polimi.model.security.User;
 import it.polimi.searchbean.UserSearchBean;
 import it.polimi.service.UserService;
 import it.polimi.utils.Utility;
@@ -102,7 +102,7 @@ public class UserController {
 
     private void getRightMapping(User user) {
         if (user.getRoleList()!=null)
-        for (it.polimi.model.domain.Role role :user.getRoleList())
+        for (it.polimi.model.security.Role role :user.getRoleList())
 
         {
 

@@ -3,7 +3,7 @@ package it.polimi.controller;
 
 import java.util.List;
 
-import it.polimi.model.domain.EntityGroup;
+import it.polimi.model.entity.EntityGroup;
 import it.polimi.searchbean.EntityGroupSearchBean;
 import it.polimi.service.EntityGroupService;
 
@@ -100,7 +100,7 @@ public class EntityGroupController {
 
     private void getRightMapping(EntityGroup entityGroup) {
         if (entityGroup.getEntityList()!=null)
-        for (it.polimi.model.domain.Entity entity :entityGroup.getEntityList())
+        for (it.polimi.model.entity.Entity entity :entityGroup.getEntityList())
 
         {
 
@@ -112,7 +112,7 @@ public class EntityGroupController {
         entity.setEntityGroup(null);
         }
         if (entityGroup.getRestrictionEntityGroupList()!=null)
-        for (it.polimi.model.domain.RestrictionEntityGroup restrictionEntityGroup :entityGroup.getRestrictionEntityGroupList())
+        for (it.polimi.model.security.RestrictionEntityGroup restrictionEntityGroup :entityGroup.getRestrictionEntityGroupList())
 
         {
 

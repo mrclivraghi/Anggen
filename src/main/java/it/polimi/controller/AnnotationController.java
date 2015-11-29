@@ -3,7 +3,7 @@ package it.polimi.controller;
 
 import java.util.List;
 
-import it.polimi.model.domain.Annotation;
+import it.polimi.model.field.Annotation;
 import it.polimi.searchbean.AnnotationSearchBean;
 import it.polimi.service.AnnotationService;
 
@@ -100,7 +100,7 @@ public class AnnotationController {
 
     private void getRightMapping(Annotation annotation) {
         if (annotation.getAnnotationAttributeList()!=null)
-        for (it.polimi.model.domain.AnnotationAttribute annotationAttribute :annotation.getAnnotationAttributeList())
+        for (it.polimi.model.field.AnnotationAttribute annotationAttribute :annotation.getAnnotationAttributeList())
 
         {
 

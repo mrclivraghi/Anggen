@@ -3,7 +3,7 @@ package it.polimi.service;
 
 import java.util.List;
 
-import it.polimi.model.domain.Field;
+import it.polimi.model.field.Field;
 import it.polimi.searchbean.FieldSearchBean;
 
 public interface FieldService {

@@ -1,7 +1,7 @@
 
 package it.polimi.searchbean;
 
-import it.polimi.model.domain.Annotation;
+import it.polimi.model.field.Annotation;
 
 public class AnnotationAttributeSearchBean {
 

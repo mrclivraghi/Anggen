@@ -2,10 +2,11 @@
 package it.polimi.searchbean;
 
 import java.util.List;
-import it.polimi.model.domain.Annotation;
-import it.polimi.model.domain.Entity;
-import it.polimi.model.domain.EnumValue;
-import it.polimi.model.domain.Tab;
+
+import it.polimi.model.entity.Entity;
+import it.polimi.model.entity.Tab;
+import it.polimi.model.field.Annotation;
+import it.polimi.model.field.EnumValue;
 
 public class EnumFieldSearchBean {
 

@@ -2,7 +2,7 @@ package it.polimi.generation;
 
 import java.util.List;
 
-import it.polimi.model.domain.Entity;
+import it.polimi.model.entity.Entity;
 
 import com.sun.codemodel.ClassType;
 import com.sun.codemodel.JClass;

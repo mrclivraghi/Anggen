@@ -2,9 +2,11 @@
 package it.polimi.repository;
 
 import java.util.List;
-import it.polimi.model.domain.EntityGroup;
-import it.polimi.model.domain.RestrictionEntityGroup;
-import it.polimi.model.domain.Role;
+
+import it.polimi.model.entity.EntityGroup;
+import it.polimi.model.security.RestrictionEntityGroup;
+import it.polimi.model.security.Role;
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;

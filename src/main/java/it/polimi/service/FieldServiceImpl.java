@@ -3,7 +3,7 @@ package it.polimi.service;
 
 import java.util.List;
 
-import it.polimi.model.domain.Field;
+import it.polimi.model.field.Field;
 import it.polimi.repository.FieldRepository;
 import it.polimi.repository.RestrictionFieldRepository;
 import it.polimi.searchbean.FieldSearchBean;
@@ -47,12 +47,12 @@ public class FieldServiceImpl
     @Transactional
     public Field update(Field field) {
         if (field.getAnnotationList()!=null)
-        for (it.polimi.model.domain.Annotation annotation: field.getAnnotationList())
+        for (it.polimi.model.field.Annotation annotation: field.getAnnotationList())
         {
         annotation.setField(field);
         }
         if (field.getRestrictionFieldList()!=null)
-        for (it.polimi.model.domain.RestrictionField restrictionField: field.getRestrictionFieldList())
+        for (it.polimi.model.security.RestrictionField restrictionField: field.getRestrictionFieldList())
         {
         restrictionField.setField(field);
         }

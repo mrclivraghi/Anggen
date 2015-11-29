@@ -3,7 +3,7 @@ package it.polimi.service;
 
 import java.util.List;
 
-import it.polimi.model.domain.Tab;
+import it.polimi.model.entity.Tab;
 import it.polimi.searchbean.TabSearchBean;
 
 public interface TabService {

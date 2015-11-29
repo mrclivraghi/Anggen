@@ -3,7 +3,7 @@ package it.polimi.service;
 
 import java.util.List;
 
-import it.polimi.model.domain.Role;
+import it.polimi.model.security.Role;
 import it.polimi.repository.RestrictionEntityGroupRepository;
 import it.polimi.repository.RestrictionEntityRepository;
 import it.polimi.repository.RestrictionFieldRepository;
@@ -59,9 +59,9 @@ public class RoleServiceImpl
     @Transactional
     public Role update(Role role) {
         if (role.getUserList()!=null)
-        for (it.polimi.model.domain.User user: role.getUserList())
+        for (it.polimi.model.security.User user: role.getUserList())
         {
-        it.polimi.model.domain.User savedUser = userRepository.findOne(user.getUserId());
+        it.polimi.model.security.User savedUser = userRepository.findOne(user.getUserId());
         Boolean found=false; 
         for (Role tempRole : savedUser.getRoleList())
         {
@@ -75,17 +75,17 @@ public class RoleServiceImpl
         savedUser.getRoleList().add(role);
         }
         if (role.getRestrictionEntityList()!=null)
-        for (it.polimi.model.domain.RestrictionEntity restrictionEntity: role.getRestrictionEntityList())
+        for (it.polimi.model.security.RestrictionEntity restrictionEntity: role.getRestrictionEntityList())
         {
         restrictionEntity.setRole(role);
         }
         if (role.getRestrictionFieldList()!=null)
-        for (it.polimi.model.domain.RestrictionField restrictionField: role.getRestrictionFieldList())
+        for (it.polimi.model.security.RestrictionField restrictionField: role.getRestrictionFieldList())
         {
         restrictionField.setRole(role);
         }
         if (role.getRestrictionEntityGroupList()!=null)
-        for (it.polimi.model.domain.RestrictionEntityGroup restrictionEntityGroup: role.getRestrictionEntityGroupList())
+        for (it.polimi.model.security.RestrictionEntityGroup restrictionEntityGroup: role.getRestrictionEntityGroupList())
         {
         restrictionEntityGroup.setRole(role);
         }

@@ -1,5 +1,9 @@
-package it.polimi.model.domain;
+package it.polimi.model.entity;
 
+import it.polimi.model.field.EnumField;
+import it.polimi.model.field.Field;
+import it.polimi.model.relationship.Relationship;
+import it.polimi.model.security.RestrictionEntity;
 import it.polimi.utils.annotation.DescriptionField;
 import it.polimi.utils.annotation.Tab;
 
@@ -32,27 +36,27 @@ public class Entity {
 	private String name;
 	
 	@OneToMany(fetch=FetchType.EAGER)
-	@Type(type="it.polimi.model.domain.Field")
+	@Type(type="it.polimi.model.Field")
 	@JoinColumn(name="entity_id_entity")
 	private List<Field> fieldList;
 	
 	@OneToMany(fetch=FetchType.EAGER)
-	@Type(type="it.polimi.model.domain.Relationship")
+	@Type(type="it.polimi.model.Relationship")
 	@JoinColumn(name="entity_id_entity")
 	private List<Relationship> relationshipList;
 	
 	@OneToMany(fetch=FetchType.EAGER)
-	@Type(type="it.polimi.model.domain.EnumField")
+	@Type(type="it.polimi.model.EnumField")
 	@JoinColumn(name="entity_id_entity")
 	private List<EnumField> enumFieldList;
 	
 	@OneToMany(fetch=FetchType.EAGER)
-	@Type(type="it.polimi.model.domain.Tab")
+	@Type(type="it.polimi.model.Tab")
 	@JoinColumn(name="entity_id_entity")
-	private List<it.polimi.model.domain.Tab> tabList;
+	private List<it.polimi.model.entity.Tab> tabList;
 	
 	@OneToMany(fetch=FetchType.EAGER)
-	@Type(type="it.polimi.model.domain.RestrictionEntity")
+	@Type(type="it.polimi.model.RestrictionEntity")
 	@JoinColumn(name="entity_id_entity")
 	private List<RestrictionEntity> restrictionEntityList;
 	
@@ -121,10 +125,10 @@ public class Entity {
 	public void setEnumFieldList(List<EnumField> enumFieldList) {
 		this.enumFieldList = enumFieldList;
 	}
-	public List<it.polimi.model.domain.Tab> getTabList() {
+	public List<it.polimi.model.entity.Tab> getTabList() {
 		return tabList;
 	}
-	public void setTabList(List<it.polimi.model.domain.Tab> tabList) {
+	public void setTabList(List<it.polimi.model.entity.Tab> tabList) {
 		this.tabList = tabList;
 	}
 	public List<RestrictionEntity> getRestrictionEntityList() {

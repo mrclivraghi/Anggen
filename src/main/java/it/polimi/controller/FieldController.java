@@ -3,7 +3,7 @@ package it.polimi.controller;
 
 import java.util.List;
 
-import it.polimi.model.domain.Field;
+import it.polimi.model.field.Field;
 import it.polimi.searchbean.FieldSearchBean;
 import it.polimi.service.FieldService;
 
@@ -109,7 +109,7 @@ public class FieldController {
         field.getEntity().setEntityGroup(null);
         }
         if (field.getAnnotationList()!=null)
-        for (it.polimi.model.domain.Annotation annotation :field.getAnnotationList())
+        for (it.polimi.model.field.Annotation annotation :field.getAnnotationList())
 
         {
 
@@ -119,7 +119,7 @@ public class FieldController {
         annotation.setEnumField(null);
         }
         if (field.getRestrictionFieldList()!=null)
-        for (it.polimi.model.domain.RestrictionField restrictionField :field.getRestrictionFieldList())
+        for (it.polimi.model.security.RestrictionField restrictionField :field.getRestrictionFieldList())
 
         {
 

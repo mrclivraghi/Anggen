@@ -3,7 +3,7 @@ package it.polimi.service;
 
 import java.util.List;
 
-import it.polimi.model.domain.Relationship;
+import it.polimi.model.relationship.Relationship;
 import it.polimi.searchbean.RelationshipSearchBean;
 
 public interface RelationshipService {

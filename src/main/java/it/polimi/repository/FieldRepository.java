@@ -2,11 +2,13 @@
 package it.polimi.repository;
 
 import java.util.List;
-import it.polimi.model.domain.Annotation;
-import it.polimi.model.domain.Entity;
-import it.polimi.model.domain.Field;
-import it.polimi.model.domain.RestrictionField;
-import it.polimi.model.domain.Tab;
+
+import it.polimi.model.entity.Entity;
+import it.polimi.model.entity.Tab;
+import it.polimi.model.field.Annotation;
+import it.polimi.model.field.Field;
+import it.polimi.model.security.RestrictionField;
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;

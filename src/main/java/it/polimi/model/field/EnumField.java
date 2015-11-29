@@ -1,4 +1,8 @@
-package it.polimi.model.domain;
+package it.polimi.model.field;
+
+import it.polimi.model.entity.Entity;
+import it.polimi.model.entity.EntityAttribute;
+import it.polimi.model.entity.Tab;
 
 import java.util.List;
 
@@ -26,7 +30,7 @@ public class EnumField extends EntityAttribute {
 	private String name;
 	
 	@OneToMany(fetch=FetchType.EAGER)
-	@Type(type="it.polimi.model.domain.EnumValue")
+	@Type(type="it.polimi.model.EnumValue")
 	@JoinColumn(name="enum_field_id_enum_field")
 	private List<EnumValue> enumValueList;
 	
@@ -35,7 +39,7 @@ public class EnumField extends EntityAttribute {
 	private Entity entity;
 	
 	@OneToMany(fetch=FetchType.EAGER)
-	@Type(type="it.polimi.model.domain.Annotation")
+	@Type(type="it.polimi.model.Annotation")
 	@JoinColumn(name="enum_field_id_enum_field")
 	private List<Annotation> annotationList;
 	

@@ -1,4 +1,9 @@
-package it.polimi.model.domain;
+package it.polimi.model.field;
+
+import it.polimi.model.entity.Entity;
+import it.polimi.model.entity.EntityAttribute;
+import it.polimi.model.entity.Tab;
+import it.polimi.model.security.RestrictionField;
 
 import java.util.List;
 
@@ -41,13 +46,13 @@ public class Field extends EntityAttribute{
 	
 	
 	@OneToMany(fetch=FetchType.EAGER)
-	@Type(type="it.polimi.model.domain.Annotation")
+	@Type(type="it.polimi.model.Annotation")
 	@JoinColumn(name="field_id_field")
 	private List<Annotation> annotationList;
 	
 	
 	@OneToMany(fetch=FetchType.EAGER)
-	@Type(type="it.polimi.model.domain.RestrictionField")
+	@Type(type="it.polimi.model.RestrictionField")
 	@JoinColumn(name="field_id_field")
 	private List<RestrictionField> restrictionFieldList;
 	

@@ -30,11 +30,11 @@ import com.sun.codemodel.JMod;
 import com.sun.codemodel.JVar;
 
 import it.polimi.boot.OracleNamingStrategy;
-import it.polimi.model.domain.EnumField;
-import it.polimi.model.domain.EnumValue;
-import it.polimi.model.domain.Field;
-import it.polimi.model.domain.Relationship;
-import it.polimi.model.domain.RelationshipType;
+import it.polimi.model.field.EnumField;
+import it.polimi.model.field.EnumValue;
+import it.polimi.model.field.Field;
+import it.polimi.model.relationship.Relationship;
+import it.polimi.model.relationship.RelationshipType;
 import it.polimi.utils.Utility;
 
 public class EnumClassGenerator {

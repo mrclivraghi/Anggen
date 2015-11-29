@@ -1,4 +1,6 @@
-package it.polimi.model.domain;
+package it.polimi.model.entity;
+
+import it.polimi.model.security.RestrictionEntityGroup;
 
 import java.util.List;
 
@@ -18,6 +20,8 @@ import org.hibernate.annotations.Type;
 @Table(schema="mustle", name="entity_group")
 public class EntityGroup {
 
+	public static final Long entityId= 10L;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name ="id_entity_group")
@@ -26,18 +30,18 @@ public class EntityGroup {
 	private String name;
 	
 	@OneToMany(fetch=FetchType.EAGER)
-	@Type(type="it.polimi.model.domain.Entity")
+	@Type(type="it.polimi.model.Entity")
 	@JoinColumn(name="entity_group_id_entity_group")
 	private List<Entity> entityList;
 	
 	@OneToMany(fetch=FetchType.EAGER)
-	@Type(type="it.polimi.model.domain.RestrictionEntityGroup")
+	@Type(type="it.polimi.model.RestrictionEntityGroup")
 	@JoinColumn(name="entity_group_id_entity_group")
 	private List<RestrictionEntityGroup> restrictionEntityGroupList;
 	
 	
 	@ManyToOne(fetch=FetchType.EAGER)
-	@Type(type="it.polimi.model.domain.Project")
+	@Type(type="it.polimi.model.Project")
 	@JoinColumn(name="project_id_project")
 	private Project project;
 	

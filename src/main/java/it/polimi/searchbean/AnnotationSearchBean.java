@@ -2,11 +2,12 @@
 package it.polimi.searchbean;
 
 import java.util.List;
-import it.polimi.model.domain.AnnotationAttribute;
-import it.polimi.model.domain.AnnotationType;
-import it.polimi.model.domain.EnumField;
-import it.polimi.model.domain.Field;
-import it.polimi.model.domain.Relationship;
+
+import it.polimi.model.field.AnnotationAttribute;
+import it.polimi.model.field.AnnotationType;
+import it.polimi.model.field.EnumField;
+import it.polimi.model.field.Field;
+import it.polimi.model.relationship.Relationship;
 
 public class AnnotationSearchBean {
 

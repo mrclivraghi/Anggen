@@ -3,7 +3,7 @@ package it.polimi.service;
 
 import java.util.List;
 
-import it.polimi.model.domain.Relationship;
+import it.polimi.model.relationship.Relationship;
 import it.polimi.repository.RelationshipRepository;
 import it.polimi.searchbean.RelationshipSearchBean;
 import it.polimi.service.RelationshipService;
@@ -45,7 +45,7 @@ public class RelationshipServiceImpl
     @Transactional
     public Relationship update(Relationship relationship) {
         if (relationship.getAnnotationList()!=null)
-        for (it.polimi.model.domain.Annotation annotation: relationship.getAnnotationList())
+        for (it.polimi.model.field.Annotation annotation: relationship.getAnnotationList())
         {
         annotation.setRelationship(relationship);
         }

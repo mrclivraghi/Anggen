@@ -1,8 +1,8 @@
 
 package it.polimi.searchbean;
 
-import it.polimi.model.domain.Entity;
-import it.polimi.model.domain.Role;
+import it.polimi.model.entity.Entity;
+import it.polimi.model.security.Role;
 
 public class RestrictionEntitySearchBean {
 

@@ -3,7 +3,7 @@ package it.polimi.service;
 
 import java.util.List;
 
-import it.polimi.model.domain.AnnotationAttribute;
+import it.polimi.model.field.AnnotationAttribute;
 import it.polimi.repository.AnnotationAttributeRepository;
 import it.polimi.searchbean.AnnotationAttributeSearchBean;
 import it.polimi.service.AnnotationAttributeService;

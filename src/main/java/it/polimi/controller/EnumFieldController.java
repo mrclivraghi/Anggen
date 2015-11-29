@@ -3,7 +3,7 @@ package it.polimi.controller;
 
 import java.util.List;
 
-import it.polimi.model.domain.EnumField;
+import it.polimi.model.field.EnumField;
 import it.polimi.searchbean.EnumFieldSearchBean;
 import it.polimi.service.EnumFieldService;
 
@@ -100,7 +100,7 @@ public class EnumFieldController {
 
     private void getRightMapping(EnumField enumField) {
         if (enumField.getEnumValueList()!=null)
-        for (it.polimi.model.domain.EnumValue enumValue :enumField.getEnumValueList())
+        for (it.polimi.model.field.EnumValue enumValue :enumField.getEnumValueList())
 
         {
 
@@ -116,7 +116,7 @@ public class EnumFieldController {
         enumField.getEntity().setEntityGroup(null);
         }
         if (enumField.getAnnotationList()!=null)
-        for (it.polimi.model.domain.Annotation annotation :enumField.getAnnotationList())
+        for (it.polimi.model.field.Annotation annotation :enumField.getAnnotationList())
 
         {
 

@@ -1,4 +1,4 @@
-package it.polimi.model.domain;
+package it.polimi.model.relationship;
 
 public enum RelationshipType {
 	ONE_TO_ONE(0),

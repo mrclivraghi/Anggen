@@ -22,13 +22,13 @@ public class ProjectServiceImpl
     public EntityGroupRepository entityGroupRepository;
 
     @Override
-    public List<it.polimi.model.domain.Project> findById(Integer projectId) {
+    public List<it.polimi.model.entity.Project> findById(Integer projectId) {
         return projectRepository.findByProjectId(projectId);
     }
 
     @Override
-    public List<it.polimi.model.domain.Project> find(ProjectSearchBean project) {
-        return projectRepository.findByNameAndProjectIdAndEntityGroupTest(project.getName(),project.getProjectId(),project.getEntityGroupTestList()==null? null :project.getEntityGroupTestList().get(0));
+    public List<it.polimi.model.entity.Project> find(ProjectSearchBean project) {
+        return projectRepository.findByNameAndProjectIdAndEntityGroup(project.getName(),project.getProjectId(),project.getEntityGroupList()==null? null :project.getEntityGroupList().get(0));
     }
 
     @Override
@@ -38,19 +38,19 @@ public class ProjectServiceImpl
     }
 
     @Override
-    public it.polimi.model.domain.Project insert(it.polimi.model.domain.Project project) {
+    public it.polimi.model.entity.Project insert(it.polimi.model.entity.Project project) {
         return projectRepository.save(project);
     }
 
     @Override
     @Transactional
-    public it.polimi.model.domain.Project update(it.polimi.model.domain.Project project) {
+    public it.polimi.model.entity.Project update(it.polimi.model.entity.Project project) {
         if (project.getEntityGroupList()!=null)
-        for (it.polimi.model.domain.EntityGroup entityGroup: project.getEntityGroupList())
+        for (it.polimi.model.entity.EntityGroup entityGroup: project.getEntityGroupList())
         {
         entityGroup.setProject(project);
         }
-        it.polimi.model.domain.Project returnedProject=projectRepository.save(project);
+        it.polimi.model.entity.Project returnedProject=projectRepository.save(project);
          return returnedProject;
     }
 

@@ -3,7 +3,7 @@ package it.polimi.controller;
 
 import java.util.List;
 
-import it.polimi.model.domain.EnumValue;
+import it.polimi.model.field.EnumValue;
 import it.polimi.searchbean.EnumValueSearchBean;
 import it.polimi.service.EnumValueService;
 

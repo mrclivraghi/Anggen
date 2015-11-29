@@ -2,8 +2,8 @@ package it.polimi.security;
 
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import it.polimi.model.domain.Entity;
-import it.polimi.model.domain.RestrictionType;
+import it.polimi.model.entity.Entity;
+import it.polimi.model.security.RestrictionType;
 
 public interface SecurityManager {
 	

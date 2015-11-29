@@ -3,7 +3,7 @@ package it.polimi.controller;
 
 import java.util.List;
 
-import it.polimi.model.domain.RestrictionField;
+import it.polimi.model.security.RestrictionField;
 import it.polimi.searchbean.RestrictionFieldSearchBean;
 import it.polimi.service.RestrictionFieldService;
 

@@ -1,4 +1,4 @@
-package it.polimi.model.domain;
+package it.polimi.model.field;
 
 import java.sql.Time;
 import java.util.Date;

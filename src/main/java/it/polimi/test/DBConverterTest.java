@@ -6,9 +6,9 @@ import java.util.List;
 import it.polimi.Application;
 import it.polimi.generation.BeanToDBConverter;
 import it.polimi.generation.Generator;
-import it.polimi.model.domain.Entity;
-import it.polimi.model.domain.EntityGroup;
-import it.polimi.model.domain.EnumField;
+import it.polimi.model.entity.Entity;
+import it.polimi.model.entity.EntityGroup;
+import it.polimi.model.field.EnumField;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

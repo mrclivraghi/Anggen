@@ -3,7 +3,7 @@ package it.polimi.controller;
 
 import java.util.List;
 
-import it.polimi.model.domain.RestrictionEntity;
+import it.polimi.model.security.RestrictionEntity;
 import it.polimi.searchbean.RestrictionEntitySearchBean;
 import it.polimi.service.RestrictionEntityService;
 

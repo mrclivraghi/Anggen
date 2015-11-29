@@ -150,16 +150,17 @@ public class EntityAttribute {
 			case DOUBLE: return codeModel.ref(Double.class);
 			case TIME: return codeModel.ref(Time.class);
 			case BOOLEAN: return codeModel.ref(Boolean.class);
+			case LONG : return codeModel.ref(Long.class);
 			default: return null;
 			}
 		} else
 		{
 			if (this.isEnumField())
 			{
-				return Generator.getJDefinedClass(this.asEnumField().getName());
+				return Generator.getJDefinedEnumFieldClass(this.asEnumField());
 			}else
 			{
-				return Generator.getJDefinedClass(this.asRelationship().getEntityTarget().getName());
+				return Generator.getJDefinedClass(this.asRelationship().getEntityTarget());
 			}
 		}
 	}

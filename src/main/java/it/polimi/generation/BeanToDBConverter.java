@@ -209,7 +209,7 @@ public class BeanToDBConverter {
 							{ //relationship
 								Relationship relationship = new Relationship();
 								relationship.setEntity(entity);
-								relationship.setName(entity.getName()+"_"+reflectionManager.parseName(field.getCompositeClass().fullName()));
+								relationship.setName(reflectionManager.parseName(field.getName()));
 								relationshipRepository.save(relationship);
 								List<it.polimi.model.field.Annotation> annotationList = new ArrayList<it.polimi.model.field.Annotation>();
 								convertAnnotation(field, relationship, annotationList);
@@ -340,28 +340,7 @@ public class BeanToDBConverter {
 			{
 				annotationType=AnnotationType.NOT_BLANK;
 			}
-			if (annotationArray[i].annotationType()==Tab.class)
-			{/*
-				it.polimi.model.Tab metaTab = new it.polimi.model.Tab();
-				for (Method method : annotationList[i].annotationType().getDeclaredMethods()) {
-					if (method.getName().equals("name"))
-					{
-						Object value=null;
-						try {
-							value = method.invoke(annotationList[i], (Object[])null);
-							metaTab.setName("name");
-							metaField.setTab(metaTab);
-						} catch (IllegalAccessException
-								| IllegalArgumentException
-								| InvocationTargetException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-
-					}
-				}
-
-			*/}
+			
 			if (annotationType!=null)
 			{
 				metaAnnotation.setAnnotationType(annotationType);
@@ -372,9 +351,9 @@ public class BeanToDBConverter {
 				if (metaEntityAttribute.isRelationship())
 					metaAnnotation.setRelationship(metaEntityAttribute.asRelationship());
 				//annotationRepository.save(metaAnnotation);
+				annotationRepository.save(metaAnnotation);
+				annotationList.add(metaAnnotation);
 			}
-			annotationRepository.save(metaAnnotation);
-			annotationList.add(metaAnnotation);
 		}
 		if (metaEntityAttribute.isField())
 			metaEntityAttribute.asField().setAnnotationList(annotationList);

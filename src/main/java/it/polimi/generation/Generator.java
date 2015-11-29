@@ -2,6 +2,7 @@ package it.polimi.generation;
 
 import it.polimi.model.entity.Entity;
 import it.polimi.model.entity.EntityGroup;
+import it.polimi.model.entity.Project;
 import it.polimi.model.field.EnumField;
 import it.polimi.utils.Field;
 import it.polimi.utils.ReflectionManager;
@@ -48,7 +49,7 @@ import com.sun.codemodel.JVar;
  */
 public class Generator {
 	
-	public static String modelPackage;
+	public static String mainPackage;
 	
 	public static Boolean bootstrapMenu=true;
 	
@@ -65,6 +66,7 @@ public class Generator {
 	public static String applicationName;
 	
 	
+	private Project project;
 	
 	private List<Entity> modelEntityList;
 	
@@ -73,11 +75,13 @@ public class Generator {
 	private List<EntityGroup> entityGroupList;
 	
 	
-	public Generator(List<EntityGroup> entityGroupList,List<EnumField> enumFieldList)
+	public Generator(Project project,List<EnumField> enumFieldList)
 	{
-		this.entityGroupList=entityGroupList;
+		this.project=project;
+		this.entityGroupList=project.getEntityGroupList();
 		this.enumFieldList=enumFieldList;
 		this.modelEntityList=new ArrayList<Entity>();
+		if (entityGroupList!=null)
 		for (EntityGroup entityGroup: entityGroupList)
 		{
 			this.modelEntityList.addAll(entityGroup.getEntityList());
@@ -95,13 +99,14 @@ public class Generator {
 			Properties properties = new Properties();
 			properties.load(fileInput);
 			fileInput.close();
-			Generator.modelPackage=properties.getProperty("application.model.package");
+			//Generator.modelPackage=properties.getProperty("application.model.package");
+			Generator.mainPackage="it.generated.";
 			Generator.easyTreeMenu=Boolean.valueOf(properties.getProperty("application.menu.easytree.enable"));
 			Generator.bootstrapMenu=Boolean.valueOf(properties.getProperty("application.menu.bootstrap.enable"));
 			Generator.menuDirectory=properties.getProperty("application.menu.directory");
 			Generator.angularDirectory=properties.getProperty("application.angular.directory");
 			Generator.htmlDirectory=properties.getProperty("application.html.directory");
-			Generator.applicationName=properties.getProperty("application.name");
+			Generator.applicationName=project.getName().toLowerCase();
 			Generator.menuName=properties.getProperty("application.menu.name");
 			
 			
@@ -141,23 +146,48 @@ public class Generator {
 		}*/
 	}
 	
-	public static JDefinedClass getJDefinedClass(String className)
+	public static JDefinedClass getJDefinedClass(Entity entity)
 	{
 		JCodeModel	codeModel = new JCodeModel();
 		JDefinedClass myClass= null;
 		try {
-			String thePackage="it.polimi.domain.";
-			if (className.endsWith("SearchBean"))
-				thePackage="it.polimi.searchbean.";
-			if (className.endsWith("Repository"))
-				thePackage="it.polimi.repository.";
-			myClass = codeModel._class(thePackage+Utility.getFirstUpper(className), ClassType.CLASS);
+			String thePackage="it.generated."+Generator.applicationName+".model."+entity.getEntityGroup().getName().toLowerCase()+".";
+		//	if (entity.getName().endsWith("Repository"))
+	//			thePackage=thePackage.replace(".model", ".repository.");
+			myClass = codeModel._class(thePackage+Utility.getFirstUpper(entity.getName()), ClassType.CLASS);
 		} catch (JClassAlreadyExistsException e) {
 			e.printStackTrace();
 		}
 		return myClass;
 	}
-	
+	public static JDefinedClass getJDefinedRepositoryClass(Entity entity)
+	{
+		JCodeModel	codeModel = new JCodeModel();
+		JDefinedClass myClass= null;
+		try {
+			String thePackage="it.generated."+Generator.applicationName+".repository."+entity.getEntityGroup().getName().toLowerCase()+".";
+		//	if (entity.getName().endsWith("Repository"))
+	//			thePackage=thePackage.replace(".model", ".repository.");
+			myClass = codeModel._class(thePackage+Utility.getFirstUpper(entity.getName()+"Repository"), ClassType.CLASS);
+		} catch (JClassAlreadyExistsException e) {
+			e.printStackTrace();
+		}
+		return myClass;
+	}
+	public static JDefinedClass getJDefinedEnumFieldClass(EnumField enumField)
+	{
+		JCodeModel	codeModel = new JCodeModel();
+		JDefinedClass myClass= null;
+		try {
+			String thePackage="it.generated."+Generator.applicationName+".model.";
+		//	if (entity.getName().endsWith("Repository"))
+	//			thePackage=thePackage.replace(".model", ".repository.");
+			myClass = codeModel._class(thePackage+Utility.getFirstUpper(enumField.getName()), ClassType.CLASS);
+		} catch (JClassAlreadyExistsException e) {
+			e.printStackTrace();
+		}
+		return myClass;
+	}
 		
 	public void generate()
 	{

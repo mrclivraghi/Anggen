@@ -32,6 +32,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.mapping.Array;
+import org.hibernate.validator.internal.util.privilegedactions.GetAnnotationParameter;
 import org.reflections.Reflections;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.repository.query.Param;
@@ -170,7 +171,7 @@ public class ReflectionManager {
 							try {
 								fieldClass=Class.forName(elementType.getTypeName());
 								jClass=jClass.narrow(fieldClass);
-								repositoryClass=Generator.getJDefinedClass(elementType.getTypeName());
+								//repositoryClass=Generator.getJDefinedClass(elementType.getTypeName());
 							} catch (ClassNotFoundException e) {
 								//e.printStackTrace();
 							}
@@ -502,7 +503,32 @@ public class ReflectionManager {
 	}
 	public static Boolean hasBackManyToMany(Field field)
 	{
-		return hasManyToMany(field);
+		//return hasManyToMany(field);
+		Annotation annotation = ReflectionManager.getAnnotation(field, ManyToMany.class);
+		if (annotation!=null)
+		{
+
+			for (Method method : annotation.annotationType().getDeclaredMethods()) {
+				if (method.getName().equals("mappedBy"))
+				{
+					Object value=null;
+					try {
+						value = method.invoke(annotation, (Object[])null);
+						if (value!=null && !value.equals(""))
+							return true;
+					} catch (IllegalAccessException
+							| IllegalArgumentException
+							| InvocationTargetException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				}
+			}
+		
+			return false;
+		} else
+			return false;
 	}
 	
 	private static Boolean hasAnnotation(Field field,Class ignoreAnnotationClass)
@@ -516,7 +542,7 @@ public class ReflectionManager {
 		return false;
 	}
 	
-	public Annotation getAnnotation(Field field, Class annotationClass)
+	public static Annotation getAnnotation(Field field, Class annotationClass)
 	{
 		Annotation[] annotationList= field.getAnnotationList();
 		for (int i=0; i<annotationList.length; i++)

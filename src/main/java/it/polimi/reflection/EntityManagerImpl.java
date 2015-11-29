@@ -202,7 +202,7 @@ public class EntityManagerImpl implements EntityManager{
 	public Boolean hasManyToMany() {
 		for (Relationship relationship : entity.getRelationshipList())
 		{
-			if (relationship.getRelationshipType()==RelationshipType.MANY_TO_MANY)
+			if (relationship.getRelationshipType()==RelationshipType.MANY_TO_MANY || relationship.getRelationshipType()==RelationshipType.MANY_TO_MANY_BACK)
 				return true;
 		}
 		return false;

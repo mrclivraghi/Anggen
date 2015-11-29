@@ -37,8 +37,9 @@ public enum FieldType {
 		case 3: return "Double";
 		case 4: return "Time";
 		case 5: return "Boolean";
+		case 6: return "Long";
 		}
-		return "String";
+		return null;
 	}
 	
 	@JsonIgnore
@@ -52,8 +53,9 @@ public enum FieldType {
 		case 3: return Double.class;
 		case 4: return Time.class;
 		case 5: return Boolean.class;
+		case 6: return Long.class;
 		}
-		return String.class;
+		return null;
 	}
 	
 }

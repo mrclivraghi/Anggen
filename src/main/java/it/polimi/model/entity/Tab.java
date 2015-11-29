@@ -8,6 +8,7 @@ import it.polimi.model.relationship.Relationship;
 import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -33,20 +34,20 @@ public class Tab {
 	@JoinColumn(name="entity_id_entity")
 	private Entity entity;
 	
-	@OneToMany
+	@OneToMany(fetch=FetchType.EAGER)
 	@Type(type="it.polimi.model.Field")
 	@JoinColumn(name="tab_id_tab")
 	private List<Field> fieldList;
 	
 
-	@OneToMany
+	@OneToMany(fetch=FetchType.EAGER)
 	@Type(type="it.polimi.model.Relationship")
 	@JoinColumn(name="tab_id_tab")
 	private List<Relationship> relationshipList;
 	
 	
 
-	@OneToMany
+	@OneToMany(fetch=FetchType.EAGER)
 	@Type(type="it.polimi.model.Enumfield")
 	@JoinColumn(name="tab_id_tab")
 	private List<EnumField> enumFieldList;

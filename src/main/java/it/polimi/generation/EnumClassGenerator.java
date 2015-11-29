@@ -66,7 +66,7 @@ public class EnumClassGenerator {
 		JDefinedClass myClass= null;
 		try {
 			//TODO fix
-			myClass = codeModel._class("it.polimi.domain."+className, ClassType.ENUM);
+			myClass = codeModel._class(Generator.mainPackage+Generator.applicationName+".model."+className, ClassType.ENUM);
 		} catch (JClassAlreadyExistsException e) {
 			e.printStackTrace();
 		}

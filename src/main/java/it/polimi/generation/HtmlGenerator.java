@@ -55,8 +55,8 @@ public class HtmlGenerator {
 		this.attributeList=entityManager.getAttributeList();
 		this.childrenEntity=entityManager.getChildrenEntities();
 		File file = new File(""); 
-		directoryViewPages = file.getAbsolutePath()+Generator.htmlDirectory;
-		directoryAngularFiles=file.getAbsolutePath()+Generator.angularDirectory;
+		directoryViewPages = file.getAbsolutePath()+Generator.htmlDirectory+Generator.applicationName+"/";
+		directoryAngularFiles=file.getAbsolutePath()+Generator.angularDirectory+Generator.applicationName+"/";
 	}
 	
 	
@@ -100,7 +100,7 @@ public class HtmlGenerator {
 			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../css/main.css"))
 			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../css/jquery-ui.css"))
 			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../css/easytree/skin-win8/ui.easytree.css"))
-			.link((new HtmlAttributes()).add("rel","import").add("href", "../"+Generator.menuName));
+			.link((new HtmlAttributes()).add("rel","import").add("href", "../"+Generator.applicationName+Generator.menuName));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -258,7 +258,7 @@ public class HtmlGenerator {
 		
 		File file = new File(""); 
 		String directoryViewPages = file.getAbsolutePath()+Generator.menuDirectory;
-		File menuFile=new File(directoryViewPages+Generator.menuName);
+		File menuFile=new File(directoryViewPages+Generator.applicationName+Generator.menuName);
 		PrintWriter writer;
 		try {
 			System.out.println("Written "+menuFile.getAbsolutePath());

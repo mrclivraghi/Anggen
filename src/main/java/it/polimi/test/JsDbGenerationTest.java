@@ -11,10 +11,12 @@ import it.polimi.generation.HtmlGenerator;
 import it.polimi.generation.JsGenerator;
 import it.polimi.model.entity.Entity;
 import it.polimi.model.entity.EntityGroup;
+import it.polimi.model.entity.Project;
 import it.polimi.model.field.EnumField;
 import it.polimi.repository.EntityGroupRepository;
 import it.polimi.repository.EntityRepository;
 import it.polimi.repository.EnumFieldRepository;
+import it.polimi.repository.ProjectRepository;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,13 +32,10 @@ import java.util.List;
 public class JsDbGenerationTest {
 
 	@Autowired
-	EntityRepository entityRepository;
+	ProjectRepository projectRepository;
 	
 	@Autowired
 	EnumFieldRepository enumFieldRepository;
-	
-	@Autowired
-	EntityGroupRepository entityGroupRepository;
 	
 	public JsDbGenerationTest() {
 		// TODO Auto-generated constructor stub
@@ -45,10 +44,9 @@ public class JsDbGenerationTest {
 	@Test
 	public void createJs()
 	{
-		List<Entity> entityList = entityRepository.findByEntityIdAndNameAndFieldAndRelationshipAndEnumFieldAndTabAndRestrictionEntityAndEntityGroup(null, null, null, null, null, null, null, null);
 		List<EnumField> enumFieldList = enumFieldRepository.findByEnumFieldIdAndNameAndEnumValueAndEntityAndAnnotationAndTab(null, null, null, null, null, null);
-		List<EntityGroup> entityGroupList=entityGroupRepository.findByEntityGroupIdAndNameAndEntityAndRestrictionEntityGroup(null, null, null, null);
-		Generator generator = new Generator(entityGroupList,enumFieldList);
+		Project project = projectRepository.findByName("angGen").get(0);
+		Generator generator = new Generator(project,enumFieldList);
 		generator.generate();
 		
 	}

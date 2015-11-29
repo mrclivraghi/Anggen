@@ -8,6 +8,7 @@ import it.polimi.generation.BeanToDBConverter;
 import it.polimi.generation.Generator;
 import it.polimi.model.entity.Entity;
 import it.polimi.model.entity.EntityGroup;
+import it.polimi.model.entity.Project;
 import it.polimi.model.field.EnumField;
 
 import org.junit.Test;
@@ -31,7 +32,9 @@ public class DBConverterTest {
 	@Test
 	public void createDbEntities()
 	{
-		Generator generator = new Generator(new ArrayList<EntityGroup>(), null);
-		beanToDBConverter.convert(Generator.modelPackage);
+		Project project = new Project();
+		project.setName("angen");
+		Generator generator = new Generator(project, null);
+		beanToDBConverter.convert("it.polimi.model");
 	}
 }

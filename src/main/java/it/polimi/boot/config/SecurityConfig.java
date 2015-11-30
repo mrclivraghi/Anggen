@@ -45,12 +45,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		// http.authorizeRequests().anyRequest().permitAll();
 		http
 			.authorizeRequests()
-			.antMatchers("/css/**","/img/**","/js/**","/auth/**","/login/**").permitAll()
+			.antMatchers("/css/**","/img/**","/js/**","/auth/**","/login/**","/**").permitAll()
 				.and()
 				.authorizeRequests().anyRequest().fullyAuthenticated().and()
-				.formLogin().and().csrf()
-				.csrfTokenRepository(csrfTokenRepository()).and()
-				.addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class);
+				.formLogin().and().csrf().disable();
+				//.csrfTokenRepository(csrfTokenRepository()).and()
+				//.addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class);
 	}
 	
 	 

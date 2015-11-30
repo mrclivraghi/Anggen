@@ -46,6 +46,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
+import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
@@ -226,7 +227,7 @@ public class WebappGenerator {
 			configureBlock.directStatement(".authorizeRequests().anyRequest().fullyAuthenticated().and()");
 			configureBlock.directStatement(".formLogin().and().csrf()");
 			configureBlock.directStatement(".csrfTokenRepository(csrfTokenRepository()).and()");
-			configureBlock.directStatement(".addFilterAfter(new "+Generator.getJDefinedCustomClass(packageName+"boot.CsrfHeaderFilter").fullName()+"(), "+Generator.getJDefinedCustomClass(packageName+"boot.CsrfHeaderFilter").fullName()+".class);");
+			configureBlock.directStatement(".addFilterAfter(new "+Generator.getJDefinedCustomClass(packageName+"boot.CsrfHeaderFilter").fullName()+"(), "+CsrfFilter.class.getName()+".class);");
 			
 			JMethod tokenRepository = securityConfig.method(JMod.PRIVATE, CsrfTokenRepository.class, "csrfTokenRepository");
 			JBlock tokenRepositoryBody=tokenRepository.body();
@@ -263,7 +264,7 @@ public class WebappGenerator {
 			}
 			csrfFilter.annotate(Configuration.class);
 			JAnnotationUse orderAnnotation=csrfFilter.annotate(Order.class);
-			orderAnnotation.param("value", SecurityProperties.ACCESS_OVERRIDE_ORDER);
+			orderAnnotation.param("value", SecurityProperties.ACCESS_OVERRIDE_ORDER);//(, );
 			JMethod doFilter = csrfFilter.method(JMod.PROTECTED, void.class, "doFilterInternal");
 			doFilter.annotate(Override.class);
 			doFilter.param(HttpServletRequest.class, "request");

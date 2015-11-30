@@ -6,10 +6,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import it.polimi.model.security.RestrictionType;
 import it.polimi.utils.annotation.DescriptionField;
 
 @Entity
@@ -92,16 +88,5 @@ public class RestrictionEntityGroup {
     public void setEntityGroup(it.generated.anggen.model.entity.EntityGroup entityGroup) {
         this.entityGroup=entityGroup;
     }
-    
-    @JsonIgnore
-	public Boolean isAllowed(RestrictionType restrictionType)
-	{
-		if (restrictionType==RestrictionType.SEARCH && !canSearch) return false;
-		if (restrictionType==RestrictionType.DELETE && !canDelete) return false;
-		if (restrictionType==RestrictionType.INSERT && !canCreate) return false;
-		if (restrictionType==RestrictionType.UPDATE && !canUpdate) return false;
-		
-		return true;
-	}
 
 }

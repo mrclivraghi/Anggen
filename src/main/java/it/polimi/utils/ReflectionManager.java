@@ -569,13 +569,15 @@ public class ReflectionManager {
 	public static List<String> getSubPackages(String mainPackage)
 	{
 		List<String> packageList= new ArrayList<String>();
-		Reflections reflections = new Reflections("it.polimi.model");
+		Reflections reflections = new Reflections(mainPackage);
 		Set<Class<?>> allClasses = reflections.getTypesAnnotatedWith(Entity.class);
 		for (Class theClass: allClasses)
 		{
 			if (!packageList.contains(theClass.getPackage().getName()) && !theClass.getPackage().getName().equals(mainPackage))
 				packageList.add(theClass.getPackage().getName());
 		}
+		if (packageList.size()==0)
+			packageList.add(mainPackage);
 		return packageList;
 	}
 	

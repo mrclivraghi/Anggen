@@ -274,6 +274,7 @@ public class BeanToDBConverter {
 		for (int i=0; i<annotationArray.length; i++)
 		{
 			it.polimi.model.field.Annotation metaAnnotation = new it.polimi.model.field.Annotation();
+			annotationRepository.save(metaAnnotation);
 			AnnotationType annotationType= null;
 			if (annotationArray[i].annotationType()==Id.class)
 			{

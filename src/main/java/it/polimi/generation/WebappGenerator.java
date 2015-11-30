@@ -1,12 +1,16 @@
 package it.polimi.generation;
 
-import it.generated.anggen.GeneratedApplication;
+import it.generated.anggen.model.security.Role;
 import it.polimi.boot.config.SecurityConfig;
 import it.polimi.utils.Utility;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -33,13 +37,20 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
@@ -51,26 +62,39 @@ import com.sun.codemodel.ClassType;
 import com.sun.codemodel.JAnnotationArrayMember;
 import com.sun.codemodel.JAnnotationUse;
 import com.sun.codemodel.JBlock;
+import com.sun.codemodel.JClass;
 import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JDefinedClass;
+import com.sun.codemodel.JExpr;
 import com.sun.codemodel.JMethod;
 import com.sun.codemodel.JMod;
+import com.sun.codemodel.JType;
 import com.sun.codemodel.JVar;
 
 public class WebappGenerator {
 
 	private String applicationName;
+	private String packageName;
 	private String directory;
-	
 	public WebappGenerator() {
 		applicationName=Generator.applicationName;
-		directory=Generator.mainPackage+applicationName.toLowerCase()+".";
+		
+		packageName=Generator.mainPackage+applicationName.toLowerCase()+".";
+		File file = new File(""); 
+		this.directory = file.getAbsolutePath()+"\\src\\main\\java";
+		
 	}
 	
 	public void generate()
 	{
-		
+		generateAppConfig();
+		generateCsrfHeaderFilter();
+		generateMvcWebAppInitializer();
+		generateMyUserDetailService();
+		generateSecurityConfig();
+		generateSecurityWebappInitializer();
+		generateSpringBootApplication();
 	}
 	
 	private void generateSpringBootApplication()
@@ -78,7 +102,7 @@ public class WebappGenerator {
 		JCodeModel codeModel = new JCodeModel();
 		JDefinedClass genApp=null;
 		try {
-			genApp = codeModel._class(JMod.PUBLIC, directory+Utility.getFirstUpper(applicationName)+"Application", ClassType.CLASS);
+			genApp = codeModel._class(JMod.PUBLIC, packageName+Utility.getFirstUpper(applicationName)+"Application", ClassType.CLASS);
 		} catch (JClassAlreadyExistsException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -99,7 +123,7 @@ public class WebappGenerator {
 		JCodeModel codeModel = new JCodeModel();
 		JDefinedClass appConfig=null;
 		try {
-			appConfig = codeModel._class(JMod.PUBLIC, directory+"boot.config.AppConfig", ClassType.CLASS);
+			appConfig = codeModel._class(JMod.PUBLIC, packageName+"boot.config.AppConfig", ClassType.CLASS);
 		} catch (JClassAlreadyExistsException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -108,7 +132,7 @@ public class WebappGenerator {
 		appConfig.annotate(EnableAutoConfiguration.class);
 		JAnnotationUse componentScanAnnotation = appConfig.annotate(ComponentScan.class);
 		JAnnotationArrayMember member = componentScanAnnotation.paramArray("value");
-		member.param(directory+".*");
+		member.param(packageName+"*");
 		declareVar(appConfig,"formatSql",String.class,"hibernate.format_sql");
 		declareVar(appConfig,"showSql",String.class,"hibernate.show_sql");
 		declareVar(appConfig,"dialect",String.class,"hibernate.dialect");
@@ -127,7 +151,7 @@ public class WebappGenerator {
 		JBlock sessionFactoryBlock=sessionFactory.body();
 		sessionFactoryBlock.directStatement(LocalSessionFactoryBuilder.class.getName()+" builder = ");
 		sessionFactoryBlock.directStatement("new "+LocalSessionFactoryBuilder.class.getName()+"(dataSource());");
-		sessionFactoryBlock.directStatement(" builder.scanPackages(\""+directory+"\")");
+		sessionFactoryBlock.directStatement(" builder.scanPackages(\""+packageName.substring(0, packageName.length()-1)+"\")");
 		sessionFactoryBlock.directStatement(".addProperties(getHibernateProperties());");
 		sessionFactoryBlock.directStatement("return builder.buildSessionFactory();");
 		JMethod hibProperties = appConfig.method(JMod.PRIVATE, Properties.class,"getHibernateProperties");
@@ -176,7 +200,7 @@ public class WebappGenerator {
 			JCodeModel codeModel = new JCodeModel();
 			JDefinedClass securityConfig=null;
 			try {
-				securityConfig = codeModel._class(JMod.PUBLIC, directory+"boot.config.SecurityConfig", ClassType.CLASS);
+				securityConfig = codeModel._class(JMod.PUBLIC, packageName+"boot.config.SecurityConfig", ClassType.CLASS);
 				securityConfig._extends(WebSecurityConfigurerAdapter.class);
 			} catch (JClassAlreadyExistsException e) {
 				// TODO Auto-generated catch block
@@ -190,6 +214,7 @@ public class WebappGenerator {
 			qualifierAnnotation.param("value", "userDetailsService");
 			
 			JMethod configure = securityConfig.method(JMod.PROTECTED, void.class, "configure");
+			configure._throws(Exception.class);
 			configure.param(HttpSecurity.class, "http");
 			configure.annotate(Override.class);
 			
@@ -201,7 +226,7 @@ public class WebappGenerator {
 			configureBlock.directStatement(".authorizeRequests().anyRequest().fullyAuthenticated().and()");
 			configureBlock.directStatement(".formLogin().and().csrf()");
 			configureBlock.directStatement(".csrfTokenRepository(csrfTokenRepository()).and()");
-			configureBlock.directStatement(".addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class);");
+			configureBlock.directStatement(".addFilterAfter(new "+Generator.getJDefinedCustomClass(packageName+"boot.CsrfHeaderFilter").fullName()+"(), "+Generator.getJDefinedCustomClass(packageName+"boot.CsrfHeaderFilter").fullName()+".class);");
 			
 			JMethod tokenRepository = securityConfig.method(JMod.PRIVATE, CsrfTokenRepository.class, "csrfTokenRepository");
 			JBlock tokenRepositoryBody=tokenRepository.body();
@@ -222,6 +247,7 @@ public class WebappGenerator {
 			passwordEncoderBlock.directStatement("PasswordEncoder encoder = new "+BCryptPasswordEncoder.class.getName()+"();");
 			passwordEncoderBlock.directStatement("return encoder;");
 			
+			saveFile(codeModel);
 	}
 	private void generateCsrfHeaderFilter()
 	{
@@ -229,7 +255,7 @@ public class WebappGenerator {
 		JCodeModel codeModel = new JCodeModel();
 			JDefinedClass csrfFilter=null;
 			try {
-				csrfFilter = codeModel._class(JMod.PUBLIC, directory+"boot.CsrfHeaderFilter", ClassType.CLASS);
+				csrfFilter = codeModel._class(JMod.PUBLIC, packageName+"boot.CsrfHeaderFilter", ClassType.CLASS);
 				csrfFilter._extends(OncePerRequestFilter.class);
 			} catch (JClassAlreadyExistsException e) {
 				// TODO Auto-generated catch block
@@ -265,7 +291,7 @@ public class WebappGenerator {
 		JCodeModel codeModel = new JCodeModel();
 		JDefinedClass waInit=null;
 		try {
-			waInit = codeModel._class(JMod.PUBLIC, directory+"boot.MvcWebApplicationInitializer", ClassType.CLASS);
+			waInit = codeModel._class(JMod.PUBLIC, packageName+"boot.MvcWebApplicationInitializer", ClassType.CLASS);
 			waInit._extends(AbstractAnnotationConfigDispatcherServletInitializer.class);
 		} catch (JClassAlreadyExistsException e) {
 			// TODO Auto-generated catch block
@@ -286,7 +312,7 @@ public class WebappGenerator {
 		JMethod getRootConfig = waInit.method(JMod.PROTECTED, Class[].class, "getRootConfigClasses");
 		getRootConfig.annotate(Override.class);
 		JBlock rootConfigBlock = getRootConfig.body();
-		rootConfigBlock.directStatement("return new Class[] {"+directory+"boot.config.SecurityConfig.class};");
+		rootConfigBlock.directStatement("return new Class[] {"+packageName+"boot.config.SecurityConfig.class};");
 	
 		
 		
@@ -294,14 +320,68 @@ public class WebappGenerator {
 	}
 	private void generateMyUserDetailService()
 	{
+		JCodeModel codeModel = new JCodeModel();
+		JDefinedClass userDetailService=null;
+		try {
+			userDetailService = codeModel._class(JMod.PUBLIC, packageName+"boot.MyUserDetailService", ClassType.CLASS);
+			userDetailService._implements(UserDetailsService.class);
+		} catch (JClassAlreadyExistsException e) {
+			e.printStackTrace();
+		}
+		JAnnotationUse serviceAnnotation=userDetailService.annotate(Service.class);
+		serviceAnnotation.param("value", "userDetailsService");
 		
+		JVar userRepository = userDetailService.field(JMod.PRIVATE, Generator.getJDefinedCustomClass(packageName+"repository.security.UserRepository"), "userRepository");
+		userRepository.annotate(Autowired.class);
+		
+		
+		JMethod loadUserByUsername = userDetailService.method(JMod.PUBLIC, UserDetails.class, "loadUserByUsername");
+		loadUserByUsername.annotate(Override.class);
+		JAnnotationUse transactionalAnnotation = loadUserByUsername.annotate(Transactional.class);
+		transactionalAnnotation.param("readOnly", true);
+		loadUserByUsername.param(JMod.FINAL, String.class, "username");
+		loadUserByUsername._throws(UsernameNotFoundException.class);
+		JType userClass=Generator.getJDefinedCustomClass(packageName+"model.security.User");
+		JClass userListClass = codeModel.ref(List.class).narrow(userClass);
+		
+		//JVar userList = loadUserByUsername.
+		JBlock loadUserBlock = loadUserByUsername.body();
+		JVar userList=loadUserBlock.decl(userListClass, "userList");
+		userList.init(JExpr.direct("userRepository.findByUsername(username)"));
+		loadUserBlock.directStatement("if (userList==null || userList.size()==0)");
+		loadUserBlock.directStatement("throw new UsernameNotFoundException(\"Username \"+username+\" not found\");");
+		loadUserBlock.directStatement(userClass.fullName()+" user = userList.get(0);");
+		loadUserBlock.directStatement("List<"+GrantedAuthority.class.getName()+"> authorities = buildUserAuthority(user.getRoleList());");
+		loadUserBlock.directStatement("return buildUserForAuthentication(user, authorities);");
+		
+		JMethod buildUserAuth = userDetailService.method(JMod.PRIVATE, User.class, "buildUserForAuthentication");
+		buildUserAuth.param(userClass, "user");
+		JClass authList=codeModel.ref(List.class).narrow(GrantedAuthority.class);
+		buildUserAuth.param(authList, "authorities");
+		JBlock buildUserAuthBlock= buildUserAuth.body();
+		buildUserAuthBlock.directStatement("return new "+User.class.getName()+"(user.getUsername(), user.getPassword(),user.getEnabled(), true, true, true, authorities);");
+
+		JMethod buildUserAuthority = userDetailService.method(JMod.PRIVATE, authList, "buildUserAuthority");
+		JClass roleList=codeModel.ref(List.class).narrow(Generator.getJDefinedCustomClass(packageName+"model.security.Role"));
+		
+		buildUserAuthority.param(roleList, "roleList");
+		JBlock buildUserAuthorityBlock = buildUserAuthority.body();
+		JClass grantedSet=codeModel.ref(Set.class).narrow(GrantedAuthority.class);
+		JVar grantedSetVar=buildUserAuthorityBlock.decl(grantedSet, "setAuths");
+		grantedSetVar.init(JExpr.direct("new "+HashSet.class.getName()+"<"+GrantedAuthority.class.getName()+">()"));
+		buildUserAuthorityBlock.directStatement("for ("+Generator.getJDefinedCustomClass(packageName+"model.security.Role").fullName()+" role: roleList)");
+		buildUserAuthorityBlock.directStatement("setAuths.add(new "+SimpleGrantedAuthority.class.getName()+"(role.getRole()));");
+		buildUserAuthorityBlock.directStatement("List<"+GrantedAuthority.class.getName()+"> result = new "+ArrayList.class.getName()+"<"+GrantedAuthority.class.getName()+">(setAuths);");
+		buildUserAuthorityBlock.directStatement("return result;");
+		
+		saveFile(codeModel);
 	}
 	private void generateSecurityWebappInitializer()
 	{
 		JCodeModel codeModel = new JCodeModel();
 		JDefinedClass securityWebAppInit=null;
 		try {
-			securityWebAppInit = codeModel._class(JMod.PUBLIC, directory+"boot.SecurityWebApplicationInitializer", ClassType.CLASS);
+			securityWebAppInit = codeModel._class(JMod.PUBLIC, packageName+"boot.SecurityWebApplicationInitializer", ClassType.CLASS);
 			securityWebAppInit._extends(AbstractSecurityWebApplicationInitializer.class);
 		} catch (JClassAlreadyExistsException e) {
 			e.printStackTrace();

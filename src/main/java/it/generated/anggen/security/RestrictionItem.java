@@ -1,7 +1,7 @@
 package it.generated.anggen.security;
 
-
-import it.generated.anggen.model.entity.Entity;
+import it.polimi.model.entity.Entity;
+import it.polimi.model.security.RestrictionField;
 
 import java.util.List;
 import java.util.Map;

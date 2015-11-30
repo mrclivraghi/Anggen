@@ -243,6 +243,8 @@ public class Generator {
 				else //DEFAULTS
 					HtmlGenerator.GenerateMenu(entityGroupList);
 			}
+			WebappGenerator webappGenerator= new WebappGenerator();
+			webappGenerator.generate();
 	}
 
 	

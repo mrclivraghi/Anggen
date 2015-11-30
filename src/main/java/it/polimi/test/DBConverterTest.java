@@ -33,8 +33,8 @@ public class DBConverterTest {
 	public void createDbEntities()
 	{
 		Project project = new Project();
-		project.setName("angen");
+		project.setName("test");
 		Generator generator = new Generator(project, null);
-		beanToDBConverter.convert("it.polimi.model");
+		beanToDBConverter.convert("it.polimi.domain");
 	}
 }

@@ -55,7 +55,7 @@ public class HtmlGenerator {
 		this.attributeList=entityManager.getAttributeList();
 		this.childrenEntity=entityManager.getChildrenEntities();
 		File file = new File(""); 
-		directoryViewPages = file.getAbsolutePath()+Generator.htmlDirectory+Generator.applicationName+"/";
+		directoryViewPages = file.getAbsolutePath()+Generator.htmlDirectory+"/";
 		directoryAngularFiles=file.getAbsolutePath()+Generator.angularDirectory+Generator.applicationName+"/";
 	}
 	

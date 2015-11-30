@@ -22,9 +22,9 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
-@Configuration
-@EnableAutoConfiguration
-@ComponentScan({ "it.polimi.*" })
+//@Configuration
+//@EnableAutoConfiguration
+//@ComponentScan({ "it.polimi.*" })
 public class AppConfig {
 	
 

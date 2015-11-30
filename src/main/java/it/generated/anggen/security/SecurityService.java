@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-@Service
+//@Service
 public class SecurityService{
 
 	@Autowired

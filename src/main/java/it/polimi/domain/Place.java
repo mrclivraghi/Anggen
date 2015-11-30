@@ -13,8 +13,8 @@ import javax.validation.constraints.Size;
 import it.polimi.utils.annotation.DescriptionField;
 import it.polimi.utils.annotation.Filter;
 
-@Entity
-@Table(schema = "public", name = "place")
+//@Entity
+//@Table(schema = "public", name = "place")
 public class Place {
 
     public final static Long entityId = 130L;

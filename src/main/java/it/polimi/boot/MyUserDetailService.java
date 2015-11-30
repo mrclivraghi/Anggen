@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 
-@Service("userDetailsService")
+//@Service("userDetailsService")
 public class MyUserDetailService implements UserDetailsService {
 
 	//get user from the database, via Hibernate

@@ -1,7 +1,6 @@
 package it.polimi.generation;
 
-import it.generated.anggen.model.security.Role;
-import it.polimi.boot.config.SecurityConfig;
+import it.polimi.repository.UserRepository;
 import it.polimi.utils.Utility;
 
 import java.io.File;
@@ -152,7 +151,7 @@ public class WebappGenerator {
 		JBlock sessionFactoryBlock=sessionFactory.body();
 		sessionFactoryBlock.directStatement(LocalSessionFactoryBuilder.class.getName()+" builder = ");
 		sessionFactoryBlock.directStatement("new "+LocalSessionFactoryBuilder.class.getName()+"(dataSource());");
-		sessionFactoryBlock.directStatement(" builder.scanPackages(\""+packageName.substring(0, packageName.length()-1)+"\")");
+		sessionFactoryBlock.directStatement(" builder.scanPackages(\""+packageName.substring(0, packageName.length()-1)+"\",\"it.polimi.model\")");
 		sessionFactoryBlock.directStatement(".addProperties(getHibernateProperties());");
 		sessionFactoryBlock.directStatement("return builder.buildSessionFactory();");
 		JMethod hibProperties = appConfig.method(JMod.PRIVATE, Properties.class,"getHibernateProperties");
@@ -182,7 +181,7 @@ public class WebappGenerator {
 		JBlock viewResolverBlock = viewResolver.body();
 		viewResolverBlock.directStatement(InternalResourceViewResolver.class.getName()+" viewResolver= new "+InternalResourceViewResolver.class.getName()+"();");
 		viewResolverBlock.directStatement("viewResolver.setViewClass("+JstlView.class.getName()+".class);");
-		viewResolverBlock.directStatement("viewResolver.setPrefix(\"/WEB-INF/jsp/"+applicationName.toLowerCase()+"/\");");
+		viewResolverBlock.directStatement("viewResolver.setPrefix(\"/WEB-INF/jsp/\");");
 		viewResolverBlock.directStatement("viewResolver.setSuffix(\".jsp\");");
 		viewResolverBlock.directStatement("return viewResolver;");
 		
@@ -329,10 +328,15 @@ public class WebappGenerator {
 		} catch (JClassAlreadyExistsException e) {
 			e.printStackTrace();
 		}
+		
+		JType userClass=codeModel.ref(it.polimi.model.security.User.class);//Generator.getJDefinedCustomClass(packageName+"model.security.User");
+		JType roleClass=codeModel.ref(it.polimi.model.security.Role.class);//Generator.getJDefinedCustomClass(packageName+"model.security.Role");
+		JType userRepositoryClass= codeModel.ref(UserRepository.class);//Generator.getJDefinedCustomClass(packageName+"repository.security.UserRepository")
+		
 		JAnnotationUse serviceAnnotation=userDetailService.annotate(Service.class);
 		serviceAnnotation.param("value", "userDetailsService");
 		
-		JVar userRepository = userDetailService.field(JMod.PRIVATE, Generator.getJDefinedCustomClass(packageName+"repository.security.UserRepository"), "userRepository");
+		JVar userRepository = userDetailService.field(JMod.PRIVATE, userRepositoryClass, "userRepository");
 		userRepository.annotate(Autowired.class);
 		
 		
@@ -342,7 +346,6 @@ public class WebappGenerator {
 		transactionalAnnotation.param("readOnly", true);
 		loadUserByUsername.param(JMod.FINAL, String.class, "username");
 		loadUserByUsername._throws(UsernameNotFoundException.class);
-		JType userClass=Generator.getJDefinedCustomClass(packageName+"model.security.User");
 		JClass userListClass = codeModel.ref(List.class).narrow(userClass);
 		
 		//JVar userList = loadUserByUsername.
@@ -363,14 +366,15 @@ public class WebappGenerator {
 		buildUserAuthBlock.directStatement("return new "+User.class.getName()+"(user.getUsername(), user.getPassword(),user.getEnabled(), true, true, true, authorities);");
 
 		JMethod buildUserAuthority = userDetailService.method(JMod.PRIVATE, authList, "buildUserAuthority");
-		JClass roleList=codeModel.ref(List.class).narrow(Generator.getJDefinedCustomClass(packageName+"model.security.Role"));
+		
+		JClass roleList=codeModel.ref(List.class).narrow(roleClass);
 		
 		buildUserAuthority.param(roleList, "roleList");
 		JBlock buildUserAuthorityBlock = buildUserAuthority.body();
 		JClass grantedSet=codeModel.ref(Set.class).narrow(GrantedAuthority.class);
 		JVar grantedSetVar=buildUserAuthorityBlock.decl(grantedSet, "setAuths");
 		grantedSetVar.init(JExpr.direct("new "+HashSet.class.getName()+"<"+GrantedAuthority.class.getName()+">()"));
-		buildUserAuthorityBlock.directStatement("for ("+Generator.getJDefinedCustomClass(packageName+"model.security.Role").fullName()+" role: roleList)");
+		buildUserAuthorityBlock.directStatement("for ("+roleClass.fullName()+" role: roleList)");
 		buildUserAuthorityBlock.directStatement("setAuths.add(new "+SimpleGrantedAuthority.class.getName()+"(role.getRole()));");
 		buildUserAuthorityBlock.directStatement("List<"+GrantedAuthority.class.getName()+"> result = new "+ArrayList.class.getName()+"<"+GrantedAuthority.class.getName()+">(setAuths);");
 		buildUserAuthorityBlock.directStatement("return result;");

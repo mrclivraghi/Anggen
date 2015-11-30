@@ -16,8 +16,8 @@ import it.polimi.domain.Place;
 import it.polimi.utils.annotation.DescriptionField;
 import org.hibernate.annotations.Type;
 
-@Entity
-@Table(schema = "public", name = "example")
+//@Entity
+//@Table(schema = "public", name = "example")
 public class Example {
 
     public final static Long entityId = 80L;

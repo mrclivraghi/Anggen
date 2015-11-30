@@ -25,8 +25,8 @@ import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.WebUtils;
 
-@Configuration
-@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
+//@Configuration
+//@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 public class CsrfHeaderFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request,

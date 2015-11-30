@@ -602,7 +602,7 @@ public class RestGenerator {
 			//declare service
 			JVar repository = myClass.field(JMod.PRIVATE, serviceInterfaceClass, lowerClass+"Service");
 			repository.annotate(Autowired.class);
-			JVar securityService= myClass.field(JMod.PRIVATE,Generator.getJDefinedCustomClass("it.generated."+Generator.applicationName+".security.SecurityService"), "securityService");
+			JVar securityService= myClass.field(JMod.PRIVATE,SecurityService.class, "securityService");
 			securityService.annotate(Autowired.class);
 			
 			JClass factory = codeModel.directClass("org.slf4j.LoggerFactory");

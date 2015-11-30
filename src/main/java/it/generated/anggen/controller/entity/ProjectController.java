@@ -124,9 +124,9 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         {
 
-        entityGroup.setEntityList(null);
-        entityGroup.setRestrictionEntityGroupList(null);
         entityGroup.setProject(null);
+        entityGroup.setRestrictionEntityGroupList(null);
+        entityGroup.setEntityList(null);
         }
     }
 

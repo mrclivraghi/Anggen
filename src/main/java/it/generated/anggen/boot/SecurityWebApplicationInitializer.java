@@ -1,13 +1,16 @@
-package it.generated.anggen.boot;
 
+package it.generated.anggen.boot;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
 
 @Configuration
 public class SecurityWebApplicationInitializer
-extends AbstractSecurityWebApplicationInitializer {
+    extends AbstractSecurityWebApplicationInitializer
+{
 
-public SecurityWebApplicationInitializer() {
-}
+
+    public SecurityWebApplicationInitializer() {
+    }
+
 }

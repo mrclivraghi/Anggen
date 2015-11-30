@@ -6,17 +6,17 @@ import it.generated.anggen.model.entity.EntityGroup;
 
 public class ProjectSearchBean {
 
-    public java.lang.Long entityId;
-    public java.lang.Integer projectId;
     public java.lang.String name;
+    public java.lang.Integer projectId;
+    public java.lang.Long entityId;
     public List<EntityGroup> entityGroupList;
 
-    public java.lang.Long getEntityId() {
-        return this.entityId;
+    public java.lang.String getName() {
+        return this.name;
     }
 
-    public void setEntityId(java.lang.Long entityId) {
-        this.entityId=entityId;
+    public void setName(java.lang.String name) {
+        this.name=name;
     }
 
     public java.lang.Integer getProjectId() {
@@ -27,12 +27,12 @@ public class ProjectSearchBean {
         this.projectId=projectId;
     }
 
-    public java.lang.String getName() {
-        return this.name;
+    public java.lang.Long getEntityId() {
+        return this.entityId;
     }
 
-    public void setName(java.lang.String name) {
-        this.name=name;
+    public void setEntityId(java.lang.Long entityId) {
+        this.entityId=entityId;
     }
 
     public List<EntityGroup> getEntityGroupList() {

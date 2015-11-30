@@ -119,6 +119,32 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     }
 
     private void getRightMapping(it.generated.anggen.model.field.EnumField enumField) {
+        if (enumField.getTab()!=null)
+        {
+        enumField.getTab().setEnumFieldList(null);
+        enumField.getTab().setRelationshipList(null);
+        enumField.getTab().setFieldList(null);
+        enumField.getTab().setEntity(null);
+        }
+        if (enumField.getAnnotationList()!=null)
+        for (it.generated.anggen.model.field.Annotation annotation :enumField.getAnnotationList())
+
+        {
+
+        annotation.setEnumField(null);
+        annotation.setRelationship(null);
+        annotation.setField(null);
+        annotation.setAnnotationAttributeList(null);
+        }
+        if (enumField.getEntity()!=null)
+        {
+        enumField.getEntity().setEntityGroup(null);
+        enumField.getEntity().setRestrictionEntityList(null);
+        enumField.getEntity().setTabList(null);
+        enumField.getEntity().setEnumFieldList(null);
+        enumField.getEntity().setRelationshipList(null);
+        enumField.getEntity().setFieldList(null);
+        }
         if (enumField.getEnumValueList()!=null)
         for (it.generated.anggen.model.field.EnumValue enumValue :enumField.getEnumValueList())
 
@@ -126,43 +152,17 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         enumValue.setEnumField(null);
         }
-        if (enumField.getEntity()!=null)
-        {
-        enumField.getEntity().setFieldList(null);
-        enumField.getEntity().setRelationshipList(null);
-        enumField.getEntity().setEnumFieldList(null);
-        enumField.getEntity().setTabList(null);
-        enumField.getEntity().setRestrictionEntityList(null);
-        enumField.getEntity().setEntityGroup(null);
-        }
-        if (enumField.getAnnotationList()!=null)
-        for (it.generated.anggen.model.field.Annotation annotation :enumField.getAnnotationList())
-
-        {
-
-        annotation.setField(null);
-        annotation.setRelationship(null);
-        annotation.setEnumField(null);
-        annotation.setAnnotationAttributeList(null);
-        }
-        if (enumField.getTab()!=null)
-        {
-        enumField.getTab().setEntity(null);
-        enumField.getTab().setFieldList(null);
-        enumField.getTab().setRelationshipList(null);
-        enumField.getTab().setEnumFieldList(null);
-        }
     }
 
     private void rebuildSecurityMapping(it.generated.anggen.model.field.EnumField enumField) {
-        if (!securityService.isAllowed(it.generated.anggen.model.field.EnumValue.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH))
-        enumField.setEnumValueList(enumFieldService.findById(enumField.getEnumFieldId()).get(0).getEnumValueList());
-        if (!securityService.isAllowed(it.generated.anggen.model.entity.Entity.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH))
-        enumField.setEntity(enumFieldService.findById(enumField.getEnumFieldId()).get(0).getEntity());
-        if (!securityService.isAllowed(it.generated.anggen.model.field.Annotation.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH))
-        enumField.setAnnotationList(enumFieldService.findById(enumField.getEnumFieldId()).get(0).getAnnotationList());
         if (!securityService.isAllowed(it.generated.anggen.model.entity.Tab.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH))
         enumField.setTab(enumFieldService.findById(enumField.getEnumFieldId()).get(0).getTab());
+        if (!securityService.isAllowed(it.generated.anggen.model.field.Annotation.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH))
+        enumField.setAnnotationList(enumFieldService.findById(enumField.getEnumFieldId()).get(0).getAnnotationList());
+        if (!securityService.isAllowed(it.generated.anggen.model.entity.Entity.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH))
+        enumField.setEntity(enumFieldService.findById(enumField.getEnumFieldId()).get(0).getEntity());
+        if (!securityService.isAllowed(it.generated.anggen.model.field.EnumValue.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH))
+        enumField.setEnumValueList(enumFieldService.findById(enumField.getEnumFieldId()).get(0).getEnumValueList());
     }
 
     private List<it.generated.anggen.model.field.EnumField> getSecurityMapping(List<it.generated.anggen.model.field.EnumField> enumFieldList) {
@@ -174,17 +174,17 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     }
 
     private void getSecurityMapping(it.generated.anggen.model.field.EnumField enumField) {
-        if (enumField.getEnumValueList()!=null && !securityService.isAllowed(it.generated.anggen.model.field.EnumValue.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH) )
-        enumField.setEnumValueList(null);
-
-        if (enumField.getEntity()!=null  && !securityService.isAllowed(it.generated.anggen.model.entity.Entity.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH) )
-        enumField.setEntity(null);
+        if (enumField.getTab()!=null  && !securityService.isAllowed(it.generated.anggen.model.entity.Tab.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH) )
+        enumField.setTab(null);
 
         if (enumField.getAnnotationList()!=null && !securityService.isAllowed(it.generated.anggen.model.field.Annotation.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH) )
         enumField.setAnnotationList(null);
 
-        if (enumField.getTab()!=null  && !securityService.isAllowed(it.generated.anggen.model.entity.Tab.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH) )
-        enumField.setTab(null);
+        if (enumField.getEntity()!=null  && !securityService.isAllowed(it.generated.anggen.model.entity.Entity.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH) )
+        enumField.setEntity(null);
+
+        if (enumField.getEnumValueList()!=null && !securityService.isAllowed(it.generated.anggen.model.field.EnumValue.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH) )
+        enumField.setEnumValueList(null);
 
     }
 

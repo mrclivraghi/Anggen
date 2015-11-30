@@ -8,20 +8,12 @@ import it.generated.anggen.model.relationship.Relationship;
 
 public class TabSearchBean {
 
-    public java.lang.Long tabId;
     public java.lang.String name;
-    public it.generated.anggen.model.entity.Entity entity;
-    public List<Field> fieldList;
-    public List<Relationship> relationshipList;
+    public java.lang.Long tabId;
     public List<EnumField> enumFieldList;
-
-    public java.lang.Long getTabId() {
-        return this.tabId;
-    }
-
-    public void setTabId(java.lang.Long tabId) {
-        this.tabId=tabId;
-    }
+    public List<Relationship> relationshipList;
+    public List<Field> fieldList;
+    public it.generated.anggen.model.entity.Entity entity;
 
     public java.lang.String getName() {
         return this.name;
@@ -31,20 +23,20 @@ public class TabSearchBean {
         this.name=name;
     }
 
-    public it.generated.anggen.model.entity.Entity getEntity() {
-        return this.entity;
+    public java.lang.Long getTabId() {
+        return this.tabId;
     }
 
-    public void setEntity(it.generated.anggen.model.entity.Entity entity) {
-        this.entity=entity;
+    public void setTabId(java.lang.Long tabId) {
+        this.tabId=tabId;
     }
 
-    public List<Field> getFieldList() {
-        return this.fieldList;
+    public List<EnumField> getEnumFieldList() {
+        return this.enumFieldList;
     }
 
-    public void setFieldList(List<Field> fieldList) {
-        this.fieldList=fieldList;
+    public void setEnumFieldList(List<EnumField> enumFieldList) {
+        this.enumFieldList=enumFieldList;
     }
 
     public List<Relationship> getRelationshipList() {
@@ -55,12 +47,20 @@ public class TabSearchBean {
         this.relationshipList=relationshipList;
     }
 
-    public List<EnumField> getEnumFieldList() {
-        return this.enumFieldList;
+    public List<Field> getFieldList() {
+        return this.fieldList;
     }
 
-    public void setEnumFieldList(List<EnumField> enumFieldList) {
-        this.enumFieldList=enumFieldList;
+    public void setFieldList(List<Field> fieldList) {
+        this.fieldList=fieldList;
+    }
+
+    public it.generated.anggen.model.entity.Entity getEntity() {
+        return this.entity;
+    }
+
+    public void setEntity(it.generated.anggen.model.entity.Entity entity) {
+        this.entity=entity;
     }
 
 }

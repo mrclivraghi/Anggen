@@ -121,10 +121,10 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     private void getRightMapping(it.generated.anggen.model.field.EnumValue enumValue) {
         if (enumValue.getEnumField()!=null)
         {
-        enumValue.getEnumField().setEnumValueList(null);
-        enumValue.getEnumField().setEntity(null);
-        enumValue.getEnumField().setAnnotationList(null);
         enumValue.getEnumField().setTab(null);
+        enumValue.getEnumField().setAnnotationList(null);
+        enumValue.getEnumField().setEntity(null);
+        enumValue.getEnumField().setEnumValueList(null);
         }
     }
 

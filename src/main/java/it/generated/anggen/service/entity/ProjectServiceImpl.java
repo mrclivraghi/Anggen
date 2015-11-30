@@ -26,7 +26,7 @@ public class ProjectServiceImpl
 
     @Override
     public List<it.generated.anggen.model.entity.Project> find(ProjectSearchBean project) {
-        return projectRepository.findByEntityIdAndProjectIdAndNameAndEntityGroup(project.getEntityId(),project.getProjectId(),project.getName(),project.getEntityGroupList()==null? null :project.getEntityGroupList().get(0));
+        return projectRepository.findByNameAndProjectIdAndEntityIdAndEntityGroup(project.getName(),project.getProjectId(),project.getEntityId(),project.getEntityGroupList()==null? null :project.getEntityGroupList().get(0));
     }
 
     @Override

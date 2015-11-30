@@ -17,29 +17,29 @@ public interface EntityRepository
 {
 
 
-    public List<it.generated.anggen.model.entity.Entity> findByEntityId(java.lang.Long entityId);
-
     public List<it.generated.anggen.model.entity.Entity> findByName(java.lang.String name);
+
+    public List<it.generated.anggen.model.entity.Entity> findByEntityId(java.lang.Long entityId);
 
     public List<it.generated.anggen.model.entity.Entity> findByEntityGroup(it.generated.anggen.model.entity.EntityGroup entityGroup);
 
-    @Query("select e from Entity e where  (:entityId is null or cast(:entityId as string)=cast(e.entityId as string)) and (:name is null or :name='' or cast(:name as string)=e.name) and (:field in elements(e.fieldList)  or :field is null) and (:relationship in elements(e.relationshipList)  or :relationship is null) and (:enumField in elements(e.enumFieldList)  or :enumField is null) and (:tab in elements(e.tabList)  or :tab is null) and (:restrictionEntity in elements(e.restrictionEntityList)  or :restrictionEntity is null) and (:entityGroup=e.entityGroup or :entityGroup is null) ")
-    public List<it.generated.anggen.model.entity.Entity> findByEntityIdAndNameAndFieldAndRelationshipAndEnumFieldAndTabAndRestrictionEntityAndEntityGroup(
-        @org.springframework.data.repository.query.Param("entityId")
-        java.lang.Long entityId,
+    @Query("select e from Entity e where  (:name is null or :name='' or cast(:name as string)=e.name) and (:entityId is null or cast(:entityId as string)=cast(e.entityId as string)) and (:entityGroup=e.entityGroup or :entityGroup is null) and (:restrictionEntity in elements(e.restrictionEntityList)  or :restrictionEntity is null) and (:tab in elements(e.tabList)  or :tab is null) and (:enumField in elements(e.enumFieldList)  or :enumField is null) and (:relationship in elements(e.relationshipList)  or :relationship is null) and (:field in elements(e.fieldList)  or :field is null) ")
+    public List<it.generated.anggen.model.entity.Entity> findByNameAndEntityIdAndEntityGroupAndRestrictionEntityAndTabAndEnumFieldAndRelationshipAndField(
         @org.springframework.data.repository.query.Param("name")
         java.lang.String name,
-        @org.springframework.data.repository.query.Param("field")
-        Field field,
-        @org.springframework.data.repository.query.Param("relationship")
-        Relationship relationship,
-        @org.springframework.data.repository.query.Param("enumField")
-        EnumField enumField,
-        @org.springframework.data.repository.query.Param("tab")
-        Tab tab,
+        @org.springframework.data.repository.query.Param("entityId")
+        java.lang.Long entityId,
+        @org.springframework.data.repository.query.Param("entityGroup")
+        it.generated.anggen.model.entity.EntityGroup entityGroup,
         @org.springframework.data.repository.query.Param("restrictionEntity")
         RestrictionEntity restrictionEntity,
-        @org.springframework.data.repository.query.Param("entityGroup")
-        it.generated.anggen.model.entity.EntityGroup entityGroup);
+        @org.springframework.data.repository.query.Param("tab")
+        Tab tab,
+        @org.springframework.data.repository.query.Param("enumField")
+        EnumField enumField,
+        @org.springframework.data.repository.query.Param("relationship")
+        Relationship relationship,
+        @org.springframework.data.repository.query.Param("field")
+        Field field);
 
 }

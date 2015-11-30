@@ -7,9 +7,9 @@ import it.generated.anggen.model.field.AnnotationAttribute;
 public class AnnotationSearchBean {
 
     public java.lang.Long annotationId;
-    public it.generated.anggen.model.field.Field field;
-    public it.generated.anggen.model.relationship.Relationship relationship;
     public it.generated.anggen.model.field.EnumField enumField;
+    public it.generated.anggen.model.relationship.Relationship relationship;
+    public it.generated.anggen.model.field.Field field;
     public List<AnnotationAttribute> annotationAttributeList;
     public it.generated.anggen.model.AnnotationType annotationType;
 
@@ -21,12 +21,12 @@ public class AnnotationSearchBean {
         this.annotationId=annotationId;
     }
 
-    public it.generated.anggen.model.field.Field getField() {
-        return this.field;
+    public it.generated.anggen.model.field.EnumField getEnumField() {
+        return this.enumField;
     }
 
-    public void setField(it.generated.anggen.model.field.Field field) {
-        this.field=field;
+    public void setEnumField(it.generated.anggen.model.field.EnumField enumField) {
+        this.enumField=enumField;
     }
 
     public it.generated.anggen.model.relationship.Relationship getRelationship() {
@@ -37,12 +37,12 @@ public class AnnotationSearchBean {
         this.relationship=relationship;
     }
 
-    public it.generated.anggen.model.field.EnumField getEnumField() {
-        return this.enumField;
+    public it.generated.anggen.model.field.Field getField() {
+        return this.field;
     }
 
-    public void setEnumField(it.generated.anggen.model.field.EnumField enumField) {
-        this.enumField=enumField;
+    public void setField(it.generated.anggen.model.field.Field field) {
+        this.field=field;
     }
 
     public List<AnnotationAttribute> getAnnotationAttributeList() {

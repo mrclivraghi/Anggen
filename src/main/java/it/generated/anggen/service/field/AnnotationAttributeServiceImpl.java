@@ -24,7 +24,7 @@ public class AnnotationAttributeServiceImpl
 
     @Override
     public List<it.generated.anggen.model.field.AnnotationAttribute> find(AnnotationAttributeSearchBean annotationAttribute) {
-        return annotationAttributeRepository.findByAnnotationAttributeIdAndPropertyAndValueAndAnnotation(annotationAttribute.getAnnotationAttributeId(),annotationAttribute.getProperty(),annotationAttribute.getValue(),annotationAttribute.getAnnotation());
+        return annotationAttributeRepository.findByValueAndPropertyAndAnnotationAttributeIdAndAnnotation(annotationAttribute.getValue(),annotationAttribute.getProperty(),annotationAttribute.getAnnotationAttributeId(),annotationAttribute.getAnnotation());
     }
 
     @Override

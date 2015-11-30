@@ -18,37 +18,29 @@ import org.hibernate.annotations.Type;
 @Table(schema = "mustle", name = "tab")
 public class Tab {
 
-    public final static java.lang.Long staticEntityId = 4710L;
+    public final static java.lang.Long staticEntityId = 5287L;
+    @javax.persistence.Column(name = "name")
+    private String name;
     @javax.persistence.Column(name = "tab_id")
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @DescriptionField
     private java.lang.Long tabId;
-    @javax.persistence.Column(name = "name")
-    private String name;
-    @ManyToOne(fetch = javax.persistence.FetchType.EAGER)
-    @javax.persistence.JoinColumn(name = "entity_id_entity")
-    private it.generated.anggen.model.entity.Entity entity;
     @OneToMany(fetch = javax.persistence.FetchType.EAGER)
-    @Type(type = "it.generated.anggen.model.field.Field")
-    @javax.persistence.JoinColumn(name = "tab_id_field")
-    private List<Field> fieldList;
+    @Type(type = "it.generated.anggen.model.field.EnumField")
+    @javax.persistence.JoinColumn(name = "tab_id_enum_field")
+    private List<EnumField> enumFieldList;
     @OneToMany(fetch = javax.persistence.FetchType.EAGER)
     @Type(type = "it.generated.anggen.model.relationship.Relationship")
     @javax.persistence.JoinColumn(name = "tab_id_relationship")
     private List<Relationship> relationshipList;
     @OneToMany(fetch = javax.persistence.FetchType.EAGER)
-    @Type(type = "it.generated.anggen.model.field.EnumField")
-    @javax.persistence.JoinColumn(name = "tab_id_enum_field")
-    private List<EnumField> enumFieldList;
-
-    public java.lang.Long getTabId() {
-        return this.tabId;
-    }
-
-    public void setTabId(java.lang.Long tabId) {
-        this.tabId=tabId;
-    }
+    @Type(type = "it.generated.anggen.model.field.Field")
+    @javax.persistence.JoinColumn(name = "tab_id_field")
+    private List<Field> fieldList;
+    @ManyToOne(fetch = javax.persistence.FetchType.EAGER)
+    @javax.persistence.JoinColumn(name = "entity_id_entity")
+    private it.generated.anggen.model.entity.Entity entity;
 
     public String getName() {
         return this.name;
@@ -58,20 +50,20 @@ public class Tab {
         this.name=name;
     }
 
-    public it.generated.anggen.model.entity.Entity getEntity() {
-        return this.entity;
+    public java.lang.Long getTabId() {
+        return this.tabId;
     }
 
-    public void setEntity(it.generated.anggen.model.entity.Entity entity) {
-        this.entity=entity;
+    public void setTabId(java.lang.Long tabId) {
+        this.tabId=tabId;
     }
 
-    public List<Field> getFieldList() {
-        return this.fieldList;
+    public List<EnumField> getEnumFieldList() {
+        return this.enumFieldList;
     }
 
-    public void setFieldList(List<Field> fieldList) {
-        this.fieldList=fieldList;
+    public void setEnumFieldList(List<EnumField> enumFieldList) {
+        this.enumFieldList=enumFieldList;
     }
 
     public List<Relationship> getRelationshipList() {
@@ -82,12 +74,20 @@ public class Tab {
         this.relationshipList=relationshipList;
     }
 
-    public List<EnumField> getEnumFieldList() {
-        return this.enumFieldList;
+    public List<Field> getFieldList() {
+        return this.fieldList;
     }
 
-    public void setEnumFieldList(List<EnumField> enumFieldList) {
-        this.enumFieldList=enumFieldList;
+    public void setFieldList(List<Field> fieldList) {
+        this.fieldList=fieldList;
+    }
+
+    public it.generated.anggen.model.entity.Entity getEntity() {
+        return this.entity;
+    }
+
+    public void setEntity(it.generated.anggen.model.entity.Entity entity) {
+        this.entity=entity;
     }
 
 }

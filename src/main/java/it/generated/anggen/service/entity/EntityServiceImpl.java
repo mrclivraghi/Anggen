@@ -21,15 +21,15 @@ public class EntityServiceImpl
     @org.springframework.beans.factory.annotation.Autowired
     public EntityRepository entityRepository;
     @org.springframework.beans.factory.annotation.Autowired
-    public FieldRepository fieldRepository;
-    @org.springframework.beans.factory.annotation.Autowired
-    public RelationshipRepository relationshipRepository;
-    @org.springframework.beans.factory.annotation.Autowired
-    public EnumFieldRepository enumFieldRepository;
+    public RestrictionEntityRepository restrictionEntityRepository;
     @org.springframework.beans.factory.annotation.Autowired
     public TabRepository tabRepository;
     @org.springframework.beans.factory.annotation.Autowired
-    public RestrictionEntityRepository restrictionEntityRepository;
+    public EnumFieldRepository enumFieldRepository;
+    @org.springframework.beans.factory.annotation.Autowired
+    public RelationshipRepository relationshipRepository;
+    @org.springframework.beans.factory.annotation.Autowired
+    public FieldRepository fieldRepository;
 
     @Override
     public List<it.generated.anggen.model.entity.Entity> findById(Long entityId) {
@@ -38,7 +38,7 @@ public class EntityServiceImpl
 
     @Override
     public List<it.generated.anggen.model.entity.Entity> find(EntitySearchBean entity) {
-        return entityRepository.findByEntityIdAndNameAndFieldAndRelationshipAndEnumFieldAndTabAndRestrictionEntityAndEntityGroup(entity.getEntityId(),entity.getName(),entity.getFieldList()==null? null :entity.getFieldList().get(0),entity.getRelationshipList()==null? null :entity.getRelationshipList().get(0),entity.getEnumFieldList()==null? null :entity.getEnumFieldList().get(0),entity.getTabList()==null? null :entity.getTabList().get(0),entity.getRestrictionEntityList()==null? null :entity.getRestrictionEntityList().get(0),entity.getEntityGroup());
+        return entityRepository.findByNameAndEntityIdAndEntityGroupAndRestrictionEntityAndTabAndEnumFieldAndRelationshipAndField(entity.getName(),entity.getEntityId(),entity.getEntityGroup(),entity.getRestrictionEntityList()==null? null :entity.getRestrictionEntityList().get(0),entity.getTabList()==null? null :entity.getTabList().get(0),entity.getEnumFieldList()==null? null :entity.getEnumFieldList().get(0),entity.getRelationshipList()==null? null :entity.getRelationshipList().get(0),entity.getFieldList()==null? null :entity.getFieldList().get(0));
     }
 
     @Override
@@ -55,30 +55,30 @@ public class EntityServiceImpl
     @Override
     @Transactional
     public it.generated.anggen.model.entity.Entity update(it.generated.anggen.model.entity.Entity entity) {
-        if (entity.getFieldList()!=null)
-        for (it.generated.anggen.model.field.Field field: entity.getFieldList())
+        if (entity.getRestrictionEntityList()!=null)
+        for (it.generated.anggen.model.security.RestrictionEntity restrictionEntity: entity.getRestrictionEntityList())
         {
-        field.setEntity(entity);
-        }
-        if (entity.getRelationshipList()!=null)
-        for (it.generated.anggen.model.relationship.Relationship relationship: entity.getRelationshipList())
-        {
-        relationship.setEntity(entity);
-        }
-        if (entity.getEnumFieldList()!=null)
-        for (it.generated.anggen.model.field.EnumField enumField: entity.getEnumFieldList())
-        {
-        enumField.setEntity(entity);
+        restrictionEntity.setEntity(entity);
         }
         if (entity.getTabList()!=null)
         for (it.generated.anggen.model.entity.Tab tab: entity.getTabList())
         {
         tab.setEntity(entity);
         }
-        if (entity.getRestrictionEntityList()!=null)
-        for (it.generated.anggen.model.security.RestrictionEntity restrictionEntity: entity.getRestrictionEntityList())
+        if (entity.getEnumFieldList()!=null)
+        for (it.generated.anggen.model.field.EnumField enumField: entity.getEnumFieldList())
         {
-        restrictionEntity.setEntity(entity);
+        enumField.setEntity(entity);
+        }
+        if (entity.getRelationshipList()!=null)
+        for (it.generated.anggen.model.relationship.Relationship relationship: entity.getRelationshipList())
+        {
+        relationship.setEntity(entity);
+        }
+        if (entity.getFieldList()!=null)
+        for (it.generated.anggen.model.field.Field field: entity.getFieldList())
+        {
+        field.setEntity(entity);
         }
         it.generated.anggen.model.entity.Entity returnedEntity=entityRepository.save(entity);
         if (entity.getEntityGroup()!=null)

@@ -7,19 +7,19 @@ import it.generated.anggen.model.security.RestrictionEntityGroup;
 
 public class EntityGroupSearchBean {
 
-    public java.lang.Long entityId;
-    public java.lang.Long entityGroupId;
     public java.lang.String name;
-    public List<Entity> entityList;
-    public List<RestrictionEntityGroup> restrictionEntityGroupList;
+    public java.lang.Long entityGroupId;
+    public java.lang.Long entityId;
     public it.generated.anggen.model.entity.Project project;
+    public List<RestrictionEntityGroup> restrictionEntityGroupList;
+    public List<Entity> entityList;
 
-    public java.lang.Long getEntityId() {
-        return this.entityId;
+    public java.lang.String getName() {
+        return this.name;
     }
 
-    public void setEntityId(java.lang.Long entityId) {
-        this.entityId=entityId;
+    public void setName(java.lang.String name) {
+        this.name=name;
     }
 
     public java.lang.Long getEntityGroupId() {
@@ -30,20 +30,20 @@ public class EntityGroupSearchBean {
         this.entityGroupId=entityGroupId;
     }
 
-    public java.lang.String getName() {
-        return this.name;
+    public java.lang.Long getEntityId() {
+        return this.entityId;
     }
 
-    public void setName(java.lang.String name) {
-        this.name=name;
+    public void setEntityId(java.lang.Long entityId) {
+        this.entityId=entityId;
     }
 
-    public List<Entity> getEntityList() {
-        return this.entityList;
+    public it.generated.anggen.model.entity.Project getProject() {
+        return this.project;
     }
 
-    public void setEntityList(List<Entity> entityList) {
-        this.entityList=entityList;
+    public void setProject(it.generated.anggen.model.entity.Project project) {
+        this.project=project;
     }
 
     public List<RestrictionEntityGroup> getRestrictionEntityGroupList() {
@@ -54,12 +54,12 @@ public class EntityGroupSearchBean {
         this.restrictionEntityGroupList=restrictionEntityGroupList;
     }
 
-    public it.generated.anggen.model.entity.Project getProject() {
-        return this.project;
+    public List<Entity> getEntityList() {
+        return this.entityList;
     }
 
-    public void setProject(it.generated.anggen.model.entity.Project project) {
-        this.project=project;
+    public void setEntityList(List<Entity> entityList) {
+        this.entityList=entityList;
     }
 
 }

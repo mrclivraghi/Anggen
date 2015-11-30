@@ -16,7 +16,7 @@ import org.hibernate.annotations.Type;
 @Table(schema = "mustle", name = "enum_field")
 public class EnumField {
 
-    public final static java.lang.Long staticEntityId = 4721L;
+    public final static java.lang.Long staticEntityId = 5280L;
     @javax.persistence.Column(name = "enum_field_id")
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -24,20 +24,20 @@ public class EnumField {
     private java.lang.Long enumFieldId;
     @javax.persistence.Column(name = "name")
     private String name;
-    @OneToMany(fetch = javax.persistence.FetchType.EAGER)
-    @Type(type = "it.generated.anggen.model.field.EnumValue")
-    @javax.persistence.JoinColumn(name = "enum_field_id_enum_value")
-    private List<EnumValue> enumValueList;
     @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.EAGER)
-    @javax.persistence.JoinColumn(name = "entity_id_entity")
-    private it.generated.anggen.model.entity.Entity entity;
+    @javax.persistence.JoinColumn(name = "tab_id_tab")
+    private it.generated.anggen.model.entity.Tab tab;
     @OneToMany(fetch = javax.persistence.FetchType.EAGER)
     @Type(type = "it.generated.anggen.model.field.Annotation")
     @javax.persistence.JoinColumn(name = "enum_field_id_annotation")
     private List<Annotation> annotationList;
     @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.EAGER)
-    @javax.persistence.JoinColumn(name = "tab_id_tab")
-    private it.generated.anggen.model.entity.Tab tab;
+    @javax.persistence.JoinColumn(name = "entity_id_entity")
+    private it.generated.anggen.model.entity.Entity entity;
+    @OneToMany(fetch = javax.persistence.FetchType.EAGER)
+    @Type(type = "it.generated.anggen.model.field.EnumValue")
+    @javax.persistence.JoinColumn(name = "enum_field_id_enum_value")
+    private List<EnumValue> enumValueList;
 
     public java.lang.Long getEnumFieldId() {
         return this.enumFieldId;
@@ -55,20 +55,12 @@ public class EnumField {
         this.name=name;
     }
 
-    public List<EnumValue> getEnumValueList() {
-        return this.enumValueList;
+    public it.generated.anggen.model.entity.Tab getTab() {
+        return this.tab;
     }
 
-    public void setEnumValueList(List<EnumValue> enumValueList) {
-        this.enumValueList=enumValueList;
-    }
-
-    public it.generated.anggen.model.entity.Entity getEntity() {
-        return this.entity;
-    }
-
-    public void setEntity(it.generated.anggen.model.entity.Entity entity) {
-        this.entity=entity;
+    public void setTab(it.generated.anggen.model.entity.Tab tab) {
+        this.tab=tab;
     }
 
     public List<Annotation> getAnnotationList() {
@@ -79,12 +71,20 @@ public class EnumField {
         this.annotationList=annotationList;
     }
 
-    public it.generated.anggen.model.entity.Tab getTab() {
-        return this.tab;
+    public it.generated.anggen.model.entity.Entity getEntity() {
+        return this.entity;
     }
 
-    public void setTab(it.generated.anggen.model.entity.Tab tab) {
-        this.tab=tab;
+    public void setEntity(it.generated.anggen.model.entity.Entity entity) {
+        this.entity=entity;
+    }
+
+    public List<EnumValue> getEnumValueList() {
+        return this.enumValueList;
+    }
+
+    public void setEnumValueList(List<EnumValue> enumValueList) {
+        this.enumValueList=enumValueList;
     }
 
 }

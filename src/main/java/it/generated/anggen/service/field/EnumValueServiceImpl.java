@@ -24,7 +24,7 @@ public class EnumValueServiceImpl
 
     @Override
     public List<it.generated.anggen.model.field.EnumValue> find(EnumValueSearchBean enumValue) {
-        return enumValueRepository.findByEnumValueIdAndValueAndNameAndEnumField(enumValue.getEnumValueId(),enumValue.getValue(),enumValue.getName(),enumValue.getEnumField());
+        return enumValueRepository.findByNameAndValueAndEnumValueIdAndEnumField(enumValue.getName(),enumValue.getValue(),enumValue.getEnumValueId(),enumValue.getEnumField());
     }
 
     @Override

@@ -16,39 +16,31 @@ import it.polimi.utils.annotation.DescriptionField;
 @Table(schema = "mustle", name = "relationship")
 public class Relationship {
 
-    public final static java.lang.Long staticEntityId = 4711L;
+    public final static java.lang.Long staticEntityId = 5293L;
+    @javax.persistence.Column(name = "name")
+    private String name;
     @javax.persistence.Column(name = "relationship_id")
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @DescriptionField
     private java.lang.Long relationshipId;
-    @javax.persistence.Column(name = "name")
-    private String name;
-    @javax.persistence.OneToOne(fetch = javax.persistence.FetchType.EAGER)
-    @org.hibernate.annotations.Type(type = "it.generated.anggen.model.entity.Entity")
-    @javax.persistence.JoinColumn(name = "entity_id_entity")
-    private it.generated.anggen.model.entity.Entity entity;
-    @javax.persistence.OneToOne(fetch = javax.persistence.FetchType.EAGER)
-    @org.hibernate.annotations.Type(type = "it.generated.anggen.model.entity.Entity")
-    @javax.persistence.JoinColumn(name = "entity_id_entity_target")
-    private it.generated.anggen.model.entity.Entity entityTarget;
+    @ManyToOne(fetch = javax.persistence.FetchType.EAGER)
+    @javax.persistence.JoinColumn(name = "tab_id_tab")
+    private it.generated.anggen.model.entity.Tab tab;
     @OneToMany(fetch = javax.persistence.FetchType.EAGER)
     @org.hibernate.annotations.Type(type = "it.generated.anggen.model.field.Annotation")
     @javax.persistence.JoinColumn(name = "relationship_id_annotation")
     private List<Annotation> annotationList;
-    @ManyToOne(fetch = javax.persistence.FetchType.EAGER)
-    @javax.persistence.JoinColumn(name = "tab_id_tab")
-    private it.generated.anggen.model.entity.Tab tab;
+    @javax.persistence.OneToOne(fetch = javax.persistence.FetchType.EAGER)
+    @org.hibernate.annotations.Type(type = "it.generated.anggen.model.entity.Entity")
+    @javax.persistence.JoinColumn(name = "entity_id_entity_target")
+    private it.generated.anggen.model.entity.Entity entityTarget;
+    @javax.persistence.OneToOne(fetch = javax.persistence.FetchType.EAGER)
+    @org.hibernate.annotations.Type(type = "it.generated.anggen.model.entity.Entity")
+    @javax.persistence.JoinColumn(name = "entity_id_entity")
+    private it.generated.anggen.model.entity.Entity entity;
     @javax.persistence.Column(name = "relationship_type")
     private RelationshipType relationshipType;
-
-    public java.lang.Long getRelationshipId() {
-        return this.relationshipId;
-    }
-
-    public void setRelationshipId(java.lang.Long relationshipId) {
-        this.relationshipId=relationshipId;
-    }
 
     public String getName() {
         return this.name;
@@ -58,20 +50,20 @@ public class Relationship {
         this.name=name;
     }
 
-    public it.generated.anggen.model.entity.Entity getEntity() {
-        return this.entity;
+    public java.lang.Long getRelationshipId() {
+        return this.relationshipId;
     }
 
-    public void setEntity(it.generated.anggen.model.entity.Entity entity) {
-        this.entity=entity;
+    public void setRelationshipId(java.lang.Long relationshipId) {
+        this.relationshipId=relationshipId;
     }
 
-    public it.generated.anggen.model.entity.Entity getEntityTarget() {
-        return this.entityTarget;
+    public it.generated.anggen.model.entity.Tab getTab() {
+        return this.tab;
     }
 
-    public void setEntityTarget(it.generated.anggen.model.entity.Entity entityTarget) {
-        this.entityTarget=entityTarget;
+    public void setTab(it.generated.anggen.model.entity.Tab tab) {
+        this.tab=tab;
     }
 
     public List<Annotation> getAnnotationList() {
@@ -82,12 +74,20 @@ public class Relationship {
         this.annotationList=annotationList;
     }
 
-    public it.generated.anggen.model.entity.Tab getTab() {
-        return this.tab;
+    public it.generated.anggen.model.entity.Entity getEntityTarget() {
+        return this.entityTarget;
     }
 
-    public void setTab(it.generated.anggen.model.entity.Tab tab) {
-        this.tab=tab;
+    public void setEntityTarget(it.generated.anggen.model.entity.Entity entityTarget) {
+        this.entityTarget=entityTarget;
+    }
+
+    public it.generated.anggen.model.entity.Entity getEntity() {
+        return this.entity;
+    }
+
+    public void setEntity(it.generated.anggen.model.entity.Entity entity) {
+        this.entity=entity;
     }
 
     public RelationshipType getRelationshipType() {

@@ -119,51 +119,51 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     }
 
     private void getRightMapping(it.generated.anggen.model.field.Field field) {
-        if (field.getEntity()!=null)
+        if (field.getTab()!=null)
         {
-        field.getEntity().setFieldList(null);
-        field.getEntity().setRelationshipList(null);
-        field.getEntity().setEnumFieldList(null);
-        field.getEntity().setTabList(null);
-        field.getEntity().setRestrictionEntityList(null);
-        field.getEntity().setEntityGroup(null);
-        }
-        if (field.getAnnotationList()!=null)
-        for (it.generated.anggen.model.field.Annotation annotation :field.getAnnotationList())
-
-        {
-
-        annotation.setField(null);
-        annotation.setRelationship(null);
-        annotation.setEnumField(null);
-        annotation.setAnnotationAttributeList(null);
+        field.getTab().setEnumFieldList(null);
+        field.getTab().setRelationshipList(null);
+        field.getTab().setFieldList(null);
+        field.getTab().setEntity(null);
         }
         if (field.getRestrictionFieldList()!=null)
         for (it.generated.anggen.model.security.RestrictionField restrictionField :field.getRestrictionFieldList())
 
         {
 
-        restrictionField.setField(null);
         restrictionField.setRole(null);
+        restrictionField.setField(null);
         }
-        if (field.getTab()!=null)
+        if (field.getAnnotationList()!=null)
+        for (it.generated.anggen.model.field.Annotation annotation :field.getAnnotationList())
+
         {
-        field.getTab().setEntity(null);
-        field.getTab().setFieldList(null);
-        field.getTab().setRelationshipList(null);
-        field.getTab().setEnumFieldList(null);
+
+        annotation.setEnumField(null);
+        annotation.setRelationship(null);
+        annotation.setField(null);
+        annotation.setAnnotationAttributeList(null);
+        }
+        if (field.getEntity()!=null)
+        {
+        field.getEntity().setEntityGroup(null);
+        field.getEntity().setRestrictionEntityList(null);
+        field.getEntity().setTabList(null);
+        field.getEntity().setEnumFieldList(null);
+        field.getEntity().setRelationshipList(null);
+        field.getEntity().setFieldList(null);
         }
     }
 
     private void rebuildSecurityMapping(it.generated.anggen.model.field.Field field) {
-        if (!securityService.isAllowed(it.generated.anggen.model.entity.Entity.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH))
-        field.setEntity(fieldService.findById(field.getFieldId()).get(0).getEntity());
-        if (!securityService.isAllowed(it.generated.anggen.model.field.Annotation.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH))
-        field.setAnnotationList(fieldService.findById(field.getFieldId()).get(0).getAnnotationList());
-        if (!securityService.isAllowed(it.generated.anggen.model.security.RestrictionField.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH))
-        field.setRestrictionFieldList(fieldService.findById(field.getFieldId()).get(0).getRestrictionFieldList());
         if (!securityService.isAllowed(it.generated.anggen.model.entity.Tab.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH))
         field.setTab(fieldService.findById(field.getFieldId()).get(0).getTab());
+        if (!securityService.isAllowed(it.generated.anggen.model.security.RestrictionField.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH))
+        field.setRestrictionFieldList(fieldService.findById(field.getFieldId()).get(0).getRestrictionFieldList());
+        if (!securityService.isAllowed(it.generated.anggen.model.field.Annotation.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH))
+        field.setAnnotationList(fieldService.findById(field.getFieldId()).get(0).getAnnotationList());
+        if (!securityService.isAllowed(it.generated.anggen.model.entity.Entity.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH))
+        field.setEntity(fieldService.findById(field.getFieldId()).get(0).getEntity());
     }
 
     private List<it.generated.anggen.model.field.Field> getSecurityMapping(List<it.generated.anggen.model.field.Field> fieldList) {
@@ -175,17 +175,17 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     }
 
     private void getSecurityMapping(it.generated.anggen.model.field.Field field) {
-        if (field.getEntity()!=null  && !securityService.isAllowed(it.generated.anggen.model.entity.Entity.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH) )
-        field.setEntity(null);
-
-        if (field.getAnnotationList()!=null && !securityService.isAllowed(it.generated.anggen.model.field.Annotation.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH) )
-        field.setAnnotationList(null);
+        if (field.getTab()!=null  && !securityService.isAllowed(it.generated.anggen.model.entity.Tab.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH) )
+        field.setTab(null);
 
         if (field.getRestrictionFieldList()!=null && !securityService.isAllowed(it.generated.anggen.model.security.RestrictionField.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH) )
         field.setRestrictionFieldList(null);
 
-        if (field.getTab()!=null  && !securityService.isAllowed(it.generated.anggen.model.entity.Tab.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH) )
-        field.setTab(null);
+        if (field.getAnnotationList()!=null && !securityService.isAllowed(it.generated.anggen.model.field.Annotation.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH) )
+        field.setAnnotationList(null);
+
+        if (field.getEntity()!=null  && !securityService.isAllowed(it.generated.anggen.model.entity.Entity.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH) )
+        field.setEntity(null);
 
     }
 

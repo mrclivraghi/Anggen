@@ -4,17 +4,17 @@ package it.generated.anggen.searchbean.field;
 
 public class AnnotationAttributeSearchBean {
 
-    public java.lang.Long annotationAttributeId;
-    public java.lang.String property;
     public java.lang.String value;
+    public java.lang.String property;
+    public java.lang.Long annotationAttributeId;
     public it.generated.anggen.model.field.Annotation annotation;
 
-    public java.lang.Long getAnnotationAttributeId() {
-        return this.annotationAttributeId;
+    public java.lang.String getValue() {
+        return this.value;
     }
 
-    public void setAnnotationAttributeId(java.lang.Long annotationAttributeId) {
-        this.annotationAttributeId=annotationAttributeId;
+    public void setValue(java.lang.String value) {
+        this.value=value;
     }
 
     public java.lang.String getProperty() {
@@ -25,12 +25,12 @@ public class AnnotationAttributeSearchBean {
         this.property=property;
     }
 
-    public java.lang.String getValue() {
-        return this.value;
+    public java.lang.Long getAnnotationAttributeId() {
+        return this.annotationAttributeId;
     }
 
-    public void setValue(java.lang.String value) {
-        this.value=value;
+    public void setAnnotationAttributeId(java.lang.Long annotationAttributeId) {
+        this.annotationAttributeId=annotationAttributeId;
     }
 
     public it.generated.anggen.model.field.Annotation getAnnotation() {

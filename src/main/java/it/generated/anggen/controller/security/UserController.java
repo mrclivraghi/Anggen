@@ -124,10 +124,10 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         {
 
-        role.setUserList(null);
-        role.setRestrictionEntityList(null);
-        role.setRestrictionFieldList(null);
         role.setRestrictionEntityGroupList(null);
+        role.setRestrictionFieldList(null);
+        role.setRestrictionEntityList(null);
+        role.setUserList(null);
         }
     }
 

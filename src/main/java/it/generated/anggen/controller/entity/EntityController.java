@@ -42,7 +42,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         List<it.generated.anggen.model.entity.Entity> entityList;
         if (entity.getEntityId()!=null)
-         log.info("Searching entity like {}", entity.getEntityId()+' '+ entity.getName());
+         log.info("Searching entity like {}", entity.getName()+' '+ entity.getEntityId());
         entityList=entityService.find(entity);
         getRightMapping(entityList);
         getSecurityMapping(entityList);
@@ -87,7 +87,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
         if (entity.getEntityId()!=null)
-        log.info("Inserting entity like {}", entity.getEntityId()+' '+ entity.getName());
+        log.info("Inserting entity like {}", entity.getName()+' '+ entity.getEntityId());
         it.generated.anggen.model.entity.Entity insertedEntity=entityService.insert(entity);
         getRightMapping(insertedEntity);
         log.info("Inserted entity with id {}",insertedEntity.getEntityId());
@@ -119,75 +119,75 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     }
 
     private void getRightMapping(it.generated.anggen.model.entity.Entity entity) {
-        if (entity.getFieldList()!=null)
-        for (it.generated.anggen.model.field.Field field :entity.getFieldList())
-
+        if (entity.getEntityGroup()!=null)
         {
-
-        field.setEntity(null);
-        field.setAnnotationList(null);
-        field.setRestrictionFieldList(null);
-        field.setTab(null);
-        }
-        if (entity.getRelationshipList()!=null)
-        for (it.generated.anggen.model.relationship.Relationship relationship :entity.getRelationshipList())
-
-        {
-
-        relationship.setEntity(null);
-        relationship.setEntity(null);
-        relationship.setAnnotationList(null);
-        relationship.setTab(null);
-        }
-        if (entity.getEnumFieldList()!=null)
-        for (it.generated.anggen.model.field.EnumField enumField :entity.getEnumFieldList())
-
-        {
-
-        enumField.setEnumValueList(null);
-        enumField.setEntity(null);
-        enumField.setAnnotationList(null);
-        enumField.setTab(null);
-        }
-        if (entity.getTabList()!=null)
-        for (it.generated.anggen.model.entity.Tab tab :entity.getTabList())
-
-        {
-
-        tab.setEntity(null);
-        tab.setFieldList(null);
-        tab.setRelationshipList(null);
-        tab.setEnumFieldList(null);
+        entity.getEntityGroup().setProject(null);
+        entity.getEntityGroup().setRestrictionEntityGroupList(null);
+        entity.getEntityGroup().setEntityList(null);
         }
         if (entity.getRestrictionEntityList()!=null)
         for (it.generated.anggen.model.security.RestrictionEntity restrictionEntity :entity.getRestrictionEntityList())
 
         {
 
-        restrictionEntity.setRole(null);
         restrictionEntity.setEntity(null);
+        restrictionEntity.setRole(null);
         }
-        if (entity.getEntityGroup()!=null)
+        if (entity.getTabList()!=null)
+        for (it.generated.anggen.model.entity.Tab tab :entity.getTabList())
+
         {
-        entity.getEntityGroup().setEntityList(null);
-        entity.getEntityGroup().setRestrictionEntityGroupList(null);
-        entity.getEntityGroup().setProject(null);
+
+        tab.setEnumFieldList(null);
+        tab.setRelationshipList(null);
+        tab.setFieldList(null);
+        tab.setEntity(null);
+        }
+        if (entity.getEnumFieldList()!=null)
+        for (it.generated.anggen.model.field.EnumField enumField :entity.getEnumFieldList())
+
+        {
+
+        enumField.setTab(null);
+        enumField.setAnnotationList(null);
+        enumField.setEntity(null);
+        enumField.setEnumValueList(null);
+        }
+        if (entity.getRelationshipList()!=null)
+        for (it.generated.anggen.model.relationship.Relationship relationship :entity.getRelationshipList())
+
+        {
+
+        relationship.setTab(null);
+        relationship.setAnnotationList(null);
+        relationship.setEntity(null);
+        relationship.setEntity(null);
+        }
+        if (entity.getFieldList()!=null)
+        for (it.generated.anggen.model.field.Field field :entity.getFieldList())
+
+        {
+
+        field.setTab(null);
+        field.setRestrictionFieldList(null);
+        field.setAnnotationList(null);
+        field.setEntity(null);
         }
     }
 
     private void rebuildSecurityMapping(it.generated.anggen.model.entity.Entity entity) {
-        if (!securityService.isAllowed(it.generated.anggen.model.field.Field.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH))
-        entity.setFieldList(entityService.findById(entity.getEntityId()).get(0).getFieldList());
-        if (!securityService.isAllowed(it.generated.anggen.model.relationship.Relationship.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH))
-        entity.setRelationshipList(entityService.findById(entity.getEntityId()).get(0).getRelationshipList());
-        if (!securityService.isAllowed(it.generated.anggen.model.field.EnumField.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH))
-        entity.setEnumFieldList(entityService.findById(entity.getEntityId()).get(0).getEnumFieldList());
-        if (!securityService.isAllowed(it.generated.anggen.model.entity.Tab.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH))
-        entity.setTabList(entityService.findById(entity.getEntityId()).get(0).getTabList());
-        if (!securityService.isAllowed(it.generated.anggen.model.security.RestrictionEntity.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH))
-        entity.setRestrictionEntityList(entityService.findById(entity.getEntityId()).get(0).getRestrictionEntityList());
         if (!securityService.isAllowed(it.generated.anggen.model.entity.EntityGroup.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH))
         entity.setEntityGroup(entityService.findById(entity.getEntityId()).get(0).getEntityGroup());
+        if (!securityService.isAllowed(it.generated.anggen.model.security.RestrictionEntity.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH))
+        entity.setRestrictionEntityList(entityService.findById(entity.getEntityId()).get(0).getRestrictionEntityList());
+        if (!securityService.isAllowed(it.generated.anggen.model.entity.Tab.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH))
+        entity.setTabList(entityService.findById(entity.getEntityId()).get(0).getTabList());
+        if (!securityService.isAllowed(it.generated.anggen.model.field.EnumField.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH))
+        entity.setEnumFieldList(entityService.findById(entity.getEntityId()).get(0).getEnumFieldList());
+        if (!securityService.isAllowed(it.generated.anggen.model.relationship.Relationship.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH))
+        entity.setRelationshipList(entityService.findById(entity.getEntityId()).get(0).getRelationshipList());
+        if (!securityService.isAllowed(it.generated.anggen.model.field.Field.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH))
+        entity.setFieldList(entityService.findById(entity.getEntityId()).get(0).getFieldList());
     }
 
     private List<it.generated.anggen.model.entity.Entity> getSecurityMapping(List<it.generated.anggen.model.entity.Entity> entityList) {
@@ -199,23 +199,23 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     }
 
     private void getSecurityMapping(it.generated.anggen.model.entity.Entity entity) {
-        if (entity.getFieldList()!=null && !securityService.isAllowed(it.generated.anggen.model.field.Field.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH) )
-        entity.setFieldList(null);
-
-        if (entity.getRelationshipList()!=null && !securityService.isAllowed(it.generated.anggen.model.relationship.Relationship.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH) )
-        entity.setRelationshipList(null);
-
-        if (entity.getEnumFieldList()!=null && !securityService.isAllowed(it.generated.anggen.model.field.EnumField.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH) )
-        entity.setEnumFieldList(null);
-
-        if (entity.getTabList()!=null && !securityService.isAllowed(it.generated.anggen.model.entity.Tab.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH) )
-        entity.setTabList(null);
+        if (entity.getEntityGroup()!=null  && !securityService.isAllowed(it.generated.anggen.model.entity.EntityGroup.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH) )
+        entity.setEntityGroup(null);
 
         if (entity.getRestrictionEntityList()!=null && !securityService.isAllowed(it.generated.anggen.model.security.RestrictionEntity.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH) )
         entity.setRestrictionEntityList(null);
 
-        if (entity.getEntityGroup()!=null  && !securityService.isAllowed(it.generated.anggen.model.entity.EntityGroup.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH) )
-        entity.setEntityGroup(null);
+        if (entity.getTabList()!=null && !securityService.isAllowed(it.generated.anggen.model.entity.Tab.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH) )
+        entity.setTabList(null);
+
+        if (entity.getEnumFieldList()!=null && !securityService.isAllowed(it.generated.anggen.model.field.EnumField.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH) )
+        entity.setEnumFieldList(null);
+
+        if (entity.getRelationshipList()!=null && !securityService.isAllowed(it.generated.anggen.model.relationship.Relationship.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH) )
+        entity.setRelationshipList(null);
+
+        if (entity.getFieldList()!=null && !securityService.isAllowed(it.generated.anggen.model.field.Field.staticEntityId, it.polimi.model.security.RestrictionType.SEARCH) )
+        entity.setFieldList(null);
 
     }
 

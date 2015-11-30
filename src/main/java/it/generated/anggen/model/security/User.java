@@ -13,48 +13,34 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import it.generated.anggen.model.security.Role;
 import it.polimi.utils.annotation.DescriptionField;
+import it.polimi.utils.annotation.Password;
 import org.hibernate.annotations.Type;
 
 @Entity
 @Table(schema = "sso", name = "user")
 public class User {
 
-    public final static java.lang.Long staticEntityId = 4713L;
-    @javax.persistence.Column(name = "enabled")
-    private Boolean enabled;
+    public final static java.lang.Long staticEntityId = 5281L;
+    @javax.persistence.Column(name = "username")
+    private java.lang.String username;
+    @javax.persistence.Column(name = "password")
+    @Password
+    private java.lang.String password;
     @javax.persistence.Column(name = "user_id")
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @DescriptionField
     private java.lang.Long userId;
-    @javax.persistence.Column(name = "username")
-    private java.lang.String username;
-    @javax.persistence.Column(name = "password")
-    private java.lang.String password;
+    @javax.persistence.Column(name = "enabled")
+    private Boolean enabled;
     @ManyToMany(fetch = FetchType.EAGER)
     @Type(type = "it.generated.anggen.model.security.Role")
-    @JoinTable(name = "user_role", schema = "sso", joinColumns = {
+    @JoinTable(name = "user_role", schema = "public", joinColumns = {
         @JoinColumn(name = "user_id")
     }, inverseJoinColumns = {
         @JoinColumn(name = "role_id")
     })
     private List<Role> roleList;
-
-    public Boolean getEnabled() {
-        return this.enabled;
-    }
-
-    public void setEnabled(Boolean enabled) {
-        this.enabled=enabled;
-    }
-
-    public java.lang.Long getUserId() {
-        return this.userId;
-    }
-
-    public void setUserId(java.lang.Long userId) {
-        this.userId=userId;
-    }
 
     public java.lang.String getUsername() {
         return this.username;
@@ -70,6 +56,22 @@ public class User {
 
     public void setPassword(java.lang.String password) {
         this.password=password;
+    }
+
+    public java.lang.Long getUserId() {
+        return this.userId;
+    }
+
+    public void setUserId(java.lang.Long userId) {
+        this.userId=userId;
+    }
+
+    public Boolean getEnabled() {
+        return this.enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled=enabled;
     }
 
     public List<Role> getRoleList() {

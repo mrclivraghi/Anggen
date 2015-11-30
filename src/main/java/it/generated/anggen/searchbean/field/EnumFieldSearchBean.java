@@ -7,20 +7,12 @@ import it.generated.anggen.model.field.EnumValue;
 
 public class EnumFieldSearchBean {
 
-    public java.lang.Long enumFieldId;
     public java.lang.String name;
-    public List<EnumValue> enumValueList;
-    public it.generated.anggen.model.entity.Entity entity;
-    public List<Annotation> annotationList;
+    public java.lang.Long enumFieldId;
     public it.generated.anggen.model.entity.Tab tab;
-
-    public java.lang.Long getEnumFieldId() {
-        return this.enumFieldId;
-    }
-
-    public void setEnumFieldId(java.lang.Long enumFieldId) {
-        this.enumFieldId=enumFieldId;
-    }
+    public List<Annotation> annotationList;
+    public it.generated.anggen.model.entity.Entity entity;
+    public List<EnumValue> enumValueList;
 
     public java.lang.String getName() {
         return this.name;
@@ -30,20 +22,20 @@ public class EnumFieldSearchBean {
         this.name=name;
     }
 
-    public List<EnumValue> getEnumValueList() {
-        return this.enumValueList;
+    public java.lang.Long getEnumFieldId() {
+        return this.enumFieldId;
     }
 
-    public void setEnumValueList(List<EnumValue> enumValueList) {
-        this.enumValueList=enumValueList;
+    public void setEnumFieldId(java.lang.Long enumFieldId) {
+        this.enumFieldId=enumFieldId;
     }
 
-    public it.generated.anggen.model.entity.Entity getEntity() {
-        return this.entity;
+    public it.generated.anggen.model.entity.Tab getTab() {
+        return this.tab;
     }
 
-    public void setEntity(it.generated.anggen.model.entity.Entity entity) {
-        this.entity=entity;
+    public void setTab(it.generated.anggen.model.entity.Tab tab) {
+        this.tab=tab;
     }
 
     public List<Annotation> getAnnotationList() {
@@ -54,12 +46,20 @@ public class EnumFieldSearchBean {
         this.annotationList=annotationList;
     }
 
-    public it.generated.anggen.model.entity.Tab getTab() {
-        return this.tab;
+    public it.generated.anggen.model.entity.Entity getEntity() {
+        return this.entity;
     }
 
-    public void setTab(it.generated.anggen.model.entity.Tab tab) {
-        this.tab=tab;
+    public void setEntity(it.generated.anggen.model.entity.Entity entity) {
+        this.entity=entity;
+    }
+
+    public List<EnumValue> getEnumValueList() {
+        return this.enumValueList;
+    }
+
+    public void setEnumValueList(List<EnumValue> enumValueList) {
+        this.enumValueList=enumValueList;
     }
 
 }

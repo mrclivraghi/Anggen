@@ -6,21 +6,13 @@ import it.generated.anggen.model.field.Annotation;
 
 public class RelationshipSearchBean {
 
-    public java.lang.Long relationshipId;
     public java.lang.String name;
-    public it.generated.anggen.model.entity.Entity entity;
-    public it.generated.anggen.model.entity.Entity entityTarget;
-    public List<Annotation> annotationList;
+    public java.lang.Long relationshipId;
     public it.generated.anggen.model.entity.Tab tab;
+    public List<Annotation> annotationList;
+    public it.generated.anggen.model.entity.Entity entityTarget;
+    public it.generated.anggen.model.entity.Entity entity;
     public it.generated.anggen.model.RelationshipType relationshipType;
-
-    public java.lang.Long getRelationshipId() {
-        return this.relationshipId;
-    }
-
-    public void setRelationshipId(java.lang.Long relationshipId) {
-        this.relationshipId=relationshipId;
-    }
 
     public java.lang.String getName() {
         return this.name;
@@ -30,20 +22,20 @@ public class RelationshipSearchBean {
         this.name=name;
     }
 
-    public it.generated.anggen.model.entity.Entity getEntity() {
-        return this.entity;
+    public java.lang.Long getRelationshipId() {
+        return this.relationshipId;
     }
 
-    public void setEntity(it.generated.anggen.model.entity.Entity entity) {
-        this.entity=entity;
+    public void setRelationshipId(java.lang.Long relationshipId) {
+        this.relationshipId=relationshipId;
     }
 
-    public it.generated.anggen.model.entity.Entity getEntityTarget() {
-        return this.entityTarget;
+    public it.generated.anggen.model.entity.Tab getTab() {
+        return this.tab;
     }
 
-    public void setEntityTarget(it.generated.anggen.model.entity.Entity entityTarget) {
-        this.entityTarget=entityTarget;
+    public void setTab(it.generated.anggen.model.entity.Tab tab) {
+        this.tab=tab;
     }
 
     public List<Annotation> getAnnotationList() {
@@ -54,12 +46,20 @@ public class RelationshipSearchBean {
         this.annotationList=annotationList;
     }
 
-    public it.generated.anggen.model.entity.Tab getTab() {
-        return this.tab;
+    public it.generated.anggen.model.entity.Entity getEntityTarget() {
+        return this.entityTarget;
     }
 
-    public void setTab(it.generated.anggen.model.entity.Tab tab) {
-        this.tab=tab;
+    public void setEntityTarget(it.generated.anggen.model.entity.Entity entityTarget) {
+        this.entityTarget=entityTarget;
+    }
+
+    public it.generated.anggen.model.entity.Entity getEntity() {
+        return this.entity;
+    }
+
+    public void setEntity(it.generated.anggen.model.entity.Entity entity) {
+        this.entity=entity;
     }
 
     public it.generated.anggen.model.RelationshipType getRelationshipType() {

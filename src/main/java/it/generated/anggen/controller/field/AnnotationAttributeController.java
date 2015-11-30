@@ -121,9 +121,9 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     private void getRightMapping(it.generated.anggen.model.field.AnnotationAttribute annotationAttribute) {
         if (annotationAttribute.getAnnotation()!=null)
         {
-        annotationAttribute.getAnnotation().setField(null);
-        annotationAttribute.getAnnotation().setRelationship(null);
         annotationAttribute.getAnnotation().setEnumField(null);
+        annotationAttribute.getAnnotation().setRelationship(null);
+        annotationAttribute.getAnnotation().setField(null);
         annotationAttribute.getAnnotation().setAnnotationAttributeList(null);
         }
     }

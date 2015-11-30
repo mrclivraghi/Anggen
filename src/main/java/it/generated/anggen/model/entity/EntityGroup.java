@@ -16,7 +16,7 @@ import org.hibernate.annotations.Type;
 @Table(schema = "mustle", name = "entity_group")
 public class EntityGroup {
 
-    public final static java.lang.Long staticEntityId = 4717L;
+    public final static java.lang.Long staticEntityId = 5290L;
     @javax.persistence.Column(name = "entity_group_id")
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -26,17 +26,17 @@ public class EntityGroup {
     private String name;
     @javax.persistence.Column(name = "entity_id")
     private java.lang.Long entityId;
-    @OneToMany(fetch = javax.persistence.FetchType.EAGER)
-    @Type(type = "it.generated.anggen.model.entity.Entity")
-    @javax.persistence.JoinColumn(name = "entity_group_id_entity")
-    private List<it.generated.anggen.model.entity.Entity> entityList;
+    @ManyToOne(fetch = javax.persistence.FetchType.EAGER)
+    @javax.persistence.JoinColumn(name = "project_id_project")
+    private it.generated.anggen.model.entity.Project project;
     @OneToMany(fetch = javax.persistence.FetchType.EAGER)
     @Type(type = "it.generated.anggen.model.security.RestrictionEntityGroup")
     @javax.persistence.JoinColumn(name = "entity_group_id_restriction_entity_group")
     private List<RestrictionEntityGroup> restrictionEntityGroupList;
-    @ManyToOne(fetch = javax.persistence.FetchType.EAGER)
-    @javax.persistence.JoinColumn(name = "project_id_project")
-    private it.generated.anggen.model.entity.Project project;
+    @OneToMany(fetch = javax.persistence.FetchType.EAGER)
+    @Type(type = "it.generated.anggen.model.entity.Entity")
+    @javax.persistence.JoinColumn(name = "entity_group_id_entity")
+    private List<it.generated.anggen.model.entity.Entity> entityList;
 
     public java.lang.Long getEntityGroupId() {
         return this.entityGroupId;
@@ -62,12 +62,12 @@ public class EntityGroup {
         this.entityId=entityId;
     }
 
-    public List<it.generated.anggen.model.entity.Entity> getEntityList() {
-        return this.entityList;
+    public it.generated.anggen.model.entity.Project getProject() {
+        return this.project;
     }
 
-    public void setEntityList(List<it.generated.anggen.model.entity.Entity> entityList) {
-        this.entityList=entityList;
+    public void setProject(it.generated.anggen.model.entity.Project project) {
+        this.project=project;
     }
 
     public List<RestrictionEntityGroup> getRestrictionEntityGroupList() {
@@ -78,12 +78,12 @@ public class EntityGroup {
         this.restrictionEntityGroupList=restrictionEntityGroupList;
     }
 
-    public it.generated.anggen.model.entity.Project getProject() {
-        return this.project;
+    public List<it.generated.anggen.model.entity.Entity> getEntityList() {
+        return this.entityList;
     }
 
-    public void setProject(it.generated.anggen.model.entity.Project project) {
-        this.project=project;
+    public void setEntityList(List<it.generated.anggen.model.entity.Entity> entityList) {
+        this.entityList=entityList;
     }
 
 }

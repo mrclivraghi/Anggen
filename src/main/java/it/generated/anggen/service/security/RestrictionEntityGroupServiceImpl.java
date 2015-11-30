@@ -24,7 +24,7 @@ public class RestrictionEntityGroupServiceImpl
 
     @Override
     public List<it.generated.anggen.model.security.RestrictionEntityGroup> find(RestrictionEntityGroupSearchBean restrictionEntityGroup) {
-        return restrictionEntityGroupRepository.findByRestrictionEntityGroupIdAndCanCreateAndCanUpdateAndCanSearchAndCanDeleteAndEntityGroupAndRole(restrictionEntityGroup.getRestrictionEntityGroupId(),restrictionEntityGroup.getCanCreate(),restrictionEntityGroup.getCanUpdate(),restrictionEntityGroup.getCanSearch(),restrictionEntityGroup.getCanDelete(),restrictionEntityGroup.getEntityGroup(),restrictionEntityGroup.getRole());
+        return restrictionEntityGroupRepository.findByCanDeleteAndCanSearchAndCanUpdateAndCanCreateAndRestrictionEntityGroupIdAndRoleAndEntityGroup(restrictionEntityGroup.getCanDelete(),restrictionEntityGroup.getCanSearch(),restrictionEntityGroup.getCanUpdate(),restrictionEntityGroup.getCanCreate(),restrictionEntityGroup.getRestrictionEntityGroupId(),restrictionEntityGroup.getRole(),restrictionEntityGroup.getEntityGroup());
     }
 
     @Override
@@ -42,19 +42,19 @@ public class RestrictionEntityGroupServiceImpl
     @Transactional
     public it.generated.anggen.model.security.RestrictionEntityGroup update(it.generated.anggen.model.security.RestrictionEntityGroup restrictionEntityGroup) {
         it.generated.anggen.model.security.RestrictionEntityGroup returnedRestrictionEntityGroup=restrictionEntityGroupRepository.save(restrictionEntityGroup);
-        if (restrictionEntityGroup.getEntityGroup()!=null)
-        {
-        List<it.generated.anggen.model.security.RestrictionEntityGroup> restrictionEntityGroupList = restrictionEntityGroupRepository.findByEntityGroup( restrictionEntityGroup.getEntityGroup());
-        if (!restrictionEntityGroupList.contains(returnedRestrictionEntityGroup))
-        restrictionEntityGroupList.add(returnedRestrictionEntityGroup);
-        returnedRestrictionEntityGroup.getEntityGroup().setRestrictionEntityGroupList(restrictionEntityGroupList);
-        }
         if (restrictionEntityGroup.getRole()!=null)
         {
         List<it.generated.anggen.model.security.RestrictionEntityGroup> restrictionEntityGroupList = restrictionEntityGroupRepository.findByRole( restrictionEntityGroup.getRole());
         if (!restrictionEntityGroupList.contains(returnedRestrictionEntityGroup))
         restrictionEntityGroupList.add(returnedRestrictionEntityGroup);
         returnedRestrictionEntityGroup.getRole().setRestrictionEntityGroupList(restrictionEntityGroupList);
+        }
+        if (restrictionEntityGroup.getEntityGroup()!=null)
+        {
+        List<it.generated.anggen.model.security.RestrictionEntityGroup> restrictionEntityGroupList = restrictionEntityGroupRepository.findByEntityGroup( restrictionEntityGroup.getEntityGroup());
+        if (!restrictionEntityGroupList.contains(returnedRestrictionEntityGroup))
+        restrictionEntityGroupList.add(returnedRestrictionEntityGroup);
+        returnedRestrictionEntityGroup.getEntityGroup().setRestrictionEntityGroupList(restrictionEntityGroupList);
         }
          return returnedRestrictionEntityGroup;
     }

@@ -17,21 +17,21 @@ import org.hibernate.annotations.Type;
 @Table(schema = "mustle", name = "annotation")
 public class Annotation {
 
-    public final static java.lang.Long staticEntityId = 4715L;
+    public final static java.lang.Long staticEntityId = 5282L;
     @javax.persistence.Column(name = "annotation_id")
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @DescriptionField
     private java.lang.Long annotationId;
     @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.EAGER)
-    @javax.persistence.JoinColumn(name = "field_id_field")
-    private it.generated.anggen.model.field.Field field;
+    @javax.persistence.JoinColumn(name = "enum_field_id_enum_field")
+    private it.generated.anggen.model.field.EnumField enumField;
     @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.EAGER)
     @javax.persistence.JoinColumn(name = "relationship_id_relationship")
     private it.generated.anggen.model.relationship.Relationship relationship;
     @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.EAGER)
-    @javax.persistence.JoinColumn(name = "enum_field_id_enum_field")
-    private it.generated.anggen.model.field.EnumField enumField;
+    @javax.persistence.JoinColumn(name = "field_id_field")
+    private it.generated.anggen.model.field.Field field;
     @OneToMany(fetch = javax.persistence.FetchType.EAGER)
     @Type(type = "it.generated.anggen.model.field.AnnotationAttribute")
     @javax.persistence.JoinColumn(name = "annotation_id_annotation_attribute")
@@ -47,12 +47,12 @@ public class Annotation {
         this.annotationId=annotationId;
     }
 
-    public it.generated.anggen.model.field.Field getField() {
-        return this.field;
+    public it.generated.anggen.model.field.EnumField getEnumField() {
+        return this.enumField;
     }
 
-    public void setField(it.generated.anggen.model.field.Field field) {
-        this.field=field;
+    public void setEnumField(it.generated.anggen.model.field.EnumField enumField) {
+        this.enumField=enumField;
     }
 
     public it.generated.anggen.model.relationship.Relationship getRelationship() {
@@ -63,12 +63,12 @@ public class Annotation {
         this.relationship=relationship;
     }
 
-    public it.generated.anggen.model.field.EnumField getEnumField() {
-        return this.enumField;
+    public it.generated.anggen.model.field.Field getField() {
+        return this.field;
     }
 
-    public void setEnumField(it.generated.anggen.model.field.EnumField enumField) {
-        this.enumField=enumField;
+    public void setField(it.generated.anggen.model.field.Field field) {
+        this.field=field;
     }
 
     public List<AnnotationAttribute> getAnnotationAttributeList() {

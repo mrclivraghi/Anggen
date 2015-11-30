@@ -14,17 +14,17 @@ public interface RestrictionFieldRepository
 
     public List<it.generated.anggen.model.security.RestrictionField> findByRestrictionFieldId(java.lang.Long restrictionFieldId);
 
-    public List<it.generated.anggen.model.security.RestrictionField> findByField(it.generated.anggen.model.field.Field field);
-
     public List<it.generated.anggen.model.security.RestrictionField> findByRole(it.generated.anggen.model.security.Role role);
 
-    @Query("select r from RestrictionField r where  (:restrictionFieldId is null or cast(:restrictionFieldId as string)=cast(r.restrictionFieldId as string)) and (:field=r.field or :field is null) and (:role=r.role or :role is null) ")
-    public List<it.generated.anggen.model.security.RestrictionField> findByRestrictionFieldIdAndFieldAndRole(
+    public List<it.generated.anggen.model.security.RestrictionField> findByField(it.generated.anggen.model.field.Field field);
+
+    @Query("select r from RestrictionField r where  (:restrictionFieldId is null or cast(:restrictionFieldId as string)=cast(r.restrictionFieldId as string)) and (:role=r.role or :role is null) and (:field=r.field or :field is null) ")
+    public List<it.generated.anggen.model.security.RestrictionField> findByRestrictionFieldIdAndRoleAndField(
         @org.springframework.data.repository.query.Param("restrictionFieldId")
         java.lang.Long restrictionFieldId,
-        @org.springframework.data.repository.query.Param("field")
-        it.generated.anggen.model.field.Field field,
         @org.springframework.data.repository.query.Param("role")
-        it.generated.anggen.model.security.Role role);
+        it.generated.anggen.model.security.Role role,
+        @org.springframework.data.repository.query.Param("field")
+        it.generated.anggen.model.field.Field field);
 
 }

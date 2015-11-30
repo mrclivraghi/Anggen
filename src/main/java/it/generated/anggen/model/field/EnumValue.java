@@ -15,9 +15,7 @@ import it.polimi.utils.annotation.DescriptionField;
 @Table(schema = "mustle", name = "enum_value")
 public class EnumValue {
 
-    public final static java.lang.Long staticEntityId = 4723L;
-    @javax.persistence.Column(name = "name")
-    private String name;
+    public final static java.lang.Long staticEntityId = 5285L;
     @javax.persistence.Column(name = "enum_value_id")
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -25,17 +23,11 @@ public class EnumValue {
     private java.lang.Long enumValueId;
     @javax.persistence.Column(name = "value")
     private Integer value;
+    @javax.persistence.Column(name = "name")
+    private String name;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "enum_field_id_enum_field")
     private it.generated.anggen.model.field.EnumField enumField;
-
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(String name) {
-        this.name=name;
-    }
 
     public java.lang.Long getEnumValueId() {
         return this.enumValueId;
@@ -51,6 +43,14 @@ public class EnumValue {
 
     public void setValue(Integer value) {
         this.value=value;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name=name;
     }
 
     public it.generated.anggen.model.field.EnumField getEnumField() {

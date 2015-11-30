@@ -18,7 +18,9 @@ import org.hibernate.annotations.Type;
 @Table(schema = "mustle", name = "project")
 public class Project {
 
-    public final static java.lang.Long staticEntityId = 4722L;
+    public final static java.lang.Long staticEntityId = 5294L;
+    @javax.persistence.Column(name = "entity_id")
+    private java.lang.Long entityId;
     @javax.persistence.Column(name = "project_id")
     @DescriptionField
     @Id
@@ -26,12 +28,18 @@ public class Project {
     private Integer projectId;
     @javax.persistence.Column(name = "name")
     private String name;
-    @javax.persistence.Column(name = "entity_id")
-    private java.lang.Long entityId;
     @OneToMany(fetch = FetchType.EAGER)
     @Type(type = "it.generated.anggen.model.entity.EntityGroup")
     @JoinColumn(name = "project_id_entity_group")
     private List<EntityGroup> entityGroupList;
+
+    public java.lang.Long getEntityId() {
+        return this.entityId;
+    }
+
+    public void setEntityId(java.lang.Long entityId) {
+        this.entityId=entityId;
+    }
 
     public Integer getProjectId() {
         return this.projectId;
@@ -47,14 +55,6 @@ public class Project {
 
     public void setName(String name) {
         this.name=name;
-    }
-
-    public java.lang.Long getEntityId() {
-        return this.entityId;
-    }
-
-    public void setEntityId(java.lang.Long entityId) {
-        this.entityId=entityId;
     }
 
     public List<EntityGroup> getEntityGroupList() {

@@ -18,9 +18,9 @@ public class EnumFieldServiceImpl
     @org.springframework.beans.factory.annotation.Autowired
     public EnumFieldRepository enumFieldRepository;
     @org.springframework.beans.factory.annotation.Autowired
-    public EnumValueRepository enumValueRepository;
-    @org.springframework.beans.factory.annotation.Autowired
     public AnnotationRepository annotationRepository;
+    @org.springframework.beans.factory.annotation.Autowired
+    public EnumValueRepository enumValueRepository;
 
     @Override
     public List<it.generated.anggen.model.field.EnumField> findById(Long enumFieldId) {
@@ -29,7 +29,7 @@ public class EnumFieldServiceImpl
 
     @Override
     public List<it.generated.anggen.model.field.EnumField> find(EnumFieldSearchBean enumField) {
-        return enumFieldRepository.findByEnumFieldIdAndNameAndEnumValueAndEntityAndAnnotationAndTab(enumField.getEnumFieldId(),enumField.getName(),enumField.getEnumValueList()==null? null :enumField.getEnumValueList().get(0),enumField.getEntity(),enumField.getAnnotationList()==null? null :enumField.getAnnotationList().get(0),enumField.getTab());
+        return enumFieldRepository.findByNameAndEnumFieldIdAndTabAndAnnotationAndEntityAndEnumValue(enumField.getName(),enumField.getEnumFieldId(),enumField.getTab(),enumField.getAnnotationList()==null? null :enumField.getAnnotationList().get(0),enumField.getEntity(),enumField.getEnumValueList()==null? null :enumField.getEnumValueList().get(0));
     }
 
     @Override
@@ -46,30 +46,30 @@ public class EnumFieldServiceImpl
     @Override
     @Transactional
     public it.generated.anggen.model.field.EnumField update(it.generated.anggen.model.field.EnumField enumField) {
-        if (enumField.getEnumValueList()!=null)
-        for (it.generated.anggen.model.field.EnumValue enumValue: enumField.getEnumValueList())
-        {
-        enumValue.setEnumField(enumField);
-        }
         if (enumField.getAnnotationList()!=null)
         for (it.generated.anggen.model.field.Annotation annotation: enumField.getAnnotationList())
         {
         annotation.setEnumField(enumField);
         }
-        it.generated.anggen.model.field.EnumField returnedEnumField=enumFieldRepository.save(enumField);
-        if (enumField.getEntity()!=null)
+        if (enumField.getEnumValueList()!=null)
+        for (it.generated.anggen.model.field.EnumValue enumValue: enumField.getEnumValueList())
         {
-        List<it.generated.anggen.model.field.EnumField> enumFieldList = enumFieldRepository.findByEntity( enumField.getEntity());
-        if (!enumFieldList.contains(returnedEnumField))
-        enumFieldList.add(returnedEnumField);
-        returnedEnumField.getEntity().setEnumFieldList(enumFieldList);
+        enumValue.setEnumField(enumField);
         }
+        it.generated.anggen.model.field.EnumField returnedEnumField=enumFieldRepository.save(enumField);
         if (enumField.getTab()!=null)
         {
         List<it.generated.anggen.model.field.EnumField> enumFieldList = enumFieldRepository.findByTab( enumField.getTab());
         if (!enumFieldList.contains(returnedEnumField))
         enumFieldList.add(returnedEnumField);
         returnedEnumField.getTab().setEnumFieldList(enumFieldList);
+        }
+        if (enumField.getEntity()!=null)
+        {
+        List<it.generated.anggen.model.field.EnumField> enumFieldList = enumFieldRepository.findByEntity( enumField.getEntity());
+        if (!enumFieldList.contains(returnedEnumField))
+        enumFieldList.add(returnedEnumField);
+        returnedEnumField.getEntity().setEnumFieldList(enumFieldList);
         }
          return returnedEnumField;
     }

@@ -71,7 +71,7 @@ public class AuthenticationController {
 				fakeRestrictionItem.setCanDelete(restrictionEntityGroup.getCanDelete());
 				fakeRestrictionItem.setCanSearch(restrictionEntityGroup.getCanSearch());
 				fakeRestrictionItem.setCanUpdate(restrictionEntityGroup.getCanUpdate());
-				fakeRestrictionItem.setEntity(entity);
+				//fakeRestrictionItem.setEntity(entity);
 				restrictionMap.put(entity.getName(), fakeRestrictionItem);
 				
 			}
@@ -90,7 +90,7 @@ public class AuthenticationController {
 					fakeRestrictionItem.setCanDelete(restrictionEntity.getCanDelete() && restrictionEntityGroup.getCanDelete());
 					fakeRestrictionItem.setCanUpdate(restrictionEntity.getCanUpdate() && restrictionEntityGroup.getCanUpdate());
 					fakeRestrictionItem.setCanSearch(restrictionEntity.getCanSearch() && restrictionEntityGroup.getCanSearch());
-					fakeRestrictionItem.setEntity(restrictionEntity.getEntity());
+					//fakeRestrictionItem.setEntity(restrictionEntity.getEntity());
 					break;
 				}
 			}

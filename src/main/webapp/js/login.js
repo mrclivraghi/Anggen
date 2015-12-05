@@ -10,8 +10,7 @@ angular.module('login', [ ])
 
 	}
 })
-.controller(
-		'loginController',
+.controller("loginController",
 
 		function($scope, $http,loginService) {
 

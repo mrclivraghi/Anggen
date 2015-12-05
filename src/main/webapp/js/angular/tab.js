@@ -1646,7 +1646,7 @@ fieldService.childrenList.tabList=response.data;
 alert("error");
 return; 
 });
-fieldService.childrenList.fieldTypeList=["STRING","INTEGER","DATE","DOUBLE","TIME","BOOLEAN","ENUM",];
+fieldService.childrenList.fieldTypeList=["STRING","INTEGER","DATE","DOUBLE","TIME","BOOLEAN","ENUM","FILE","PHOTO"];
 }; 
 $scope.init();
 $scope.annotationListGridOptions = {

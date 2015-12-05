@@ -116,9 +116,7 @@ var exampleApp=angular.module("exampleApp",['ngFileUpload','ngTouch', 'ui.grid',
 				return promise; 
 			};
 			this.update = function() {
-				var promise= $http.post("../example/",this.selectedEntity,{
-		            headers: {'Content-Type': undefined}
-		        });
+				var promise= $http.post("../example/",this.selectedEntity);
 				return promise; 
 			}
 			

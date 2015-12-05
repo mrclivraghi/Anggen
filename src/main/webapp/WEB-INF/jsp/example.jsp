@@ -226,16 +226,12 @@
 							</div>
 
 <br><br><br>
-<!-- <input type="file" id="test-file"  ng-if="selectedEntity.filePath==undefined"/> 
-<script>
-//$("#test-file").fileinput();
-</script>-->
+
 
 							<div class="pull-left right-input" 
 								 ng-if="selectedEntity.exampleId&gt;0 "
 								ng-class="{'has-success' : true }"
 								>
-								<script src="../js/fileinput.js" type="text/javascript"></script>
 								<div class="input-group ">
 								
    <div tabindex="500" class="form-control file-caption  kv-fileinput-caption">
@@ -245,98 +241,13 @@
    <div class="input-group-btn">
        <button ng-click="removeFile()" type="button" tabindex="500" title="Clear selected files" class="btn btn-default fileinput-remove fileinput-remove-button"><i class="glyphicon glyphicon-trash"></i> <span class="hidden-xs">Remove</span></button>
        <button type="button" tabindex="500" title="Abort ongoing upload" class="btn btn-default hide fileinput-cancel fileinput-cancel-button"><i class="glyphicon glyphicon-ban-circle"></i> <span class="hidden-xs">Cancel</span></button>
-     <!--   <button ng-click="loadFile()" type="submit" tabindex="500" title="Upload selected files" class="btn btn-default fileinput-upload fileinput-upload-button"><i class="glyphicon glyphicon-upload"></i> <span class="hidden-xs">Upload</span></button> -->
      <div class="btn btn-primary btn-file" ngf-select="loadFile($file)"> <i class="glyphicon glyphicon-folder-open"></i>Browse</div> 
-     <!--   <div class="btn btn-primary btn-file" ngf-select ng-model="file" name="file" ngf-pattern="'image/*'"
-    accept="image/*" ngf-max-size="20MB" ngf-min-height="100" 
-    ngf-resize="{width: 100, height: 100}">Select</div>
-     <!--   <div tabindex="500" class="">
-       <i class="glyphicon glyphicon-folder-open"></i> <span class="hidden-xs">Browse...</span>      
-       <input type="file" id="test-file" file-model="selectedEntity.testFile"style="width: 100%" onchange="angular.element(this).scope().loadFile()"/>
-       </div>-->
        
        
    </div>
 </div>
 								
 								
-								
-								
-								<!-- old input group 
-								<div class="input-group">
-									<span class="input-group-addon">testFile</span>
-
-<input type="file"  file-model="selectedEntity.testFile" ng-if="selectedEntity.filePath==undefined"/> 
-
-<a href="{{selectedEntity.filePath}}" ng-if="selectedEntity.filePath!=undefined">file</a>
-
-<span class="input-group-btn"><button
-											ng-click="loadFile()" class="btn btn-default "
-											id="example" ng-if="selectedEntity.filePath==undefined">Load</button>
-										<button ng-click=""
-											class="btn btn-default " id="example"
-											ng-if="selectedEntity.example!=null">Open/button></span>
-								</div>-->
-								
-								
-								
-								
-
-
-								<!--  begin file gmmt -->
-
-
-								<!-- 						
-<div flow-init
-
-      
- style="width: 500px">
- <!--  <div class="drop" flow-drop="" ng-class="dropClass">
-    <span class="btn btn-default" flow-btn="">Upload File<input ng-model="selectedEntity.testFile" type="file" multiple="multiple" style="visibility: hidden; position: absolute;"></span>
-  </div>-->
-
-								<!-- 
-  <input type="file" flow-btn/>
-
-  <br>
-<!--
-  <div class="well">
-    <a class="btn btn-small btn-success" ng-click="$flow.resume()">Resume all</a>
-    <a class="btn btn-small btn-danger" ng-click="$flow.pause()">Pause all</a>
-    <a class="btn btn-small btn-info" ng-click="$flow.cancel()">Cancel all</a>
-    <span class="label label-info ng-binding">Total Size: 192832288bytes</span>
-  </div>-->
-								<!-- 
-  <div>
-
-   <div ng-repeat="file in $flow.files" class="transfer-box ng-scope ng-binding">
-	{{file.name}} ({{file.size}}bytes)
-      <div class="progress progress-striped" ng-class="{active: file.isUploading()}">
-        <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" ng-style="{width: (file.progress() * 100) + '%'}" style="width: 100%;">
-          <span class="sr-only ng-binding">1% Complete</span>
-        </div>
-      </div>
-      <div class="btn-group">
-        <a class="btn btn-xs btn-warning ng-hide" ng-click="file.pause()" ng-show="!file.paused &amp;&amp; file.isUploading()">
-          Pause
-        </a>
-        <a class="btn btn-xs btn-warning ng-hide" ng-click="file.resume()" ng-show="file.paused">
-          Resume
-        </a>
-        <a class="btn btn-xs btn-danger" ng-click="file.cancel()">
-          Cancel
-        </a>
-        <a class="btn btn-xs btn-info ng-hide" ng-click="file.retry()" ng-show="file.error">
-          Retry
-        </a>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- end file mgmt -->
-
-
 							</div>
 
 

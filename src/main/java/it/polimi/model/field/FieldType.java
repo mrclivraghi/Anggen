@@ -12,7 +12,9 @@ public enum FieldType {
 	DOUBLE(3),
 	TIME(4),
 	BOOLEAN(5),
-	LONG(6);
+	LONG(6),
+	FILE(7),
+	PHOTO(8);
 	
 	private final int value;
 	
@@ -38,6 +40,9 @@ public enum FieldType {
 		case 4: return "Time";
 		case 5: return "Boolean";
 		case 6: return "Long";
+		case 7: return "String";
+		case 8: return "String";
+		
 		}
 		return null;
 	}
@@ -54,6 +59,8 @@ public enum FieldType {
 		case 4: return Time.class;
 		case 5: return Boolean.class;
 		case 6: return Long.class;
+		case 7: return String.class;
+		case 8: return String.class;
 		}
 		return null;
 	}

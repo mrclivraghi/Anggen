@@ -86,7 +86,8 @@ public class HtmlGenerator {
 			.macros().javascript("../js/jquery.easytree.js")
 			.macros().javascript("../js/jquery.cookie.js")
 			.macros().javascript("../js/bootstrap.min.js")
-			.macros().javascript("../js/alasql.min.js");
+			.macros().javascript("../js/alasql.min.js")
+			.macros().javascript("../js/ng-file-upload-all.js");
 			} catch (IOException e) {
 			e.printStackTrace();
 		}

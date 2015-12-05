@@ -1,4 +1,4 @@
-var placeApp=angular.module("placeApp",['ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter'])
+var placeApp=angular.module("placeApp",['ngFileUpload','ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter'])
 .service("securityService",function($http)
 {
 this.restrictionList;
@@ -108,6 +108,15 @@ var url="../place/"+this.selectedEntity.placeId;
 var promise= $http["delete"](url);
 return promise; 
 }
+this.loadFile= function(file,field){
+var formData = new FormData();
+if (file!=null)
+formData.append('file',file);
+var promise= $http.post("../place/"+this.selectedEntity.placeId+"/load"+field+"/",formData,{
+ headers: {'Content-Type': undefined}
+});
+return promise; 
+}
  this.initExampleList= function()
 {
 var promise= $http
@@ -182,6 +191,16 @@ $scope.refreshTableDetail= function()
 if ($scope.exampleGridApi!=undefined && $scope.exampleGridApi!=null)
  $scope.exampleGridApi.core.handleWindowResize(); 
 };
+$scope.loadFile = function(file,field)
+{
+placeService.loadFile(file,field).then(function successCallback(response) {
+placeService.setSelectedEntity(response.data);
+},function errorCallback(response) { 
+alert("error");
+return; 
+return; 
+});
+}
 $scope.trueFalseValues=[true,false];
 $scope.showExampleDetail= function(index)
 {
@@ -282,7 +301,9 @@ columnDefs: [
 { name: 'male'},
 { name: 'age'},
 { name: 'exampleDate', cellFilter: "date:'dd-MM-yyyy'"},
-{ name: 'exampleId'} 
+{ name: 'exampleId'},
+{ name: 'exampleFile'},
+{ name: 'file2'} 
 ]
 ,data: $scope.selectedEntity.exampleList
  };
@@ -398,6 +419,15 @@ return promise;
 this.del = function() {
 var url="../example/"+this.selectedEntity.exampleId;
 var promise= $http["delete"](url);
+return promise; 
+}
+this.loadFile= function(file,field){
+var formData = new FormData();
+if (file!=null)
+formData.append('file',file);
+var promise= $http.post("../example/"+this.selectedEntity.exampleId+"/load"+field+"/",formData,{
+ headers: {'Content-Type': undefined}
+});
 return promise; 
 }
  this.initPlaceList= function()
@@ -525,6 +555,16 @@ $scope.refreshTableDetail= function()
 if ($scope.placeGridApi!=undefined && $scope.placeGridApi!=null)
  $scope.placeGridApi.core.handleWindowResize(); 
 };
+$scope.loadFile = function(file,field)
+{
+exampleService.loadFile(file,field).then(function successCallback(response) {
+exampleService.setSelectedEntity(response.data);
+},function errorCallback(response) { 
+alert("error");
+return; 
+return; 
+});
+}
 $scope.trueFalseValues=[true,false];
 $scope.showPlaceDetail= function(index)
 {

@@ -66,6 +66,8 @@ public class Generator {
 	
 	public static String htmlDirectory="/src/main/webapp/WEB-INF/jsp/";
 	
+	public static String uploadDirectory;
+	
 	public static String applicationName;
 	
 	
@@ -112,6 +114,7 @@ public class Generator {
 			Generator.applicationName=project.getName().toLowerCase();
 			Generator.menuName=properties.getProperty("application.menu.name");
 			Generator.schema=properties.getProperty("application.schema");
+			Generator.uploadDirectory=properties.getProperty("application.upload.directory");
 			
 			
 		} catch (FileNotFoundException e) {

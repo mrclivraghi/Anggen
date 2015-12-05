@@ -212,9 +212,18 @@ public class JsGenerator {
 		sb.append("return promise; \n");
 		sb.append("}\n");
 
-		
-		
-		
+		//load file
+		sb.append("this.loadFile= function(file,field){\n");
+		sb.append("var formData = new FormData();\n");
+		sb.append("if (file!=null)\n");
+		sb.append("formData.append('file',file);\n");
+		sb.append("var promise= $http.post(\"../"+entityName+"/\"+this.selectedEntity."+entityName+"Id+\"/load\"+field+\"/\",formData,{\n");
+		sb.append(" headers: {'Content-Type': undefined}\n");
+		sb.append("});\n");
+		sb.append("return promise; \n");
+		sb.append("}\n");
+
+
 		if (relationshipList!=null)
 			for (Relationship relationship: relationshipList)
 			{
@@ -502,6 +511,19 @@ public class JsGenerator {
 			sb.append(resetTableTab(tab.getName(),entity));
 		sb.append("};\n");
 		}
+
+
+		//loadFile
+		sb.append("$scope.loadFile = function(file,field)\n");
+		sb.append("{\n");
+		sb.append(entityName+"Service.loadFile(file,field).then(function successCallback(response) {\n");
+		sb.append(entityName+"Service.setSelectedEntity(response.data);\n");
+		sb.append("},function errorCallback(response) { \n");
+		manageRestError(sb);
+		sb.append("return; \n");
+		sb.append("});\n");
+		sb.append("}\n");
+
 		sb.append("$scope.trueFalseValues=[true,false];\n");
 		//if (isParent)
 		{
@@ -815,7 +837,7 @@ public class JsGenerator {
 	private String buildJS()
 	{
 		StringBuilder buildJS= new StringBuilder();
-		buildJS.append("var "+entityName+"App=angular.module(\""+entityName+"App\",['ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter'])\n");
+		buildJS.append("var "+entityName+"App=angular.module(\""+entityName+"App\",['ngFileUpload','ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter'])\n");
 		//JsGenerator jsGenerator = new JsGenerator(entity, true,null,null);
 		buildJS.append(getSecurity());
 		buildJS.append(generateService());

@@ -1,10 +1,13 @@
 package it.polimi.utils;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.multipart.MultipartFile;
 
 public class Utility {
 	public static String formatDate(java.sql.Date date){
@@ -55,6 +58,33 @@ public class Utility {
 		BCryptPasswordEncoder passwordEncoder= new BCryptPasswordEncoder();
 		return passwordEncoder.encode(password);
 	}
+	
+	public static String saveMultipartFile(MultipartFile file, String destination)
+	{
+		String filePath=null;
+		if (file==null || file.isEmpty())
+		{
+			filePath="";
+		} else
+		{
+			
+			try {
+				
+				File savedFile = new File(destination);
+				if (!savedFile.exists())
+					savedFile.mkdirs();
+				savedFile=new File(destination+file.getOriginalFilename());
+				file.transferTo(savedFile);
+				filePath=savedFile.getAbsolutePath();
+			} catch (IllegalStateException | IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+		return filePath;
+	}
+	
 	
 	public static void main (String[] args)
 	{

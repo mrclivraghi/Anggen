@@ -1,5 +1,6 @@
 package it.polimi.generation;
 
+import it.generated.test.model.domain.Example;
 import it.polimi.model.entity.Entity;
 import it.polimi.model.entity.EntityAttribute;
 import it.polimi.model.field.FieldType;
@@ -40,7 +41,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.sun.codemodel.ClassType;
 import com.sun.codemodel.JAnnotationUse;
@@ -186,7 +189,7 @@ public class RestGenerator {
 				query= query+" (:"+fieldName+" is null or cast(:"+fieldName+" as string)"+comparator+"cast(date("+hibernateField+") as string)) and";
 			} else
 			{
-				if (entityAttribute.asField()!=null && entityAttribute.asField().getFieldType()==FieldType.STRING)
+				if (entityAttribute.asField()!=null && (entityAttribute.asField().getFieldType()==FieldType.STRING || entityAttribute.asField().getFieldType()==FieldType.FILE || entityAttribute.asField().getFieldType()==FieldType.PHOTO  ))
 				{
 					query= query+" (:"+fieldName+" is null or :"+fieldName+"='' or cast(:"+fieldName+" as string)"+comparator+""+hibernateField+") and";
 				} else
@@ -764,6 +767,35 @@ public class RestGenerator {
 			JBlock getSecurityMappingBlock = getSecurityMapping.body();
 			
 			RestGenerator.generateSecurityMapping(entity,getSecurityMappingBlock);
+			
+			for (it.polimi.model.field.Field field: entity.getFieldList())
+			{
+				if (field.getFieldType()==FieldType.FILE)
+				{
+					JMethod loadFileMethod= myClass.method(JMod.PRIVATE, ResponseEntity.class, "loadFile"+Utility.getFirstUpper(field.getName()));
+					loadFileMethod.annotate(ResponseBody.class);
+					JAnnotationUse requestMappingLoadfile=loadFileMethod.annotate(RequestMapping.class);
+					requestMappingLoadfile.param("value", "/{"+Utility.getFirstLower(className)+"Id}/load"+Utility.getFirstUpper(field.getName()));
+					requestMappingLoadfile.param("method",RequestMethod.POST);
+					JVar idParam= loadFileMethod.param(String.class,lowerClass+"Id");
+					idParam.annotate(PathVariable.class);
+					JVar fileParam =loadFileMethod.param(MultipartFile.class, "file");
+					JAnnotationUse reqParam = fileParam.annotate(RequestParam.class);
+					reqParam.param("value", "file");
+					reqParam.param("required",false);
+					JBlock loadFileBlock =loadFileMethod.body();
+					loadFileBlock.directStatement(Generator.getJDefinedClass(entity).fullName()+" "+lowerClass+" = "+lowerClass+"Service.findById("+keyClass.getFieldClass().getName()+".valueOf("+lowerClass+"Id)).get(0);");
+					loadFileBlock.directStatement(Generator.getJDefinedClass(entity).fullName()+" updated"+Utility.getFirstUpper(lowerClass)+"=null;");
+					loadFileBlock.directStatement("String destination=\""+Generator.uploadDirectory+lowerClass+"/\"+"+lowerClass+"Id+\"/\";");
+					loadFileBlock.directStatement("String filePath = "+Utility.class.getName()+".saveMultipartFile(file, destination);");
+					loadFileBlock.directStatement(""+lowerClass+".set"+Utility.getFirstUpper(field.getName())+"(filePath);");
+					loadFileBlock.directStatement("updated"+Utility.getFirstUpper(lowerClass)+"="+lowerClass+"Service.update("+lowerClass+");");
+					loadFileBlock.directStatement("return  ResponseEntity.ok().body(updated"+Utility.getFirstUpper(lowerClass)+");");
+					
+				}
+			}
+			
+			
 			
 		} catch (JClassAlreadyExistsException e) {
 			e.printStackTrace();

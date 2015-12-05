@@ -3,6 +3,7 @@ package it.polimi.test;
 import java.io.File;
 import java.util.ArrayList;
 
+import it.TestApplication;
 import it.polimi.Application;
 import it.polimi.generation.AngularGenerator;
 import it.polimi.generation.EntityGenerator;
@@ -28,7 +29,7 @@ import java.util.List;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes=Application.class)
+@SpringApplicationConfiguration(classes=TestApplication.class)
 public class JsDbGenerationTest {
 
 	@Autowired

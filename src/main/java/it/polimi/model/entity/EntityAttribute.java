@@ -156,6 +156,8 @@ public class EntityAttribute {
 			case TIME: return codeModel.ref(Time.class);
 			case BOOLEAN: return codeModel.ref(Boolean.class);
 			case LONG : return codeModel.ref(Long.class);
+			case FILE: return codeModel.ref(String.class);
+			case PHOTO: return codeModel.ref(String.class);
 			default: return null;
 			}
 		} else

@@ -10,6 +10,7 @@ import it.polimi.utils.annotation.IgnoreTableList;
 import it.polimi.utils.annotation.IgnoreUpdate;
 import it.polimi.utils.annotation.Tab;
 
+import java.io.File;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -80,6 +81,7 @@ public class ReflectionManager {
 		if (myClass==BigDecimal.class) return true;
 		if (myClass==Boolean.class) return true;
 		if (myClass==Time.class) return true;
+		if (myClass==File.class) return true;
 		
 		return false;
 	}

@@ -384,6 +384,7 @@ public class AngularGenerator {
 		if (entityAttribute.asField()!=null && entityAttribute.asField().getFieldType()==FieldType.TIME) return "time";
 		if (entityAttribute.asField()!=null && entityAttribute.getPassword()) 
 			return "password";
+		if (entityAttribute.isField()&&entityAttribute.asField().getFieldType()==FieldType.FILE) return "file";
 		return "text";
 	}
 	
@@ -508,6 +509,9 @@ public class AngularGenerator {
 				System.out.println("");
 			for (EntityAttribute entityAttribute: entityManager.getFieldByTab(tab))
 			{
+				
+				if (search && entityAttribute.isField() && entityAttribute.asField().getFieldType()==FieldType.FILE) continue;
+					
 
 				if (entityAttribute.getBetweenFilter() && (search))
 				{
@@ -612,7 +616,7 @@ public class AngularGenerator {
 		}
 		else
 		{
-			if (entityAttribute.asField()!=null)
+			if (entityAttribute.isField())
 			{
 				
 				
@@ -620,15 +624,44 @@ public class AngularGenerator {
 				html.div(CssGenerator.getExternalFieldPanel(style, search, entityName, entityAttribute).add("ng-show", securityCondition,false));
 				html.div(CssGenerator.getInputGroup());
 				html.span((new HtmlAttributes()).add("class","input-group-addon")).content(entityAttribute.getName());
-				if (getInputType(entityAttribute).equals("checkbox"))
+				String inputType=getInputType(entityAttribute);
+				if (inputType.equals("checkbox"))
 				{
 					html.select(getFieldHtmlAttributes(entityAttribute, baseEntity, !search, "").add("ng-options", "value for value in trueFalseValues"))
 					._select();
 				}else
+				{
+					if (inputType.equals("file"))
+					{
+						
+						HtmlCanvas fileIcon = new HtmlCanvas();
+						fileIcon.span((new HtmlAttributes()).add("class", "glyphicon glyphicon-file kv-caption-icon"))._span();
+						
+						HtmlCanvas folderIcon = new HtmlCanvas();
+						folderIcon.i((new HtmlAttributes()).add("class", "glyphicon glyphicon-folder-open"))._i();
+						
+						html.div((new HtmlAttributes()).add("tabindex","500").add("class","form-control file-caption  kv-fileinput-caption"))
+						.div((new HtmlAttributes()).add("class","file-caption-name").add("title",""))
+						.content(fileIcon.toHtml()+"{{selectedEntity."+entityAttribute.getName()+"}}",false)
+						._div()
+						.div((new HtmlAttributes()).add("class","input-group-btn"))
+						
+						.button((new HtmlAttributes()).add("ng-click","loadFile(null)").add("type","button").add("tabindex", "500").add("title","Clear selected files").add("class","btn btn-default fileinput-remove fileinput-remove-button"))
+						.i((new HtmlAttributes()).add("class","glyphicon glyphicon-trash"))._i()
+						.span((new HtmlAttributes()).add("class","hidden-xs")).content("Remove")
+						._button()
+						.div((new HtmlAttributes()).add("class","btn btn-primary btn-file").add("ngf-select","loadFile($file)")).
+						content(folderIcon.toHtml()+"Browse",false)
+						._div();
+						
+						
+						
+					}else
 						html.input(getFieldHtmlAttributes(entityAttribute,baseEntity,!search,""));
+				}
 				html._div();
 				if (!search)
-				renderValidator(html,entityAttribute);
+					renderValidator(html,entityAttribute);
 				html._div();
 				
 			} else

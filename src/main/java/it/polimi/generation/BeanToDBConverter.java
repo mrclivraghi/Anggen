@@ -1,5 +1,6 @@
 package it.polimi.generation;
 
+import java.io.File;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -173,6 +174,8 @@ public class BeanToDBConverter {
 									fieldType=FieldType.BOOLEAN;
 								if (field.getFieldClass()==Time.class)
 									fieldType=FieldType.TIME;
+								if (field.getFieldClass()==File.class)
+									fieldType=FieldType.FILE;
 								metaField.setFieldType(fieldType);
 								metaField.setEntity(entity);
 								List<it.polimi.model.field.Annotation> annotationList = new ArrayList<it.polimi.model.field.Annotation>();

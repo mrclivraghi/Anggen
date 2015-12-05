@@ -646,11 +646,11 @@ public class AngularGenerator {
 						._div()
 						.div((new HtmlAttributes()).add("class","input-group-btn"))
 						
-						.button((new HtmlAttributes()).add("ng-click","loadFile(null)").add("type","button").add("tabindex", "500").add("title","Clear selected files").add("class","btn btn-default fileinput-remove fileinput-remove-button"))
+						.button((new HtmlAttributes()).add("ng-click","loadFile(null,'"+Utility.getFirstUpper(entityAttribute.getName())+"')").add("type","button").add("tabindex", "500").add("title","Clear selected files").add("class","btn btn-default fileinput-remove fileinput-remove-button"))
 						.i((new HtmlAttributes()).add("class","glyphicon glyphicon-trash"))._i()
 						.span((new HtmlAttributes()).add("class","hidden-xs")).content("Remove")
 						._button()
-						.div((new HtmlAttributes()).add("class","btn btn-primary btn-file").add("ngf-select","loadFile($file)")).
+						.div((new HtmlAttributes()).add("class","btn btn-primary btn-file").add("ngf-select","loadFile($file,'"+Utility.getFirstUpper(entityAttribute.getName())+"')")).
 						content(folderIcon.toHtml()+"Browse",false)
 						._div();
 						

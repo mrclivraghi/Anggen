@@ -1,4 +1,4 @@
-var exampleApp=angular.module("exampleApp",['ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter'])
+var exampleApp=angular.module("exampleApp",['ngFileUpload','ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter'])
 .service("securityService",function($http)
 		{
 	this.restrictionList;
@@ -124,7 +124,8 @@ var exampleApp=angular.module("exampleApp",['ngTouch', 'ui.grid', 'ui.grid.pagin
 			
 			this.loadFile= function(file){
 				var formData = new FormData();
-				formData.append('file',file);
+				if (file!=null)
+					formData.append('file',file);
 				var promise= $http.post("../example/"+this.selectedEntity.exampleId+"/loadFile/",formData,{
 		            headers: {'Content-Type': undefined}
 		        });
@@ -151,11 +152,7 @@ var exampleApp=angular.module("exampleApp",['ngTouch', 'ui.grid', 'ui.grid.pagin
 					$scope.entityList=exampleService.entityList;
 					$scope.selectedEntity=exampleService.selectedEntity;
 					$scope.childrenList=exampleService.childrenList; 
-					$scope.loadFile=function(file,message,flow)
-					{
-						alert(message);
-						console.log(file);
-					}
+
 					
 				
 					$scope.reset = function()
@@ -173,10 +170,21 @@ var exampleApp=angular.module("exampleApp",['ngTouch', 'ui.grid', 'ui.grid.pagin
 						placeService.selectedEntity.show=false;$('#exampleTabs li:eq(0) a').tab('show');
 					};
 
-					$scope.loadFile = function()
+					$scope.loadFile = function(file)
 					{
-						exampleService.loadFile($scope.selectedEntity.testFile).then(function successCallback(response) {
-							alert("ok");
+						console.log("loading"+file);
+						exampleService.loadFile(file).then(function successCallback(response) {
+							exampleService.setSelectedEntity(response.data);
+						},function errorCallback(response) { 
+							alert("error");
+							return; 
+						});
+					}
+					
+					$scope.removeFile = function()
+					{
+						exampleService.loadFile(null).then(function successCallback(response) {
+							exampleService.setSelectedEntity(response.data);
 						},function errorCallback(response) { 
 							alert("error");
 							return; 

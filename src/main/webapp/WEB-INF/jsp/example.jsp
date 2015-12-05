@@ -18,6 +18,8 @@
 <script type="text/javascript" src="../js/jquery.cookie.js"></script>
 <script type="text/javascript" src="../js/bootstrap.min.js"></script>
 <script type="text/javascript" src="../js/alasql.min.js"></script>
+<script type="text/javascript" src="../js/ng-file-upload-all.js"></script>
+
 <link rel="stylesheet" href="../css/ui-grid.css" />
 <link rel="stylesheet" href="../css/bootstrap.min.css" />
 <link rel="stylesheet" href="../css/main.css" />
@@ -224,20 +226,48 @@
 							</div>
 
 <br><br><br>
-<input type="file" id="test-file"  ng-if="selectedEntity.filePath==undefined"/> 
+<!-- <input type="file" id="test-file"  ng-if="selectedEntity.filePath==undefined"/> 
 <script>
-$("#test-file").fileinput();
-</script>
+//$("#test-file").fileinput();
+</script>-->
 
 							<div class="pull-left right-input" 
 								 ng-if="selectedEntity.exampleId&gt;0 "
 								ng-class="{'has-success' : true }"
 								>
 								<script src="../js/fileinput.js" type="text/javascript"></script>
+								<div class="input-group ">
+								
+   <div tabindex="500" class="form-control file-caption  kv-fileinput-caption">
+   <div class="file-caption-name" title=""><span class="glyphicon glyphicon-file kv-caption-icon"></span>{{selectedEntity.filePath}}</div>
+</div>
+
+   <div class="input-group-btn">
+       <button ng-click="removeFile()" type="button" tabindex="500" title="Clear selected files" class="btn btn-default fileinput-remove fileinput-remove-button"><i class="glyphicon glyphicon-trash"></i> <span class="hidden-xs">Remove</span></button>
+       <button type="button" tabindex="500" title="Abort ongoing upload" class="btn btn-default hide fileinput-cancel fileinput-cancel-button"><i class="glyphicon glyphicon-ban-circle"></i> <span class="hidden-xs">Cancel</span></button>
+     <!--   <button ng-click="loadFile()" type="submit" tabindex="500" title="Upload selected files" class="btn btn-default fileinput-upload fileinput-upload-button"><i class="glyphicon glyphicon-upload"></i> <span class="hidden-xs">Upload</span></button> -->
+     <div class="btn btn-primary btn-file" ngf-select="loadFile($file)"> <i class="glyphicon glyphicon-folder-open"></i>Browse</div> 
+     <!--   <div class="btn btn-primary btn-file" ngf-select ng-model="file" name="file" ngf-pattern="'image/*'"
+    accept="image/*" ngf-max-size="20MB" ngf-min-height="100" 
+    ngf-resize="{width: 100, height: 100}">Select</div>
+     <!--   <div tabindex="500" class="">
+       <i class="glyphicon glyphicon-folder-open"></i> <span class="hidden-xs">Browse...</span>      
+       <input type="file" id="test-file" file-model="selectedEntity.testFile"style="width: 100%" onchange="angular.element(this).scope().loadFile()"/>
+       </div>-->
+       
+       
+   </div>
+</div>
+								
+								
+								
+								
+								<!-- old input group 
 								<div class="input-group">
 									<span class="input-group-addon">testFile</span>
 
 <input type="file"  file-model="selectedEntity.testFile" ng-if="selectedEntity.filePath==undefined"/> 
+
 <a href="{{selectedEntity.filePath}}" ng-if="selectedEntity.filePath!=undefined">file</a>
 
 <span class="input-group-btn"><button
@@ -246,7 +276,7 @@ $("#test-file").fileinput();
 										<button ng-click=""
 											class="btn btn-default " id="example"
 											ng-if="selectedEntity.example!=null">Open/button></span>
-								</div>
+								</div>-->
 								
 								
 								

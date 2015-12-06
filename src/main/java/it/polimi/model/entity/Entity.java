@@ -65,6 +65,10 @@ public class Entity {
 	@JoinColumn(name="entity_group_id_entity_group")
 	private EntityGroup entityGroup;
 	
+	@Column(name="security_type")
+	private SecurityType securityType;
+	
+	
 	/**
 	 * @return the entityId
 	 */

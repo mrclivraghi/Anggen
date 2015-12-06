@@ -650,8 +650,10 @@ public class AngularGenerator {
 						.i((new HtmlAttributes()).add("class","glyphicon glyphicon-trash"))._i()
 						.span((new HtmlAttributes()).add("class","hidden-xs")).content("Remove")
 						._button()
-						.div((new HtmlAttributes()).add("class","btn btn-primary btn-file").add("ngf-select","loadFile($file,'"+Utility.getFirstUpper(entityAttribute.getName())+"')")).
+						.div((new HtmlAttributes()).add("ng-if","selectedEntity.exampleFile==undefined").add("class","btn btn-primary btn-file").add("ngf-select","loadFile($file,'"+Utility.getFirstUpper(entityAttribute.getName())+"')")).
 						content(folderIcon.toHtml()+"Browse",false)
+						.div((new HtmlAttributes()).add("class","btn btn-primary").add("ng-if","selectedEntity.exampleFile!=undefined").add("ng-click","openFile(selectedEntity."+entityAttribute.getName()+")"))
+						.content(folderIcon.toHtml()+"Open",false)
 						._div();
 						
 						

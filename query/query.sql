@@ -1,1 +1,3 @@
-﻿truncate table mustle.entity_group cascade;
+﻿select * from mustle.project;
+
+truncate table mustle.project cascade;

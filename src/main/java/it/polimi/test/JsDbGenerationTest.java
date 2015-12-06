@@ -46,7 +46,7 @@ public class JsDbGenerationTest {
 	public void createJs()
 	{
 		List<EnumField> enumFieldList = enumFieldRepository.findByEnumFieldIdAndNameAndEnumValueAndEntityAndAnnotationAndTab(null, null, null, null, null, null);
-		Project project = projectRepository.findByName("test").get(0);
+		Project project = projectRepository.findByName("anggen").get(0);
 		Generator generator = new Generator(project,enumFieldList);
 		generator.generate();
 		

@@ -155,6 +155,18 @@ public class Entity {
 	public void setEntityGroup(EntityGroup entityGroup) {
 		this.entityGroup = entityGroup;
 	}
+	/**
+	 * @return the securityType
+	 */
+	public SecurityType getSecurityType() {
+		return securityType;
+	}
+	/**
+	 * @param securityType the securityType to set
+	 */
+	public void setSecurityType(SecurityType securityType) {
+		this.securityType = securityType;
+	}
 	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof Entity)) return false;

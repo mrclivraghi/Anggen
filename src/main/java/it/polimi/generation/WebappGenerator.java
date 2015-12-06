@@ -1,6 +1,6 @@
 package it.polimi.generation;
 
-import it.polimi.repository.UserRepository;
+import it.polimi.repository.security.UserRepository;
 import it.polimi.utils.Utility;
 
 import java.io.File;

@@ -1,129 +1,88 @@
+
 package it.polimi.model.security;
-import static javax.persistence.GenerationType.IDENTITY;
-import it.polimi.utils.annotation.Password;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import it.polimi.model.security.Role;
+import it.polimi.utils.annotation.DescriptionField;
+import it.polimi.utils.annotation.Password;
 
 import org.hibernate.annotations.Type;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 @Entity
-@Table(name = "user", schema = "sso")
+@Table(schema = "sso", name = "user")
 public class User {
 
-	@Id
-	@GeneratedValue(strategy = IDENTITY)
-	@Column(name = "user_id", 
-		unique = true, nullable = false)
-	private Long userId;
-	
-	private String username;
-	@Password
-	private String password;
-	private Boolean enabled;
-	
+    public final static java.lang.Long staticEntityId = 2L;
+    @javax.persistence.Column(name = "username")
+    private java.lang.String username;
+    @javax.persistence.Column(name = "user_id")
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @DescriptionField
+    private java.lang.Long userId;
+    @javax.persistence.Column(name = "enabled")
+    private Boolean enabled;
+    @javax.persistence.Column(name = "password")
+    @Password
+    private java.lang.String password;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @Type(type = "it.generated.anggen.model.security.Role")
+    @JoinTable(name = "user_role", schema = "sso", joinColumns = {
+        @JoinColumn(name = "user_id")
+    }, inverseJoinColumns = {
+        @JoinColumn(name = "role_id")
+    })
+    private List<Role> roleList;
 
-	@ManyToMany(fetch=FetchType.EAGER)
-	@Type(type="it.polimi.model.Role")
-	@JoinTable(name="user_role", schema="sso",
-	joinColumns=@JoinColumn(name="user_id"),inverseJoinColumns={@JoinColumn(name="role_id")})
-	private List<Role> roleList;
+    public java.lang.String getUsername() {
+        return this.username;
+    }
 
-	public User() {
-	}
+    public void setUsername(java.lang.String username) {
+        this.username=username;
+    }
 
-	public User(String username, String password, boolean enabled) {
-		this.setUsername(username);
-		this.setPassword(password);
-		this.setEnabled(enabled);
-	}
+    public java.lang.Long getUserId() {
+        return this.userId;
+    }
 
-	/**
-	 * @return the username
-	 */
-	public String getUsername() {
-		return username;
-	}
+    public void setUserId(java.lang.Long userId) {
+        this.userId=userId;
+    }
 
-	/**
-	 * @param username the username to set
-	 */
-	public void setUsername(String username) {
-		this.username = username;
-	}
+    public Boolean getEnabled() {
+        return this.enabled;
+    }
 
-	/**
-	 * @return the userId
-	 */
-	public Long getUserId() {
-		return userId;
-	}
+    public void setEnabled(Boolean enabled) {
+        this.enabled=enabled;
+    }
 
-	/**
-	 * @param userId the userId to set
-	 */
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
+    public java.lang.String getPassword() {
+        return this.password;
+    }
 
-	/**
-	 * @return the password
-	 */
-	public String getPassword() {
-		return password;
-	}
+    public void setPassword(java.lang.String password) {
+        this.password=password;
+    }
 
-	/**
-	 * @param password the password to set
-	 */
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public List<Role> getRoleList() {
+        return this.roleList;
+    }
 
-
-	/**
-	 * @return the enabled
-	 */
-	public Boolean isEnabled() {
-		return enabled;
-	}
-
-	/**
-	 * @param enabled the enabled to set
-	 */
-	public void setEnabled(Boolean enabled) {
-		this.enabled = enabled;
-	}
-
-	public List<Role> getRoleList() {
-		return roleList;
-	}
-
-	public void setRoleList(List<Role> roleList) {
-		this.roleList = roleList;
-	}
-
-	public Boolean getEnabled() {
-		return enabled;
-	}
-
-	
-	
+    public void setRoleList(List<Role> roleList) {
+        this.roleList=roleList;
+    }
 
 }

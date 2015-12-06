@@ -1,15 +1,13 @@
 package it.polimi.generation;
 
-import it.polimi.Application;
+import it.polimi.model.EntityAttribute;
+import it.polimi.model.FieldType;
 import it.polimi.model.entity.Entity;
-import it.polimi.model.entity.EntityAttribute;
 import it.polimi.model.entity.Tab;
 import it.polimi.model.field.EnumField;
 import it.polimi.model.field.EnumValue;
 import it.polimi.model.field.Field;
-import it.polimi.model.field.FieldType;
 import it.polimi.model.relationship.Relationship;
-import it.polimi.model.relationship.RelationshipType;
 import it.polimi.reflection.EntityManager;
 import it.polimi.reflection.EntityManagerImpl;
 import it.polimi.utils.ClassDetail;

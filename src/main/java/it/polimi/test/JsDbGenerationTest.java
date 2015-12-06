@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import it.TestApplication;
-import it.polimi.Application;
+import it.polimi.AnggenApplication;
 import it.polimi.generation.AngularGenerator;
 import it.polimi.generation.EntityGenerator;
 import it.polimi.generation.Generator;
@@ -14,10 +14,8 @@ import it.polimi.model.entity.Entity;
 import it.polimi.model.entity.EntityGroup;
 import it.polimi.model.entity.Project;
 import it.polimi.model.field.EnumField;
-import it.polimi.repository.EntityGroupRepository;
-import it.polimi.repository.EntityRepository;
-import it.polimi.repository.EnumFieldRepository;
-import it.polimi.repository.ProjectRepository;
+import it.polimi.repository.entity.ProjectRepository;
+import it.polimi.repository.field.EnumFieldRepository;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,7 +27,7 @@ import java.util.List;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes=TestApplication.class)
+@SpringApplicationConfiguration(classes=AnggenApplication.class)
 public class JsDbGenerationTest {
 
 	@Autowired

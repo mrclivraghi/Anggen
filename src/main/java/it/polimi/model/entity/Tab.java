@@ -1,107 +1,96 @@
-package it.polimi.model.entity;
 
-import static javax.persistence.GenerationType.IDENTITY;
-import it.polimi.model.field.EnumField;
-import it.polimi.model.field.Field;
-import it.polimi.model.relationship.Relationship;
+package it.polimi.model.entity;
 
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import it.polimi.model.field.EnumField;
+import it.polimi.model.field.Field;
+import it.polimi.model.relationship.Relationship;
+import it.polimi.utils.annotation.DescriptionField;
+
 import org.hibernate.annotations.Type;
 
 @javax.persistence.Entity
-@Table(schema="mustle",name="tab")
+@Table(schema = "meta", name = "tab")
 public class Tab {
 
-	@Id
-	@GeneratedValue(strategy = IDENTITY)
-	@Column(name = "tab_id") 
-	
-	private Long tabId;
-	
-	private String name;
-	
-	@ManyToOne
-	@JoinColumn(name="entity_id_entity")
-	private Entity entity;
-	
-	@OneToMany(fetch=FetchType.EAGER)
-	@Type(type="it.polimi.model.Field")
-	@JoinColumn(name="tab_id_tab")
-	private List<Field> fieldList;
-	
+    public final static java.lang.Long staticEntityId = 3L;
+    @javax.persistence.Column(name = "name")
+    private String name;
+    @javax.persistence.Column(name = "tab_id")
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @DescriptionField
+    private java.lang.Long tabId;
+    @ManyToOne(fetch = javax.persistence.FetchType.EAGER)
+    @javax.persistence.JoinColumn(name = "entity_id_entity")
+    private it.polimi.model.entity.Entity entity;
+    @OneToMany(fetch = javax.persistence.FetchType.EAGER)
+    @Type(type = "it.generated.anggen.model.field.Field")
+    @javax.persistence.JoinColumn(name = "tab_id_tab")
+    private List<Field> fieldList;
+    @OneToMany(fetch = javax.persistence.FetchType.EAGER)
+    @Type(type = "it.generated.anggen.model.relationship.Relationship")
+    @javax.persistence.JoinColumn(name = "tab_id_tab")
+    private List<Relationship> relationshipList;
+    @OneToMany(fetch = javax.persistence.FetchType.EAGER)
+    @Type(type = "it.generated.anggen.model.field.EnumField")
+    @javax.persistence.JoinColumn(name = "tab_id_tab")
+    private List<EnumField> enumFieldList;
 
-	@OneToMany(fetch=FetchType.EAGER)
-	@Type(type="it.polimi.model.Relationship")
-	@JoinColumn(name="tab_id_tab")
-	private List<Relationship> relationshipList;
-	
-	
+    public String getName() {
+        return this.name;
+    }
 
-	@OneToMany(fetch=FetchType.EAGER)
-	@Type(type="it.polimi.model.Enumfield")
-	@JoinColumn(name="tab_id_tab")
-	private List<EnumField> enumFieldList;
-	
-	public Tab() {
-		// TODO Auto-generated constructor stub
-	}
+    public void setName(String name) {
+        this.name=name;
+    }
 
-	public Long getTabId() {
-		return tabId;
-	}
+    public java.lang.Long getTabId() {
+        return this.tabId;
+    }
 
-	public void setTabId(Long tabId) {
-		this.tabId = tabId;
-	}
+    public void setTabId(java.lang.Long tabId) {
+        this.tabId=tabId;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public it.polimi.model.entity.Entity getEntity() {
+        return this.entity;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setEntity(it.polimi.model.entity.Entity entity) {
+        this.entity=entity;
+    }
 
-	public Entity getEntity() {
-		return entity;
-	}
+    public List<Field> getFieldList() {
+        return this.fieldList;
+    }
 
-	public void setEntity(Entity entity) {
-		this.entity = entity;
-	}
+    public void setFieldList(List<Field> fieldList) {
+        this.fieldList=fieldList;
+    }
 
-	public List<Field> getFieldList() {
-		return fieldList;
-	}
+    public List<Relationship> getRelationshipList() {
+        return this.relationshipList;
+    }
 
-	public void setFieldList(List<Field> fieldList) {
-		this.fieldList = fieldList;
-	}
+    public void setRelationshipList(List<Relationship> relationshipList) {
+        this.relationshipList=relationshipList;
+    }
 
-	public List<Relationship> getRelationshipList() {
-		return relationshipList;
-	}
+    public List<EnumField> getEnumFieldList() {
+        return this.enumFieldList;
+    }
 
-	public void setRelationshipList(List<Relationship> relationshipList) {
-		this.relationshipList = relationshipList;
-	}
-
-	public List<EnumField> getEnumFieldList() {
-		return enumFieldList;
-	}
-
-	public void setEnumFieldList(List<EnumField> enumFieldList) {
-		this.enumFieldList = enumFieldList;
-	}
+    public void setEnumFieldList(List<EnumField> enumFieldList) {
+        this.enumFieldList=enumFieldList;
+    }
 
 }

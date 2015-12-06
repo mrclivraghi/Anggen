@@ -1,6 +1,7 @@
+
 package it.polimi.model.field;
 
-import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,89 +10,56 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-@javax.persistence.Entity
-@Table(schema="mustle",name="enum_value")
-public class EnumValue{
+import it.polimi.utils.annotation.DescriptionField;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	@Column(name ="enum_value_id")
-	private Long enumValueId;
-	
-	private Integer value;
-	
-	private String name;
-	
-	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="enum_field_id_enum_field")
-	private EnumField enumField;
-	
-	public EnumValue() {
-		// TODO Auto-generated constructor stub
-	}
+@Entity
+@Table(schema = "meta", name = "enum_value")
+public class EnumValue {
 
+    public final static java.lang.Long staticEntityId = 4L;
+    @javax.persistence.Column(name = "value")
+    private Integer value;
+    @javax.persistence.Column(name = "enum_value_id")
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @DescriptionField
+    private java.lang.Long enumValueId;
+    @javax.persistence.Column(name = "name")
+    private String name;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "enum_field_id_enum_field")
+    private it.polimi.model.field.EnumField enumField;
 
-	/**
-	 * @return the enumValueId
-	 */
-	public Long getEnumValueId() {
-		return enumValueId;
-	}
+    public Integer getValue() {
+        return this.value;
+    }
 
+    public void setValue(Integer value) {
+        this.value=value;
+    }
 
-	/**
-	 * @param enumValueId the enumValueId to set
-	 */
-	public void setEnumValueId(Long enumValueId) {
-		this.enumValueId = enumValueId;
-	}
+    public java.lang.Long getEnumValueId() {
+        return this.enumValueId;
+    }
 
+    public void setEnumValueId(java.lang.Long enumValueId) {
+        this.enumValueId=enumValueId;
+    }
 
-	/**
-	 * @return the value
-	 */
-	public Integer getValue() {
-		return value;
-	}
+    public String getName() {
+        return this.name;
+    }
 
+    public void setName(String name) {
+        this.name=name;
+    }
 
-	/**
-	 * @param value the value to set
-	 */
-	public void setValue(Integer value) {
-		this.value = value;
-	}
+    public it.polimi.model.field.EnumField getEnumField() {
+        return this.enumField;
+    }
 
-
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
-
-
-	/**
-	 * @param name the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-
-
-	/**
-	 * @return the enumField
-	 */
-	public EnumField getEnumField() {
-		return enumField;
-	}
-
-
-	/**
-	 * @param enumField the enumField to set
-	 */
-	public void setEnumField(EnumField enumField) {
-		this.enumField = enumField;
-	}
+    public void setEnumField(it.polimi.model.field.EnumField enumField) {
+        this.enumField=enumField;
+    }
 
 }

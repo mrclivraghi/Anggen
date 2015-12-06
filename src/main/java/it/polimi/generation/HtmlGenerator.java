@@ -1,7 +1,7 @@
 package it.polimi.generation;
 
+import it.polimi.model.EntityAttribute;
 import it.polimi.model.entity.Entity;
-import it.polimi.model.entity.EntityAttribute;
 import it.polimi.model.entity.EntityGroup;
 import it.polimi.model.field.Field;
 import it.polimi.reflection.EntityManager;

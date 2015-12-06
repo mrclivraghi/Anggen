@@ -1,14 +1,14 @@
 package it.polimi.generation;
 
 import it.polimi.boot.OracleNamingStrategy;
+import it.polimi.model.EntityAttribute;
+import it.polimi.model.RelationshipType;
 import it.polimi.model.entity.Entity;
-import it.polimi.model.entity.EntityAttribute;
 import it.polimi.model.field.Annotation;
 import it.polimi.model.field.AnnotationAttribute;
 import it.polimi.model.field.EnumField;
 import it.polimi.model.field.Field;
 import it.polimi.model.relationship.Relationship;
-import it.polimi.model.relationship.RelationshipType;
 import it.polimi.utils.Utility;
 import it.polimi.utils.annotation.Between;
 import it.polimi.utils.annotation.DescriptionField;
@@ -142,6 +142,7 @@ public class EntityGenerator {
 		{
 			JClass fieldClass = field.getFieldClass();
 			String fieldName= field.getName();
+			if (fieldName.equals("staticEntityId")) continue;
 			JVar classField = myClass.field(JMod.PRIVATE, fieldClass, field.getName());
 			JAnnotationUse columnAnnotation = classField.annotate(Column.class);
 			columnAnnotation.param("name", namingStrategy.classToTableName(field.getName()));
@@ -175,7 +176,7 @@ public class EntityGenerator {
 					type.param("type", Generator.getJDefinedClass(relationship.getEntityTarget()).fullName());
 					JAnnotationUse joinTable = listField.annotate(JoinTable.class);
 					joinTable.param("name", namingStrategy.classToTableName(relationship.getEntity().getName())+"_"+namingStrategy.classToTableName(relationship.getEntityTarget().getName()));
-					joinTable.param("schema", "public");
+					joinTable.param("schema", Generator.schema);
 					JAnnotationArrayMember listJoinColumns = joinTable.paramArray("joinColumns");
 					listJoinColumns.annotate(JoinColumn.class).param("name", relationship.getEntity().getName().toLowerCase()+"_id");
 					

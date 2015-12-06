@@ -1,11 +1,11 @@
 package it.polimi.security;
 
+import it.polimi.model.RestrictionType;
 import it.polimi.model.entity.Entity;
 import it.polimi.model.security.RestrictionEntity;
 import it.polimi.model.security.RestrictionEntityGroup;
 import it.polimi.model.security.User;
-import it.polimi.model.security.RestrictionType;
-import it.polimi.repository.UserRepository;
+import it.polimi.repository.security.UserRepository;
 
 import java.util.List;
 
@@ -66,6 +66,7 @@ public class SecurityService{
 		Boolean hasPermission=false;
 		for (RestrictionEntityGroup restrictionEntityGroup: userManager.getRestrictionEntityGroupList())
 		{
+			if (restrictionEntityGroup.getEntityGroup()!=null)
 			for (Entity entity: restrictionEntityGroup.getEntityGroup().getEntityList())
 			{
 				if (entity.getEntityId().equals(entityId) && (isAllowed(restrictionEntityGroup,restrictionType))) 

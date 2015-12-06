@@ -9,11 +9,10 @@ import it.polimi.model.security.RestrictionField;
 import it.polimi.model.security.User;
 import it.polimi.reflection.EntityManager;
 import it.polimi.reflection.EntityManagerImpl;
-import it.polimi.searchbean.AnnotationSearchBean;
-import it.polimi.searchbean.UserSearchBean;
+import it.polimi.searchbean.security.UserSearchBean;
 import it.polimi.security.RestrictionItem;
 import it.polimi.security.UserManager;
-import it.polimi.service.UserService;
+import it.polimi.service.security.UserService;
 
 import java.util.HashMap;
 import java.util.List;
@@ -61,7 +60,7 @@ public class AuthenticationController {
 	private Map<String,RestrictionItem> buildRestrictionMap(List<RestrictionEntity> restrictionEntityList, List<RestrictionEntityGroup> restrictionEntityGroupList, List<RestrictionField> restrictionFieldList)
 	{
 		Map<String,RestrictionItem> restrictionMap= new HashMap<String, RestrictionItem>();
-		
+		if (restrictionEntityGroupList!=null)
 		for (RestrictionEntityGroup restrictionEntityGroup: restrictionEntityGroupList)
 		{
 			for (Entity entity:restrictionEntityGroup.getEntityGroup().getEntityList())
@@ -108,6 +107,7 @@ public class AuthenticationController {
 		for (RestrictionItem restrictionItem: restrictionMap.values())
 		{
 			Map<String,Boolean> restrictionFieldMap= new HashMap<String, Boolean>();
+			if (restrictionItem.getEntity()!=null)
 			for (Field field: restrictionItem.getEntity().getFieldList())
 			{
 				for (RestrictionField restrictionField: field.getRestrictionFieldList())

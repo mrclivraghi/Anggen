@@ -1,6 +1,6 @@
 package it.polimi.generation;
 
-import it.polimi.model.entity.EntityAttribute;
+import it.polimi.model.EntityAttribute;
 import it.polimi.utils.Field;
 
 import org.rendersnake.HtmlAttributes;

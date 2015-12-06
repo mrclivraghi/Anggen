@@ -1,13 +1,16 @@
-package it.polimi.boot;
 
+package it.polimi.boot;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
 
-//@Configuration
+@Configuration
 public class SecurityWebApplicationInitializer
-extends AbstractSecurityWebApplicationInitializer {
+    extends AbstractSecurityWebApplicationInitializer
+{
 
-public SecurityWebApplicationInitializer() {
-}
+
+    public SecurityWebApplicationInitializer() {
+    }
+
 }

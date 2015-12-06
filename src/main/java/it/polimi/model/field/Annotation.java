@@ -1,149 +1,93 @@
-package it.polimi.model.field;
 
-import it.polimi.model.relationship.Relationship;
+package it.polimi.model.field;
 
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.FetchType;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import it.polimi.model.AnnotationType;
+import it.polimi.model.field.AnnotationAttribute;
+import it.polimi.utils.annotation.DescriptionField;
+
 import org.hibernate.annotations.Type;
 
-@javax.persistence.Entity
-@Table(schema="mustle",name="annotation")
+@Entity
+@Table(schema = "meta", name = "annotation")
 public class Annotation {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	@Column(name ="annotation_id")
-	private Long annotationId;
-	
-	@Column(name="annotation_type")
-	private AnnotationType annotationType;
-	
-	
-	@OneToMany(fetch=FetchType.EAGER)
-	@Type(type="it.polimi.model.AnnotationAttribute")
-	@JoinColumn(name="annotation_id_annotation")
-	private List<AnnotationAttribute> annotationAttributeList;
-	
-	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="field_id_field")
-	private Field field;
-	
-	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="relationship_id_relationship")
-	private Relationship relationship;
-	
-	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="enum_field_id_enum_field")
-	private EnumField enumField;
-	
-	public Annotation() {
-		// TODO Auto-generated constructor stub
-	}
+    public final static java.lang.Long staticEntityId = 7L;
+    @javax.persistence.Column(name = "annotation_id")
+    @Id
+    @GeneratedValue(strategy = GenerationType.TABLE)
+    @DescriptionField
+    private java.lang.Long annotationId;
+    @OneToMany(fetch = javax.persistence.FetchType.EAGER)
+    @Type(type = "it.generated.anggen.model.field.AnnotationAttribute")
+    @javax.persistence.JoinColumn(name = "annotation_id_annotation")
+    private List<AnnotationAttribute> annotationAttributeList;
+    @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.EAGER)
+    @javax.persistence.JoinColumn(name = "field_id_field")
+    private it.polimi.model.field.Field field;
+    @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.EAGER)
+    @javax.persistence.JoinColumn(name = "relationship_id_relationship")
+    private it.polimi.model.relationship.Relationship relationship;
+    @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.EAGER)
+    @javax.persistence.JoinColumn(name = "enum_field_id_enum_field")
+    private it.polimi.model.field.EnumField enumField;
+    @javax.persistence.Column(name = "annotation_type")
+    private AnnotationType annotationType;
 
+    public java.lang.Long getAnnotationId() {
+        return this.annotationId;
+    }
 
-	/**
-	 * @return the annotationId
-	 */
-	public Long getAnnotationId() {
-		return annotationId;
-	}
+    public void setAnnotationId(java.lang.Long annotationId) {
+        this.annotationId=annotationId;
+    }
 
+    public List<AnnotationAttribute> getAnnotationAttributeList() {
+        return this.annotationAttributeList;
+    }
 
-	/**
-	 * @param annotationId the annotationId to set
-	 */
-	public void setAnnotationId(Long annotationId) {
-		this.annotationId = annotationId;
-	}
+    public void setAnnotationAttributeList(List<AnnotationAttribute> annotationAttributeList) {
+        this.annotationAttributeList=annotationAttributeList;
+    }
 
+    public it.polimi.model.field.Field getField() {
+        return this.field;
+    }
 
-	/**
-	 * @return the annotationType
-	 */
-	public AnnotationType getAnnotationType() {
-		return annotationType;
-	}
+    public void setField(it.polimi.model.field.Field field) {
+        this.field=field;
+    }
 
+    public it.polimi.model.relationship.Relationship getRelationship() {
+        return this.relationship;
+    }
 
-	/**
-	 * @param annotationType the annotationType to set
-	 */
-	public void setAnnotationType(AnnotationType annotationType) {
-		this.annotationType = annotationType;
-	}
+    public void setRelationship(it.polimi.model.relationship.Relationship relationship) {
+        this.relationship=relationship;
+    }
 
+    public it.polimi.model.field.EnumField getEnumField() {
+        return this.enumField;
+    }
 
-	/**
-	 * @return the attributeList
-	 */
-	public List<AnnotationAttribute> getAnnotationAttributeList() {
-		return annotationAttributeList;
-	}
+    public void setEnumField(it.polimi.model.field.EnumField enumField) {
+        this.enumField=enumField;
+    }
 
+    public AnnotationType getAnnotationType() {
+        return this.annotationType;
+    }
 
-	/**
-	 * @param attributeList the attributeList to set
-	 */
-	public void setAnnotationAttributeList(List<AnnotationAttribute> annotationAttributeList) {
-		this.annotationAttributeList = annotationAttributeList;
-	}
-
-
-	/**
-	 * @return the field
-	 */
-	public Field getField() {
-		return field;
-	}
-
-
-	/**
-	 * @param field the field to set
-	 */
-	public void setField(Field field) {
-		this.field = field;
-	}
-
-
-	/**
-	 * @return the relationship
-	 */
-	public Relationship getRelationship() {
-		return relationship;
-	}
-
-
-	/**
-	 * @param relationship the relationship to set
-	 */
-	public void setRelationship(Relationship relationship) {
-		this.relationship = relationship;
-	}
-
-
-	/**
-	 * @return the enumField
-	 */
-	public EnumField getEnumField() {
-		return enumField;
-	}
-
-
-	/**
-	 * @param enumField the enumField to set
-	 */
-	public void setEnumField(EnumField enumField) {
-		this.enumField = enumField;
-	}
+    public void setAnnotationType(AnnotationType annotationType) {
+        this.annotationType=annotationType;
+    }
 
 }

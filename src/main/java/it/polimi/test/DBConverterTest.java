@@ -3,7 +3,8 @@ package it.polimi.test;
 import java.util.ArrayList;
 import java.util.List;
 
-import it.polimi.Application;
+import it.TestApplication;
+import it.polimi.AnggenApplication;
 import it.polimi.generation.BeanToDBConverter;
 import it.polimi.generation.Generator;
 import it.polimi.model.entity.Entity;
@@ -19,7 +20,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes=Application.class)
+@SpringApplicationConfiguration(classes=AnggenApplication.class)
 public class DBConverterTest {
 
 	@Autowired
@@ -33,8 +34,8 @@ public class DBConverterTest {
 	public void createDbEntities()
 	{
 		Project project = new Project();
-		project.setName("test");
+		project.setName("anggen");
 		Generator generator = new Generator(project, null);
-		beanToDBConverter.convert("it.polimi.domain");
+		beanToDBConverter.convert("it.polimi.model");
 	}
 }

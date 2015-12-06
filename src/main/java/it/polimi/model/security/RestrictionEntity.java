@@ -1,130 +1,92 @@
+
 package it.polimi.model.security;
 
-import static javax.persistence.GenerationType.IDENTITY;
-import it.polimi.model.entity.Entity;
-
-import javax.persistence.Column;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import it.polimi.utils.annotation.DescriptionField;
 
 @javax.persistence.Entity
-@Table(schema="sso", name="restriction_entity")
+@Table(schema = "sso", name = "restriction_entity")
 public class RestrictionEntity {
 
+    public final static java.lang.Long staticEntityId = 5L;
+    @javax.persistence.Column(name = "can_create")
+    private java.lang.Boolean canCreate;
+    @javax.persistence.Column(name = "can_delete")
+    private java.lang.Boolean canDelete;
+    @javax.persistence.Column(name = "restriction_entity_id")
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @DescriptionField
+    private java.lang.Long restrictionEntityId;
+    @javax.persistence.Column(name = "can_update")
+    private java.lang.Boolean canUpdate;
+    @javax.persistence.Column(name = "can_search")
+    private java.lang.Boolean canSearch;
+    @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.EAGER)
+    @javax.persistence.JoinColumn(name = "role_id_role")
+    private it.polimi.model.security.Role role;
+    @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.EAGER)
+    @javax.persistence.JoinColumn(name = "entity_id_entity")
+    private it.polimi.model.entity.Entity entity;
 
+    public java.lang.Boolean getCanCreate() {
+        return this.canCreate;
+    }
 
-	@Id
-	@GeneratedValue(strategy = IDENTITY)
-	@Column(name = "restriction_entity_id")
-	private Long restrictionEntityId;
-	
-	@Column(name="can_create")
-	private Boolean canCreate;
-	
-	@Column(name="can_update")
-	private Boolean canUpdate;
-	
-	@Column(name="can_search")
-	private Boolean canSearch;
-	
-	@Column(name="can_delete")
-	private Boolean canDelete;
-	
-	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="role_id_role")
-	private Role role;
-	
-	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="entity_id_entity")
-	private Entity entity;
-	
-	
-	public RestrictionEntity() {
-		// TODO Auto-generated constructor stub
-	}
-	
-	
-	public Long getRestrictionEntityId() {
-		return restrictionEntityId;
-	}
+    public void setCanCreate(java.lang.Boolean canCreate) {
+        this.canCreate=canCreate;
+    }
 
-	public void setRestrictionEntityId(Long entityrestrictionId) {
-		this.restrictionEntityId = entityrestrictionId;
-	}
+    public java.lang.Boolean getCanDelete() {
+        return this.canDelete;
+    }
 
-	public Role getRole() {
-		return role;
-	}
+    public void setCanDelete(java.lang.Boolean canDelete) {
+        this.canDelete=canDelete;
+    }
 
-	public Boolean getCanCreate() {
-		return canCreate;
-	}
+    public java.lang.Long getRestrictionEntityId() {
+        return this.restrictionEntityId;
+    }
 
+    public void setRestrictionEntityId(java.lang.Long restrictionEntityId) {
+        this.restrictionEntityId=restrictionEntityId;
+    }
 
-	public void setCanCreate(Boolean canCreate) {
-		this.canCreate = canCreate;
-	}
+    public java.lang.Boolean getCanUpdate() {
+        return this.canUpdate;
+    }
 
+    public void setCanUpdate(java.lang.Boolean canUpdate) {
+        this.canUpdate=canUpdate;
+    }
 
-	public Boolean getCanUpdate() {
-		return canUpdate;
-	}
+    public java.lang.Boolean getCanSearch() {
+        return this.canSearch;
+    }
 
+    public void setCanSearch(java.lang.Boolean canSearch) {
+        this.canSearch=canSearch;
+    }
 
-	public void setCanUpdate(Boolean canUpdate) {
-		this.canUpdate = canUpdate;
-	}
+    public it.polimi.model.security.Role getRole() {
+        return this.role;
+    }
 
+    public void setRole(it.polimi.model.security.Role role) {
+        this.role=role;
+    }
 
-	public Boolean getCanSearch() {
-		return canSearch;
-	}
+    public it.polimi.model.entity.Entity getEntity() {
+        return this.entity;
+    }
 
-
-	public void setCanSearch(Boolean canSearch) {
-		this.canSearch = canSearch;
-	}
-
-
-	public Boolean getCanDelete() {
-		return canDelete;
-	}
-
-
-	public void setCanDelete(Boolean canDelete) {
-		this.canDelete = canDelete;
-	}
-
-
-	public void setRole(Role role) {
-		this.role = role;
-	}
-
-	public Entity getEntity() {
-		return entity;
-	}
-
-	public void setEntity(Entity entity) {
-		this.entity = entity;
-	}
-
-	@JsonIgnore
-	public Boolean isAllowed(RestrictionType restrictionType)
-	{
-		if (restrictionType==RestrictionType.SEARCH && !canSearch) return false;
-		if (restrictionType==RestrictionType.DELETE && !canDelete) return false;
-		if (restrictionType==RestrictionType.INSERT && !canCreate) return false;
-		if (restrictionType==RestrictionType.UPDATE && !canUpdate) return false;
-		
-		return true;
-	}
-	
-
+    public void setEntity(it.polimi.model.entity.Entity entity) {
+        this.entity=entity;
+    }
 
 }

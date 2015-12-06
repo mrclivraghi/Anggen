@@ -1,6 +1,7 @@
+
 package it.polimi.model.field;
 
-import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,81 +10,56 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-@javax.persistence.Entity
-@Table(schema="mustle",name="annotation_attribute")
+import it.polimi.utils.annotation.DescriptionField;
+
+@Entity
+@Table(schema = "meta", name = "annotation_attribute")
 public class AnnotationAttribute {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	@Column(name ="annotation_attribute_id")
-	private Long annotationAttributeId;
-	
-	private String property;
-	
-	private String value;
-	
-	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="annotation_id_annotation")
-	private Annotation annotation;
-	
-	public AnnotationAttribute() {
-		// TODO Auto-generated constructor stub
-	}
+    public final static java.lang.Long staticEntityId = 1L;
+    @javax.persistence.Column(name = "property")
+    private java.lang.String property;
+    @javax.persistence.Column(name = "value")
+    private java.lang.String value;
+    @javax.persistence.Column(name = "annotation_attribute_id")
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @DescriptionField
+    private java.lang.Long annotationAttributeId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "annotation_id_annotation")
+    private it.polimi.model.field.Annotation annotation;
 
-	/**
-	 * @return the annotationAttributeId
-	 */
-	public Long getAnnotationAttributeId() {
-		return annotationAttributeId;
-	}
+    public java.lang.String getProperty() {
+        return this.property;
+    }
 
-	/**
-	 * @param annotationAttributeId the annotationAttributeId to set
-	 */
-	public void setAnnotationAttributeId(Long annotationAttributeId) {
-		this.annotationAttributeId = annotationAttributeId;
-	}
+    public void setProperty(java.lang.String property) {
+        this.property=property;
+    }
 
-	/**
-	 * @return the property
-	 */
-	public String getProperty() {
-		return property;
-	}
+    public java.lang.String getValue() {
+        return this.value;
+    }
 
-	/**
-	 * @param property the property to set
-	 */
-	public void setProperty(String property) {
-		this.property = property;
-	}
+    public void setValue(java.lang.String value) {
+        this.value=value;
+    }
 
-	/**
-	 * @return the value
-	 */
-	public String getValue() {
-		return value;
-	}
+    public java.lang.Long getAnnotationAttributeId() {
+        return this.annotationAttributeId;
+    }
 
-	/**
-	 * @param value the value to set
-	 */
-	public void setValue(String value) {
-		this.value = value;
-	}
+    public void setAnnotationAttributeId(java.lang.Long annotationAttributeId) {
+        this.annotationAttributeId=annotationAttributeId;
+    }
 
-	/**
-	 * @return the annotation
-	 */
-	public Annotation getAnnotation() {
-		return annotation;
-	}
+    public it.polimi.model.field.Annotation getAnnotation() {
+        return this.annotation;
+    }
 
-	/**
-	 * @param annotation the annotation to set
-	 */
-	public void setAnnotation(Annotation annotation) {
-		this.annotation = annotation;
-	}
+    public void setAnnotation(it.polimi.model.field.Annotation annotation) {
+        this.annotation=annotation;
+    }
 
 }

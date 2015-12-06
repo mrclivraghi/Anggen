@@ -1,150 +1,94 @@
-package it.polimi.model.field;
 
-import it.polimi.model.entity.Entity;
-import it.polimi.model.entity.EntityAttribute;
-import it.polimi.model.entity.Tab;
+package it.polimi.model.field;
 
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import it.polimi.model.EntityAttribute;
+import it.polimi.model.field.Annotation;
+import it.polimi.model.field.EnumValue;
+import it.polimi.utils.annotation.DescriptionField;
 
 import org.hibernate.annotations.Type;
 
 @javax.persistence.Entity
-@Table(schema="mustle",name="enum_field")
-public class EnumField extends EntityAttribute {
+@Table(schema = "meta", name = "enum_field")
+public class EnumField extends EntityAttribute{
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	@Column(name ="enum_field_id")
-	private Long enumFieldId;
-	
-	private String name;
-	
-	@OneToMany(fetch=FetchType.EAGER)
-	@Type(type="it.polimi.model.EnumValue")
-	@JoinColumn(name="enum_field_id_enum_field")
-	private List<EnumValue> enumValueList;
-	
-	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="entity_id_entity")
-	private Entity entity;
-	
-	@OneToMany(fetch=FetchType.EAGER)
-	@Type(type="it.polimi.model.Annotation")
-	@JoinColumn(name="enum_field_id_enum_field")
-	private List<Annotation> annotationList;
-	
-	@ManyToOne
-	@JoinColumn(name="tab_id_tab")
-	private Tab tab;
-	
-	public EnumField() {
-		// TODO Auto-generated constructor stub
-	}
+    public final static java.lang.Long staticEntityId = 9L;
+    @javax.persistence.Column(name = "enum_field_id")
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @DescriptionField
+    private java.lang.Long enumFieldId;
+    @javax.persistence.Column(name = "name")
+    private String name;
+    @OneToMany(fetch = javax.persistence.FetchType.EAGER)
+    @Type(type = "it.generated.anggen.model.field.EnumValue")
+    @javax.persistence.JoinColumn(name = "enum_field_id_enum_field")
+    private List<EnumValue> enumValueList;
+    @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.EAGER)
+    @javax.persistence.JoinColumn(name = "entity_id_entity")
+    private it.polimi.model.entity.Entity entity;
+    @OneToMany(fetch = javax.persistence.FetchType.EAGER)
+    @Type(type = "it.generated.anggen.model.field.Annotation")
+    @javax.persistence.JoinColumn(name = "enum_field_id_enum_field")
+    private List<Annotation> annotationList;
+    @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.EAGER)
+    @javax.persistence.JoinColumn(name = "tab_id_tab")
+    private it.polimi.model.entity.Tab tab;
 
+    public java.lang.Long getEnumFieldId() {
+        return this.enumFieldId;
+    }
 
-	/**
-	 * @return the enumFieldId
-	 */
-	public Long getEnumFieldId() {
-		return enumFieldId;
-	}
+    public void setEnumFieldId(java.lang.Long enumFieldId) {
+        this.enumFieldId=enumFieldId;
+    }
 
+    public String getName() {
+        return this.name;
+    }
 
-	/**
-	 * @param enumFieldId the enumFieldId to set
-	 */
-	public void setEnumFieldId(Long enumFieldId) {
-		this.enumFieldId = enumFieldId;
-	}
+    public void setName(String name) {
+        this.name=name;
+    }
 
+    public List<EnumValue> getEnumValueList() {
+        return this.enumValueList;
+    }
 
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
+    public void setEnumValueList(List<EnumValue> enumValueList) {
+        this.enumValueList=enumValueList;
+    }
 
+    public it.polimi.model.entity.Entity getEntity() {
+        return this.entity;
+    }
 
-	/**
-	 * @param name the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setEntity(it.polimi.model.entity.Entity entity) {
+        this.entity=entity;
+    }
 
+    public List<Annotation> getAnnotationList() {
+        return this.annotationList;
+    }
 
-	/**
-	 * @return the enumValueList
-	 */
-	public List<EnumValue> getEnumValueList() {
-		return enumValueList;
-	}
+    public void setAnnotationList(List<Annotation> annotationList) {
+        this.annotationList=annotationList;
+    }
 
+    public it.polimi.model.entity.Tab getTab() {
+        return this.tab;
+    }
 
-	/**
-	 * @param enumValueList the enumValueList to set
-	 */
-	public void setEnumValueList(List<EnumValue> enumValueList) {
-		this.enumValueList = enumValueList;
-	}
-
-
-	/**
-	 * @return the entity
-	 */
-	public Entity getEntity() {
-		return entity;
-	}
-
-
-	/**
-	 * @param entity the entity to set
-	 */
-	public void setEntity(Entity entity) {
-		this.entity = entity;
-	}
-
-
-	/**
-	 * @return the annotationList
-	 */
-	public List<Annotation> getAnnotationList() {
-		return annotationList;
-	}
-
-
-	/**
-	 * @param annotationList the annotationList to set
-	 */
-	public void setAnnotationList(List<Annotation> annotationList) {
-		this.annotationList = annotationList;
-	}
-
-
-	/**
-	 * @return the tab
-	 */
-	public Tab getTab() {
-		return tab;
-	}
-
-
-	/**
-	 * @param tab the tab to set
-	 */
-	public void setTab(Tab tab) {
-		this.tab = tab;
-	}
+    public void setTab(it.polimi.model.entity.Tab tab) {
+        this.tab=tab;
+    }
 
 }

@@ -1,11 +1,11 @@
 package it.polimi.security;
 
+import it.polimi.model.RestrictionType;
 import it.polimi.model.entity.Entity;
 import it.polimi.model.security.RestrictionEntity;
 import it.polimi.model.security.RestrictionEntityGroup;
 import it.polimi.model.security.User;
-import it.polimi.model.security.RestrictionType;
-import it.polimi.repository.UserRepository;
+import it.polimi.repository.security.UserRepository;
 
 import java.util.List;
 
@@ -33,10 +33,10 @@ public class SecurityService{
 		return user;
 	}
 
-	public Boolean isAllowed(Long entityId, RestrictionType restrictionType) {
+	public Boolean hasRestriction(Long entityId, RestrictionType restrictionType) {
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		List<User> userList = userRepository.findByUsername(username);
-		if (userList==null || userList.size()==0) return false;
+		if (userList==null || userList.size()==0) return true;
 		User user = userList.get(0);
 		//check entity group restriction
 		UserManager userManager = new UserManager(user);
@@ -45,15 +45,48 @@ public class SecurityService{
 			for (Entity entity: restrictionEntityGroup.getEntityGroup().getEntityList())
 			{
 				if (entity.getEntityId().equals(entityId) && (!isAllowed(restrictionEntityGroup,restrictionType))) 
-					return false;
+					return true;
 			}
 		}
 		for (RestrictionEntity restrictionEntity: userManager.getRestrictionEntityList())
 		{
-			if (restrictionEntity.getEntity().getEntityId().equals(entityId) && (!isAllowed(restrictionEntity,restrictionType))) return false;
+			if (restrictionEntity.getEntity().getEntityId().equals(entityId) && (!isAllowed(restrictionEntity,restrictionType))) return true;
 		}
-		return true;
+		return false;
 	}
+	
+	
+	public Boolean hasPermission(Long entityId, RestrictionType restrictionType) {
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		List<User> userList = userRepository.findByUsername(username);
+		if (userList==null || userList.size()==0) return false;
+		User user = userList.get(0);
+		//check entity group restriction
+		UserManager userManager = new UserManager(user);
+		Boolean hasPermission=false;
+		for (RestrictionEntityGroup restrictionEntityGroup: userManager.getRestrictionEntityGroupList())
+		{
+			if (restrictionEntityGroup.getEntityGroup()!=null)
+			for (Entity entity: restrictionEntityGroup.getEntityGroup().getEntityList())
+			{
+				if (entity.getEntityId().equals(entityId) && (isAllowed(restrictionEntityGroup,restrictionType))) 
+					hasPermission=true;
+			}
+		}
+		//no permission on entitygroup so return false
+		if (!hasPermission) return false;
+		hasPermission=false;
+		for (RestrictionEntity restrictionEntity: userManager.getRestrictionEntityList())
+		{
+			if (restrictionEntity.getEntity().getEntityId().equals(entityId) && isAllowed(restrictionEntity,restrictionType))
+					hasPermission=true;
+		}
+		return hasPermission;
+	}
+	
+	
+	
+	
 	
 	public Boolean isAllowed(RestrictionEntity restrictionEntity,RestrictionType restrictionType)
 	{

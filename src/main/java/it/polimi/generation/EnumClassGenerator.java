@@ -34,7 +34,6 @@ import it.polimi.model.field.EnumField;
 import it.polimi.model.field.EnumValue;
 import it.polimi.model.field.Field;
 import it.polimi.model.relationship.Relationship;
-import it.polimi.model.relationship.RelationshipType;
 import it.polimi.utils.Utility;
 
 public class EnumClassGenerator {

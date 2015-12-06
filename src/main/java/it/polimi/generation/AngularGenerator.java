@@ -1,12 +1,12 @@
 package it.polimi.generation;
 
+import it.polimi.model.AnnotationType;
+import it.polimi.model.EntityAttribute;
+import it.polimi.model.FieldType;
 import it.polimi.model.entity.Entity;
-import it.polimi.model.entity.EntityAttribute;
 import it.polimi.model.entity.Tab;
 import it.polimi.model.field.Annotation;
 import it.polimi.model.field.AnnotationAttribute;
-import it.polimi.model.field.AnnotationType;
-import it.polimi.model.field.FieldType;
 import it.polimi.reflection.EntityManager;
 import it.polimi.reflection.EntityManagerImpl;
 import it.polimi.utils.ClassDetail;

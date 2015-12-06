@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
+
 import it.polimi.utils.annotation.DescriptionField;
 import it.polimi.utils.annotation.Filter;
 
@@ -29,7 +30,7 @@ public class Place {
     private String placeName;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "example_id_example")
-    private it.polimi.domain.Example example;
+    private Example example;
 
     public Integer getPlaceId() {
         return this.placeId;
@@ -47,11 +48,11 @@ public class Place {
         this.placeName=placeName;
     }
 
-    public it.polimi.domain.Example getExample() {
+    public Example getExample() {
         return this.example;
     }
 
-    public void setExample(it.polimi.domain.Example example) {
+    public void setExample(Example example) {
         this.example=example;
     }
 

@@ -157,6 +157,8 @@ public class BeanToDBConverter {
 							if (reflectionManager.isKnownClass(field.getFieldClass()))
 							{
 								Field metaField= new Field();
+								if (field.getName().equals("staticEntityId"))
+									continue;
 								metaField.setName(field.getName());
 								fieldRepository.save(metaField);
 								FieldType fieldType=null;

@@ -142,7 +142,6 @@ public class EntityGenerator {
 		{
 			JClass fieldClass = field.getFieldClass();
 			String fieldName= field.getName();
-			if (fieldName.equals("staticEntityId")) continue;
 			JVar classField = myClass.field(JMod.PRIVATE, fieldClass, field.getName());
 			JAnnotationUse columnAnnotation = classField.annotate(Column.class);
 			columnAnnotation.param("name", namingStrategy.classToTableName(field.getName()));

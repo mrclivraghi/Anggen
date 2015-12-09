@@ -221,7 +221,10 @@ public class WebappGenerator {
 			JBlock configureBlock=configure.body();
 			configureBlock.directStatement("http");
 			configureBlock.directStatement(".authorizeRequests()");
-			configureBlock.directStatement(".antMatchers(\"/css/**\",\"/img/**\",\"/js/**\",\"/auth/**\",\"/login/**\").permitAll()");
+			String enableAll="";
+			if (!Generator.security)
+				enableAll=",\"/**\"";
+			configureBlock.directStatement(".antMatchers(\"/css/**\",\"/img/**\",\"/js/**\",\"/auth/**\",\"/login/**\""+enableAll+").permitAll()");
 			configureBlock.directStatement(".and()");
 			configureBlock.directStatement(".authorizeRequests().anyRequest().fullyAuthenticated().and()");
 			configureBlock.directStatement(".formLogin().and().csrf()");

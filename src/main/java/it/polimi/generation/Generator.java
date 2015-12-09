@@ -69,7 +69,8 @@ public class Generator {
 	public static String uploadDirectory;
 	
 	public static String applicationName;
-	
+
+	public static Boolean security;
 	
 	private Project project;
 	
@@ -115,7 +116,7 @@ public class Generator {
 			Generator.menuName=properties.getProperty("application.menu.name");
 			Generator.schema=properties.getProperty("application.schema");
 			Generator.uploadDirectory=properties.getProperty("application.upload.directory");
-			
+			Generator.security=Boolean.valueOf(properties.getProperty("application.security"));
 			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block

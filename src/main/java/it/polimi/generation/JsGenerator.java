@@ -793,32 +793,33 @@ public class JsGenerator {
 		sb.append(".service(\"securityService\",function($http)\n");
 		sb.append("{\n");
 		sb.append("this.restrictionList;\n");
-		sb.append("this.init= function() {\n");
-		sb.append("var promise= $http.get(\"../authentication/\");\n");
-		sb.append("return promise; \n");
-
-		sb.append("};\n");
-
+		if (Generator.security)
+		{
+			sb.append("this.init= function() {\n");
+			sb.append("var promise= $http.get(\"../authentication/\");\n");
+			sb.append("return promise; \n");
+			sb.append("};\n");
+		}
 		sb.append("})\n");
 		String services = getServices();
 		
 		sb.append(".run(function($rootScope,securityService"+services+"){\n");
 
-		sb.append("securityService.init().then(function successCallback(response) {\n");
-		sb.append("securityService.restrictionList=response.data;\n");
-		sb.append("$rootScope.restrictionList=response.data;\n");
-		sb.append("console.log($rootScope.restrictionList);\n");
-		String[] serviceArray=services.split(",");
-		//for (int i=0; i<serviceArray.length; i++)
-		//	if (!serviceArray[i].equals("") && !serviceArray[i].trim().equals("securityService"))
+		if (Generator.security)
 		{
-			//sb.append("//"+serviceArray[i].trim()+".init();\n");
-			
-			initChildrenList(sb, entity);
-				
+			sb.append("securityService.init().then(function successCallback(response) {\n");
+			sb.append("securityService.restrictionList=response.data;\n");
+			sb.append("$rootScope.restrictionList=response.data;\n");
+		} else
+		{
+			sb.append("securityService.restrictionList={};\n");
+			sb.append("$rootScope.restrictionList={};\n");
 		}
-		
-		sb.append("});\n");
+		String[] serviceArray=services.split(",");
+		initChildrenList(sb, entity);
+				
+		if (Generator.security)
+			sb.append("});\n");
 
 		
 		

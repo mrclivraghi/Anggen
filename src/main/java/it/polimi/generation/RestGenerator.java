@@ -816,6 +816,8 @@ public class RestGenerator {
 	}
 	private String addSecurityCheck(RestrictionType restrictionType) {
 		String check= "";
+		if (!Generator.security)
+			return check;
 		
 			if (entity.getSecurityType()==null || entity.getSecurityType()==SecurityType.ACCESS_WITH_PERMISSION)
 				check="if (!securityService.hasPermission("+Generator.getJDefinedClass(entity).fullName()+".staticEntityId, "+RestrictionType.class.getName()+"."+restrictionType.toString()+")) \n";

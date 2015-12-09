@@ -3,7 +3,6 @@ package it.polimi.test;
 import java.util.ArrayList;
 import java.util.List;
 
-import it.TestApplication;
 import it.polimi.AnggenApplication;
 import it.polimi.generation.BeanToDBConverter;
 import it.polimi.generation.Generator;
@@ -34,8 +33,8 @@ public class DBConverterTest {
 	public void createDbEntities()
 	{
 		Project project = new Project();
-		project.setName("anggen");
+		project.setName("test2");
 		Generator generator = new Generator(project, null);
-		beanToDBConverter.convert("it.polimi.model");
+		beanToDBConverter.convert("it.polimi.domain");
 	}
 }

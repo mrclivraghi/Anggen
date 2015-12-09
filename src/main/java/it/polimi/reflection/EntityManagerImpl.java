@@ -47,26 +47,21 @@ public class EntityManagerImpl implements EntityManager{
 	@Override
 	public List<Entity> getDescendantEntities(Entity entity, List<Entity> parentEntities)
 	{
-		List<Entity> descendantEntities = new ArrayList<Entity>();
-		for (Relationship relationship: entity.getRelationshipList())
-		{
-			if (!parentEntities.contains(relationship.getEntityTarget()))
-			{
-				descendantEntities.add(relationship.getEntityTarget());
-			}
-		}
-		
-		return descendantEntities;
+		List<Entity> descendantEntityList = new ArrayList<Entity>();
+		addDescendantEntities(entity, descendantEntityList,0,entity.getDescendantMaxLevel());		
+		return descendantEntityList;
 	}
 	
-	private void addDescentantEntities(Entity entity, List<Entity> descendantEntityList)
+	private void addDescendantEntities(Entity entity, List<Entity> descendantEntityList,Integer level,Integer maxLevel)
 	{
+		if (level>=maxLevel)
+			return;
 		for (Relationship relationship: entity.getRelationshipList())
 		{
 			if (!descendantEntityList.contains(relationship.getEntityTarget()) && (!relationship.getEntityTarget().equals(this.entity)))
 			{
 				descendantEntityList.add(relationship.getEntityTarget());
-				addDescentantEntities(relationship.getEntityTarget(), descendantEntityList);
+				addDescendantEntities(relationship.getEntityTarget(), descendantEntityList,level+1,maxLevel);
 			}
 				
 		}
@@ -76,7 +71,7 @@ public class EntityManagerImpl implements EntityManager{
 	public List<Entity> getDescendantEntities() {
 		
 		List<Entity> descendantEntityList = new ArrayList<Entity>();
-		addDescentantEntities(entity, descendantEntityList);		
+		addDescendantEntities(entity, descendantEntityList,0,entity.getDescendantMaxLevel());		
 		return descendantEntityList;
 		
 	}

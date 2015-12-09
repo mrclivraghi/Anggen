@@ -3,6 +3,7 @@ package it.polimi.model.entity;
 
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -57,6 +58,9 @@ public class Entity {
     private List<Field> fieldList;
     @javax.persistence.Column(name = "security_type")
     private SecurityType securityType;
+    
+    @Column(name="descendant_max_level")
+    private Integer descendantMaxLevel;
 
     public String getName() {
         return this.name;
@@ -129,5 +133,19 @@ public class Entity {
     public void setSecurityType(SecurityType securityType) {
         this.securityType=securityType;
     }
+
+	/**
+	 * @return the descendantMaxLevel
+	 */
+	public Integer getDescendantMaxLevel() {
+		return descendantMaxLevel;
+	}
+
+	/**
+	 * @param descendantMaxLevel the descendantMaxLevel to set
+	 */
+	public void setDescendantMaxLevel(Integer descendantMaxLevel) {
+		this.descendantMaxLevel = descendantMaxLevel;
+	}
 
 }

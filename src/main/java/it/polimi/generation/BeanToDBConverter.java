@@ -47,7 +47,9 @@ import it.polimi.utils.annotation.Filter;
 import it.polimi.utils.annotation.IgnoreSearch;
 import it.polimi.utils.annotation.IgnoreTableList;
 import it.polimi.utils.annotation.IgnoreUpdate;
+import it.polimi.utils.annotation.MaxDescendantLevel;
 import it.polimi.utils.annotation.Password;
+import it.polimi.utils.annotation.SecurityType;
 import it.polimi.utils.annotation.Tab;
 
 import org.hibernate.type.MetaType;
@@ -109,6 +111,44 @@ public class BeanToDBConverter {
 			ReflectionManager reflectionManager = new ReflectionManager(myClass);
 			Entity entity = new Entity();
 			entity.setName(reflectionManager.parseName());
+			Annotation[] annotationArray=myClass.getAnnotations();
+			for (int i=0; i<annotationArray.length;i++)
+			{
+				if (annotationArray[i].annotationType()==SecurityType.class)
+				for (Method method : annotationArray[i].annotationType().getDeclaredMethods()) {
+					if (method.getName().equals("type"))
+					{
+						Object value= null;
+						try {
+							value=  method.invoke(annotationArray[i], (Object[])null);
+							entity.setSecurityType((it.polimi.model.SecurityType) value);
+						} catch (IllegalAccessException
+								| IllegalArgumentException
+								| InvocationTargetException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+				
+				if (annotationArray[i].annotationType()==MaxDescendantLevel.class)
+					for (Method method : annotationArray[i].annotationType().getDeclaredMethods()) {
+						if (method.getName().equals("value"))
+						{
+							Object value= null;
+							try {
+								value=  method.invoke(annotationArray[i], (Object[])null);
+								entity.setDescendantMaxLevel((Integer) value);
+							} catch (IllegalAccessException
+									| IllegalArgumentException
+									| InvocationTargetException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+					}
+			}
+			
 			entityRepository.save(entity);
 			entityMap.put(reflectionManager.parseName(), entity);
 		}

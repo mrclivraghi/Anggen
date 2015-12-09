@@ -17,7 +17,9 @@ import it.polimi.utils.annotation.Filter;
 import it.polimi.utils.annotation.IgnoreSearch;
 import it.polimi.utils.annotation.IgnoreTableList;
 import it.polimi.utils.annotation.IgnoreUpdate;
+import it.polimi.utils.annotation.MaxDescendantLevel;
 import it.polimi.utils.annotation.Password;
+import it.polimi.utils.annotation.SecurityType;
 
 import java.io.File;
 import java.net.PasswordAuthentication;
@@ -129,6 +131,13 @@ public class EntityGenerator {
 			annotationTable.param("schema", "sso");
 		else
 			annotationTable.param("schema", Generator.schema);
+		
+		JAnnotationUse securityType= myClass.annotate(SecurityType.class);
+		securityType.param("type", entity.getSecurityType());
+		
+		JAnnotationUse maxDescendantLevel= myClass.annotate(MaxDescendantLevel.class);
+		maxDescendantLevel.param("value", entity.getDescendantMaxLevel());
+		
 		
 		JVar entityId= myClass.field(JMod.PUBLIC+JMod.STATIC+JMod.FINAL, Long.class, "staticEntityId");
 		entityId.init(JExpr.lit(entity.getEntityId()));

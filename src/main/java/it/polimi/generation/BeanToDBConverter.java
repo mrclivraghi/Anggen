@@ -29,6 +29,7 @@ import it.polimi.model.field.EnumField;
 import it.polimi.model.field.EnumValue;
 import it.polimi.model.field.Field;
 import it.polimi.model.relationship.Relationship;
+import it.polimi.model.security.RestrictionEntity;
 import it.polimi.model.security.RestrictionEntityGroup;
 import it.polimi.model.security.Role;
 import it.polimi.model.security.User;
@@ -209,8 +210,19 @@ public class BeanToDBConverter {
 		{
 				EntityGroup entityGroup= new EntityGroup();
 				entityGroup.setName(temp.parseName(myPackage));
-				//entityGroupRepository.save(entityGroup);
 				entityGroupRepository.save(entityGroup);
+				RestrictionEntityGroup restrictionEntityGroup = new RestrictionEntityGroup();
+				restrictionEntityGroup.setCanCreate(true);
+				restrictionEntityGroup.setCanDelete(true);
+				restrictionEntityGroup.setCanSearch(true);
+				restrictionEntityGroup.setCanUpdate(true);
+				restrictionEntityGroup.setEntityGroup(entityGroup);
+				restrictionEntityGroup.setRole(adminRole);
+				restrictionEntityGroupRepository.save(restrictionEntityGroup);
+				List<RestrictionEntityGroup> restrictionEntityGroupList = new ArrayList<RestrictionEntityGroup>();
+				restrictionEntityGroupList.add(restrictionEntityGroup);
+				entityGroup.setRestrictionEntityGroupList(restrictionEntityGroupList);
+				
 				Set<Class<?>> packageClassSet = ReflectionManager.getClassInPackage(myPackage);
 				List<Entity> entityList = new ArrayList<Entity>();
 				for (Class myClass: packageClassSet)
@@ -222,6 +234,18 @@ public class BeanToDBConverter {
 					entity.setEntityGroup(entityGroup);
 					//entityRepository.save(entity);
 					entityRepository.save(entity);
+					RestrictionEntity restrictionEntity = new RestrictionEntity();
+					restrictionEntity.setCanCreate(true);
+					restrictionEntity.setCanDelete(true);
+					restrictionEntity.setCanSearch(true);
+					restrictionEntity.setCanUpdate(true);
+					restrictionEntity.setEntity(entity);
+					restrictionEntity.setRole(adminRole);
+					restrictionEntityRepository.save(restrictionEntity);
+					List<RestrictionEntity> restrictionEntitieList= new ArrayList<RestrictionEntity>();
+					restrictionEntitieList.add(restrictionEntity);
+					entity.setRestrictionEntityList(restrictionEntitieList);
+					
 					
 					List<String> tabNameList=reflectionManager.getTabsName();
 					List<it.polimi.model.entity.Tab> tabList = new ArrayList<it.polimi.model.entity.Tab>();

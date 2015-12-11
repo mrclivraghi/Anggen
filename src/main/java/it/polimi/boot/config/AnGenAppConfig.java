@@ -20,12 +20,6 @@ public class AnGenAppConfig {
     private String formatSql;
     @Value("${hibernate.show_sql}")
     private String showSql;
-    @Value("${hibernate.dialect}")
-    private String dialect;
-    @Value("${hibernate.hbm2ddl.auto}")
-    private String mode;
-    @Value("${hibernate.naming-strategy}")
-    private String namingStrategy;
     @Value("${datasource.driver.class.name}")
     private String driverClassName;
     @Value("${datasource.jdbc}")
@@ -54,9 +48,6 @@ public class AnGenAppConfig {
         java.util.Properties  prop = new java.util.Properties();
          prop.put("hibernate.format_sql", formatSql);
          prop.put("hibernate.show_sql", showSql);
-         prop.put("hibernate.dialect", dialect);
-        prop.put("hibernate.hbm2ddl.auto", mode);
-         prop.put("hibernate.naming-strategy",namingStrategy);
          return prop;
     }
 

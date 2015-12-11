@@ -112,6 +112,8 @@ public class BeanToDBConverter {
 			Entity entity = new Entity();
 			entity.setName(reflectionManager.parseName());
 			Annotation[] annotationArray=myClass.getAnnotations();
+			Boolean securityTypeFound=false;
+			Boolean maxDescendantLevelFound=false;
 			for (int i=0; i<annotationArray.length;i++)
 			{
 				if (annotationArray[i].annotationType()==SecurityType.class)
@@ -122,6 +124,7 @@ public class BeanToDBConverter {
 						try {
 							value=  method.invoke(annotationArray[i], (Object[])null);
 							entity.setSecurityType((it.polimi.model.SecurityType) value);
+							securityTypeFound=true;
 						} catch (IllegalAccessException
 								| IllegalArgumentException
 								| InvocationTargetException e) {
@@ -139,6 +142,7 @@ public class BeanToDBConverter {
 							try {
 								value=  method.invoke(annotationArray[i], (Object[])null);
 								entity.setDescendantMaxLevel((Integer) value);
+								maxDescendantLevelFound=true;
 							} catch (IllegalAccessException
 									| IllegalArgumentException
 									| InvocationTargetException e) {
@@ -148,6 +152,10 @@ public class BeanToDBConverter {
 						}
 					}
 			}
+			if (!securityTypeFound)
+				entity.setSecurityType(it.polimi.model.SecurityType.ACCESS_WITH_PERMISSION);
+			if (!maxDescendantLevelFound)
+				entity.setDescendantMaxLevel(1);
 			
 			entityRepository.save(entity);
 			entityMap.put(reflectionManager.parseName(), entity);

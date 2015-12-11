@@ -91,7 +91,7 @@ public class WebappGenerator {
 		generateAppConfig();
 		generateCsrfHeaderFilter();
 		generateMvcWebAppInitializer();
-		generateMyUserDetailService();
+		//generateMyUserDetailService();
 		generateSecurityConfig();
 		generateSecurityWebappInitializer();
 		generateSpringBootApplication();
@@ -102,7 +102,7 @@ public class WebappGenerator {
 		JCodeModel codeModel = new JCodeModel();
 		JDefinedClass genApp=null;
 		try {
-			genApp = codeModel._class(JMod.PUBLIC, packageName+Utility.getFirstUpper(applicationName)+"Application", ClassType.CLASS);
+			genApp = codeModel._class(JMod.PUBLIC, "it."+Utility.getFirstUpper(applicationName)+"Application", ClassType.CLASS);
 		} catch (JClassAlreadyExistsException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -129,15 +129,15 @@ public class WebappGenerator {
 			e.printStackTrace();
 		}
 		appConfig.annotate(Configuration.class);
-		appConfig.annotate(EnableAutoConfiguration.class);
+		//appConfig.annotate(EnableAutoConfiguration.class);
 		JAnnotationUse componentScanAnnotation = appConfig.annotate(ComponentScan.class);
 		JAnnotationArrayMember member = componentScanAnnotation.paramArray("value");
 		member.param(packageName+"*");
 		declareVar(appConfig,"formatSql",String.class,"hibernate.format_sql");
 		declareVar(appConfig,"showSql",String.class,"hibernate.show_sql");
-		declareVar(appConfig,"dialect",String.class,"hibernate.dialect");
-		declareVar(appConfig,"mode",String.class,"hibernate.hbm2ddl.auto");
-		declareVar(appConfig,"namingStrategy",String.class,"hibernate.naming-strategy");
+		//declareVar(appConfig,"dialect",String.class,"hibernate.dialect");
+		//declareVar(appConfig,"mode",String.class,"hibernate.hbm2ddl.auto");
+		//declareVar(appConfig,"namingStrategy",String.class,"hibernate.naming-strategy");
 		declareVar(appConfig,"driverClassName",String.class,"datasource.driver.class.name");
 		declareVar(appConfig,"jdbcString",String.class,"datasource.jdbc");
 		declareVar(appConfig,"dbUrl",String.class,"datasource.url");
@@ -151,7 +151,7 @@ public class WebappGenerator {
 		JBlock sessionFactoryBlock=sessionFactory.body();
 		sessionFactoryBlock.directStatement(LocalSessionFactoryBuilder.class.getName()+" builder = ");
 		sessionFactoryBlock.directStatement("new "+LocalSessionFactoryBuilder.class.getName()+"(dataSource());");
-		sessionFactoryBlock.directStatement(" builder.scanPackages(\""+packageName.substring(0, packageName.length()-1)+"\",\"it.polimi.model\")");
+		sessionFactoryBlock.directStatement(" builder.scanPackages(\""+packageName.substring(0, packageName.length()-1)+"\")");
 		sessionFactoryBlock.directStatement(".addProperties(getHibernateProperties());");
 		sessionFactoryBlock.directStatement("return builder.buildSessionFactory();");
 		JMethod hibProperties = appConfig.method(JMod.PRIVATE, Properties.class,"getHibernateProperties");
@@ -159,9 +159,9 @@ public class WebappGenerator {
 		hibPropertiesBlock.directStatement(Properties.class.getName()+"  prop = new "+Properties.class.getName()+"();");
 		hibPropertiesBlock.directStatement(" prop.put(\"hibernate.format_sql\", formatSql);");
 		hibPropertiesBlock.directStatement(" prop.put(\"hibernate.show_sql\", showSql);");
-		hibPropertiesBlock.directStatement(" prop.put(\"hibernate.dialect\", dialect);");
-		hibPropertiesBlock.directStatement("prop.put(\"hibernate.hbm2ddl.auto\", mode);");
-		hibPropertiesBlock.directStatement(" prop.put(\"hibernate.naming-strategy\",namingStrategy);");
+		//hibPropertiesBlock.directStatement(" prop.put(\"hibernate.dialect\", dialect);");
+		//hibPropertiesBlock.directStatement("prop.put(\"hibernate.hbm2ddl.auto\", mode);");
+		//hibPropertiesBlock.directStatement(" prop.put(\"hibernate.naming-strategy\",namingStrategy);");
 		hibPropertiesBlock.directStatement(" return prop;");
 
 		JMethod dataSource = appConfig.method(JMod.PUBLIC, DataSource.class, "dataSource");
@@ -208,6 +208,8 @@ public class WebappGenerator {
 			}
 			securityConfig.annotate(Configuration.class);
 			securityConfig.annotate(EnableWebSecurity.class);
+			JAnnotationUse orderAnnotation = securityConfig.annotate(Order.class);
+			orderAnnotation.param("value", 99);
 			JVar userDetailsService = securityConfig.field(JMod.PRIVATE, UserDetailsService.class, "userDetailsService");
 			userDetailsService.annotate(Autowired.class);
 			JAnnotationUse qualifierAnnotation= userDetailsService.annotate(Qualifier.class);
@@ -264,7 +266,8 @@ public class WebappGenerator {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			csrfFilter.annotate(Configuration.class);
+			JAnnotationUse configAnnotation =csrfFilter.annotate(Configuration.class);
+			configAnnotation.param("value", Generator.applicationName+"CsrfFilter");
 			JAnnotationUse orderAnnotation=csrfFilter.annotate(Order.class);
 			orderAnnotation.param("value", SecurityProperties.ACCESS_OVERRIDE_ORDER);//(, );
 			JMethod doFilter = csrfFilter.method(JMod.PROTECTED, void.class, "doFilterInternal");
@@ -389,7 +392,7 @@ public class WebappGenerator {
 		JCodeModel codeModel = new JCodeModel();
 		JDefinedClass securityWebAppInit=null;
 		try {
-			securityWebAppInit = codeModel._class(JMod.PUBLIC, packageName+"boot.SecurityWebApplicationInitializer", ClassType.CLASS);
+			securityWebAppInit = codeModel._class(JMod.PUBLIC, packageName+"boot.SecurityWebApplicationInitializer"+Utility.getFirstUpper(applicationName), ClassType.CLASS);
 			securityWebAppInit._extends(AbstractSecurityWebApplicationInitializer.class);
 		} catch (JClassAlreadyExistsException e) {
 			e.printStackTrace();

@@ -1,13 +1,15 @@
 
 package it.polimi;
 
+import it.polimi.boot.config.AnGenAppConfig;
+
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
-@Configuration
-@EnableAutoConfiguration
 @SpringBootApplication
+@Import({AnGenAppConfig.class})
 public class AnggenApplication {
 
 

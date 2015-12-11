@@ -12,11 +12,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 @Configuration
-@EnableAutoConfiguration
 @ComponentScan({
-    "it.polimi.*"
-})
-public class AppConfig {
+    "it.polimi.*"})
+public class AnGenAppConfig {
 
     @Value("${hibernate.format_sql}")
     private String formatSql;

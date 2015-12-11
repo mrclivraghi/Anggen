@@ -11,7 +11,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 @Configuration
-@Order(2147483640)
 public class CsrfHeaderFilter
     extends OncePerRequestFilter
 {

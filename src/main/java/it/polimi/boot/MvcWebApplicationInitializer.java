@@ -20,7 +20,7 @@ public class MvcWebApplicationInitializer
 
     @Override
     protected Class[] getRootConfigClasses() {
-        return new Class[] {it.polimi.boot.config.SecurityConfig.class};
+        return new Class[] {it.polimi.boot.config.AngGenSecurityConfig.class};
     }
 
 }

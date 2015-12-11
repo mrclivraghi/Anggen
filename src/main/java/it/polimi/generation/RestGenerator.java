@@ -817,15 +817,17 @@ public class RestGenerator {
 	private String addSecurityCheck(RestrictionType restrictionType) {
 		String check= "";
 		if (!Generator.security)
-			return check;
+			check+="/*\n";
 		
 			if (entity.getSecurityType()==null || entity.getSecurityType()==SecurityType.ACCESS_WITH_PERMISSION)
-				check="if (!securityService.hasPermission("+Generator.getJDefinedClass(entity).fullName()+".staticEntityId, "+RestrictionType.class.getName()+"."+restrictionType.toString()+")) \n";
+				check+="if (!securityService.hasPermission("+Generator.getJDefinedClass(entity).fullName()+".staticEntityId, "+RestrictionType.class.getName()+"."+restrictionType.toString()+")) \n";
 			else
 				if (entity.getSecurityType()==SecurityType.BLOCK_WITH_RESTRICTION)
-					check="if (securityService.hasRestriction("+Generator.getJDefinedClass(entity).fullName()+".staticEntityId, "+RestrictionType.class.getName()+"."+restrictionType.toString()+")) \n";
+					check+="if (securityService.hasRestriction("+Generator.getJDefinedClass(entity).fullName()+".staticEntityId, "+RestrictionType.class.getName()+"."+restrictionType.toString()+")) \n";
 				
 		check+="return ResponseEntity.status("+HttpStatus.class.getName()+".FORBIDDEN).build(); \n";
+		if (!Generator.security)
+			check+="*/\n";
 		return check;
 	}
 

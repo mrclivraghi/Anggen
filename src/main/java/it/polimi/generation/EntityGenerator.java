@@ -133,7 +133,10 @@ public class EntityGenerator {
 			annotationTable.param("schema", Generator.schema);
 		
 		JAnnotationUse securityType= myClass.annotate(SecurityType.class);
-		securityType.param("type", entity.getSecurityType());
+		it.polimi.model.SecurityType secType = entity.getSecurityType();
+		if (secType==null)
+			secType=it.polimi.model.SecurityType.ACCESS_WITH_PERMISSION;
+		securityType.param("type", secType);
 		
 		JAnnotationUse maxDescendantLevel= myClass.annotate(MaxDescendantLevel.class);
 		maxDescendantLevel.param("value", entity.getDescendantMaxLevel());

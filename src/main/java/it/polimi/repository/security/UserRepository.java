@@ -7,9 +7,11 @@ import it.polimi.model.security.Role;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 @Repository
+@Component
 public interface UserRepository
     extends CrudRepository<it.polimi.model.security.User, java.lang.Long>
 {

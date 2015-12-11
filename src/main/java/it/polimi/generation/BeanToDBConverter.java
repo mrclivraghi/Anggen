@@ -29,6 +29,9 @@ import it.polimi.model.field.EnumField;
 import it.polimi.model.field.EnumValue;
 import it.polimi.model.field.Field;
 import it.polimi.model.relationship.Relationship;
+import it.polimi.model.security.RestrictionEntityGroup;
+import it.polimi.model.security.Role;
+import it.polimi.model.security.User;
 import it.polimi.repository.entity.EntityGroupRepository;
 import it.polimi.repository.entity.EntityRepository;
 import it.polimi.repository.entity.ProjectRepository;
@@ -39,6 +42,10 @@ import it.polimi.repository.field.EnumFieldRepository;
 import it.polimi.repository.field.EnumValueRepository;
 import it.polimi.repository.field.FieldRepository;
 import it.polimi.repository.relationship.RelationshipRepository;
+import it.polimi.repository.security.RestrictionEntityGroupRepository;
+import it.polimi.repository.security.RestrictionEntityRepository;
+import it.polimi.repository.security.RoleRepository;
+import it.polimi.repository.security.UserRepository;
 import it.polimi.utils.ReflectionManager;
 import it.polimi.utils.annotation.Between;
 import it.polimi.utils.annotation.DescriptionField;
@@ -56,6 +63,7 @@ import org.hibernate.type.MetaType;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -94,14 +102,45 @@ public class BeanToDBConverter {
 	@Autowired
 	EnumValueRepository enumValueRepository;
 	
+	@Autowired
+	RestrictionEntityRepository restrictionEntityRepository;
+	
+	@Autowired
+	RestrictionEntityGroupRepository restrictionEntityGroupRepository;
+	
+	@Autowired
+	RoleRepository roleRepository;
+	
+	@Autowired
+	UserRepository userRepository;
+	
+	
+	User admin;
+	
+	Role adminRole;
 	
 	public BeanToDBConverter() {
 		
 		
 	}
-	
+	private void init(){
+		admin = new User();
+		admin.setEnabled(true);
+		admin.setUsername("st");
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		admin.setPassword(encoder.encode("123"));
+		userRepository.save(admin);
+		adminRole = new Role();
+		adminRole.setRole("META-ADMIN");
+		roleRepository.save(adminRole);
+		List<Role> roleList = new ArrayList<Role>();
+		roleList.add(adminRole);
+		admin.setRoleList(roleList);
+		userRepository.save(admin);
+	}
 	public void convert(String mainPackage)
 	{
+		init();
 		List<String> packageList= ReflectionManager.getSubPackages(mainPackage);
 		Map<String,Entity> entityMap = new HashMap<String,Entity>();
 		Set<Class<?>> mainPackageClassSet = ReflectionManager.getClassInPackage(mainPackage);

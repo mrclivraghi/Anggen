@@ -30,6 +30,7 @@ import javax.persistence.ManyToOne;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -620,7 +621,9 @@ public class RestGenerator {
 			JClass jClassClass =ReflectionManager.getJDefinedClass(entity);
 			log.init(factory.staticInvoke("getLogger").arg(jClassClass.dotclass()));
 			//log.assign(factory.staticInvoke("getLogger"));
-			
+			JVar securityEnable = myClass.field(JMod.PRIVATE, Boolean.class, "securityEnabled");
+			JAnnotationUse valueSecurityEnable= securityEnable.annotate(Value.class);
+			valueSecurityEnable.param("value", "${application.security}");
 			
 			//manage
 			JMethod manage = myClass.method(JMod.PUBLIC, String.class, "manage");
@@ -629,10 +632,10 @@ public class RestGenerator {
 			JBlock manageBlock = manage.body();
 			String check="";
 			if (entity.getSecurityType()==null || entity.getSecurityType()==SecurityType.ACCESS_WITH_PERMISSION)
-				check="if (!securityService.hasPermission("+ReflectionManager.getJDefinedClass(entity).fullName()+".staticEntityId, "+RestrictionType.class.getName()+"."+RestrictionType.SEARCH.toString()+")) \n";
+				check="if (securityEnabled && !securityService.hasPermission("+ReflectionManager.getJDefinedClass(entity).fullName()+".staticEntityId, "+RestrictionType.class.getName()+"."+RestrictionType.SEARCH.toString()+")) \n";
 			else
 				if (entity.getSecurityType()==SecurityType.BLOCK_WITH_RESTRICTION)
-					check="if (securityService.hasRestriction("+ReflectionManager.getJDefinedClass(entity).fullName()+".staticEntityId, "+RestrictionType.class.getName()+"."+RestrictionType.SEARCH.toString()+")) \n";
+					check="if (securityEnabled && securityService.hasRestriction("+ReflectionManager.getJDefinedClass(entity).fullName()+".staticEntityId, "+RestrictionType.class.getName()+"."+RestrictionType.SEARCH.toString()+")) \n";
 			
 			check+="return \"forbidden\"; \n";
 
@@ -759,10 +762,10 @@ public class RestGenerator {
 			{
 				
 				if (entity.getSecurityType()==null || entity.getSecurityType()==SecurityType.ACCESS_WITH_PERMISSION)
-					reBuildBlock.directStatement("if (!securityService.hasPermission("+ReflectionManager.getJDefinedClass(relationship.getEntityTarget()).fullName()+".staticEntityId, "+RestrictionType.class.getName()+".SEARCH))");
+					reBuildBlock.directStatement("if (securityEnabled && !securityService.hasPermission("+ReflectionManager.getJDefinedClass(relationship.getEntityTarget()).fullName()+".staticEntityId, "+RestrictionType.class.getName()+".SEARCH))");
 				else
 					if (entity.getSecurityType()==SecurityType.BLOCK_WITH_RESTRICTION)
-						reBuildBlock.directStatement("if (securityService.hasRestriction("+ReflectionManager.getJDefinedClass(relationship.getEntityTarget()).fullName()+".staticEntityId, "+RestrictionType.class.getName()+".SEARCH))");
+						reBuildBlock.directStatement("if (securityEnabled && securityService.hasRestriction("+ReflectionManager.getJDefinedClass(relationship.getEntityTarget()).fullName()+".staticEntityId, "+RestrictionType.class.getName()+".SEARCH))");
 					
 				if (EntityAttributeManager.getInstance(relationship).isList())
 					reBuildBlock.directStatement(entity.getName()+".set"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List("+entity.getName()+"Service.findById("+entity.getName()+".get"+Utility.getFirstUpper(entity.getName())+"Id()).get(0).get"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List());");
@@ -823,18 +826,14 @@ public class RestGenerator {
 	}
 	private String addSecurityCheck(RestrictionType restrictionType) {
 		String check= "";
-		if (!generator.security)
-			check+="/*\n";
 		
 			if (entity.getSecurityType()==null || entity.getSecurityType()==SecurityType.ACCESS_WITH_PERMISSION)
-				check+="if (!securityService.hasPermission("+ReflectionManager.getJDefinedClass(entity).fullName()+".staticEntityId, "+RestrictionType.class.getName()+"."+restrictionType.toString()+")) \n";
+				check+="if (securityEnabled && !securityService.hasPermission("+ReflectionManager.getJDefinedClass(entity).fullName()+".staticEntityId, "+RestrictionType.class.getName()+"."+restrictionType.toString()+")) \n";
 			else
 				if (entity.getSecurityType()==SecurityType.BLOCK_WITH_RESTRICTION)
-					check+="if (securityService.hasRestriction("+ReflectionManager.getJDefinedClass(entity).fullName()+".staticEntityId, "+RestrictionType.class.getName()+"."+restrictionType.toString()+")) \n";
+					check+="if (securityEnabled && securityService.hasRestriction("+ReflectionManager.getJDefinedClass(entity).fullName()+".staticEntityId, "+RestrictionType.class.getName()+"."+restrictionType.toString()+")) \n";
 				
 		check+="return ResponseEntity.status("+HttpStatus.class.getName()+".FORBIDDEN).build(); \n";
-		if (!generator.security)
-			check+="*/\n";
 		return check;
 	}
 
@@ -903,20 +902,20 @@ public class RestGenerator {
 			if (EntityAttributeManager.getInstance(relationship).isList())
 			{
 				if (entity.getSecurityType()==null || entity.getSecurityType()==SecurityType.ACCESS_WITH_PERMISSION)
-					block.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List()!=null && !securityService.hasPermission("+ReflectionManager.getJDefinedClass(relationship.getEntityTarget()).fullName()+".staticEntityId, "+RestrictionType.class.getName()+".SEARCH) )");
+					block.directStatement("if (securityEnabled && "+lowerClass+".get"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List()!=null && !securityService.hasPermission("+ReflectionManager.getJDefinedClass(relationship.getEntityTarget()).fullName()+".staticEntityId, "+RestrictionType.class.getName()+".SEARCH) )");
 				else
 					if (entity.getSecurityType()==SecurityType.BLOCK_WITH_RESTRICTION)
-						block.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List()!=null && securityService.hasRestriction("+ReflectionManager.getJDefinedClass(relationship.getEntityTarget()).fullName()+".staticEntityId, "+RestrictionType.class.getName()+".SEARCH) )");
+						block.directStatement("if (securityEnabled && "+lowerClass+".get"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List()!=null && securityService.hasRestriction("+ReflectionManager.getJDefinedClass(relationship.getEntityTarget()).fullName()+".staticEntityId, "+RestrictionType.class.getName()+".SEARCH) )");
 				block.directStatement(""+lowerClass+".set"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List(null);\n");
 			}
 			 else
 			 {
 				 
 				 if (entity.getSecurityType()==null || entity.getSecurityType()==SecurityType.ACCESS_WITH_PERMISSION)
-						block.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"()!=null  && !securityService.hasPermission("+ReflectionManager.getJDefinedClass(relationship.getEntityTarget()).fullName()+".staticEntityId, "+RestrictionType.class.getName()+".SEARCH) )");
+						block.directStatement("if (securityEnabled && "+lowerClass+".get"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"()!=null  && !securityService.hasPermission("+ReflectionManager.getJDefinedClass(relationship.getEntityTarget()).fullName()+".staticEntityId, "+RestrictionType.class.getName()+".SEARCH) )");
 				 else
 						if (entity.getSecurityType()==SecurityType.BLOCK_WITH_RESTRICTION)
-							block.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"()!=null  && securityService.hasRestriction("+ReflectionManager.getJDefinedClass(relationship.getEntityTarget()).fullName()+".staticEntityId, "+RestrictionType.class.getName()+".SEARCH) )");
+							block.directStatement("if (securityEnabled && "+lowerClass+".get"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"()!=null  && securityService.hasRestriction("+ReflectionManager.getJDefinedClass(relationship.getEntityTarget()).fullName()+".staticEntityId, "+RestrictionType.class.getName()+".SEARCH) )");
 				block.directStatement(""+lowerClass+".set"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"(null);\n");
 			 }
 		}

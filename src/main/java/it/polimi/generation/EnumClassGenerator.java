@@ -14,6 +14,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.sun.codemodel.ClassType;
 import com.sun.codemodel.JAnnotationUse;
@@ -36,11 +38,20 @@ import it.polimi.model.field.Field;
 import it.polimi.model.relationship.Relationship;
 import it.polimi.utils.Utility;
 
+@Service
 public class EnumClassGenerator {
 
 	private EnumField enumField;
 	
-	public EnumClassGenerator(EnumField enumField) {
+	@Autowired
+	private Generator generator;
+	
+	public EnumClassGenerator()
+	{
+		
+	}
+	
+	public void init(EnumField enumField) {
 		// TODO Auto-generated constructor stub
 		this.enumField=enumField;
 	}
@@ -65,7 +76,7 @@ public class EnumClassGenerator {
 		JDefinedClass myClass= null;
 		try {
 			//TODO fix
-			myClass = codeModel._class(Generator.mainPackage+Generator.applicationName+".model."+className, ClassType.ENUM);
+			myClass = codeModel._class(generator.mainPackage+generator.applicationName+".model."+className, ClassType.ENUM);
 		} catch (JClassAlreadyExistsException e) {
 			e.printStackTrace();
 		}

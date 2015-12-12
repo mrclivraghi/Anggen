@@ -29,12 +29,19 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotBlank;
 import org.rendersnake.HtmlAttributes;
 import org.rendersnake.HtmlCanvas;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * @author Marco
  * Creates an html file for rendering the entity with all its children.
  */
+@Service
 public class AngularGenerator {
+	
+	@Autowired
+	private Generator generator;
+	
 	private String entityName;
 
 	private Boolean isParent;
@@ -47,8 +54,11 @@ public class AngularGenerator {
 
 	private Entity entity;
 	
-
-	public AngularGenerator(Entity entity,Boolean isParent, List<Entity> parentEntity)
+	public AngularGenerator(){
+		
+	}
+	
+	public void init(Entity entity,Boolean isParent, List<Entity> parentEntity)
 	{
 		this.entityManager= new EntityManagerImpl(entity);
 		this.entityName=entity.getName();
@@ -71,7 +81,7 @@ public class AngularGenerator {
 	public void generateEntityView(HtmlCanvas html) throws IOException {
 		HtmlAttributes mainControllerAttributes = new HtmlAttributes();
 		mainControllerAttributes.add("ng-controller", entityName+"Controller");
-		if (Generator.easyTreeMenu)
+		if (generator.easyTreeMenu)
 		{
 			mainControllerAttributes.add("style", "position: absolute; left: 250px; width:80%; top: 30px;");
 		}
@@ -116,8 +126,8 @@ public class AngularGenerator {
 			if (descendantEntityList==null || descendantEntityList.size()==0) return;
 			for (Entity descendantEntity: descendantEntityList)
 			{
-				AngularGenerator angularGenerator = new AngularGenerator(descendantEntity, false, parentEntity);
-				angularGenerator.generateEntityView(html);
+				init(descendantEntity, false, parentEntity);
+				generateEntityView(html);
 			}
 		}
 	}

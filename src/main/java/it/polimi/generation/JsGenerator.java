@@ -35,6 +35,8 @@ import java.util.Set;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.reflections.Reflections;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.sun.codemodel.JClass;
 
@@ -44,6 +46,7 @@ import com.sun.codemodel.JClass;
  * @author Marco
  *
  */
+@Service
 public class JsGenerator {
 
 	private Entity entity;
@@ -65,14 +68,16 @@ public class JsGenerator {
 	
 	private Boolean entityList;
 	
-	/**
-	 * Constructor
-	 * @param classClass
-	 * @param isParent
-	 * @param compositeClass
-	 * @param parentEntityName
-	 */
-	public JsGenerator(Entity entity,Boolean isParent,String parentEntityName,Boolean entityList)
+	@Autowired
+	private Generator generator;
+
+	public JsGenerator()
+	{
+		
+	}
+
+	
+	public void init(Entity entity,Boolean isParent,String parentEntityName,Boolean entityList)
 	{
 		this.entity=entity;
 		this.parentEntityName=parentEntityName;
@@ -589,11 +594,16 @@ public class JsGenerator {
 		//pagination
 		if (isParent)
 			sb.append(getPagination());
+		Entity mainEntity=entity;
+		Boolean mainIsParent= isParent;
+		String mainParentName = parentEntityName;
+		Boolean mainEntityList = entityList;
 		for (Relationship relationship: relationshipList)
 		{
-			JsGenerator jsGenerator = new JsGenerator(relationship.getEntityTarget(), false, entityName,true);
-			sb.append(jsGenerator.getPagination());
+			init(relationship.getEntityTarget(), false, entityName,true);
+			sb.append(getPagination());
 		}
+		init(mainEntity,isParent,parentEntityName,entityList);
 		sb.append("$scope.downloadEntityList=function()\n");
 		sb.append("{\n");
 		sb.append("var mystyle = {\n");
@@ -793,7 +803,7 @@ public class JsGenerator {
 		sb.append(".service(\"securityService\",function($http)\n");
 		sb.append("{\n");
 		sb.append("this.restrictionList;\n");
-		if (Generator.security)
+		if (generator.security)
 		{
 			sb.append("this.init= function() {\n");
 			sb.append("var promise= $http.get(\"../authentication/\");\n");
@@ -805,7 +815,7 @@ public class JsGenerator {
 		
 		sb.append(".run(function($rootScope,securityService"+services+"){\n");
 
-		if (Generator.security)
+		if (generator.security)
 		{
 			sb.append("securityService.init().then(function successCallback(response) {\n");
 			sb.append("securityService.restrictionList=response.data;\n");
@@ -818,7 +828,7 @@ public class JsGenerator {
 		String[] serviceArray=services.split(",");
 		initChildrenList(sb, entity);
 				
-		if (Generator.security)
+		if (generator.security)
 			sb.append("});\n");
 
 		
@@ -846,9 +856,9 @@ public class JsGenerator {
 		descendantEntitySet.addAll(descendantEntityList);
 		for (Entity descendantEntity : descendantEntitySet)
 		{
-			JsGenerator jsGenerator = new JsGenerator(descendantEntity,false,entity.getName(),true);
-			buildJS.append(jsGenerator.generateService());
-			buildJS.append(jsGenerator.generateController());
+			init(descendantEntity,false,entity.getName(),true);
+			buildJS.append(generateService());
+			buildJS.append(generateController());
 			
 			
 		}

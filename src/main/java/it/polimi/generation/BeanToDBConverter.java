@@ -132,7 +132,6 @@ public class BeanToDBConverter {
 		
 		Project project = new Project();
 		project.setName(projectName);
-		Generator generator = new Generator(project, null);
 		admin = new User();
 		admin.setEnabled(true);
 		admin.setUsername("st");

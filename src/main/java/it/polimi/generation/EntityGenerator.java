@@ -9,6 +9,7 @@ import it.polimi.model.field.AnnotationAttribute;
 import it.polimi.model.field.EnumField;
 import it.polimi.model.field.Field;
 import it.polimi.model.relationship.Relationship;
+import it.polimi.utils.ReflectionManager;
 import it.polimi.utils.Utility;
 import it.polimi.utils.annotation.Between;
 import it.polimi.utils.annotation.DescriptionField;
@@ -49,6 +50,8 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.sun.codemodel.ClassType;
 import com.sun.codemodel.JAnnotationArrayMember;
@@ -64,11 +67,21 @@ import com.sun.codemodel.JMethod;
 import com.sun.codemodel.JMod;
 import com.sun.codemodel.JVar;
 
+@Service
 public class EntityGenerator {
+	
+	@Autowired
+	private Generator generator;
 	
 	private Entity entity;
 	
-	public EntityGenerator(Entity entity)
+	
+	public EntityGenerator()
+	{
+	}
+	
+	
+	public void init (Entity entity)
 	{
 		this.entity=entity;
 	}
@@ -120,7 +133,7 @@ public class EntityGenerator {
 		String lowerClassName = Utility.getFirstLower(className);
 		JDefinedClass myClass= null;
 		try {
-			myClass = codeModel._class(Generator.mainPackage+Generator.applicationName+".model."+entity.getEntityGroup().getName()+"."+className, ClassType.CLASS);
+			myClass = codeModel._class(generator.mainPackage+generator.applicationName+".model."+entity.getEntityGroup().getName()+"."+className, ClassType.CLASS);
 		} catch (JClassAlreadyExistsException e) {
 			e.printStackTrace();
 		}
@@ -130,7 +143,7 @@ public class EntityGenerator {
 		if (entity.getEntityGroup().getName().equals("security"))
 			annotationTable.param("schema", "sso");
 		else
-			annotationTable.param("schema", Generator.schema);
+			annotationTable.param("schema", generator.schema);
 		
 		JAnnotationUse securityType= myClass.annotate(SecurityType.class);
 		it.polimi.model.SecurityType secType = entity.getSecurityType();
@@ -166,7 +179,7 @@ public class EntityGenerator {
 			
 			if (relationship.isList())
 			{
-				JClass listClass = codeModel.ref(List.class).narrow(Generator.getJDefinedClass(relationship.getEntityTarget()));
+				JClass listClass = codeModel.ref(List.class).narrow(ReflectionManager.getJDefinedClass(relationship.getEntityTarget()));
 				listField = myClass.field(JMod.PRIVATE, listClass, relationship.getEntityTarget().getName()+"List");
 				generateGetterAndSetter(myClass, relationship.getName()+"List", listClass);
 				if (relationship.getRelationshipType()==RelationshipType.ONE_TO_MANY)
@@ -174,7 +187,7 @@ public class EntityGenerator {
 					JAnnotationUse oneToMany = listField.annotate(OneToMany.class);
 					oneToMany.param("fetch", FetchType.EAGER);
 					JAnnotationUse type = listField.annotate(Type.class);
-					type.param("type", Generator.getJDefinedClass(relationship.getEntityTarget()).fullName());
+					type.param("type", ReflectionManager.getJDefinedClass(relationship.getEntityTarget()).fullName());
 					JAnnotationUse joinColumn = listField.annotate(JoinColumn.class);
 					joinColumn.param("name", namingStrategy.classToTableName(entity.getName())+"_id_"+namingStrategy.classToTableName(relationship.getName()));
 				}
@@ -184,10 +197,10 @@ public class EntityGenerator {
 					JAnnotationUse manyToMany = listField.annotate(ManyToMany.class);
 					manyToMany.param("fetch", FetchType.EAGER);
 					JAnnotationUse type = listField.annotate(Type.class);
-					type.param("type", Generator.getJDefinedClass(relationship.getEntityTarget()).fullName());
+					type.param("type", ReflectionManager.getJDefinedClass(relationship.getEntityTarget()).fullName());
 					JAnnotationUse joinTable = listField.annotate(JoinTable.class);
 					joinTable.param("name", namingStrategy.classToTableName(relationship.getEntity().getName())+"_"+namingStrategy.classToTableName(relationship.getEntityTarget().getName()));
-					joinTable.param("schema", Generator.schema);
+					joinTable.param("schema", generator.schema);
 					JAnnotationArrayMember listJoinColumns = joinTable.paramArray("joinColumns");
 					listJoinColumns.annotate(JoinColumn.class).param("name", relationship.getEntity().getName().toLowerCase()+"_id");
 					
@@ -209,7 +222,7 @@ public class EntityGenerator {
 			}
 			else
 			{
-				listField = myClass.field(JMod.PRIVATE, Generator.getJDefinedClass(relationship.getEntityTarget()), relationship.getName());
+				listField = myClass.field(JMod.PRIVATE, ReflectionManager.getJDefinedClass(relationship.getEntityTarget()), relationship.getName());
 				if (relationship.getRelationshipType()==RelationshipType.MANY_TO_ONE)
 				{
 					JAnnotationUse manyToOne = listField.annotate(ManyToOne.class);
@@ -223,12 +236,12 @@ public class EntityGenerator {
 					JAnnotationUse oneToOne = listField.annotate(OneToOne.class);
 					oneToOne.param("fetch", FetchType.EAGER);
 					JAnnotationUse type = listField.annotate(Type.class);
-					type.param("type", Generator.getJDefinedClass(relationship.getEntityTarget()).fullName());
+					type.param("type", ReflectionManager.getJDefinedClass(relationship.getEntityTarget()).fullName());
 					JAnnotationUse joinColumn = listField.annotate(JoinColumn.class);
 					joinColumn.param("name", namingStrategy.classToTableName(relationship.getEntityTarget().getName())+"_id_"+namingStrategy.classToTableName(relationship.getName()));
 				
 				}
-				generateGetterAndSetter(myClass, relationship.getName(), Generator.getJDefinedClass(relationship.getEntityTarget()));
+				generateGetterAndSetter(myClass, relationship.getName(), ReflectionManager.getJDefinedClass(relationship.getEntityTarget()));
 			}
 			addValidationAnnotation(relationship,listField);
 		}

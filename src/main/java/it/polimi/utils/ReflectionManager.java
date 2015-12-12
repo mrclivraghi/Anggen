@@ -1,6 +1,7 @@
 package it.polimi.utils;
 
 import it.polimi.generation.Generator;
+import it.polimi.model.field.EnumField;
 import it.polimi.utils.annotation.Between;
 import it.polimi.utils.annotation.DescriptionField;
 import it.polimi.utils.annotation.ExcelExport;
@@ -38,8 +39,10 @@ import org.reflections.Reflections;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.repository.query.Param;
 
+import com.sun.codemodel.ClassType;
 import com.sun.codemodel.JAnnotationUse;
 import com.sun.codemodel.JClass;
+import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JType;
@@ -694,6 +697,64 @@ public class ReflectionManager {
 		if (fieldList.size()==0  && tabName.equals("Detail")) //default every field
 			return getFieldList();
 		return fieldList;
+	}
+	
+	
+	
+	public static JDefinedClass getJDefinedClass(it.polimi.model.entity.Entity entity)
+	{
+		JCodeModel	codeModel = new JCodeModel();
+		JDefinedClass myClass= null;
+		try {
+			String thePackage="it.generated."+Generator.appName+".model."+entity.getEntityGroup().getName().toLowerCase()+".";
+		//	if (entity.getName().endsWith("Repository"))
+	//			thePackage=thePackage.replace(".model", ".repository.");
+			myClass = codeModel._class(thePackage+Utility.getFirstUpper(entity.getName()), ClassType.CLASS);
+		} catch (JClassAlreadyExistsException e) {
+			e.printStackTrace();
+		}
+		return myClass;
+	}
+	public  static  JDefinedClass getJDefinedRepositoryClass(it.polimi.model.entity.Entity entity)
+	{
+		JCodeModel	codeModel = new JCodeModel();
+		JDefinedClass myClass= null;
+		try {
+			String thePackage="it.generated."+Generator.appName+".repository."+entity.getEntityGroup().getName().toLowerCase()+".";
+		//	if (entity.getName().endsWith("Repository"))
+	//			thePackage=thePackage.replace(".model", ".repository.");
+			myClass = codeModel._class(thePackage+Utility.getFirstUpper(entity.getName()+"Repository"), ClassType.CLASS);
+		} catch (JClassAlreadyExistsException e) {
+			e.printStackTrace();
+		}
+		return myClass;
+	}
+	public static  JDefinedClass getJDefinedEnumFieldClass(EnumField enumField)
+	{
+		JCodeModel	codeModel = new JCodeModel();
+		JDefinedClass myClass= null;
+		try {
+			String thePackage="it.generated."+Generator.appName+".model.";
+		//	if (entity.getName().endsWith("Repository"))
+	//			thePackage=thePackage.replace(".model", ".repository.");
+			myClass = codeModel._class(thePackage+Utility.getFirstUpper(enumField.getName()), ClassType.CLASS);
+		} catch (JClassAlreadyExistsException e) {
+			e.printStackTrace();
+		}
+		return myClass;
+	}
+	public static  JType getJDefinedCustomClass(String fullName) {
+		JCodeModel	codeModel = new JCodeModel();
+		JDefinedClass myClass= null;
+		try {
+			
+		//	if (entity.getName().endsWith("Repository"))
+	//			thePackage=thePackage.replace(".model", ".repository.");
+			myClass = codeModel._class(fullName, ClassType.CLASS);
+		} catch (JClassAlreadyExistsException e) {
+			e.printStackTrace();
+		}
+		return myClass;
 	}
 	
 	

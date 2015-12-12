@@ -162,10 +162,10 @@ public class EntityAttribute {
 		{
 			if (this.isEnumField())
 			{
-				return Generator.getJDefinedEnumFieldClass(this.asEnumField());
+				return ReflectionManager.getJDefinedEnumFieldClass(this.asEnumField());
 			}else
 			{
-				return Generator.getJDefinedClass(this.asRelationship().getEntityTarget());
+				return ReflectionManager.getJDefinedClass(this.asRelationship().getEntityTarget());
 			}
 		}
 	}

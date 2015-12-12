@@ -36,6 +36,9 @@ public class JsDbGenerationTest {
 	@Autowired
 	EnumFieldRepository enumFieldRepository;
 	
+	@Autowired
+	Generator generator;
+	
 	@Value("${application.name}")
 	private String projectName;
 	
@@ -46,10 +49,12 @@ public class JsDbGenerationTest {
 	@Test
 	public void createJs()
 	{
-		List<EnumField> enumFieldList = enumFieldRepository.findByEnumFieldIdAndNameAndEnumValueAndEntityAndAnnotationAndTab(null, null, null, null, null, null);
-		Project project = projectRepository.findByName(projectName).get(0);
-		Generator generator = new Generator(project,enumFieldList);
-		generator.generate();
+		try {
+			generator.generate();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 

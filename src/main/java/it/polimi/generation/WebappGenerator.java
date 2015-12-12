@@ -1,6 +1,7 @@
 package it.polimi.generation;
 
 import it.polimi.repository.security.UserRepository;
+import it.polimi.utils.ReflectionManager;
 import it.polimi.utils.Utility;
 
 import java.io.File;
@@ -72,15 +73,25 @@ import com.sun.codemodel.JMod;
 import com.sun.codemodel.JType;
 import com.sun.codemodel.JVar;
 
+@Service
 public class WebappGenerator {
 
+	@Autowired
+	private Generator generator;
+	
 	private String applicationName;
 	private String packageName;
 	private String directory;
-	public WebappGenerator() {
-		applicationName=Generator.applicationName;
+	
+	public WebappGenerator()
+	{
 		
-		packageName=Generator.mainPackage+applicationName.toLowerCase()+".";
+	}
+	
+	public void init() {
+		applicationName=generator.applicationName;
+		
+		packageName=generator.mainPackage+applicationName.toLowerCase()+".";
 		File file = new File(""); 
 		this.directory = file.getAbsolutePath()+"\\src\\main\\java";
 		
@@ -88,6 +99,7 @@ public class WebappGenerator {
 	
 	public void generate()
 	{
+		init();
 		generateAppConfig();
 		generateCsrfHeaderFilter();
 		generateMvcWebAppInitializer();
@@ -224,14 +236,14 @@ public class WebappGenerator {
 			configureBlock.directStatement("http");
 			configureBlock.directStatement(".authorizeRequests()");
 			String enableAll="";
-			if (!Generator.security)
+			if (!generator.security)
 				enableAll=",\"/**\"";
 			configureBlock.directStatement(".antMatchers(\"/css/**\",\"/img/**\",\"/js/**\",\"/auth/**\",\"/login/**\""+enableAll+").permitAll()");
 			configureBlock.directStatement(".and()");
 			configureBlock.directStatement(".authorizeRequests().anyRequest().fullyAuthenticated().and()");
 			configureBlock.directStatement(".formLogin().and().csrf()");
 			configureBlock.directStatement(".csrfTokenRepository(csrfTokenRepository()).and()");
-			configureBlock.directStatement(".addFilterAfter(new "+Generator.getJDefinedCustomClass(packageName+"boot.CsrfHeaderFilter").fullName()+"(), "+CsrfFilter.class.getName()+".class);");
+			configureBlock.directStatement(".addFilterAfter(new "+ReflectionManager.getJDefinedCustomClass(packageName+"boot.CsrfHeaderFilter").fullName()+"(), "+CsrfFilter.class.getName()+".class);");
 			
 			JMethod tokenRepository = securityConfig.method(JMod.PRIVATE, CsrfTokenRepository.class, "csrfTokenRepository");
 			JBlock tokenRepositoryBody=tokenRepository.body();
@@ -267,7 +279,7 @@ public class WebappGenerator {
 				e.printStackTrace();
 			}
 			JAnnotationUse configAnnotation =csrfFilter.annotate(Configuration.class);
-			configAnnotation.param("value", Generator.applicationName+"CsrfFilter");
+			configAnnotation.param("value", generator.applicationName+"CsrfFilter");
 			JAnnotationUse orderAnnotation=csrfFilter.annotate(Order.class);
 			orderAnnotation.param("value", SecurityProperties.ACCESS_OVERRIDE_ORDER);//(, );
 			JMethod doFilter = csrfFilter.method(JMod.PROTECTED, void.class, "doFilterInternal");

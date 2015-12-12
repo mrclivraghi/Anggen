@@ -4,6 +4,8 @@ import it.polimi.model.entity.Entity;
 import it.polimi.model.entity.EntityGroup;
 import it.polimi.model.entity.Project;
 import it.polimi.model.field.EnumField;
+import it.polimi.repository.entity.ProjectRepository;
+import it.polimi.repository.field.EnumFieldRepository;
 import it.polimi.utils.Field;
 import it.polimi.utils.ReflectionManager;
 import it.polimi.utils.Utility;
@@ -31,6 +33,7 @@ import org.apache.commons.dbcp.BasicDataSource;
 import org.reflections.Reflections;
 import org.rendersnake.HtmlAttributes;
 import org.rendersnake.HtmlCanvas;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -52,27 +55,42 @@ import com.sun.codemodel.JVar;
 @Service
 public class Generator {
 	
-	public static String mainPackage;
 	
-	public static Boolean bootstrapMenu=true;
+	@Value("${application.package.main}")
+	public String mainPackage;
 	
-	public static Boolean easyTreeMenu;
+	@Value("${application.menu.bootstrap.enable}")
+	public Boolean bootstrapMenu=true;
 	
-	public static String schema;
+	@Value("${application.menu.easytree.enable}")
+	public Boolean easyTreeMenu;
 	
-	public static String menuName;
+	@Value("${application.schema}")
+	public String schema;
 	
-	public static String menuDirectory;
+	@Value("${application.menu.name}")
+	public String menuName;
 	
-	public static String angularDirectory="/src/main/webapp/js/angular/";
+	@Value("${application.menu.directory}")
+	public  String menuDirectory;
 	
-	public static String htmlDirectory="/src/main/webapp/WEB-INF/jsp/";
+	@Value("${application.angular.directory}")
+	public String angularDirectory;
 	
-	public static String uploadDirectory;
+	@Value("${application.html.directory}")
+	public String htmlDirectory;
 	
-	public static String applicationName;
+	@Value("${application.upload.directory}")
+	public String uploadDirectory;
+	
+	@Value("${application.name}")
+	public String applicationName;
 
-	public static Boolean security;
+	@Value("${application.security}")
+	public Boolean security;
+	
+	@Value("application.name")
+	public String test;
 	
 	private Project project;
 	
@@ -82,6 +100,29 @@ public class Generator {
 	
 	private List<EntityGroup> entityGroupList;
 	
+	@Autowired
+	ProjectRepository projectRepository;
+	
+	@Autowired
+	EnumFieldRepository enumFieldRepository;
+	
+	@Autowired
+	RestGenerator restGenerator;
+	
+	@Autowired
+	EntityGenerator entityGenerator;
+	
+	@Autowired
+	EnumClassGenerator enumClassGenerator;
+	
+	@Autowired
+	HtmlGenerator htmlGenerator;
+	
+	@Autowired
+	WebappGenerator webappGenerator;
+	
+	public static String appName;
+	
 	public Generator()
 	{
 		
@@ -89,8 +130,19 @@ public class Generator {
 	
 	public Generator(Project project,List<EnumField> enumFieldList)
 	{
-		this.project=project;
+		
+		
+	}
+	
+	private void init() throws Exception
+	{
+		Generator.appName=applicationName;
+		List<Project> projectList=projectRepository.findByName(applicationName);
+		if (projectList.size()==0)
+			throw new Exception();
+		this.project=projectList.get(0);
 		this.entityGroupList=project.getEntityGroupList();
+		List<EnumField> enumFieldList = enumFieldRepository.findByEnumFieldIdAndNameAndEnumValueAndEntityAndAnnotationAndTab(null, null, null, null, null, null);
 		this.enumFieldList=enumFieldList;
 		this.modelEntityList=new ArrayList<Entity>();
 		if (entityGroupList!=null)
@@ -98,40 +150,6 @@ public class Generator {
 		{
 			this.modelEntityList.addAll(entityGroup.getEntityList());
 		}
-		init();
-	}
-	
-	private void init()
-	{
-		File file = new File("src/main/resources/application.properties");
-		System.out.println(file.getAbsolutePath());
-		FileInputStream fileInput;
-		try {
-			fileInput = new FileInputStream(file);
-			Properties properties = new Properties();
-			properties.load(fileInput);
-			fileInput.close();
-			//Generator.modelPackage=properties.getProperty("application.model.package");
-			Generator.mainPackage="it.generated.";
-			Generator.easyTreeMenu=Boolean.valueOf(properties.getProperty("application.menu.easytree.enable"));
-			Generator.bootstrapMenu=Boolean.valueOf(properties.getProperty("application.menu.bootstrap.enable"));
-			Generator.menuDirectory=properties.getProperty("application.menu.directory");
-			Generator.angularDirectory=properties.getProperty("application.angular.directory");
-			Generator.htmlDirectory=properties.getProperty("application.html.directory");
-			Generator.applicationName=project.getName().toLowerCase();
-			Generator.menuName=properties.getProperty("application.menu.name");
-			Generator.schema=properties.getProperty("application.schema");
-			Generator.uploadDirectory=properties.getProperty("application.upload.directory");
-			Generator.security=Boolean.valueOf(properties.getProperty("application.security"));
-			
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 	}
 
 	
@@ -159,102 +177,48 @@ public class Generator {
 		}*/
 	}
 	
-	public static JDefinedClass getJDefinedClass(Entity entity)
-	{
-		JCodeModel	codeModel = new JCodeModel();
-		JDefinedClass myClass= null;
-		try {
-			String thePackage="it.generated."+Generator.applicationName+".model."+entity.getEntityGroup().getName().toLowerCase()+".";
-		//	if (entity.getName().endsWith("Repository"))
-	//			thePackage=thePackage.replace(".model", ".repository.");
-			myClass = codeModel._class(thePackage+Utility.getFirstUpper(entity.getName()), ClassType.CLASS);
-		} catch (JClassAlreadyExistsException e) {
-			e.printStackTrace();
-		}
-		return myClass;
-	}
-	public static JDefinedClass getJDefinedRepositoryClass(Entity entity)
-	{
-		JCodeModel	codeModel = new JCodeModel();
-		JDefinedClass myClass= null;
-		try {
-			String thePackage="it.generated."+Generator.applicationName+".repository."+entity.getEntityGroup().getName().toLowerCase()+".";
-		//	if (entity.getName().endsWith("Repository"))
-	//			thePackage=thePackage.replace(".model", ".repository.");
-			myClass = codeModel._class(thePackage+Utility.getFirstUpper(entity.getName()+"Repository"), ClassType.CLASS);
-		} catch (JClassAlreadyExistsException e) {
-			e.printStackTrace();
-		}
-		return myClass;
-	}
-	public static JDefinedClass getJDefinedEnumFieldClass(EnumField enumField)
-	{
-		JCodeModel	codeModel = new JCodeModel();
-		JDefinedClass myClass= null;
-		try {
-			String thePackage="it.generated."+Generator.applicationName+".model.";
-		//	if (entity.getName().endsWith("Repository"))
-	//			thePackage=thePackage.replace(".model", ".repository.");
-			myClass = codeModel._class(thePackage+Utility.getFirstUpper(enumField.getName()), ClassType.CLASS);
-		} catch (JClassAlreadyExistsException e) {
-			e.printStackTrace();
-		}
-		return myClass;
-	}
-	public static JType getJDefinedCustomClass(String fullName) {
-		JCodeModel	codeModel = new JCodeModel();
-		JDefinedClass myClass= null;
-		try {
-			
-		//	if (entity.getName().endsWith("Repository"))
-	//			thePackage=thePackage.replace(".model", ".repository.");
-			myClass = codeModel._class(fullName, ClassType.CLASS);
-		} catch (JClassAlreadyExistsException e) {
-			e.printStackTrace();
-		}
-		return myClass;
-	}
 	
-	public void generate()
+	
+	public void generate() throws Exception
 	{
+		init();
 		for (EnumField enumField: enumFieldList)
 		{
-			EnumClassGenerator enumClassGenerator = new EnumClassGenerator(enumField);
+			enumClassGenerator.init(enumField);
 			enumClassGenerator.getModelClass();
 		}
-			for (Entity modelEntity: modelEntityList)
-			{
-				EntityGenerator entityGenerator = new EntityGenerator(modelEntity);
-				entityGenerator.getModelClass();
-			}
-		
-			for (Entity modelEntity: modelEntityList)
-			{
-				RestGenerator restGenerator = new RestGenerator(modelEntity);
-				restGenerator.generateRESTClasses();
-			}
-			for (Entity modelEntity: modelEntityList)
-			{
-				HtmlGenerator htmlGenerator = new HtmlGenerator(modelEntity);
-				try {
-					htmlGenerator.generateJSP();
-				} catch (IllegalAccessException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+		for (Entity modelEntity: modelEntityList)
+		{
+			entityGenerator.init(modelEntity);
+			entityGenerator.getModelClass();
+		}
 
+		for (Entity modelEntity: modelEntityList)
+		{
+			restGenerator.init(modelEntity);
+			restGenerator.generateRESTClasses();
+		}
+		for (Entity modelEntity: modelEntityList)
+		{
+			htmlGenerator.init(modelEntity);
+			try {
+				htmlGenerator.generateJSP();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			if (Generator.bootstrapMenu)
-				HtmlGenerator.GenerateMenu(entityGroupList);
-			else
-			{
-				if (Generator.easyTreeMenu)
-					HtmlGenerator.GenerateEasyTreeMenu(entityGroupList);
-				else //DEFAULTS
-					HtmlGenerator.GenerateMenu(entityGroupList);
-			}
-			WebappGenerator webappGenerator= new WebappGenerator();
-			webappGenerator.generate();
+
+		}
+		if (bootstrapMenu)
+			htmlGenerator.GenerateMenu(entityGroupList);
+		else
+		{
+			if (easyTreeMenu)
+				htmlGenerator.GenerateEasyTreeMenu(entityGroupList);
+			else //DEFAULTS
+				htmlGenerator.GenerateMenu(entityGroupList);
+		}
+		webappGenerator.generate();
 	}
 
 	

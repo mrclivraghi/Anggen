@@ -23,13 +23,20 @@ import java.util.Set;
 import org.rendersnake.DocType;
 import org.rendersnake.HtmlAttributes;
 import org.rendersnake.HtmlCanvas;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 /**
  * Prepare the html template and fill it with angular code and html elements.
  * @author Marco
  *
  */
+@Service
 public class HtmlGenerator {
+	
+	@Autowired
+	Generator generator;
+	
 	private List<EntityAttribute> attributeList;
 	
 	private List<Entity> childrenEntity;
@@ -47,7 +54,17 @@ public class HtmlGenerator {
 	private DocType docType= DocType.HTML5;
 	
 	
-	public HtmlGenerator(Entity entity)
+	@Autowired
+	AngularGenerator angularGenerator;
+	
+	@Autowired
+	JsGenerator jsGenerator;
+	
+	public HtmlGenerator(){
+		
+	}
+	
+	public void init(Entity entity)
 	{
 		this.entity=entity;
 		this.entityManager = new EntityManagerImpl(entity);
@@ -55,8 +72,8 @@ public class HtmlGenerator {
 		this.attributeList=entityManager.getAttributeList();
 		this.childrenEntity=entityManager.getChildrenEntities();
 		File file = new File(""); 
-		directoryViewPages = file.getAbsolutePath()+Generator.htmlDirectory+"/";
-		directoryAngularFiles=file.getAbsolutePath()+Generator.angularDirectory+Generator.applicationName+"/";
+		directoryViewPages = file.getAbsolutePath()+generator.htmlDirectory+"/";
+		directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+generator.applicationName+"/";
 	}
 	
 	
@@ -80,7 +97,7 @@ public class HtmlGenerator {
 			.macros().javascript("../js/pdfmake.js")
 			.macros().javascript("../js/vfs_fonts.js")
 			.macros().javascript("../js/ui-grid.js")
-			.macros().javascript("../js/angular/"+Generator.applicationName+"/"+entityName+".js")
+			.macros().javascript("../js/angular/"+generator.applicationName+"/"+entityName+".js")
 			.macros().javascript("../js/date.js")
 			.macros().javascript("../js/utility.js")
 			.macros().javascript("../js/jquery.easytree.js")
@@ -101,7 +118,7 @@ public class HtmlGenerator {
 			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../css/main.css"))
 			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../css/jquery-ui.css"))
 			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../css/easytree/skin-win8/ui.easytree.css"))
-			.link((new HtmlAttributes()).add("rel","import").add("href", "../"+Generator.applicationName+Generator.menuName));
+			.link((new HtmlAttributes()).add("rel","import").add("href", "../"+generator.applicationName+generator.menuName));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -117,7 +134,7 @@ public class HtmlGenerator {
 	{
 		HtmlCanvas html = new HtmlCanvas();
 		HtmlAttributes htmlAttributes= new HtmlAttributes();
-		JsGenerator jsGenerator = new JsGenerator(entity, true, null, false);
+		jsGenerator.init(entity, true, null, false);
 		
 		try {
 			html.render(docType);
@@ -130,7 +147,7 @@ public class HtmlGenerator {
 			jsGenerator.saveJsToFile(directoryAngularFiles);
 			html._head()
 			.body(htmlAttributes.add("ng-app", Utility.getFirstLower(entityName)+"App"));
-			AngularGenerator angularGenerator= new AngularGenerator(entity, true,new ArrayList<Entity>());
+			angularGenerator.init(entity, true,new ArrayList<Entity>());
 			angularGenerator.generateEntityView(html);
 			
 			//TODO switch
@@ -141,7 +158,7 @@ public class HtmlGenerator {
 				loadMenuScript=loadMenuScript+" $('#menu').easytree(easyTreeOption);";
 			*/
 			html.script((new HtmlAttributes()).add("type", "text/javascript")).content(loadMenuScript,false);
-			if (Generator.easyTreeMenu)
+			if (generator.easyTreeMenu)
 				html.script().content("function stateChanged(nodes, nodesJson) {var t = nodes[0].text; $.cookie('menu', nodesJson); };  var easyTree = $('#menu').easytree({data: ($.cookie('menu')!=null? $.cookie('menu') : null), stateChanged: stateChanged});",false);
 			html._body()._html();
 		} catch (IOException e) {
@@ -161,7 +178,7 @@ public class HtmlGenerator {
 		
 	}
 	
-	public static void GenerateEasyTreeMenu(List<EntityGroup> entityGroupList)
+	public void GenerateEasyTreeMenu(List<EntityGroup> entityGroupList)
 	{
 		HtmlCanvas html= new HtmlCanvas();
 		try {
@@ -188,8 +205,8 @@ public class HtmlGenerator {
 		}
 		
 		File file = new File(""); 
-		String directoryViewPages = file.getAbsolutePath()+Generator.menuDirectory;
-		File menuFile=new File(directoryViewPages+Generator.menuName);
+		String directoryViewPages = file.getAbsolutePath()+generator.menuDirectory;
+		File menuFile=new File(directoryViewPages+generator.menuName);
 		PrintWriter writer;
 		try {
 			System.out.println("Written "+menuFile.getAbsolutePath());
@@ -205,7 +222,7 @@ public class HtmlGenerator {
 	/**
 	 * Generate the html menu
 	 */
-	public static void GenerateMenu(List<EntityGroup> entityGroupList)
+	public void GenerateMenu(List<EntityGroup> entityGroupList)
 	{
 		HtmlCanvas html = new HtmlCanvas();
 		try {
@@ -221,7 +238,7 @@ public class HtmlGenerator {
 			.span((new HtmlAttributes()).add("class", "icon-bar"))._span()
 			._button()
 			.a((new HtmlAttributes()).add("class", "navbar-brand").add("href", "#"))
-			.content(Generator.applicationName)
+			.content(generator.applicationName)
 			._div()//end header
 			.div((new HtmlAttributes()).add("class", "collapse navbar-collapse").add("id", "bs-example-navbar-collapse-1")) //start real nav menu
 			.ul((new HtmlAttributes()).add("class", "nav navbar-nav"));
@@ -258,8 +275,8 @@ public class HtmlGenerator {
 		}
 		
 		File file = new File(""); 
-		String directoryViewPages = file.getAbsolutePath()+Generator.menuDirectory;
-		File menuFile=new File(directoryViewPages+Generator.applicationName+Generator.menuName);
+		String directoryViewPages = file.getAbsolutePath()+generator.menuDirectory;
+		File menuFile=new File(directoryViewPages+generator.applicationName+generator.menuName);
 		PrintWriter writer;
 		try {
 			System.out.println("Written "+menuFile.getAbsolutePath());

@@ -32,6 +32,7 @@ import org.reflections.Reflections;
 import org.rendersnake.HtmlAttributes;
 import org.rendersnake.HtmlCanvas;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import com.sun.codemodel.ClassType;
 import com.sun.codemodel.JBlock;
@@ -48,6 +49,7 @@ import com.sun.codemodel.JVar;
  * @author Marco
  *
  */
+@Service
 public class Generator {
 	
 	public static String mainPackage;
@@ -80,6 +82,10 @@ public class Generator {
 	
 	private List<EntityGroup> entityGroupList;
 	
+	public Generator()
+	{
+		
+	}
 	
 	public Generator(Project project,List<EnumField> enumFieldList)
 	{

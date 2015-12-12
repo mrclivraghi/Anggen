@@ -70,9 +70,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class BeanToDBConverter {
 
-	@Value("${application.name}")
-	private String projectName;
-	
 	@Autowired
 	ProjectRepository projectRepository;
 	
@@ -120,11 +117,22 @@ public class BeanToDBConverter {
 	
 	Role adminRole;
 	
+	@Value(value="${application.model.package}")
+	private String modelPackage;
+	
+	@Value("${application.name}")
+	private String projectName;
+	
+	
 	public BeanToDBConverter() {
 		
 		
 	}
 	private void init(){
+		
+		Project project = new Project();
+		project.setName(projectName);
+		Generator generator = new Generator(project, null);
 		admin = new User();
 		admin.setEnabled(true);
 		admin.setUsername("st");
@@ -139,12 +147,12 @@ public class BeanToDBConverter {
 		admin.setRoleList(roleList);
 		userRepository.save(admin);
 	}
-	public void convert(String mainPackage)
+	public void convert()
 	{
 		init();
-		List<String> packageList= ReflectionManager.getSubPackages(mainPackage);
+		List<String> packageList= ReflectionManager.getSubPackages(modelPackage);
 		Map<String,Entity> entityMap = new HashMap<String,Entity>();
-		Set<Class<?>> mainPackageClassSet = ReflectionManager.getClassInPackage(mainPackage);
+		Set<Class<?>> mainPackageClassSet = ReflectionManager.getClassInPackage(modelPackage);
 		// init entities
 		for (Class myClass: mainPackageClassSet)
 		{

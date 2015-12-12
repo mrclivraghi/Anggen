@@ -19,6 +19,7 @@ import it.polimi.repository.field.EnumFieldRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -35,6 +36,9 @@ public class JsDbGenerationTest {
 	@Autowired
 	EnumFieldRepository enumFieldRepository;
 	
+	@Value("${application.name}")
+	private String projectName;
+	
 	public JsDbGenerationTest() {
 		// TODO Auto-generated constructor stub
 	}
@@ -43,7 +47,7 @@ public class JsDbGenerationTest {
 	public void createJs()
 	{
 		List<EnumField> enumFieldList = enumFieldRepository.findByEnumFieldIdAndNameAndEnumValueAndEntityAndAnnotationAndTab(null, null, null, null, null, null);
-		Project project = projectRepository.findByName("test3").get(0);
+		Project project = projectRepository.findByName(projectName).get(0);
 		Generator generator = new Generator(project,enumFieldList);
 		generator.generate();
 		

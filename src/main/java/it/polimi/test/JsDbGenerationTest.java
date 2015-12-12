@@ -39,8 +39,6 @@ public class JsDbGenerationTest {
 	@Autowired
 	Generator generator;
 	
-	@Value("${application.name}")
-	private String projectName;
 	
 	public JsDbGenerationTest() {
 		// TODO Auto-generated constructor stub

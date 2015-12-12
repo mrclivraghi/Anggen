@@ -165,6 +165,10 @@ public class HtmlGenerator {
 			e.printStackTrace();
 		}
 		
+		File dir = new File(directoryViewPages);
+		if (!dir.exists())
+			dir.mkdirs();
+		
 		File myJsp=new File(directoryViewPages+entityName+".jsp");
 		PrintWriter writer;
 		try {

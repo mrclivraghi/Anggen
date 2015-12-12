@@ -896,6 +896,9 @@ public class JsGenerator {
 	 */
 	public void saveJsToFile(String directory)
 	{
+		File dir = new File(directory);
+		if (!dir.exists())
+			dir.mkdirs();
 		File file = new File(directory+Utility.getFirstLower(entityName)+".js");
 		PrintWriter writer;
 		try {

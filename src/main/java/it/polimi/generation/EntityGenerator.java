@@ -9,6 +9,7 @@ import it.polimi.model.field.AnnotationAttribute;
 import it.polimi.model.field.EnumField;
 import it.polimi.model.field.Field;
 import it.polimi.model.relationship.Relationship;
+import it.polimi.reflection.EntityAttributeManager;
 import it.polimi.utils.ReflectionManager;
 import it.polimi.utils.Utility;
 import it.polimi.utils.annotation.Between;
@@ -165,7 +166,7 @@ public class EntityGenerator {
 		fieldSet.addAll(entity.getFieldList());
 		for (Field field : fieldSet)
 		{
-			JClass fieldClass = field.getFieldClass();
+			JClass fieldClass = EntityAttributeManager.getInstance(field).getFieldClass();
 			String fieldName= field.getName();
 			JVar classField = myClass.field(JMod.PRIVATE, fieldClass, field.getName());
 			JAnnotationUse columnAnnotation = classField.annotate(Column.class);
@@ -177,7 +178,7 @@ public class EntityGenerator {
 		{
 			JVar listField;
 			
-			if (relationship.isList())
+			if (EntityAttributeManager.getInstance(relationship).isList())
 			{
 				JClass listClass = codeModel.ref(List.class).narrow(ReflectionManager.getJDefinedClass(relationship.getEntityTarget()));
 				listField = myClass.field(JMod.PRIVATE, listClass, relationship.getEntityTarget().getName()+"List");
@@ -247,7 +248,7 @@ public class EntityGenerator {
 		}
 		for (EnumField enumField: entity.getEnumFieldList())
 		{
-			JClass fieldClass = enumField.getFieldClass();
+			JClass fieldClass = EntityAttributeManager.getInstance(enumField).getFieldClass();
 			JVar classField = myClass.field(JMod.PRIVATE, fieldClass, enumField.getName());
 			JAnnotationUse columnAnnotation = classField.annotate(Column.class);
 			columnAnnotation.param("name", namingStrategy.classToTableName(enumField.getName()));
@@ -286,7 +287,7 @@ public class EntityGenerator {
 			case PRIMARY_KEY: 	annotationUse=classField.annotate(Id.class);
 			JAnnotationUse generatedValue= classField.annotate(GeneratedValue.class);
 			generatedValue.param("strategy", GenerationType.SEQUENCE);
-			if (!entityAttribute.getDescriptionField())
+			if (!EntityAttributeManager.getInstance(entityAttribute).getDescriptionField())
 			{
 				classField.annotate(DescriptionField.class);
 			}

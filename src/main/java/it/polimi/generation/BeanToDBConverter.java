@@ -33,6 +33,7 @@ import it.polimi.model.security.RestrictionEntity;
 import it.polimi.model.security.RestrictionEntityGroup;
 import it.polimi.model.security.Role;
 import it.polimi.model.security.User;
+import it.polimi.reflection.EntityAttributeManager;
 import it.polimi.repository.entity.EntityGroupRepository;
 import it.polimi.repository.entity.EntityRepository;
 import it.polimi.repository.entity.ProjectRepository;
@@ -473,23 +474,23 @@ public class BeanToDBConverter {
 			if (annotationType!=null)
 			{
 				metaAnnotation.setAnnotationType(annotationType);
-				if (metaEntityAttribute.isField())
-					metaAnnotation.setField(metaEntityAttribute.asField());
-				if (metaEntityAttribute.isEnumField())
-					metaAnnotation.setEnumField(metaEntityAttribute.asEnumField());
-				if (metaEntityAttribute.isRelationship())
-					metaAnnotation.setRelationship(metaEntityAttribute.asRelationship());
+				if (EntityAttributeManager.getInstance(metaEntityAttribute).isField())
+					metaAnnotation.setField(EntityAttributeManager.getInstance(metaEntityAttribute).asField());
+				if (EntityAttributeManager.getInstance(metaEntityAttribute).isEnumField())
+					metaAnnotation.setEnumField(EntityAttributeManager.getInstance(metaEntityAttribute).asEnumField());
+				if (EntityAttributeManager.getInstance(metaEntityAttribute).isRelationship())
+					metaAnnotation.setRelationship(EntityAttributeManager.getInstance(metaEntityAttribute).asRelationship());
 				//annotationRepository.save(metaAnnotation);
 				annotationRepository.save(metaAnnotation);
 				annotationList.add(metaAnnotation);
 			}
 		}
-		if (metaEntityAttribute.isField())
-			metaEntityAttribute.asField().setAnnotationList(annotationList);
-		if (metaEntityAttribute.isEnumField())
-			metaEntityAttribute.asEnumField().setAnnotationList(annotationList);
-		if (metaEntityAttribute.isRelationship())
-			metaEntityAttribute.asRelationship().setAnnotationList(annotationList);
+		if (EntityAttributeManager.getInstance(metaEntityAttribute).isField())
+			EntityAttributeManager.getInstance(metaEntityAttribute).asField().setAnnotationList(annotationList);
+		if (EntityAttributeManager.getInstance(metaEntityAttribute).isEnumField())
+			EntityAttributeManager.getInstance(metaEntityAttribute).asEnumField().setAnnotationList(annotationList);
+		if (EntityAttributeManager.getInstance(metaEntityAttribute).isRelationship())
+			EntityAttributeManager.getInstance(metaEntityAttribute).asRelationship().setAnnotationList(annotationList);
 
 	}
 

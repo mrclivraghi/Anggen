@@ -8,6 +8,7 @@ import it.polimi.model.field.EnumField;
 import it.polimi.model.field.EnumValue;
 import it.polimi.model.field.Field;
 import it.polimi.model.relationship.Relationship;
+import it.polimi.reflection.EntityAttributeManager;
 import it.polimi.reflection.EntityManager;
 import it.polimi.reflection.EntityManagerImpl;
 import it.polimi.utils.ClassDetail;
@@ -114,7 +115,7 @@ public class JsGenerator {
 		.append("this.selectedEntity= 	{show: false \n");
 		for (Relationship relationship : relationshipList)
 		{
-			if (relationship.isList())
+			if (EntityAttributeManager.getInstance(relationship).isList())
 				sb.append(","+relationship.getEntityTarget().getName()+"List: []");
 		}
 		sb.append("};\n")
@@ -344,7 +345,7 @@ public class JsGenerator {
 		if (relationshipList!=null)
 			for (Relationship relationship: relationshipList)
 			{
-				if (relationship.isList())
+				if (EntityAttributeManager.getInstance(relationship).isList())
 				{
 					sb.append(""+Utility.getEntityCallName(entityName)+"Service.searchBean."+relationship.getEntityTarget().getName()+"List=[];\n");
 					sb.append(""+Utility.getEntityCallName(entityName)+"Service.searchBean."+relationship.getEntityTarget().getName()+"List.push("+entityName+"Service.searchBean."+relationship.getEntityTarget().getName()+");\n");
@@ -614,7 +615,7 @@ public class JsGenerator {
 		String exportFields="";
 		for (Field field: fieldList)
 		{
-			if (field.getExcelExport())
+			if (EntityAttributeManager.getInstance(field).getExcelExport())
 				exportFields=exportFields+field.getName()+",";
 		}
 		
@@ -629,7 +630,7 @@ public class JsGenerator {
 		
 		for (Relationship relationship: relationshipList)
 		{
-			if (relationship.isList())
+			if (EntityAttributeManager.getInstance(relationship).isList())
 			{
 				sb.append("$scope.saveLinked"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"= function() {\n");
 				sb.append(Utility.getEntityCallName(entityName)+"Service.selectedEntity."+relationship.getEntityTarget().getName()+"List.push("+Utility.getEntityCallName(entityName)+"Service.selectedEntity."+relationship.getEntityTarget().getName()+");\n");
@@ -646,7 +647,7 @@ public class JsGenerator {
 			exportFields="";
 			for (Field field : fieldList)
 			{
-				if (field.getExcelExport())
+				if (EntityAttributeManager.getInstance(field).getExcelExport())
 					exportFields=exportFields+relationship.getEntityTarget().getName()+",";
 			}
 			
@@ -682,26 +683,26 @@ public class JsGenerator {
 		//TODO add enum fields?
 		for (EntityAttribute entityAttribute: entityManager.getAttributeList())
 		{
-			if ((entityAttribute.asRelationship()!=null && entityAttribute.getIgnoreTableList()) || (entityAttribute.asField()!=null && entityAttribute.asField().getIgnoreTableList())) continue;
+			if ((EntityAttributeManager.getInstance(entityAttribute).asRelationship()!=null && EntityAttributeManager.getInstance(entityAttribute).getIgnoreTableList()) || (EntityAttributeManager.getInstance(entityAttribute).asField()!=null && EntityAttributeManager.getInstance(entityAttribute).getIgnoreTableList())) continue;
 			
-			if (entityAttribute.asField()!= null )
+			if (EntityAttributeManager.getInstance(entityAttribute).asField()!= null )
 			{
-				if (entityAttribute.getPassword())
+				if (EntityAttributeManager.getInstance(entityAttribute).getPassword())
 				{
 					continue;
 				}
-				if (entityAttribute.asField().getFieldType()==FieldType.TIME)
+				if (EntityAttributeManager.getInstance(entityAttribute).asField().getFieldType()==FieldType.TIME)
 				{
 					sb.append("{ name: '"+entityAttribute.getName()+"', cellFilter: \"date:\'HH:mm\'\"},\n");
 				}else
 				{
-					if (entityAttribute.asField().getFieldType()==FieldType.DATE)
+					if (EntityAttributeManager.getInstance(entityAttribute).asField().getFieldType()==FieldType.DATE)
 						sb.append("{ name: '"+entityAttribute.getName()+"', cellFilter: \"date:\'dd-MM-yyyy\'\"},\n");
 					else
 						sb.append("{ name: '"+entityAttribute.getName()+"'},\n");
 				}
 			}
-			else if (!entityAttribute.asRelationship().isList() && isParent)
+			else if (!EntityAttributeManager.getInstance(entityAttribute).isList() && isParent)
 			{
 				sb.append("{ name: '"+entityAttribute.getName()+"."+entityAttribute.getName()+"Id', displayName: '"+entityAttribute.getName()+"'},\n");
 			}

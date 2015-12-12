@@ -10,9 +10,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import it.polimi.model.EntityAttribute;
 import it.polimi.model.RelationshipType;
 import it.polimi.model.field.Annotation;
@@ -104,10 +101,5 @@ public class Relationship extends EntityAttribute{
         this.relationshipType=relationshipType;
     }
     
-    @JsonIgnore
-    public Boolean isList()
-	{
-		return !(relationshipType==RelationshipType.ONE_TO_ONE || relationshipType==RelationshipType.MANY_TO_ONE);
-	}
 
 }

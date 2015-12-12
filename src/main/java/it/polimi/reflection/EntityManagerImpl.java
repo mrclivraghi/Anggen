@@ -81,7 +81,7 @@ public class EntityManagerImpl implements EntityManager{
 		List<Field> fieldList= new ArrayList<Field>();
 		for (Field field: getFieldList())
 		{
-			if (field.getDescriptionField() || field.getPrimaryKey())
+			if (EntityAttributeManager.getInstance(field).getDescriptionField() || EntityAttributeManager.getInstance(field).getPrimaryKey())
 				fieldList.add(field);
 		}
 		return fieldList;
@@ -91,7 +91,7 @@ public class EntityManagerImpl implements EntityManager{
 	public FieldType getKeyClass() {
 		for (Field field: getFieldList())
 		{
-			if (field.getPrimaryKey())
+			if (EntityAttributeManager.getInstance(field).getPrimaryKey())
 				return field.getFieldType();
 		}
 		return null;
@@ -106,9 +106,9 @@ public class EntityManagerImpl implements EntityManager{
 		for (EntityAttribute entityAttribute: entityAttributeList)
 		{
 			
-			String entityAttributeName= entityAttribute.asField()!=null ? entityAttribute.getName() : (entityAttribute.isRelationship()? entityAttribute.asRelationship().getEntityTarget().getName(): entityAttribute.asEnumField().getName());
+			String entityAttributeName= EntityAttributeManager.getInstance(entityAttribute).asField()!=null ? entityAttribute.getName() : (EntityAttributeManager.getInstance(entityAttribute).isRelationship()? EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName(): EntityAttributeManager.getInstance(entityAttribute).asEnumField().getName());
 			
-			if (entityAttribute.getBetweenFilter())
+			if (EntityAttributeManager.getInstance(entityAttribute).getBetweenFilter())
 			{
 				string=string+manageSingleParam(className, entityAttribute,  entityAttributeName+"From");
 				string=string+manageSingleParam(className, entityAttribute,  entityAttributeName+"To");
@@ -129,7 +129,7 @@ public class EntityManagerImpl implements EntityManager{
 		//children filter
 		for (EntityAttribute filterAttribute: getChildrenFilter())
 		{
-			String filterFieldName=filterAttribute.getParent().getName()+Utility.getFirstUpper(filterAttribute.getName());
+			String filterFieldName=EntityAttributeManager.getInstance(filterAttribute).getParent().getName()+Utility.getFirstUpper(filterAttribute.getName());
 			string = string+manageSingleParam(className, filterAttribute, filterFieldName);
 		
 		}
@@ -139,27 +139,27 @@ public class EntityManagerImpl implements EntityManager{
 	private String manageSingleParam(String className,EntityAttribute entityAttribute, String fieldName)
 	{
 		String string="";
-		if (entityAttribute.asEnumField()!=null)
+		if (EntityAttributeManager.getInstance(entityAttribute).asEnumField()!=null)
 		{
 			string=string+" ("+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(fieldName)+"()==null)? null : "+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(fieldName)+"().getValue(),";
 		}else
 		{
-			if (entityAttribute.asField()!=null && entityAttribute.asField().getFieldType()==FieldType.TIME)
+			if (EntityAttributeManager.getInstance(entityAttribute).asField()!=null && EntityAttributeManager.getInstance(entityAttribute).asField().getFieldType()==FieldType.TIME)
 			{
 				string=string+"it.polimi.utils.Utility.formatTime("+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(fieldName)+"()),";
 			}
 			else
 			{
-				if (entityAttribute.asField()!=null && entityAttribute.asField().getFieldType()==FieldType.DATE)
+				if (EntityAttributeManager.getInstance(entityAttribute).asField()!=null && EntityAttributeManager.getInstance(entityAttribute).asField().getFieldType()==FieldType.DATE)
 				{
 					string=string+"it.polimi.utils.Utility.formatDate("+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(fieldName)+"()),";
 				}else
 				{
-					if (entityAttribute.asRelationship()!=null && entityAttribute.asRelationship().isList())
+					if (EntityAttributeManager.getInstance(entityAttribute).isList())
 						string=string+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(fieldName)+"List()==null? null :"+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(fieldName)+"List().get(0),";
 					else
 					{
-						if (entityAttribute.isEnumField())
+						if (EntityAttributeManager.getInstance(entityAttribute).isEnumField())
 							string=string+" ("+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(fieldName)+"()==null)? null : "+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(fieldName)+"().getValue(),";
 						else
 						string=string+Utility.getFirstLower(className)+".get"+Utility.getFirstUpper(fieldName)+"(),";
@@ -239,7 +239,7 @@ public class EntityManagerImpl implements EntityManager{
 		
 		for (EntityAttribute entityAttribute: entityAttributeList)
 		{
-				if (entityAttribute.getDescriptionField())
+				if (EntityAttributeManager.getInstance(entityAttribute).getDescriptionField())
 				{
 					if (withGetter)
 						descriptionFields=descriptionFields+" "+entityName+".get"+Utility.getFirstUpper(entityAttribute.getName())+"()+' '+";
@@ -280,7 +280,7 @@ public class EntityManagerImpl implements EntityManager{
 			
 			for (EntityAttribute childrenEntityAttribute: childrenEntityManager.getAllAttribute())
 			{
-				if (childrenEntityAttribute.hasAnnotation(AnnotationType.FILTER_FIELD))
+				if (EntityAttributeManager.getInstance(childrenEntityAttribute).hasAnnotation(AnnotationType.FILTER_FIELD))
 					childrenFilterList.add(childrenEntityAttribute);
 			}
 		}

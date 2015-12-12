@@ -3,7 +3,6 @@ package it.polimi.security;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import it.polimi.model.security.RestrictionEntity;
 import it.polimi.model.security.RestrictionEntityGroup;

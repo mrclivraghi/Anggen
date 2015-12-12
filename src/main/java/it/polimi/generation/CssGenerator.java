@@ -1,6 +1,7 @@
 package it.polimi.generation;
 
 import it.polimi.model.EntityAttribute;
+import it.polimi.reflection.EntityAttributeManager;
 import it.polimi.utils.Field;
 
 import org.rendersnake.HtmlAttributes;
@@ -121,7 +122,7 @@ public  class CssGenerator {
 	public static HtmlAttributes getExternalFieldPanel(String style,Boolean search, String entityName,EntityAttribute entityAttribute)
 	{
 		HtmlAttributes htmlAttributes= new HtmlAttributes();
-		String entityAttributeName= (entityAttribute.isRelationship()? entityAttribute.asRelationship().getEntityTarget().getName(): entityAttribute.getName());
+		String entityAttributeName= (EntityAttributeManager.getInstance(entityAttribute).isRelationship()? EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName(): entityAttribute.getName());
 		htmlAttributes.add("class", style+" right-input");
 		if (!search)
 		{

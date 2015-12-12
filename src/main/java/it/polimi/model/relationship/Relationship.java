@@ -46,6 +46,9 @@ public class Relationship extends EntityAttribute{
     @javax.persistence.Column(name = "relationship_type")
     private RelationshipType relationshipType;
 
+    private Integer priority;
+    
+    
     public String getName() {
         return this.name;
     }
@@ -101,6 +104,20 @@ public class Relationship extends EntityAttribute{
     public void setRelationshipType(RelationshipType relationshipType) {
         this.relationshipType=relationshipType;
     }
+
+	/**
+	 * @return the priority
+	 */
+	public Integer getPriority() {
+		return priority;
+	}
+
+	/**
+	 * @param priority the priority to set
+	 */
+	public void setPriority(Integer priority) {
+		this.priority = priority;
+	}
     
 
 }

@@ -186,6 +186,7 @@ public class EntityManagerImpl implements EntityManager{
 		entityAttributeList.addAll(tab.getFieldList());
 		entityAttributeList.addAll(tab.getRelationshipList());
 		entityAttributeList.addAll(tab.getEnumFieldList());
+		Utility.orderByPriority(entityAttributeList);
 		return entityAttributeList;
 	}
 
@@ -268,6 +269,7 @@ public class EntityManagerImpl implements EntityManager{
 	public List<EntityAttribute> getAllAttribute() {
 		List<EntityAttribute> tempList = getAttributeList();
 		tempList.addAll(entity.getEnumFieldList());
+		Utility.orderByPriority(tempList);
 		return tempList;
 	}
 

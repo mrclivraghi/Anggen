@@ -47,6 +47,10 @@ public class Field extends EntityAttribute {
     @javax.persistence.Column(name = "field_type")
     private FieldType fieldType;
 
+    
+    
+    private Integer priority;
+    
     public java.lang.Long getFieldId() {
         return this.fieldId;
     }
@@ -102,5 +106,19 @@ public class Field extends EntityAttribute {
     public void setFieldType(FieldType fieldType) {
         this.fieldType=fieldType;
     }
+
+	/**
+	 * @return the priority
+	 */
+	public Integer getPriority() {
+		return priority;
+	}
+
+	/**
+	 * @param priority the priority to set
+	 */
+	public void setPriority(Integer priority) {
+		this.priority = priority;
+	}
 
 }

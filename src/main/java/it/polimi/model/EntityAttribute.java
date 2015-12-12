@@ -38,5 +38,14 @@ public class EntityAttribute {
 			return EntityAttributeManager.getInstance(this).asRelationship().getAnnotationList();
 		return EntityAttributeManager.getInstance(this).asField().getAnnotationList();
 	}
+	
+	public Integer getPriority()
+	{
+		if (EntityAttributeManager.getInstance(this).isField())
+			return EntityAttributeManager.getInstance(this).asField().getPriority();
+		if (EntityAttributeManager.getInstance(this).isRelationship())
+			EntityAttributeManager.getInstance(this).asRelationship().getPriority();
+		return EntityAttributeManager.getInstance(this).asEnumField().getPriority();
+	}
 
 }

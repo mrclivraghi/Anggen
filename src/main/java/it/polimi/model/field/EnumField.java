@@ -44,6 +44,8 @@ public class EnumField extends EntityAttribute{
     @javax.persistence.JoinColumn(name = "tab_id_tab")
     private it.polimi.model.entity.Tab tab;
 
+    private Integer priority;
+    
     public java.lang.Long getEnumFieldId() {
         return this.enumFieldId;
     }
@@ -91,5 +93,19 @@ public class EnumField extends EntityAttribute{
     public void setTab(it.polimi.model.entity.Tab tab) {
         this.tab=tab;
     }
+
+	/**
+	 * @return the priority
+	 */
+	public Integer getPriority() {
+		return priority;
+	}
+
+	/**
+	 * @param priority the priority to set
+	 */
+	public void setPriority(Integer priority) {
+		this.priority = priority;
+	}
 
 }

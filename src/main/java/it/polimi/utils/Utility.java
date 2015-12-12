@@ -1,10 +1,16 @@
 package it.polimi.utils;
 
+import it.polimi.model.EntityAttribute;
+
 import java.io.File;
 import java.io.IOException;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
@@ -94,6 +100,10 @@ public class Utility {
 		System.out.println(Utility.getEntityCallName("entityTarget"));
 		
 	}
+
+	public static void orderByPriority(List<EntityAttribute> entityAttributeList) {
+		Collections.sort(entityAttributeList, Comparator.comparing(EntityAttribute::getPriority));
+		}
 
 	
 }

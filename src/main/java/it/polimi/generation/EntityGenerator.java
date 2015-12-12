@@ -190,7 +190,7 @@ public class EntityGenerator {
 					JAnnotationUse type = listField.annotate(Type.class);
 					type.param("type", ReflectionManager.getJDefinedClass(relationship.getEntityTarget()).fullName());
 					JAnnotationUse joinColumn = listField.annotate(JoinColumn.class);
-					joinColumn.param("name", namingStrategy.classToTableName(entity.getName())+"_id_"+namingStrategy.classToTableName(relationship.getName()));
+					joinColumn.param("name", namingStrategy.classToTableName(entity.getName())+"_id_"+namingStrategy.classToTableName(entity.getName()));
 				}
 
 				if (relationship.getRelationshipType()==RelationshipType.MANY_TO_MANY)

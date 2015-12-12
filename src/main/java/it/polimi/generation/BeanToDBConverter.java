@@ -113,6 +113,11 @@ public class BeanToDBConverter {
 	@Autowired
 	UserRepository userRepository;
 	
+	@Value("${application.admin.name}")
+	private String adminName;
+	
+	@Value("${application.admin.password}")
+	private String adminPassword;
 	
 	User admin;
 	
@@ -135,9 +140,9 @@ public class BeanToDBConverter {
 		project.setName(projectName);
 		admin = new User();
 		admin.setEnabled(true);
-		admin.setUsername("st");
+		admin.setUsername(adminName);
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		admin.setPassword(encoder.encode("123"));
+		admin.setPassword(encoder.encode(adminPassword));
 		userRepository.save(admin);
 		adminRole = new Role();
 		adminRole.setRole("META-ADMIN");

@@ -58,6 +58,7 @@ import it.polimi.utils.annotation.IgnoreTableList;
 import it.polimi.utils.annotation.IgnoreUpdate;
 import it.polimi.utils.annotation.MaxDescendantLevel;
 import it.polimi.utils.annotation.Password;
+import it.polimi.utils.annotation.Priority;
 import it.polimi.utils.annotation.SecurityType;
 import it.polimi.utils.annotation.Tab;
 
@@ -306,9 +307,17 @@ public class BeanToDBConverter {
 								metaField.setEntity(entity);
 								List<it.polimi.model.field.Annotation> annotationList = new ArrayList<it.polimi.model.field.Annotation>();
 								convertAnnotation(field, metaField, annotationList);
+								if (metaField.getPriority()==null)
+								{
+									if (ReflectionManager.hasId(field))
+										metaField.setPriority(1);
+									else
+										metaField.setPriority(2); // by default
+								}
 								fieldRepository.save(metaField);
 								fieldList.add(metaField);
 								tabFieldList.add(metaField);
+								
 								continue;
 							} // fine is known class
 							if(field.getIsEnum())
@@ -319,6 +328,8 @@ public class BeanToDBConverter {
 								enumFieldRepository.save(enumField);
 								List<it.polimi.model.field.Annotation> annotationList = new ArrayList<it.polimi.model.field.Annotation>();
 								convertAnnotation(field, enumField, annotationList);
+								if (enumField.getPriority()==null)
+									enumField.setPriority(3); // by default
 								List<String> enumValueList = field.getEnumValuesList();
 								List<EnumValue> metaEnumValueList = new ArrayList<EnumValue>();
 								for (int i=0; i<enumValueList.size(); i++)
@@ -343,6 +354,8 @@ public class BeanToDBConverter {
 								relationshipRepository.save(relationship);
 								List<it.polimi.model.field.Annotation> annotationList = new ArrayList<it.polimi.model.field.Annotation>();
 								convertAnnotation(field, relationship, annotationList);
+								if (relationship.getPriority()==null)
+									relationship.setPriority(4); // by default
 								RelationshipType relationshipType = null;
 								if (ReflectionManager.hasOneToOne(field))
 								{
@@ -405,6 +418,25 @@ public class BeanToDBConverter {
 			it.polimi.model.field.Annotation metaAnnotation = new it.polimi.model.field.Annotation();
 			annotationRepository.save(metaAnnotation);
 			AnnotationType annotationType= null;
+			if (annotationArray[i].annotationType()==Priority.class)
+			{
+				for (Method method : annotationArray[i].annotationType().getDeclaredMethods()) {
+					if (method.getName().equals("value"))
+					{
+						Object value= null;
+						try {
+							value=  method.invoke(annotationArray[i], (Object[])null);
+							metaEntityAttribute.setPriority((Integer) value);
+						} catch (IllegalAccessException
+								| IllegalArgumentException
+								| InvocationTargetException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+			
+			}
 			if (annotationArray[i].annotationType()==Id.class)
 			{
 				annotationType=AnnotationType.PRIMARY_KEY;

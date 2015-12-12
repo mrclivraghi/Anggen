@@ -15,7 +15,8 @@ public enum AnnotationType {
     IGNORE_UPDATE(8),
     IGNORE_TABLE_LIST(9),
     SIZE(10),
-    PASSWORD(11);
+    PASSWORD(11),
+    PRIORITY(12);
     private final int value;
 
     private AnnotationType(int value) {

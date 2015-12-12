@@ -1,3 +1,3 @@
-﻿select * from mustle.project;
+﻿select * from meta.project;
 
-truncate table mustle.project cascade;
+truncate table meta.project cascade;

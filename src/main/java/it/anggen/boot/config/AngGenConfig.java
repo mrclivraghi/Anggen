@@ -14,7 +14,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 @ComponentScan({
     "it.anggen.*"
 })
-public class AppConfig {
+public class AngGenConfig {
 
     @Value("${hibernate.format_sql}")
     private String formatSql;

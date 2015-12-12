@@ -146,7 +146,10 @@ public class BeanToDBConverter {
 		admin.setPassword(encoder.encode(adminPassword));
 		userRepository.save(admin);
 		adminRole = new Role();
-		adminRole.setRole("META-ADMIN");
+		if (projectName.equals("anggen"))
+			adminRole.setRole("META-ADMIN");
+		else
+			adminRole.setRole("ADMIN");
 		roleRepository.save(adminRole);
 		List<Role> roleList = new ArrayList<Role>();
 		roleList.add(adminRole);
@@ -159,6 +162,17 @@ public class BeanToDBConverter {
 		List<String> packageList= ReflectionManager.getSubPackages(modelPackage);
 		Map<String,Entity> entityMap = new HashMap<String,Entity>();
 		Set<Class<?>> mainPackageClassSet = ReflectionManager.getClassInPackage(modelPackage);
+		if (!projectName.equals("anggen"))
+		{
+			List<String> securityPackageList = ReflectionManager.getSubPackages("it.anggen.model.security");
+			packageList.addAll(securityPackageList);
+			Set<Class<?>> securityPackageClassSet = ReflectionManager.getClassInPackage("it.anggen.model.security");
+			mainPackageClassSet.addAll(securityPackageClassSet);
+			mainPackageClassSet.add(Field.class);
+			mainPackageClassSet.add(EntityGroup.class);
+			mainPackageClassSet.add(Entity.class);
+			
+		}
 		// init entities
 		for (Class myClass: mainPackageClassSet)
 		{
@@ -214,6 +228,11 @@ public class BeanToDBConverter {
 			entityRepository.save(entity);
 			entityMap.put(reflectionManager.parseName(), entity);
 		}
+		
+		
+		mainPackageClassSet.remove(Field.class);
+		mainPackageClassSet.remove(EntityGroup.class);
+		mainPackageClassSet.remove(Entity.class);
 		
 		Project project = new Project();
 		ReflectionManager temp = new ReflectionManager(Object.class);

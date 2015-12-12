@@ -200,14 +200,20 @@ public class Generator {
 			}
 			for (Entity modelEntity: modelEntityList)
 			{
-				entityGenerator.init(modelEntity);
-				entityGenerator.getModelClass();
+				if (!isAngGenSecurity(modelEntity))
+				{
+					entityGenerator.init(modelEntity);
+					entityGenerator.getModelClass();
+				}
 			}
 
 			for (Entity modelEntity: modelEntityList)
 			{
-				restGenerator.init(modelEntity);
-				restGenerator.generateRESTClasses();
+				if (!isAngGenSecurity(modelEntity))
+				{
+					restGenerator.init(modelEntity);
+					restGenerator.generateRESTClasses();
+				}
 			}
 			webappGenerator.generate();
 		}
@@ -237,7 +243,22 @@ public class Generator {
 		
 	}
 
-	
+	private Boolean isAngGenSecurity(Entity entity)
+	{
+		if (appName.equals("anggen"))
+			return false;
+		if (entity.getEntityGroup()==null)
+			return true;
+		if (!entity.getEntityGroup().getName().equals("security"))
+			return false;
+		if (entity.getName().equals("restrictionField") || 
+				entity.getName().equals("restrictionEntityGroup") || 
+				entity.getName().equals("restrictionEntity") || 
+				entity.getName().equals("user") || 
+				entity.getName().equals("role") )
+			return true;
+		return false;
+	}
 	
 	
 	

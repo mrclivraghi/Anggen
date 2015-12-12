@@ -309,10 +309,28 @@ public class BeanToDBConverter {
 								convertAnnotation(field, metaField, annotationList);
 								if (metaField.getPriority()==null)
 								{
+									it.polimi.model.field.Annotation priority = new it.polimi.model.field.Annotation();
+									priority.setAnnotationType(AnnotationType.PRIORITY);
+									priority.setField(metaField);
+									annotationRepository.save(priority);
+									List<AnnotationAttribute> annotationAttributeList = new ArrayList<AnnotationAttribute>();
+									AnnotationAttribute annotationAttribute = new AnnotationAttribute();
+									annotationAttribute.setProperty("value");
 									if (ReflectionManager.hasId(field))
+									{
+										annotationAttribute.setValue("1");
 										metaField.setPriority(1);
-									else
-										metaField.setPriority(2); // by default
+									}else
+									{
+										annotationAttribute.setValue("2"); // by default
+										metaField.setPriority(2);
+									}
+									annotationAttribute.setAnnotation(priority);
+									annotationAttributeRepository.save(annotationAttribute);
+									annotationAttributeList.add(annotationAttribute);
+									priority.setAnnotationAttributeList(annotationAttributeList);
+									annotationRepository.save(priority);
+									metaField.getAnnotationList().add(priority);
 								}
 								fieldRepository.save(metaField);
 								fieldList.add(metaField);
@@ -329,7 +347,23 @@ public class BeanToDBConverter {
 								List<it.polimi.model.field.Annotation> annotationList = new ArrayList<it.polimi.model.field.Annotation>();
 								convertAnnotation(field, enumField, annotationList);
 								if (enumField.getPriority()==null)
-									enumField.setPriority(3); // by default
+								{
+									it.polimi.model.field.Annotation priority = new it.polimi.model.field.Annotation();
+									priority.setAnnotationType(AnnotationType.PRIORITY);
+									priority.setEnumField(enumField);
+									annotationRepository.save(priority);
+									List<AnnotationAttribute> annotationAttributeList = new ArrayList<AnnotationAttribute>();
+									AnnotationAttribute annotationAttribute = new AnnotationAttribute();
+									annotationAttribute.setProperty("value");
+									annotationAttribute.setValue("3");
+									enumField.setPriority(3);
+									annotationAttribute.setAnnotation(priority);
+									annotationAttributeRepository.save(annotationAttribute);
+									annotationAttributeList.add(annotationAttribute);
+									priority.setAnnotationAttributeList(annotationAttributeList);
+									annotationRepository.save(priority);
+									enumField.getAnnotationList().add(priority);
+								}
 								List<String> enumValueList = field.getEnumValuesList();
 								List<EnumValue> metaEnumValueList = new ArrayList<EnumValue>();
 								for (int i=0; i<enumValueList.size(); i++)
@@ -355,7 +389,23 @@ public class BeanToDBConverter {
 								List<it.polimi.model.field.Annotation> annotationList = new ArrayList<it.polimi.model.field.Annotation>();
 								convertAnnotation(field, relationship, annotationList);
 								if (relationship.getPriority()==null)
-									relationship.setPriority(4); // by default
+								{
+									it.polimi.model.field.Annotation priority = new it.polimi.model.field.Annotation();
+									priority.setAnnotationType(AnnotationType.PRIORITY);
+									priority.setRelationship(relationship);
+									annotationRepository.save(priority);
+									List<AnnotationAttribute> annotationAttributeList = new ArrayList<AnnotationAttribute>();
+									AnnotationAttribute annotationAttribute = new AnnotationAttribute();
+									annotationAttribute.setProperty("value");
+									annotationAttribute.setValue("4"); // by default
+									relationship.setPriority(4);
+									annotationAttribute.setAnnotation(priority);
+									annotationAttributeRepository.save(annotationAttribute);
+									annotationAttributeList.add(annotationAttribute);
+									priority.setAnnotationAttributeList(annotationAttributeList);
+									annotationRepository.save(priority);
+									relationship.getAnnotationList().add(priority);
+								}
 								RelationshipType relationshipType = null;
 								if (ReflectionManager.hasOneToOne(field))
 								{
@@ -420,6 +470,7 @@ public class BeanToDBConverter {
 			AnnotationType annotationType= null;
 			if (annotationArray[i].annotationType()==Priority.class)
 			{
+				annotationType=AnnotationType.PRIORITY;
 				List<AnnotationAttribute> annotationAttributeList = new ArrayList<AnnotationAttribute>();
 				for (Method method : annotationArray[i].annotationType().getDeclaredMethods()) {
 					if (method.getName().equals("value"))
@@ -427,7 +478,6 @@ public class BeanToDBConverter {
 						Object value= null;
 						try {
 							value=  method.invoke(annotationArray[i], (Object[])null);
-							metaEntityAttribute.setPriority((Integer) value);
 							AnnotationAttribute annotationAttribute = new AnnotationAttribute();
 							annotationAttribute.setProperty(method.getName());
 							annotationAttribute.setValue(value.toString());
@@ -443,7 +493,6 @@ public class BeanToDBConverter {
 					}
 				}
 				metaAnnotation.setAnnotationAttributeList(annotationAttributeList);
-			
 			}
 			if (annotationArray[i].annotationType()==Id.class)
 			{

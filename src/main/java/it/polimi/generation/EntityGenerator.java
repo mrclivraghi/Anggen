@@ -21,6 +21,7 @@ import it.polimi.utils.annotation.IgnoreTableList;
 import it.polimi.utils.annotation.IgnoreUpdate;
 import it.polimi.utils.annotation.MaxDescendantLevel;
 import it.polimi.utils.annotation.Password;
+import it.polimi.utils.annotation.Priority;
 import it.polimi.utils.annotation.SecurityType;
 
 import java.io.File;
@@ -299,6 +300,12 @@ public class EntityGenerator {
 				}
 				break;
 			case PASSWORD: annotationUse=classField.annotate(Password.class);
+				break;
+			case PRIORITY: annotationUse=classField.annotate(Priority.class);
+			for (AnnotationAttribute annotationAttribute: annotation.getAnnotationAttributeList())
+			{
+				annotationUse.param(annotationAttribute.getProperty(), Integer.valueOf(annotationAttribute.getValue()));
+			}
 				break;
 				
 			}

@@ -420,6 +420,7 @@ public class BeanToDBConverter {
 			AnnotationType annotationType= null;
 			if (annotationArray[i].annotationType()==Priority.class)
 			{
+				List<AnnotationAttribute> annotationAttributeList = new ArrayList<AnnotationAttribute>();
 				for (Method method : annotationArray[i].annotationType().getDeclaredMethods()) {
 					if (method.getName().equals("value"))
 					{
@@ -427,6 +428,12 @@ public class BeanToDBConverter {
 						try {
 							value=  method.invoke(annotationArray[i], (Object[])null);
 							metaEntityAttribute.setPriority((Integer) value);
+							AnnotationAttribute annotationAttribute = new AnnotationAttribute();
+							annotationAttribute.setProperty(method.getName());
+							annotationAttribute.setValue(value.toString());
+							annotationAttribute.setAnnotation(metaAnnotation);
+							annotationAttributeRepository.save(annotationAttribute);
+							annotationAttributeList.add(annotationAttribute);
 						} catch (IllegalAccessException
 								| IllegalArgumentException
 								| InvocationTargetException e) {
@@ -435,6 +442,7 @@ public class BeanToDBConverter {
 						}
 					}
 				}
+				metaAnnotation.setAnnotationAttributeList(annotationAttributeList);
 			
 			}
 			if (annotationArray[i].annotationType()==Id.class)

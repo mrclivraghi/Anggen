@@ -18,6 +18,7 @@ public class AnnotationAttribute {
 
     public final static java.lang.Long staticEntityId = 1L;
     @javax.persistence.Column(name = "property")
+    @DescriptionField
     private java.lang.String property;
     @javax.persistence.Column(name = "value")
     private java.lang.String value;

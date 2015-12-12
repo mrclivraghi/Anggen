@@ -40,6 +40,7 @@ public class Annotation {
     @javax.persistence.JoinColumn(name = "enum_field_id_enum_field")
     private it.polimi.model.field.EnumField enumField;
     @javax.persistence.Column(name = "annotation_type")
+    @DescriptionField
     private AnnotationType annotationType;
 
     public java.lang.Long getAnnotationId() {

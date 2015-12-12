@@ -25,6 +25,7 @@ public class EnumValue {
     @DescriptionField
     private java.lang.Long enumValueId;
     @javax.persistence.Column(name = "name")
+    @DescriptionField
     private String name;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "enum_field_id_enum_field")

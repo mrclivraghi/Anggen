@@ -21,6 +21,7 @@ public class EntityGroup {
 
     public final static java.lang.Long staticEntityId = 8L;
     @javax.persistence.Column(name = "name")
+    @DescriptionField
     private String name;
     @javax.persistence.Column(name = "entity_id")
     private java.lang.Long entityId;

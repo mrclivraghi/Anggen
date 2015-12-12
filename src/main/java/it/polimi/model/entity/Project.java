@@ -28,6 +28,7 @@ public class Project {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer projectId;
     @javax.persistence.Column(name = "name")
+    @DescriptionField
     private String name;
     
     @OneToMany(fetch = FetchType.EAGER)

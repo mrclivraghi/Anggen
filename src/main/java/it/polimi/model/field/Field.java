@@ -28,6 +28,7 @@ public class Field extends EntityAttribute {
     @DescriptionField
     private java.lang.Long fieldId;
     @javax.persistence.Column(name = "name")
+    @DescriptionField
     private String name;
     @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.EAGER)
     @javax.persistence.JoinColumn(name = "entity_id_entity")

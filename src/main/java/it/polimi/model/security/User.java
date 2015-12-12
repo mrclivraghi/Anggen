@@ -25,6 +25,7 @@ public class User {
 
     public final static java.lang.Long staticEntityId = 2L;
     @javax.persistence.Column(name = "username")
+    @DescriptionField
     private java.lang.String username;
     @javax.persistence.Column(name = "user_id")
     @Id

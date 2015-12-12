@@ -23,6 +23,7 @@ public class Tab {
 
     public final static java.lang.Long staticEntityId = 3L;
     @javax.persistence.Column(name = "name")
+    @DescriptionField
     private String name;
     @javax.persistence.Column(name = "tab_id")
     @Id

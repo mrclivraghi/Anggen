@@ -31,6 +31,7 @@ public class RestrictionEntity {
     private it.polimi.model.security.Role role;
     @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.EAGER)
     @javax.persistence.JoinColumn(name = "entity_id_entity")
+    @DescriptionField
     private it.polimi.model.entity.Entity entity;
 
     public java.lang.Boolean getCanCreate() {

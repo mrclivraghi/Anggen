@@ -27,6 +27,7 @@ public class Role {
 
     public final static Long staticEntityId = 13L;
     @javax.persistence.Column(name = "role")
+    @DescriptionField
     private String role;
     @javax.persistence.Column(name = "role_id")
     @Id

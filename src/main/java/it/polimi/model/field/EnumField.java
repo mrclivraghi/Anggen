@@ -27,6 +27,7 @@ public class EnumField extends EntityAttribute{
     @DescriptionField
     private java.lang.Long enumFieldId;
     @javax.persistence.Column(name = "name")
+    @DescriptionField
     private String name;
     @OneToMany(fetch = javax.persistence.FetchType.EAGER)
     @Type(type = "it.generated.anggen.model.field.EnumValue")

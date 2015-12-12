@@ -21,6 +21,7 @@ public class Relationship extends EntityAttribute{
 
     public final static java.lang.Long staticEntityId = 10L;
     @javax.persistence.Column(name = "name")
+    @DescriptionField
     private String name;
     @javax.persistence.Column(name = "relationship_id")
     @Id

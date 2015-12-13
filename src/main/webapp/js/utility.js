@@ -17,3 +17,48 @@ function activeMenu(path)
 	
 	
 }
+
+var AlertSuccess = (function() {
+    "use strict";
+
+    var elem,
+        hideHandler,
+        that = {};
+
+    that.init = function(options) {
+        elem = $(options.selector);
+    };
+
+    that.show = function(text) {
+        clearTimeout(hideHandler);
+
+        elem.find("span").html(text);
+        elem.delay(200).fadeIn().delay(2000).fadeOut();
+    };
+
+    return that;
+}());
+
+var AlertError = (function() {
+    "use strict";
+
+    var elem,
+        hideHandler,
+        that = {};
+
+    that.init = function(options) {
+        elem = $(options.selector);
+    };
+
+    that.show = function(text) {
+        clearTimeout(hideHandler);
+
+        elem.find("span").html(text);
+        elem.delay(200).fadeIn().delay(2000).fadeOut();
+    };
+
+    return that;
+}());
+
+AlertError.init({selector: "#alertError"});
+AlertSuccess.init({selector: "#alertInfo"});

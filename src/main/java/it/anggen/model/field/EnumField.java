@@ -6,9 +6,11 @@ import java.util.List;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import it.anggen.model.entity.EnumEntity;
 import it.anggen.model.field.Annotation;
 import it.anggen.model.field.EnumValue;
 import it.anggen.utils.EntityAttribute;
@@ -36,11 +38,14 @@ public class EnumField  extends EntityAttribute{
     @it.anggen.utils.annotation.DescriptionField
     @it.anggen.utils.annotation.Priority(2)
     private String name;
-    @OneToMany(fetch = javax.persistence.FetchType.EAGER)
-    @Type(type = "it.anggen.model.field.EnumValue")
-    @javax.persistence.JoinColumn(name = "enum_field_id_enum_field")
+    
+    
+    @ManyToOne(fetch = javax.persistence.FetchType.EAGER)
+    @javax.persistence.JoinColumn(name = "enum_entity_id_enum_entity")
     @it.anggen.utils.annotation.Priority(4)
-    private List<EnumValue> enumValueList;
+    private EnumEntity enumEntity;
+    
+    
     @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.EAGER)
     @javax.persistence.JoinColumn(name = "entity_id_entity")
     @it.anggen.utils.annotation.Priority(4)
@@ -79,14 +84,6 @@ public class EnumField  extends EntityAttribute{
         this.name=name;
     }
 
-    public List<EnumValue> getEnumValueList() {
-        return this.enumValueList;
-    }
-
-    public void setEnumValueList(List<EnumValue> enumValueList) {
-        this.enumValueList=enumValueList;
-    }
-
     public it.anggen.model.entity.Entity getEntity() {
         return this.entity;
     }
@@ -110,5 +107,19 @@ public class EnumField  extends EntityAttribute{
     public void setTab(it.anggen.model.entity.Tab tab) {
         this.tab=tab;
     }
+
+	/**
+	 * @return the enumEntity
+	 */
+	public EnumEntity getEnumEntity() {
+		return enumEntity;
+	}
+
+	/**
+	 * @param enumEntity the enumEntity to set
+	 */
+	public void setEnumEntity(EnumEntity enumEntity) {
+		this.enumEntity = enumEntity;
+	}
 
 }

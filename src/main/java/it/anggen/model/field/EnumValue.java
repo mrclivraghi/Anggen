@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import it.anggen.model.entity.EnumEntity;
 import it.anggen.utils.annotation.MaxDescendantLevel;
 
 @Entity
@@ -32,10 +33,11 @@ public class EnumValue {
     @javax.persistence.Column(name = "value")
     @it.anggen.utils.annotation.Priority(2)
     private Integer value;
+    
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "enum_field_id_enum_field")
+    @JoinColumn(name = "enum_entity_id_enum_entity")
     @it.anggen.utils.annotation.Priority(4)
-    private it.anggen.model.field.EnumField enumField;
+    private EnumEntity enumEntity;
 
     public String getName() {
         return this.name;
@@ -61,12 +63,19 @@ public class EnumValue {
         this.value=value;
     }
 
-    public it.anggen.model.field.EnumField getEnumField() {
-        return this.enumField;
-    }
 
-    public void setEnumField(it.anggen.model.field.EnumField enumField) {
-        this.enumField=enumField;
-    }
+	/**
+	 * @return the enumEntity
+	 */
+	public EnumEntity getEnumEntity() {
+		return enumEntity;
+	}
+
+	/**
+	 * @param enumEntity the enumEntity to set
+	 */
+	public void setEnumEntity(EnumEntity enumEntity) {
+		this.enumEntity = enumEntity;
+	}
 
 }

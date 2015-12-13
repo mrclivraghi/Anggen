@@ -60,5 +60,3 @@ var AlertError = (function() {
     return that;
 }());
 
-AlertError.init({selector: "#alertError"});
-AlertSuccess.init({selector: "#alertInfo"});

@@ -16,8 +16,8 @@
 
 .custom-alert{
 	position:absolute;
-	width:100px;
-	height:50px;
+	width:200px;
+	height:80px;
 	right: 50px;
 	bottom: 20px;
 }

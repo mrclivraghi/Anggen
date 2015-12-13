@@ -2,6 +2,8 @@
 package it.anggen.service.entity;
 
 import java.util.List;
+
+import it.anggen.model.entity.Entity;
 import it.anggen.repository.entity.EntityRepository;
 import it.anggen.repository.entity.TabRepository;
 import it.anggen.repository.field.EnumFieldRepository;
@@ -10,6 +12,8 @@ import it.anggen.repository.relationship.RelationshipRepository;
 import it.anggen.repository.security.RestrictionEntityRepository;
 import it.anggen.searchbean.entity.EntitySearchBean;
 import it.anggen.service.entity.EntityService;
+import it.anggen.utils.Utility;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,6 +53,8 @@ public class EntityServiceImpl
 
     @Override
     public it.anggen.model.entity.Entity insert(it.anggen.model.entity.Entity entity) {
+    	List<Entity> oldEntityList = entityRepository.findByEntityIdAndDescendantMaxLevelAndNameAndSecurityTypeAndRelationshipAndEnumFieldAndTabAndRestrictionEntityAndEntityGroupAndField(null, null, null, null, null, null, null, null, null, null);
+		entity.setEntityId(Utility.getFirstEntityId(oldEntityList));
         return entityRepository.save(entity);
     }
 

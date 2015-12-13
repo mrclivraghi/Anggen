@@ -20,6 +20,7 @@ import javax.validation.constraints.Size;
 import it.anggen.reflection.EntityAttributeManager;
 import it.anggen.utils.EntityAttribute;
 import it.anggen.utils.ReflectionManager;
+import it.anggen.utils.Utility;
 import it.anggen.utils.annotation.Between;
 import it.anggen.utils.annotation.DescriptionField;
 import it.anggen.utils.annotation.ExcelExport;
@@ -131,6 +132,8 @@ public class BeanToDBConverter {
 	@Value("${application.name}")
 	private String projectName;
 	
+	private Long firstEntityId;
+	
 	
 	public BeanToDBConverter() {
 		
@@ -174,6 +177,9 @@ public class BeanToDBConverter {
 			mainPackageClassSet.add(Entity.class);
 			
 		}
+		List<Entity> oldEntityList = entityRepository.findByEntityIdAndDescendantMaxLevelAndNameAndSecurityTypeAndRelationshipAndEnumFieldAndTabAndRestrictionEntityAndEntityGroupAndField(null, null, null, null, null, null, null, null, null, null);
+		firstEntityId=Utility.getFirstEntityId(oldEntityList);
+		
 		// init entities
 		for (Class myClass: mainPackageClassSet)
 		{
@@ -226,17 +232,17 @@ public class BeanToDBConverter {
 			if (!maxDescendantLevelFound)
 				entity.setDescendantMaxLevel(1);
 			entity.setEntityId(getEntityId(entity));
-			System.out.println("cerco di salvare "+entity.getName()+" con id "+entity.getEntityId());
+			//System.out.println("cerco di salvare "+entity.getName()+" con id "+entity.getEntityId()+" ma sul db ho "+savedEntity.getEntityId());
 			try {
-				Thread.sleep(10000);
+				Thread.sleep(5000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			Entity savedEntity=entityRepository.save(entity);
-			System.out.println("Ho salvato "+entity.getName()+" con id "+entity.getEntityId()+ " ma sul db ho "+savedEntity.getEntityId());
+			entityRepository.save(entity);
+			//System.out.println("Ho salvato "+entity.getName()+" con id "+entity.getEntityId()+ " ma sul db ho "+savedEntity.getEntityId());
 			try {
-				Thread.sleep(10000);
+				Thread.sleep(5000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -638,7 +644,10 @@ public class BeanToDBConverter {
 	public Long getEntityId(Entity entity)
 	{
 		if (!isAngGenSecurity(entity))
-			return null;
+			{
+				firstEntityId++;
+				return firstEntityId;
+			}
 		if (entity.getName().equals("user"))
 			return User.staticEntityId;
 		if (entity.getName().equals("role"))
@@ -655,7 +664,9 @@ public class BeanToDBConverter {
 			return Entity.staticEntityId;
 		if (entity.getName().equals("entityGroup"))
 			return EntityGroup.staticEntityId;
-		return null;
+
+		firstEntityId++;
+		return firstEntityId;
 	}
 	
 	

@@ -3,11 +3,13 @@ package it.anggen.model.entity;
 
 import java.util.List;
 
+import javax.persistence.Basic;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import it.anggen.model.entity.Tab;
@@ -29,10 +31,10 @@ public class Entity {
     @javax.persistence.Column(name = "descendant_max_level")
     @it.anggen.utils.annotation.Priority(2)
     private Integer descendantMaxLevel;
-    @javax.persistence.Column(name = "entity_id")
+    @javax.persistence.Column(name = "entity_id", insertable=true, updatable=true, unique=true, nullable=false)
     @it.anggen.utils.annotation.DescriptionField
     @Id
-    @GeneratedValue
+    //@GeneratedValue(strategy=GenerationType.AUTO)
     @it.anggen.utils.annotation.Priority(1)
     private java.lang.Long entityId;
     @javax.persistence.Column(name = "name")

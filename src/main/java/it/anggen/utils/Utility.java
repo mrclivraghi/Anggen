@@ -1,5 +1,7 @@
 package it.anggen.utils;
 
+import it.anggen.model.entity.Entity;
+
 import java.io.File;
 import java.io.IOException;
 import java.sql.Time;
@@ -102,6 +104,16 @@ public class Utility {
 	public static void orderByPriority(List<EntityAttribute> entityAttributeList) {
 		Collections.sort(entityAttributeList, Comparator.comparing(EntityAttribute::getPriority));
 		}
+	public static void orderById(List<Entity> entityList){
+		Collections.sort(entityList, Comparator.comparing(Entity::getEntityId));
+	}
+	public static Long getFirstEntityId(List<Entity> entityList){
+		Utility.orderById(entityList);
+		if (entityList.size()==0)
+			return 1L;
+		else
+			return entityList.get(entityList.size()-1).getEntityId()+1;
+	}
 
 	
 }

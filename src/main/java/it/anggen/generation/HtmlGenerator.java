@@ -51,7 +51,7 @@ public class HtmlGenerator {
 	
 	private Entity entity;
 	
-	private DocType docType= DocType.HTML5;
+	public static  DocType docType= DocType.HTML5;
 	
 	
 	@Autowired
@@ -82,7 +82,7 @@ public class HtmlGenerator {
 	 * Include the functional js scripts
 	 * @param html
 	 */
-	private void includeJavascriptScripts(HtmlCanvas html)
+	public void includeJavascriptScripts(HtmlCanvas html,Boolean includeEntityFile)
 	{
 		
 		try {
@@ -96,12 +96,17 @@ public class HtmlGenerator {
 			.macros().javascript("../js/csv.js")
 			.macros().javascript("../js/pdfmake.js")
 			.macros().javascript("../js/vfs_fonts.js")
-			.macros().javascript("../js/ui-grid.js")
-			.macros().javascript("../js/angular/"+generator.applicationName+"/"+entityName+".js")
-			.macros().javascript("../js/date.js")
-			.macros().javascript("../js/utility.js")
-			.macros().javascript("../js/jquery.easytree.js")
-			.macros().javascript("../js/jquery.cookie.js")
+			.macros().javascript("../js/ui-grid.js");
+			if (includeEntityFile)
+				html.macros().javascript("../js/angular/"+generator.applicationName+"/"+entityName+".js");
+			
+			html.macros().javascript("../js/date.js")
+			.macros().javascript("../js/utility.js");
+			
+			if (generator.easyTreeMenu)
+				html.macros().javascript("../js/jquery.easytree.js");
+			
+			html.macros().javascript("../js/jquery.cookie.js")
 			.macros().javascript("../js/bootstrap.min.js")
 			.macros().javascript("../js/alasql.min.js")
 			.macros().javascript("../js/ng-file-upload-all.js");
@@ -142,7 +147,7 @@ public class HtmlGenerator {
 			html()
 			.head()
 			.title().content(entityName);
-			includeJavascriptScripts(html);
+			includeJavascriptScripts(html,true);
 			incluseCssFiles(html);
 			jsGenerator.saveJsToFile(directoryAngularFiles);
 			html._head()

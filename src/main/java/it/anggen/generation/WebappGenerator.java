@@ -5,7 +5,10 @@ import it.anggen.utils.Utility;
 import it.anggen.repository.security.UserRepository;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -18,9 +21,11 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
+import javax.xml.crypto.dsig.spec.HMACParameterSpec;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.hibernate.SessionFactory;
+import org.rendersnake.HtmlCanvas;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -79,6 +84,9 @@ public class WebappGenerator {
 	@Autowired
 	private Generator generator;
 	
+	@Autowired
+	private HtmlGenerator htmlGenerator;
+	
 	private String applicationName;
 	private String packageName;
 	private String directory;
@@ -107,6 +115,7 @@ public class WebappGenerator {
 		generateSecurityConfig();
 		generateSecurityWebappInitializer();
 		generateSpringBootApplication();
+		generateForbiddenJsp();
 	}
 	
 	private void generateSpringBootApplication()
@@ -413,6 +422,45 @@ public class WebappGenerator {
 		securityWebAppInit.constructor(JMod.PUBLIC);
 		
 		saveFile(codeModel);
+	}
+	
+	private void generateForbiddenJsp()
+	{
+		HtmlCanvas html = new HtmlCanvas();
+		try {
+			html.render(HtmlGenerator.docType);
+			html.
+			html()
+			.head()
+			.title().content("Access forbidden");
+			htmlGenerator.incluseCssFiles(html);
+			htmlGenerator.includeJavascriptScripts(html, false);
+			html._head()
+			.body()
+			.content("Access forbidden!!!")
+			._html();
+
+			File file= new File("");
+			String directoryViewPages = file.getAbsolutePath()+generator.htmlDirectory+"/";
+			
+			File dir = new File(directoryViewPages);
+			if (!dir.exists())
+				dir.mkdirs();
+			
+			File myJsp=new File(directoryViewPages+"forbidden.jsp");
+			PrintWriter writer;
+			try {
+				System.out.println("Written "+myJsp.getAbsolutePath());
+				writer = new PrintWriter(myJsp, "UTF-8");
+				writer.write(html.toHtml());
+				writer.close();
+			} catch (FileNotFoundException | UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 	
 	/**

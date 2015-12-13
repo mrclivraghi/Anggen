@@ -45,6 +45,7 @@ import it.anggen.model.field.Field;
 import it.anggen.model.relationship.Relationship;
 import it.anggen.model.security.RestrictionEntity;
 import it.anggen.model.security.RestrictionEntityGroup;
+import it.anggen.model.security.RestrictionField;
 import it.anggen.model.security.Role;
 import it.anggen.model.security.User;
 import it.anggen.repository.entity.EntityGroupRepository;
@@ -224,15 +225,26 @@ public class BeanToDBConverter {
 				entity.setSecurityType(it.anggen.model.SecurityType.ACCESS_WITH_PERMISSION);
 			if (!maxDescendantLevelFound)
 				entity.setDescendantMaxLevel(1);
-			
-			entityRepository.save(entity);
+			entity.setEntityId(getEntityId(entity));
+			System.out.println("cerco di salvare "+entity.getName()+" con id "+entity.getEntityId());
+			try {
+				Thread.sleep(10000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			Entity savedEntity=entityRepository.save(entity);
+			System.out.println("Ho salvato "+entity.getName()+" con id "+entity.getEntityId()+ " ma sul db ho "+savedEntity.getEntityId());
+			try {
+				Thread.sleep(10000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			entityMap.put(reflectionManager.parseName(), entity);
 		}
 		
 		
-		mainPackageClassSet.remove(Field.class);
-		mainPackageClassSet.remove(EntityGroup.class);
-		mainPackageClassSet.remove(Entity.class);
 		
 		Project project = new Project();
 		ReflectionManager temp = new ReflectionManager(Object.class);
@@ -606,5 +618,46 @@ public class BeanToDBConverter {
 			EntityAttributeManager.getInstance(metaEntityAttribute).asRelationship().setAnnotationList(annotationList);
 
 	}
+	
+	private Boolean isAngGenSecurity(Entity entity)
+	{
+		if (projectName.equals("anggen"))
+			return false;
+		if (entity.getName().equals("restrictionField") || 
+				entity.getName().equals("restrictionEntityGroup") || 
+				entity.getName().equals("restrictionEntity") || 
+				entity.getName().equals("user") || 
+				entity.getName().equals("role") ||
+				entity.getName().equals("field") ||
+				entity.getName().equals("entity") ||
+				entity.getName().equals("entityGroup") )
+			return true;
+		return false;
+	}
+	
+	public Long getEntityId(Entity entity)
+	{
+		if (!isAngGenSecurity(entity))
+			return null;
+		if (entity.getName().equals("user"))
+			return User.staticEntityId;
+		if (entity.getName().equals("role"))
+			return Role.staticEntityId;
+		if (entity.getName().equals("restrictionEntity"))
+			return RestrictionEntity.staticEntityId;
+		if (entity.getName().equals("restrictionEntityGroup"))
+			return RestrictionEntityGroup.staticEntityId;
+		if (entity.getName().equals("restrictionField"))
+			return RestrictionField.staticEntityId;
+		if (entity.getName().equals("field"))
+			return Field.staticEntityId;
+		if (entity.getName().equals("entity"))
+			return Entity.staticEntityId;
+		if (entity.getName().equals("entityGroup"))
+			return EntityGroup.staticEntityId;
+		return null;
+	}
+	
+	
 
 }

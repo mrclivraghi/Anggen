@@ -287,7 +287,7 @@ public class EntityGenerator {
 			break;
 			case PRIMARY_KEY: 	annotationUse=classField.annotate(Id.class);
 			JAnnotationUse generatedValue= classField.annotate(GeneratedValue.class);
-			generatedValue.param("strategy", GenerationType.SEQUENCE);
+			//generatedValue.param("strategy", GenerationType.SEQUENCE);
 			if (!EntityAttributeManager.getInstance(entityAttribute).getDescriptionField())
 			{
 				classField.annotate(DescriptionField.class);

@@ -871,7 +871,8 @@ public class JsGenerator {
 
 	private void manageRestError(StringBuilder sb)
 	{
-		sb.append("alert(\"error\");\n");
+		sb.append("AlertError.init({selector: \"#alertError\"});\n");
+		sb.append("AlertError.show(\"Si è verificato un errore\");\n");
 		sb.append("return; \n");
 	}
 	

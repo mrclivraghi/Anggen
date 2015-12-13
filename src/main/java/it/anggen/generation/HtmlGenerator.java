@@ -152,6 +152,8 @@ public class HtmlGenerator {
 			jsGenerator.saveJsToFile(directoryAngularFiles);
 			html._head()
 			.body(htmlAttributes.add("ng-app", Utility.getFirstLower(entityName)+"App"));
+			html.div((new HtmlAttributes()).add("id", "alertInfo").add("class","alert alert-success custom-alert").add("style","display: none")).span().content("")._div();
+			html.div((new HtmlAttributes()).add("id", "alertError").add("class","alert alert-danger custom-alert").add("style","display: none")).span().content("")._div();
 			angularGenerator.init(entity, true,new ArrayList<Entity>());
 			angularGenerator.generateEntityView(html);
 			

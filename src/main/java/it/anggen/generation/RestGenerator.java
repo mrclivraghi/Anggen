@@ -401,11 +401,14 @@ public class RestGenerator {
 				//entityManager.addChildrenFilter(entityAttribute);
 			}
 			searchMethod=getRepositorySearchMethod();
-			JMethod method=myClass.method(JMod.PUBLIC, listClass, searchMethod);
-			String alias=className.substring(0, 1).toLowerCase();
-			String query=getSearchQuery(method);
-			JAnnotationUse annotationQuery= method.annotate(Query.class);
-			annotationQuery.param("value", query);
+			if (entityAttributeList.size()>1)
+			{
+				JMethod method=myClass.method(JMod.PUBLIC, listClass, searchMethod);
+				String alias=className.substring(0, 1).toLowerCase();
+				String query=getSearchQuery(method);
+				JAnnotationUse annotationQuery= method.annotate(Query.class);
+				annotationQuery.param("value", query);
+			}
 			
 		} catch (JClassAlreadyExistsException e) {
 			e.printStackTrace();

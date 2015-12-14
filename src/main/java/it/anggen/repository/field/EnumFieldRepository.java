@@ -24,7 +24,7 @@ public interface EnumFieldRepository
 
     public List<it.anggen.model.field.EnumField> findByTab(it.anggen.model.entity.Tab tab);
 
-    @Query("select e from EnumField e where  (:enumFieldId is null or cast(:enumFieldId as string)=cast(e.enumFieldId as string)) and (:priority is null or cast(:priority as string)=cast(e.priority as string)) and (:name is null or :name='' or cast(:name as string)=e.name) and (:enumValue in elements(e.enumValueList)  or :enumValue is null) and (:entity=e.entity or :entity is null) and (:annotation in elements(e.annotationList)  or :annotation is null) and (:tab=e.tab or :tab is null) ")
+    @Query("select e from EnumField e where  (:enumFieldId is null or cast(:enumFieldId as string)=cast(e.enumFieldId as string)) and (:priority is null or cast(:priority as string)=cast(e.priority as string)) and (:name is null or :name='' or cast(:name as string)=e.name)  and (:entity=e.entity or :entity is null) and (:annotation in elements(e.annotationList)  or :annotation is null) and (:tab=e.tab or :tab is null) ")
     public List<it.anggen.model.field.EnumField> findByEnumFieldIdAndPriorityAndNameAndEnumValueAndEntityAndAnnotationAndTab(
         @org.springframework.data.repository.query.Param("enumFieldId")
         java.lang.Long enumFieldId,
@@ -32,8 +32,6 @@ public interface EnumFieldRepository
         java.lang.Integer priority,
         @org.springframework.data.repository.query.Param("name")
         java.lang.String name,
-        @org.springframework.data.repository.query.Param("enumValue")
-        EnumValue enumValue,
         @org.springframework.data.repository.query.Param("entity")
         it.anggen.model.entity.Entity entity,
         @org.springframework.data.repository.query.Param("annotation")

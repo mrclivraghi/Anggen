@@ -1,119 +1,74 @@
+
 package it.anggen.model.entity;
 
-import it.anggen.model.field.EnumField;
-import it.anggen.model.field.EnumValue;
-import it.anggen.utils.annotation.DescriptionField;
-
 import java.util.List;
-
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
+import it.anggen.model.field.EnumValue;
+import it.anggen.utils.annotation.MaxDescendantLevel;
 import org.hibernate.annotations.Type;
 
-
 @Entity
-@Table(schema="meta",name="enum_entity")
+@Table(schema = "meta", name = "enum_entity")
+@it.anggen.utils.annotation.SecurityType(type = it.anggen.model.SecurityType.ACCESS_WITH_PERMISSION)
+@MaxDescendantLevel(1)
 public class EnumEntity {
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE)
-	private Long enumEntityId;
-	
-	@DescriptionField
-	private String name;
-	
-	@OneToMany(fetch=FetchType.EAGER,mappedBy="enumEntity")
-	@Type(type = "it.anggen.model.field.EnumValue")
-	private List<EnumValue> enumValueList;
+    public final static java.lang.Long staticEntityId = 5L;
+    @javax.persistence.Column(name = "name")
+    @it.anggen.utils.annotation.DescriptionField
+    @it.anggen.utils.annotation.Priority(2)
+    private String name;
+    @javax.persistence.Column(name = "enum_entity_id")
+    @Id
+    @GeneratedValue
+    @it.anggen.utils.annotation.DescriptionField
+    @it.anggen.utils.annotation.Priority(1)
+    private java.lang.Long enumEntityId;
+    @ManyToOne(fetch = javax.persistence.FetchType.EAGER)
+    @javax.persistence.JoinColumn(name = "project_id_project")
+    @it.anggen.utils.annotation.Priority(4)
+    private it.anggen.model.entity.Project project;
+    @OneToMany(fetch = javax.persistence.FetchType.EAGER)
+    @Type(type = "it.anggen.model.field.EnumValue")
+    @javax.persistence.JoinColumn(name = "enum_entity_id_enum_entity")
+    @it.anggen.utils.annotation.Priority(4)
+    private List<EnumValue> enumValueList;
 
-	/*@OneToMany(fetch=FetchType.EAGER,mappedBy="enumEntity")
-	@Type(type = "it.anggen.model.field.EnumField")
-	private List<EnumField> enumFieldList;
-*/
-	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="project_id_project")
-	private Project project;
-	
-	public EnumEntity() {
-		// TODO Auto-generated constructor stub
-	}
+    public String getName() {
+        return this.name;
+    }
 
-	/**
-	 * @return the enumEntityId
-	 */
-	public Long getEnumEntityId() {
-		return enumEntityId;
-	}
+    public void setName(String name) {
+        this.name=name;
+    }
 
-	/**
-	 * @param enumEntityId the enumEntityId to set
-	 */
-	public void setEnumEntityId(Long enumEntityId) {
-		this.enumEntityId = enumEntityId;
-	}
+    public java.lang.Long getEnumEntityId() {
+        return this.enumEntityId;
+    }
 
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
+    public void setEnumEntityId(java.lang.Long enumEntityId) {
+        this.enumEntityId=enumEntityId;
+    }
 
-	/**
-	 * @param name the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
+    public it.anggen.model.entity.Project getProject() {
+        return this.project;
+    }
 
-	/**
-	 * @return the enumValueList
-	 */
-	public List<EnumValue> getEnumValueList() {
-		return enumValueList;
-	}
+    public void setProject(it.anggen.model.entity.Project project) {
+        this.project=project;
+    }
 
-	/**
-	 * @param enumValueList the enumValueList to set
-	 */
-	public void setEnumValueList(List<EnumValue> enumValueList) {
-		this.enumValueList = enumValueList;
-	}
+    public List<EnumValue> getEnumValueList() {
+        return this.enumValueList;
+    }
 
-	/**
-	 * @return the enumFieldList
-	 */
-/*	public List<EnumField> getEnumFieldList() {
-		return enumFieldList;
-	}
-
-	/**
-	 * @param enumFieldList the enumFieldList to set
-	 */
-	/*public void setEnumFieldList(List<EnumField> enumFieldList) {
-		this.enumFieldList = enumFieldList;
-	}
-
-	/**
-	 * @return the project
-	 */
-	public Project getProject() {
-		return project;
-	}
-
-	/**
-	 * @param project the project to set
-	 */
-	public void setProject(Project project) {
-		this.project = project;
-	}
+    public void setEnumValueList(List<EnumValue> enumValueList) {
+        this.enumValueList=enumValueList;
+    }
 
 }

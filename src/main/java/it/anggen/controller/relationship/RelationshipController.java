@@ -2,11 +2,9 @@
 package it.anggen.controller.relationship;
 
 import java.util.List;
-
 import it.anggen.searchbean.relationship.RelationshipSearchBean;
 import it.anggen.security.SecurityService;
 import it.anggen.service.relationship.RelationshipService;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -126,38 +124,38 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     private void getRightMapping(it.anggen.model.relationship.Relationship relationship) {
         if (relationship.getEntity()!=null)
         {
-        relationship.getEntity().setRelationshipList(null);
-        relationship.getEntity().setEnumFieldList(null);
-        relationship.getEntity().setTabList(null);
-        relationship.getEntity().setRestrictionEntityList(null);
-        relationship.getEntity().setEntityGroup(null);
         relationship.getEntity().setFieldList(null);
+        relationship.getEntity().setEntityGroup(null);
+        relationship.getEntity().setRestrictionEntityList(null);
+        relationship.getEntity().setTabList(null);
+        relationship.getEntity().setEnumFieldList(null);
+        relationship.getEntity().setRelationshipList(null);
         }
         if (relationship.getEntity()!=null)
         {
-        relationship.getEntity().setRelationshipList(null);
-        relationship.getEntity().setEnumFieldList(null);
-        relationship.getEntity().setTabList(null);
-        relationship.getEntity().setRestrictionEntityList(null);
-        relationship.getEntity().setEntityGroup(null);
         relationship.getEntity().setFieldList(null);
+        relationship.getEntity().setEntityGroup(null);
+        relationship.getEntity().setRestrictionEntityList(null);
+        relationship.getEntity().setTabList(null);
+        relationship.getEntity().setEnumFieldList(null);
+        relationship.getEntity().setRelationshipList(null);
         }
         if (relationship.getAnnotationList()!=null)
         for (it.anggen.model.field.Annotation annotation :relationship.getAnnotationList())
 
         {
 
-        annotation.setAnnotationAttributeList(null);
-        annotation.setField(null);
-        annotation.setRelationship(null);
         annotation.setEnumField(null);
+        annotation.setRelationship(null);
+        annotation.setField(null);
+        annotation.setAnnotationAttributeList(null);
         }
         if (relationship.getTab()!=null)
         {
-        relationship.getTab().setEntity(null);
-        relationship.getTab().setFieldList(null);
-        relationship.getTab().setRelationshipList(null);
         relationship.getTab().setEnumFieldList(null);
+        relationship.getTab().setRelationshipList(null);
+        relationship.getTab().setFieldList(null);
+        relationship.getTab().setEntity(null);
         }
     }
 

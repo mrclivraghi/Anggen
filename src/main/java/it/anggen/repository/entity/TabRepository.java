@@ -21,19 +21,19 @@ public interface TabRepository
 
     public List<it.anggen.model.entity.Tab> findByEntity(it.anggen.model.entity.Entity entity);
 
-    @Query("select t from Tab t where  (:tabId is null or cast(:tabId as string)=cast(t.tabId as string)) and (:name is null or :name='' or cast(:name as string)=t.name) and (:entity=t.entity or :entity is null) and (:field in elements(t.fieldList)  or :field is null) and (:relationship in elements(t.relationshipList)  or :relationship is null) and (:enumField in elements(t.enumFieldList)  or :enumField is null) ")
-    public List<it.anggen.model.entity.Tab> findByTabIdAndNameAndEntityAndFieldAndRelationshipAndEnumField(
+    @Query("select t from Tab t where  (:tabId is null or cast(:tabId as string)=cast(t.tabId as string)) and (:name is null or :name='' or cast(:name as string)=t.name) and (:enumField in elements(t.enumFieldList)  or :enumField is null) and (:relationship in elements(t.relationshipList)  or :relationship is null) and (:field in elements(t.fieldList)  or :field is null) and (:entity=t.entity or :entity is null) ")
+    public List<it.anggen.model.entity.Tab> findByTabIdAndNameAndEnumFieldAndRelationshipAndFieldAndEntity(
         @org.springframework.data.repository.query.Param("tabId")
         java.lang.Long tabId,
         @org.springframework.data.repository.query.Param("name")
         java.lang.String name,
-        @org.springframework.data.repository.query.Param("entity")
-        it.anggen.model.entity.Entity entity,
-        @org.springframework.data.repository.query.Param("field")
-        Field field,
+        @org.springframework.data.repository.query.Param("enumField")
+        EnumField enumField,
         @org.springframework.data.repository.query.Param("relationship")
         Relationship relationship,
-        @org.springframework.data.repository.query.Param("enumField")
-        EnumField enumField);
+        @org.springframework.data.repository.query.Param("field")
+        Field field,
+        @org.springframework.data.repository.query.Param("entity")
+        it.anggen.model.entity.Entity entity);
 
 }

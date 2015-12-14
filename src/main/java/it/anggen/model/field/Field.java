@@ -4,7 +4,6 @@ package it.anggen.model.field;
 import java.util.List;
 
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -23,38 +22,38 @@ import org.hibernate.annotations.Type;
 @MaxDescendantLevel(100)
 public class Field extends EntityAttribute{
 
-    public final static java.lang.Long staticEntityId = 317L;
+    public final static java.lang.Long staticEntityId = 12L;
     @javax.persistence.Column(name = "field_id")
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue
     @it.anggen.utils.annotation.DescriptionField
     @it.anggen.utils.annotation.Priority(1)
     private java.lang.Long fieldId;
-    @javax.persistence.Column(name = "priority")
-    @it.anggen.utils.annotation.Priority(2)
-    private Integer priority;
     @javax.persistence.Column(name = "name")
     @it.anggen.utils.annotation.DescriptionField
     @it.anggen.utils.annotation.Priority(2)
     private String name;
+    @javax.persistence.Column(name = "priority")
+    @it.anggen.utils.annotation.Priority(2)
+    private Integer priority;
     @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.EAGER)
-    @javax.persistence.JoinColumn(name = "entity_id_entity")
+    @javax.persistence.JoinColumn(name = "tab_id_tab")
     @it.anggen.utils.annotation.Priority(4)
-    private it.anggen.model.entity.Entity entity;
-    @OneToMany(fetch = javax.persistence.FetchType.EAGER)
-    @Type(type = "it.anggen.model.field.Annotation")
-    @javax.persistence.JoinColumn(name = "field_id_field")
-    @it.anggen.utils.annotation.Priority(4)
-    private List<Annotation> annotationList;
+    private it.anggen.model.entity.Tab tab;
     @OneToMany(fetch = javax.persistence.FetchType.EAGER)
     @Type(type = "it.anggen.model.security.RestrictionField")
     @javax.persistence.JoinColumn(name = "field_id_field")
     @it.anggen.utils.annotation.Priority(4)
     private List<RestrictionField> restrictionFieldList;
-    @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.EAGER)
-    @javax.persistence.JoinColumn(name = "tab_id_tab")
+    @OneToMany(fetch = javax.persistence.FetchType.EAGER)
+    @Type(type = "it.anggen.model.field.Annotation")
+    @javax.persistence.JoinColumn(name = "field_id_field")
     @it.anggen.utils.annotation.Priority(4)
-    private it.anggen.model.entity.Tab tab;
+    private List<Annotation> annotationList;
+    @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.EAGER)
+    @javax.persistence.JoinColumn(name = "entity_id_entity")
+    @it.anggen.utils.annotation.Priority(4)
+    private it.anggen.model.entity.Entity entity;
     @javax.persistence.Column(name = "field_type")
     @it.anggen.utils.annotation.Priority(3)
     private FieldType fieldType;
@@ -67,14 +66,6 @@ public class Field extends EntityAttribute{
         this.fieldId=fieldId;
     }
 
-    public Integer getPriority() {
-        return this.priority;
-    }
-
-    public void setPriority(Integer priority) {
-        this.priority=priority;
-    }
-
     public String getName() {
         return this.name;
     }
@@ -83,20 +74,20 @@ public class Field extends EntityAttribute{
         this.name=name;
     }
 
-    public it.anggen.model.entity.Entity getEntity() {
-        return this.entity;
+    public Integer getPriority() {
+        return this.priority;
     }
 
-    public void setEntity(it.anggen.model.entity.Entity entity) {
-        this.entity=entity;
+    public void setPriority(Integer priority) {
+        this.priority=priority;
     }
 
-    public List<Annotation> getAnnotationList() {
-        return this.annotationList;
+    public it.anggen.model.entity.Tab getTab() {
+        return this.tab;
     }
 
-    public void setAnnotationList(List<Annotation> annotationList) {
-        this.annotationList=annotationList;
+    public void setTab(it.anggen.model.entity.Tab tab) {
+        this.tab=tab;
     }
 
     public List<RestrictionField> getRestrictionFieldList() {
@@ -107,12 +98,20 @@ public class Field extends EntityAttribute{
         this.restrictionFieldList=restrictionFieldList;
     }
 
-    public it.anggen.model.entity.Tab getTab() {
-        return this.tab;
+    public List<Annotation> getAnnotationList() {
+        return this.annotationList;
     }
 
-    public void setTab(it.anggen.model.entity.Tab tab) {
-        this.tab=tab;
+    public void setAnnotationList(List<Annotation> annotationList) {
+        this.annotationList=annotationList;
+    }
+
+    public it.anggen.model.entity.Entity getEntity() {
+        return this.entity;
+    }
+
+    public void setEntity(it.anggen.model.entity.Entity entity) {
+        this.entity=entity;
     }
 
     public FieldType getFieldType() {

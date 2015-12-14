@@ -3,6 +3,7 @@ package it.anggen.service.entity;
 
 import java.util.List;
 import it.anggen.repository.entity.EntityGroupRepository;
+import it.anggen.repository.entity.EnumEntityRepository;
 import it.anggen.repository.entity.ProjectRepository;
 import it.anggen.searchbean.entity.ProjectSearchBean;
 import it.anggen.service.entity.ProjectService;
@@ -17,6 +18,8 @@ public class ProjectServiceImpl
     @org.springframework.beans.factory.annotation.Autowired
     public ProjectRepository projectRepository;
     @org.springframework.beans.factory.annotation.Autowired
+    public EnumEntityRepository enumEntityRepository;
+    @org.springframework.beans.factory.annotation.Autowired
     public EntityGroupRepository entityGroupRepository;
 
     @Override
@@ -26,7 +29,7 @@ public class ProjectServiceImpl
 
     @Override
     public List<it.anggen.model.entity.Project> find(ProjectSearchBean project) {
-        return projectRepository.findByProjectIdAndNameAndEntityGroup(project.getProjectId(),project.getName(),project.getEntityGroupList()==null? null :project.getEntityGroupList().get(0));
+        return projectRepository.findByProjectIdAndNameAndEnumEntityAndEntityGroup(project.getProjectId(),project.getName(),project.getEnumEntityList()==null? null :project.getEnumEntityList().get(0),project.getEntityGroupList()==null? null :project.getEntityGroupList().get(0));
     }
 
     @Override
@@ -43,6 +46,11 @@ public class ProjectServiceImpl
     @Override
     @Transactional
     public it.anggen.model.entity.Project update(it.anggen.model.entity.Project project) {
+        if (project.getEnumEntityList()!=null)
+        for (it.anggen.model.entity.EnumEntity enumEntity: project.getEnumEntityList())
+        {
+        enumEntity.setProject(project);
+        }
         if (project.getEntityGroupList()!=null)
         for (it.anggen.model.entity.EntityGroup entityGroup: project.getEntityGroupList())
         {

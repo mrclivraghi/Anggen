@@ -8,10 +8,10 @@ public class AnnotationSearchBean {
 
     public java.lang.Long annotationId;
     public it.anggen.model.AnnotationType annotationType;
-    public List<AnnotationAttribute> annotationAttributeList;
-    public it.anggen.model.field.Field field;
-    public it.anggen.model.relationship.Relationship relationship;
     public it.anggen.model.field.EnumField enumField;
+    public it.anggen.model.relationship.Relationship relationship;
+    public it.anggen.model.field.Field field;
+    public List<AnnotationAttribute> annotationAttributeList;
 
     public java.lang.Long getAnnotationId() {
         return this.annotationId;
@@ -29,20 +29,12 @@ public class AnnotationSearchBean {
         this.annotationType=annotationType;
     }
 
-    public List<AnnotationAttribute> getAnnotationAttributeList() {
-        return this.annotationAttributeList;
+    public it.anggen.model.field.EnumField getEnumField() {
+        return this.enumField;
     }
 
-    public void setAnnotationAttributeList(List<AnnotationAttribute> annotationAttributeList) {
-        this.annotationAttributeList=annotationAttributeList;
-    }
-
-    public it.anggen.model.field.Field getField() {
-        return this.field;
-    }
-
-    public void setField(it.anggen.model.field.Field field) {
-        this.field=field;
+    public void setEnumField(it.anggen.model.field.EnumField enumField) {
+        this.enumField=enumField;
     }
 
     public it.anggen.model.relationship.Relationship getRelationship() {
@@ -53,12 +45,20 @@ public class AnnotationSearchBean {
         this.relationship=relationship;
     }
 
-    public it.anggen.model.field.EnumField getEnumField() {
-        return this.enumField;
+    public it.anggen.model.field.Field getField() {
+        return this.field;
     }
 
-    public void setEnumField(it.anggen.model.field.EnumField enumField) {
-        this.enumField=enumField;
+    public void setField(it.anggen.model.field.Field field) {
+        this.field=field;
+    }
+
+    public List<AnnotationAttribute> getAnnotationAttributeList() {
+        return this.annotationAttributeList;
+    }
+
+    public void setAnnotationAttributeList(List<AnnotationAttribute> annotationAttributeList) {
+        this.annotationAttributeList=annotationAttributeList;
     }
 
 }

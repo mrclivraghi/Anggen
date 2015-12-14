@@ -2,23 +2,19 @@
 package it.anggen.model.security;
 
 import java.util.List;
-
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
 import it.anggen.model.security.RestrictionEntity;
 import it.anggen.model.security.RestrictionEntityGroup;
 import it.anggen.model.security.RestrictionField;
 import it.anggen.model.security.User;
 import it.anggen.utils.annotation.MaxDescendantLevel;
-
 import org.hibernate.annotations.Type;
 
 @Entity
@@ -27,35 +23,35 @@ import org.hibernate.annotations.Type;
 @MaxDescendantLevel(100)
 public class Role {
 
-    public final static Long staticEntityId = 310L;
+    public final static Long staticEntityId = 6L;
     @javax.persistence.Column(name = "role_id")
     @it.anggen.utils.annotation.Priority(1)
     @it.anggen.utils.annotation.DescriptionField
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue
     private Integer roleId;
     @javax.persistence.Column(name = "role")
     @it.anggen.utils.annotation.Priority(2)
     @it.anggen.utils.annotation.DescriptionField
     private String role;
-    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "roleList")
-    @it.anggen.utils.annotation.Priority(4)
-    private List<User> userList;
     @OneToMany(fetch = FetchType.EAGER)
-    @Type(type = "it.anggen.model.security.RestrictionEntity")
+    @Type(type = "it.anggen.model.security.RestrictionEntityGroup")
     @JoinColumn(name = "role_id_role")
     @it.anggen.utils.annotation.Priority(4)
-    private List<RestrictionEntity> restrictionEntityList;
+    private List<RestrictionEntityGroup> restrictionEntityGroupList;
     @OneToMany(fetch = FetchType.EAGER)
     @Type(type = "it.anggen.model.security.RestrictionField")
     @JoinColumn(name = "role_id_role")
     @it.anggen.utils.annotation.Priority(4)
     private List<RestrictionField> restrictionFieldList;
     @OneToMany(fetch = FetchType.EAGER)
-    @Type(type = "it.anggen.model.security.RestrictionEntityGroup")
+    @Type(type = "it.anggen.model.security.RestrictionEntity")
     @JoinColumn(name = "role_id_role")
     @it.anggen.utils.annotation.Priority(4)
-    private List<RestrictionEntityGroup> restrictionEntityGroupList;
+    private List<RestrictionEntity> restrictionEntityList;
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "roleList")
+    @it.anggen.utils.annotation.Priority(4)
+    private List<User> userList;
 
     public Integer getRoleId() {
         return this.roleId;
@@ -73,20 +69,12 @@ public class Role {
         this.role=role;
     }
 
-    public List<User> getUserList() {
-        return this.userList;
+    public List<RestrictionEntityGroup> getRestrictionEntityGroupList() {
+        return this.restrictionEntityGroupList;
     }
 
-    public void setUserList(List<User> userList) {
-        this.userList=userList;
-    }
-
-    public List<RestrictionEntity> getRestrictionEntityList() {
-        return this.restrictionEntityList;
-    }
-
-    public void setRestrictionEntityList(List<RestrictionEntity> restrictionEntityList) {
-        this.restrictionEntityList=restrictionEntityList;
+    public void setRestrictionEntityGroupList(List<RestrictionEntityGroup> restrictionEntityGroupList) {
+        this.restrictionEntityGroupList=restrictionEntityGroupList;
     }
 
     public List<RestrictionField> getRestrictionFieldList() {
@@ -97,12 +85,20 @@ public class Role {
         this.restrictionFieldList=restrictionFieldList;
     }
 
-    public List<RestrictionEntityGroup> getRestrictionEntityGroupList() {
-        return this.restrictionEntityGroupList;
+    public List<RestrictionEntity> getRestrictionEntityList() {
+        return this.restrictionEntityList;
     }
 
-    public void setRestrictionEntityGroupList(List<RestrictionEntityGroup> restrictionEntityGroupList) {
-        this.restrictionEntityGroupList=restrictionEntityGroupList;
+    public void setRestrictionEntityList(List<RestrictionEntity> restrictionEntityList) {
+        this.restrictionEntityList=restrictionEntityList;
+    }
+
+    public List<User> getUserList() {
+        return this.userList;
+    }
+
+    public void setUserList(List<User> userList) {
+        this.userList=userList;
     }
 
 }

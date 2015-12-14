@@ -239,20 +239,8 @@ public class BeanToDBConverter {
 				entity.setDescendantMaxLevel(1);
 			entity.setEntityId(getEntityId(entity));
 			//System.out.println("cerco di salvare "+entity.getName()+" con id "+entity.getEntityId()+" ma sul db ho "+savedEntity.getEntityId());
-			try {
-				Thread.sleep(5000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			entityRepository.save(entity);
+				entityRepository.save(entity);
 			//System.out.println("Ho salvato "+entity.getName()+" con id "+entity.getEntityId()+ " ma sul db ho "+savedEntity.getEntityId());
-			try {
-				Thread.sleep(5000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 			entityMap.put(reflectionManager.parseName(), entity);
 		}
 		

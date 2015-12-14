@@ -172,7 +172,7 @@ public class BeanToDBConverter {
 		Map<String,Entity> entityMap = new HashMap<String,Entity>();
 		Map<String,EnumEntity> enumEntityMap = new HashMap<String,EnumEntity>();
 		Set<Class<?>> mainPackageClassSet = ReflectionManager.getClassInPackage(modelPackage);
-		if (!projectName.equals("anggen"))
+		if (!projectName.equals("anggen") && !packageList.contains("it.anggen.model.security"))
 		{
 			List<String> securityPackageList = ReflectionManager.getSubPackages("it.anggen.model.security");
 			packageList.addAll(securityPackageList);
@@ -395,7 +395,7 @@ public class BeanToDBConverter {
 										enumValueRepository.save(metaEnumValue);
 										metaEnumValueList.add(metaEnumValue);
 									}
-									enumEntity.setEnumValueList(metaEnumValueList);
+									enumEntity.setEnumValueList( metaEnumValueList);
 									enumEntityRepository.save(enumEntity);
 									enumEntityList.add(enumEntity);
 								}
@@ -533,6 +533,7 @@ public class BeanToDBConverter {
 							AnnotationAttribute annotationAttribute = new AnnotationAttribute();
 							annotationAttribute.setProperty(method.getName());
 							annotationAttribute.setValue(value.toString());
+							metaEntityAttribute.setPriority((Integer) value);
 							annotationAttribute.setAnnotation(metaAnnotation);
 							annotationAttributeRepository.save(annotationAttribute);
 							annotationAttributeList.add(annotationAttribute);

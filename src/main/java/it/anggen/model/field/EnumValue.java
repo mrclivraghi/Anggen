@@ -19,7 +19,8 @@ import it.anggen.utils.annotation.MaxDescendantLevel;
 @MaxDescendantLevel(100)
 public class EnumValue {
 
-    public final static java.lang.Long staticEntityId = 313L;
+   
+	public final static java.lang.Long staticEntityId = 313L;
     @javax.persistence.Column(name = "name")
     @it.anggen.utils.annotation.DescriptionField
     @it.anggen.utils.annotation.Priority(2)
@@ -77,5 +78,12 @@ public class EnumValue {
 	public void setEnumEntity(EnumEntity enumEntity) {
 		this.enumEntity = enumEntity;
 	}
+	
+	 @Override
+		public boolean equals(Object obj) {
+			// TODO Auto-generated method stub
+			return getEnumValueId().equals(((EnumValue)obj).getEnumValueId());
+		}
+
 
 }

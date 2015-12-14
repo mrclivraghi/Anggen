@@ -16,6 +16,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Type;
+
 
 @Entity
 @Table(schema="meta",name="enum_entity")
@@ -28,14 +30,14 @@ public class EnumEntity {
 	@DescriptionField
 	private String name;
 	
-	@OneToMany(fetch=FetchType.EAGER)
-	@JoinColumn(name="enum_entity_id_enum_entity")
+	@OneToMany(fetch=FetchType.EAGER,mappedBy="enumEntity")
+	@Type(type = "it.anggen.model.field.EnumValue")
 	private List<EnumValue> enumValueList;
 
-	@OneToMany(fetch=FetchType.EAGER)
-	@JoinColumn(name="enum_entity_id_enum_entity")
+	/*@OneToMany(fetch=FetchType.EAGER,mappedBy="enumEntity")
+	@Type(type = "it.anggen.model.field.EnumField")
 	private List<EnumField> enumFieldList;
-
+*/
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="project_id_project")
 	private Project project;
@@ -89,14 +91,14 @@ public class EnumEntity {
 	/**
 	 * @return the enumFieldList
 	 */
-	public List<EnumField> getEnumFieldList() {
+/*	public List<EnumField> getEnumFieldList() {
 		return enumFieldList;
 	}
 
 	/**
 	 * @param enumFieldList the enumFieldList to set
 	 */
-	public void setEnumFieldList(List<EnumField> enumFieldList) {
+	/*public void setEnumFieldList(List<EnumField> enumFieldList) {
 		this.enumFieldList = enumFieldList;
 	}
 

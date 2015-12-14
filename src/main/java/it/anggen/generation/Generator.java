@@ -153,8 +153,7 @@ public class Generator {
 			throw new Exception();
 		this.project=projectList.get(0);
 		this.entityGroupList=project.getEntityGroupList();
-		List<EnumEntity> enumEntityList = enumEntityRepository.findByAll();
-		this.enumEntityList=enumEntityList;
+		this.enumEntityList=project.getEnumEntityList();
 		this.modelEntityList=new ArrayList<Entity>();
 		if (entityGroupList!=null)
 		for (EntityGroup entityGroup: entityGroupList)

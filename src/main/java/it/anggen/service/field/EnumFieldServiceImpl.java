@@ -46,11 +46,6 @@ public class EnumFieldServiceImpl
     @Override
     @Transactional
     public it.anggen.model.field.EnumField update(it.anggen.model.field.EnumField enumField) {
-        if (enumField.getEnumValueList()!=null)
-        for (it.anggen.model.field.EnumValue enumValue: enumField.getEnumValueList())
-        {
-        enumValue.setEnumField(enumField);
-        }
         if (enumField.getAnnotationList()!=null)
         for (it.anggen.model.field.Annotation annotation: enumField.getAnnotationList())
         {

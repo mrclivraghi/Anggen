@@ -42,13 +42,6 @@ public class EnumValueServiceImpl
     @Transactional
     public it.anggen.model.field.EnumValue update(it.anggen.model.field.EnumValue enumValue) {
         it.anggen.model.field.EnumValue returnedEnumValue=enumValueRepository.save(enumValue);
-        if (enumValue.getEnumField()!=null)
-        {
-        List<it.anggen.model.field.EnumValue> enumValueList = enumValueRepository.findByEnumField( enumValue.getEnumField());
-        if (!enumValueList.contains(returnedEnumValue))
-        enumValueList.add(returnedEnumValue);
-        returnedEnumValue.getEnumField().setEnumValueList(enumValueList);
-        }
          return returnedEnumValue;
     }
 

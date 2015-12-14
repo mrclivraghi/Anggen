@@ -124,13 +124,6 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     }
 
     private void getRightMapping(it.anggen.model.field.EnumField enumField) {
-        if (enumField.getEnumValueList()!=null)
-        for (it.anggen.model.field.EnumValue enumValue :enumField.getEnumValueList())
-
-        {
-
-        enumValue.setEnumField(null);
-        }
         if (enumField.getEntity()!=null)
         {
         enumField.getEntity().setRelationshipList(null);
@@ -160,8 +153,6 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     }
 
     private void rebuildSecurityMapping(it.anggen.model.field.EnumField enumField) {
-        if (securityEnabled && !securityService.hasPermission(it.anggen.model.field.EnumValue.staticEntityId, it.anggen.model.RestrictionType.SEARCH))
-        enumField.setEnumValueList(enumFieldService.findById(enumField.getEnumFieldId()).get(0).getEnumValueList());
         if (securityEnabled && !securityService.hasPermission(it.anggen.model.entity.Entity.staticEntityId, it.anggen.model.RestrictionType.SEARCH))
         enumField.setEntity(enumFieldService.findById(enumField.getEnumFieldId()).get(0).getEntity());
         if (securityEnabled && !securityService.hasPermission(it.anggen.model.field.Annotation.staticEntityId, it.anggen.model.RestrictionType.SEARCH))
@@ -179,9 +170,6 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     }
 
     private void getSecurityMapping(it.anggen.model.field.EnumField enumField) {
-        if (securityEnabled && enumField.getEnumValueList()!=null && !securityService.hasPermission(it.anggen.model.field.EnumValue.staticEntityId, it.anggen.model.RestrictionType.SEARCH) )
-        enumField.setEnumValueList(null);
-
         if (securityEnabled && enumField.getEntity()!=null  && !securityService.hasPermission(it.anggen.model.entity.Entity.staticEntityId, it.anggen.model.RestrictionType.SEARCH) )
         enumField.setEntity(null);
 

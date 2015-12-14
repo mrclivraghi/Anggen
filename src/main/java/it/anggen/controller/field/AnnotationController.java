@@ -147,7 +147,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         }
         if (annotation.getEnumField()!=null)
         {
-        annotation.getEnumField().setEnumValueList(null);
+        annotation.getEnumField().setEnumEntity(null);
         annotation.getEnumField().setEntity(null);
         annotation.getEnumField().setAnnotationList(null);
         annotation.getEnumField().setTab(null);

@@ -139,7 +139,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         {
 
-        enumField.setEnumValueList(null);
+        enumField.setEnumEntity(null);
         enumField.setEntity(null);
         enumField.setAnnotationList(null);
         enumField.setTab(null);

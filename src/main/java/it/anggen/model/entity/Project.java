@@ -34,11 +34,18 @@ public class Project {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @it.anggen.utils.annotation.Priority(1)
     private Integer projectId;
+    
     @OneToMany(fetch = FetchType.EAGER)
     @Type(type = "it.anggen.model.entity.EntityGroup")
     @JoinColumn(name = "project_id_project")
     @it.anggen.utils.annotation.Priority(4)
     private List<EntityGroup> entityGroupList;
+    
+    @OneToMany(fetch = FetchType.EAGER)
+    @Type(type = "it.anggen.model.entity.EnumEntity")
+    @JoinColumn(name = "project_id_project")
+    @it.anggen.utils.annotation.Priority(4)
+    private List<EnumEntity> enumEntityList;
 
     public String getName() {
         return this.name;
@@ -63,5 +70,19 @@ public class Project {
     public void setEntityGroupList(List<EntityGroup> entityGroupList) {
         this.entityGroupList=entityGroupList;
     }
+
+	/**
+	 * @return the enumEntityList
+	 */
+	public List<EnumEntity> getEnumEntityList() {
+		return enumEntityList;
+	}
+
+	/**
+	 * @param enumEntityList the enumEntityList to set
+	 */
+	public void setEnumEntityList(List<EnumEntity> enumEntityList) {
+		this.enumEntityList = enumEntityList;
+	}
 
 }

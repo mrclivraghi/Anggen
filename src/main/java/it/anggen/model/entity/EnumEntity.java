@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -34,6 +35,10 @@ public class EnumEntity {
 	@OneToMany(fetch=FetchType.EAGER)
 	@JoinColumn(name="enum_entity_id_enum_entity")
 	private List<EnumField> enumFieldList;
+
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="project_id_project")
+	private Project project;
 	
 	public EnumEntity() {
 		// TODO Auto-generated constructor stub
@@ -93,6 +98,20 @@ public class EnumEntity {
 	 */
 	public void setEnumFieldList(List<EnumField> enumFieldList) {
 		this.enumFieldList = enumFieldList;
+	}
+
+	/**
+	 * @return the project
+	 */
+	public Project getProject() {
+		return project;
+	}
+
+	/**
+	 * @param project the project to set
+	 */
+	public void setProject(Project project) {
+		this.project = project;
 	}
 
 }

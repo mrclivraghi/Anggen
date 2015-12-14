@@ -38,6 +38,7 @@ import it.anggen.model.FieldType;
 import it.anggen.model.RelationshipType;
 import it.anggen.model.entity.Entity;
 import it.anggen.model.entity.EntityGroup;
+import it.anggen.model.entity.EnumEntity;
 import it.anggen.model.entity.Project;
 import it.anggen.model.field.AnnotationAttribute;
 import it.anggen.model.field.EnumField;
@@ -51,6 +52,7 @@ import it.anggen.model.security.Role;
 import it.anggen.model.security.User;
 import it.anggen.repository.entity.EntityGroupRepository;
 import it.anggen.repository.entity.EntityRepository;
+import it.anggen.repository.entity.EnumEntityRepository;
 import it.anggen.repository.entity.ProjectRepository;
 import it.anggen.repository.entity.TabRepository;
 import it.anggen.repository.field.AnnotationAttributeRepository;
@@ -97,6 +99,9 @@ public class BeanToDBConverter {
 	
 	@Autowired
 	RelationshipRepository relationshipRepository;
+	
+	@Autowired
+	EnumEntityRepository enumEntityRepository;
 	
 	@Autowired
 	EnumFieldRepository enumFieldRepository;
@@ -165,6 +170,7 @@ public class BeanToDBConverter {
 		init();
 		List<String> packageList= ReflectionManager.getSubPackages(modelPackage);
 		Map<String,Entity> entityMap = new HashMap<String,Entity>();
+		Map<String,EnumEntity> enumEntityMap = new HashMap<String,EnumEntity>();
 		Set<Class<?>> mainPackageClassSet = ReflectionManager.getClassInPackage(modelPackage);
 		if (!projectName.equals("anggen"))
 		{
@@ -271,6 +277,7 @@ public class BeanToDBConverter {
 				restrictionEntityGroup.setRole(adminRole);
 				restrictionEntityGroupRepository.save(restrictionEntityGroup);
 				List<RestrictionEntityGroup> restrictionEntityGroupList = new ArrayList<RestrictionEntityGroup>();
+				List<EnumEntity> enumEntityList= new ArrayList<EnumEntity>();
 				restrictionEntityGroupList.add(restrictionEntityGroup);
 				entityGroup.setRestrictionEntityGroupList(restrictionEntityGroupList);
 				
@@ -377,9 +384,39 @@ public class BeanToDBConverter {
 							} // fine is known class
 							if(field.getIsEnum())
 							{
+								EnumEntity enumEntity= null;
+								ReflectionManager enumReflection = new ReflectionManager(field.getFieldClass());
+								String enumEntityName=enumReflection.parseName();
+								if (enumEntityMap.get(enumEntityName)!=null)
+								{
+									enumEntity=enumEntityMap.get(enumEntityName);
+								} else
+								{ //create enumEntity
+									enumEntity= new EnumEntity();
+									enumEntity.setName(enumEntityName);
+									enumEntity.setProject(project);
+									enumEntityRepository.save(enumEntity);
+									List<String> enumValueList = field.getEnumValuesList();
+									List<EnumValue> metaEnumValueList = new ArrayList<EnumValue>();
+									for (int i=0; i<enumValueList.size(); i++)
+									{
+										EnumValue metaEnumValue= new EnumValue();
+										metaEnumValue.setName(enumValueList.get(i));
+										metaEnumValue.setEnumEntity(enumEntity);
+										metaEnumValue.setValue(i);
+										enumValueRepository.save(metaEnumValue);
+										metaEnumValueList.add(metaEnumValue);
+									}
+									enumEntity.setEnumValueList(metaEnumValueList);
+									enumEntityRepository.save(enumEntity);
+									enumEntityList.add(enumEntity);
+								}
+								
+								
 								EnumField enumField = new EnumField();
 								enumField.setName(field.getName());
 								enumField.setEntity(entity);
+								enumField.setEnumEntity(enumEntity);
 								enumFieldRepository.save(enumField);
 								List<it.anggen.model.field.Annotation> annotationList = new ArrayList<it.anggen.model.field.Annotation>();
 								convertAnnotation(field, enumField, annotationList);
@@ -401,22 +438,12 @@ public class BeanToDBConverter {
 									annotationRepository.save(priority);
 									enumField.getAnnotationList().add(priority);
 								}
-								List<String> enumValueList = field.getEnumValuesList();
-								List<EnumValue> metaEnumValueList = new ArrayList<EnumValue>();
-								for (int i=0; i<enumValueList.size(); i++)
-								{
-									EnumValue metaEnumValue= new EnumValue();
-									metaEnumValue.setName(enumValueList.get(i));
-									metaEnumValue.setEnumField(enumField);
-									metaEnumValue.setValue(i);
-									enumValueRepository.save(metaEnumValue);
-									metaEnumValueList.add(metaEnumValue);
-								}
-								enumField.setEnumValueList(metaEnumValueList);
 								enumFieldRepository.save(enumField);
 								enumFieldList.add(enumField);
 								tabEnumFieldList.add(enumField);
 								continue;
+								
+								//end enum Field
 							}
 							{ //relationship
 								Relationship relationship = new Relationship();

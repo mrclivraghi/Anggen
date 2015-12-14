@@ -788,7 +788,7 @@ public class JsGenerator {
 			for (EnumField enumField: entity.getEnumFieldList())
 			{
 				sb.append(entity.getName()+"Service.childrenList."+enumField.getName()+"List=[");
-				for (EnumValue enumValue: enumField.getEnumValueList())
+				for (EnumValue enumValue: enumField.getEnumEntity().getEnumValueList())
 				{
 					sb.append("\""+enumValue.getName()+"\",");
 				}

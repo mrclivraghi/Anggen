@@ -759,11 +759,11 @@ public class ReflectionManager {
 	
 	
 	public static void main(String[] args)
-	{/*
-		ReflectionManager reflectionManager= new ReflectionManager(Example.class);
+	{
+		ReflectionManager reflectionManager= new ReflectionManager(it.anggen.model.entity.Entity.class);
 		for (Field field: reflectionManager.getFieldList())
 		{
-			//System.out.println(field.getName()+"-"+reflectionManager.isTimeField(field));
+			System.out.println(field.getName()+"-"+field.getFieldClass());
 			Annotation[] list= field.getAnnotationList();
 			for (int i=0; i<list.length; i++)
 				System.out.println(field.getName()+"-"+list[i].annotationType().getName());
@@ -778,7 +778,7 @@ public class ReflectionManager {
 			System.out.println(myClass.getClassClass().getName()+"---"+myClass.getCompositeClass().fullName());
 		}
 		
-		//reflectionManager= new ReflectionManager(Sex.class);
+		/*reflectionManager= new ReflectionManager(Sex.class);
 		//List<Field> fieldList=reflectionManager.getFieldList();
 		//System.out.println(Sex.class.getEnumConstants());
 		Sex[] sec= Sex.class.getEnumConstants();

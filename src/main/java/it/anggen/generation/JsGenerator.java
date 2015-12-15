@@ -263,6 +263,8 @@ public class JsGenerator {
 	 */
 	private void changeChildrenVisibility(StringBuilder stringBuilder,Boolean show)
 	{
+		if (lastLevel)
+			return;
 		if (isParent)
 		{
 			if (descendantEntityList!=null && descendantEntityList.size()>0)
@@ -602,9 +604,10 @@ public class JsGenerator {
 		Boolean mainIsParent= isParent;
 		String mainParentName = parentEntityName;
 		Boolean mainEntityList = entityList;
+		EntityManager mainEntityManager= new EntityManagerImpl(mainEntity);
 		for (Relationship relationship: relationshipList)
 		{
-			init(relationship.getEntityTarget(), false, entityName,true,entityManager.isLastLevel(relationship.getEntityTarget()));
+			init(relationship.getEntityTarget(), false, entityName,true,mainEntityManager.isLastLevel(relationship.getEntityTarget()));
 			sb.append(getPagination());
 		}
 		init(mainEntity,isParent,parentEntityName,entityList,entityManager.isLastLevel(mainEntity));
@@ -718,14 +721,20 @@ public class JsGenerator {
 		else
 			sb.append(",data: $scope.selectedEntity."+entityName+"List\n");
 		sb.append(" };\n");
-
+		if (parentEntityName!=null && parentEntityName.equals("entity"))
+			System.out.println("**tento di generare** "+entityName+" - parent "+parentEntityName+" - lastLevel"+lastLevel+"- isParent "+isParent);
+			
+		if (lastLevel && !isParent) 
+			return sb.toString();
+		if (parentEntityName!=null && parentEntityName.equals("entity"))
+		System.out.println("**GENERO** "+entityName+" - parent "+parentEntityName+" - lastLevel"+lastLevel+"- isParent "+isParent);
 		//on row selection
 		sb.append("$scope."+entityName+ (entityList? "List":"")+"GridOptions.onRegisterApi = function(gridApi){\n");
 		sb.append("$scope."+entityName+"GridApi = gridApi;");
 		sb.append("gridApi.selection.on.rowSelectionChanged($scope,function(row){\n");
 		if (isParent)
 			changeChildrenVisibility(sb, false);
-
+		
 		sb.append("if (row.isSelected)\n");
 		sb.append("{\n");
 		//if (isParent)
@@ -734,17 +743,19 @@ public class JsGenerator {
 			
 		//} else
 		//{
+		
 			sb.append(Utility.getEntityCallName(entityName)+"Service.searchOne(row.entity).then(function(response) { \n");
 			sb.append("console.log(response.data);\n");
 			sb.append(Utility.getEntityCallName(entityName)+"Service.setSelectedEntity(response.data[0]);\n");
+
 			sb.append("});\n");
-		//}
-		sb.append("$('#"+entityName+"Tabs li:eq(0) a').tab('show');\n");
-		sb.append("}\n");
-		sb.append("else \n");
-		sb.append(Utility.getEntityCallName(entityName)+"Service.setSelectedEntity(null);\n");
-		sb.append(Utility.getEntityCallName(entityName)+"Service.selectedEntity.show = row.isSelected;\n");
-		sb.append("});\n");
+			//}
+			sb.append("$('#"+entityName+"Tabs li:eq(0) a').tab('show');\n");
+			sb.append("}\n");
+			sb.append("else \n");
+			sb.append(Utility.getEntityCallName(entityName)+"Service.setSelectedEntity(null);\n");
+			sb.append(Utility.getEntityCallName(entityName)+"Service.selectedEntity.show = row.isSelected;\n");
+			sb.append("});\n");
 		sb.append("  };\n");
 
 		return sb.toString();
@@ -854,10 +865,14 @@ public class JsGenerator {
 		//JsGenerator jsGenerator = new JsGenerator(entity, true,null,null);
 		buildJS.append(getSecurity());
 		buildJS.append(generateService());
+		if (entityName.equals("entity"))
+			System.out.println("");
 		buildJS.append(generateController());
 		List<Entity> descendantEntityList = entityManager.getDescendantEntities();
 		Set<Entity> descendantEntitySet = new HashSet<Entity>();
 		descendantEntitySet.addAll(descendantEntityList);
+		
+		
 		for (Entity descendantEntity : descendantEntitySet)
 		{
 			init(descendantEntity,false,entity.getName(),true,entityManager.isLastLevel(descendantEntity));

@@ -29,9 +29,11 @@ public class UserManager {
 	
 	public List<RestrictionEntityGroup> getRestrictionEntityGroupList(){
 		List<RestrictionEntityGroup> restrictionList = new ArrayList<RestrictionEntityGroup>();
+		if (user.getRoleList()!=null)
 		for (Role role: user.getRoleList())
 		{
-			restrictionList.addAll(role.getRestrictionEntityGroupList());
+			if (role.getRestrictionEntityGroupList()!=null)
+				restrictionList.addAll(role.getRestrictionEntityGroupList());
 		}
 		return restrictionList;
 	}

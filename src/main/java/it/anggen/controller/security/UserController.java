@@ -2,11 +2,9 @@
 package it.anggen.controller.security;
 
 import java.util.List;
-
 import it.anggen.searchbean.security.UserSearchBean;
 import it.anggen.security.SecurityService;
 import it.anggen.service.security.UserService;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -129,10 +127,10 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         {
 
-        role.setUserList(null);
-        role.setRestrictionEntityList(null);
-        role.setRestrictionFieldList(null);
         role.setRestrictionEntityGroupList(null);
+        role.setRestrictionFieldList(null);
+        role.setRestrictionEntityList(null);
+        role.setUserList(null);
         }
     }
 

@@ -24,7 +24,7 @@ public class EnumValueServiceImpl
 
     @Override
     public List<it.anggen.model.field.EnumValue> find(EnumValueSearchBean enumValue) {
-        return enumValueRepository.findByEnumValueIdAndNameAndValueAndEnumField(enumValue.getEnumValueId(),enumValue.getName(),enumValue.getValue(),enumValue.getEnumField());
+        return enumValueRepository.findByEnumValueIdAndValueAndNameAndEnumEntity(enumValue.getEnumValueId(),enumValue.getValue(),enumValue.getName(),enumValue.getEnumEntity());
     }
 
     @Override
@@ -42,12 +42,12 @@ public class EnumValueServiceImpl
     @Transactional
     public it.anggen.model.field.EnumValue update(it.anggen.model.field.EnumValue enumValue) {
         it.anggen.model.field.EnumValue returnedEnumValue=enumValueRepository.save(enumValue);
-        if (enumValue.getEnumField()!=null)
+        if (enumValue.getEnumEntity()!=null)
         {
-        List<it.anggen.model.field.EnumValue> enumValueList = enumValueRepository.findByEnumField( enumValue.getEnumField());
+        List<it.anggen.model.field.EnumValue> enumValueList = enumValueRepository.findByEnumEntity( enumValue.getEnumEntity());
         if (!enumValueList.contains(returnedEnumValue))
         enumValueList.add(returnedEnumValue);
-        returnedEnumValue.getEnumField().setEnumValueList(enumValueList);
+        returnedEnumValue.getEnumEntity().setEnumValueList(enumValueList);
         }
          return returnedEnumValue;
     }

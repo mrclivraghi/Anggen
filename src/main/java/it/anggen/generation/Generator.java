@@ -5,8 +5,10 @@ import it.anggen.utils.ReflectionManager;
 import it.anggen.utils.Utility;
 import it.anggen.model.entity.Entity;
 import it.anggen.model.entity.EntityGroup;
+import it.anggen.model.entity.EnumEntity;
 import it.anggen.model.entity.Project;
 import it.anggen.model.field.EnumField;
+import it.anggen.repository.entity.EnumEntityRepository;
 import it.anggen.repository.entity.ProjectRepository;
 import it.anggen.repository.field.EnumFieldRepository;
 
@@ -102,7 +104,7 @@ public class Generator {
 	
 	private List<Entity> modelEntityList;
 	
-	private List<EnumField> enumFieldList;
+	private List<EnumEntity> enumEntityList;
 	
 	private List<EntityGroup> entityGroupList;
 	
@@ -110,7 +112,7 @@ public class Generator {
 	ProjectRepository projectRepository;
 	
 	@Autowired
-	EnumFieldRepository enumFieldRepository;
+	EnumEntityRepository enumEntityRepository;
 	
 	@Autowired
 	RestGenerator restGenerator;
@@ -151,8 +153,7 @@ public class Generator {
 			throw new Exception();
 		this.project=projectList.get(0);
 		this.entityGroupList=project.getEntityGroupList();
-		List<EnumField> enumFieldList = enumFieldRepository.findByEnumFieldIdAndPriorityAndNameAndEnumValueAndEntityAndAnnotationAndTab(null, null, null, null, null, null, null);
-		this.enumFieldList=enumFieldList;
+		this.enumEntityList=project.getEnumEntityList();
 		this.modelEntityList=new ArrayList<Entity>();
 		if (entityGroupList!=null)
 		for (EntityGroup entityGroup: entityGroupList)
@@ -193,9 +194,9 @@ public class Generator {
 		init();
 		if (generateRest)
 		{
-			for (EnumField enumField: enumFieldList)
+			for (EnumEntity enumEntity: enumEntityList)
 			{
-				enumClassGenerator.init(enumField);
+				enumClassGenerator.init(enumEntity);
 				enumClassGenerator.getModelClass();
 			}
 			for (Entity modelEntity: modelEntityList)

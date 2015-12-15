@@ -725,17 +725,17 @@ public class JsGenerator {
 
 		sb.append("if (row.isSelected)\n");
 		sb.append("{\n");
-		if (isParent)
-		{
-			sb.append(Utility.getEntityCallName(entityName)+"Service.setSelectedEntity(row.entity);\n");
+		//if (isParent)
+		//{
+			//sb.append(Utility.getEntityCallName(entityName)+"Service.setSelectedEntity(row.entity);\n");
 			
-		} else
-		{
+		//} else
+		//{
 			sb.append(Utility.getEntityCallName(entityName)+"Service.searchOne(row.entity).then(function(response) { \n");
 			sb.append("console.log(response.data);\n");
 			sb.append(Utility.getEntityCallName(entityName)+"Service.setSelectedEntity(response.data[0]);\n");
 			sb.append("});\n");
-		}
+		//}
 		sb.append("$('#"+entityName+"Tabs li:eq(0) a').tab('show');\n");
 		sb.append("}\n");
 		sb.append("else \n");
@@ -788,7 +788,7 @@ public class JsGenerator {
 			for (EnumField enumField: entity.getEnumFieldList())
 			{
 				sb.append(entity.getName()+"Service.childrenList."+enumField.getName()+"List=[");
-				for (EnumValue enumValue: enumField.getEnumValueList())
+				for (EnumValue enumValue: enumField.getEnumEntity().getEnumValueList())
 				{
 					sb.append("\""+enumValue.getName()+"\",");
 				}

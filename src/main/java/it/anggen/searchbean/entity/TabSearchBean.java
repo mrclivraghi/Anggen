@@ -10,10 +10,10 @@ public class TabSearchBean {
 
     public java.lang.Long tabId;
     public java.lang.String name;
-    public it.anggen.model.entity.Entity entity;
-    public List<Field> fieldList;
-    public List<Relationship> relationshipList;
     public List<EnumField> enumFieldList;
+    public List<Relationship> relationshipList;
+    public List<Field> fieldList;
+    public it.anggen.model.entity.Entity entity;
 
     public java.lang.Long getTabId() {
         return this.tabId;
@@ -31,20 +31,12 @@ public class TabSearchBean {
         this.name=name;
     }
 
-    public it.anggen.model.entity.Entity getEntity() {
-        return this.entity;
+    public List<EnumField> getEnumFieldList() {
+        return this.enumFieldList;
     }
 
-    public void setEntity(it.anggen.model.entity.Entity entity) {
-        this.entity=entity;
-    }
-
-    public List<Field> getFieldList() {
-        return this.fieldList;
-    }
-
-    public void setFieldList(List<Field> fieldList) {
-        this.fieldList=fieldList;
+    public void setEnumFieldList(List<EnumField> enumFieldList) {
+        this.enumFieldList=enumFieldList;
     }
 
     public List<Relationship> getRelationshipList() {
@@ -55,12 +47,20 @@ public class TabSearchBean {
         this.relationshipList=relationshipList;
     }
 
-    public List<EnumField> getEnumFieldList() {
-        return this.enumFieldList;
+    public List<Field> getFieldList() {
+        return this.fieldList;
     }
 
-    public void setEnumFieldList(List<EnumField> enumFieldList) {
-        this.enumFieldList=enumFieldList;
+    public void setFieldList(List<Field> fieldList) {
+        this.fieldList=fieldList;
+    }
+
+    public it.anggen.model.entity.Entity getEntity() {
+        return this.entity;
+    }
+
+    public void setEntity(it.anggen.model.entity.Entity entity) {
+        this.entity=entity;
     }
 
 }

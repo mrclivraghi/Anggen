@@ -26,7 +26,7 @@ public class UserServiceImpl
 
     @Override
     public List<it.anggen.model.security.User> find(UserSearchBean user) {
-        return userRepository.findByUserIdAndPasswordAndEnabledAndUsernameAndRole(user.getUserId(),user.getPassword(),user.getEnabled(),user.getUsername(),user.getRoleList()==null? null :user.getRoleList().get(0));
+        return userRepository.findByUserIdAndEnabledAndUsernameAndPasswordAndRole(user.getUserId(),user.getEnabled(),user.getUsername(),user.getPassword(),user.getRoleList()==null? null :user.getRoleList().get(0));
     }
 
     @Override

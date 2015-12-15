@@ -33,6 +33,7 @@ import com.sun.codemodel.JVar;
 
 import it.anggen.utils.OracleNamingStrategy;
 import it.anggen.utils.Utility;
+import it.anggen.model.entity.EnumEntity;
 import it.anggen.model.field.EnumField;
 import it.anggen.model.field.EnumValue;
 import it.anggen.model.field.Field;
@@ -41,7 +42,7 @@ import it.anggen.model.relationship.Relationship;
 @Service
 public class EnumClassGenerator {
 
-	private EnumField enumField;
+	private EnumEntity enumEntity;
 	
 	@Autowired
 	private Generator generator;
@@ -51,9 +52,9 @@ public class EnumClassGenerator {
 		
 	}
 	
-	public void init(EnumField enumField) {
+	public void init(EnumEntity enumEntity) {
 		// TODO Auto-generated constructor stub
-		this.enumField=enumField;
+		this.enumEntity=enumEntity;
 	}
 	private void saveFile(JCodeModel codeModel)
 	{
@@ -71,7 +72,7 @@ public class EnumClassGenerator {
 	public JDefinedClass getModelClass()
 	{
 		JCodeModel	codeModel = new JCodeModel();
-		String className = Utility.getFirstUpper(enumField.getName());
+		String className = Utility.getFirstUpper(enumEntity.getName());
 		String lowerClassName = Utility.getFirstLower(className);
 		JDefinedClass myClass= null;
 		try {
@@ -81,7 +82,7 @@ public class EnumClassGenerator {
 			e.printStackTrace();
 		}
 		OracleNamingStrategy namingStrategy = new OracleNamingStrategy();
-		for (EnumValue enumValue : enumField.getEnumValueList())
+		for (EnumValue enumValue : enumEntity.getEnumValueList())
 		{
 			JEnumConstant enumConstant =myClass.enumConstant(enumValue.getName());
 			enumConstant.arg(JExpr.lit(enumValue.getValue()));

@@ -6,11 +6,11 @@ public class RestrictionEntitySearchBean {
 
     public java.lang.Long restrictionEntityId;
     public java.lang.Boolean canCreate;
-    public java.lang.Boolean canDelete;
-    public java.lang.Boolean canUpdate;
     public java.lang.Boolean canSearch;
-    public it.anggen.model.entity.Entity entity;
+    public java.lang.Boolean canUpdate;
+    public java.lang.Boolean canDelete;
     public it.anggen.model.security.Role role;
+    public it.anggen.model.entity.Entity entity;
 
     public java.lang.Long getRestrictionEntityId() {
         return this.restrictionEntityId;
@@ -28,12 +28,12 @@ public class RestrictionEntitySearchBean {
         this.canCreate=canCreate;
     }
 
-    public java.lang.Boolean getCanDelete() {
-        return this.canDelete;
+    public java.lang.Boolean getCanSearch() {
+        return this.canSearch;
     }
 
-    public void setCanDelete(java.lang.Boolean canDelete) {
-        this.canDelete=canDelete;
+    public void setCanSearch(java.lang.Boolean canSearch) {
+        this.canSearch=canSearch;
     }
 
     public java.lang.Boolean getCanUpdate() {
@@ -44,20 +44,12 @@ public class RestrictionEntitySearchBean {
         this.canUpdate=canUpdate;
     }
 
-    public java.lang.Boolean getCanSearch() {
-        return this.canSearch;
+    public java.lang.Boolean getCanDelete() {
+        return this.canDelete;
     }
 
-    public void setCanSearch(java.lang.Boolean canSearch) {
-        this.canSearch=canSearch;
-    }
-
-    public it.anggen.model.entity.Entity getEntity() {
-        return this.entity;
-    }
-
-    public void setEntity(it.anggen.model.entity.Entity entity) {
-        this.entity=entity;
+    public void setCanDelete(java.lang.Boolean canDelete) {
+        this.canDelete=canDelete;
     }
 
     public it.anggen.model.security.Role getRole() {
@@ -66,6 +58,14 @@ public class RestrictionEntitySearchBean {
 
     public void setRole(it.anggen.model.security.Role role) {
         this.role=role;
+    }
+
+    public it.anggen.model.entity.Entity getEntity() {
+        return this.entity;
+    }
+
+    public void setEntity(it.anggen.model.entity.Entity entity) {
+        this.entity=entity;
     }
 
 }

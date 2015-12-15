@@ -2,11 +2,9 @@
 package it.anggen.controller.field;
 
 import java.util.List;
-
 import it.anggen.searchbean.field.AnnotationAttributeSearchBean;
 import it.anggen.security.SecurityService;
 import it.anggen.service.field.AnnotationAttributeService;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -126,10 +124,10 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     private void getRightMapping(it.anggen.model.field.AnnotationAttribute annotationAttribute) {
         if (annotationAttribute.getAnnotation()!=null)
         {
-        annotationAttribute.getAnnotation().setAnnotationAttributeList(null);
-        annotationAttribute.getAnnotation().setField(null);
-        annotationAttribute.getAnnotation().setRelationship(null);
         annotationAttribute.getAnnotation().setEnumField(null);
+        annotationAttribute.getAnnotation().setRelationship(null);
+        annotationAttribute.getAnnotation().setField(null);
+        annotationAttribute.getAnnotation().setAnnotationAttributeList(null);
         }
     }
 

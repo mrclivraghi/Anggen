@@ -2,11 +2,9 @@
 package it.anggen.controller.entity;
 
 import java.util.List;
-
 import it.anggen.searchbean.entity.ProjectSearchBean;
 import it.anggen.security.SecurityService;
 import it.anggen.service.entity.ProjectService;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -47,7 +45,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         List<it.anggen.model.entity.Project> projectList;
         if (project.getProjectId()!=null)
-         log.info("Searching project like {}", project.getName()+' '+ project.getProjectId());
+         log.info("Searching project like {}", project.getProjectId()+' '+ project.getName());
         projectList=projectService.find(project);
         getRightMapping(projectList);
         getSecurityMapping(projectList);
@@ -92,7 +90,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
         if (project.getProjectId()!=null)
-        log.info("Inserting project like {}", project.getName()+' '+ project.getProjectId());
+        log.info("Inserting project like {}", project.getProjectId()+' '+ project.getName());
         it.anggen.model.entity.Project insertedProject=projectService.insert(project);
         getRightMapping(insertedProject);
         log.info("Inserted project with id {}",insertedProject.getProjectId());
@@ -124,18 +122,28 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     }
 
     private void getRightMapping(it.anggen.model.entity.Project project) {
+        if (project.getEnumEntityList()!=null)
+        for (it.anggen.model.entity.EnumEntity enumEntity :project.getEnumEntityList())
+
+        {
+
+        enumEntity.setProject(null);
+        enumEntity.setEnumValueList(null);
+        }
         if (project.getEntityGroupList()!=null)
         for (it.anggen.model.entity.EntityGroup entityGroup :project.getEntityGroupList())
 
         {
 
-        entityGroup.setEntityList(null);
-        entityGroup.setRestrictionEntityGroupList(null);
         entityGroup.setProject(null);
+        entityGroup.setRestrictionEntityGroupList(null);
+        entityGroup.setEntityList(null);
         }
     }
 
     private void rebuildSecurityMapping(it.anggen.model.entity.Project project) {
+        if (securityEnabled && !securityService.hasPermission(it.anggen.model.entity.EnumEntity.staticEntityId, it.anggen.model.RestrictionType.SEARCH))
+        project.setEnumEntityList(projectService.findById(project.getProjectId()).get(0).getEnumEntityList());
         if (securityEnabled && !securityService.hasPermission(it.anggen.model.entity.EntityGroup.staticEntityId, it.anggen.model.RestrictionType.SEARCH))
         project.setEntityGroupList(projectService.findById(project.getProjectId()).get(0).getEntityGroupList());
     }
@@ -149,6 +157,9 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     }
 
     private void getSecurityMapping(it.anggen.model.entity.Project project) {
+        if (securityEnabled && project.getEnumEntityList()!=null && !securityService.hasPermission(it.anggen.model.entity.EnumEntity.staticEntityId, it.anggen.model.RestrictionType.SEARCH) )
+        project.setEnumEntityList(null);
+
         if (securityEnabled && project.getEntityGroupList()!=null && !securityService.hasPermission(it.anggen.model.entity.EntityGroup.staticEntityId, it.anggen.model.RestrictionType.SEARCH) )
         project.setEntityGroupList(null);
 

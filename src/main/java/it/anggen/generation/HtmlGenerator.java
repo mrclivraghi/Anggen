@@ -139,7 +139,7 @@ public class HtmlGenerator {
 	{
 		HtmlCanvas html = new HtmlCanvas();
 		HtmlAttributes htmlAttributes= new HtmlAttributes();
-		jsGenerator.init(entity, true, null, false);
+		jsGenerator.init(entity, true, null, false,entityManager.isLastLevel(entity));
 		
 		try {
 			html.render(docType);

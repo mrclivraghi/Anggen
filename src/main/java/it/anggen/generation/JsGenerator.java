@@ -69,6 +69,9 @@ public class JsGenerator {
 	
 	private Boolean entityList;
 	
+	private Boolean lastLevel;
+	
+	
 	@Autowired
 	private Generator generator;
 
@@ -78,7 +81,7 @@ public class JsGenerator {
 	}
 
 	
-	public void init(Entity entity,Boolean isParent,String parentEntityName,Boolean entityList)
+	public void init(Entity entity,Boolean isParent,String parentEntityName,Boolean entityList, Boolean lastLevel)
 	{
 		this.entity=entity;
 		this.parentEntityName=parentEntityName;
@@ -91,7 +94,7 @@ public class JsGenerator {
 		this.fieldList=entity.getFieldList();
 		
 		this.relationshipList=entity.getRelationshipList();
-		
+		this.lastLevel=lastLevel;
 		this.descendantEntityList=entityManager.getDescendantEntities();
 		
 		/*List<Class> parentClassList = new ArrayList<Class>();
@@ -601,10 +604,10 @@ public class JsGenerator {
 		Boolean mainEntityList = entityList;
 		for (Relationship relationship: relationshipList)
 		{
-			init(relationship.getEntityTarget(), false, entityName,true);
+			init(relationship.getEntityTarget(), false, entityName,true,entityManager.isLastLevel(relationship.getEntityTarget()));
 			sb.append(getPagination());
 		}
-		init(mainEntity,isParent,parentEntityName,entityList);
+		init(mainEntity,isParent,parentEntityName,entityList,entityManager.isLastLevel(mainEntity));
 		sb.append("$scope.downloadEntityList=function()\n");
 		sb.append("{\n");
 		sb.append("var mystyle = {\n");
@@ -857,7 +860,7 @@ public class JsGenerator {
 		descendantEntitySet.addAll(descendantEntityList);
 		for (Entity descendantEntity : descendantEntitySet)
 		{
-			init(descendantEntity,false,entity.getName(),true);
+			init(descendantEntity,false,entity.getName(),true,entityManager.isLastLevel(descendantEntity));
 			buildJS.append(generateService());
 			buildJS.append(generateController());
 			

@@ -393,7 +393,10 @@ $scope.enumEntityGridOptions.onRegisterApi = function(gridApi){
 $scope.enumEntityGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
 projectService.selectedEntity.show=false;enumValueService.selectedEntity.show=false;if (row.isSelected)
 {
-enumEntityService.setSelectedEntity(row.entity);
+enumEntityService.searchOne(row.entity).then(function(response) { 
+console.log(response.data);
+enumEntityService.setSelectedEntity(response.data[0]);
+});
 $('#enumEntityTabs li:eq(0) a').tab('show');
 }
 else 

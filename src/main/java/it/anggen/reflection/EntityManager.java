@@ -27,4 +27,5 @@ public interface EntityManager {
 	public String getDescription(Boolean withGetter, String fieldName);
 	public List<EntityAttribute> getAllAttribute();
 	public List<EntityAttribute> getChildrenFilter();
+	public Boolean isLastLevel(Entity entity);
 }

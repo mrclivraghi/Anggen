@@ -291,4 +291,13 @@ public class EntityManagerImpl implements EntityManager{
 		return childrenFilterList;
 	}
 
+	@Override
+	public Boolean isLastLevel(Entity entity) {
+		List<Entity> descendantEntityList = new ArrayList<Entity>();
+		addDescendantEntities(entity, descendantEntityList,0,entity.getDescendantMaxLevel()-1);	
+		if (descendantEntityList.contains(entity))
+			return false;
+		return true;
+	}
+
 }

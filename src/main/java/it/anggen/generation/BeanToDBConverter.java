@@ -311,17 +311,16 @@ public class BeanToDBConverter {
 					if (enableRestrictionData && entity.getEntityGroup()!=null && !entity.getEntityGroup().getName().equals("security"))
 					{
 						Entity restrictionData = new Entity();
-						String restrictionDataName="Restriction"+Utility.getFirstUpper(reflectionManager.parseName());
+						String restrictionDataName="restriction"+Utility.getFirstUpper(reflectionManager.parseName());
 						restrictionData.setName(restrictionDataName);
 						restrictionData.setEntityId(getEntityId(restrictionData));
 						restrictionData.setEntityGroup(restrictionDataGroup);
-						String lowerName=Utility.getFirstLower(restrictionDataName);
 						restrictionData.setDescendantMaxLevel(0);
 						entityRepository.save(restrictionData);
 						/* pk */
 						Field fieldPk = new Field();
 						fieldPk.setEntity(restrictionData);
-						fieldPk.setName(lowerName+"Id");
+						fieldPk.setName(restrictionDataName+"Id");
 						fieldPk.setFieldType(FieldType.LONG);
 						fieldPk.setPriority(1);
 						fieldRepository.save(fieldPk);

@@ -707,7 +707,9 @@ public class ReflectionManager {
 		JDefinedClass myClass= null;
 		try {
 			String thePackage=Generator.generatedPackage+Generator.appName+".model."+entity.getEntityGroup().getName().toLowerCase()+".";
-		//	if (entity.getName().endsWith("Repository"))
+			if (entity.getEntityGroup().getName().equals("security"))
+				thePackage=thePackage.replaceAll("."+Generator.appName+".", ".anggen.");
+			//	if (entity.getName().endsWith("Repository"))
 	//			thePackage=thePackage.replace(".model", ".repository.");
 			myClass = codeModel._class(thePackage+Utility.getFirstUpper(entity.getName()), ClassType.CLASS);
 		} catch (JClassAlreadyExistsException e) {
@@ -721,6 +723,8 @@ public class ReflectionManager {
 		JDefinedClass myClass= null;
 		try {
 			String thePackage=Generator.generatedPackage+Generator.appName+".repository."+entity.getEntityGroup().getName().toLowerCase()+".";
+			if (entity.getEntityGroup().getName().equals("security"))
+				thePackage=thePackage.replaceAll("."+Generator.appName+".", ".anggen.");
 		//	if (entity.getName().endsWith("Repository"))
 	//			thePackage=thePackage.replace(".model", ".repository.");
 			myClass = codeModel._class(thePackage+Utility.getFirstUpper(entity.getName()+"Repository"), ClassType.CLASS);

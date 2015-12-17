@@ -23,15 +23,20 @@ public class SecurityService{
 	@Autowired
 	UserRepository userRepository;
 	
-	private User user;
 	
 	/**
 	 * @return the user
 	 */
-	public User getUser() {
+	public User getLoggedUser() {
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		List<User> userList = userRepository.findByUsername(username);
+		if (userList==null || userList.size()==0) return new User();
+		User user = userList.get(0);
 		return user;
 	}
 
+	
+	
 	public Boolean hasRestriction(Long entityId, RestrictionType restrictionType) {
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		List<User> userList = userRepository.findByUsername(username);

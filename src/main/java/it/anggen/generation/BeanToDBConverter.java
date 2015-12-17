@@ -265,6 +265,14 @@ public class BeanToDBConverter {
 			restrictionDataGroup.setName(this.restrictionDataGroupName);
 			restrictionDataGroup.setProject(project);
 			entityGroupRepository.save(restrictionDataGroup);
+			RestrictionEntityGroup restrictionEntityGroup = new RestrictionEntityGroup();
+			restrictionEntityGroup.setCanCreate(true);
+			restrictionEntityGroup.setCanDelete(true);
+			restrictionEntityGroup.setCanSearch(true);
+			restrictionEntityGroup.setCanUpdate(true);
+			restrictionEntityGroup.setEntityGroup(restrictionDataGroup);
+			restrictionEntityGroup.setRole(adminRole);
+			restrictionEntityGroupRepository.save(restrictionEntityGroup);
 		}
 		
 		for (String myPackage: packageList)
@@ -342,6 +350,18 @@ public class BeanToDBConverter {
 						mainEntity.setPriority(4);
 						mainEntity.setRelationshipType(RelationshipType.MANY_TO_ONE);
 						relationshipRepository.save(mainEntity);
+						// add restriction entity
+						RestrictionEntity restrictionDataEntity = new RestrictionEntity();
+						restrictionDataEntity.setCanCreate(true);
+						restrictionDataEntity.setCanDelete(true);
+						restrictionDataEntity.setCanSearch(true);
+						restrictionDataEntity.setCanUpdate(true);
+						restrictionDataEntity.setEntity(restrictionData);
+						restrictionDataEntity.setRole(adminRole);
+						restrictionEntityRepository.save(restrictionDataEntity);
+						List<RestrictionEntity> restrictionDataEntitieList= new ArrayList<RestrictionEntity>();
+						restrictionDataEntitieList.add(restrictionDataEntity);
+						restrictionData.setRestrictionEntityList(restrictionDataEntitieList);
 						
 					}
 					

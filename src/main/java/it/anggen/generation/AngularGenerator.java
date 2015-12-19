@@ -128,10 +128,14 @@ public class AngularGenerator {
 			List<Entity> descendantEntityList = entityManager.getDescendantEntities(entity, parentEntity);
 			parentEntity=oldParentClassList;
 			if (descendantEntityList==null || descendantEntityList.size()==0) return;
+			EntityManager mainEntityManager = new EntityManagerImpl(entity);
+			
 			for (Entity descendantEntity: descendantEntityList)
 			{
-				init(descendantEntity, false, parentEntity,entityManager.isLastLevel(descendantEntity));
+				init(descendantEntity, false, parentEntity,mainEntityManager.isLastLevel(descendantEntity));
+				System.out.println(mainEntityManager.getDescription()+"-"+descendantEntity.getName()+" last level : "+mainEntityManager.isLastLevel(descendantEntity));
 				generateEntityView(html);
+				
 			}
 		}
 	}
@@ -713,9 +717,9 @@ public class AngularGenerator {
 							//data-target="#myModal">Open Modal</button>
 							if (!lastLevel)
 							{
-								html.button((new HtmlAttributes()).add("type", "button").add("class", "btn btn-default pull-right").add("style", "margin-top: -7px").add("data-toggle", "modal").add("data-target", "#"+entityName+"-"+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()))
+								downloadCanvas.button((new HtmlAttributes()).add("type", "button").add("class", "btn btn-default pull-right").add("style", "margin-top: -7px").add("data-toggle", "modal").add("data-target", "#"+entityName+"-"+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()))
 								.content("Link existing");
-								html.button(CssGenerator.getButton("download"+Utility.getFirstUpper(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName())+"List","pull-right").add("style", "margin-top:-7px"))
+								downloadCanvas.button(CssGenerator.getButton("download"+Utility.getFirstUpper(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName())+"List","pull-right").add("style", "margin-top:-7px"))
 								.span((new HtmlAttributes()).add("class", "glyphicon glyphicon-download-alt").add("aria-hidden", "true"))
 								._span()
 								._button();

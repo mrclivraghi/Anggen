@@ -681,8 +681,8 @@ public class JsGenerator {
 		sb.append("enablePaginationControls: true,\n");
 		sb.append("multiSelect: false,\n");
 		sb.append("enableSelectAll: false,\n");
-		sb.append("paginationPageSizes: [2, 4, 6],\n");
-		sb.append("paginationPageSize: 2,\n");
+		sb.append("paginationPageSizes: [10, 20, 30],\n");
+		sb.append("paginationPageSize: 10,\n");
 		sb.append("enableGridMenu: true,\n");
 		//generate dynamically
 		sb.append("columnDefs: [\n");

@@ -36,8 +36,8 @@ public class RestrictionEntity {
     @it.anggen.utils.annotation.Priority(4)
     private it.anggen.model.security.Role role;
     @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.EAGER)
-    @javax.persistence.JoinColumn(name = "entity_id_entity")
     @it.anggen.utils.annotation.DescriptionField
+    @javax.persistence.JoinColumn(name = "entity_id_entity")
     @it.anggen.utils.annotation.Priority(4)
     private it.anggen.model.entity.Entity entity;
 

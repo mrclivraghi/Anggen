@@ -294,6 +294,7 @@ public class EntityManagerImpl implements EntityManager{
 	@Override
 	public Boolean isLastLevel(Entity entity) {
 		List<Entity> descendantEntityList = new ArrayList<Entity>();
+		descendantEntityList.add(entity);
 		addDescendantEntities(this.entity, descendantEntityList,0,this.entity.getDescendantMaxLevel()-1);	
 		if (descendantEntityList.contains(entity))
 			return false;

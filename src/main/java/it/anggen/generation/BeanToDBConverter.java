@@ -137,6 +137,12 @@ public class BeanToDBConverter {
 	@Value("${application.name}")
 	private String projectName;
 	
+	@Value("${application.restriction.data.enable}")
+	private Boolean enableRestrictionData;
+	
+	private String restrictionDataGroupName="restrictiondata";
+	
+	
 	private Long firstEntityId;
 	
 	
@@ -183,6 +189,8 @@ public class BeanToDBConverter {
 			mainPackageClassSet.add(Entity.class);
 			
 		}
+		
+		
 		List<Entity> oldEntityList = entityRepository.findByEntityIdAndNameAndDescendantMaxLevelAndSecurityTypeAndFieldAndEntityGroupAndRestrictionEntityAndTabAndEnumFieldAndRelationship(null, null, null, null, null, null, null, null, null, null);
 		firstEntityId=Utility.getFirstEntityId(oldEntityList);
 		
@@ -250,6 +258,22 @@ public class BeanToDBConverter {
 		ReflectionManager temp = new ReflectionManager(Object.class);
 		project.setName(temp.parseName(projectName));
 		projectRepository.save(project);
+		EntityGroup restrictionDataGroup = null;
+		if (enableRestrictionData)
+		{
+			restrictionDataGroup= new EntityGroup();
+			restrictionDataGroup.setName(this.restrictionDataGroupName);
+			restrictionDataGroup.setProject(project);
+			entityGroupRepository.save(restrictionDataGroup);
+			RestrictionEntityGroup restrictionEntityGroup = new RestrictionEntityGroup();
+			restrictionEntityGroup.setCanCreate(true);
+			restrictionEntityGroup.setCanDelete(true);
+			restrictionEntityGroup.setCanSearch(true);
+			restrictionEntityGroup.setCanUpdate(true);
+			restrictionEntityGroup.setEntityGroup(restrictionDataGroup);
+			restrictionEntityGroup.setRole(adminRole);
+			restrictionEntityGroupRepository.save(restrictionEntityGroup);
+		}
 		
 		for (String myPackage: packageList)
 		{
@@ -292,6 +316,54 @@ public class BeanToDBConverter {
 					restrictionEntitieList.add(restrictionEntity);
 					entity.setRestrictionEntityList(restrictionEntitieList);
 					
+					if (enableRestrictionData && entity.getEntityGroup()!=null && !entity.getEntityGroup().getName().equals("security"))
+					{
+						Entity restrictionData = new Entity();
+						String restrictionDataName="restriction"+Utility.getFirstUpper(reflectionManager.parseName());
+						restrictionData.setName(restrictionDataName);
+						restrictionData.setEntityId(getEntityId(restrictionData));
+						restrictionData.setEntityGroup(restrictionDataGroup);
+						restrictionData.setDescendantMaxLevel(0);
+						entityRepository.save(restrictionData);
+						/* pk */
+						Field fieldPk = new Field();
+						fieldPk.setEntity(restrictionData);
+						fieldPk.setName(restrictionDataName+"Id");
+						fieldPk.setFieldType(FieldType.LONG);
+						fieldPk.setPriority(1);
+						fieldRepository.save(fieldPk);
+						it.anggen.model.field.Annotation annotationPk = new it.anggen.model.field.Annotation();
+						annotationPk.setAnnotationType(AnnotationType.PRIMARY_KEY);
+						annotationPk.setField(fieldPk);
+						annotationRepository.save(annotationPk);
+						Relationship role= new Relationship();
+						role.setName("role");
+						role.setEntity(restrictionData);
+						role.setEntityTarget(entityMap.get("role"));
+						role.setPriority(4);
+						role.setRelationshipType(RelationshipType.MANY_TO_ONE);
+						relationshipRepository.save(role);
+						Relationship mainEntity= new Relationship();
+						mainEntity.setName(entity.getName());
+						mainEntity.setEntity(restrictionData);
+						mainEntity.setEntityTarget(entityMap.get(entity.getName()));
+						mainEntity.setPriority(4);
+						mainEntity.setRelationshipType(RelationshipType.MANY_TO_ONE);
+						relationshipRepository.save(mainEntity);
+						// add restriction entity
+						RestrictionEntity restrictionDataEntity = new RestrictionEntity();
+						restrictionDataEntity.setCanCreate(true);
+						restrictionDataEntity.setCanDelete(true);
+						restrictionDataEntity.setCanSearch(true);
+						restrictionDataEntity.setCanUpdate(true);
+						restrictionDataEntity.setEntity(restrictionData);
+						restrictionDataEntity.setRole(adminRole);
+						restrictionEntityRepository.save(restrictionDataEntity);
+						List<RestrictionEntity> restrictionDataEntitieList= new ArrayList<RestrictionEntity>();
+						restrictionDataEntitieList.add(restrictionDataEntity);
+						restrictionData.setRestrictionEntityList(restrictionDataEntitieList);
+						
+					}
 					
 					List<String> tabNameList=reflectionManager.getTabsName();
 					List<it.anggen.model.entity.Tab> tabList = new ArrayList<it.anggen.model.entity.Tab>();

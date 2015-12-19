@@ -13,6 +13,8 @@ import it.anggen.model.FieldType;
 import it.anggen.model.SecurityType;
 import it.anggen.model.entity.Entity;
 import it.anggen.model.relationship.Relationship;
+import it.anggen.model.security.Role;
+import it.anggen.model.security.User;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -618,6 +620,13 @@ public class RestGenerator {
 			JVar securityService= myClass.field(JMod.PRIVATE,SecurityService.class, "securityService");
 			securityService.annotate(Autowired.class);
 			
+			if (entity.getEntityGroup()!=null && !entity.getEntityGroup().getName().equals("restrictiondata"))
+			{
+				String restrictionDataRepositoryName=ReflectionManager.getJDefinedClass(entity).fullName().replaceAll("."+Utility.getFirstUpper(entity.getName()),".Restriction"+Utility.getFirstUpper(entity.getName()) ).replaceAll("."+entity.getEntityGroup().getName()+".", ".restrictiondata.").replaceAll(".model.", ".repository.")+"Repository";
+				JVar repositoryRestrictionData = myClass.field(JMod.PRIVATE, ReflectionManager.getJDefinedCustomClass(restrictionDataRepositoryName), "restriction"+Utility.getFirstUpper(entity.getName())+"Repository");
+				repositoryRestrictionData.annotate(Autowired.class);
+			}
+			
 			JClass factory = codeModel.directClass("org.slf4j.LoggerFactory");
 			JVar log = myClass.field(JMod.PRIVATE+JMod.STATIC+JMod.FINAL, Logger.class, "log");
 			JClass jClassClass =ReflectionManager.getJDefinedClass(entity);
@@ -659,7 +668,6 @@ public class RestGenerator {
 			
 			JVar entityList= searchBlock.decl(listClass, lowerClass+"List");
 			// log.info("Searching mountain like {}",mountain);
-			//TODO ,anage null on description field
 			searchBlock.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(lowerClass)+"Id()!=null)");
 			searchBlock.directStatement(" log.info(\"Searching "+lowerClass+" like {}\","+entityManager.getDescription(true)+");");
 			searchBlock.directStatement(""+lowerClass+"List="+lowerClass+"Service.find("+lowerClass+");");
@@ -680,6 +688,7 @@ public class RestGenerator {
 			getByIdBlock.directStatement("log.info(\"Searching "+lowerClass+" with id {}\","+lowerClass+"Id);");
 			getByIdBlock.directStatement("List<"+ReflectionManager.getJDefinedClass(entity).fullName()+"> "+lowerClass+"List="+lowerClass+"Service.findById("+EntityAttributeManager.getInstance(null).getFieldTypeName(keyClass)+".valueOf("+lowerClass+"Id));");
 			getByIdBlock.directStatement("getRightMapping("+lowerClass+"List);");
+			getByIdBlock.directStatement("getSecurityMapping("+lowerClass+"List);");
 			getByIdBlock.directStatement(" log.info(\"Search: returning {} "+lowerClass+".\","+lowerClass+"List.size());");
 			
 			getByIdBlock.directStatement("return "+response+".body("+lowerClass+"List);");
@@ -779,7 +788,24 @@ public class RestGenerator {
 			JMethod getSecurityMappingList = myClass.method(JMod.PRIVATE, listClass, "getSecurityMapping");
 			getSecurityMappingList.param(listClass, lowerClass+"List");
 			JBlock getSecurityMappingListBlock = getSecurityMappingList.body();
-			getSecurityMappingListBlock.directStatement("for ("+ReflectionManager.getJDefinedClass(entity).fullName()+" "+lowerClass+": "+lowerClass+"List)");
+			
+			if (entity.getEntityGroup()!=null && !entity.getEntityGroup().getName().equals("restrictiondata"))
+			{
+				getSecurityMappingListBlock.directStatement(User.class.getName()+" loggedUser = securityService.getLoggedUser();");
+				getSecurityMappingListBlock.directStatement("for ("+Role.class.getName()+" role : loggedUser.getRoleList())");
+				getSecurityMappingListBlock.directStatement("{");
+				String restrictionDataEntityName=ReflectionManager.getJDefinedClass(entity).fullName().replaceAll("."+Utility.getFirstUpper(entity.getName()),".Restriction"+Utility.getFirstUpper(entity.getName()) ).replaceAll("."+entity.getEntityGroup().getName()+".", ".restrictiondata.");
+
+				getSecurityMappingListBlock.directStatement("List<"+restrictionDataEntityName+"> restrictedEntityList = restriction"+Utility.getFirstUpper(entity.getName())+"Repository.findByRole(role);");
+				getSecurityMappingListBlock.directStatement("for ("+restrictionDataEntityName+" restriction"+Utility.getFirstUpper(entity.getName())+": restrictedEntityList)");
+				getSecurityMappingListBlock.directStatement("{");
+				getSecurityMappingListBlock.directStatement(entity.getName()+"List.remove(restriction"+Utility.getFirstUpper(entity.getName())+".get"+Utility.getFirstUpper(entity.getName())+"());");
+				getSecurityMappingListBlock.directStatement("}");
+				getSecurityMappingListBlock.directStatement("}");
+
+			}	
+	    		
+	    		getSecurityMappingListBlock.directStatement("for ("+ReflectionManager.getJDefinedClass(entity).fullName()+" "+lowerClass+": "+lowerClass+"List)");
 			getSecurityMappingListBlock.directStatement("{");
 			getSecurityMappingListBlock.directStatement("getSecurityMapping("+lowerClass+");");
 			getSecurityMappingListBlock.directStatement("}");

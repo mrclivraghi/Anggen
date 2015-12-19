@@ -385,7 +385,7 @@ public class JsGenerator {
 			/*sb.append(entityName+"Service.insert().then(function(data) { });\n");*/
 			sb.append(Utility.getEntityCallName(entityName)+"Service.selectedEntity.show=false;\n");
 			//TODO 
-			if (relationshipType==RelationshipType.MANY_TO_MANY || relationshipType==RelationshipType.MANY_TO_ONE)
+			if (relationshipType==RelationshipType.MANY_TO_MANY || relationshipType==RelationshipType.ONE_TO_MANY || relationshipType==RelationshipType.MANY_TO_MANY_BACK)
 			{
 				sb.append(Utility.getEntityCallName(entityName)+"Service.selectedEntity."+parentEntityName+"List.push("+parentEntityName+"Service.selectedEntity);\n");
 			}else

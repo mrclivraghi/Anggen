@@ -1050,10 +1050,10 @@ $scope.entityGridOptions = {
 enablePaginationControls: true,
 multiSelect: false,
 enableSelectAll: false,
-paginationPageSizes: [2, 4, 6],
-paginationPageSize: 2,
+paginationPageSizes: [10, 20, 30],
+paginationPageSize: 10,
 enableGridMenu: true,
-columnDefs: [
+columnDefs: [    
 { name: 'name'},
 { name: 'entityId'},
 { name: 'descendantMaxLevel'},
@@ -1080,38 +1080,68 @@ $scope.fieldListGridOptions = {
 enablePaginationControls: true,
 multiSelect: false,
 enableSelectAll: false,
-paginationPageSizes: [2, 4, 6],
-paginationPageSize: 2,
+paginationPageSizes: [10, 20, 30],
+paginationPageSize: 10,
 enableGridMenu: true,
-columnDefs: [
+columnDefs: [    
 { name: 'name'},
 { name: 'priority'},
 { name: 'fieldId'} 
 ]
 ,data: $scope.selectedEntity.fieldList
  };
-$scope.entityGroupListGridOptions = {
+$scope.fieldListGridOptions.onRegisterApi = function(gridApi){
+$scope.fieldGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
+if (row.isSelected)
+{
+fieldService.searchOne(row.entity).then(function(response) { 
+console.log(response.data);
+fieldService.setSelectedEntity(response.data[0]);
+});
+$('#fieldTabs li:eq(0) a').tab('show');
+}
+else 
+fieldService.setSelectedEntity(null);
+fieldService.selectedEntity.show = row.isSelected;
+});
+  };
+$scope.entityGroupGridOptions = {
 enablePaginationControls: true,
 multiSelect: false,
 enableSelectAll: false,
-paginationPageSizes: [2, 4, 6],
-paginationPageSize: 2,
+paginationPageSizes: [10, 20, 30],
+paginationPageSize: 10,
 enableGridMenu: true,
-columnDefs: [
+columnDefs: [    
 { name: 'name'},
 { name: 'entityGroupId'},
 { name: 'entityId'} 
 ]
 ,data: $scope.selectedEntity.entityGroupList
  };
+$scope.entityGroupGridOptions.onRegisterApi = function(gridApi){
+$scope.entityGroupGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
+if (row.isSelected)
+{
+entityGroupService.searchOne(row.entity).then(function(response) { 
+console.log(response.data);
+entityGroupService.setSelectedEntity(response.data[0]);
+});
+$('#entityGroupTabs li:eq(0) a').tab('show');
+}
+else 
+entityGroupService.setSelectedEntity(null);
+entityGroupService.selectedEntity.show = row.isSelected;
+});
+  };
 $scope.restrictionEntityListGridOptions = {
 enablePaginationControls: true,
 multiSelect: false,
 enableSelectAll: false,
-paginationPageSizes: [2, 4, 6],
-paginationPageSize: 2,
+paginationPageSizes: [10, 20, 30],
+paginationPageSize: 10,
 enableGridMenu: true,
-columnDefs: [
+columnDefs: [    
 { name: 'canCreate'},
 { name: 'canSearch'},
 { name: 'canUpdate'},
@@ -1120,47 +1150,107 @@ columnDefs: [
 ]
 ,data: $scope.selectedEntity.restrictionEntityList
  };
+$scope.restrictionEntityListGridOptions.onRegisterApi = function(gridApi){
+$scope.restrictionEntityGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
+if (row.isSelected)
+{
+restrictionEntityService.searchOne(row.entity).then(function(response) { 
+console.log(response.data);
+restrictionEntityService.setSelectedEntity(response.data[0]);
+});
+$('#restrictionEntityTabs li:eq(0) a').tab('show');
+}
+else 
+restrictionEntityService.setSelectedEntity(null);
+restrictionEntityService.selectedEntity.show = row.isSelected;
+});
+  };
 $scope.tabListGridOptions = {
 enablePaginationControls: true,
 multiSelect: false,
 enableSelectAll: false,
-paginationPageSizes: [2, 4, 6],
-paginationPageSize: 2,
+paginationPageSizes: [10, 20, 30],
+paginationPageSize: 10,
 enableGridMenu: true,
-columnDefs: [
+columnDefs: [    
 { name: 'tabId'},
 { name: 'name'} 
 ]
 ,data: $scope.selectedEntity.tabList
  };
+$scope.tabListGridOptions.onRegisterApi = function(gridApi){
+$scope.tabGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
+if (row.isSelected)
+{
+tabService.searchOne(row.entity).then(function(response) { 
+console.log(response.data);
+tabService.setSelectedEntity(response.data[0]);
+});
+$('#tabTabs li:eq(0) a').tab('show');
+}
+else 
+tabService.setSelectedEntity(null);
+tabService.selectedEntity.show = row.isSelected;
+});
+  };
 $scope.enumFieldListGridOptions = {
 enablePaginationControls: true,
 multiSelect: false,
 enableSelectAll: false,
-paginationPageSizes: [2, 4, 6],
-paginationPageSize: 2,
+paginationPageSizes: [10, 20, 30],
+paginationPageSize: 10,
 enableGridMenu: true,
-columnDefs: [
+columnDefs: [    
 { name: 'name'},
 { name: 'priority'},
 { name: 'enumFieldId'} 
 ]
 ,data: $scope.selectedEntity.enumFieldList
  };
+$scope.enumFieldListGridOptions.onRegisterApi = function(gridApi){
+$scope.enumFieldGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
+if (row.isSelected)
+{
+enumFieldService.searchOne(row.entity).then(function(response) { 
+console.log(response.data);
+enumFieldService.setSelectedEntity(response.data[0]);
+});
+$('#enumFieldTabs li:eq(0) a').tab('show');
+}
+else 
+enumFieldService.setSelectedEntity(null);
+enumFieldService.selectedEntity.show = row.isSelected;
+});
+  };
 $scope.relationshipListGridOptions = {
 enablePaginationControls: true,
 multiSelect: false,
 enableSelectAll: false,
-paginationPageSizes: [2, 4, 6],
-paginationPageSize: 2,
+paginationPageSizes: [10, 20, 30],
+paginationPageSize: 10,
 enableGridMenu: true,
-columnDefs: [
+columnDefs: [    
 { name: 'relationshipId'},
 { name: 'priority'},
 { name: 'name'} 
 ]
 ,data: $scope.selectedEntity.relationshipList
  };
+$scope.relationshipListGridOptions.onRegisterApi = function(gridApi){
+$scope.relationshipGridApi = gridApi;gridApi.selection.on.rowSelectionChanged($scope,function(row){
+if (row.isSelected)
+{
+relationshipService.searchOne(row.entity).then(function(response) { 
+console.log(response.data);
+relationshipService.setSelectedEntity(response.data[0]);
+});
+$('#relationshipTabs li:eq(0) a').tab('show');
+}
+else 
+relationshipService.setSelectedEntity(null);
+relationshipService.selectedEntity.show = row.isSelected;
+});
+  };
 $scope.downloadEntityList=function()
 {
 var mystyle = {

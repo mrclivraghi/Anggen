@@ -22,3 +22,6 @@ select * from sso.restriction_entity
 select * from sso.restriction_entity 
 select * from sso.restriction_entity_group 
 select * from sso.user_role 
+select * from sso.role
+
+update meta.entity set descendant_max_level=3 where entity_id=3

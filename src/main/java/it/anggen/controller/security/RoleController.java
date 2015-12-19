@@ -92,9 +92,10 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         if (role.getRoleId()!=null)
         log.info("Inserting role like {}", role.getRole()+' '+ role.getRoleId());
         it.anggen.model.security.Role insertedRole=roleService.insert(role);
-        getRightMapping(insertedRole);
+        role.setRoleId(insertedRole.getRoleId());
+        //getRightMapping(insertedRole);
         log.info("Inserted role with id {}",insertedRole.getRoleId());
-        return ResponseEntity.ok().body(insertedRole);
+        return ResponseEntity.ok().body(role);
     }
 
     @ResponseBody

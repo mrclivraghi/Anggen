@@ -668,7 +668,6 @@ public class RestGenerator {
 			
 			JVar entityList= searchBlock.decl(listClass, lowerClass+"List");
 			// log.info("Searching mountain like {}",mountain);
-			//TODO ,anage null on description field
 			searchBlock.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(lowerClass)+"Id()!=null)");
 			searchBlock.directStatement(" log.info(\"Searching "+lowerClass+" like {}\","+entityManager.getDescription(true)+");");
 			searchBlock.directStatement(""+lowerClass+"List="+lowerClass+"Service.find("+lowerClass+");");
@@ -689,6 +688,7 @@ public class RestGenerator {
 			getByIdBlock.directStatement("log.info(\"Searching "+lowerClass+" with id {}\","+lowerClass+"Id);");
 			getByIdBlock.directStatement("List<"+ReflectionManager.getJDefinedClass(entity).fullName()+"> "+lowerClass+"List="+lowerClass+"Service.findById("+EntityAttributeManager.getInstance(null).getFieldTypeName(keyClass)+".valueOf("+lowerClass+"Id));");
 			getByIdBlock.directStatement("getRightMapping("+lowerClass+"List);");
+			getByIdBlock.directStatement("getSecurityMapping("+lowerClass+"List);");
 			getByIdBlock.directStatement(" log.info(\"Search: returning {} "+lowerClass+".\","+lowerClass+"List.size());");
 			
 			getByIdBlock.directStatement("return "+response+".body("+lowerClass+"List);");
@@ -796,7 +796,7 @@ public class RestGenerator {
 				getSecurityMappingListBlock.directStatement("{");
 				String restrictionDataEntityName=ReflectionManager.getJDefinedClass(entity).fullName().replaceAll("."+Utility.getFirstUpper(entity.getName()),".Restriction"+Utility.getFirstUpper(entity.getName()) ).replaceAll("."+entity.getEntityGroup().getName()+".", ".restrictiondata.");
 
-				getSecurityMappingListBlock.directStatement("List<"+restrictionDataEntityName+"> restrictedEntityList = restrictionAaaRepository.findByRole(role);");
+				getSecurityMappingListBlock.directStatement("List<"+restrictionDataEntityName+"> restrictedEntityList = restriction"+Utility.getFirstUpper(entity.getName())+"Repository.findByRole(role);");
 				getSecurityMappingListBlock.directStatement("for ("+restrictionDataEntityName+" restriction"+Utility.getFirstUpper(entity.getName())+": restrictedEntityList)");
 				getSecurityMappingListBlock.directStatement("{");
 				getSecurityMappingListBlock.directStatement(entity.getName()+"List.remove(restriction"+Utility.getFirstUpper(entity.getName())+".get"+Utility.getFirstUpper(entity.getName())+"());");

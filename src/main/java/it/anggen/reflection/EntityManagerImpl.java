@@ -301,4 +301,28 @@ public class EntityManagerImpl implements EntityManager{
 		return true;
 	}
 
+	@Override
+	public List<Relationship> getDescendantRelationship() {
+		List<Relationship> descendantRelationshipList = new ArrayList<Relationship>();
+		addDescendantRelationship(entity, descendantRelationshipList,0,entity.getDescendantMaxLevel());		
+		return descendantRelationshipList;
+	}
+	
+	private void addDescendantRelationship(Entity entity, List<Relationship> descendantRelationshipList,Integer level,Integer maxLevel)
+	{
+		if (level>=maxLevel)
+			return;
+		for (Relationship relationship: entity.getRelationshipList())
+		{
+			if (!descendantRelationshipList.contains(relationship) && (!relationship.getEntityTarget().equals(this.entity)))
+			{
+				descendantRelationshipList.add(relationship);
+				addDescendantRelationship(relationship.getEntityTarget(), descendantRelationshipList,level+1,maxLevel);
+			}
+				
+		}
+	}
+	
+
+
 }

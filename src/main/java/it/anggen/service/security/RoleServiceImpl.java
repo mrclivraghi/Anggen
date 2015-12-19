@@ -52,39 +52,39 @@ public class RoleServiceImpl
     @Override
     @Transactional
     public it.anggen.model.security.Role update(it.anggen.model.security.Role role) {
-        if (role.getRestrictionEntityGroupList()!=null)
-        for (it.anggen.model.security.RestrictionEntityGroup restrictionEntityGroup: role.getRestrictionEntityGroupList())
-        {
-        restrictionEntityGroup.setRole(role);
-        }
-        if (role.getRestrictionFieldList()!=null)
-        for (it.anggen.model.security.RestrictionField restrictionField: role.getRestrictionFieldList())
-        {
-        restrictionField.setRole(role);
-        }
-        if (role.getRestrictionEntityList()!=null)
-        for (it.anggen.model.security.RestrictionEntity restrictionEntity: role.getRestrictionEntityList())
-        {
-        restrictionEntity.setRole(role);
-        }
-        if (role.getUserList()!=null)
-        for (it.anggen.model.security.User user: role.getUserList())
-        {
-        it.anggen.model.security.User savedUser = userRepository.findOne(user.getUserId());
-        Boolean found=false; 
-        for (it.anggen.model.security.Role tempRole : savedUser.getRoleList())
-        {
-        if (tempRole.getRoleId().equals(role.getRoleId()))
-        {
-        found=true;
-        break;
-        }
-        }
-        if (!found)
-        savedUser.getRoleList().add(role);
-        }
-        it.anggen.model.security.Role returnedRole=roleRepository.save(role);
-         return returnedRole;
+    	if (role.getRestrictionEntityGroupList()!=null)
+    		for (it.anggen.model.security.RestrictionEntityGroup restrictionEntityGroup: role.getRestrictionEntityGroupList())
+    		{
+    			restrictionEntityGroup.setRole(role);
+    		}
+    	if (role.getRestrictionFieldList()!=null)
+    		for (it.anggen.model.security.RestrictionField restrictionField: role.getRestrictionFieldList())
+    		{
+    			restrictionField.setRole(role);
+    		}
+    	if (role.getRestrictionEntityList()!=null)
+    		for (it.anggen.model.security.RestrictionEntity restrictionEntity: role.getRestrictionEntityList())
+    		{
+    			restrictionEntity.setRole(role);
+    		}
+    	if (role.getUserList()!=null)
+    		for (it.anggen.model.security.User user: role.getUserList())
+    		{
+    			it.anggen.model.security.User savedUser = userRepository.findOne(user.getUserId());
+    			Boolean found=false; 
+    			for (it.anggen.model.security.Role tempRole : savedUser.getRoleList())
+    			{
+    				if (tempRole.getRoleId().equals(role.getRoleId()))
+    				{
+    					found=true;
+    					break;
+    				}
+    			}
+    			if (!found)
+    				savedUser.getRoleList().add(role);
+    		}
+    	it.anggen.model.security.Role returnedRole=roleRepository.save(role);
+    	return returnedRole;
     }
 
 }

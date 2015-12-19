@@ -8,6 +8,7 @@ import it.anggen.utils.EntityAttribute;
 import it.anggen.utils.ReflectionManager;
 import it.anggen.utils.Utility;
 import it.anggen.model.FieldType;
+import it.anggen.model.RelationshipType;
 import it.anggen.model.entity.Entity;
 import it.anggen.model.entity.Tab;
 import it.anggen.model.field.EnumField;
@@ -67,7 +68,7 @@ public class JsGenerator {
 	
 	private List<Entity> descendantEntityList;
 	
-	private Boolean entityList;
+	private RelationshipType relationshipType;
 	
 	private Boolean lastLevel;
 	
@@ -81,12 +82,12 @@ public class JsGenerator {
 	}
 
 	
-	public void init(Entity entity,Boolean isParent,String parentEntityName,Boolean entityList, Boolean lastLevel)
+	public void init(Entity entity,Boolean isParent,String parentEntityName,RelationshipType relationshipType, Boolean lastLevel)
 	{
 		this.entity=entity;
 		this.parentEntityName=parentEntityName;
 		this.isParent=isParent;
-		this.entityList=entityList;
+		this.relationshipType=relationshipType;
 		entityManager = new EntityManagerImpl(entity);
 		
 		this.entityName=Utility.getFirstLower(entity.getName());
@@ -384,7 +385,7 @@ public class JsGenerator {
 			/*sb.append(entityName+"Service.insert().then(function(data) { });\n");*/
 			sb.append(Utility.getEntityCallName(entityName)+"Service.selectedEntity.show=false;\n");
 			//TODO 
-			if (entityList)
+			if (relationshipType==RelationshipType.MANY_TO_MANY || relationshipType==RelationshipType.MANY_TO_ONE)
 			{
 				sb.append(Utility.getEntityCallName(entityName)+"Service.selectedEntity."+parentEntityName+"List.push("+parentEntityName+"Service.selectedEntity);\n");
 			}else
@@ -396,7 +397,7 @@ public class JsGenerator {
 			
 			
 			sb.append(Utility.getEntityCallName(entityName)+"Service.insert().then(function successCallBack(response) { \n");
-			if (entityList)
+			if (relationshipType==RelationshipType.MANY_TO_MANY || relationshipType==RelationshipType.ONE_TO_MANY || relationshipType==RelationshipType.MANY_TO_MANY_BACK)
 			{
 				sb.append(""+Utility.getEntityCallName(parentEntityName)+"Service.selectedEntity."+entityName+"List.push(response.data);\n");
 //				sb.append(parentEntityName+"Service.selectedEntity."+entityName+"List.push("+entityName+"Service.selectedEntity);\n\n");
@@ -431,7 +432,7 @@ public class JsGenerator {
 		}else
 		{
 			sb.append(Utility.getEntityCallName(entityName)+"Service.selectedEntity.show=false;\n\n");
-			if (entityList)
+			if (relationshipType==RelationshipType.MANY_TO_MANY || relationshipType==RelationshipType.ONE_TO_MANY || relationshipType==RelationshipType.MANY_TO_MANY_BACK)
 			{
 				sb.append("for (i=0; i<"+Utility.getEntityCallName(parentEntityName)+"Service.selectedEntity."+entityName+"List.length; i++)\n\n");
 				sb.append("{\n\n");
@@ -460,7 +461,7 @@ public class JsGenerator {
 			sb.append("$scope.remove= function()\n");
 			sb.append("{\n");
 			sb.append(Utility.getEntityCallName(entityName)+"Service.selectedEntity.show=false;\n");
-			if (entityList)
+			if (relationshipType==RelationshipType.MANY_TO_MANY || relationshipType==RelationshipType.ONE_TO_MANY || relationshipType==RelationshipType.MANY_TO_MANY_BACK)
 			{
 				sb.append("for (i=0; i<"+parentEntityName+"Service.selectedEntity."+entityName+"List.length; i++)\n");
 				sb.append("{\n");
@@ -483,7 +484,7 @@ public class JsGenerator {
 		sb.append("$scope.del=function()\n");
 		sb.append("{\n");
 		//update entity in $scope
-		if (entityList)
+		if (relationshipType==RelationshipType.MANY_TO_MANY || relationshipType==RelationshipType.ONE_TO_MANY || relationshipType==RelationshipType.MANY_TO_MANY_BACK)
 		{
 			sb.append("for (i=0; i<"+parentEntityName+"Service.selectedEntity."+entityName+"List.length; i++)\n");
 			sb.append("{\n");
@@ -603,14 +604,14 @@ public class JsGenerator {
 		Entity mainEntity=entity;
 		Boolean mainIsParent= isParent;
 		String mainParentName = parentEntityName;
-		Boolean mainEntityList = entityList;
+		RelationshipType mainEntityList = relationshipType;
 		EntityManager mainEntityManager= new EntityManagerImpl(mainEntity);
 		for (Relationship relationship: relationshipList)
 		{
-			init(relationship.getEntityTarget(), false, entityName,true,mainEntityManager.isLastLevel(relationship.getEntityTarget()));
+			init(relationship.getEntityTarget(), false, entityName,relationship.getRelationshipType(),mainEntityManager.isLastLevel(relationship.getEntityTarget()));
 			sb.append(getPagination());
 		}
-		init(mainEntity,isParent,parentEntityName,entityList,entityManager.isLastLevel(mainEntity));
+		init(mainEntity,isParent,parentEntityName,relationshipType,entityManager.isLastLevel(mainEntity));
 		sb.append("$scope.downloadEntityList=function()\n");
 		sb.append("{\n");
 		sb.append("var mystyle = {\n");
@@ -677,7 +678,7 @@ public class JsGenerator {
 	{
 		StringBuilder sb = new StringBuilder();
 		//pagination options
-		sb.append("$scope."+entityName+ (entityList? "List":"")+"GridOptions = {\n");
+		sb.append("$scope."+entityName+ (relationshipType==RelationshipType.MANY_TO_MANY || relationshipType==RelationshipType.ONE_TO_MANY || relationshipType==RelationshipType.MANY_TO_MANY_BACK? "List":"")+"GridOptions = {\n");
 		sb.append("enablePaginationControls: true,\n");
 		sb.append("multiSelect: false,\n");
 		sb.append("enableSelectAll: false,\n");
@@ -685,7 +686,7 @@ public class JsGenerator {
 		sb.append("paginationPageSize: 10,\n");
 		sb.append("enableGridMenu: true,\n");
 		//generate dynamically
-		sb.append("columnDefs: [\n");
+		sb.append("columnDefs: [    \n");
 		//TODO add enum fields?
 		for (EntityAttribute entityAttribute: entityManager.getAttributeList())
 		{
@@ -729,7 +730,7 @@ public class JsGenerator {
 		if (parentEntityName!=null && parentEntityName.equals("entity"))
 		System.out.println("**GENERO** "+entityName+" - parent "+parentEntityName+" - lastLevel"+lastLevel+"- isParent "+isParent);
 		//on row selection
-		sb.append("$scope."+entityName+ (entityList? "List":"")+"GridOptions.onRegisterApi = function(gridApi){\n");
+		sb.append("$scope."+entityName+ (relationshipType==RelationshipType.MANY_TO_MANY || relationshipType==RelationshipType.ONE_TO_MANY || relationshipType==RelationshipType.MANY_TO_MANY_BACK? "List":"")+"GridOptions.onRegisterApi = function(gridApi){\n");
 		sb.append("$scope."+entityName+"GridApi = gridApi;");
 		sb.append("gridApi.selection.on.rowSelectionChanged($scope,function(row){\n");
 		if (isParent)
@@ -868,14 +869,16 @@ public class JsGenerator {
 		if (entityName.equals("entity"))
 			System.out.println("");
 		buildJS.append(generateController());
-		List<Entity> descendantEntityList = entityManager.getDescendantEntities();
-		Set<Entity> descendantEntitySet = new HashSet<Entity>();
-		descendantEntitySet.addAll(descendantEntityList);
+		List<Relationship> descendantRelationshipList = entityManager.getDescendantRelationship();
+		Set<Relationship> descendantRelationshipSet = new HashSet<Relationship>();
+		descendantRelationshipSet.addAll(descendantRelationshipList);
 		
+		String entityName=entity.getName();
+		EntityManager mainEntityManager = new EntityManagerImpl(entity);
 		
-		for (Entity descendantEntity : descendantEntitySet)
+		for (Relationship descendantRelationship : descendantRelationshipSet)
 		{
-			init(descendantEntity,false,entity.getName(),true,entityManager.isLastLevel(descendantEntity));
+			init(descendantRelationship.getEntityTarget(),false,entityName,descendantRelationship.getRelationshipType(),mainEntityManager.isLastLevel(descendantRelationship.getEntityTarget()));
 			buildJS.append(generateService());
 			buildJS.append(generateController());
 			

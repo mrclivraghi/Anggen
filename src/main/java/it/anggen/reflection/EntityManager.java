@@ -5,6 +5,7 @@ import it.anggen.model.FieldType;
 import it.anggen.model.entity.Entity;
 import it.anggen.model.entity.Tab;
 import it.anggen.model.field.Field;
+import it.anggen.model.relationship.Relationship;
 
 import java.util.List;
 
@@ -28,4 +29,5 @@ public interface EntityManager {
 	public List<EntityAttribute> getAllAttribute();
 	public List<EntityAttribute> getChildrenFilter();
 	public Boolean isLastLevel(Entity entity);
+	public List<Relationship> getDescendantRelationship();
 }

@@ -72,6 +72,9 @@ public class JsGenerator {
 	
 	private Boolean lastLevel;
 	
+	private String serviceList;
+	
+	
 	
 	@Autowired
 	private Generator generator;
@@ -82,7 +85,7 @@ public class JsGenerator {
 	}
 
 	
-	public void init(Entity entity,Boolean isParent,String parentEntityName,RelationshipType relationshipType, Boolean lastLevel)
+	public void init(Entity entity,Boolean isParent,String parentEntityName,RelationshipType relationshipType, Boolean lastLevel,String serviceList)
 	{
 		this.entity=entity;
 		this.parentEntityName=parentEntityName;
@@ -97,7 +100,10 @@ public class JsGenerator {
 		this.relationshipList=entity.getRelationshipList();
 		this.lastLevel=lastLevel;
 		this.descendantEntityList=entityManager.getDescendantEntities();
-		
+		if (isParent)
+			this.serviceList=getServices();
+		else
+			this.serviceList=serviceList;
 		/*List<Class> parentClassList = new ArrayList<Class>();
 		parentClassList.add(classClass);
 		this.descendantClassList=reflectionManager.getDescendantClassList(classClass, parentClassList);
@@ -293,7 +299,7 @@ public class JsGenerator {
 	{
 		StringBuilder sb = new StringBuilder();
 
-		sb.append(".controller(\""+entityName+"Controller\",function($scope,$http"+getServices()+")\n");
+		sb.append(".controller(\""+entityName+"Controller\",function($scope,$http"+serviceList+")\n");
 		sb.append("{\n");
 		sb.append("//"+parentEntityName+"\n");
 		//search var
@@ -606,12 +612,13 @@ public class JsGenerator {
 		String mainParentName = parentEntityName;
 		RelationshipType mainEntityList = relationshipType;
 		EntityManager mainEntityManager= new EntityManagerImpl(mainEntity);
+		String mainServiceList = serviceList;
 		for (Relationship relationship: relationshipList)
 		{
-			init(relationship.getEntityTarget(), false, entityName,relationship.getRelationshipType(),mainEntityManager.isLastLevel(relationship.getEntityTarget()));
+			init(relationship.getEntityTarget(), false, entityName,relationship.getRelationshipType(),mainEntityManager.isLastLevel(relationship.getEntityTarget()),mainServiceList);
 			sb.append(getPagination());
 		}
-		init(mainEntity,isParent,parentEntityName,relationshipType,entityManager.isLastLevel(mainEntity));
+		init(mainEntity,isParent,parentEntityName,relationshipType,entityManager.isLastLevel(mainEntity),serviceList);
 		sb.append("$scope.downloadEntityList=function()\n");
 		sb.append("{\n");
 		sb.append("var mystyle = {\n");
@@ -827,7 +834,7 @@ public class JsGenerator {
 			sb.append("};\n");
 		}
 		sb.append("})\n");
-		String services = getServices();
+		String services = serviceList;
 		
 		sb.append(".run(function($rootScope,securityService"+services+"){\n");
 
@@ -875,10 +882,10 @@ public class JsGenerator {
 		
 		String entityName=entity.getName();
 		EntityManager mainEntityManager = new EntityManagerImpl(entity);
-		
+		String mainServiceList = serviceList;
 		for (Relationship descendantRelationship : descendantRelationshipSet)
 		{
-			init(descendantRelationship.getEntityTarget(),false,entityName,descendantRelationship.getRelationshipType(),mainEntityManager.isLastLevel(descendantRelationship.getEntityTarget()));
+			init(descendantRelationship.getEntityTarget(),false,entityName,descendantRelationship.getRelationshipType(),mainEntityManager.isLastLevel(descendantRelationship.getEntityTarget()),mainServiceList);
 			buildJS.append(generateService());
 			buildJS.append(generateController());
 			

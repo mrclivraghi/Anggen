@@ -11,8 +11,7 @@ public enum FieldType {
     TIME(4),
     BOOLEAN(5),
     LONG(6),
-    FILE(7),
-    PHOTO(8);
+    FILE(7);
     private final int value;
 
     private FieldType(int value) {

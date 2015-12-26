@@ -198,7 +198,7 @@ public class RestGenerator {
 				query= query+" (:"+fieldName+" is null or cast(:"+fieldName+" as string)"+comparator+"cast(date("+hibernateField+") as string)) and";
 			} else
 			{
-				if (EntityAttributeManager.getInstance(entityAttribute).asField()!=null && (EntityAttributeManager.getInstance(entityAttribute).asField().getFieldType()==FieldType.STRING || EntityAttributeManager.getInstance(entityAttribute).asField().getFieldType()==FieldType.FILE || EntityAttributeManager.getInstance(entityAttribute).asField().getFieldType()==FieldType.PHOTO  ))
+				if (EntityAttributeManager.getInstance(entityAttribute).asField()!=null && (EntityAttributeManager.getInstance(entityAttribute).asField().getFieldType()==FieldType.STRING || EntityAttributeManager.getInstance(entityAttribute).asField().getFieldType()==FieldType.FILE  ))
 				{
 					query= query+" (:"+fieldName+" is null or :"+fieldName+"='' or cast(:"+fieldName+" as string)"+comparator+""+hibernateField+") and";
 				} else

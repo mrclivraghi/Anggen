@@ -78,6 +78,10 @@ public class EntityAttributeManager {
 		return hasAnnotation(AnnotationType.PASSWORD);
 	}
 	
+	public Boolean isEmbedded(){
+		return hasAnnotation(AnnotationType.EMBEDDED);
+	}
+	
 	
 	/*  check */
 	
@@ -138,7 +142,6 @@ public class EntityAttributeManager {
 			case BOOLEAN: return codeModel.ref(Boolean.class);
 			case LONG: return codeModel.ref(Long.class);
 			case FILE: return codeModel.ref(String.class);
-			case PHOTO: return codeModel.ref(String.class);
 			default: return null;
 			}
 		} else

@@ -23,6 +23,7 @@ import it.anggen.utils.ReflectionManager;
 import it.anggen.utils.Utility;
 import it.anggen.utils.annotation.Between;
 import it.anggen.utils.annotation.DescriptionField;
+import it.anggen.utils.annotation.Embedded;
 import it.anggen.utils.annotation.ExcelExport;
 import it.anggen.utils.annotation.Filter;
 import it.anggen.utils.annotation.IgnoreSearch;
@@ -650,6 +651,10 @@ public class BeanToDBConverter {
 			if (annotationArray[i].annotationType()==IgnoreUpdate.class)
 			{
 				annotationType=AnnotationType.IGNORE_UPDATE;
+			}
+			if (annotationArray[i].annotationType()==Embedded.class)
+			{
+				annotationType=AnnotationType.EMBEDDED;
 			}
 			if (annotationArray[i].annotationType()==Size.class)
 			{

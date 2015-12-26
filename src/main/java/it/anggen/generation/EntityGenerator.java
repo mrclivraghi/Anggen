@@ -7,6 +7,7 @@ import it.anggen.utils.ReflectionManager;
 import it.anggen.utils.Utility;
 import it.anggen.utils.annotation.Between;
 import it.anggen.utils.annotation.DescriptionField;
+import it.anggen.utils.annotation.Embedded;
 import it.anggen.utils.annotation.ExcelExport;
 import it.anggen.utils.annotation.Filter;
 import it.anggen.utils.annotation.IgnoreSearch;
@@ -284,6 +285,8 @@ public class EntityGenerator {
 			case NOT_NULL:	annotationUse = classField.annotate(NotNull.class);
 			break;
 			case IGNORE_TABLE_LIST: annotationUse = classField.annotate(IgnoreTableList.class);
+			break;
+			case EMBEDDED: annotationUse=classField.annotate(Embedded.class);
 			break;
 			case PRIMARY_KEY: 	annotationUse=classField.annotate(Id.class);
 			JAnnotationUse generatedValue= classField.annotate(GeneratedValue.class);

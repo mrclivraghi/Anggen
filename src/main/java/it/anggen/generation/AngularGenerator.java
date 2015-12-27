@@ -515,6 +515,11 @@ public class AngularGenerator {
 				if (!search)
 					renderValidator(html,entityAttribute);
 				html._div();
+				if (inputType.equals("embedded"))
+				{
+					html.div((new HtmlAttributes()).add("style", "clear:both; height:80px"))
+					._div();
+				}
 				
 			} else
 				if ( !(parentEntity.contains(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget())))

@@ -123,7 +123,10 @@ public  class CssGenerator {
 	{
 		HtmlAttributes htmlAttributes= new HtmlAttributes();
 		String entityAttributeName= (EntityAttributeManager.getInstance(entityAttribute).isRelationship()? EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName(): entityAttribute.getName());
-		htmlAttributes.add("class", style+" right-input");
+		if (EntityAttributeManager.getInstance(entityAttribute).asField()!=null && EntityAttributeManager.getInstance(entityAttribute).isEmbedded()) 
+			htmlAttributes.add("class", style); // if embedded create a new row
+		else
+			htmlAttributes.add("class", style+" right-input");
 		if (!search)
 		{
 			htmlAttributes.add("ng-class","{'has-error': !"+entityName+"DetailForm."+entityAttributeName+".$valid, 'has-success': "+entityName+"DetailForm."+entityAttributeName+".$valid}");

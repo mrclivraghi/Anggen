@@ -24,6 +24,7 @@ import it.anggen.utils.Utility;
 import it.anggen.utils.annotation.Between;
 import it.anggen.utils.annotation.DescriptionField;
 import it.anggen.utils.annotation.Embedded;
+import it.anggen.utils.annotation.EnableRestrictionData;
 import it.anggen.utils.annotation.ExcelExport;
 import it.anggen.utils.annotation.Filter;
 import it.anggen.utils.annotation.IgnoreSearch;
@@ -201,6 +202,7 @@ public class BeanToDBConverter {
 			ReflectionManager reflectionManager = new ReflectionManager(myClass);
 			Entity entity = new Entity();
 			entity.setName(reflectionManager.parseName());
+			entity.setEnableRestrictionData(false);
 			Annotation[] annotationArray=myClass.getAnnotations();
 			Boolean securityTypeFound=false;
 			Boolean maxDescendantLevelFound=false;
@@ -223,6 +225,11 @@ public class BeanToDBConverter {
 						}
 					}
 				}
+				if (annotationArray[i].annotationType()==EnableRestrictionData.class)
+				{
+					entity.setEnableRestrictionData(true);
+				} 
+					
 				
 				if (annotationArray[i].annotationType()==MaxDescendantLevel.class)
 					for (Method method : annotationArray[i].annotationType().getDeclaredMethods()) {
@@ -317,7 +324,7 @@ public class BeanToDBConverter {
 					restrictionEntitieList.add(restrictionEntity);
 					entity.setRestrictionEntityList(restrictionEntitieList);
 					
-					if (enableRestrictionData && entity.getEntityGroup()!=null && !entity.getEntityGroup().getName().equals("security"))
+					if (entity.getEnableRestrictionData() && enableRestrictionData && entity.getEntityGroup()!=null && !entity.getEntityGroup().getName().equals("security"))
 					{
 						Entity restrictionData = new Entity();
 						String restrictionDataName="restriction"+Utility.getFirstUpper(reflectionManager.parseName());

@@ -620,7 +620,7 @@ public class RestGenerator {
 			JVar securityService= myClass.field(JMod.PRIVATE,SecurityService.class, "securityService");
 			securityService.annotate(Autowired.class);
 			
-			if (entity.getEntityGroup()!=null && !entity.getEntityGroup().getName().equals("restrictiondata"))
+			if (entity.getEntityGroup()!=null && !entity.getEntityGroup().getName().equals("restrictiondata") && entity.getEnableRestrictionData())
 			{
 				String restrictionDataRepositoryName=ReflectionManager.getJDefinedClass(entity).fullName().replaceAll("."+Utility.getFirstUpper(entity.getName()),".Restriction"+Utility.getFirstUpper(entity.getName()) ).replaceAll("."+entity.getEntityGroup().getName()+".", ".restrictiondata.").replaceAll(".model.", ".repository.")+"Repository";
 				JVar repositoryRestrictionData = myClass.field(JMod.PRIVATE, ReflectionManager.getJDefinedCustomClass(restrictionDataRepositoryName), "restriction"+Utility.getFirstUpper(entity.getName())+"Repository");

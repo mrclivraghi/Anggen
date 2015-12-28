@@ -2,6 +2,8 @@
 package it.anggen.model.entity;
 
 import java.util.List;
+
+import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -35,6 +37,11 @@ public class Entity {
     @javax.persistence.Column(name = "descendant_max_level")
     @it.anggen.utils.annotation.Priority(2)
     private Integer descendantMaxLevel;
+    
+    @Column(name="enable_restriction_data")
+    private Boolean enableRestrictionData;
+    
+    
     @OneToMany(fetch = javax.persistence.FetchType.EAGER)
     @Type(type = "it.anggen.model.field.Field")
     @javax.persistence.JoinColumn(name = "entity_id_entity")
@@ -147,5 +154,19 @@ public class Entity {
     public void setSecurityType(it.anggen.model.SecurityType securityType) {
         this.securityType=securityType;
     }
+
+	/**
+	 * @return the enableRestrictionData
+	 */
+	public Boolean getEnableRestrictionData() {
+		return enableRestrictionData;
+	}
+
+	/**
+	 * @param enableRestrictionData the enableRestrictionData to set
+	 */
+	public void setEnableRestrictionData(Boolean enableRestrictionData) {
+		this.enableRestrictionData = enableRestrictionData;
+	}
 
 }

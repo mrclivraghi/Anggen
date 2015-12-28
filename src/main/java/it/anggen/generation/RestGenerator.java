@@ -789,7 +789,7 @@ public class RestGenerator {
 			getSecurityMappingList.param(listClass, lowerClass+"List");
 			JBlock getSecurityMappingListBlock = getSecurityMappingList.body();
 			
-			if (entity.getEntityGroup()!=null && !entity.getEntityGroup().getName().equals("restrictiondata"))
+			if (entity.getEnableRestrictionData() && entity.getEntityGroup()!=null && !entity.getEntityGroup().getName().equals("restrictiondata"))
 			{
 				getSecurityMappingListBlock.directStatement(User.class.getName()+" loggedUser = securityService.getLoggedUser();");
 				getSecurityMappingListBlock.directStatement("for ("+Role.class.getName()+" role : loggedUser.getRoleList())");

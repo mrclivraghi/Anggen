@@ -64,6 +64,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         log.info("Searching user with id {}",userId);
         List<it.anggen.model.security.User> userList=userService.findById(Long.valueOf(userId));
         getRightMapping(userList);
+        getSecurityMapping(userList);
          log.info("Search: returning {} user.",userList.size());
         return ResponseEntity.ok().body(userList);
     }
@@ -128,8 +129,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         {
 
         role.setRestrictionEntityGroupList(null);
-        role.setRestrictionFieldList(null);
         role.setRestrictionEntityList(null);
+        role.setRestrictionFieldList(null);
         role.setUserList(null);
         }
     }

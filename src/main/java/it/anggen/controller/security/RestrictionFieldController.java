@@ -64,6 +64,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         log.info("Searching restrictionField with id {}",restrictionFieldId);
         List<it.anggen.model.security.RestrictionField> restrictionFieldList=restrictionFieldService.findById(Long.valueOf(restrictionFieldId));
         getRightMapping(restrictionFieldList);
+        getSecurityMapping(restrictionFieldList);
          log.info("Search: returning {} restrictionField.",restrictionFieldList.size());
         return ResponseEntity.ok().body(restrictionFieldList);
     }
@@ -122,27 +123,27 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     }
 
     private void getRightMapping(it.anggen.model.security.RestrictionField restrictionField) {
-        if (restrictionField.getRole()!=null)
-        {
-        restrictionField.getRole().setRestrictionEntityGroupList(null);
-        restrictionField.getRole().setRestrictionFieldList(null);
-        restrictionField.getRole().setRestrictionEntityList(null);
-        restrictionField.getRole().setUserList(null);
-        }
         if (restrictionField.getField()!=null)
         {
         restrictionField.getField().setTab(null);
-        restrictionField.getField().setRestrictionFieldList(null);
-        restrictionField.getField().setAnnotationList(null);
         restrictionField.getField().setEntity(null);
+        restrictionField.getField().setAnnotationList(null);
+        restrictionField.getField().setRestrictionFieldList(null);
+        }
+        if (restrictionField.getRole()!=null)
+        {
+        restrictionField.getRole().setRestrictionEntityGroupList(null);
+        restrictionField.getRole().setRestrictionEntityList(null);
+        restrictionField.getRole().setRestrictionFieldList(null);
+        restrictionField.getRole().setUserList(null);
         }
     }
 
     private void rebuildSecurityMapping(it.anggen.model.security.RestrictionField restrictionField) {
-        if (securityEnabled && !securityService.hasPermission(it.anggen.model.security.Role.staticEntityId, it.anggen.model.RestrictionType.SEARCH))
-        restrictionField.setRole(restrictionFieldService.findById(restrictionField.getRestrictionFieldId()).get(0).getRole());
         if (securityEnabled && !securityService.hasPermission(it.anggen.model.field.Field.staticEntityId, it.anggen.model.RestrictionType.SEARCH))
         restrictionField.setField(restrictionFieldService.findById(restrictionField.getRestrictionFieldId()).get(0).getField());
+        if (securityEnabled && !securityService.hasPermission(it.anggen.model.security.Role.staticEntityId, it.anggen.model.RestrictionType.SEARCH))
+        restrictionField.setRole(restrictionFieldService.findById(restrictionField.getRestrictionFieldId()).get(0).getRole());
     }
 
     private List<it.anggen.model.security.RestrictionField> getSecurityMapping(List<it.anggen.model.security.RestrictionField> restrictionFieldList) {
@@ -154,11 +155,11 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     }
 
     private void getSecurityMapping(it.anggen.model.security.RestrictionField restrictionField) {
-        if (securityEnabled && restrictionField.getRole()!=null  && !securityService.hasPermission(it.anggen.model.security.Role.staticEntityId, it.anggen.model.RestrictionType.SEARCH) )
-        restrictionField.setRole(null);
-
         if (securityEnabled && restrictionField.getField()!=null  && !securityService.hasPermission(it.anggen.model.field.Field.staticEntityId, it.anggen.model.RestrictionType.SEARCH) )
         restrictionField.setField(null);
+
+        if (securityEnabled && restrictionField.getRole()!=null  && !securityService.hasPermission(it.anggen.model.security.Role.staticEntityId, it.anggen.model.RestrictionType.SEARCH) )
+        restrictionField.setRole(null);
 
     }
 

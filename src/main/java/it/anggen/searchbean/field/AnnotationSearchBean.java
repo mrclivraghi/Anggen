@@ -8,9 +8,9 @@ public class AnnotationSearchBean {
 
     public java.lang.Long annotationId;
     public it.anggen.model.AnnotationType annotationType;
-    public it.anggen.model.field.EnumField enumField;
     public it.anggen.model.relationship.Relationship relationship;
     public it.anggen.model.field.Field field;
+    public it.anggen.model.field.EnumField enumField;
     public List<AnnotationAttribute> annotationAttributeList;
 
     public java.lang.Long getAnnotationId() {
@@ -29,14 +29,6 @@ public class AnnotationSearchBean {
         this.annotationType=annotationType;
     }
 
-    public it.anggen.model.field.EnumField getEnumField() {
-        return this.enumField;
-    }
-
-    public void setEnumField(it.anggen.model.field.EnumField enumField) {
-        this.enumField=enumField;
-    }
-
     public it.anggen.model.relationship.Relationship getRelationship() {
         return this.relationship;
     }
@@ -51,6 +43,14 @@ public class AnnotationSearchBean {
 
     public void setField(it.anggen.model.field.Field field) {
         this.field=field;
+    }
+
+    public it.anggen.model.field.EnumField getEnumField() {
+        return this.enumField;
+    }
+
+    public void setEnumField(it.anggen.model.field.EnumField enumField) {
+        this.enumField=enumField;
     }
 
     public List<AnnotationAttribute> getAnnotationAttributeList() {

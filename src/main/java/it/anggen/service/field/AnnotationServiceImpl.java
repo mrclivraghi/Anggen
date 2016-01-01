@@ -26,7 +26,7 @@ public class AnnotationServiceImpl
 
     @Override
     public List<it.anggen.model.field.Annotation> find(AnnotationSearchBean annotation) {
-        return annotationRepository.findByAnnotationIdAndAnnotationTypeAndEnumFieldAndRelationshipAndFieldAndAnnotationAttribute(annotation.getAnnotationId(), (annotation.getAnnotationType()==null)? null : annotation.getAnnotationType().getValue(),annotation.getEnumField(),annotation.getRelationship(),annotation.getField(),annotation.getAnnotationAttributeList()==null? null :annotation.getAnnotationAttributeList().get(0));
+        return annotationRepository.findByAnnotationIdAndAnnotationTypeAndRelationshipAndFieldAndEnumFieldAndAnnotationAttribute(annotation.getAnnotationId(), (annotation.getAnnotationType()==null)? null : annotation.getAnnotationType().getValue(),annotation.getRelationship(),annotation.getField(),annotation.getEnumField(),annotation.getAnnotationAttributeList()==null? null :annotation.getAnnotationAttributeList().get(0));
     }
 
     @Override
@@ -49,13 +49,6 @@ public class AnnotationServiceImpl
         annotationAttribute.setAnnotation(annotation);
         }
         it.anggen.model.field.Annotation returnedAnnotation=annotationRepository.save(annotation);
-        if (annotation.getEnumField()!=null)
-        {
-        List<it.anggen.model.field.Annotation> annotationList = annotationRepository.findByEnumField( annotation.getEnumField());
-        if (!annotationList.contains(returnedAnnotation))
-        annotationList.add(returnedAnnotation);
-        returnedAnnotation.getEnumField().setAnnotationList(annotationList);
-        }
         if (annotation.getRelationship()!=null)
         {
         List<it.anggen.model.field.Annotation> annotationList = annotationRepository.findByRelationship( annotation.getRelationship());
@@ -69,6 +62,13 @@ public class AnnotationServiceImpl
         if (!annotationList.contains(returnedAnnotation))
         annotationList.add(returnedAnnotation);
         returnedAnnotation.getField().setAnnotationList(annotationList);
+        }
+        if (annotation.getEnumField()!=null)
+        {
+        List<it.anggen.model.field.Annotation> annotationList = annotationRepository.findByEnumField( annotation.getEnumField());
+        if (!annotationList.contains(returnedAnnotation))
+        annotationList.add(returnedAnnotation);
+        returnedAnnotation.getEnumField().setAnnotationList(annotationList);
         }
          return returnedAnnotation;
     }

@@ -21,18 +21,18 @@ import org.hibernate.annotations.Type;
 @MaxDescendantLevel(100)
 public class User {
 
-    public final static java.lang.Long staticEntityId = 15L;
-    @javax.persistence.Column(name = "username")
-    @it.anggen.utils.annotation.DescriptionField
-    @it.anggen.utils.annotation.Priority(2)
-    private java.lang.String username;
-    @javax.persistence.Column(name = "enabled")
-    @it.anggen.utils.annotation.Priority(2)
-    private Boolean enabled;
+    public final static java.lang.Long staticEntityId = 9L;
     @javax.persistence.Column(name = "password")
     @it.anggen.utils.annotation.Priority(2)
     @Password
     private java.lang.String password;
+    @javax.persistence.Column(name = "enabled")
+    @it.anggen.utils.annotation.Priority(2)
+    private Boolean enabled;
+    @javax.persistence.Column(name = "username")
+    @it.anggen.utils.annotation.DescriptionField
+    @it.anggen.utils.annotation.Priority(2)
+    private java.lang.String username;
     @javax.persistence.Column(name = "user_id")
     @it.anggen.utils.annotation.Priority(1)
     @it.anggen.utils.annotation.DescriptionField
@@ -49,12 +49,12 @@ public class User {
     @it.anggen.utils.annotation.Priority(4)
     private List<Role> roleList;
 
-    public java.lang.String getUsername() {
-        return this.username;
+    public java.lang.String getPassword() {
+        return this.password;
     }
 
-    public void setUsername(java.lang.String username) {
-        this.username=username;
+    public void setPassword(java.lang.String password) {
+        this.password=password;
     }
 
     public Boolean getEnabled() {
@@ -65,12 +65,12 @@ public class User {
         this.enabled=enabled;
     }
 
-    public java.lang.String getPassword() {
-        return this.password;
+    public java.lang.String getUsername() {
+        return this.username;
     }
 
-    public void setPassword(java.lang.String password) {
-        this.password=password;
+    public void setUsername(java.lang.String username) {
+        this.username=username;
     }
 
     public java.lang.Long getUserId() {

@@ -24,7 +24,7 @@ public class RestrictionFieldServiceImpl
 
     @Override
     public List<it.anggen.model.security.RestrictionField> find(RestrictionFieldSearchBean restrictionField) {
-        return restrictionFieldRepository.findByRestrictionFieldIdAndRoleAndField(restrictionField.getRestrictionFieldId(),restrictionField.getRole(),restrictionField.getField());
+        return restrictionFieldRepository.findByRestrictionFieldIdAndFieldAndRole(restrictionField.getRestrictionFieldId(),restrictionField.getField(),restrictionField.getRole());
     }
 
     @Override
@@ -42,19 +42,19 @@ public class RestrictionFieldServiceImpl
     @Transactional
     public it.anggen.model.security.RestrictionField update(it.anggen.model.security.RestrictionField restrictionField) {
         it.anggen.model.security.RestrictionField returnedRestrictionField=restrictionFieldRepository.save(restrictionField);
-        if (restrictionField.getRole()!=null)
-        {
-        List<it.anggen.model.security.RestrictionField> restrictionFieldList = restrictionFieldRepository.findByRole( restrictionField.getRole());
-        if (!restrictionFieldList.contains(returnedRestrictionField))
-        restrictionFieldList.add(returnedRestrictionField);
-        returnedRestrictionField.getRole().setRestrictionFieldList(restrictionFieldList);
-        }
         if (restrictionField.getField()!=null)
         {
         List<it.anggen.model.security.RestrictionField> restrictionFieldList = restrictionFieldRepository.findByField( restrictionField.getField());
         if (!restrictionFieldList.contains(returnedRestrictionField))
         restrictionFieldList.add(returnedRestrictionField);
         returnedRestrictionField.getField().setRestrictionFieldList(restrictionFieldList);
+        }
+        if (restrictionField.getRole()!=null)
+        {
+        List<it.anggen.model.security.RestrictionField> restrictionFieldList = restrictionFieldRepository.findByRole( restrictionField.getRole());
+        if (!restrictionFieldList.contains(returnedRestrictionField))
+        restrictionFieldList.add(returnedRestrictionField);
+        returnedRestrictionField.getRole().setRestrictionFieldList(restrictionFieldList);
         }
          return returnedRestrictionField;
     }

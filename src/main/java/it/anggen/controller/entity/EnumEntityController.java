@@ -45,7 +45,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         List<it.anggen.model.entity.EnumEntity> enumEntityList;
         if (enumEntity.getEnumEntityId()!=null)
-         log.info("Searching enumEntity like {}", enumEntity.getName());
+         log.info("Searching enumEntity like {}", enumEntity.getEnumEntityId()+' '+ enumEntity.getName());
         enumEntityList=enumEntityService.find(enumEntity);
         getRightMapping(enumEntityList);
         getSecurityMapping(enumEntityList);
@@ -64,6 +64,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         log.info("Searching enumEntity with id {}",enumEntityId);
         List<it.anggen.model.entity.EnumEntity> enumEntityList=enumEntityService.findById(Long.valueOf(enumEntityId));
         getRightMapping(enumEntityList);
+        getSecurityMapping(enumEntityList);
          log.info("Search: returning {} enumEntity.",enumEntityList.size());
         return ResponseEntity.ok().body(enumEntityList);
     }
@@ -90,7 +91,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
         if (enumEntity.getEnumEntityId()!=null)
-        log.info("Inserting enumEntity like {}", enumEntity.getName());
+        log.info("Inserting enumEntity like {}", enumEntity.getEnumEntityId()+' '+ enumEntity.getName());
         it.anggen.model.entity.EnumEntity insertedEnumEntity=enumEntityService.insert(enumEntity);
         getRightMapping(insertedEnumEntity);
         log.info("Inserted enumEntity with id {}",insertedEnumEntity.getEnumEntityId());
@@ -124,8 +125,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     private void getRightMapping(it.anggen.model.entity.EnumEntity enumEntity) {
         if (enumEntity.getProject()!=null)
         {
-        enumEntity.getProject().setEnumEntityList(null);
         enumEntity.getProject().setEntityGroupList(null);
+        enumEntity.getProject().setEnumEntityList(null);
         }
         if (enumEntity.getEnumValueList()!=null)
         for (it.anggen.model.field.EnumValue enumValue :enumEntity.getEnumValueList())

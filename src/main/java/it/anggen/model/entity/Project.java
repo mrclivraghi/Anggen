@@ -20,7 +20,7 @@ import org.hibernate.annotations.Type;
 @MaxDescendantLevel(100)
 public class Project {
 
-    public final static Long staticEntityId = 9L;
+    public final static Long staticEntityId = 7L;
     @javax.persistence.Column(name = "name")
     @it.anggen.utils.annotation.DescriptionField
     @it.anggen.utils.annotation.Priority(2)
@@ -32,15 +32,15 @@ public class Project {
     @it.anggen.utils.annotation.Priority(1)
     private Integer projectId;
     @OneToMany(fetch = FetchType.EAGER)
-    @Type(type = "it.anggen.model.entity.EnumEntity")
-    @JoinColumn(name = "project_id_project")
-    @it.anggen.utils.annotation.Priority(4)
-    private List<EnumEntity> enumEntityList;
-    @OneToMany(fetch = FetchType.EAGER)
     @Type(type = "it.anggen.model.entity.EntityGroup")
     @JoinColumn(name = "project_id_project")
     @it.anggen.utils.annotation.Priority(4)
     private List<EntityGroup> entityGroupList;
+    @OneToMany(fetch = FetchType.EAGER)
+    @Type(type = "it.anggen.model.entity.EnumEntity")
+    @JoinColumn(name = "project_id_project")
+    @it.anggen.utils.annotation.Priority(4)
+    private List<EnumEntity> enumEntityList;
 
     public String getName() {
         return this.name;
@@ -58,20 +58,20 @@ public class Project {
         this.projectId=projectId;
     }
 
-    public List<EnumEntity> getEnumEntityList() {
-        return this.enumEntityList;
-    }
-
-    public void setEnumEntityList(List<EnumEntity> enumEntityList) {
-        this.enumEntityList=enumEntityList;
-    }
-
     public List<EntityGroup> getEntityGroupList() {
         return this.entityGroupList;
     }
 
     public void setEntityGroupList(List<EntityGroup> entityGroupList) {
         this.entityGroupList=entityGroupList;
+    }
+
+    public List<EnumEntity> getEnumEntityList() {
+        return this.enumEntityList;
+    }
+
+    public void setEnumEntityList(List<EnumEntity> enumEntityList) {
+        this.enumEntityList=enumEntityList;
     }
 
 }

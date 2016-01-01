@@ -8,13 +8,13 @@ import it.anggen.model.security.RestrictionField;
 public class FieldSearchBean {
 
     public java.lang.Long fieldId;
-    public java.lang.String name;
     public java.lang.Integer priority;
+    public java.lang.String name;
     public it.anggen.model.FieldType fieldType;
     public it.anggen.model.entity.Tab tab;
-    public List<RestrictionField> restrictionFieldList;
-    public List<Annotation> annotationList;
     public it.anggen.model.entity.Entity entity;
+    public List<Annotation> annotationList;
+    public List<RestrictionField> restrictionFieldList;
 
     public java.lang.Long getFieldId() {
         return this.fieldId;
@@ -24,20 +24,20 @@ public class FieldSearchBean {
         this.fieldId=fieldId;
     }
 
-    public java.lang.String getName() {
-        return this.name;
-    }
-
-    public void setName(java.lang.String name) {
-        this.name=name;
-    }
-
     public java.lang.Integer getPriority() {
         return this.priority;
     }
 
     public void setPriority(java.lang.Integer priority) {
         this.priority=priority;
+    }
+
+    public java.lang.String getName() {
+        return this.name;
+    }
+
+    public void setName(java.lang.String name) {
+        this.name=name;
     }
 
     public it.anggen.model.FieldType getFieldType() {
@@ -56,12 +56,12 @@ public class FieldSearchBean {
         this.tab=tab;
     }
 
-    public List<RestrictionField> getRestrictionFieldList() {
-        return this.restrictionFieldList;
+    public it.anggen.model.entity.Entity getEntity() {
+        return this.entity;
     }
 
-    public void setRestrictionFieldList(List<RestrictionField> restrictionFieldList) {
-        this.restrictionFieldList=restrictionFieldList;
+    public void setEntity(it.anggen.model.entity.Entity entity) {
+        this.entity=entity;
     }
 
     public List<Annotation> getAnnotationList() {
@@ -72,12 +72,12 @@ public class FieldSearchBean {
         this.annotationList=annotationList;
     }
 
-    public it.anggen.model.entity.Entity getEntity() {
-        return this.entity;
+    public List<RestrictionField> getRestrictionFieldList() {
+        return this.restrictionFieldList;
     }
 
-    public void setEntity(it.anggen.model.entity.Entity entity) {
-        this.entity=entity;
+    public void setRestrictionFieldList(List<RestrictionField> restrictionFieldList) {
+        this.restrictionFieldList=restrictionFieldList;
     }
 
 }

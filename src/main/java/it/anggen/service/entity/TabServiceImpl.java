@@ -19,11 +19,11 @@ public class TabServiceImpl
     @org.springframework.beans.factory.annotation.Autowired
     public TabRepository tabRepository;
     @org.springframework.beans.factory.annotation.Autowired
-    public EnumFieldRepository enumFieldRepository;
-    @org.springframework.beans.factory.annotation.Autowired
     public RelationshipRepository relationshipRepository;
     @org.springframework.beans.factory.annotation.Autowired
     public FieldRepository fieldRepository;
+    @org.springframework.beans.factory.annotation.Autowired
+    public EnumFieldRepository enumFieldRepository;
 
     @Override
     public List<it.anggen.model.entity.Tab> findById(Long tabId) {
@@ -32,7 +32,7 @@ public class TabServiceImpl
 
     @Override
     public List<it.anggen.model.entity.Tab> find(TabSearchBean tab) {
-        return tabRepository.findByTabIdAndNameAndEnumFieldAndRelationshipAndFieldAndEntity(tab.getTabId(),tab.getName(),tab.getEnumFieldList()==null? null :tab.getEnumFieldList().get(0),tab.getRelationshipList()==null? null :tab.getRelationshipList().get(0),tab.getFieldList()==null? null :tab.getFieldList().get(0),tab.getEntity());
+        return tabRepository.findByTabIdAndNameAndRelationshipAndEntityAndFieldAndEnumField(tab.getTabId(),tab.getName(),tab.getRelationshipList()==null? null :tab.getRelationshipList().get(0),tab.getEntity(),tab.getFieldList()==null? null :tab.getFieldList().get(0),tab.getEnumFieldList()==null? null :tab.getEnumFieldList().get(0));
     }
 
     @Override
@@ -49,11 +49,6 @@ public class TabServiceImpl
     @Override
     @Transactional
     public it.anggen.model.entity.Tab update(it.anggen.model.entity.Tab tab) {
-        if (tab.getEnumFieldList()!=null)
-        for (it.anggen.model.field.EnumField enumField: tab.getEnumFieldList())
-        {
-        enumField.setTab(tab);
-        }
         if (tab.getRelationshipList()!=null)
         for (it.anggen.model.relationship.Relationship relationship: tab.getRelationshipList())
         {
@@ -63,6 +58,11 @@ public class TabServiceImpl
         for (it.anggen.model.field.Field field: tab.getFieldList())
         {
         field.setTab(tab);
+        }
+        if (tab.getEnumFieldList()!=null)
+        for (it.anggen.model.field.EnumField enumField: tab.getEnumFieldList())
+        {
+        enumField.setTab(tab);
         }
         it.anggen.model.entity.Tab returnedTab=tabRepository.save(tab);
         if (tab.getEntity()!=null)

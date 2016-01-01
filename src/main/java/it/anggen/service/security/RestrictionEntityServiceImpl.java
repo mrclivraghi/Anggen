@@ -24,7 +24,7 @@ public class RestrictionEntityServiceImpl
 
     @Override
     public List<it.anggen.model.security.RestrictionEntity> find(RestrictionEntitySearchBean restrictionEntity) {
-        return restrictionEntityRepository.findByRestrictionEntityIdAndCanCreateAndCanSearchAndCanUpdateAndCanDeleteAndRoleAndEntity(restrictionEntity.getRestrictionEntityId(),restrictionEntity.getCanCreate(),restrictionEntity.getCanSearch(),restrictionEntity.getCanUpdate(),restrictionEntity.getCanDelete(),restrictionEntity.getRole(),restrictionEntity.getEntity());
+        return restrictionEntityRepository.findByRestrictionEntityIdAndCanCreateAndCanUpdateAndCanDeleteAndCanSearchAndEntityAndRole(restrictionEntity.getRestrictionEntityId(),restrictionEntity.getCanCreate(),restrictionEntity.getCanUpdate(),restrictionEntity.getCanDelete(),restrictionEntity.getCanSearch(),restrictionEntity.getEntity(),restrictionEntity.getRole());
     }
 
     @Override
@@ -42,19 +42,19 @@ public class RestrictionEntityServiceImpl
     @Transactional
     public it.anggen.model.security.RestrictionEntity update(it.anggen.model.security.RestrictionEntity restrictionEntity) {
         it.anggen.model.security.RestrictionEntity returnedRestrictionEntity=restrictionEntityRepository.save(restrictionEntity);
-        if (restrictionEntity.getRole()!=null)
-        {
-        List<it.anggen.model.security.RestrictionEntity> restrictionEntityList = restrictionEntityRepository.findByRole( restrictionEntity.getRole());
-        if (!restrictionEntityList.contains(returnedRestrictionEntity))
-        restrictionEntityList.add(returnedRestrictionEntity);
-        returnedRestrictionEntity.getRole().setRestrictionEntityList(restrictionEntityList);
-        }
         if (restrictionEntity.getEntity()!=null)
         {
         List<it.anggen.model.security.RestrictionEntity> restrictionEntityList = restrictionEntityRepository.findByEntity( restrictionEntity.getEntity());
         if (!restrictionEntityList.contains(returnedRestrictionEntity))
         restrictionEntityList.add(returnedRestrictionEntity);
         returnedRestrictionEntity.getEntity().setRestrictionEntityList(restrictionEntityList);
+        }
+        if (restrictionEntity.getRole()!=null)
+        {
+        List<it.anggen.model.security.RestrictionEntity> restrictionEntityList = restrictionEntityRepository.findByRole( restrictionEntity.getRole());
+        if (!restrictionEntityList.contains(returnedRestrictionEntity))
+        restrictionEntityList.add(returnedRestrictionEntity);
+        returnedRestrictionEntity.getRole().setRestrictionEntityList(restrictionEntityList);
         }
          return returnedRestrictionEntity;
     }

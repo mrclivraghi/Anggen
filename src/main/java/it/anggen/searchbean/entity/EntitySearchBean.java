@@ -11,15 +11,16 @@ import it.anggen.model.security.RestrictionEntity;
 public class EntitySearchBean {
 
     public java.lang.Long entityId;
-    public java.lang.String name;
+    public java.lang.Boolean enableRestrictionData;
     public java.lang.Integer descendantMaxLevel;
+    public java.lang.String name;
     public it.anggen.model.SecurityType securityType;
-    public List<Field> fieldList;
-    public it.anggen.model.entity.EntityGroup entityGroup;
-    public List<RestrictionEntity> restrictionEntityList;
-    public List<Tab> tabList;
-    public List<EnumField> enumFieldList;
     public List<Relationship> relationshipList;
+    public it.anggen.model.entity.EntityGroup entityGroup;
+    public List<Tab> tabList;
+    public List<Field> fieldList;
+    public List<EnumField> enumFieldList;
+    public List<RestrictionEntity> restrictionEntityList;
 
     public java.lang.Long getEntityId() {
         return this.entityId;
@@ -29,12 +30,12 @@ public class EntitySearchBean {
         this.entityId=entityId;
     }
 
-    public java.lang.String getName() {
-        return this.name;
+    public java.lang.Boolean getEnableRestrictionData() {
+        return this.enableRestrictionData;
     }
 
-    public void setName(java.lang.String name) {
-        this.name=name;
+    public void setEnableRestrictionData(java.lang.Boolean enableRestrictionData) {
+        this.enableRestrictionData=enableRestrictionData;
     }
 
     public java.lang.Integer getDescendantMaxLevel() {
@@ -45,6 +46,14 @@ public class EntitySearchBean {
         this.descendantMaxLevel=descendantMaxLevel;
     }
 
+    public java.lang.String getName() {
+        return this.name;
+    }
+
+    public void setName(java.lang.String name) {
+        this.name=name;
+    }
+
     public it.anggen.model.SecurityType getSecurityType() {
         return this.securityType;
     }
@@ -53,12 +62,12 @@ public class EntitySearchBean {
         this.securityType=securityType;
     }
 
-    public List<Field> getFieldList() {
-        return this.fieldList;
+    public List<Relationship> getRelationshipList() {
+        return this.relationshipList;
     }
 
-    public void setFieldList(List<Field> fieldList) {
-        this.fieldList=fieldList;
+    public void setRelationshipList(List<Relationship> relationshipList) {
+        this.relationshipList=relationshipList;
     }
 
     public it.anggen.model.entity.EntityGroup getEntityGroup() {
@@ -69,20 +78,20 @@ public class EntitySearchBean {
         this.entityGroup=entityGroup;
     }
 
-    public List<RestrictionEntity> getRestrictionEntityList() {
-        return this.restrictionEntityList;
-    }
-
-    public void setRestrictionEntityList(List<RestrictionEntity> restrictionEntityList) {
-        this.restrictionEntityList=restrictionEntityList;
-    }
-
     public List<Tab> getTabList() {
         return this.tabList;
     }
 
     public void setTabList(List<Tab> tabList) {
         this.tabList=tabList;
+    }
+
+    public List<Field> getFieldList() {
+        return this.fieldList;
+    }
+
+    public void setFieldList(List<Field> fieldList) {
+        this.fieldList=fieldList;
     }
 
     public List<EnumField> getEnumFieldList() {
@@ -93,12 +102,12 @@ public class EntitySearchBean {
         this.enumFieldList=enumFieldList;
     }
 
-    public List<Relationship> getRelationshipList() {
-        return this.relationshipList;
+    public List<RestrictionEntity> getRestrictionEntityList() {
+        return this.restrictionEntityList;
     }
 
-    public void setRelationshipList(List<Relationship> relationshipList) {
-        this.relationshipList=relationshipList;
+    public void setRestrictionEntityList(List<RestrictionEntity> restrictionEntityList) {
+        this.restrictionEntityList=restrictionEntityList;
     }
 
 }

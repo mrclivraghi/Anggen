@@ -18,9 +18,9 @@ public class EntityGroupServiceImpl
     @org.springframework.beans.factory.annotation.Autowired
     public EntityGroupRepository entityGroupRepository;
     @org.springframework.beans.factory.annotation.Autowired
-    public RestrictionEntityGroupRepository restrictionEntityGroupRepository;
-    @org.springframework.beans.factory.annotation.Autowired
     public EntityRepository entityRepository;
+    @org.springframework.beans.factory.annotation.Autowired
+    public RestrictionEntityGroupRepository restrictionEntityGroupRepository;
 
     @Override
     public List<it.anggen.model.entity.EntityGroup> findById(Long entityGroupId) {
@@ -29,7 +29,7 @@ public class EntityGroupServiceImpl
 
     @Override
     public List<it.anggen.model.entity.EntityGroup> find(EntityGroupSearchBean entityGroup) {
-        return entityGroupRepository.findByEntityGroupIdAndNameAndEntityIdAndProjectAndRestrictionEntityGroupAndEntity(entityGroup.getEntityGroupId(),entityGroup.getName(),entityGroup.getEntityId(),entityGroup.getProject(),entityGroup.getRestrictionEntityGroupList()==null? null :entityGroup.getRestrictionEntityGroupList().get(0),entityGroup.getEntityList()==null? null :entityGroup.getEntityList().get(0));
+        return entityGroupRepository.findByEntityGroupIdAndEntityIdAndNameAndProjectAndEntityAndRestrictionEntityGroup(entityGroup.getEntityGroupId(),entityGroup.getEntityId(),entityGroup.getName(),entityGroup.getProject(),entityGroup.getEntityList()==null? null :entityGroup.getEntityList().get(0),entityGroup.getRestrictionEntityGroupList()==null? null :entityGroup.getRestrictionEntityGroupList().get(0));
     }
 
     @Override
@@ -46,15 +46,15 @@ public class EntityGroupServiceImpl
     @Override
     @Transactional
     public it.anggen.model.entity.EntityGroup update(it.anggen.model.entity.EntityGroup entityGroup) {
-        if (entityGroup.getRestrictionEntityGroupList()!=null)
-        for (it.anggen.model.security.RestrictionEntityGroup restrictionEntityGroup: entityGroup.getRestrictionEntityGroupList())
-        {
-        restrictionEntityGroup.setEntityGroup(entityGroup);
-        }
         if (entityGroup.getEntityList()!=null)
         for (it.anggen.model.entity.Entity entity: entityGroup.getEntityList())
         {
         entity.setEntityGroup(entityGroup);
+        }
+        if (entityGroup.getRestrictionEntityGroupList()!=null)
+        for (it.anggen.model.security.RestrictionEntityGroup restrictionEntityGroup: entityGroup.getRestrictionEntityGroupList())
+        {
+        restrictionEntityGroup.setEntityGroup(entityGroup);
         }
         it.anggen.model.entity.EntityGroup returnedEntityGroup=entityGroupRepository.save(entityGroup);
         if (entityGroup.getProject()!=null)

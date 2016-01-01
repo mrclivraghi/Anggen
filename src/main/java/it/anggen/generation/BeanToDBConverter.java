@@ -193,7 +193,7 @@ public class BeanToDBConverter {
 		}
 		
 		
-		List<Entity> oldEntityList = entityRepository.findByEntityIdAndNameAndDescendantMaxLevelAndSecurityTypeAndFieldAndEntityGroupAndRestrictionEntityAndTabAndEnumFieldAndRelationship(null, null, null, null, null, null, null, null, null, null);
+		List<Entity> oldEntityList = entityRepository.findByEntityIdAndEnableRestrictionDataAndDescendantMaxLevelAndNameAndSecurityTypeAndRelationshipAndEntityGroupAndTabAndFieldAndEnumFieldAndRestrictionEntity(null, null, null, null, null, null, null, null, null, null, null);
 		firstEntityId=Utility.getFirstEntityId(oldEntityList);
 		
 		// init entities

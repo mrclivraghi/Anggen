@@ -694,8 +694,9 @@ public class JsGenerator {
 		sb.append("enableGridMenu: true,\n");
 		//generate dynamically
 		sb.append("columnDefs: [    \n");
-		//TODO add enum fields?
-		for (EntityAttribute entityAttribute: entityManager.getAttributeList())
+		List<EntityAttribute> entityAttributeList = entityManager.getAttributeList();
+		Utility.orderByPriority(entityAttributeList);
+		for (EntityAttribute entityAttribute: entityAttributeList)
 		{
 			if ((EntityAttributeManager.getInstance(entityAttribute).asRelationship()!=null && EntityAttributeManager.getInstance(entityAttribute).getIgnoreTableList()) || (EntityAttributeManager.getInstance(entityAttribute).asField()!=null && EntityAttributeManager.getInstance(entityAttribute).getIgnoreTableList())) continue;
 			
@@ -878,7 +879,20 @@ public class JsGenerator {
 		buildJS.append(generateController());
 		List<Relationship> descendantRelationshipList = entityManager.getDescendantRelationship();
 		Set<Relationship> descendantRelationshipSet = new HashSet<Relationship>();
-		descendantRelationshipSet.addAll(descendantRelationshipList);
+		for (Relationship relationshipToInsert : descendantRelationshipList)
+		{
+			Boolean found = false;
+			for  (Relationship insertedRelationship: descendantRelationshipSet)
+			{
+				if (insertedRelationship.getEntityTarget().getEntityId().equals(relationshipToInsert.getEntityTarget().getEntityId()))
+				{	
+					found= true;
+					break;
+				}
+			}
+			if (!found)
+				descendantRelationshipSet.add(relationshipToInsert);
+		}
 		
 		String entityName=entity.getName();
 		EntityManager mainEntityManager = new EntityManagerImpl(entity);

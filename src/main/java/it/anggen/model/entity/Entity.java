@@ -29,6 +29,13 @@ public class Entity {
     @javax.persistence.Column(name = "enable_restriction_data")
     @it.anggen.utils.annotation.Priority(2)
     private Boolean enableRestrictionData;
+    
+    @javax.persistence.Column(name = "disable_view_generation")
+    @it.anggen.utils.annotation.Priority(2)
+    private Boolean disableViewGeneration;
+    
+    
+    
     @javax.persistence.Column(name = "descendant_max_level")
     @it.anggen.utils.annotation.Priority(2)
     private Integer descendantMaxLevel;
@@ -158,5 +165,19 @@ public class Entity {
     public void setSecurityType(it.anggen.model.SecurityType securityType) {
         this.securityType=securityType;
     }
+
+	/**
+	 * @return the disableViewGeneration
+	 */
+	public Boolean getDisableViewGeneration() {
+		return disableViewGeneration;
+	}
+
+	/**
+	 * @param disableViewGeneration the disableViewGeneration to set
+	 */
+	public void setDisableViewGeneration(Boolean disableViewGeneration) {
+		this.disableViewGeneration = disableViewGeneration;
+	}
 
 }

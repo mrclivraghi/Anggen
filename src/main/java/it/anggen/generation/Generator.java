@@ -222,6 +222,7 @@ public class Generator {
 		{
 			for (Entity modelEntity: modelEntityList)
 			{
+				if (modelEntity.getDisableViewGeneration()) continue;
 				htmlGenerator.init(modelEntity);
 				try {
 					htmlGenerator.generateJSP();

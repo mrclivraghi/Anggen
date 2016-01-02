@@ -636,25 +636,28 @@ public class RestGenerator {
 			JAnnotationUse valueSecurityEnable= securityEnable.annotate(Value.class);
 			valueSecurityEnable.param("value", "${application.security}");
 			
-			//manage
-			JMethod manage = myClass.method(JMod.PUBLIC, String.class, "manage");
-			JAnnotationUse requestMappingManage = manage.annotate(RequestMapping.class);
-			requestMappingManage.param("method", RequestMethod.GET);
-			JBlock manageBlock = manage.body();
-			String check="";
-			if (entity.getSecurityType()==null || entity.getSecurityType()==SecurityType.ACCESS_WITH_PERMISSION)
-				check="if (securityEnabled && !securityService.hasPermission("+ReflectionManager.getJDefinedClass(entity).fullName()+".staticEntityId, "+RestrictionType.class.getName()+"."+RestrictionType.SEARCH.toString()+")) \n";
-			else
-				if (entity.getSecurityType()==SecurityType.BLOCK_WITH_RESTRICTION)
-					check="if (securityEnabled && securityService.hasRestriction("+ReflectionManager.getJDefinedClass(entity).fullName()+".staticEntityId, "+RestrictionType.class.getName()+"."+RestrictionType.SEARCH.toString()+")) \n";
-			
-			check+="return \"forbidden\"; \n";
+			if (!entity.getDisableViewGeneration())
+			{
 
-			manageBlock.directStatement(check);
-			
-			manageBlock.directStatement("return \""+lowerClass+"\";");
-			
-			
+				//manage
+				JMethod manage = myClass.method(JMod.PUBLIC, String.class, "manage");
+				JAnnotationUse requestMappingManage = manage.annotate(RequestMapping.class);
+				requestMappingManage.param("method", RequestMethod.GET);
+				JBlock manageBlock = manage.body();
+				String check="";
+				if (entity.getSecurityType()==null || entity.getSecurityType()==SecurityType.ACCESS_WITH_PERMISSION)
+					check="if (securityEnabled && !securityService.hasPermission("+ReflectionManager.getJDefinedClass(entity).fullName()+".staticEntityId, "+RestrictionType.class.getName()+"."+RestrictionType.SEARCH.toString()+")) \n";
+				else
+					if (entity.getSecurityType()==SecurityType.BLOCK_WITH_RESTRICTION)
+						check="if (securityEnabled && securityService.hasRestriction("+ReflectionManager.getJDefinedClass(entity).fullName()+".staticEntityId, "+RestrictionType.class.getName()+"."+RestrictionType.SEARCH.toString()+")) \n";
+
+				check+="return \"forbidden\"; \n";
+
+				manageBlock.directStatement(check);
+
+				manageBlock.directStatement("return \""+lowerClass+"\";");
+
+			}
 			//search
 			JMethod search = myClass.method(JMod.PUBLIC, ResponseEntity.class, "search");
 			search.annotate(ResponseBody.class);

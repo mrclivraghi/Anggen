@@ -32,6 +32,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -444,6 +447,10 @@ public class RestGenerator {
 			insert.param(ReflectionManager.getJDefinedClass(entity), className);
 			JMethod update= myClass.method(JMod.PUBLIC, ReflectionManager.getJDefinedClass(entity), "update");
 			update.param(ReflectionManager.getJDefinedClass(entity), className);
+			JMethod findByPage= myClass.method(JMod.PUBLIC, ReflectionManager.getJDefinedClass(entity), "findByPage");
+			JVar param=findByPage.param(Integer.class, "pageNumber");
+			param.annotate(PathVariable.class);
+			
 		} catch (JClassAlreadyExistsException e) {
 			e.printStackTrace();
 		}
@@ -492,6 +499,7 @@ public class RestGenerator {
 			myClass._implements(serviceInterfaceClass);
 			myClass.annotate(Service.class);
 			JClass listClass = codeModel.ref(List.class).narrow(ReflectionManager.getJDefinedClass(entity));
+			JClass pageClass = codeModel.ref(Page.class).narrow(ReflectionManager.getJDefinedClass(entity));
 			String lowerClass= className.replaceFirst(className.substring(0, 1), className.substring(0, 1).toLowerCase());
 			JDefinedClass repositoryClass= ReflectionManager.getJDefinedRepositoryClass(entity);
 			JVar repository = myClass.field(JMod.PUBLIC, repositoryClass, lowerClass+"Repository");
@@ -505,12 +513,24 @@ public class RestGenerator {
 				}
 			}
 			
+			JVar pageSize = myClass.field(JMod.PRIVATE+JMod.STATIC, Integer.class, "PAGE_SIZE");
+			pageSize.init(JExpr.direct("5"));
 			
 			JMethod findById = myClass.method(JMod.PUBLIC, listClass, "findById");
 			findById.annotate(Override.class);
 			findById.param(EntityAttributeManager.getInstance(null).getFieldTypeClass(keyClass),lowerClass+"Id");
 			JBlock findByIdBlock= findById.body();
 			findByIdBlock.directStatement("return "+lowerClass+"Repository.findBy"+Utility.getFirstUpper(className)+"Id("+lowerClass+"Id);");
+			
+			JMethod findByPage = myClass.method(JMod.PUBLIC, pageClass, "findByPage");
+			findByPage.annotate(Override.class);
+			findByPage.param(Integer.class,"pageNumber");
+			JBlock findByPageBlock= findByPage.body();
+			findByPageBlock.directStatement(PageRequest.class.getName()+" pageRequest = new "+PageRequest.class.getName()+"(pageNumber - 1, PAGE_SIZE, "+Sort.class.getName()+".Direction.DESC, \""+lowerClass+"Id\");");
+			findByPageBlock.directStatement("return "+lowerClass+"Repository.findAll(pageRequeste);");
+			
+			
+			
 			//search
 			JMethod findLike=myClass.method(JMod.PUBLIC, listClass, "find");
 			findLike.annotate(Override.class);

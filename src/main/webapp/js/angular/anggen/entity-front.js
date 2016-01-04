@@ -1,13 +1,4 @@
 var entityApp=angular.module("entityFrontApp",['ngFileUpload','ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection'])
-.service("securityService",function($http)
-		{
-	this.restrictionList;
-	
-	this.init= function() {
-		var promise= $http.get("../authentication/");
-		return promise; 
-	};
-		})
 		.run(function($rootScope,entityService){
 
 			
@@ -89,31 +80,11 @@ var entityApp=angular.module("entityFrontApp",['ngFileUpload','ngTouch', 'ui.gri
 					}
 				};
 			};
-			this.search = function() {
-				var promise= $http.post("../entity/search",this.searchBean);
-				return promise; 
-			};
+
 			this.searchPage = function() {
 				var promise= $http.get("../entity/pages/"+this.currentPage);
 				return promise; 
 			};
-			this.searchOne=function(entity) {};
-			this.insert = function() {};
-			this.update = function() {}
-			this.del = function() {}
-			this.loadFile= function(file,field){}
-			this.initRelationshipList= function()
-			{};
-			this.initEntityGroupList= function()
-			{};
-			this.initTabList= function()
-			{};
-			this.initFieldList= function()
-			{};
-			this.initEnumFieldList= function()
-			{};
-			this.initRestrictionEntityList= function()
-			{};
 				})
 				.controller("entityFrontController",function($scope,$http,entityService)
 						{
@@ -123,13 +94,6 @@ var entityApp=angular.module("entityFrontApp",['ngFileUpload','ngTouch', 'ui.gri
 					$scope.entityList=entityService.entityList;
 					$scope.selectedEntity=entityService.selectedEntity;
 					$scope.childrenList=entityService.childrenList; 
-					$scope.reset = function()
-					{
-						entityService.resetSearchBean();
-						$scope.searchBean=entityService.searchBean;entityService.setSelectedEntity(null);
-						entityService.selectedEntity.show=false;
-						entityService.setEntityList(null); 
-						relationshipService.selectedEntity.show=false;tabService.selectedEntity.show=false;fieldService.selectedEntity.show=false;annotationService.selectedEntity.show=false;enumFieldService.selectedEntity.show=false;enumEntityService.selectedEntity.show=false;projectService.selectedEntity.show=false;entityGroupService.selectedEntity.show=false;restrictionEntityGroupService.selectedEntity.show=false;roleService.selectedEntity.show=false;restrictionEntityService.selectedEntity.show=false;restrictionFieldService.selectedEntity.show=false;userService.selectedEntity.show=false;enumValueService.selectedEntity.show=false;annotationAttributeService.selectedEntity.show=false;}
 					$scope.getPagination= function(pageNumber)
 					{
 						entityService.currentPage=pageNumber;

@@ -133,7 +133,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         relationship.setTab(null);
         relationship.setEntity(null);
-        relationship.setEntity(null);
+        relationship.setEntityTarget(null);
         relationship.setAnnotationList(null);
         }
         if (entity.getEntityGroup()!=null)
@@ -230,14 +230,13 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     @RequestMapping(value = "/pages/{pageNumber}", method = RequestMethod.GET)
     public ResponseEntity getRunbookPage(@PathVariable Integer pageNumber) {
     	Page<Entity> page = entityService.findByPage(pageNumber);
-    	List<Entity> entityList=page.getContent();
+    	List<Entity> entityList = page.getContent();
     	getRightMapping(entityList);
-    	page.
         int current = page.getNumber() + 1;
         int begin = Math.max(1, current - 5);
         int end = Math.min(begin + 10, page.getTotalPages());
 
-        return ResponseEntity.ok().body(page);
+        return ResponseEntity.ok().body(entityList);
     }
 
 }

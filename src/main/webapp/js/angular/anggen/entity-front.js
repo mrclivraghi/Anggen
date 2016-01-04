@@ -2,6 +2,7 @@ var entityApp=angular.module("entityFrontApp",['ngFileUpload','ngTouch', 'ui.gri
 .service("securityService",function($http)
 		{
 	this.restrictionList;
+	
 	this.init= function() {
 		var promise= $http.get("../authentication/");
 		return promise; 
@@ -9,8 +10,11 @@ var entityApp=angular.module("entityFrontApp",['ngFileUpload','ngTouch', 'ui.gri
 		})
 		.run(function($rootScope,entityService){
 
-			entityService.search().then(function successCallback(response) {
-				entityService.setEntityList(response.data);
+			
+			
+			entityService.searchPage().then(function successCallback(response) {
+				entityService.setEntityList(response.data.content);
+				entityService.setSelectedEntity(response.data);
 			},function errorCallback(response) { 
 				AlertError.init({selector: "#alertError"});
 				AlertError.show("Si è verificato un errore");
@@ -21,6 +25,8 @@ var entityApp=angular.module("entityFrontApp",['ngFileUpload','ngTouch', 'ui.gri
 		.service("entityService", function($http)
 				{
 			this.entityList =		[];
+			this.currentPage=1;
+			this.maxPage=0;
 			this.selectedEntity= 	{show: false 
 					,relationshipList: [],tabList: [],fieldList: [],enumFieldList: [],restrictionEntityList: []};
 			this.childrenList=[]; 
@@ -84,8 +90,11 @@ var entityApp=angular.module("entityFrontApp",['ngFileUpload','ngTouch', 'ui.gri
 				};
 			};
 			this.search = function() {
-				this.setSelectedEntity(null);
 				var promise= $http.post("../entity/search",this.searchBean);
+				return promise; 
+			};
+			this.searchPage = function() {
+				var promise= $http.get("../entity/pages/"+this.currentPage);
 				return promise; 
 			};
 			this.searchOne=function(entity) {};
@@ -109,6 +118,7 @@ var entityApp=angular.module("entityFrontApp",['ngFileUpload','ngTouch', 'ui.gri
 				.controller("entityFrontController",function($scope,$http,entityService)
 						{
 //					null
+					$scope.currentPage=entityService.currentPage;
 					$scope.searchBean=entityService.searchBean;
 					$scope.entityList=entityService.entityList;
 					$scope.selectedEntity=entityService.selectedEntity;
@@ -120,15 +130,21 @@ var entityApp=angular.module("entityFrontApp",['ngFileUpload','ngTouch', 'ui.gri
 						entityService.selectedEntity.show=false;
 						entityService.setEntityList(null); 
 						relationshipService.selectedEntity.show=false;tabService.selectedEntity.show=false;fieldService.selectedEntity.show=false;annotationService.selectedEntity.show=false;enumFieldService.selectedEntity.show=false;enumEntityService.selectedEntity.show=false;projectService.selectedEntity.show=false;entityGroupService.selectedEntity.show=false;restrictionEntityGroupService.selectedEntity.show=false;roleService.selectedEntity.show=false;restrictionEntityService.selectedEntity.show=false;restrictionFieldService.selectedEntity.show=false;userService.selectedEntity.show=false;enumValueService.selectedEntity.show=false;annotationAttributeService.selectedEntity.show=false;}
-					$scope.search=function()
+					$scope.getPagination= function(pageNumber)
 					{
-						entityService.search().then(function successCallback(response) {
-							entityService.setEntityList(response.data);
+						entityService.currentPage=pageNumber;
+						$scope.currentPage=pageNumber;
+						entityService.searchPage().then(function successCallback(response) {
+							entityService.setEntityList(response.data.content);
+							console.log(response.data);
+							console.log(entityService.selectedEntity);
 						},function errorCallback(response) { 
 							AlertError.init({selector: "#alertError"});
 							AlertError.show("Si è verificato un errore");
 							return; 
 						});
-					};
+						
+					}
+					
 						});
 																																																																		;

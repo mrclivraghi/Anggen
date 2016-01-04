@@ -38,15 +38,15 @@
 		<div ng-repeat="entity in entityList" class="panel panel-default default-panel">
 			{{entity.entityId}} <br>
 		</div>
-
+	current:{{currentPage}}<br>
+	max: {{selectedEntity.totalPages}}
+	
+	
+	
 		<ul class="pagination">
-			<li class="disabled"><a href="#">&laquo;</a></li>
-			<li><a href="#">1</a></li>
-			<li class="active"><a href="#">2</a></li>
-			<li><a href="#">3</a></li>
-			<li><a href="#">4</a></li>
-			<li><a href="#">5</a></li>
-			<li><a href="#">&raquo;</a></li>
+			<li  ng-class="{disabled: currentPage<=1}" ><a ng-click="getPagination(currentPage-1)">&laquo;</a></li>
+		<li ng-repeat="i in [].constructor(selectedEntity.totalPages) track by $index" ng-class="{active: $index+1==currentPage}"><a ng-click="getPagination($index+1)" >{{$index+1}}</a></li>
+			<li ng-class="{disabled: currentPage>=selectedEntity.totalPages}"><a ng-click="getPagination(currentPage+1)" ng-class="{disabled: currentPage>=selectedEntity.totalPages}">&raquo;</a></li>
 		</ul>
 	</div>
 	<script type="text/javascript">loadMenu(); </script>

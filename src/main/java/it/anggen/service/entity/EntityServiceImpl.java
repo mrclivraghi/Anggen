@@ -2,6 +2,8 @@
 package it.anggen.service.entity;
 
 import java.util.List;
+
+import it.anggen.model.entity.Entity;
 import it.anggen.repository.entity.EntityRepository;
 import it.anggen.repository.entity.TabRepository;
 import it.anggen.repository.field.EnumFieldRepository;
@@ -10,6 +12,10 @@ import it.anggen.repository.relationship.RelationshipRepository;
 import it.anggen.repository.security.RestrictionEntityRepository;
 import it.anggen.searchbean.entity.EntitySearchBean;
 import it.anggen.service.entity.EntityService;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +36,8 @@ public class EntityServiceImpl
     public EnumFieldRepository enumFieldRepository;
     @org.springframework.beans.factory.annotation.Autowired
     public RestrictionEntityRepository restrictionEntityRepository;
+    
+    private static Integer PAGE_SIZE=5;
 
     @Override
     public List<it.anggen.model.entity.Entity> findById(Long entityId) {
@@ -90,5 +98,11 @@ public class EntityServiceImpl
         }
          return returnedEntity;
     }
+
+	@Override
+	public Page<Entity> findByPage(Integer pageNumber) {
+		 PageRequest pageRequest = new PageRequest(pageNumber - 1, PAGE_SIZE, Sort.Direction.DESC, "entityId");
+		 return entityRepository.findAll(pageRequest);
+	}
 
 }

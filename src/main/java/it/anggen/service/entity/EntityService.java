@@ -2,6 +2,9 @@
 package it.anggen.service.entity;
 
 import java.util.List;
+
+import org.springframework.data.domain.Page;
+
 import it.anggen.searchbean.entity.EntitySearchBean;
 
 public interface EntityService {
@@ -16,5 +19,7 @@ public interface EntityService {
     public it.anggen.model.entity.Entity insert(it.anggen.model.entity.Entity Entity);
 
     public it.anggen.model.entity.Entity update(it.anggen.model.entity.Entity Entity);
+    
+    public Page<it.anggen.model.entity.Entity> findByPage(Integer pageNumber);
 
 }

@@ -2,12 +2,16 @@
 package it.anggen.controller.entity;
 
 import java.util.List;
+
+import it.anggen.model.entity.Entity;
 import it.anggen.searchbean.entity.EntitySearchBean;
 import it.anggen.security.SecurityService;
 import it.anggen.service.entity.EntityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +23,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/entity-front")
 public class EntityFrontController {
 
+	@Autowired
+	private EntityService entityService;
+	
     private final static Logger log = LoggerFactory.getLogger(it.anggen.model.entity.Entity.class);
     @Value("${application.security}")
     private Boolean securityEnabled;
@@ -27,6 +34,8 @@ public class EntityFrontController {
     public String manage() {
     	return "entity-front";
     }
+    
+   
 
    
 

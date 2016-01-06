@@ -527,7 +527,7 @@ public class RestGenerator {
 			findByPage.param(Integer.class,"pageNumber");
 			JBlock findByPageBlock= findByPage.body();
 			findByPageBlock.directStatement(PageRequest.class.getName()+" pageRequest = new "+PageRequest.class.getName()+"(pageNumber - 1, PAGE_SIZE, "+Sort.class.getName()+".Direction.DESC, \""+lowerClass+"Id\");");
-			findByPageBlock.directStatement("return "+lowerClass+"Repository.findAll(pageRequeste);");
+			findByPageBlock.directStatement("return "+lowerClass+"Repository.findAll(pageRequest);");
 			
 			
 			
@@ -678,6 +678,33 @@ public class RestGenerator {
 				manageBlock.directStatement("return \""+lowerClass+"\";");
 
 			}
+			
+			//getpage
+			/*
+			 *  @ResponseBody
+    @RequestMapping(value = "/pages/{pageNumber}", method = RequestMethod.GET)
+    public ResponseEntity getRunbookPage(@PathVariable Integer pageNumber) {
+    	Page<Entity> page = entityService.findByPage(pageNumber);
+    	getRightMapping(page.getContent());
+        int current = page.getNumber() + 1;
+        int begin = Math.max(1, current - 5);
+        int end = Math.min(begin + 10, page.getTotalPages());
+
+        return ResponseEntity.ok().body(page);
+    }
+			 */
+			JMethod getPage = myClass.method(JMod.PUBLIC, ResponseEntity.class, "findPage");
+			JAnnotationUse reqMapping = getPage.annotate(RequestMapping.class);
+			reqMapping.param("name", "/pages/{pageNumber}");
+			reqMapping.param("method", RequestMethod.GET);
+			getPage.annotate(ResponseBody.class);
+			JBlock getPageBlock = getPage.body();
+			getPageBlock.directStatement(Page.class.getName()+"<"+ReflectionManager.getJDefinedClass(entity).fullName()+"> page = "+lowerClass+"Service.findByPage(pageNumber);");
+			getPageBlock.directStatement("getRightMapping(page.getContent());");
+			getPageBlock.directStatement("return ResponseEntity.ok().body(page);");
+			
+			
+			
 			//search
 			JMethod search = myClass.method(JMod.PUBLIC, ResponseEntity.class, "search");
 			search.annotate(ResponseBody.class);

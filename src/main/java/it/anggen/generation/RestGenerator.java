@@ -35,6 +35,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -370,7 +371,7 @@ public class RestGenerator {
 		String searchMethod="";
 		try {
 			myClass = codeModel._class(ReflectionManager.getJDefinedRepositoryClass(entity).fullName(), ClassType.INTERFACE);
-			JClass extendedClass = codeModel.ref(CrudRepository.class).narrow(ReflectionManager.getJDefinedClass(entity)).narrow(EntityAttributeManager.getInstance(null).getFieldTypeClass(keyClass));//,codeModel._ref(EntityAttributeManagerImpl.getInstance(null).getFieldTypeClass(keyClass))); //.narrow(ciao,EntityAttributeManagerImpl.getInstance(null).getFieldTypeClass(keyClass));
+			JClass extendedClass = codeModel.ref(JpaRepository.class).narrow(ReflectionManager.getJDefinedClass(entity)).narrow(EntityAttributeManager.getInstance(null).getFieldTypeClass(keyClass));//,codeModel._ref(EntityAttributeManagerImpl.getInstance(null).getFieldTypeClass(keyClass))); //.narrow(ciao,EntityAttributeManagerImpl.getInstance(null).getFieldTypeClass(keyClass));
 			myClass._extends(extendedClass);
 			myClass.annotate(Repository.class);
 			JClass listClass=codeModel.ref(List.class).narrow(ReflectionManager.getJDefinedClass(entity));
@@ -447,7 +448,11 @@ public class RestGenerator {
 			insert.param(ReflectionManager.getJDefinedClass(entity), className);
 			JMethod update= myClass.method(JMod.PUBLIC, ReflectionManager.getJDefinedClass(entity), "update");
 			update.param(ReflectionManager.getJDefinedClass(entity), className);
-			JMethod findByPage= myClass.method(JMod.PUBLIC, ReflectionManager.getJDefinedClass(entity), "findByPage");
+			
+			JClass pageClass = codeModel.ref(Page.class).narrow(ReflectionManager.getJDefinedClass(entity));
+			
+			
+			JMethod findByPage= myClass.method(JMod.PUBLIC,pageClass, "findByPage");
 			JVar param=findByPage.param(Integer.class, "pageNumber");
 			param.annotate(PathVariable.class);
 			
@@ -698,6 +703,9 @@ public class RestGenerator {
 			reqMapping.param("name", "/pages/{pageNumber}");
 			reqMapping.param("method", RequestMethod.GET);
 			getPage.annotate(ResponseBody.class);
+			
+			JVar param = getPage.param(Integer.class, "pageNumber");
+			param.annotate(PathVariable.class);
 			JBlock getPageBlock = getPage.body();
 			getPageBlock.directStatement(Page.class.getName()+"<"+ReflectionManager.getJDefinedClass(entity).fullName()+"> page = "+lowerClass+"Service.findByPage(pageNumber);");
 			getPageBlock.directStatement("getRightMapping(page.getContent());");

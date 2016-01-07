@@ -34,6 +34,9 @@ public class Entity {
     @it.anggen.utils.annotation.Priority(2)
     private Boolean disableViewGeneration;
     
+    @javax.persistence.Column(name = "generate_front_end")
+    @it.anggen.utils.annotation.Priority(2)
+    private Boolean generateFrontEnd;
     
     
     @javax.persistence.Column(name = "descendant_max_level")
@@ -178,6 +181,20 @@ public class Entity {
 	 */
 	public void setDisableViewGeneration(Boolean disableViewGeneration) {
 		this.disableViewGeneration = disableViewGeneration;
+	}
+
+	/**
+	 * @return the generateFrontEnd
+	 */
+	public Boolean getGenerateFrontEnd() {
+		return generateFrontEnd;
+	}
+
+	/**
+	 * @param generateFrontEnd the generateFrontEnd to set
+	 */
+	public void setGenerateFrontEnd(Boolean generateFrontEnd) {
+		this.generateFrontEnd = generateFrontEnd;
 	}
 
 }

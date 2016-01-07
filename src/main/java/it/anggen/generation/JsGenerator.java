@@ -823,18 +823,18 @@ public class JsGenerator {
 	
 	private String getSecurity()
 	{
-		StringBuilder sb = new StringBuilder();
-		sb.append(".service(\"securityService\",function($http)\n");
-		sb.append("{\n");
-		sb.append("this.restrictionList;\n");
-		if (generator.security)
-		{
-			sb.append("this.init= function() {\n");
-			sb.append("var promise= $http.get(\"../authentication/\");\n");
-			sb.append("return promise; \n");
-			sb.append("};\n");
-		}
-		sb.append("})\n");
+		StringBuilder sb = new StringBuilder();	
+			sb.append(".service(\"securityService\",function($http)\n");
+			sb.append("{\n");
+			sb.append("this.restrictionList;\n");
+			if (generator.security)
+			{
+				sb.append("this.init= function() {\n");
+				sb.append("var promise= $http.get(\"../authentication/\");\n");
+				sb.append("return promise; \n");
+				sb.append("};\n");
+			}
+			sb.append("})\n");
 		String services = serviceList;
 		
 		sb.append(".run(function($rootScope,securityService"+services+"){\n");

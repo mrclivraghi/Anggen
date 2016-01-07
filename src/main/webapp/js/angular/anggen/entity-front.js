@@ -107,8 +107,8 @@ var entityApp=angular.module("entityFrontApp",['ngFileUpload','ngTouch', 'ui.gri
 							AlertError.show("Si è verificato un errore");
 							return; 
 						});
-						
+
 					}
-					
+
 						});
 																																																																		;

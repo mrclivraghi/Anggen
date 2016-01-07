@@ -347,7 +347,7 @@ public class FrontJsGenerator {
 	private String buildJS()
 	{
 		StringBuilder buildJS= new StringBuilder();
-		buildJS.append("var "+entityName+"FrontApp=angular.module(\""+entityName+"App\",['ngFileUpload','ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter'])\n");
+		buildJS.append("var "+entityName+"FrontApp=angular.module(\""+entityName+"FrontApp\",['ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter'])\n");
 		//JsGenerator jsGenerator = new JsGenerator(entity, true,null,null);
 		buildJS.append(getSecurity());
 		buildJS.append(generateService());

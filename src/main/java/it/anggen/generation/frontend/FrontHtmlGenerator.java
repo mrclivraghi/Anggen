@@ -5,6 +5,7 @@ import it.anggen.reflection.EntityManagerImpl;
 import it.anggen.utils.EntityAttribute;
 import it.anggen.utils.ReflectionManager;
 import it.anggen.utils.Utility;
+import it.anggen.generation.CssGenerator;
 import it.anggen.generation.Generator;
 import it.anggen.model.entity.Entity;
 import it.anggen.model.entity.EntityGroup;
@@ -141,9 +142,11 @@ public class FrontHtmlGenerator {
 			incluseCssFiles(html);
 			frontJsGenerator.saveJsToFile(directoryAngularFiles);
 			html._head()
-			.body(htmlAttributes.add("ng-app", Utility.getFirstLower(entityName)+"App"));
+			.body(htmlAttributes.add("ng-app", Utility.getFirstLower(entityName)+"FrontApp"));
 			html.div((new HtmlAttributes()).add("id", "alertInfo").add("class","alert alert-success custom-alert").add("style","display: none")).span().content("")._div();
 			html.div((new HtmlAttributes()).add("id", "alertError").add("class","alert alert-danger custom-alert").add("style","display: none")).span().content("")._div();
+			
+			renderBody(html);
 			
 			//TODO switch
 			String loadMenuScript="loadMenu(); ";
@@ -170,6 +173,39 @@ public class FrontHtmlGenerator {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	private void renderBody(HtmlCanvas html)
+	{
+		/*
+		 * <div ng-controller="entityFrontController">
+		<div ng-repeat="entity in entityList" class="panel panel-default default-panel">
+			{{entity.entityId}} <br>
+		</div>
+		<ul class="pagination">
+			<li  ng-class="{disabled: currentPage<=1}" ><a ng-click="getPagination(currentPage-1)">&laquo;</a></li>
+		<li ng-repeat="i in [].constructor(selectedEntity.totalPages) track by $index" ng-class="{active: $index+1==currentPage}"><a ng-click="getPagination($index+1)" >{{$index+1}}</a></li>
+			<li ng-class="{disabled: currentPage>=selectedEntity.totalPages}"><a ng-click="getPagination(currentPage+1)" ng-class="{disabled: currentPage>=selectedEntity.totalPages}">&raquo;</a></li>
+		</ul>
+	</div>
+		 */
+		try {
+			html.div((new HtmlAttributes()).add("ng-controller", "entityFrontController"))
+					.div(CssGenerator.getPanel().add("ng-repeat", "entity in entityList")).content("{{"+entity.getName()+"."+entity.getName()+"Id}} <br>",false);
+			
+			//ul for pagination
+			html.ul((new HtmlAttributes()).add("class", "pagination"))
+			.li((new HtmlAttributes()).add("ng-class", "{disabled: currentPage<=1}")).a((new HtmlAttributes()).add("ng-click", "getPagination(currentPage-1)")).content("&laquo;",false)._li()
+			.li((new HtmlAttributes()).add("ng-repeat", "i in [].constructor(selectedEntity.totalPages) track by $index")).a((new HtmlAttributes()).add("ng-click", "getPagination($index+1)")).content("{{$index+1}}")._li()
+			.li((new HtmlAttributes()).add("ng-class", "{disabled: currentPage>=selectedEntity.totalPages}")).a((new HtmlAttributes()).add("ng-click", "getPagination(currentPage+1)")).content("&raquo;",false)._li()
+			._ul();
+			
+			//close div
+			html._div();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 }

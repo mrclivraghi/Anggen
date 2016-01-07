@@ -1,4 +1,4 @@
-var entityApp=angular.module("entityFrontApp",['ngFileUpload','ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter'])
+var entityFrontApp=angular.module("entityFrontApp",['ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter'])
 .run(function($rootScope,entityService){
 entityService.searchPage().then(function successCallback(response) {
 entityService.setEntityList(response.data.content);

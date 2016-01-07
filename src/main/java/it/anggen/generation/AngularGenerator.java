@@ -436,7 +436,7 @@ public class AngularGenerator {
 		style= style.equals("pull-left")? "pull-right": "pull-left";
 		
 		String securityCondition="true ";
-		if (!EntityAttributeManager.getInstance(entityAttribute).getParent().equals(entity))
+		if (EntityAttributeManager.getInstance(entityAttribute).getParent()!=null && !EntityAttributeManager.getInstance(entityAttribute).getParent().equals(entity))
 			securityCondition=checkSecurity(EntityAttributeManager.getInstance(entityAttribute).getParent().getName(), "search") ;
 		
 		

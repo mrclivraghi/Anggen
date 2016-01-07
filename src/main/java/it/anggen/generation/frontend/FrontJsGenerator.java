@@ -122,12 +122,15 @@ public class FrontJsGenerator {
 		.append("{\n")
 		.append("this.entityList =		[];\n")
 		.append("this.selectedEntity= 	{show: false \n");
+		
 		for (Relationship relationship : relationshipList)
 		{
 			if (EntityAttributeManager.getInstance(relationship).isList())
 				sb.append(","+relationship.getEntityTarget().getName()+"List: []");
 		}
 		sb.append("};\n")
+		.append("this.currentPage=1;\n")
+		.append("this.maxPage=0;\n")
 		.append("this.childrenList=[]; \n")
 		.append("this.addEntity=function (entity)\n")
 		.append("{\n")
@@ -241,7 +244,7 @@ public class FrontJsGenerator {
 	{
 		StringBuilder sb = new StringBuilder();
 
-		sb.append(".controller(\""+entityName+"Controller\",function($scope,$http"+serviceList+")\n");
+		sb.append(".controller(\""+entityName+"FrontController\",function($scope,$http"+serviceList+")\n");
 		sb.append("{\n");
 		sb.append("//"+parentEntityName+"\n");
 		//search var
@@ -344,7 +347,7 @@ public class FrontJsGenerator {
 	private String buildJS()
 	{
 		StringBuilder buildJS= new StringBuilder();
-		buildJS.append("var "+entityName+"App=angular.module(\""+entityName+"App\",['ngFileUpload','ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter'])\n");
+		buildJS.append("var "+entityName+"FrontApp=angular.module(\""+entityName+"App\",['ngFileUpload','ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter'])\n");
 		//JsGenerator jsGenerator = new JsGenerator(entity, true,null,null);
 		buildJS.append(getSecurity());
 		buildJS.append(generateService());

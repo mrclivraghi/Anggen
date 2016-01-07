@@ -3,6 +3,7 @@ package it.anggen.generation;
 import it.anggen.utils.Field;
 import it.anggen.utils.ReflectionManager;
 import it.anggen.utils.Utility;
+import it.anggen.generation.frontend.FrontHtmlGenerator;
 import it.anggen.model.entity.Entity;
 import it.anggen.model.entity.EntityGroup;
 import it.anggen.model.entity.EnumEntity;
@@ -127,6 +128,9 @@ public class Generator {
 	HtmlGenerator htmlGenerator;
 	
 	@Autowired
+	FrontHtmlGenerator frontHtmlGenerator;
+	
+	@Autowired
 	WebappGenerator webappGenerator;
 	
 	public static String appName;
@@ -230,6 +234,13 @@ public class Generator {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				
+				if (modelEntity.getGenerateFrontEnd())
+				{
+					frontHtmlGenerator.init(modelEntity);
+					frontHtmlGenerator.generateJSP();
+				}
+				
 				
 			}
 			if (bootstrapMenu)

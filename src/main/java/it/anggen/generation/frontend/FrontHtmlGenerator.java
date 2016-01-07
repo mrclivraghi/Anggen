@@ -56,7 +56,7 @@ public class FrontHtmlGenerator {
 	
 	
 	@Autowired
-	FrontJsGenerator jsGenerator;
+	FrontJsGenerator frontJsGenerator;
 	
 	public FrontHtmlGenerator(){
 		
@@ -129,7 +129,7 @@ public class FrontHtmlGenerator {
 	{
 		HtmlCanvas html = new HtmlCanvas();
 		HtmlAttributes htmlAttributes= new HtmlAttributes();
-		jsGenerator.init(entity, true, null, null,entityManager.isLastLevel(entity),null);
+		frontJsGenerator.init(entity, true, null, null,entityManager.isLastLevel(entity),null);
 		
 		try {
 			html.render(docType);
@@ -139,7 +139,7 @@ public class FrontHtmlGenerator {
 			.title().content(entityName);
 			includeJavascriptScripts(html,true);
 			incluseCssFiles(html);
-			jsGenerator.saveJsToFile(directoryAngularFiles);
+			frontJsGenerator.saveJsToFile(directoryAngularFiles);
 			html._head()
 			.body(htmlAttributes.add("ng-app", Utility.getFirstLower(entityName)+"App"));
 			html.div((new HtmlAttributes()).add("id", "alertInfo").add("class","alert alert-success custom-alert").add("style","display: none")).span().content("")._div();

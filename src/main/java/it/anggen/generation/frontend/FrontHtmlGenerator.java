@@ -1,5 +1,6 @@
 package it.anggen.generation.frontend;
 
+import it.anggen.reflection.EntityAttributeManager;
 import it.anggen.reflection.EntityManager;
 import it.anggen.reflection.EntityManagerImpl;
 import it.anggen.utils.EntityAttribute;
@@ -7,8 +8,11 @@ import it.anggen.utils.ReflectionManager;
 import it.anggen.utils.Utility;
 import it.anggen.generation.CssGenerator;
 import it.anggen.generation.Generator;
+import it.anggen.generation.JsGenerator;
+import it.anggen.model.FieldType;
 import it.anggen.model.entity.Entity;
 import it.anggen.model.entity.EntityGroup;
+import it.anggen.model.entity.Tab;
 import it.anggen.model.field.Field;
 
 import java.io.File;
@@ -190,9 +194,11 @@ public class FrontHtmlGenerator {
 	</div>
 		 */
 		try {
-			html.div((new HtmlAttributes()).add("ng-controller", "entityFrontController"))
-					.div(CssGenerator.getPanel().add("ng-repeat", "entity in entityList")).content("{{"+entity.getName()+"."+entity.getName()+"Id}} <br>",false);
+			html.div((new HtmlAttributes()).add("ng-controller", "entityFrontController"));
 			
+			html.div((new HtmlAttributes()).add("ng-repeat", "entity in entityList"));
+			renderElement(html);
+			html._div();
 			//ul for pagination
 			html.ul((new HtmlAttributes()).add("class", "pagination"))
 			.li((new HtmlAttributes()).add("ng-class", "{disabled: currentPage<=1}")).a((new HtmlAttributes()).add("ng-click", "getPagination(currentPage-1)")).content("&laquo;",false)._li()
@@ -208,4 +214,78 @@ public class FrontHtmlGenerator {
 		}
 	}
 	
+	private void renderElement(HtmlCanvas html) throws IOException
+	{
+		//
+
+		html.div(CssGenerator.getPanel());
+		html.div(CssGenerator.getPanelHeader());
+		html.content(""+entityName+" {{ entity."+entityName+"Id }}");
+		html.div(CssGenerator.getPanelBody());
+
+		for (EntityAttribute entityAttribute: entityManager.getAllAttribute())
+		{
+				
+			renderField(html, entityAttribute);
+		}
+
+
+
+		html._div();
+
+		html._div();
+	
+	}
+
+	private void renderField(HtmlCanvas html, EntityAttribute entityAttribute) throws IOException {
+
+
+		if (EntityAttributeManager.getInstance(entityAttribute).isEnumField())
+		{
+			html.div().content(entityAttribute.getName()+": {{entity."+entityAttribute.getName()+"}}");
+		}
+		else
+		{
+			if (EntityAttributeManager.getInstance(entityAttribute).isField())
+			{
+				String inputType=getInputType(entityAttribute);
+				if (inputType.equals("embedded"))
+				{
+					
+				}else
+				{
+					if (inputType.equals("checkbox"))
+					{
+						
+					}else
+					{
+						if (inputType.equals("file"))
+						{
+							
+						}else
+						{ //base attribute
+							html.div().content(entityAttribute.getName()+": {{entity."+entityAttribute.getName()+"}}");
+						}
+							
+					}
+				}
+			
+			}
+		}
+	
+	}
+	
+	
+	private String getInputType(EntityAttribute entityAttribute)
+	{
+		if (EntityAttributeManager.getInstance(entityAttribute).asField()!=null && EntityAttributeManager.getInstance(entityAttribute).asField().getFieldType()==FieldType.BOOLEAN) return "checkbox";
+		if (EntityAttributeManager.getInstance(entityAttribute).asField()!=null && EntityAttributeManager.getInstance(entityAttribute).asField().getFieldType()==FieldType.TIME) return "time";
+		if (EntityAttributeManager.getInstance(entityAttribute).asField()!=null && EntityAttributeManager.getInstance(entityAttribute).getPassword()) 
+			return "password";
+		if (EntityAttributeManager.getInstance(entityAttribute).asField()!=null && EntityAttributeManager.getInstance(entityAttribute).isEmbedded()) 
+			return "embedded";
+		
+		if (EntityAttributeManager.getInstance(entityAttribute).isField()&&EntityAttributeManager.getInstance(entityAttribute).asField().getFieldType()==FieldType.FILE) return "file";
+		return "text";
+	}
 }

@@ -1,8 +1,10 @@
 var entityFrontApp=angular.module("entityFrontApp",['ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter'])
 .run(function($rootScope,entityService){
+entityService.maxPage=1;
 entityService.searchPage().then(function successCallback(response) {
 entityService.setEntityList(response.data.content);
 entityService.setSelectedEntity(response.data);
+entityService.maxPage=response.data.totalPages;
 },function errorCallback(response) { 
 AlertError.init({selector: "#alertError"});
 AlertError.show("Si è verificato un errore");
@@ -90,10 +92,13 @@ $scope.selectedEntity=entityService.selectedEntity;
 $scope.childrenList=entityService.childrenList; 
 $scope.getPagination= function(pageNumber) 
 { 
-entityService.currentPage=pageNumber; 
+if (pageNumber<=0 || pageNumber>entityService.maxPage) 
+return;
+ entityService.currentPage=pageNumber; 
 $scope.currentPage=pageNumber; 
 entityService.searchPage().then(function successCallback(response) { 
 entityService.setEntityList(response.data.content); 
+entityService.maxPage=response.data.totalPages; 
 },function errorCallback(response) {  
 AlertError.init({selector: "#alertError"}); 
 AlertError.show("Si è verificato un errore"); 

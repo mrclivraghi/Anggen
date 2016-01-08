@@ -196,7 +196,7 @@ public class FrontHtmlGenerator {
 			//ul for pagination
 			html.ul((new HtmlAttributes()).add("class", "pagination"))
 			.li((new HtmlAttributes()).add("ng-class", "{disabled: currentPage<=1}")).a((new HtmlAttributes()).add("ng-click", "getPagination(currentPage-1)")).content("&laquo;",false)._li()
-			.li((new HtmlAttributes()).add("ng-repeat", "i in [].constructor(selectedEntity.totalPages) track by $index")).a((new HtmlAttributes()).add("ng-click", "getPagination($index+1)")).content("{{$index+1}}")._li()
+			.li((new HtmlAttributes()).add("ng-repeat", "i in [].constructor(selectedEntity.totalPages) track by $index").add("ng-class","{active: $index+1==currentPage}")).a((new HtmlAttributes()).add("ng-click", "getPagination($index+1)")).content("{{$index+1}}")._li()
 			.li((new HtmlAttributes()).add("ng-class", "{disabled: currentPage>=selectedEntity.totalPages}")).a((new HtmlAttributes()).add("ng-click", "getPagination(currentPage+1)")).content("&raquo;",false)._li()
 			._ul();
 			

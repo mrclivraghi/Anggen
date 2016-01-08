@@ -255,10 +255,13 @@ public class FrontJsGenerator {
 		sb.append("$scope.childrenList="+Utility.getEntityCallName(entityName)+"Service.childrenList; \n");
 		sb.append("$scope.getPagination= function(pageNumber) \n");
 		sb.append("{ \n");
+		sb.append("if (pageNumber<=0 || pageNumber>"+entityName+"Service.maxPage) \n");
+		sb.append("return;\n ");
 		sb.append(entityName+"Service.currentPage=pageNumber; \n");
 		sb.append("$scope.currentPage=pageNumber; \n");
 		sb.append(entityName+"Service.searchPage().then(function successCallback(response) { \n");
 		sb.append(entityName+"Service.setEntityList(response.data.content); \n");
+		sb.append(entityName+"Service.maxPage=response.data.totalPages; \n");
 		sb.append("},function errorCallback(response) {  \n");
 		sb.append("AlertError.init({selector: \"#alertError\"}); \n");
 		sb.append("AlertError.show(\"Si è verificato un errore\"); \n");
@@ -322,10 +325,11 @@ public class FrontJsGenerator {
 		String services = serviceList;
 
 		sb.append(".run(function($rootScope"+services+"){\n");
-
+		sb.append(entityName+"Service.maxPage=1;\n");
 		sb.append(entityName+"Service.searchPage().then(function successCallback(response) {\n");
 		sb.append(entityName+"Service.setEntityList(response.data.content);\n");
 		sb.append(entityName+"Service.setSelectedEntity(response.data);\n");
+		sb.append(entityName+"Service.maxPage=response.data.totalPages;\n");
 		sb.append("},function errorCallback(response) { \n");
 		sb.append("AlertError.init({selector: \"#alertError\"});\n");
 		sb.append("AlertError.show(\"Si è verificato un errore\");\n");

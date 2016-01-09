@@ -36,8 +36,9 @@ public  class CssGenerator {
 	public static HtmlAttributes getButton(String function,String otherClasses)
 	{
 		HtmlAttributes htmlAttributes= new HtmlAttributes();
-		htmlAttributes.add("ng-click", function+"()")
-		.add("class", "btn btn-default "+otherClasses);
+		if (!function.isEmpty())
+			htmlAttributes.add("ng-click", function+"()");
+		htmlAttributes.add("class", "btn btn-default "+otherClasses);
 		return htmlAttributes;
 	}
 	

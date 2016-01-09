@@ -7,13 +7,15 @@ import it.anggen.model.field.EnumField;
 import it.anggen.model.field.Field;
 import it.anggen.model.relationship.Relationship;
 import it.anggen.model.security.RestrictionEntity;
+
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface EntityRepository
-    extends CrudRepository<it.anggen.model.entity.Entity, java.lang.Long>
+    extends JpaRepository<it.anggen.model.entity.Entity, java.lang.Long>
 {
 
 

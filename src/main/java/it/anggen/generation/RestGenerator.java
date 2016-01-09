@@ -32,6 +32,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -367,7 +371,7 @@ public class RestGenerator {
 		String searchMethod="";
 		try {
 			myClass = codeModel._class(ReflectionManager.getJDefinedRepositoryClass(entity).fullName(), ClassType.INTERFACE);
-			JClass extendedClass = codeModel.ref(CrudRepository.class).narrow(ReflectionManager.getJDefinedClass(entity)).narrow(EntityAttributeManager.getInstance(null).getFieldTypeClass(keyClass));//,codeModel._ref(EntityAttributeManagerImpl.getInstance(null).getFieldTypeClass(keyClass))); //.narrow(ciao,EntityAttributeManagerImpl.getInstance(null).getFieldTypeClass(keyClass));
+			JClass extendedClass = codeModel.ref(JpaRepository.class).narrow(ReflectionManager.getJDefinedClass(entity)).narrow(EntityAttributeManager.getInstance(null).getFieldTypeClass(keyClass));//,codeModel._ref(EntityAttributeManagerImpl.getInstance(null).getFieldTypeClass(keyClass))); //.narrow(ciao,EntityAttributeManagerImpl.getInstance(null).getFieldTypeClass(keyClass));
 			myClass._extends(extendedClass);
 			myClass.annotate(Repository.class);
 			JClass listClass=codeModel.ref(List.class).narrow(ReflectionManager.getJDefinedClass(entity));
@@ -444,6 +448,14 @@ public class RestGenerator {
 			insert.param(ReflectionManager.getJDefinedClass(entity), className);
 			JMethod update= myClass.method(JMod.PUBLIC, ReflectionManager.getJDefinedClass(entity), "update");
 			update.param(ReflectionManager.getJDefinedClass(entity), className);
+			
+			JClass pageClass = codeModel.ref(Page.class).narrow(ReflectionManager.getJDefinedClass(entity));
+			
+			
+			JMethod findByPage= myClass.method(JMod.PUBLIC,pageClass, "findByPage");
+			JVar param=findByPage.param(Integer.class, "pageNumber");
+			param.annotate(PathVariable.class);
+			
 		} catch (JClassAlreadyExistsException e) {
 			e.printStackTrace();
 		}
@@ -492,6 +504,7 @@ public class RestGenerator {
 			myClass._implements(serviceInterfaceClass);
 			myClass.annotate(Service.class);
 			JClass listClass = codeModel.ref(List.class).narrow(ReflectionManager.getJDefinedClass(entity));
+			JClass pageClass = codeModel.ref(Page.class).narrow(ReflectionManager.getJDefinedClass(entity));
 			String lowerClass= className.replaceFirst(className.substring(0, 1), className.substring(0, 1).toLowerCase());
 			JDefinedClass repositoryClass= ReflectionManager.getJDefinedRepositoryClass(entity);
 			JVar repository = myClass.field(JMod.PUBLIC, repositoryClass, lowerClass+"Repository");
@@ -505,12 +518,24 @@ public class RestGenerator {
 				}
 			}
 			
+			JVar pageSize = myClass.field(JMod.PRIVATE+JMod.STATIC, Integer.class, "PAGE_SIZE");
+			pageSize.init(JExpr.direct("5"));
 			
 			JMethod findById = myClass.method(JMod.PUBLIC, listClass, "findById");
 			findById.annotate(Override.class);
 			findById.param(EntityAttributeManager.getInstance(null).getFieldTypeClass(keyClass),lowerClass+"Id");
 			JBlock findByIdBlock= findById.body();
 			findByIdBlock.directStatement("return "+lowerClass+"Repository.findBy"+Utility.getFirstUpper(className)+"Id("+lowerClass+"Id);");
+			
+			JMethod findByPage = myClass.method(JMod.PUBLIC, pageClass, "findByPage");
+			findByPage.annotate(Override.class);
+			findByPage.param(Integer.class,"pageNumber");
+			JBlock findByPageBlock= findByPage.body();
+			findByPageBlock.directStatement(PageRequest.class.getName()+" pageRequest = new "+PageRequest.class.getName()+"(pageNumber - 1, PAGE_SIZE, "+Sort.class.getName()+".Direction.DESC, \""+lowerClass+"Id\");");
+			findByPageBlock.directStatement("return "+lowerClass+"Repository.findAll(pageRequest);");
+			
+			
+			
 			//search
 			JMethod findLike=myClass.method(JMod.PUBLIC, listClass, "find");
 			findLike.annotate(Override.class);
@@ -658,6 +683,36 @@ public class RestGenerator {
 				manageBlock.directStatement("return \""+lowerClass+"\";");
 
 			}
+			
+			//getpage
+			/*
+			 *  @ResponseBody
+    @RequestMapping(value = "/pages/{pageNumber}", method = RequestMethod.GET)
+    public ResponseEntity getRunbookPage(@PathVariable Integer pageNumber) {
+    	Page<Entity> page = entityService.findByPage(pageNumber);
+    	getRightMapping(page.getContent());
+        int current = page.getNumber() + 1;
+        int begin = Math.max(1, current - 5);
+        int end = Math.min(begin + 10, page.getTotalPages());
+
+        return ResponseEntity.ok().body(page);
+    }
+			 */
+			JMethod getPage = myClass.method(JMod.PUBLIC, ResponseEntity.class, "findPage");
+			JAnnotationUse reqMapping = getPage.annotate(RequestMapping.class);
+			reqMapping.param("name", "/pages/{pageNumber}");
+			reqMapping.param("method", RequestMethod.GET);
+			getPage.annotate(ResponseBody.class);
+			
+			JVar param = getPage.param(Integer.class, "pageNumber");
+			param.annotate(PathVariable.class);
+			JBlock getPageBlock = getPage.body();
+			getPageBlock.directStatement(Page.class.getName()+"<"+ReflectionManager.getJDefinedClass(entity).fullName()+"> page = "+lowerClass+"Service.findByPage(pageNumber);");
+			getPageBlock.directStatement("getRightMapping(page.getContent());");
+			getPageBlock.directStatement("return ResponseEntity.ok().body(page);");
+			
+			
+			
 			//search
 			JMethod search = myClass.method(JMod.PUBLIC, ResponseEntity.class, "search");
 			search.annotate(ResponseBody.class);
@@ -674,8 +729,8 @@ public class RestGenerator {
 			searchBlock.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(lowerClass)+"Id()!=null)");
 			searchBlock.directStatement(" log.info(\"Searching "+lowerClass+" like {}\","+entityManager.getDescription(true)+");");
 			searchBlock.directStatement(""+lowerClass+"List="+lowerClass+"Service.find("+lowerClass+");");
-			searchBlock.directStatement("getRightMapping("+lowerClass+"List);");
 			searchBlock.directStatement("getSecurityMapping("+lowerClass+"List);");
+			searchBlock.directStatement("getRightMapping("+lowerClass+"List);");
 			searchBlock.directStatement(" log.info(\"Search: returning {} "+lowerClass+".\","+lowerClass+"List.size());");
 			searchBlock.directStatement("return "+response+".body("+lowerClass+"List);");
 			//getById  
@@ -690,8 +745,8 @@ public class RestGenerator {
 			getByIdBlock.directStatement(addSecurityCheck(RestrictionType.SEARCH));
 			getByIdBlock.directStatement("log.info(\"Searching "+lowerClass+" with id {}\","+lowerClass+"Id);");
 			getByIdBlock.directStatement("List<"+ReflectionManager.getJDefinedClass(entity).fullName()+"> "+lowerClass+"List="+lowerClass+"Service.findById("+EntityAttributeManager.getInstance(null).getFieldTypeName(keyClass)+".valueOf("+lowerClass+"Id));");
-			getByIdBlock.directStatement("getRightMapping("+lowerClass+"List);");
 			getByIdBlock.directStatement("getSecurityMapping("+lowerClass+"List);");
+			getByIdBlock.directStatement("getRightMapping("+lowerClass+"List);");
 			getByIdBlock.directStatement(" log.info(\"Search: returning {} "+lowerClass+".\","+lowerClass+"List.size());");
 			
 			getByIdBlock.directStatement("return "+response+".body("+lowerClass+"List);");
@@ -740,8 +795,8 @@ public class RestGenerator {
 			updateBlock.directStatement("log.info(\"Updating "+lowerClass+" with id {}\","+lowerClass+".get"+Utility.getFirstUpper(lowerClass)+"Id());");
 			updateBlock.directStatement("rebuildSecurityMapping("+lowerClass+");");
 			updateBlock.directStatement(ReflectionManager.getJDefinedClass(entity).fullName()+" updated"+className+"="+lowerClass+"Service.update("+lowerClass+");");
-			updateBlock.directStatement("getRightMapping(updated"+className+");");
 			updateBlock.directStatement("getSecurityMapping(updated"+className+");");
+			updateBlock.directStatement("getRightMapping(updated"+className+");");
 			updateBlock.directStatement("return "+response+".body(updated"+className+");");
 			
 			//get Right Mapping -List

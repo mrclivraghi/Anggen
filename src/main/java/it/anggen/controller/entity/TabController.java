@@ -130,7 +130,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         relationship.setTab(null);
         relationship.setEntity(null);
-        relationship.setEntity(null);
+        relationship.setEntityTarget(null);
         relationship.setAnnotationList(null);
         }
         if (tab.getEntity()!=null)

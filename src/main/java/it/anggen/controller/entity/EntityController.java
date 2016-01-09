@@ -2,12 +2,15 @@
 package it.anggen.controller.entity;
 
 import java.util.List;
+
+import it.anggen.model.entity.Entity;
 import it.anggen.searchbean.entity.EntitySearchBean;
 import it.anggen.security.SecurityService;
 import it.anggen.service.entity.EntityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -63,8 +66,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         log.info("Searching entity with id {}",entityId);
         List<it.anggen.model.entity.Entity> entityList=entityService.findById(Long.valueOf(entityId));
-        getRightMapping(entityList);
         getSecurityMapping(entityList);
+        getRightMapping(entityList);
          log.info("Search: returning {} entity.",entityList.size());
         return ResponseEntity.ok().body(entityList);
     }
@@ -130,7 +133,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         relationship.setTab(null);
         relationship.setEntity(null);
-        relationship.setEntity(null);
+        relationship.setEntityTarget(null);
         relationship.setAnnotationList(null);
         }
         if (entity.getEntityGroup()!=null)
@@ -221,6 +224,18 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         if (securityEnabled && entity.getRestrictionEntityList()!=null && !securityService.hasPermission(it.anggen.model.security.RestrictionEntity.staticEntityId, it.anggen.model.RestrictionType.SEARCH) )
         entity.setRestrictionEntityList(null);
 
+    }
+    
+    @ResponseBody
+    @RequestMapping(value = "/pages/{pageNumber}", method = RequestMethod.GET)
+    public ResponseEntity getRunbookPage(@PathVariable Integer pageNumber) {
+    	Page<Entity> page = entityService.findByPage(pageNumber);
+    	getRightMapping(page.getContent());
+        int current = page.getNumber() + 1;
+        int begin = Math.max(1, current - 5);
+        int end = Math.min(begin + 10, page.getTotalPages());
+
+        return ResponseEntity.ok().body(page);
     }
 
 }

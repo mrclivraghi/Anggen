@@ -203,7 +203,7 @@ public class FrontHtmlGenerator {
 			html.div((new HtmlAttributes()).add("class", "default-panel").add("style", "margin-left:45%"));
 			html.ul((new HtmlAttributes()).add("class", "pagination"))
 			.li((new HtmlAttributes()).add("ng-class", "{disabled: currentPage<=1}")).a((new HtmlAttributes()).add("ng-click", "getPagination(currentPage-1)")).content("&laquo;",false)._li()
-			.li((new HtmlAttributes()).add("ng-repeat", "i in [].constructor(selectedEntity.totalPages) track by $index").add("ng-class","{active: $index+1==currentPage}")).a((new HtmlAttributes()).add("ng-click", "getPagination($index+1)")).content("{{$index+1}}")._li()
+			.li((new HtmlAttributes()).add("ng-repeat", "i in [].constructor(selectedEntity.totalPages) track by $index").add("ng-class","{active: $index+1==currentPage  || (currentPage==undefined && $index==0)}")).a((new HtmlAttributes()).add("ng-click", "getPagination($index+1)")).content("{{$index+1}}")._li()
 			.li((new HtmlAttributes()).add("ng-class", "{disabled: currentPage>=selectedEntity.totalPages}")).a((new HtmlAttributes()).add("ng-click", "getPagination(currentPage+1)")).content("&raquo;",false)._li()
 			._ul();
 			html._div();
@@ -252,12 +252,15 @@ public class FrontHtmlGenerator {
 				String inputType=getInputType(entityAttribute);
 				if (inputType.equals("embedded"))
 				{
-					
+					html.div().content("{{entity."+entityAttribute.getName()+"}}",false);
 				}else
 				{
 					if (inputType.equals("checkbox"))
 					{
-						
+						html.button(CssGenerator.getButton("","btn-s"));
+						HtmlCanvas buttonContent= new HtmlCanvas();
+						buttonContent.span((new HtmlAttributes()).add("class","glyphicon").add("ng-class", "{'glyphicon-ok': entity."+entityAttribute.getName()+",'glyphicon-remove ': !entity."+entityAttribute.getName()+"}").add("aria-hidden", "true"));
+						html.content(buttonContent.toHtml()+""+entityAttribute.getName()+"",false);
 					}else
 					{
 						if (inputType.equals("file"))

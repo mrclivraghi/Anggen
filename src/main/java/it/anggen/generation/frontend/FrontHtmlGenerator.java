@@ -265,7 +265,7 @@ public class FrontHtmlGenerator {
 					{
 						if (inputType.equals("file"))
 						{
-							
+							html.a((new HtmlAttributes()).add("href", "{{entity."+entityAttribute.getName()+"}}")).content(entityAttribute.getName()+"");
 						}else
 						{ //base attribute
 							html.div().content(entityAttribute.getName()+": {{entity."+entityAttribute.getName()+"}}");

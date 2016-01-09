@@ -66,8 +66,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         log.info("Searching entity with id {}",entityId);
         List<it.anggen.model.entity.Entity> entityList=entityService.findById(Long.valueOf(entityId));
-        getRightMapping(entityList);
         getSecurityMapping(entityList);
+        getRightMapping(entityList);
          log.info("Search: returning {} entity.",entityList.size());
         return ResponseEntity.ok().body(entityList);
     }

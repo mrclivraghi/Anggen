@@ -234,7 +234,7 @@ public class Generator {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
+				System.out.println(" "+modelEntity.getName()+" "+modelEntity.getGenerateFrontEnd());
 				if (modelEntity.getGenerateFrontEnd())
 				{
 					frontHtmlGenerator.init(modelEntity);

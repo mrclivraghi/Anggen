@@ -681,26 +681,27 @@ public class RestGenerator {
 				manageBlock.directStatement(check);
 
 				manageBlock.directStatement("return \""+lowerClass+"\";");
+				
+				if (entity.getGenerateFrontEnd())
+				{
+					JMethod manageFront = myClass.method(JMod.PUBLIC, String.class, "manageFront");
+					JAnnotationUse requestMappingManageFront = manageFront.annotate(RequestMapping.class);
+					requestMappingManageFront.param("method", RequestMethod.GET);
+					requestMappingManageFront.param("value", "/front");
+					JBlock manageFrontBlock = manageFront.body();
+					manageFrontBlock.directStatement(check);
+
+					manageFrontBlock.directStatement("return \""+lowerClass+"-front\";");
+				}
+				
 
 			}
 			
 			//getpage
-			/*
-			 *  @ResponseBody
-    @RequestMapping(value = "/pages/{pageNumber}", method = RequestMethod.GET)
-    public ResponseEntity getRunbookPage(@PathVariable Integer pageNumber) {
-    	Page<Entity> page = entityService.findByPage(pageNumber);
-    	getRightMapping(page.getContent());
-        int current = page.getNumber() + 1;
-        int begin = Math.max(1, current - 5);
-        int end = Math.min(begin + 10, page.getTotalPages());
 
-        return ResponseEntity.ok().body(page);
-    }
-			 */
 			JMethod getPage = myClass.method(JMod.PUBLIC, ResponseEntity.class, "findPage");
 			JAnnotationUse reqMapping = getPage.annotate(RequestMapping.class);
-			reqMapping.param("name", "/pages/{pageNumber}");
+			reqMapping.param("value", "/pages/{pageNumber}");
 			reqMapping.param("method", RequestMethod.GET);
 			getPage.annotate(ResponseBody.class);
 			

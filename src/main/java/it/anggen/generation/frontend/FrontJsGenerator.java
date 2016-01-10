@@ -199,7 +199,7 @@ public class FrontJsGenerator {
 
 
 		sb.append("this.searchPage = function() {\n");
-		sb.append("var promise= $http.get(\"../"+entityName+"/pages/\"+this.currentPage);\n");
+		sb.append("var promise= $http.get(\"../../"+entityName+"/pages/\"+this.currentPage);\n");
 		sb.append("return promise; \n");
 		sb.append("};\n");
 

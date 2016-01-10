@@ -91,20 +91,20 @@ public class FrontHtmlGenerator {
 		try {
 			//js
 			html
-			.macros().javascript("../js/jquery-1.9.1.js")
-			.macros().javascript("../js/jquery-ui.js")
-			.macros().javascript("../js/angular.js")
-			.macros().javascript("../js/angular-touch.js")
-			.macros().javascript("../js/angular-animate.js")
-			.macros().javascript("../js/csv.js")
-			.macros().javascript("../js/pdfmake.js")
-			.macros().javascript("../js/vfs_fonts.js")
-			.macros().javascript("../js/ui-grid.js");
+			.macros().javascript("../../js/jquery-1.9.1.js")
+			.macros().javascript("../../js/jquery-ui.js")
+			.macros().javascript("../../js/angular.js")
+			.macros().javascript("../../js/angular-touch.js")
+			.macros().javascript("../../js/angular-animate.js")
+			.macros().javascript("../../js/csv.js")
+			.macros().javascript("../../js/pdfmake.js")
+			.macros().javascript("../../js/vfs_fonts.js")
+			.macros().javascript("../../js/ui-grid.js");
 			if (includeEntityFile)
-				html.macros().javascript("../js/angular/"+generator.applicationName+"/"+entityName+"-front.js");
-			html.macros().javascript("../js/date.js")
-			.macros().javascript("../js/utility.js")
-			.macros().javascript("../js/bootstrap.min.js");
+				html.macros().javascript("../../js/angular/"+generator.applicationName+"/"+entityName+"-front.js");
+			html.macros().javascript("../../js/date.js")
+			.macros().javascript("../../js/utility.js")
+			.macros().javascript("../../js/bootstrap.min.js");
 			} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -113,12 +113,12 @@ public class FrontHtmlGenerator {
 	public void incluseCssFiles(HtmlCanvas html)
 	{
 		try {
-			html.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../css/ui-grid.css"))
-			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../css/bootstrap.min.css"))
-			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../css/main.css"))
-			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../css/jquery-ui.css"))
-			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../css/easytree/skin-win8/ui.easytree.css"))
-			.link((new HtmlAttributes()).add("rel","import").add("href", "../"+generator.applicationName+generator.menuName));
+			html.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../../css/ui-grid.css"))
+			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../../css/bootstrap.min.css"))
+			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../../css/main.css"))
+			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../../css/jquery-ui.css"))
+			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../../css/easytree/skin-win8/ui.easytree.css"))
+			.link((new HtmlAttributes()).add("rel","import").add("href", "../../"+generator.applicationName+generator.menuName));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -194,7 +194,7 @@ public class FrontHtmlGenerator {
 	</div>
 		 */
 		try {
-			html.div((new HtmlAttributes()).add("ng-controller", "entityFrontController"));
+			html.div((new HtmlAttributes()).add("ng-controller", entityName+"FrontController"));
 			
 			html.div((new HtmlAttributes()).add("ng-repeat", "entity in entityList"));
 			renderElement(html);

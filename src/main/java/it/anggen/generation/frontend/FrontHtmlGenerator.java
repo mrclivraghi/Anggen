@@ -99,6 +99,7 @@ public class FrontHtmlGenerator {
 			.macros().javascript("../../js/csv.js")
 			.macros().javascript("../../js/pdfmake.js")
 			.macros().javascript("../../js/vfs_fonts.js")
+			.macros().javascript("../../js/sanitize.js")
 			.macros().javascript("../../js/ui-grid.js");
 			if (includeEntityFile)
 				html.macros().javascript("../../js/angular/"+generator.applicationName+"/"+entityName+"-front.js");
@@ -243,7 +244,8 @@ public class FrontHtmlGenerator {
 
 		if (EntityAttributeManager.getInstance(entityAttribute).isEnumField())
 		{
-			html.div().content(entityAttribute.getName()+": {{entity."+entityAttribute.getName()+"}}");
+			html.div((new HtmlAttributes()).add("ng-bind-html", "entity."+entityAttribute.getName()+""))
+			._div();
 		}
 		else
 		{
@@ -252,7 +254,9 @@ public class FrontHtmlGenerator {
 				String inputType=getInputType(entityAttribute);
 				if (inputType.equals("embedded"))
 				{
-					html.div().content("{{entity."+entityAttribute.getName()+"}}",false);
+					html.div((new HtmlAttributes()).add("ng-bind-html", "entity."+entityAttribute.getName()+""))
+					._div();
+					
 				}else
 				{
 					if (inputType.equals("checkbox"))
@@ -265,9 +269,15 @@ public class FrontHtmlGenerator {
 					{
 						if (inputType.equals("file"))
 						{
-							html.a((new HtmlAttributes()).add("href", "{{entity."+entityAttribute.getName()+"}}")).content(entityAttribute.getName()+"");
+							html.div().content("{{entity."+entityAttribute.getName()+"}}",false);
 						}else
 						{ //base attribute
+							
+							if (EntityAttributeManager.getInstance(entityAttribute).getFieldTypeName().equals("Date"))
+							{
+								html.div().content(entityAttribute.getName()+": {{entity."+entityAttribute.getName()+" | date: 'dd/MM/yyyy'}}");
+							}
+							else
 							html.div().content(entityAttribute.getName()+": {{entity."+entityAttribute.getName()+"}}");
 						}
 							

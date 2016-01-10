@@ -269,7 +269,8 @@ public class EntityManagerImpl implements EntityManager{
 	public List<EntityAttribute> getAllAttribute() {
 		List<EntityAttribute> tempList = getAttributeList();
 		tempList.addAll(entity.getEnumFieldList());
-		Utility.orderByPriority(tempList);
+		if (tempList!=null)
+			Utility.orderByPriority(tempList);
 		return tempList;
 	}
 

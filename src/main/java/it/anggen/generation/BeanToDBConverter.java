@@ -18,6 +18,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import it.anggen.reflection.EntityAttributeManager;
+import it.anggen.reflection.EntityManager;
+import it.anggen.reflection.EntityManagerImpl;
 import it.anggen.utils.EntityAttribute;
 import it.anggen.utils.ReflectionManager;
 import it.anggen.utils.Utility;
@@ -182,95 +184,33 @@ public class BeanToDBConverter {
 		Map<String,Entity> entityMap = new HashMap<String,Entity>();
 		Map<String,EnumEntity> enumEntityMap = new HashMap<String,EnumEntity>();
 		Set<Class<?>> mainPackageClassSet = ReflectionManager.getClassInPackage(modelPackage);
+		Set<Class<?>> securityPackageClassSet= null;
 		if (!projectName.equals("anggen") && !packageList.contains("it.anggen.model.security"))
 		{
 			List<String> securityPackageList = ReflectionManager.getSubPackages("it.anggen.model.security");
 			packageList.addAll(securityPackageList);
-			Set<Class<?>> securityPackageClassSet = ReflectionManager.getClassInPackage("it.anggen.model.security");
-			mainPackageClassSet.addAll(securityPackageClassSet);
-			mainPackageClassSet.add(Field.class);
-			mainPackageClassSet.add(EntityGroup.class);
-			mainPackageClassSet.add(Entity.class);
+			securityPackageClassSet = ReflectionManager.getClassInPackage("it.anggen.model.security");
+			//mainPackageClassSet.addAll(securityPackageClassSet);
+			securityPackageClassSet.add(Field.class);
+			securityPackageClassSet.add(EntityGroup.class);
+			securityPackageClassSet.add(Entity.class);
 			
 		}
 		
 		
-		List<Entity> oldEntityList = entityRepository.findByEntityIdAndEnableRestrictionDataAndDescendantMaxLevelAndNameAndSecurityTypeAndRelationshipAndEntityGroupAndTabAndFieldAndEnumFieldAndRestrictionEntity(null, null, null, null, null, null, null, null, null, null, null);
-		firstEntityId=Utility.getFirstEntityId(oldEntityList);
+		//List<Entity> oldEntityList = entityRepository.findByEntityIdAndEnableRestrictionDataAndDescendantMaxLevelAndNameAndSecurityTypeAndRelationshipAndEntityGroupAndTabAndFieldAndEnumFieldAndRestrictionEntity(null, null, null, null, null, null, null, null, null, null, null);
 		
+		for (Class securityClass: securityPackageClassSet)
+		{
+			initEntity(securityClass,entityMap);
+		}
+
+		List<Entity> entityList = new ArrayList<Entity>(entityMap.values());
+		firstEntityId=Utility.getFirstEntityId(entityList);
 		// init entities
 		for (Class myClass: mainPackageClassSet)
 		{
-			ReflectionManager reflectionManager = new ReflectionManager(myClass);
-			Entity entity = new Entity();
-			entity.setName(reflectionManager.parseName());
-			entity.setEnableRestrictionData(false);
-			entity.setDisableViewGeneration(false);
-			entity.setGenerateFrontEnd(false);
-			Annotation[] annotationArray=myClass.getAnnotations();
-			Boolean securityTypeFound=false;
-			Boolean maxDescendantLevelFound=false;
-			for (int i=0; i<annotationArray.length;i++)
-			{
-				if (annotationArray[i].annotationType()==SecurityType.class)
-				for (Method method : annotationArray[i].annotationType().getDeclaredMethods()) {
-					if (method.getName().equals("type"))
-					{
-						Object value= null;
-						try {
-							value=  method.invoke(annotationArray[i], (Object[])null);
-							entity.setSecurityType((it.anggen.model.SecurityType) value);
-							securityTypeFound=true;
-						} catch (IllegalAccessException
-								| IllegalArgumentException
-								| InvocationTargetException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-				}
-				if (annotationArray[i].annotationType()==EnableRestrictionData.class)
-				{
-					entity.setEnableRestrictionData(true);
-				} 
-				
-				if (annotationArray[i].annotationType()==DisableViewGeneration.class)
-				{
-					entity.setDisableViewGeneration(true);
-				} 
-				
-				if (annotationArray[i].annotationType()==GenerateFrontEnd.class)
-				{
-					entity.setGenerateFrontEnd(true);
-				} 
-				
-				if (annotationArray[i].annotationType()==MaxDescendantLevel.class)
-					for (Method method : annotationArray[i].annotationType().getDeclaredMethods()) {
-						if (method.getName().equals("value"))
-						{
-							Object value= null;
-							try {
-								value=  method.invoke(annotationArray[i], (Object[])null);
-								entity.setDescendantMaxLevel((Integer) value);
-								maxDescendantLevelFound=true;
-							} catch (IllegalAccessException
-									| IllegalArgumentException
-									| InvocationTargetException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-						}
-					}
-			}
-			if (!securityTypeFound)
-				entity.setSecurityType(it.anggen.model.SecurityType.ACCESS_WITH_PERMISSION);
-			if (!maxDescendantLevelFound)
-				entity.setDescendantMaxLevel(1);
-			entity.setEntityId(getEntityId(entity));
-			//System.out.println("cerco di salvare "+entity.getName()+" con id "+entity.getEntityId()+" ma sul db ho "+savedEntity.getEntityId());
-				entityRepository.save(entity);
-			//System.out.println("Ho salvato "+entity.getName()+" con id "+entity.getEntityId()+ " ma sul db ho "+savedEntity.getEntityId());
-			entityMap.put(reflectionManager.parseName(), entity);
+			initEntity(myClass,entityMap);
 		}
 		
 		
@@ -300,6 +240,7 @@ public class BeanToDBConverter {
 		{
 				EntityGroup entityGroup= new EntityGroup();
 				entityGroup.setName(temp.parseName(myPackage));
+				entityGroup.setProject(project);
 				entityGroupRepository.save(entityGroup);
 				RestrictionEntityGroup restrictionEntityGroup = new RestrictionEntityGroup();
 				restrictionEntityGroup.setCanCreate(true);
@@ -309,13 +250,13 @@ public class BeanToDBConverter {
 				restrictionEntityGroup.setEntityGroup(entityGroup);
 				restrictionEntityGroup.setRole(adminRole);
 				restrictionEntityGroupRepository.save(restrictionEntityGroup);
-				List<RestrictionEntityGroup> restrictionEntityGroupList = new ArrayList<RestrictionEntityGroup>();
-				List<EnumEntity> enumEntityList= new ArrayList<EnumEntity>();
-				restrictionEntityGroupList.add(restrictionEntityGroup);
-				entityGroup.setRestrictionEntityGroupList(restrictionEntityGroupList);
+				//List<RestrictionEntityGroup> restrictionEntityGroupList = new ArrayList<RestrictionEntityGroup>();
+				//List<EnumEntity> enumEntityList= new ArrayList<EnumEntity>();
+				//restrictionEntityGroupList.add(restrictionEntityGroup);
+				//entityGroup.setRestrictionEntityGroupList(restrictionEntityGroupList);
 				
 				Set<Class<?>> packageClassSet = ReflectionManager.getClassInPackage(myPackage);
-				List<Entity> entityList = new ArrayList<Entity>();
+				//List<Entity> entityList = new ArrayList<Entity>();
 				for (Class myClass: packageClassSet)
 				{
 					ReflectionManager reflectionManager = new ReflectionManager(myClass);
@@ -388,19 +329,24 @@ public class BeanToDBConverter {
 					
 					List<String> tabNameList=reflectionManager.getTabsName();
 					List<it.anggen.model.entity.Tab> tabList = new ArrayList<it.anggen.model.entity.Tab>();
+					
+					
+					//List<Field> fieldList= new ArrayList<Field>();
+					//List<Relationship>	relationshipList = new ArrayList<Relationship>();
+					//List<EnumField> enumFieldList = new ArrayList<EnumField>();
+					
+					
 					for (String tabName: tabNameList)
 					{
 						it.anggen.model.entity.Tab metaTab = new it.anggen.model.entity.Tab();
 						metaTab.setName(tabName);
 						metaTab.setEntity(entity);
 						tabRepository.save(metaTab);
-						List<Field> fieldList= new ArrayList<Field>();
-						List<Relationship>	relationshipList = new ArrayList<Relationship>();
-						List<EnumField> enumFieldList = new ArrayList<EnumField>();
 						
-						List<Field> tabFieldList = new ArrayList<Field>();
-						List<EnumField> tabEnumFieldList= new ArrayList<EnumField>();
-						List<Relationship> tabRelationshipList = new ArrayList<Relationship>();
+						
+						//List<Field> tabFieldList = new ArrayList<Field>();
+						//List<EnumField> tabEnumFieldList= new ArrayList<EnumField>();
+						//List<Relationship> tabRelationshipList = new ArrayList<Relationship>();
 
 						for (it.anggen.utils.Field field: reflectionManager.getFieldByTabName(tabName))
 						{
@@ -410,7 +356,8 @@ public class BeanToDBConverter {
 								if (field.getName().equals("staticEntityId"))
 									continue;
 								metaField.setName(field.getName());
-								fieldRepository.save(metaField);
+								metaField.setTab(metaTab);
+								
 								FieldType fieldType=null;
 								if (field.getFieldClass()==Integer.class) 
 									fieldType=FieldType.INTEGER;
@@ -430,36 +377,23 @@ public class BeanToDBConverter {
 									fieldType=FieldType.FILE;
 								metaField.setFieldType(fieldType);
 								metaField.setEntity(entity);
-								List<it.anggen.model.field.Annotation> annotationList = new ArrayList<it.anggen.model.field.Annotation>();
-								convertAnnotation(field, metaField, annotationList);
-								if (metaField.getPriority()==null)
+								if (ReflectionManager.hasId(field))
 								{
-									it.anggen.model.field.Annotation priority = new it.anggen.model.field.Annotation();
-									priority.setAnnotationType(AnnotationType.PRIORITY);
-									priority.setField(metaField);
-									annotationRepository.save(priority);
-									List<AnnotationAttribute> annotationAttributeList = new ArrayList<AnnotationAttribute>();
-									AnnotationAttribute annotationAttribute = new AnnotationAttribute();
-									annotationAttribute.setProperty("value");
-									if (ReflectionManager.hasId(field))
-									{
-										annotationAttribute.setValue("1");
-										metaField.setPriority(1);
-									}else
-									{
-										annotationAttribute.setValue("2"); // by default
-										metaField.setPriority(2);
-									}
-									annotationAttribute.setAnnotation(priority);
-									annotationAttributeRepository.save(annotationAttribute);
-									annotationAttributeList.add(annotationAttribute);
-									priority.setAnnotationAttributeList(annotationAttributeList);
-									annotationRepository.save(priority);
-									metaField.getAnnotationList().add(priority);
+									metaField.setPriority(1);
+								}else
+								{
+									metaField.setPriority(2);
 								}
+								setRightPriority(field, metaField);
+
 								fieldRepository.save(metaField);
-								fieldList.add(metaField);
-								tabFieldList.add(metaField);
+								//List<it.anggen.model.field.Annotation> annotationList = new ArrayList<it.anggen.model.field.Annotation>();
+								convertAnnotation(field, metaField);
+								//if (metaField.getPriority()==null)
+								
+								//fieldRepository.save(metaField);
+								//fieldList.add(metaField);
+								//tabFieldList.add(metaField);
 								
 								continue;
 							} // fine is known class
@@ -478,7 +412,7 @@ public class BeanToDBConverter {
 									enumEntity.setProject(project);
 									enumEntityRepository.save(enumEntity);
 									List<String> enumValueList = field.getEnumValuesList();
-									List<EnumValue> metaEnumValueList = new ArrayList<EnumValue>();
+									//List<EnumValue> metaEnumValueList = new ArrayList<EnumValue>();
 									for (int i=0; i<enumValueList.size(); i++)
 									{
 										EnumValue metaEnumValue= new EnumValue();
@@ -486,11 +420,11 @@ public class BeanToDBConverter {
 										metaEnumValue.setEnumEntity(enumEntity);
 										metaEnumValue.setValue(i);
 										enumValueRepository.save(metaEnumValue);
-										metaEnumValueList.add(metaEnumValue);
+										//metaEnumValueList.add(metaEnumValue);
 									}
-									enumEntity.setEnumValueList( metaEnumValueList);
+									//enumEntity.setEnumValueList( metaEnumValueList);
 									enumEntityRepository.save(enumEntity);
-									enumEntityList.add(enumEntity);
+									//enumEntityList.add(enumEntity);
 								}
 								
 								
@@ -498,59 +432,44 @@ public class BeanToDBConverter {
 								enumField.setName(field.getName());
 								enumField.setEntity(entity);
 								enumField.setEnumEntity(enumEntity);
+								enumField.setTab(metaTab);
+								enumField.setPriority(3);
+								setRightPriority(field, enumField);
+								
 								enumFieldRepository.save(enumField);
-								List<it.anggen.model.field.Annotation> annotationList = new ArrayList<it.anggen.model.field.Annotation>();
-								convertAnnotation(field, enumField, annotationList);
+								//List<it.anggen.model.field.Annotation> annotationList = new ArrayList<it.anggen.model.field.Annotation>();
+								convertAnnotation(field, enumField);
 								if (enumField.getPriority()==null)
-								{
+								{/*
 									it.anggen.model.field.Annotation priority = new it.anggen.model.field.Annotation();
 									priority.setAnnotationType(AnnotationType.PRIORITY);
 									priority.setEnumField(enumField);
 									annotationRepository.save(priority);
-									List<AnnotationAttribute> annotationAttributeList = new ArrayList<AnnotationAttribute>();
+									//List<AnnotationAttribute> annotationAttributeList = new ArrayList<AnnotationAttribute>();
 									AnnotationAttribute annotationAttribute = new AnnotationAttribute();
 									annotationAttribute.setProperty("value");
 									annotationAttribute.setValue("3");
 									enumField.setPriority(3);
 									annotationAttribute.setAnnotation(priority);
 									annotationAttributeRepository.save(annotationAttribute);
-									annotationAttributeList.add(annotationAttribute);
-									priority.setAnnotationAttributeList(annotationAttributeList);
-									annotationRepository.save(priority);
-									enumField.getAnnotationList().add(priority);
-								}
-								enumFieldRepository.save(enumField);
-								enumFieldList.add(enumField);
-								tabEnumFieldList.add(enumField);
+									//annotationAttributeList.add(annotationAttribute);
+									//priority.setAnnotationAttributeList(annotationAttributeList);
+									//annotationRepository.save(priority);
+									//enumField.getAnnotationList().add(priority);
+								*/}
+								//enumFieldRepository.save(enumField);
+								//enumFieldList.add(enumField);
+								//tabEnumFieldList.add(enumField);
 								continue;
 								
 								//end enum Field
-							}
+							} else
 							{ //relationship
 								Relationship relationship = new Relationship();
 								relationship.setEntity(entity);
+								relationship.setTab(metaTab);
 								relationship.setName(reflectionManager.parseName(field.getName()));
 								relationshipRepository.save(relationship);
-								List<it.anggen.model.field.Annotation> annotationList = new ArrayList<it.anggen.model.field.Annotation>();
-								convertAnnotation(field, relationship, annotationList);
-								if (relationship.getPriority()==null)
-								{
-									it.anggen.model.field.Annotation priority = new it.anggen.model.field.Annotation();
-									priority.setAnnotationType(AnnotationType.PRIORITY);
-									priority.setRelationship(relationship);
-									annotationRepository.save(priority);
-									List<AnnotationAttribute> annotationAttributeList = new ArrayList<AnnotationAttribute>();
-									AnnotationAttribute annotationAttribute = new AnnotationAttribute();
-									annotationAttribute.setProperty("value");
-									annotationAttribute.setValue("4"); // by default
-									relationship.setPriority(4);
-									annotationAttribute.setAnnotation(priority);
-									annotationAttributeRepository.save(annotationAttribute);
-									annotationAttributeList.add(annotationAttribute);
-									priority.setAnnotationAttributeList(annotationAttributeList);
-									annotationRepository.save(priority);
-									relationship.getAnnotationList().add(priority);
-								}
 								RelationshipType relationshipType = null;
 								if (ReflectionManager.hasOneToOne(field))
 								{
@@ -575,48 +494,192 @@ public class BeanToDBConverter {
 								relationship.setEntityTarget(entityMap.get(reflectionManager.parseName(field.getCompositeClass().fullName())));
 								
 								relationship.setRelationshipType(relationshipType);
+								relationship.setPriority(4);
+								setRightPriority(field, relationship);
 								relationshipRepository.save(relationship);
-								
-								relationshipList.add(relationship);
-								tabRelationshipList.add(relationship);
-								continue;
+								//List<it.anggen.model.field.Annotation> annotationList = new ArrayList<it.anggen.model.field.Annotation>();
+								convertAnnotation(field, relationship);
+								if (relationship.getPriority()==null)
+								{/*
+									it.anggen.model.field.Annotation priority = new it.anggen.model.field.Annotation();
+									priority.setAnnotationType(AnnotationType.PRIORITY);
+									priority.setRelationship(relationship);
+									annotationRepository.save(priority);
+									//List<AnnotationAttribute> annotationAttributeList = new ArrayList<AnnotationAttribute>();
+									AnnotationAttribute annotationAttribute = new AnnotationAttribute();
+									annotationAttribute.setProperty("value");
+									annotationAttribute.setValue("4"); // by default
+									relationship.setPriority(4);
+									annotationAttribute.setAnnotation(priority);
+									annotationAttributeRepository.save(annotationAttribute);
+									//annotationAttributeList.add(annotationAttribute);
+									//priority.setAnnotationAttributeList(annotationAttributeList);
+									//annotationRepository.save(priority);
+									//relationship.getAnnotationList().add(priority);
+								*/}
+								//relationshipList.add(relationship);
+								//tabRelationshipList.add(relationship);
+								//continue;
 							}
 							
 						}
-						metaTab.setFieldList(tabFieldList);
-						metaTab.setEnumFieldList(tabEnumFieldList);
-						metaTab.setRelationshipList(tabRelationshipList);
-						tabRepository.save(metaTab);
-						entity.setFieldList(fieldList);
-						entity.setRelationshipList(relationshipList);
-						entity.setEnumFieldList(enumFieldList);
-						tabList.add(metaTab);
+						//metaTab.setFieldList(tabFieldList);
+						//metaTab.setEnumFieldList(tabEnumFieldList);
+						//metaTab.setRelationshipList(tabRelationshipList);
+						//tabRepository.save(metaTab);
+						//entity.setFieldList(fieldList);
+						//entity.setRelationshipList(relationshipList);
+						//entity.setEnumFieldList(enumFieldList);
+						//tabList.add(metaTab);
 					} // fine ciclo entity
-					entity.setTabList(tabList);
-					entityRepository.save(entity);
-					entityList.add(entity);
+					//entity.setTabList(tabList);
+					//entityRepository.save(entity);
+					//entityList.add(entity);
 				}
 				
-				entityGroup.setEntityList(entityList);
-				entityGroup.setProject(project);
-				entityGroupRepository.save(entityGroup);
+				//entityGroup.setEntityList(entityList);
+				//entityGroup.setProject(project);
+				//entityGroupRepository.save(entityGroup);
+				System.out.println("");
 		}
 	}
 	
-	private void convertAnnotation(it.anggen.utils.Field field,EntityAttribute metaEntityAttribute, List<it.anggen.model.field.Annotation> annotationList)
+	private void initEntity(Class myClass, Map<String, Entity> entityMap)
+	{
+
+		ReflectionManager reflectionManager = new ReflectionManager(myClass);
+		Entity entity = new Entity();
+		entity.setName(reflectionManager.parseName());
+		entity.setEnableRestrictionData(false);
+		entity.setDisableViewGeneration(false);
+		entity.setGenerateFrontEnd(false);
+		Annotation[] annotationArray=myClass.getAnnotations();
+		Boolean securityTypeFound=false;
+		Boolean maxDescendantLevelFound=false;
+		for (int i=0; i<annotationArray.length;i++)
+		{
+			if (annotationArray[i].annotationType()==SecurityType.class)
+			for (Method method : annotationArray[i].annotationType().getDeclaredMethods()) {
+				if (method.getName().equals("type"))
+				{
+					Object value= null;
+					try {
+						value=  method.invoke(annotationArray[i], (Object[])null);
+						entity.setSecurityType((it.anggen.model.SecurityType) value);
+						securityTypeFound=true;
+					} catch (IllegalAccessException
+							| IllegalArgumentException
+							| InvocationTargetException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+			if (annotationArray[i].annotationType()==EnableRestrictionData.class)
+			{
+				entity.setEnableRestrictionData(true);
+			} 
+			
+			if (annotationArray[i].annotationType()==DisableViewGeneration.class)
+			{
+				entity.setDisableViewGeneration(true);
+			} 
+			
+			if (annotationArray[i].annotationType()==GenerateFrontEnd.class)
+			{
+				entity.setGenerateFrontEnd(true);
+			} 
+			
+			if (annotationArray[i].annotationType()==MaxDescendantLevel.class)
+				for (Method method : annotationArray[i].annotationType().getDeclaredMethods()) {
+					if (method.getName().equals("value"))
+					{
+						Object value= null;
+						try {
+							value=  method.invoke(annotationArray[i], (Object[])null);
+							entity.setDescendantMaxLevel((Integer) value);
+							maxDescendantLevelFound=true;
+						} catch (IllegalAccessException
+								| IllegalArgumentException
+								| InvocationTargetException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+		}
+		if (!securityTypeFound)
+			entity.setSecurityType(it.anggen.model.SecurityType.ACCESS_WITH_PERMISSION);
+		if (!maxDescendantLevelFound)
+			entity.setDescendantMaxLevel(1);
+		entity.setEntityId(getEntityId(entity));
+		entityRepository.save(entity);
+		//System.out.println("Ho salvato "+entity.getName()+" con id "+entity.getEntityId()+ " ma sul db ho "+savedEntity.getEntityId());
+		entityMap.put(reflectionManager.parseName(), entity);
+	
+	}
+	
+	private void setRightPriority(it.anggen.utils.Field field,EntityAttribute metaEntityAttribute)
+	{
+		Annotation[] annotationArray = field.getAnnotationList();
+
+
+		for (int i=0; i<annotationArray.length; i++)
+		{
+
+
+
+			if (annotationArray[i].annotationType()==Priority.class)
+			{
+				for (Method method : annotationArray[i].annotationType().getDeclaredMethods()) {
+					if (method.getName().equals("value"))
+					{
+						Object value= null;
+						try {
+							value=  method.invoke(annotationArray[i], (Object[])null);
+							metaEntityAttribute.setPriority((Integer) value);
+							if (EntityAttributeManager.getInstance(metaEntityAttribute).isField())
+								fieldRepository.save(EntityAttributeManager.getInstance(metaEntityAttribute).asField());
+							if (EntityAttributeManager.getInstance(metaEntityAttribute).isEnumField())
+								enumFieldRepository.save(EntityAttributeManager.getInstance(metaEntityAttribute).asEnumField());
+							if (EntityAttributeManager.getInstance(metaEntityAttribute).isRelationship())
+								relationshipRepository.save(EntityAttributeManager.getInstance(metaEntityAttribute).asRelationship());
+						
+						} catch (IllegalAccessException
+								| IllegalArgumentException
+								| InvocationTargetException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+				//metaAnnotation.setAnnotationAttributeList(annotationAttributeList);
+			}
+		}
+	}
+	
+	
+	private void convertAnnotation(it.anggen.utils.Field field,EntityAttribute metaEntityAttribute)
 	{
 		Annotation[] annotationArray = field.getAnnotationList();
 		
 		
 		for (int i=0; i<annotationArray.length; i++)
 		{
-			it.anggen.model.field.Annotation metaAnnotation = new it.anggen.model.field.Annotation();
-			annotationRepository.save(metaAnnotation);
+			
+			
+			
+			//List<it.anggen.model.field.Annotation> metaAnnotationList = annotationRepository.findByAnnotationIdAndAnnotationTypeAndRelationshipAndFieldAndEnumFieldAndAnnotationAttribute(null, AnnotationType.PRIORITY.getValue(), EntityAttributeManager.getInstance(metaEntityAttribute).asRelationship(), EntityAttributeManager.getInstance(metaEntityAttribute).asField(), EntityAttributeManager.getInstance(metaEntityAttribute).asEnumField(), null);
+			it.anggen.model.field.Annotation metaAnnotation = null;		
+			//if (metaAnnotationList.size()>0)
+			//	metaAnnotation=metaAnnotationList.get(0);
+			//else
+				metaAnnotation=	new it.anggen.model.field.Annotation();
+			
 			AnnotationType annotationType= null;
 			if (annotationArray[i].annotationType()==Priority.class)
 			{
 				annotationType=AnnotationType.PRIORITY;
-				List<AnnotationAttribute> annotationAttributeList = new ArrayList<AnnotationAttribute>();
 				for (Method method : annotationArray[i].annotationType().getDeclaredMethods()) {
 					if (method.getName().equals("value"))
 					{
@@ -626,10 +689,17 @@ public class BeanToDBConverter {
 							AnnotationAttribute annotationAttribute = new AnnotationAttribute();
 							annotationAttribute.setProperty(method.getName());
 							annotationAttribute.setValue(value.toString());
-							metaEntityAttribute.setPriority((Integer) value);
 							annotationAttribute.setAnnotation(metaAnnotation);
+							metaAnnotation.setAnnotationType(annotationType);
+							if (EntityAttributeManager.getInstance(metaEntityAttribute).isField())
+								metaAnnotation.setField(EntityAttributeManager.getInstance(metaEntityAttribute).asField());
+							if (EntityAttributeManager.getInstance(metaEntityAttribute).isEnumField())
+								metaAnnotation.setEnumField(EntityAttributeManager.getInstance(metaEntityAttribute).asEnumField());
+							if (EntityAttributeManager.getInstance(metaEntityAttribute).isRelationship())
+								metaAnnotation.setRelationship(EntityAttributeManager.getInstance(metaEntityAttribute).asRelationship());
+							annotationRepository.save(metaAnnotation);
 							annotationAttributeRepository.save(annotationAttribute);
-							annotationAttributeList.add(annotationAttribute);
+							//annotationAttributeList.add(annotationAttribute);
 						} catch (IllegalAccessException
 								| IllegalArgumentException
 								| InvocationTargetException e) {
@@ -638,7 +708,7 @@ public class BeanToDBConverter {
 						}
 					}
 				}
-				metaAnnotation.setAnnotationAttributeList(annotationAttributeList);
+				//metaAnnotation.setAnnotationAttributeList(annotationAttributeList);
 			}
 			if (annotationArray[i].annotationType()==Id.class)
 			{
@@ -679,7 +749,16 @@ public class BeanToDBConverter {
 			if (annotationArray[i].annotationType()==Size.class)
 			{
 				annotationType=AnnotationType.SIZE;
-				List<AnnotationAttribute> annotationAttributeList = new ArrayList<AnnotationAttribute>();
+				metaAnnotation.setAnnotationType(annotationType);
+				if (EntityAttributeManager.getInstance(metaEntityAttribute).isField())
+					metaAnnotation.setField(EntityAttributeManager.getInstance(metaEntityAttribute).asField());
+				if (EntityAttributeManager.getInstance(metaEntityAttribute).isEnumField())
+					metaAnnotation.setEnumField(EntityAttributeManager.getInstance(metaEntityAttribute).asEnumField());
+				if (EntityAttributeManager.getInstance(metaEntityAttribute).isRelationship())
+					metaAnnotation.setRelationship(EntityAttributeManager.getInstance(metaEntityAttribute).asRelationship());
+				
+				annotationRepository.save(metaAnnotation);
+				//List<AnnotationAttribute> annotationAttributeList = new ArrayList<AnnotationAttribute>();
 				for (Method method : annotationArray[i].annotationType().getDeclaredMethods()) {
 					if (method.getName().equals("min") || method.getName().equals("max"))
 					{
@@ -691,7 +770,7 @@ public class BeanToDBConverter {
 							annotationAttribute.setValue(value.toString());
 							annotationAttribute.setAnnotation(metaAnnotation);
 							annotationAttributeRepository.save(annotationAttribute);
-							annotationAttributeList.add(annotationAttribute);
+							//annotationAttributeList.add(annotationAttribute);
 						} catch (IllegalAccessException
 								| IllegalArgumentException
 								| InvocationTargetException e) {
@@ -700,7 +779,7 @@ public class BeanToDBConverter {
 						}
 					}
 				}
-				metaAnnotation.setAnnotationAttributeList(annotationAttributeList);
+			//	metaAnnotation.setAnnotationAttributeList(annotationAttributeList);
 			}
 			if (annotationArray[i].annotationType()==NotNull.class)
 			{
@@ -715,7 +794,7 @@ public class BeanToDBConverter {
 				annotationType=AnnotationType.PASSWORD;
 			}
 			
-			if (annotationType!=null)
+			if (annotationType!=null && metaAnnotation.getAnnotationType()!=AnnotationType.SIZE && metaAnnotation.getAnnotationType()!=AnnotationType.PRIORITY)
 			{
 				metaAnnotation.setAnnotationType(annotationType);
 				if (EntityAttributeManager.getInstance(metaEntityAttribute).isField())
@@ -724,18 +803,11 @@ public class BeanToDBConverter {
 					metaAnnotation.setEnumField(EntityAttributeManager.getInstance(metaEntityAttribute).asEnumField());
 				if (EntityAttributeManager.getInstance(metaEntityAttribute).isRelationship())
 					metaAnnotation.setRelationship(EntityAttributeManager.getInstance(metaEntityAttribute).asRelationship());
-				//annotationRepository.save(metaAnnotation);
 				annotationRepository.save(metaAnnotation);
-				annotationList.add(metaAnnotation);
+				//annotationList.add(metaAnnotation);
 			}
 		}
-		if (EntityAttributeManager.getInstance(metaEntityAttribute).isField())
-			EntityAttributeManager.getInstance(metaEntityAttribute).asField().setAnnotationList(annotationList);
-		if (EntityAttributeManager.getInstance(metaEntityAttribute).isEnumField())
-			EntityAttributeManager.getInstance(metaEntityAttribute).asEnumField().setAnnotationList(annotationList);
-		if (EntityAttributeManager.getInstance(metaEntityAttribute).isRelationship())
-			EntityAttributeManager.getInstance(metaEntityAttribute).asRelationship().setAnnotationList(annotationList);
-
+		
 	}
 	
 	private Boolean isAngGenSecurity(Entity entity)
@@ -754,7 +826,7 @@ public class BeanToDBConverter {
 		return false;
 	}
 	
-	public Long getEntityId(Entity entity)
+	private Long getEntityId(Entity entity)
 	{
 		if (!isAngGenSecurity(entity))
 			{

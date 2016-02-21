@@ -2,6 +2,8 @@ package it.anggen.generation;
 
 import it.anggen.utils.ReflectionManager;
 import it.anggen.utils.Utility;
+import it.anggen.model.RestrictionType;
+import it.anggen.model.SecurityType;
 import it.anggen.repository.security.UserRepository;
 
 import java.io.File;
@@ -55,8 +57,11 @@ import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
+import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
@@ -90,6 +95,7 @@ public class WebappGenerator {
 	private String applicationName;
 	private String packageName;
 	private String directory;
+	private String modelPackage;
 	
 	public WebappGenerator()
 	{
@@ -102,6 +108,8 @@ public class WebappGenerator {
 		packageName=generator.mainPackage+applicationName.toLowerCase()+".";
 		File file = new File(""); 
 		this.directory = file.getAbsolutePath()+"\\src\\main\\java";
+		this.modelPackage=generator.mainPackage+generator.applicationName+".model.";
+		
 		
 	}
 	
@@ -116,8 +124,35 @@ public class WebappGenerator {
 		generateSecurityWebappInitializer();
 		generateSpringBootApplication();
 		generateForbiddenJsp();
+		generateMainAppController();
+		htmlGenerator.generateTemplate();
 	}
 	
+	private void generateMainAppController() {
+		JCodeModel codeModel = new JCodeModel();
+		JDefinedClass mainAppController=null;
+		try {
+			mainAppController = codeModel._class(""+modelPackage.replace(".model.", ".controller.")+"MainAppController", ClassType.CLASS);
+			} catch (JClassAlreadyExistsException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		mainAppController.annotate(Controller.class);
+		//appConfig.annotate(EnableAutoConfiguration.class);
+		JAnnotationUse requestMapping = mainAppController.annotate(RequestMapping.class);
+		requestMapping.param("value", "/");
+		JMethod manage = mainAppController.method(JMod.PUBLIC, String.class, "manage");
+		JAnnotationUse requestMappingManage = manage.annotate(RequestMapping.class);
+		requestMappingManage.param("method", RequestMethod.GET);
+		JBlock manageBlock = manage.body();
+		String check="";
+		manageBlock.directStatement(check);
+		manageBlock.directStatement("return \"template\";");
+		
+		saveFile(codeModel);
+		
+	}
+
 	private void generateSpringBootApplication()
 	{
 		JCodeModel codeModel = new JCodeModel();

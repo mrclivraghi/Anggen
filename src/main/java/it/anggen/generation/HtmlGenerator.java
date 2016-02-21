@@ -121,7 +121,7 @@ public class HtmlGenerator {
 			.macros().javascript("js/ng-file-upload-all.js");
 			
 			html.script((new HtmlAttributes()).add("type", "text/javascript"))
-			.content(" angular.element(document.getElementsByTagName('head')).append(angular.element('<base href=\"' + window.location.pathname + '\" />'));");
+			.content(" angular.element(document.getElementsByTagName('head')).append(angular.element('<base href=\"' + window.location.pathname + '\" />'));",false);
 			
 			} catch (IOException e) {
 			e.printStackTrace();
@@ -255,7 +255,7 @@ public class HtmlGenerator {
 				String ulContent="";
 				for (Entity entity: entityGroup.getEntityList())
 				{
-					ulContent=ulContent+"<li ng-if=\"restrictionList."+entity.getName()+".canSearch || restrictionList."+entity.getName()+"==undefined\"><a href=\"../"+Utility.getFirstLower(entity.getName())+"/\">"+Utility.getFirstUpper(entity.getName())+"</a></li>";
+					ulContent=ulContent+"<li ng-if=\"restrictionList."+entity.getName()+".canSearch || restrictionList."+entity.getName()+"==undefined\"><a href=\""+Utility.getFirstUpper(entity.getName())+"\">"+Utility.getFirstUpper(entity.getName())+"</a></li>";
 				}
 				
 				ulHtml.content(ulContent,false);
@@ -300,7 +300,7 @@ public class HtmlGenerator {
 			includeJavascriptScripts(html,true);
 			incluseCssFiles(html);
 			html._head()
-			.body(htmlAttributes.add("ng-app", generator.applicationName+"App").add("ng-controller", "mainAppController"));
+			.body(htmlAttributes.add("ng-app", generator.applicationName+"App").add("ng-controller", "MainController"));
 			html.div((new HtmlAttributes()).add("id", "alertInfo").add("class","alert alert-success custom-alert").add("style","display: none")).span().content("")._div();
 			html.div((new HtmlAttributes()).add("id", "alertError").add("class","alert alert-danger custom-alert").add("style","display: none")).span().content("")._div();
 			//TODO switch

@@ -52,7 +52,6 @@ import com.sun.codemodel.JClass;
 public class JsGenerator {
 
 	private Entity entity;
-
 	
 	private EntityManager entityManager;
 	
@@ -76,6 +75,7 @@ public class JsGenerator {
 	
 	
 	
+	
 	@Autowired
 	private Generator generator;
 
@@ -84,7 +84,6 @@ public class JsGenerator {
 		
 	}
 
-	
 	public void init(Entity entity,Boolean isParent,String parentEntityName,RelationshipType relationshipType, Boolean lastLevel,String serviceList)
 	{
 		this.entity=entity;
@@ -120,7 +119,36 @@ public class JsGenerator {
 		sb.append(getSecurityService());
 		sb.append(getMainController());
 		sb.append(getNavigation());
-		saveAsJsFile(generator.angularDirectory, "main-app", sb.toString());
+		
+		File file = new File("");
+		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+generator.applicationName+"/";
+		saveAsJsFile(directoryAngularFiles, "main-app", sb.toString());
+	}
+	
+	public void generateControllerFile()
+	{
+		StringBuilder sb = new StringBuilder();
+		for (Entity entity: generator.getEntityList())
+		{
+			init(entity, null, null, null, null, null);
+			sb.append(generateController());
+		}
+		File file = new File("");
+		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+generator.applicationName+"/";
+		saveAsJsFile(directoryAngularFiles, generator.applicationName+"-controller", sb.toString());
+	}
+	
+	public void generateServiceFile()
+	{
+		StringBuilder sb = new StringBuilder();
+		for (Entity entity: generator.getEntityList())
+		{
+			init(entity, null, null, null, null, null);
+			sb.append(generateService ());
+		}
+		File file = new File("");
+		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+generator.applicationName+"/";
+		saveAsJsFile(directoryAngularFiles, generator.applicationName+"-service ", sb.toString());
 	}
 	
 	private String getNavigation()
@@ -129,7 +157,7 @@ public class JsGenerator {
 		sb.append(generator.applicationName+"App.config(function($routeProvider, $locationProvider) \n");
 		sb.append("{\n");
 		sb.append("$routeProvider\n");
-		for (Entity entity: descendantEntityList)
+		for (Entity entity: generator.getEntityList())
 		{
 			sb.append(".when('/"+Utility.getFirstUpper(entity.getName())+"/',{\n")
 			.append("templateUrl: './"+Utility.getFirstLower(entity.getName())+"/',\n")
@@ -139,7 +167,7 @@ public class JsGenerator {
 		
 		sb.append(";");
 		sb.append("$locationProvider.html5Mode(true);\n");
-		sb.append("}\n");
+		sb.append("});\n");
 		return sb.toString();
 	}
 	
@@ -884,7 +912,8 @@ public class JsGenerator {
 			}
 			sb.append("})\n");
 		String services = serviceList;
-		
+		if (services==null)
+			services="";
 		sb.append(".run(function($rootScope,securityService"+services+"){\n");
 
 		if (generator.security)
@@ -897,8 +926,7 @@ public class JsGenerator {
 			sb.append("securityService.restrictionList={};\n");
 			sb.append("$rootScope.restrictionList={};\n");
 		}
-		if (entity!=null)
-			initChildrenList(sb, entity);
+			//initChildrenList(sb);
 				
 		if (generator.security)
 			sb.append("});\n");

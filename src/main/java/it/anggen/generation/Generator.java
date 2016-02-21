@@ -274,6 +274,9 @@ public class Generator {
 	}
 	
 	
-	
+	public List<Entity> getEntityList()
+	{
+		return modelEntityList;
+	}
 
 }

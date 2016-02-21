@@ -98,7 +98,11 @@ public class HtmlGenerator {
 			.macros().javascript("../js/vfs_fonts.js")
 			.macros().javascript("../js/ui-grid.js");
 			if (includeEntityFile)
-				html.macros().javascript("../js/angular/"+generator.applicationName+"/"+entityName+".js");
+			{
+				html.macros().javascript("../js/angular/"+generator.applicationName+"/"+generator.applicationName+"-services.js");
+				html.macros().javascript("../js/angular/"+generator.applicationName+"/"+generator.applicationName+"-controller.js");
+				html.macros().javascript("../js/angular/"+generator.applicationName+"/main-app.js");
+			}
 			
 			html.macros().javascript("../js/date.js")
 			.macros().javascript("../js/utility.js");
@@ -138,40 +142,13 @@ public class HtmlGenerator {
 	public void generateJSP() throws IllegalAccessException
 	{
 		HtmlCanvas html = new HtmlCanvas();
-		HtmlAttributes htmlAttributes= new HtmlAttributes();
-		jsGenerator.init(entity, true, null, null,entityManager.isLastLevel(entity),null);
-		
+		angularGenerator.init(entity, true,new ArrayList<Entity>(),entityManager.isLastLevel(entity));
 		try {
-			html.render(docType);
-			html.
-			html()
-			.head()
-			.title().content(entityName);
-			includeJavascriptScripts(html,true);
-			incluseCssFiles(html);
-			jsGenerator.saveJsToFile(directoryAngularFiles);
-			html._head()
-			.body(htmlAttributes.add("ng-app", Utility.getFirstLower(entityName)+"App"));
-			html.div((new HtmlAttributes()).add("id", "alertInfo").add("class","alert alert-success custom-alert").add("style","display: none")).span().content("")._div();
-			html.div((new HtmlAttributes()).add("id", "alertError").add("class","alert alert-danger custom-alert").add("style","display: none")).span().content("")._div();
-			angularGenerator.init(entity, true,new ArrayList<Entity>(),entityManager.isLastLevel(entity));
 			angularGenerator.generateEntityView(html);
-			
-			//TODO switch
-			String loadMenuScript="loadMenu(); ";
-			/*if (Generator.bootstrapMenu)
-				loadMenuScript=loadMenuScript+" activeMenu(\""+entityName+"\");";
-			else
-				loadMenuScript=loadMenuScript+" $('#menu').easytree(easyTreeOption);";
-			*/
-			html.script((new HtmlAttributes()).add("type", "text/javascript")).content(loadMenuScript,false);
-			if (generator.easyTreeMenu)
-				html.script().content("function stateChanged(nodes, nodesJson) {var t = nodes[0].text; $.cookie('menu', nodesJson); };  var easyTree = $('#menu').easytree({data: ($.cookie('menu')!=null? $.cookie('menu') : null), stateChanged: stateChanged});",false);
-			html._body()._html();
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
-		
 		File dir = new File(directoryViewPages);
 		if (!dir.exists())
 			dir.mkdirs();
@@ -297,6 +274,57 @@ public class HtmlGenerator {
 			writer.close();
 		} catch (FileNotFoundException | UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
+	public void generateTemplate() {
+		HtmlCanvas html = new HtmlCanvas();
+		HtmlAttributes htmlAttributes= new HtmlAttributes();
+		try {
+			html.render(docType);
+			html.
+			html()
+			.head()
+			.title().content(generator.applicationName);
+			includeJavascriptScripts(html,true);
+			incluseCssFiles(html);
+			html._head()
+			.body(htmlAttributes.add("ng-app", generator.applicationName+"App").add("ng-controller", "mainAppController"));
+			html.div((new HtmlAttributes()).add("id", "alertInfo").add("class","alert alert-success custom-alert").add("style","display: none")).span().content("")._div();
+			html.div((new HtmlAttributes()).add("id", "alertError").add("class","alert alert-danger custom-alert").add("style","display: none")).span().content("")._div();
+			//TODO switch
+			html.div((new HtmlAttributes()).add("ng-view", ""))
+			._div();
+			
+			
+			String loadMenuScript="loadMenu(); ";
+			/*if (Generator.bootstrapMenu)
+				loadMenuScript=loadMenuScript+" activeMenu(\""+entityName+"\");";
+			else
+				loadMenuScript=loadMenuScript+" $('#menu').easytree(easyTreeOption);";
+			*/
+			html.script((new HtmlAttributes()).add("type", "text/javascript")).content(loadMenuScript,false);
+			if (generator.easyTreeMenu)
+				html.script().content("function stateChanged(nodes, nodesJson) {var t = nodes[0].text; $.cookie('menu', nodesJson); };  var easyTree = $('#menu').easytree({data: ($.cookie('menu')!=null? $.cookie('menu') : null), stateChanged: stateChanged});",false);
+			html._body()._html();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		File dir = new File(directoryViewPages);
+		if (!dir.exists())
+			dir.mkdirs();
+		
+		File myJsp=new File(directoryViewPages+"template.jsp");
+		PrintWriter writer;
+		try {
+			System.out.println("Written "+myJsp.getAbsolutePath());
+			writer = new PrintWriter(myJsp, "UTF-8");
+			writer.write(html.toHtml());
+			writer.close();
+		} catch (FileNotFoundException | UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
 		

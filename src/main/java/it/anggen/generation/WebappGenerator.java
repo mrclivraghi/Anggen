@@ -90,6 +90,9 @@ public class WebappGenerator {
 	private Generator generator;
 	
 	@Autowired
+	private JsGenerator jsGenerator;
+	
+	@Autowired
 	private HtmlGenerator htmlGenerator;
 	
 	private String applicationName;
@@ -127,6 +130,7 @@ public class WebappGenerator {
 		generateMainAppController();
 		htmlGenerator.setDirectory();
 		htmlGenerator.generateTemplate();
+		jsGenerator.generateMainApp();
 	}
 	
 	private void generateMainAppController() {

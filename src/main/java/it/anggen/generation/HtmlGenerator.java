@@ -100,6 +100,7 @@ public class HtmlGenerator {
 			.macros().javascript("js/csv.js")
 			.macros().javascript("js/pdfmake.js")
 			.macros().javascript("js/vfs_fonts.js")
+			.macros().javascript("js/angular-route.js")
 			.macros().javascript("js/ui-grid.js");
 			if (includeEntityFile)
 			{
@@ -118,6 +119,10 @@ public class HtmlGenerator {
 			.macros().javascript("js/bootstrap.min.js")
 			.macros().javascript("js/alasql.min.js")
 			.macros().javascript("js/ng-file-upload-all.js");
+			
+			html.script((new HtmlAttributes()).add("type", "text/javascript"))
+			.content(" angular.element(document.getElementsByTagName('head')).append(angular.element('<base href=\"' + window.location.pathname + '\" />'));");
+			
 			} catch (IOException e) {
 			e.printStackTrace();
 		}

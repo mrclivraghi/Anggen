@@ -112,6 +112,37 @@ public class JsGenerator {
 		else
 			entityList=false;*/
 	}
+	
+	public void generateMainApp()
+	{
+		StringBuilder sb = new StringBuilder();
+		sb.append("var "+generator.applicationName+"App=angular.module(\""+generator.applicationName+"App\",['ngRoute','ngFileUpload','ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter']);");
+		sb.append(getSecurityService());
+		sb.append(getMainController());
+		sb.append(getNavigation());
+		saveAsJsFile(generator.angularDirectory, "main-app", sb.toString());
+	}
+	
+	private String getNavigation()
+	{
+		StringBuilder sb = new StringBuilder();
+		sb.append(generator.applicationName+"App.config(function($routeProvider, $locationProvider) \n");
+		sb.append("{\n");
+		sb.append("$routeProvider\n");
+		for (Entity entity: descendantEntityList)
+		{
+			sb.append(".when('/"+Utility.getFirstUpper(entity.getName())+"/',{\n")
+			.append("templateUrl: './"+Utility.getFirstLower(entity.getName())+"/',\n")
+			.append("controller:'"+Utility.getFirstLower(entity.getName())+"Controller'\n")
+			.append("})\n");
+		}
+		
+		sb.append(";");
+		sb.append("$locationProvider.html5Mode(true);\n");
+		sb.append("}\n");
+		return sb.toString();
+	}
+	
 	/**
 	 * Generate the service code for the entity
 	 * @return
@@ -821,10 +852,27 @@ public class JsGenerator {
 	}
 	
 	
-	private String getSecurity()
+	private String getMainController()
 	{
 		StringBuilder sb = new StringBuilder();	
-			sb.append(".service(\"securityService\",function($http)\n");
+		sb.append(generator.applicationName+"App.controller(\"MainController\",function($scope, $route, $routeParams, $location)\n");
+		sb.append("{\n");
+		sb.append("$scope.$route = $route;");
+		sb.append("$scope.$location = $location;");
+		sb.append("$scope.$routeParams = $routeParams;");
+
+
+		sb.append("});");
+		return sb.toString();
+
+	}
+	
+	
+	
+	private String getSecurityService()
+	{
+		StringBuilder sb = new StringBuilder();	
+			sb.append(generator.applicationName+"App.service(\"securityService\",function($http)\n");
 			sb.append("{\n");
 			sb.append("this.restrictionList;\n");
 			if (generator.security)
@@ -849,15 +897,15 @@ public class JsGenerator {
 			sb.append("securityService.restrictionList={};\n");
 			sb.append("$rootScope.restrictionList={};\n");
 		}
-		String[] serviceArray=services.split(",");
-		initChildrenList(sb, entity);
+		if (entity!=null)
+			initChildrenList(sb, entity);
 				
 		if (generator.security)
 			sb.append("});\n");
 
 		
 		
-		sb.append("})\n");
+		sb.append("});\n");
 
 
 		return sb.toString();
@@ -872,7 +920,7 @@ public class JsGenerator {
 		StringBuilder buildJS= new StringBuilder();
 		buildJS.append("var "+entityName+"App=angular.module(\""+entityName+"App\",['ngFileUpload','ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter'])\n");
 		//JsGenerator jsGenerator = new JsGenerator(entity, true,null,null);
-		buildJS.append(getSecurity());
+		buildJS.append(getSecurityService());
 		buildJS.append(generateService());
 		if (entityName.equals("entity"))
 			System.out.println("");
@@ -933,6 +981,25 @@ public class JsGenerator {
 
 		return sb.toString();
 	}
+	
+	private void saveAsJsFile(String directory, String fileName, String content)
+	{
+		File dir = new File(directory);
+		if (!dir.exists())
+			dir.mkdirs();
+		File file = new File(directory+fileName+".js");
+		PrintWriter writer;
+		try {
+			writer = new PrintWriter(file, "UTF-8");
+			writer.write(content);
+			writer.close();
+			System.out.println("written js file "+file.getAbsolutePath());
+		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * Save the generated file
 	 * @param directory

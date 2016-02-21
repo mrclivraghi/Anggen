@@ -71,12 +71,16 @@ public class HtmlGenerator {
 		this.entityName=Utility.getFirstLower(entity.getName());
 		this.attributeList=entityManager.getAttributeList();
 		this.childrenEntity=entityManager.getChildrenEntities();
+		setDirectory();
+		}
+	
+	
+	public void setDirectory()
+	{
 		File file = new File(""); 
 		directoryViewPages = file.getAbsolutePath()+generator.htmlDirectory+"/";
 		directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+generator.applicationName+"/";
 	}
-	
-	
 	
 	/**
 	 * Include the functional js scripts
@@ -88,32 +92,32 @@ public class HtmlGenerator {
 		try {
 			//js
 			html
-			.macros().javascript("../js/jquery-1.9.1.js")
-			.macros().javascript("../js/jquery-ui.js")
-			.macros().javascript("../js/angular.js")
-			.macros().javascript("../js/angular-touch.js")
-			.macros().javascript("../js/angular-animate.js")
-			.macros().javascript("../js/csv.js")
-			.macros().javascript("../js/pdfmake.js")
-			.macros().javascript("../js/vfs_fonts.js")
-			.macros().javascript("../js/ui-grid.js");
+			.macros().javascript("js/jquery-1.9.1.js")
+			.macros().javascript("js/jquery-ui.js")
+			.macros().javascript("js/angular.js")
+			.macros().javascript("js/angular-touch.js")
+			.macros().javascript("js/angular-animate.js")
+			.macros().javascript("js/csv.js")
+			.macros().javascript("js/pdfmake.js")
+			.macros().javascript("js/vfs_fonts.js")
+			.macros().javascript("js/ui-grid.js");
 			if (includeEntityFile)
 			{
-				html.macros().javascript("../js/angular/"+generator.applicationName+"/"+generator.applicationName+"-services.js");
-				html.macros().javascript("../js/angular/"+generator.applicationName+"/"+generator.applicationName+"-controller.js");
-				html.macros().javascript("../js/angular/"+generator.applicationName+"/main-app.js");
+				html.macros().javascript("js/angular/"+generator.applicationName+"/main-app.js");
+				html.macros().javascript("js/angular/"+generator.applicationName+"/"+generator.applicationName+"-services.js");
+				html.macros().javascript("js/angular/"+generator.applicationName+"/"+generator.applicationName+"-controller.js");
 			}
 			
-			html.macros().javascript("../js/date.js")
-			.macros().javascript("../js/utility.js");
+			html.macros().javascript("js/date.js")
+			.macros().javascript("js/utility.js");
 			
 			if (generator.easyTreeMenu)
-				html.macros().javascript("../js/jquery.easytree.js");
+				html.macros().javascript("js/jquery.easytree.js");
 			
-			html.macros().javascript("../js/jquery.cookie.js")
-			.macros().javascript("../js/bootstrap.min.js")
-			.macros().javascript("../js/alasql.min.js")
-			.macros().javascript("../js/ng-file-upload-all.js");
+			html.macros().javascript("js/jquery.cookie.js")
+			.macros().javascript("js/bootstrap.min.js")
+			.macros().javascript("js/alasql.min.js")
+			.macros().javascript("js/ng-file-upload-all.js");
 			} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -122,12 +126,12 @@ public class HtmlGenerator {
 	public void incluseCssFiles(HtmlCanvas html)
 	{
 		try {
-			html.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../css/ui-grid.css"))
-			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../css/bootstrap.min.css"))
-			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../css/main.css"))
-			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../css/jquery-ui.css"))
-			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../css/easytree/skin-win8/ui.easytree.css"))
-			.link((new HtmlAttributes()).add("rel","import").add("href", "../"+generator.applicationName+generator.menuName));
+			html.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "css/ui-grid.css"))
+			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "css/bootstrap.min.css"))
+			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "css/main.css"))
+			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "css/jquery-ui.css"))
+			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "css/easytree/skin-win8/ui.easytree.css"))
+			.link((new HtmlAttributes()).add("rel","import").add("href", ""+generator.applicationName+generator.menuName));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

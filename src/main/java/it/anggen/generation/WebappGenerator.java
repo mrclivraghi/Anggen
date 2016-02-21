@@ -125,6 +125,7 @@ public class WebappGenerator {
 		generateSpringBootApplication();
 		generateForbiddenJsp();
 		generateMainAppController();
+		htmlGenerator.setDirectory();
 		htmlGenerator.generateTemplate();
 	}
 	
@@ -140,13 +141,11 @@ public class WebappGenerator {
 		mainAppController.annotate(Controller.class);
 		//appConfig.annotate(EnableAutoConfiguration.class);
 		JAnnotationUse requestMapping = mainAppController.annotate(RequestMapping.class);
-		requestMapping.param("value", "/");
+		requestMapping.param("value", "//");
 		JMethod manage = mainAppController.method(JMod.PUBLIC, String.class, "manage");
 		JAnnotationUse requestMappingManage = manage.annotate(RequestMapping.class);
 		requestMappingManage.param("method", RequestMethod.GET);
 		JBlock manageBlock = manage.body();
-		String check="";
-		manageBlock.directStatement(check);
 		manageBlock.directStatement("return \"template\";");
 		
 		saveFile(codeModel);

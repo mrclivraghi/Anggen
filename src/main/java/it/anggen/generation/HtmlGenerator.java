@@ -105,7 +105,7 @@ public class HtmlGenerator {
 			if (includeEntityFile)
 			{
 				html.macros().javascript("js/angular/"+generator.applicationName+"/main-app.js");
-				html.macros().javascript("js/angular/"+generator.applicationName+"/"+generator.applicationName+"-services.js");
+				html.macros().javascript("js/angular/"+generator.applicationName+"/"+generator.applicationName+"-service.js");
 				html.macros().javascript("js/angular/"+generator.applicationName+"/"+generator.applicationName+"-controller.js");
 			}
 			

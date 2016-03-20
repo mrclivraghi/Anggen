@@ -133,6 +133,9 @@ public class Generator {
 	@Autowired
 	WebappGenerator webappGenerator;
 	
+	@Autowired
+	JsGenerator jsGenerator;
+	
 	public static String appName;
 	
 	public static String generatedPackage;
@@ -224,6 +227,8 @@ public class Generator {
 		}
 		if (generateView)
 		{
+			jsGenerator.generateServiceFile();
+			jsGenerator.generateControllerFile();
 			for (Entity modelEntity: modelEntityList)
 			{
 				if (modelEntity.getDisableViewGeneration()) continue;

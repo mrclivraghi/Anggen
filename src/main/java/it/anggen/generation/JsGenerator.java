@@ -88,7 +88,7 @@ public class JsGenerator {
 	{
 		this.entity=entity;
 		this.parentEntityName=parentEntityName;
-		this.isParent=isParent;
+		this.isParent=isParent==null? true : isParent;
 		this.relationshipType=relationshipType;
 		entityManager = new EntityManagerImpl(entity);
 		
@@ -97,9 +97,9 @@ public class JsGenerator {
 		this.fieldList=entity.getFieldList();
 		
 		this.relationshipList=entity.getRelationshipList();
-		this.lastLevel=lastLevel;
+		this.lastLevel=lastLevel==null? true : lastLevel;
 		this.descendantEntityList=entityManager.getDescendantEntities();
-		if (isParent)
+		if (this.isParent)
 			this.serviceList=getServices();
 		else
 			this.serviceList=serviceList;
@@ -128,6 +128,7 @@ public class JsGenerator {
 	public void generateControllerFile()
 	{
 		StringBuilder sb = new StringBuilder();
+		sb.append(generator.applicationName+"App");
 		for (Entity entity: generator.getEntityList())
 		{
 			init(entity, null, null, null, null, null);
@@ -141,6 +142,7 @@ public class JsGenerator {
 	public void generateServiceFile()
 	{
 		StringBuilder sb = new StringBuilder();
+		sb.append(generator.applicationName+"App");
 		for (Entity entity: generator.getEntityList())
 		{
 			init(entity, null, null, null, null, null);
@@ -148,7 +150,7 @@ public class JsGenerator {
 		}
 		File file = new File("");
 		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+generator.applicationName+"/";
-		saveAsJsFile(directoryAngularFiles, generator.applicationName+"-service ", sb.toString());
+		saveAsJsFile(directoryAngularFiles, generator.applicationName+"-service", sb.toString());
 	}
 	
 	private String getNavigation()
@@ -184,7 +186,7 @@ public class JsGenerator {
 	private String generateService()
 	{
 		StringBuilder sb = new StringBuilder();
-		sb.append(".service(\""+entityName+"Service\", function($http)\n")
+		sb.append(".service(\""+entityName+"Service\", function($http,mainService)\n")
 		.append("{\n")
 		.append("this.entityList =		[];\n")
 		.append("this.selectedEntity= 	{show: false \n");
@@ -194,6 +196,13 @@ public class JsGenerator {
 				sb.append(","+relationship.getEntityTarget().getName()+"List: []");
 		}
 		sb.append("};\n")
+		
+		//check if is parent
+		.append("this.isParent=function()\n")
+		.append("{\n")
+		.append("return mainService.parentEntity==\""+Utility.getFirstUpper(entityName)+"\";\n")
+		.append("};\n")
+		
 		.append("this.childrenList=[]; \n")
 		.append("this.addEntity=function (entity)\n")
 		.append("{\n")
@@ -262,31 +271,31 @@ public class JsGenerator {
 		//search
 		sb.append("this.search = function() {\n");
 		sb.append("this.setSelectedEntity(null);\n");
-		sb.append("var promise= $http.post(\"../"+entityName+"/search\",this.searchBean);\n");
+		sb.append("var promise= $http.post(\""+entityName+"/search\",this.searchBean);\n");
 		sb.append("return promise; \n");
 		sb.append("};\n");
 		//searchOne
 
 		sb.append("this.searchOne=function(entity) {\n");
 		//sb.append("this.setSelectedEntity(null);\n");
-		sb.append("var promise= $http.get(\"../"+entityName+"/\"+entity."+entityName+"Id);\n");
+		sb.append("var promise= $http.get(\""+entityName+"/\"+entity."+entityName+"Id);\n");
 		sb.append("return promise; \n");
 		sb.append("};\n");
 
 
 		//insert
 		sb.append("this.insert = function() {\n");
-		sb.append("var promise= $http.put(\"../"+entityName+"/\",this.selectedEntity);\n");
+		sb.append("var promise= $http.put(\""+entityName+"/\",this.selectedEntity);\n");
 		sb.append("return promise; \n");
 		sb.append("};\n");
 		//update
 		sb.append("this.update = function() {\n");
-		sb.append("var promise= $http.post(\"../"+entityName+"/\",this.selectedEntity);\n");
+		sb.append("var promise= $http.post(\""+entityName+"/\",this.selectedEntity);\n");
 		sb.append("return promise; \n");
 		sb.append("}\n");
 		//delete
 		sb.append("this.del = function() {\n");
-		sb.append("var url=\"../"+entityName+"/\"+this.selectedEntity."+entityName+"Id;\n");
+		sb.append("var url=\""+entityName+"/\"+this.selectedEntity."+entityName+"Id;\n");
 		sb.append("var promise= $http[\"delete\"](url);\n");
 		sb.append("return promise; \n");
 		sb.append("}\n");
@@ -296,7 +305,7 @@ public class JsGenerator {
 		sb.append("var formData = new FormData();\n");
 		sb.append("if (file!=null)\n");
 		sb.append("formData.append('file',file);\n");
-		sb.append("var promise= $http.post(\"../"+entityName+"/\"+this.selectedEntity."+entityName+"Id+\"/load\"+field+\"/\",formData,{\n");
+		sb.append("var promise= $http.post(\""+entityName+"/\"+this.selectedEntity."+entityName+"Id+\"/load\"+field+\"/\",formData,{\n");
 		sb.append(" headers: {'Content-Type': undefined}\n");
 		sb.append("});\n");
 		sb.append("return promise; \n");
@@ -310,7 +319,7 @@ public class JsGenerator {
 				sb.append(" this.init"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List= function()\n");
 				sb.append("{\n");
 				sb.append("var promise= $http\n");
-				sb.append(".post(\"../"+Utility.getEntityCallName(relationship.getEntityTarget().getName())+"/search\",\n");
+				sb.append(".post(\""+Utility.getEntityCallName(relationship.getEntityTarget().getName())+"/search\",\n");
 				sb.append("{});\n");
 				sb.append("return promise;\n");
 				sb.append("};\n");

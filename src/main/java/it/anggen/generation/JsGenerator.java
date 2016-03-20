@@ -161,7 +161,13 @@ public class JsGenerator {
 		{
 			sb.append(".when('/"+Utility.getFirstUpper(entity.getName())+"/',{\n")
 			.append("templateUrl: './"+Utility.getFirstLower(entity.getName())+"/',\n")
-			.append("controller:'"+Utility.getFirstLower(entity.getName())+"Controller'\n")
+			.append("controller:'"+Utility.getFirstLower(entity.getName())+"Controller',\n")
+
+			.append("resolve: {\n")
+			.append("setParent: function(mainService){\n")
+			.append("mainService.parentEntity=\""+Utility.getFirstUpper(entity.getName())+"\";\n")
+			.append("}\n")
+			.append("}\n")
 			.append("})\n");
 		}
 		
@@ -883,14 +889,18 @@ public class JsGenerator {
 	private String getMainController()
 	{
 		StringBuilder sb = new StringBuilder();	
-		sb.append(generator.applicationName+"App.controller(\"MainController\",function($scope, $route, $routeParams, $location)\n");
+		sb.append("testApp.service(\"mainService\", function()\n");
 		sb.append("{\n");
-		sb.append("$scope.$route = $route;");
-		sb.append("$scope.$location = $location;");
-		sb.append("$scope.$routeParams = $routeParams;");
+		sb.append("this.parentEntity=\"\";\n");
+		sb.append("});\n");
+		sb.append(generator.applicationName+"App.controller(\"MainController\",function($scope, $route, $routeParams, $location,mainService)\n");
+		sb.append("{\n");
+		sb.append("$scope.$route = $route;\n");
+		sb.append("$scope.$location = $location;\n");
+		sb.append("$scope.$routeParams = $routeParams;\n");
 
 
-		sb.append("});");
+		sb.append("});\n");
 		return sb.toString();
 
 	}

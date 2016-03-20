@@ -843,7 +843,7 @@ public class JsGenerator {
 		List<Entity> parentClassList= new ArrayList<Entity>();
 		parentClassList.add(entity);
 		String services="";
-		services=services+","+entityName+"Service, securityService ";
+		services=services+","+entityName+"Service, securityService, mainService ";
 		for (Entity descendantEntity : descendantEntityList)
 		{
 			services=services+","+descendantEntity.getName()+"Service";

@@ -156,6 +156,7 @@ public class JsGenerator {
 	private String getNavigation()
 	{
 		StringBuilder sb = new StringBuilder();
+		
 		sb.append(generator.applicationName+"App.config(function($routeProvider, $locationProvider) \n");
 		sb.append("{\n");
 		sb.append("$routeProvider\n");
@@ -166,8 +167,21 @@ public class JsGenerator {
 			.append("controller:'"+Utility.getFirstLower(entity.getName())+"Controller',\n")
 
 			.append("resolve: {\n")
-			.append("setParent: function(mainService){\n")
+			.append("setParent: function(mainService,"+Utility.getFirstLower(entity.getName())+"Service){\n")
+
+			.append("if (mainService.parentService!=null)\n")
+			.append("{\n")
+
+			.append("mainService.parentService.resetSearchBean();\n")
+			.append("mainService.parentService.setSelectedEntity(null);\n")
+			.append("mainService.parentService.selectedEntity.show=false;\n")
+			.append("mainService.parentService.setEntityList(null);\n") 
+			.append("}\n")
+
 			.append("mainService.parentEntity=\""+Utility.getFirstUpper(entity.getName())+"\";\n")
+
+			.append("mainService.parentService="+Utility.getFirstLower(entity.getName())+"Service;\n")
+
 			.append("}\n")
 			.append("}\n")
 			.append("})\n");
@@ -853,6 +867,7 @@ public class JsGenerator {
 		parentClassList.add(entity);
 		String services="";
 		services=services+","+entityName+"Service, securityService, mainService ";
+		if (descendantEntityList!=null)
 		for (Entity descendantEntity : descendantEntityList)
 		{
 			services=services+","+descendantEntity.getName()+"Service";

@@ -1068,7 +1068,8 @@ public class JsGenerator {
 		sb.append("var target = $(e.target).attr(\"href\"); // activated tab\n");
 		sb.append("//console.log(target);\n");
 		sb.append("if (angular.element($('#"+entityName+"Tabs')).scope()!=null && angular.element($('#"+entityName+"Tabs')).scope()!=undefined) \n");
-		sb.append("angular.element($('#"+entityName+"Tabs')).scope().refreshTable"+Utility.getFirstUpper(tabName.replaceAll(" ",""))+"();\n");
+		//TODO FIX
+		sb.append("{ /* angular.element($('#"+entityName+"Tabs')).scope().refreshTable"+Utility.getFirstUpper(tabName.replaceAll(" ",""))+"(); */ }\n");
 		sb.append("});\n");
 
 		return sb.toString();

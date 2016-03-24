@@ -171,9 +171,18 @@ public class JsGenerator {
 
 			.append("mainService.parentEntity=\""+Utility.getFirstUpper(entity.getName())+"\";\n")
 
-			.append("mainService.parentService="+Utility.getFirstLower(entity.getName())+"Service;\n")
-			.append("mainService.parentService.initChildrenList();\n")
-			.append("}\n")
+			.append("mainService.parentService="+Utility.getFirstLower(entity.getName())+"Service;\n");
+			
+			//todo get descendant e init children
+			for (Relationship relationship : entity.getRelationshipList())
+			{
+
+				sb.append("mainService.parentService.init"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List().then(function(response) {\n")
+				.append("mainService.parentService.childrenList."+Utility.getFirstLower(relationship.getEntityTarget().getName())+"List=response.data;\n")
+				.append("});\n");
+			}
+			
+			sb.append("}\n")
 			.append("}\n")
 			.append("})\n");
 		}
@@ -313,19 +322,10 @@ public class JsGenerator {
 		sb.append("return promise; \n");
 		sb.append("}\n");
 		
-		StringBuilder initChildren = new StringBuilder();
-
 		if (relationshipList!=null)
 			for (Relationship relationship: relationshipList)
 			{
 
-				initChildren.append("this.init"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List(); \n");
-				
-				initChildren.append("this.init"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List().then(function(response) {\n");
-				initChildren.append("this.childrenList."+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List=response.data;\n");
-				initChildren.append("});\n");
-				
-				
 				sb.append(" this.init"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List= function()\n");
 				sb.append("{\n");
 				sb.append("var promise= $http\n");
@@ -335,10 +335,6 @@ public class JsGenerator {
 				sb.append("};\n");
 			}
 		
-		sb.append("this.initChildrenList= function() \n")
-		.append("{\n")
-		.append(initChildren.toString())
-		.append("};\n");
 		
 		sb.append("})\n");
 		

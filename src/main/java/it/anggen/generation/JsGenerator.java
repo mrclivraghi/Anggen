@@ -150,7 +150,13 @@ public class JsGenerator {
 		
 		sb.append(generator.applicationName+"App.config(function($routeProvider, $locationProvider) \n");
 		sb.append("{\n");
-		sb.append("$routeProvider\n");
+		sb.append("$routeProvider\n")
+		.append(".when('/',{\n")
+		.append("templateUrl:'./home/'\n")
+		.append("})\n")
+		.append(".when('/home/',{\n")
+		.append("templateUrl:'./home/'\n")
+		.append("})\n");
 		for (Entity entity: generator.getEntityList())
 		{
 			sb.append(".when('/"+Utility.getFirstUpper(entity.getName())+"/',{\n")

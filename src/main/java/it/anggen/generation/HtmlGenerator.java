@@ -234,7 +234,7 @@ public class HtmlGenerator {
 			.span((new HtmlAttributes()).add("class", "icon-bar"))._span()
 			.span((new HtmlAttributes()).add("class", "icon-bar"))._span()
 			._button()
-			.a((new HtmlAttributes()).add("class", "navbar-brand").add("href", "#"))
+			.a((new HtmlAttributes()).add("class", "navbar-brand").add("href", "home"))
 			.content(generator.applicationName)
 			._div()//end header
 			.div((new HtmlAttributes()).add("class", "collapse navbar-collapse").add("id", "bs-example-navbar-collapse-1")) //start real nav menu
@@ -287,6 +287,27 @@ public class HtmlGenerator {
 		}
 		
 	}
+	
+	public void generateHomePage(){
+		HtmlCanvas html = new HtmlCanvas();
+		try {
+			html.h1().center().content("HOME PAGE")._h1();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		File myJsp=new File(directoryViewPages+"home.jsp");
+		PrintWriter writer;
+		try {
+			System.out.println("Written "+myJsp.getAbsolutePath());
+			writer = new PrintWriter(myJsp, "UTF-8");
+			writer.write(html.toHtml());
+			writer.close();
+		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+	}
+	
 
 	public void generateTemplate() {
 		HtmlCanvas html = new HtmlCanvas();

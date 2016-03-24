@@ -130,6 +130,7 @@ public class WebappGenerator {
 		generateMainAppController();
 		htmlGenerator.setDirectory();
 		htmlGenerator.generateTemplate();
+		htmlGenerator.generateHomePage();
 		jsGenerator.generateMainApp();
 	}
 	
@@ -151,6 +152,15 @@ public class WebappGenerator {
 		requestMappingManage.param("method", RequestMethod.GET);
 		JBlock manageBlock = manage.body();
 		manageBlock.directStatement("return \"template\";");
+		
+		JMethod home = mainAppController.method(JMod.PUBLIC, String.class, "home");
+		JAnnotationUse requestMappingHome = home.annotate(RequestMapping.class);
+		requestMappingHome.param("value", "/home");
+		requestMappingHome.param("method", RequestMethod.GET);
+		JBlock homeBlock = home.body();
+		homeBlock.directStatement("return \"home\";");
+		
+		
 		
 		saveFile(codeModel);
 		

@@ -353,22 +353,22 @@ public class JsGenerator {
 	 */
 	private void changeChildrenVisibility(StringBuilder stringBuilder,Boolean show)
 	{
-		if (lastLevel)
-			return;
+		//if (lastLevel)
+		//	return;
 		//if (isParent)
 		{
-			if (descendantEntityList!=null && descendantEntityList.size()>0)
+			/*if (descendantEntityList!=null && descendantEntityList.size()>0)
 				for (Entity descendantEntity: descendantEntityList)
 				{
 					stringBuilder.append(descendantEntity.getName()+"Service.selectedEntity.show="+show.toString()+";");
-				}
+				}*/
 		}
 		//else
 		{
 			if (relationshipList!=null && relationshipList.size()>0)
 				for (Relationship relationship: relationshipList)
 				{
-					stringBuilder.append(relationship.getEntityTarget().getName()+"Service.selectedEntity.show="+show.toString()+";");
+					stringBuilder.append(relationship.getEntityTarget().getName()+"Service.selectedEntity.show="+show.toString()+";\n");
 				}
 
 		}
@@ -401,7 +401,7 @@ public class JsGenerator {
 		//if (isParent)
 		sb.append("if ("+Utility.getEntityCallName(entityName)+"Service.isParent()) \n");
 		sb.append("{\n");
-		changeChildrenVisibility(sb, false);
+			changeChildrenVisibility(sb, false);
 		sb.append("}\n");
 			
 		sb.append("}\n");

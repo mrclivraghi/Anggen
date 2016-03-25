@@ -131,6 +131,7 @@ public class AngularGenerator {
 			EntityManager mainEntityManager = new EntityManagerImpl(entity);
 			
 			for (Entity descendantEntity: descendantEntityList)
+				if (descendantEntity.getEntityGroup()!=null)
 			{
 				init(descendantEntity, false, parentEntity,mainEntityManager.isLastLevel(descendantEntity));
 				System.out.println(mainEntityManager.getDescription()+"-"+descendantEntity.getName()+" last level : "+mainEntityManager.isLastLevel(descendantEntity));

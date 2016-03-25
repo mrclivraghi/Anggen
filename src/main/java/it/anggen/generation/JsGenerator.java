@@ -649,6 +649,7 @@ public class JsGenerator {
 		//if (isParent)
 		{
 			for (Relationship relationship: relationshipList)
+				if (relationship.getEntityTarget().getEntityGroup()!=null)
 			{
 				
 				
@@ -860,12 +861,14 @@ public class JsGenerator {
 			
 		//} else
 		//{
-		
+
+if (entity.getEntityGroup()!=null)
+{
 			sb.append(Utility.getEntityCallName(entityName)+"Service.searchOne(row.entity).then(function(response) { \n");
 			sb.append("console.log(response.data);\n");
 			sb.append(Utility.getEntityCallName(entityName)+"Service.setSelectedEntity(response.data[0]);\n");
-
 			sb.append("});\n");
+}
 			//}
 			sb.append("$('#"+entityName+"Tabs li:eq(0) a').tab('show');\n");
 			sb.append("}\n");
@@ -889,6 +892,7 @@ public class JsGenerator {
 		services=services+","+entityName+"Service, securityService, mainService ";
 		if (descendantEntityList!=null)
 		for (Entity descendantEntity : descendantEntityList)
+			if (descendantEntity.getEntityGroup()!=null)
 		{
 			services=services+","+descendantEntity.getName()+"Service";
 

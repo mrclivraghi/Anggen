@@ -986,7 +986,7 @@ if (entity.getEntityGroup()!=null)
 			if (generator.security)
 			{
 				sb.append("this.init= function() {\n");
-				sb.append("var promise= $http.get(\"../authentication/\");\n");
+				sb.append("var promise= $http.get(\"./authentication/\");\n");
 				sb.append("return promise; \n");
 				sb.append("};\n");
 			}

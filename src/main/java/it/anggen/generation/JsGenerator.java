@@ -106,7 +106,7 @@ public class JsGenerator {
 	public void generateMainApp()
 	{
 		StringBuilder sb = new StringBuilder();
-		sb.append("var "+generator.applicationName+"App=angular.module(\""+generator.applicationName+"App\",['ngRoute','ngFileUpload','ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter']);");
+		sb.append("angular.module(\""+generator.applicationName+"App\",['ngRoute','ngFileUpload','ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter']);");
 		sb.append(getSecurityService());
 		sb.append(getMainController());
 		sb.append(getNavigation());
@@ -121,7 +121,7 @@ public class JsGenerator {
 		for (Entity entity: generator.getEntityList())
 		{
 			StringBuilder sb = new StringBuilder();
-			sb.append(generator.applicationName+"App");
+			sb.append("angular.module(\""+generator.applicationName+"App\")");
 			init(entity, null, null, null, null, null);
 			sb.append(generateController());
 		File file = new File("");
@@ -135,7 +135,7 @@ public class JsGenerator {
 		for (Entity entity: generator.getEntityList())
 		{
 			StringBuilder sb = new StringBuilder();
-			sb.append(generator.applicationName+"App");
+			sb.append("angular.module(\""+generator.applicationName+"App\")");
 			init(entity, null, null, null, null, null);
 			sb.append(generateService ());
 		File file = new File("");
@@ -147,8 +147,8 @@ public class JsGenerator {
 	private String getNavigation()
 	{
 		StringBuilder sb = new StringBuilder();
-		
-		sb.append(generator.applicationName+"App.config(function($routeProvider, $locationProvider) \n");
+		sb.append("angular.module(\""+generator.applicationName+"App\")");
+		sb.append(".config(function($routeProvider, $locationProvider) \n");
 		sb.append("{\n");
 		sb.append("$routeProvider\n")
 		.append(".when('/',{\n")
@@ -955,12 +955,12 @@ if (entity.getEntityGroup()!=null)
 	private String getMainController()
 	{
 		StringBuilder sb = new StringBuilder();	
-		sb.append("testApp.service(\"mainService\", function()\n");
+		sb.append("angular.module(\""+generator.applicationName+"App\").service(\"mainService\", function()\n");
 		sb.append("{\n");
 		sb.append("this.parentEntity=\"\";\n");
 		sb.append(" this.parentService=null; \n");
 		sb.append("});\n");
-		sb.append(generator.applicationName+"App.controller(\"MainController\",function($scope, $route, $routeParams, $location,mainService)\n");
+		sb.append("angular.module(\""+generator.applicationName+"App\").controller(\"MainController\",function($scope, $route, $routeParams, $location,mainService)\n");
 		sb.append("{\n");
 		sb.append("$scope.$route = $route;\n");
 		sb.append("$scope.$location = $location;\n");
@@ -977,7 +977,7 @@ if (entity.getEntityGroup()!=null)
 	private String getSecurityService()
 	{
 		StringBuilder sb = new StringBuilder();	
-			sb.append(generator.applicationName+"App.service(\"securityService\",function($http)\n");
+			sb.append("angular.module(\""+generator.applicationName+"App\").service(\"securityService\",function($http)\n");
 			sb.append("{\n");
 			sb.append("this.restrictionList;\n");
 			if (generator.security)
@@ -1023,7 +1023,7 @@ if (entity.getEntityGroup()!=null)
 	private String buildJS()
 	{
 		StringBuilder buildJS= new StringBuilder();
-		buildJS.append("var "+entityName+"App=angular.module(\""+entityName+"App\",['ngFileUpload','ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter'])\n");
+		buildJS.append("angular.module(\""+entityName+"App\",['ngFileUpload','ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter'])\n");
 		//JsGenerator jsGenerator = new JsGenerator(entity, true,null,null);
 		buildJS.append(getSecurityService());
 		buildJS.append(generateService());

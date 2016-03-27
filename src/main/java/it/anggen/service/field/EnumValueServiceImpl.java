@@ -6,6 +6,7 @@ import it.anggen.repository.field.EnumValueRepository;
 import it.anggen.searchbean.field.EnumValueSearchBean;
 import it.anggen.service.field.EnumValueService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +17,7 @@ public class EnumValueServiceImpl
 
     @Autowired
     public EnumValueRepository enumValueRepository;
+    private static Integer PAGE_SIZE = (5);
 
     @Override
     public List<it.anggen.model.field.EnumValue> findById(Long enumValueId) {
@@ -23,8 +25,14 @@ public class EnumValueServiceImpl
     }
 
     @Override
+    public Page<it.anggen.model.field.EnumValue> findByPage(Integer pageNumber) {
+        org.springframework.data.domain.PageRequest pageRequest = new org.springframework.data.domain.PageRequest(pageNumber - 1, PAGE_SIZE, org.springframework.data.domain.Sort.Direction.DESC, "enumValueId");
+        return enumValueRepository.findAll(pageRequest);
+    }
+
+    @Override
     public List<it.anggen.model.field.EnumValue> find(EnumValueSearchBean enumValue) {
-        return enumValueRepository.findByEnumValueIdAndNameAndValueAndEnumEntity(enumValue.getEnumValueId(),enumValue.getName(),enumValue.getValue(),enumValue.getEnumEntity());
+        return enumValueRepository.findByEnumValueIdAndValueAndNameAndEnumEntity(enumValue.getEnumValueId(),enumValue.getValue(),enumValue.getName(),enumValue.getEnumEntity());
     }
 
     @Override

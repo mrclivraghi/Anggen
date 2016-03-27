@@ -7,6 +7,7 @@ import it.anggen.repository.field.FieldRepository;
 import it.anggen.repository.security.RestrictionFieldRepository;
 import it.anggen.searchbean.field.FieldSearchBean;
 import it.anggen.service.field.FieldService;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,10 +22,17 @@ public class FieldServiceImpl
     public AnnotationRepository annotationRepository;
     @org.springframework.beans.factory.annotation.Autowired
     public RestrictionFieldRepository restrictionFieldRepository;
+    private static Integer PAGE_SIZE = (5);
 
     @Override
     public List<it.anggen.model.field.Field> findById(Long fieldId) {
         return fieldRepository.findByFieldId(fieldId);
+    }
+
+    @Override
+    public Page<it.anggen.model.field.Field> findByPage(Integer pageNumber) {
+        org.springframework.data.domain.PageRequest pageRequest = new org.springframework.data.domain.PageRequest(pageNumber - 1, PAGE_SIZE, org.springframework.data.domain.Sort.Direction.DESC, "fieldId");
+        return fieldRepository.findAll(pageRequest);
     }
 
     @Override

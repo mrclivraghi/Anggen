@@ -6,6 +6,7 @@ import it.anggen.repository.security.RestrictionEntityGroupRepository;
 import it.anggen.searchbean.security.RestrictionEntityGroupSearchBean;
 import it.anggen.service.security.RestrictionEntityGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +17,7 @@ public class RestrictionEntityGroupServiceImpl
 
     @Autowired
     public RestrictionEntityGroupRepository restrictionEntityGroupRepository;
+    private static Integer PAGE_SIZE = (5);
 
     @Override
     public List<it.anggen.model.security.RestrictionEntityGroup> findById(Long restrictionEntityGroupId) {
@@ -23,8 +25,14 @@ public class RestrictionEntityGroupServiceImpl
     }
 
     @Override
+    public Page<it.anggen.model.security.RestrictionEntityGroup> findByPage(Integer pageNumber) {
+        org.springframework.data.domain.PageRequest pageRequest = new org.springframework.data.domain.PageRequest(pageNumber - 1, PAGE_SIZE, org.springframework.data.domain.Sort.Direction.DESC, "restrictionEntityGroupId");
+        return restrictionEntityGroupRepository.findAll(pageRequest);
+    }
+
+    @Override
     public List<it.anggen.model.security.RestrictionEntityGroup> find(RestrictionEntityGroupSearchBean restrictionEntityGroup) {
-        return restrictionEntityGroupRepository.findByRestrictionEntityGroupIdAndCanCreateAndCanSearchAndCanDeleteAndCanUpdateAndEntityGroupAndRole(restrictionEntityGroup.getRestrictionEntityGroupId(),restrictionEntityGroup.getCanCreate(),restrictionEntityGroup.getCanSearch(),restrictionEntityGroup.getCanDelete(),restrictionEntityGroup.getCanUpdate(),restrictionEntityGroup.getEntityGroup(),restrictionEntityGroup.getRole());
+        return restrictionEntityGroupRepository.findByRestrictionEntityGroupIdAndCanUpdateAndCanCreateAndCanDeleteAndCanSearchAndEntityGroupAndRole(restrictionEntityGroup.getRestrictionEntityGroupId(),restrictionEntityGroup.getCanUpdate(),restrictionEntityGroup.getCanCreate(),restrictionEntityGroup.getCanDelete(),restrictionEntityGroup.getCanSearch(),restrictionEntityGroup.getEntityGroup(),restrictionEntityGroup.getRole());
     }
 
     @Override

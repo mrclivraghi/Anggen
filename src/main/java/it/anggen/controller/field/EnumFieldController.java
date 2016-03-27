@@ -35,6 +35,16 @@ return "forbidden";
         return "enumField";
     }
 
+    @RequestMapping(value = "/pages/{pageNumber}", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity findPage(
+        @PathVariable
+        Integer pageNumber) {
+        org.springframework.data.domain.Page<it.anggen.model.field.EnumField> page = enumFieldService.findByPage(pageNumber);
+        getRightMapping(page.getContent());
+        return ResponseEntity.ok().body(page);
+    }
+
     @ResponseBody
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ResponseEntity search(
@@ -47,8 +57,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         if (enumField.getEnumFieldId()!=null)
          log.info("Searching enumField like {}", enumField.getEnumFieldId()+' '+ enumField.getName());
         enumFieldList=enumFieldService.find(enumField);
-        getRightMapping(enumFieldList);
         getSecurityMapping(enumFieldList);
+        getRightMapping(enumFieldList);
          log.info("Search: returning {} enumField.",enumFieldList.size());
         return ResponseEntity.ok().body(enumFieldList);
     }
@@ -63,8 +73,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         log.info("Searching enumField with id {}",enumFieldId);
         List<it.anggen.model.field.EnumField> enumFieldList=enumFieldService.findById(Long.valueOf(enumFieldId));
-        getRightMapping(enumFieldList);
         getSecurityMapping(enumFieldList);
+        getRightMapping(enumFieldList);
          log.info("Search: returning {} enumField.",enumFieldList.size());
         return ResponseEntity.ok().body(enumFieldList);
     }
@@ -109,8 +119,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         log.info("Updating enumField with id {}",enumField.getEnumFieldId());
         rebuildSecurityMapping(enumField);
         it.anggen.model.field.EnumField updatedEnumField=enumFieldService.update(enumField);
-        getRightMapping(updatedEnumField);
         getSecurityMapping(updatedEnumField);
+        getRightMapping(updatedEnumField);
         return ResponseEntity.ok().body(updatedEnumField);
     }
 
@@ -125,10 +135,10 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     private void getRightMapping(it.anggen.model.field.EnumField enumField) {
         if (enumField.getTab()!=null)
         {
-        enumField.getTab().setRelationshipList(null);
-        enumField.getTab().setEntity(null);
         enumField.getTab().setFieldList(null);
         enumField.getTab().setEnumFieldList(null);
+        enumField.getTab().setEntity(null);
+        enumField.getTab().setRelationshipList(null);
         }
         if (enumField.getEnumEntity()!=null)
         {
@@ -137,12 +147,12 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         }
         if (enumField.getEntity()!=null)
         {
-        enumField.getEntity().setRelationshipList(null);
-        enumField.getEntity().setEntityGroup(null);
-        enumField.getEntity().setTabList(null);
-        enumField.getEntity().setFieldList(null);
-        enumField.getEntity().setEnumFieldList(null);
         enumField.getEntity().setRestrictionEntityList(null);
+        enumField.getEntity().setEnumFieldList(null);
+        enumField.getEntity().setFieldList(null);
+        enumField.getEntity().setTabList(null);
+        enumField.getEntity().setEntityGroup(null);
+        enumField.getEntity().setRelationshipList(null);
         }
         if (enumField.getAnnotationList()!=null)
         for (it.anggen.model.field.Annotation annotation :enumField.getAnnotationList())

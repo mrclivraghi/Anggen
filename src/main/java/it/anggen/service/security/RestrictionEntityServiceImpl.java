@@ -6,6 +6,7 @@ import it.anggen.repository.security.RestrictionEntityRepository;
 import it.anggen.searchbean.security.RestrictionEntitySearchBean;
 import it.anggen.service.security.RestrictionEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +17,7 @@ public class RestrictionEntityServiceImpl
 
     @Autowired
     public RestrictionEntityRepository restrictionEntityRepository;
+    private static Integer PAGE_SIZE = (5);
 
     @Override
     public List<it.anggen.model.security.RestrictionEntity> findById(Long restrictionEntityId) {
@@ -23,8 +25,14 @@ public class RestrictionEntityServiceImpl
     }
 
     @Override
+    public Page<it.anggen.model.security.RestrictionEntity> findByPage(Integer pageNumber) {
+        org.springframework.data.domain.PageRequest pageRequest = new org.springframework.data.domain.PageRequest(pageNumber - 1, PAGE_SIZE, org.springframework.data.domain.Sort.Direction.DESC, "restrictionEntityId");
+        return restrictionEntityRepository.findAll(pageRequest);
+    }
+
+    @Override
     public List<it.anggen.model.security.RestrictionEntity> find(RestrictionEntitySearchBean restrictionEntity) {
-        return restrictionEntityRepository.findByRestrictionEntityIdAndCanCreateAndCanUpdateAndCanDeleteAndCanSearchAndEntityAndRole(restrictionEntity.getRestrictionEntityId(),restrictionEntity.getCanCreate(),restrictionEntity.getCanUpdate(),restrictionEntity.getCanDelete(),restrictionEntity.getCanSearch(),restrictionEntity.getEntity(),restrictionEntity.getRole());
+        return restrictionEntityRepository.findByRestrictionEntityIdAndCanCreateAndCanUpdateAndCanSearchAndCanDeleteAndEntityAndRole(restrictionEntity.getRestrictionEntityId(),restrictionEntity.getCanCreate(),restrictionEntity.getCanUpdate(),restrictionEntity.getCanSearch(),restrictionEntity.getCanDelete(),restrictionEntity.getEntity(),restrictionEntity.getRole());
     }
 
     @Override

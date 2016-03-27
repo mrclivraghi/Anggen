@@ -6,6 +6,7 @@ import it.anggen.repository.security.RestrictionFieldRepository;
 import it.anggen.searchbean.security.RestrictionFieldSearchBean;
 import it.anggen.service.security.RestrictionFieldService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,10 +17,17 @@ public class RestrictionFieldServiceImpl
 
     @Autowired
     public RestrictionFieldRepository restrictionFieldRepository;
+    private static Integer PAGE_SIZE = (5);
 
     @Override
     public List<it.anggen.model.security.RestrictionField> findById(Long restrictionFieldId) {
         return restrictionFieldRepository.findByRestrictionFieldId(restrictionFieldId);
+    }
+
+    @Override
+    public Page<it.anggen.model.security.RestrictionField> findByPage(Integer pageNumber) {
+        org.springframework.data.domain.PageRequest pageRequest = new org.springframework.data.domain.PageRequest(pageNumber - 1, PAGE_SIZE, org.springframework.data.domain.Sort.Direction.DESC, "restrictionFieldId");
+        return restrictionFieldRepository.findAll(pageRequest);
     }
 
     @Override

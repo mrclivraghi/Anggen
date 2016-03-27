@@ -6,6 +6,7 @@ import it.anggen.repository.field.AnnotationAttributeRepository;
 import it.anggen.repository.field.AnnotationRepository;
 import it.anggen.searchbean.field.AnnotationSearchBean;
 import it.anggen.service.field.AnnotationService;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,10 +19,17 @@ public class AnnotationServiceImpl
     public AnnotationRepository annotationRepository;
     @org.springframework.beans.factory.annotation.Autowired
     public AnnotationAttributeRepository annotationAttributeRepository;
+    private static Integer PAGE_SIZE = (5);
 
     @Override
     public List<it.anggen.model.field.Annotation> findById(Long annotationId) {
         return annotationRepository.findByAnnotationId(annotationId);
+    }
+
+    @Override
+    public Page<it.anggen.model.field.Annotation> findByPage(Integer pageNumber) {
+        org.springframework.data.domain.PageRequest pageRequest = new org.springframework.data.domain.PageRequest(pageNumber - 1, PAGE_SIZE, org.springframework.data.domain.Sort.Direction.DESC, "annotationId");
+        return annotationRepository.findAll(pageRequest);
     }
 
     @Override

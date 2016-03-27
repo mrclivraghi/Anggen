@@ -4,13 +4,13 @@ package it.anggen.repository.entity;
 import java.util.List;
 import it.anggen.model.entity.Entity;
 import it.anggen.model.security.RestrictionEntityGroup;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface EntityGroupRepository
-    extends CrudRepository<it.anggen.model.entity.EntityGroup, java.lang.Long>
+    extends JpaRepository<it.anggen.model.entity.EntityGroup, java.lang.Long>
 {
 
 

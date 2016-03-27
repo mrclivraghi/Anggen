@@ -6,6 +6,7 @@ import it.anggen.repository.field.AnnotationRepository;
 import it.anggen.repository.relationship.RelationshipRepository;
 import it.anggen.searchbean.relationship.RelationshipSearchBean;
 import it.anggen.service.relationship.RelationshipService;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +19,7 @@ public class RelationshipServiceImpl
     public RelationshipRepository relationshipRepository;
     @org.springframework.beans.factory.annotation.Autowired
     public AnnotationRepository annotationRepository;
+    private static Integer PAGE_SIZE = (5);
 
     @Override
     public List<it.anggen.model.relationship.Relationship> findById(Long relationshipId) {
@@ -25,8 +27,14 @@ public class RelationshipServiceImpl
     }
 
     @Override
+    public Page<it.anggen.model.relationship.Relationship> findByPage(Integer pageNumber) {
+        org.springframework.data.domain.PageRequest pageRequest = new org.springframework.data.domain.PageRequest(pageNumber - 1, PAGE_SIZE, org.springframework.data.domain.Sort.Direction.DESC, "relationshipId");
+        return relationshipRepository.findAll(pageRequest);
+    }
+
+    @Override
     public List<it.anggen.model.relationship.Relationship> find(RelationshipSearchBean relationship) {
-        return relationshipRepository.findByRelationshipIdAndPriorityAndNameAndRelationshipTypeAndTabAndEntityAndEntityAndAnnotation(relationship.getRelationshipId(),relationship.getPriority(),relationship.getName(), (relationship.getRelationshipType()==null)? null : relationship.getRelationshipType().getValue(),relationship.getTab(),relationship.getEntity(),relationship.getEntity(),relationship.getAnnotationList()==null? null :relationship.getAnnotationList().get(0));
+        return relationshipRepository.findByRelationshipIdAndPriorityAndNameAndRelationshipTypeAndAnnotationAndEntityAndEntityAndTab(relationship.getRelationshipId(),relationship.getPriority(),relationship.getName(), (relationship.getRelationshipType()==null)? null : relationship.getRelationshipType().getValue(),relationship.getAnnotationList()==null? null :relationship.getAnnotationList().get(0),relationship.getEntity(),relationship.getEntity(),relationship.getTab());
     }
 
     @Override
@@ -49,26 +57,26 @@ public class RelationshipServiceImpl
         annotation.setRelationship(relationship);
         }
         it.anggen.model.relationship.Relationship returnedRelationship=relationshipRepository.save(relationship);
+        if (relationship.getEntity()!=null)
+        {
+        List<it.anggen.model.relationship.Relationship> relationshipList = relationshipRepository.findByEntity( relationship.getEntity());
+        if (!relationshipList.contains(returnedRelationship))
+        relationshipList.add(returnedRelationship);
+        returnedRelationship.getEntity().setRelationshipList(relationshipList);
+        }
+        if (relationship.getEntity()!=null)
+        {
+        List<it.anggen.model.relationship.Relationship> relationshipList = relationshipRepository.findByEntity( relationship.getEntity());
+        if (!relationshipList.contains(returnedRelationship))
+        relationshipList.add(returnedRelationship);
+        returnedRelationship.getEntity().setRelationshipList(relationshipList);
+        }
         if (relationship.getTab()!=null)
         {
         List<it.anggen.model.relationship.Relationship> relationshipList = relationshipRepository.findByTab( relationship.getTab());
         if (!relationshipList.contains(returnedRelationship))
         relationshipList.add(returnedRelationship);
         returnedRelationship.getTab().setRelationshipList(relationshipList);
-        }
-        if (relationship.getEntity()!=null)
-        {
-        List<it.anggen.model.relationship.Relationship> relationshipList = relationshipRepository.findByEntity( relationship.getEntity());
-        if (!relationshipList.contains(returnedRelationship))
-        relationshipList.add(returnedRelationship);
-        returnedRelationship.getEntity().setRelationshipList(relationshipList);
-        }
-        if (relationship.getEntity()!=null)
-        {
-        List<it.anggen.model.relationship.Relationship> relationshipList = relationshipRepository.findByEntity( relationship.getEntity());
-        if (!relationshipList.contains(returnedRelationship))
-        relationshipList.add(returnedRelationship);
-        returnedRelationship.getEntity().setRelationshipList(relationshipList);
         }
          return returnedRelationship;
     }

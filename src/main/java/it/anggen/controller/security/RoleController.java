@@ -35,6 +35,16 @@ return "forbidden";
         return "role";
     }
 
+    @RequestMapping(value = "/pages/{pageNumber}", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity findPage(
+        @PathVariable
+        Integer pageNumber) {
+        org.springframework.data.domain.Page<it.anggen.model.security.Role> page = roleService.findByPage(pageNumber);
+        getRightMapping(page.getContent());
+        return ResponseEntity.ok().body(page);
+    }
+
     @ResponseBody
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ResponseEntity search(
@@ -47,8 +57,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         if (role.getRoleId()!=null)
          log.info("Searching role like {}", role.getRole()+' '+ role.getRoleId());
         roleList=roleService.find(role);
-        getRightMapping(roleList);
         getSecurityMapping(roleList);
+        getRightMapping(roleList);
          log.info("Search: returning {} role.",roleList.size());
         return ResponseEntity.ok().body(roleList);
     }
@@ -63,8 +73,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         log.info("Searching role with id {}",roleId);
         List<it.anggen.model.security.Role> roleList=roleService.findById(Integer.valueOf(roleId));
-        getRightMapping(roleList);
         getSecurityMapping(roleList);
+        getRightMapping(roleList);
          log.info("Search: returning {} role.",roleList.size());
         return ResponseEntity.ok().body(roleList);
     }
@@ -109,8 +119,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         log.info("Updating role with id {}",role.getRoleId());
         rebuildSecurityMapping(role);
         it.anggen.model.security.Role updatedRole=roleService.update(role);
-        getRightMapping(updatedRole);
         getSecurityMapping(updatedRole);
+        getRightMapping(updatedRole);
         return ResponseEntity.ok().body(updatedRole);
     }
 

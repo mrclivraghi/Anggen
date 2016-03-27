@@ -15,22 +15,22 @@ import org.hibernate.annotations.Type;
 @Table(schema = "meta", name = "enum_field")
 @it.anggen.utils.annotation.SecurityType(type = it.anggen.model.SecurityType.ACCESS_WITH_PERMISSION)
 @MaxDescendantLevel(100)
-public class EnumField extends EntityAttribute{
+public class EnumField extends EntityAttribute {
 
-    public final static java.lang.Long staticEntityId = 15L;
+    public final static java.lang.Long staticEntityId = 13L;
     @javax.persistence.Column(name = "enum_field_id")
     @Id
     @GeneratedValue
     @it.anggen.utils.annotation.DescriptionField
     @it.anggen.utils.annotation.Priority(1)
     private java.lang.Long enumFieldId;
+    @javax.persistence.Column(name = "name")
+    @it.anggen.utils.annotation.Priority(2)
+    @it.anggen.utils.annotation.DescriptionField
+    private String name;
     @javax.persistence.Column(name = "priority")
     @it.anggen.utils.annotation.Priority(2)
     private Integer priority;
-    @javax.persistence.Column(name = "name")
-    @it.anggen.utils.annotation.DescriptionField
-    @it.anggen.utils.annotation.Priority(2)
-    private String name;
     @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.EAGER)
     @javax.persistence.JoinColumn(name = "tab_id_tab")
     @it.anggen.utils.annotation.Priority(4)
@@ -57,20 +57,20 @@ public class EnumField extends EntityAttribute{
         this.enumFieldId=enumFieldId;
     }
 
-    public Integer getPriority() {
-        return this.priority;
-    }
-
-    public void setPriority(Integer priority) {
-        this.priority=priority;
-    }
-
     public String getName() {
         return this.name;
     }
 
     public void setName(String name) {
         this.name=name;
+    }
+
+    public Integer getPriority() {
+        return this.priority;
+    }
+
+    public void setPriority(Integer priority) {
+        this.priority=priority;
     }
 
     public it.anggen.model.entity.Tab getTab() {

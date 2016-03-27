@@ -199,7 +199,7 @@ public class BeanToDBConverter {
 		
 		
 		//List<Entity> oldEntityList = entityRepository.findByEntityIdAndEnableRestrictionDataAndDescendantMaxLevelAndNameAndSecurityTypeAndRelationshipAndEntityGroupAndTabAndFieldAndEnumFieldAndRestrictionEntity(null, null, null, null, null, null, null, null, null, null, null);
-		
+		if (securityPackageClassSet!=null)
 		for (Class securityClass: securityPackageClassSet)
 		{
 			initEntity(securityClass,entityMap);
@@ -423,7 +423,7 @@ public class BeanToDBConverter {
 										//metaEnumValueList.add(metaEnumValue);
 									}
 									//enumEntity.setEnumValueList( metaEnumValueList);
-									enumEntityRepository.save(enumEntity);
+									//enumEntityRepository.save(enumEntity);
 									//enumEntityList.add(enumEntity);
 								}
 								

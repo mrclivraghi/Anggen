@@ -3,6 +3,8 @@ package it.anggen.service.relationship;
 
 import java.util.List;
 import it.anggen.searchbean.relationship.RelationshipSearchBean;
+import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.PathVariable;
 
 public interface RelationshipService {
 
@@ -16,5 +18,9 @@ public interface RelationshipService {
     public it.anggen.model.relationship.Relationship insert(it.anggen.model.relationship.Relationship Relationship);
 
     public it.anggen.model.relationship.Relationship update(it.anggen.model.relationship.Relationship Relationship);
+
+    public Page<it.anggen.model.relationship.Relationship> findByPage(
+        @PathVariable
+        Integer pageNumber);
 
 }

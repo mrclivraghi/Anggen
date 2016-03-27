@@ -35,6 +35,16 @@ return "forbidden";
         return "restrictionEntity";
     }
 
+    @RequestMapping(value = "/pages/{pageNumber}", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity findPage(
+        @PathVariable
+        Integer pageNumber) {
+        org.springframework.data.domain.Page<it.anggen.model.security.RestrictionEntity> page = restrictionEntityService.findByPage(pageNumber);
+        getRightMapping(page.getContent());
+        return ResponseEntity.ok().body(page);
+    }
+
     @ResponseBody
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ResponseEntity search(
@@ -45,10 +55,10 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         List<it.anggen.model.security.RestrictionEntity> restrictionEntityList;
         if (restrictionEntity.getRestrictionEntityId()!=null)
-         log.info("Searching restrictionEntity like {}", restrictionEntity.getRestrictionEntityId()+' '+ restrictionEntity.getEntity().getName());
+         log.info("Searching restrictionEntity like {}", restrictionEntity.getRestrictionEntityId()+' '+ restrictionEntity.getEntity().getEntityId());
         restrictionEntityList=restrictionEntityService.find(restrictionEntity);
-        getRightMapping(restrictionEntityList);
         getSecurityMapping(restrictionEntityList);
+        getRightMapping(restrictionEntityList);
          log.info("Search: returning {} restrictionEntity.",restrictionEntityList.size());
         return ResponseEntity.ok().body(restrictionEntityList);
     }
@@ -63,8 +73,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         log.info("Searching restrictionEntity with id {}",restrictionEntityId);
         List<it.anggen.model.security.RestrictionEntity> restrictionEntityList=restrictionEntityService.findById(Long.valueOf(restrictionEntityId));
-        getRightMapping(restrictionEntityList);
         getSecurityMapping(restrictionEntityList);
+        getRightMapping(restrictionEntityList);
          log.info("Search: returning {} restrictionEntity.",restrictionEntityList.size());
         return ResponseEntity.ok().body(restrictionEntityList);
     }
@@ -91,7 +101,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
         if (restrictionEntity.getRestrictionEntityId()!=null)
-        log.info("Inserting restrictionEntity like {}", restrictionEntity.getRestrictionEntityId()+' '+ restrictionEntity.getEntity().getName());
+        log.info("Inserting restrictionEntity like {}", restrictionEntity.getRestrictionEntityId()+' '+ restrictionEntity.getEntity().getEntityId());
         it.anggen.model.security.RestrictionEntity insertedRestrictionEntity=restrictionEntityService.insert(restrictionEntity);
         getRightMapping(insertedRestrictionEntity);
         log.info("Inserted restrictionEntity with id {}",insertedRestrictionEntity.getRestrictionEntityId());
@@ -109,8 +119,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         log.info("Updating restrictionEntity with id {}",restrictionEntity.getRestrictionEntityId());
         rebuildSecurityMapping(restrictionEntity);
         it.anggen.model.security.RestrictionEntity updatedRestrictionEntity=restrictionEntityService.update(restrictionEntity);
-        getRightMapping(updatedRestrictionEntity);
         getSecurityMapping(updatedRestrictionEntity);
+        getRightMapping(updatedRestrictionEntity);
         return ResponseEntity.ok().body(updatedRestrictionEntity);
     }
 
@@ -125,12 +135,12 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     private void getRightMapping(it.anggen.model.security.RestrictionEntity restrictionEntity) {
         if (restrictionEntity.getEntity()!=null)
         {
-        restrictionEntity.getEntity().setRelationshipList(null);
-        restrictionEntity.getEntity().setEntityGroup(null);
-        restrictionEntity.getEntity().setTabList(null);
-        restrictionEntity.getEntity().setFieldList(null);
-        restrictionEntity.getEntity().setEnumFieldList(null);
         restrictionEntity.getEntity().setRestrictionEntityList(null);
+        restrictionEntity.getEntity().setEnumFieldList(null);
+        restrictionEntity.getEntity().setFieldList(null);
+        restrictionEntity.getEntity().setTabList(null);
+        restrictionEntity.getEntity().setEntityGroup(null);
+        restrictionEntity.getEntity().setRelationshipList(null);
         }
         if (restrictionEntity.getRole()!=null)
         {

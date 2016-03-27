@@ -35,6 +35,16 @@ return "forbidden";
         return "enumEntity";
     }
 
+    @RequestMapping(value = "/pages/{pageNumber}", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity findPage(
+        @PathVariable
+        Integer pageNumber) {
+        org.springframework.data.domain.Page<it.anggen.model.entity.EnumEntity> page = enumEntityService.findByPage(pageNumber);
+        getRightMapping(page.getContent());
+        return ResponseEntity.ok().body(page);
+    }
+
     @ResponseBody
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ResponseEntity search(
@@ -45,10 +55,10 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         List<it.anggen.model.entity.EnumEntity> enumEntityList;
         if (enumEntity.getEnumEntityId()!=null)
-         log.info("Searching enumEntity like {}", enumEntity.getEnumEntityId()+' '+ enumEntity.getName());
+         log.info("Searching enumEntity like {}", enumEntity.getName()+' '+ enumEntity.getEnumEntityId());
         enumEntityList=enumEntityService.find(enumEntity);
-        getRightMapping(enumEntityList);
         getSecurityMapping(enumEntityList);
+        getRightMapping(enumEntityList);
          log.info("Search: returning {} enumEntity.",enumEntityList.size());
         return ResponseEntity.ok().body(enumEntityList);
     }
@@ -63,8 +73,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         log.info("Searching enumEntity with id {}",enumEntityId);
         List<it.anggen.model.entity.EnumEntity> enumEntityList=enumEntityService.findById(Long.valueOf(enumEntityId));
-        getRightMapping(enumEntityList);
         getSecurityMapping(enumEntityList);
+        getRightMapping(enumEntityList);
          log.info("Search: returning {} enumEntity.",enumEntityList.size());
         return ResponseEntity.ok().body(enumEntityList);
     }
@@ -91,7 +101,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
         if (enumEntity.getEnumEntityId()!=null)
-        log.info("Inserting enumEntity like {}", enumEntity.getEnumEntityId()+' '+ enumEntity.getName());
+        log.info("Inserting enumEntity like {}", enumEntity.getName()+' '+ enumEntity.getEnumEntityId());
         it.anggen.model.entity.EnumEntity insertedEnumEntity=enumEntityService.insert(enumEntity);
         getRightMapping(insertedEnumEntity);
         log.info("Inserted enumEntity with id {}",insertedEnumEntity.getEnumEntityId());
@@ -109,8 +119,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         log.info("Updating enumEntity with id {}",enumEntity.getEnumEntityId());
         rebuildSecurityMapping(enumEntity);
         it.anggen.model.entity.EnumEntity updatedEnumEntity=enumEntityService.update(enumEntity);
-        getRightMapping(updatedEnumEntity);
         getSecurityMapping(updatedEnumEntity);
+        getRightMapping(updatedEnumEntity);
         return ResponseEntity.ok().body(updatedEnumEntity);
     }
 
@@ -125,8 +135,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     private void getRightMapping(it.anggen.model.entity.EnumEntity enumEntity) {
         if (enumEntity.getProject()!=null)
         {
-        enumEntity.getProject().setEntityGroupList(null);
         enumEntity.getProject().setEnumEntityList(null);
+        enumEntity.getProject().setEntityGroupList(null);
         }
         if (enumEntity.getEnumValueList()!=null)
         for (it.anggen.model.field.EnumValue enumValue :enumEntity.getEnumValueList())

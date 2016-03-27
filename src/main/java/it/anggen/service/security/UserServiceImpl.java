@@ -6,6 +6,7 @@ import it.anggen.repository.security.RoleRepository;
 import it.anggen.repository.security.UserRepository;
 import it.anggen.searchbean.security.UserSearchBean;
 import it.anggen.service.security.UserService;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +19,7 @@ public class UserServiceImpl
     public UserRepository userRepository;
     @org.springframework.beans.factory.annotation.Autowired
     public RoleRepository roleRepository;
+    private static Integer PAGE_SIZE = (5);
 
     @Override
     public List<it.anggen.model.security.User> findById(Long userId) {
@@ -25,8 +27,14 @@ public class UserServiceImpl
     }
 
     @Override
+    public Page<it.anggen.model.security.User> findByPage(Integer pageNumber) {
+        org.springframework.data.domain.PageRequest pageRequest = new org.springframework.data.domain.PageRequest(pageNumber - 1, PAGE_SIZE, org.springframework.data.domain.Sort.Direction.DESC, "userId");
+        return userRepository.findAll(pageRequest);
+    }
+
+    @Override
     public List<it.anggen.model.security.User> find(UserSearchBean user) {
-        return userRepository.findByUserIdAndPasswordAndEnabledAndUsernameAndRole(user.getUserId(),user.getPassword(),user.getEnabled(),user.getUsername(),user.getRoleList()==null? null :user.getRoleList().get(0));
+        return userRepository.findByUserIdAndUsernameAndPasswordAndEnabledAndRole(user.getUserId(),user.getUsername(),user.getPassword(),user.getEnabled(),user.getRoleList()==null? null :user.getRoleList().get(0));
     }
 
     @Override

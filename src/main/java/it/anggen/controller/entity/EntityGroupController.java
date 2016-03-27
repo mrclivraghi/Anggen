@@ -35,6 +35,16 @@ return "forbidden";
         return "entityGroup";
     }
 
+    @RequestMapping(value = "/pages/{pageNumber}", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity findPage(
+        @PathVariable
+        Integer pageNumber) {
+        org.springframework.data.domain.Page<it.anggen.model.entity.EntityGroup> page = entityGroupService.findByPage(pageNumber);
+        getRightMapping(page.getContent());
+        return ResponseEntity.ok().body(page);
+    }
+
     @ResponseBody
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ResponseEntity search(
@@ -45,10 +55,10 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         List<it.anggen.model.entity.EntityGroup> entityGroupList;
         if (entityGroup.getEntityGroupId()!=null)
-         log.info("Searching entityGroup like {}", entityGroup.getEntityGroupId()+' '+ entityGroup.getName());
+         log.info("Searching entityGroup like {}", entityGroup.getName()+' '+ entityGroup.getEntityGroupId());
         entityGroupList=entityGroupService.find(entityGroup);
-        getRightMapping(entityGroupList);
         getSecurityMapping(entityGroupList);
+        getRightMapping(entityGroupList);
          log.info("Search: returning {} entityGroup.",entityGroupList.size());
         return ResponseEntity.ok().body(entityGroupList);
     }
@@ -63,8 +73,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         log.info("Searching entityGroup with id {}",entityGroupId);
         List<it.anggen.model.entity.EntityGroup> entityGroupList=entityGroupService.findById(Long.valueOf(entityGroupId));
-        getRightMapping(entityGroupList);
         getSecurityMapping(entityGroupList);
+        getRightMapping(entityGroupList);
          log.info("Search: returning {} entityGroup.",entityGroupList.size());
         return ResponseEntity.ok().body(entityGroupList);
     }
@@ -91,7 +101,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
         if (entityGroup.getEntityGroupId()!=null)
-        log.info("Inserting entityGroup like {}", entityGroup.getEntityGroupId()+' '+ entityGroup.getName());
+        log.info("Inserting entityGroup like {}", entityGroup.getName()+' '+ entityGroup.getEntityGroupId());
         it.anggen.model.entity.EntityGroup insertedEntityGroup=entityGroupService.insert(entityGroup);
         getRightMapping(insertedEntityGroup);
         log.info("Inserted entityGroup with id {}",insertedEntityGroup.getEntityGroupId());
@@ -109,8 +119,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         log.info("Updating entityGroup with id {}",entityGroup.getEntityGroupId());
         rebuildSecurityMapping(entityGroup);
         it.anggen.model.entity.EntityGroup updatedEntityGroup=entityGroupService.update(entityGroup);
-        getRightMapping(updatedEntityGroup);
         getSecurityMapping(updatedEntityGroup);
+        getRightMapping(updatedEntityGroup);
         return ResponseEntity.ok().body(updatedEntityGroup);
     }
 
@@ -125,20 +135,20 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     private void getRightMapping(it.anggen.model.entity.EntityGroup entityGroup) {
         if (entityGroup.getProject()!=null)
         {
-        entityGroup.getProject().setEntityGroupList(null);
         entityGroup.getProject().setEnumEntityList(null);
+        entityGroup.getProject().setEntityGroupList(null);
         }
         if (entityGroup.getEntityList()!=null)
         for (it.anggen.model.entity.Entity entity :entityGroup.getEntityList())
 
         {
 
-        entity.setRelationshipList(null);
-        entity.setEntityGroup(null);
-        entity.setTabList(null);
-        entity.setFieldList(null);
-        entity.setEnumFieldList(null);
         entity.setRestrictionEntityList(null);
+        entity.setEnumFieldList(null);
+        entity.setFieldList(null);
+        entity.setTabList(null);
+        entity.setEntityGroup(null);
+        entity.setRelationshipList(null);
         }
         if (entityGroup.getRestrictionEntityGroupList()!=null)
         for (it.anggen.model.security.RestrictionEntityGroup restrictionEntityGroup :entityGroup.getRestrictionEntityGroupList())

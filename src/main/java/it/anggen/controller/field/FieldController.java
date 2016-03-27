@@ -35,6 +35,16 @@ return "forbidden";
         return "field";
     }
 
+    @RequestMapping(value = "/pages/{pageNumber}", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity findPage(
+        @PathVariable
+        Integer pageNumber) {
+        org.springframework.data.domain.Page<it.anggen.model.field.Field> page = fieldService.findByPage(pageNumber);
+        getRightMapping(page.getContent());
+        return ResponseEntity.ok().body(page);
+    }
+
     @ResponseBody
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ResponseEntity search(
@@ -45,10 +55,10 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         List<it.anggen.model.field.Field> fieldList;
         if (field.getFieldId()!=null)
-         log.info("Searching field like {}", field.getName()+' '+ field.getFieldId());
+         log.info("Searching field like {}", field.getFieldId()+' '+ field.getName());
         fieldList=fieldService.find(field);
-        getRightMapping(fieldList);
         getSecurityMapping(fieldList);
+        getRightMapping(fieldList);
          log.info("Search: returning {} field.",fieldList.size());
         return ResponseEntity.ok().body(fieldList);
     }
@@ -63,8 +73,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         log.info("Searching field with id {}",fieldId);
         List<it.anggen.model.field.Field> fieldList=fieldService.findById(Long.valueOf(fieldId));
-        getRightMapping(fieldList);
         getSecurityMapping(fieldList);
+        getRightMapping(fieldList);
          log.info("Search: returning {} field.",fieldList.size());
         return ResponseEntity.ok().body(fieldList);
     }
@@ -91,7 +101,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
         if (field.getFieldId()!=null)
-        log.info("Inserting field like {}", field.getName()+' '+ field.getFieldId());
+        log.info("Inserting field like {}", field.getFieldId()+' '+ field.getName());
         it.anggen.model.field.Field insertedField=fieldService.insert(field);
         getRightMapping(insertedField);
         log.info("Inserted field with id {}",insertedField.getFieldId());
@@ -109,8 +119,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         log.info("Updating field with id {}",field.getFieldId());
         rebuildSecurityMapping(field);
         it.anggen.model.field.Field updatedField=fieldService.update(field);
-        getRightMapping(updatedField);
         getSecurityMapping(updatedField);
+        getRightMapping(updatedField);
         return ResponseEntity.ok().body(updatedField);
     }
 
@@ -125,19 +135,19 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     private void getRightMapping(it.anggen.model.field.Field field) {
         if (field.getTab()!=null)
         {
-        field.getTab().setRelationshipList(null);
-        field.getTab().setEntity(null);
         field.getTab().setFieldList(null);
         field.getTab().setEnumFieldList(null);
+        field.getTab().setEntity(null);
+        field.getTab().setRelationshipList(null);
         }
         if (field.getEntity()!=null)
         {
-        field.getEntity().setRelationshipList(null);
-        field.getEntity().setEntityGroup(null);
-        field.getEntity().setTabList(null);
-        field.getEntity().setFieldList(null);
-        field.getEntity().setEnumFieldList(null);
         field.getEntity().setRestrictionEntityList(null);
+        field.getEntity().setEnumFieldList(null);
+        field.getEntity().setFieldList(null);
+        field.getEntity().setTabList(null);
+        field.getEntity().setEntityGroup(null);
+        field.getEntity().setRelationshipList(null);
         }
         if (field.getAnnotationList()!=null)
         for (it.anggen.model.field.Annotation annotation :field.getAnnotationList())

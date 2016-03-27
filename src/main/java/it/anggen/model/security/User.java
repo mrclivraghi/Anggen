@@ -21,24 +21,24 @@ import org.hibernate.annotations.Type;
 @MaxDescendantLevel(100)
 public class User {
 
-    public final static java.lang.Long staticEntityId = 9L;
-    @javax.persistence.Column(name = "password")
-    @it.anggen.utils.annotation.Priority(2)
-    @Password
-    private java.lang.String password;
-    @javax.persistence.Column(name = "enabled")
-    @it.anggen.utils.annotation.Priority(2)
-    private Boolean enabled;
-    @javax.persistence.Column(name = "username")
-    @it.anggen.utils.annotation.DescriptionField
-    @it.anggen.utils.annotation.Priority(2)
-    private java.lang.String username;
+    public final static java.lang.Long staticEntityId = 2L;
     @javax.persistence.Column(name = "user_id")
     @it.anggen.utils.annotation.Priority(1)
     @it.anggen.utils.annotation.DescriptionField
     @Id
     @GeneratedValue
     private java.lang.Long userId;
+    @javax.persistence.Column(name = "enabled")
+    @it.anggen.utils.annotation.Priority(2)
+    private Boolean enabled;
+    @javax.persistence.Column(name = "username")
+    @it.anggen.utils.annotation.Priority(2)
+    @it.anggen.utils.annotation.DescriptionField
+    private java.lang.String username;
+    @javax.persistence.Column(name = "password")
+    @Password
+    @it.anggen.utils.annotation.Priority(2)
+    private java.lang.String password;
     @ManyToMany(fetch = FetchType.EAGER)
     @Type(type = "it.anggen.model.security.Role")
     @JoinTable(name = "user_role", schema = "sso", joinColumns = {
@@ -49,12 +49,12 @@ public class User {
     @it.anggen.utils.annotation.Priority(4)
     private List<Role> roleList;
 
-    public java.lang.String getPassword() {
-        return this.password;
+    public java.lang.Long getUserId() {
+        return this.userId;
     }
 
-    public void setPassword(java.lang.String password) {
-        this.password=password;
+    public void setUserId(java.lang.Long userId) {
+        this.userId=userId;
     }
 
     public Boolean getEnabled() {
@@ -73,12 +73,12 @@ public class User {
         this.username=username;
     }
 
-    public java.lang.Long getUserId() {
-        return this.userId;
+    public java.lang.String getPassword() {
+        return this.password;
     }
 
-    public void setUserId(java.lang.Long userId) {
-        this.userId=userId;
+    public void setPassword(java.lang.String password) {
+        this.password=password;
     }
 
     public List<Role> getRoleList() {

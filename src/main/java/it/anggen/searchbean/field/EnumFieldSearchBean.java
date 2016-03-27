@@ -7,8 +7,8 @@ import it.anggen.model.field.Annotation;
 public class EnumFieldSearchBean {
 
     public java.lang.Long enumFieldId;
-    public java.lang.String name;
     public java.lang.Integer priority;
+    public java.lang.String name;
     public it.anggen.model.entity.Tab tab;
     public it.anggen.model.entity.EnumEntity enumEntity;
     public it.anggen.model.entity.Entity entity;
@@ -22,20 +22,20 @@ public class EnumFieldSearchBean {
         this.enumFieldId=enumFieldId;
     }
 
-    public java.lang.String getName() {
-        return this.name;
-    }
-
-    public void setName(java.lang.String name) {
-        this.name=name;
-    }
-
     public java.lang.Integer getPriority() {
         return this.priority;
     }
 
     public void setPriority(java.lang.Integer priority) {
         this.priority=priority;
+    }
+
+    public java.lang.String getName() {
+        return this.name;
+    }
+
+    public void setName(java.lang.String name) {
+        this.name=name;
     }
 
     public it.anggen.model.entity.Tab getTab() {

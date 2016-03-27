@@ -6,6 +6,7 @@ import it.anggen.repository.field.AnnotationRepository;
 import it.anggen.repository.field.EnumFieldRepository;
 import it.anggen.searchbean.field.EnumFieldSearchBean;
 import it.anggen.service.field.EnumFieldService;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +19,7 @@ public class EnumFieldServiceImpl
     public EnumFieldRepository enumFieldRepository;
     @org.springframework.beans.factory.annotation.Autowired
     public AnnotationRepository annotationRepository;
+    private static Integer PAGE_SIZE = (5);
 
     @Override
     public List<it.anggen.model.field.EnumField> findById(Long enumFieldId) {
@@ -25,8 +27,14 @@ public class EnumFieldServiceImpl
     }
 
     @Override
+    public Page<it.anggen.model.field.EnumField> findByPage(Integer pageNumber) {
+        org.springframework.data.domain.PageRequest pageRequest = new org.springframework.data.domain.PageRequest(pageNumber - 1, PAGE_SIZE, org.springframework.data.domain.Sort.Direction.DESC, "enumFieldId");
+        return enumFieldRepository.findAll(pageRequest);
+    }
+
+    @Override
     public List<it.anggen.model.field.EnumField> find(EnumFieldSearchBean enumField) {
-        return enumFieldRepository.findByEnumFieldIdAndNameAndPriorityAndTabAndEnumEntityAndEntityAndAnnotation(enumField.getEnumFieldId(),enumField.getName(),enumField.getPriority(),enumField.getTab(),enumField.getEnumEntity(),enumField.getEntity(),enumField.getAnnotationList()==null? null :enumField.getAnnotationList().get(0));
+        return enumFieldRepository.findByEnumFieldIdAndPriorityAndNameAndTabAndEnumEntityAndEntityAndAnnotation(enumField.getEnumFieldId(),enumField.getPriority(),enumField.getName(),enumField.getTab(),enumField.getEnumEntity(),enumField.getEntity(),enumField.getAnnotationList()==null? null :enumField.getAnnotationList().get(0));
     }
 
     @Override

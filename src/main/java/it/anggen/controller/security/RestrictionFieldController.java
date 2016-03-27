@@ -35,6 +35,16 @@ return "forbidden";
         return "restrictionField";
     }
 
+    @RequestMapping(value = "/pages/{pageNumber}", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity findPage(
+        @PathVariable
+        Integer pageNumber) {
+        org.springframework.data.domain.Page<it.anggen.model.security.RestrictionField> page = restrictionFieldService.findByPage(pageNumber);
+        getRightMapping(page.getContent());
+        return ResponseEntity.ok().body(page);
+    }
+
     @ResponseBody
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ResponseEntity search(
@@ -47,8 +57,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         if (restrictionField.getRestrictionFieldId()!=null)
          log.info("Searching restrictionField like {}", restrictionField.getRestrictionFieldId());
         restrictionFieldList=restrictionFieldService.find(restrictionField);
-        getRightMapping(restrictionFieldList);
         getSecurityMapping(restrictionFieldList);
+        getRightMapping(restrictionFieldList);
          log.info("Search: returning {} restrictionField.",restrictionFieldList.size());
         return ResponseEntity.ok().body(restrictionFieldList);
     }
@@ -63,8 +73,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         log.info("Searching restrictionField with id {}",restrictionFieldId);
         List<it.anggen.model.security.RestrictionField> restrictionFieldList=restrictionFieldService.findById(Long.valueOf(restrictionFieldId));
-        getRightMapping(restrictionFieldList);
         getSecurityMapping(restrictionFieldList);
+        getRightMapping(restrictionFieldList);
          log.info("Search: returning {} restrictionField.",restrictionFieldList.size());
         return ResponseEntity.ok().body(restrictionFieldList);
     }
@@ -109,8 +119,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         log.info("Updating restrictionField with id {}",restrictionField.getRestrictionFieldId());
         rebuildSecurityMapping(restrictionField);
         it.anggen.model.security.RestrictionField updatedRestrictionField=restrictionFieldService.update(restrictionField);
-        getRightMapping(updatedRestrictionField);
         getSecurityMapping(updatedRestrictionField);
+        getRightMapping(updatedRestrictionField);
         return ResponseEntity.ok().body(updatedRestrictionField);
     }
 

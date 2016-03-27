@@ -6,13 +6,13 @@ import it.anggen.model.security.RestrictionEntity;
 import it.anggen.model.security.RestrictionEntityGroup;
 import it.anggen.model.security.RestrictionField;
 import it.anggen.model.security.User;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RoleRepository
-    extends CrudRepository<it.anggen.model.security.Role, java.lang.Integer>
+    extends JpaRepository<it.anggen.model.security.Role, java.lang.Integer>
 {
 
 

@@ -35,6 +35,16 @@ return "forbidden";
         return "annotationAttribute";
     }
 
+    @RequestMapping(value = "/pages/{pageNumber}", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity findPage(
+        @PathVariable
+        Integer pageNumber) {
+        org.springframework.data.domain.Page<it.anggen.model.field.AnnotationAttribute> page = annotationAttributeService.findByPage(pageNumber);
+        getRightMapping(page.getContent());
+        return ResponseEntity.ok().body(page);
+    }
+
     @ResponseBody
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ResponseEntity search(
@@ -47,8 +57,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         if (annotationAttribute.getAnnotationAttributeId()!=null)
          log.info("Searching annotationAttribute like {}", annotationAttribute.getProperty()+' '+ annotationAttribute.getAnnotationAttributeId());
         annotationAttributeList=annotationAttributeService.find(annotationAttribute);
-        getRightMapping(annotationAttributeList);
         getSecurityMapping(annotationAttributeList);
+        getRightMapping(annotationAttributeList);
          log.info("Search: returning {} annotationAttribute.",annotationAttributeList.size());
         return ResponseEntity.ok().body(annotationAttributeList);
     }
@@ -63,8 +73,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         log.info("Searching annotationAttribute with id {}",annotationAttributeId);
         List<it.anggen.model.field.AnnotationAttribute> annotationAttributeList=annotationAttributeService.findById(Long.valueOf(annotationAttributeId));
-        getRightMapping(annotationAttributeList);
         getSecurityMapping(annotationAttributeList);
+        getRightMapping(annotationAttributeList);
          log.info("Search: returning {} annotationAttribute.",annotationAttributeList.size());
         return ResponseEntity.ok().body(annotationAttributeList);
     }
@@ -109,8 +119,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         log.info("Updating annotationAttribute with id {}",annotationAttribute.getAnnotationAttributeId());
         rebuildSecurityMapping(annotationAttribute);
         it.anggen.model.field.AnnotationAttribute updatedAnnotationAttribute=annotationAttributeService.update(annotationAttribute);
-        getRightMapping(updatedAnnotationAttribute);
         getSecurityMapping(updatedAnnotationAttribute);
+        getRightMapping(updatedAnnotationAttribute);
         return ResponseEntity.ok().body(updatedAnnotationAttribute);
     }
 

@@ -9,6 +9,7 @@ import it.anggen.repository.security.RoleRepository;
 import it.anggen.repository.security.UserRepository;
 import it.anggen.searchbean.security.RoleSearchBean;
 import it.anggen.service.security.RoleService;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,10 +28,17 @@ public class RoleServiceImpl
     public RestrictionFieldRepository restrictionFieldRepository;
     @org.springframework.beans.factory.annotation.Autowired
     public UserRepository userRepository;
+    private static Integer PAGE_SIZE = (5);
 
     @Override
     public List<it.anggen.model.security.Role> findById(Integer roleId) {
         return roleRepository.findByRoleId(roleId);
+    }
+
+    @Override
+    public Page<it.anggen.model.security.Role> findByPage(Integer pageNumber) {
+        org.springframework.data.domain.PageRequest pageRequest = new org.springframework.data.domain.PageRequest(pageNumber - 1, PAGE_SIZE, org.springframework.data.domain.Sort.Direction.DESC, "roleId");
+        return roleRepository.findAll(pageRequest);
     }
 
     @Override

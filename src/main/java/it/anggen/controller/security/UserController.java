@@ -35,6 +35,16 @@ return "forbidden";
         return "user";
     }
 
+    @RequestMapping(value = "/pages/{pageNumber}", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity findPage(
+        @PathVariable
+        Integer pageNumber) {
+        org.springframework.data.domain.Page<it.anggen.model.security.User> page = userService.findByPage(pageNumber);
+        getRightMapping(page.getContent());
+        return ResponseEntity.ok().body(page);
+    }
+
     @ResponseBody
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ResponseEntity search(
@@ -47,8 +57,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         if (user.getUserId()!=null)
          log.info("Searching user like {}", user.getUserId()+' '+ user.getUsername());
         userList=userService.find(user);
-        getRightMapping(userList);
         getSecurityMapping(userList);
+        getRightMapping(userList);
          log.info("Search: returning {} user.",userList.size());
         return ResponseEntity.ok().body(userList);
     }
@@ -63,8 +73,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         log.info("Searching user with id {}",userId);
         List<it.anggen.model.security.User> userList=userService.findById(Long.valueOf(userId));
-        getRightMapping(userList);
         getSecurityMapping(userList);
+        getRightMapping(userList);
          log.info("Search: returning {} user.",userList.size());
         return ResponseEntity.ok().body(userList);
     }
@@ -109,8 +119,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         log.info("Updating user with id {}",user.getUserId());
         rebuildSecurityMapping(user);
         it.anggen.model.security.User updatedUser=userService.update(user);
-        getRightMapping(updatedUser);
         getSecurityMapping(updatedUser);
+        getRightMapping(updatedUser);
         return ResponseEntity.ok().body(updatedUser);
     }
 

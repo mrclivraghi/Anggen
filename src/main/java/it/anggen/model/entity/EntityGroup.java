@@ -17,7 +17,7 @@ import org.hibernate.annotations.Type;
 @MaxDescendantLevel(100)
 public class EntityGroup {
 
-    public final static java.lang.Long staticEntityId = 16L;
+    public final static java.lang.Long staticEntityId = 10L;
     @javax.persistence.Column(name = "entity_group_id")
     @Id
     @GeneratedValue
@@ -25,8 +25,8 @@ public class EntityGroup {
     @it.anggen.utils.annotation.Priority(1)
     private java.lang.Long entityGroupId;
     @javax.persistence.Column(name = "name")
-    @it.anggen.utils.annotation.DescriptionField
     @it.anggen.utils.annotation.Priority(2)
+    @it.anggen.utils.annotation.DescriptionField
     private String name;
     @javax.persistence.Column(name = "entity_id")
     @it.anggen.utils.annotation.Priority(2)

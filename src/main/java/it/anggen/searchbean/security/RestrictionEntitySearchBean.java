@@ -7,8 +7,8 @@ public class RestrictionEntitySearchBean {
     public java.lang.Long restrictionEntityId;
     public java.lang.Boolean canCreate;
     public java.lang.Boolean canUpdate;
-    public java.lang.Boolean canDelete;
     public java.lang.Boolean canSearch;
+    public java.lang.Boolean canDelete;
     public it.anggen.model.entity.Entity entity;
     public it.anggen.model.security.Role role;
 
@@ -36,20 +36,20 @@ public class RestrictionEntitySearchBean {
         this.canUpdate=canUpdate;
     }
 
-    public java.lang.Boolean getCanDelete() {
-        return this.canDelete;
-    }
-
-    public void setCanDelete(java.lang.Boolean canDelete) {
-        this.canDelete=canDelete;
-    }
-
     public java.lang.Boolean getCanSearch() {
         return this.canSearch;
     }
 
     public void setCanSearch(java.lang.Boolean canSearch) {
         this.canSearch=canSearch;
+    }
+
+    public java.lang.Boolean getCanDelete() {
+        return this.canDelete;
+    }
+
+    public void setCanDelete(java.lang.Boolean canDelete) {
+        this.canDelete=canDelete;
     }
 
     public it.anggen.model.entity.Entity getEntity() {

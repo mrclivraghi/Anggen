@@ -3,6 +3,8 @@ package it.anggen.service.field;
 
 import java.util.List;
 import it.anggen.searchbean.field.EnumValueSearchBean;
+import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.PathVariable;
 
 public interface EnumValueService {
 
@@ -16,5 +18,9 @@ public interface EnumValueService {
     public it.anggen.model.field.EnumValue insert(it.anggen.model.field.EnumValue EnumValue);
 
     public it.anggen.model.field.EnumValue update(it.anggen.model.field.EnumValue EnumValue);
+
+    public Page<it.anggen.model.field.EnumValue> findByPage(
+        @PathVariable
+        Integer pageNumber);
 
 }

@@ -7,6 +7,7 @@ import it.anggen.repository.entity.EntityRepository;
 import it.anggen.repository.security.RestrictionEntityGroupRepository;
 import it.anggen.searchbean.entity.EntityGroupSearchBean;
 import it.anggen.service.entity.EntityGroupService;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,10 +22,17 @@ public class EntityGroupServiceImpl
     public EntityRepository entityRepository;
     @org.springframework.beans.factory.annotation.Autowired
     public RestrictionEntityGroupRepository restrictionEntityGroupRepository;
+    private static Integer PAGE_SIZE = (5);
 
     @Override
     public List<it.anggen.model.entity.EntityGroup> findById(Long entityGroupId) {
         return entityGroupRepository.findByEntityGroupId(entityGroupId);
+    }
+
+    @Override
+    public Page<it.anggen.model.entity.EntityGroup> findByPage(Integer pageNumber) {
+        org.springframework.data.domain.PageRequest pageRequest = new org.springframework.data.domain.PageRequest(pageNumber - 1, PAGE_SIZE, org.springframework.data.domain.Sort.Direction.DESC, "entityGroupId");
+        return entityGroupRepository.findAll(pageRequest);
     }
 
     @Override

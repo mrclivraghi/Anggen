@@ -2,13 +2,13 @@
 package it.anggen.repository.security;
 
 import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RestrictionFieldRepository
-    extends CrudRepository<it.anggen.model.security.RestrictionField, java.lang.Long>
+    extends JpaRepository<it.anggen.model.security.RestrictionField, java.lang.Long>
 {
 
 

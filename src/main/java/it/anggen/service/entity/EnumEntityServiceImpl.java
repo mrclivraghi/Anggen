@@ -6,6 +6,7 @@ import it.anggen.repository.entity.EnumEntityRepository;
 import it.anggen.repository.field.EnumValueRepository;
 import it.anggen.searchbean.entity.EnumEntitySearchBean;
 import it.anggen.service.entity.EnumEntityService;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,10 +19,17 @@ public class EnumEntityServiceImpl
     public EnumEntityRepository enumEntityRepository;
     @org.springframework.beans.factory.annotation.Autowired
     public EnumValueRepository enumValueRepository;
+    private static Integer PAGE_SIZE = (5);
 
     @Override
     public List<it.anggen.model.entity.EnumEntity> findById(Long enumEntityId) {
         return enumEntityRepository.findByEnumEntityId(enumEntityId);
+    }
+
+    @Override
+    public Page<it.anggen.model.entity.EnumEntity> findByPage(Integer pageNumber) {
+        org.springframework.data.domain.PageRequest pageRequest = new org.springframework.data.domain.PageRequest(pageNumber - 1, PAGE_SIZE, org.springframework.data.domain.Sort.Direction.DESC, "enumEntityId");
+        return enumEntityRepository.findAll(pageRequest);
     }
 
     @Override

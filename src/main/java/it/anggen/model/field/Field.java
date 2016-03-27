@@ -17,9 +17,9 @@ import org.hibernate.annotations.Type;
 @Table(schema = "meta", name = "field")
 @it.anggen.utils.annotation.SecurityType(type = it.anggen.model.SecurityType.ACCESS_WITH_PERMISSION)
 @MaxDescendantLevel(100)
-public class Field extends EntityAttribute{
+public class Field  extends EntityAttribute{
 
-    public final static java.lang.Long staticEntityId = 17L;
+    public final static java.lang.Long staticEntityId = 3L;
     @javax.persistence.Column(name = "priority")
     @it.anggen.utils.annotation.Priority(2)
     private Integer priority;
@@ -30,8 +30,8 @@ public class Field extends EntityAttribute{
     @it.anggen.utils.annotation.Priority(1)
     private java.lang.Long fieldId;
     @javax.persistence.Column(name = "name")
-    @it.anggen.utils.annotation.DescriptionField
     @it.anggen.utils.annotation.Priority(2)
+    @it.anggen.utils.annotation.DescriptionField
     private String name;
     @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.EAGER)
     @javax.persistence.JoinColumn(name = "tab_id_tab")

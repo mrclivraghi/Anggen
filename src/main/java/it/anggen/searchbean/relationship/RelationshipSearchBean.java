@@ -10,10 +10,10 @@ public class RelationshipSearchBean {
     public java.lang.Integer priority;
     public java.lang.String name;
     public it.anggen.model.RelationshipType relationshipType;
-    public it.anggen.model.entity.Tab tab;
-    public it.anggen.model.entity.Entity entity;
-    public it.anggen.model.entity.Entity entityTarget;
     public List<Annotation> annotationList;
+    public it.anggen.model.entity.Entity entityTarget;
+    public it.anggen.model.entity.Entity entity;
+    public it.anggen.model.entity.Tab tab;
 
     public java.lang.Long getRelationshipId() {
         return this.relationshipId;
@@ -47,20 +47,12 @@ public class RelationshipSearchBean {
         this.relationshipType=relationshipType;
     }
 
-    public it.anggen.model.entity.Tab getTab() {
-        return this.tab;
+    public List<Annotation> getAnnotationList() {
+        return this.annotationList;
     }
 
-    public void setTab(it.anggen.model.entity.Tab tab) {
-        this.tab=tab;
-    }
-
-    public it.anggen.model.entity.Entity getEntity() {
-        return this.entity;
-    }
-
-    public void setEntity(it.anggen.model.entity.Entity entity) {
-        this.entity=entity;
+    public void setAnnotationList(List<Annotation> annotationList) {
+        this.annotationList=annotationList;
     }
 
     public it.anggen.model.entity.Entity getEntityTarget() {
@@ -71,12 +63,20 @@ public class RelationshipSearchBean {
         this.entityTarget=entityTarget;
     }
 
-    public List<Annotation> getAnnotationList() {
-        return this.annotationList;
+    public it.anggen.model.entity.Entity getEntity() {
+        return this.entity;
     }
 
-    public void setAnnotationList(List<Annotation> annotationList) {
-        this.annotationList=annotationList;
+    public void setEntity(it.anggen.model.entity.Entity entity) {
+        this.entity=entity;
+    }
+
+    public it.anggen.model.entity.Tab getTab() {
+        return this.tab;
+    }
+
+    public void setTab(it.anggen.model.entity.Tab tab) {
+        this.tab=tab;
     }
 
 }

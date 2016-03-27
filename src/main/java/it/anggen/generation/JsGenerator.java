@@ -206,7 +206,8 @@ public class JsGenerator {
 	private String generateService()
 	{
 		StringBuilder sb = new StringBuilder();
-		sb.append(".service(\""+entityName+"Service\", function($http,mainService)\n")
+		sb.append(".service(\""+entityName+"Service\", "+entityName+"Service);\n");
+		sb.append("function "+entityName+"Service($http,mainService)\n")
 		.append("{\n")
 		.append("this.entityList =		[];\n")
 		.append("this.selectedEntity= 	{show: false \n");
@@ -315,7 +316,7 @@ public class JsGenerator {
 		
 		sb.append(generateGridOptions());
 		
-		sb.append("})\n");
+		sb.append("};\n");
 		
 		
 		
@@ -372,7 +373,9 @@ public class JsGenerator {
 	{
 		StringBuilder sb = new StringBuilder();
 
-		sb.append(".controller(\""+entityName+"Controller\",function($scope,$http "+getServices()+")\n");
+		sb.append(".controller(\""+entityName+"Controller\","+entityName+"Controller);\n");
+		
+		sb.append("function "+entityName+"Controller($scope,$http "+getServices()+")\n");
 		sb.append("{\n");
 		//search var
 		sb.append("$scope.searchBean="+Utility.getEntityCallName(entityName)+"Service.searchBean;\n");
@@ -788,7 +791,7 @@ public class JsGenerator {
 		
 		
 		
-		sb.append("})\n");
+		sb.append("};\n");
 		return sb.toString();
 	}
 	/**

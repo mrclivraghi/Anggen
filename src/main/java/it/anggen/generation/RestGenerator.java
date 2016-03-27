@@ -376,6 +376,11 @@ public class RestGenerator {
 			myClass.annotate(Repository.class);
 			JClass listClass=codeModel.ref(List.class).narrow(ReflectionManager.getJDefinedClass(entity));
 			searchMethod="findBy";
+			//find all
+			JMethod findAllMethod=myClass.method(JMod.PUBLIC, listClass, "findAll");
+			JAnnotationUse annotationQueryFindAll= findAllMethod.annotate(Query.class);
+			annotationQueryFindAll.param("value", "select "+alias+" from "+Utility.getFirstUpper(entity.getName())+" "+alias);
+			
 			for (EntityAttribute entityAttribute: entityAttributeList)
 			{
 				if (EntityAttributeManager.getInstance(entityAttribute).asField()!=null)

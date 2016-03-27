@@ -543,10 +543,12 @@ public class JsGenerator {
 			sb.append(Utility.getEntityCallName(entityName)+"Service.update().then(function successCallback(response){\n");
 			//console.log(data);
 			sb.append(Utility.getEntityCallName(entityName)+"Service.setSelectedEntity(response.data);\n");
+			sb.append("updateParentEntities();\n");
 			sb.append("},function errorCallback(response) { \n");
 			manageRestError(sb);
 			sb.append("});\n");
 			sb.append("}\n");
+			
 		sb.append("};\n");
 
 
@@ -782,7 +784,7 @@ public class JsGenerator {
 		init(mainEntity,mainIsParent,mainParentName,relationshipType,entityManager.isLastLevel(mainEntity),serviceList);
 		
 		
-		
+		updateParentEntities(sb);
 		
 		
 		
@@ -1121,6 +1123,64 @@ if (entity.getEntityGroup()!=null)
 			e.printStackTrace();
 		}
 	}
+	
+	private void updateParentEntities(StringBuilder sb)
+	{
+		
+		sb.append("function updateParentEntities() { \n");
+		
+		for (Relationship relationship : generator.getRelationshipList())
+		if (relationship.getEntityTarget().getEntityId()==entity.getEntityId())
+		{
+			String entitySource = Utility.getFirstLower(relationship.getEntity().getName());
+			String entityTarget = Utility.getFirstLower(relationship.getEntityTarget().getName());
+			
+			//update childrenEntityList
+			/*
+			 * mainService.parentService.initRoleList().then(function(response) {
+mainService.parentService.childrenList.roleList=response.data;
+});
+			 */
+			sb.append(entitySource+"Service.init"+Utility.getFirstUpper(entityTarget)+"List().then(function(response) {\n");
+			sb.append(entitySource+"Service.childrenList."+entityTarget+"List=response.data;\n");
+			sb.append("});\n");
+			
+			sb.append("\n");
+			
+			
+			sb.append("if ("+entitySource+"Service.selectedEntity."+entitySource+"Id!=undefined) ");
+			sb.append(entitySource+"Service.searchOne("+entitySource+"Service.selectedEntity).then(\n");
+			sb.append("function successCallback(response) {\n");
+			sb.append("console.log(\"response-ok\");\n");
+			sb.append("console.log(response);\n");
+			//initChildrenList(sb, relationship.getEntityTarget());
+			sb.append(entitySource+"Service.setSelectedEntity(response.data[0]);\n");
+			//sb.append(Utility.getEntityCallName(relationship.getEntityTarget().getName())+"Service.selectedEntity.show=true;\n");
+
+			sb.append("  }, function errorCallback(response) {\n");
+			// called asynchronously if an error occurs
+			// or server returns response with an error status.
+			//sb.append(" console.log(\"response-error-controller\");\n");
+			//sb.append("console.log(response);\n");
+			manageRestError(sb);
+			sb.append("  }	\n");
+
+			sb.append(");\n");
+			
+			
+			if (relationship.getRelationshipType()==RelationshipType.MANY_TO_ONE || relationship.getRelationshipType()==RelationshipType.ONE_TO_ONE)
+			{ //update single entity
+				//sb.append(entitySource+"Service.selectedEntity="+entityTarget+"Service.selectedEntity;\n");
+			} else
+			{//update list
+				
+			}
+		}
+		
+		sb.append("}\n");
+	}
+	
+	
 	private String resetTableTab(String tabName,Entity entity) {
 		String resetTableTabString="";
 		for (Relationship relationship: entity.getRelationshipList())

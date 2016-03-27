@@ -9,9 +9,12 @@ import it.anggen.model.entity.EntityGroup;
 import it.anggen.model.entity.EnumEntity;
 import it.anggen.model.entity.Project;
 import it.anggen.model.field.EnumField;
+import it.anggen.model.relationship.Relationship;
 import it.anggen.repository.entity.EnumEntityRepository;
 import it.anggen.repository.entity.ProjectRepository;
 import it.anggen.repository.field.EnumFieldRepository;
+import it.anggen.repository.relationship.RelationshipRepository;
+import it.anggen.service.relationship.RelationshipServiceImpl;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -109,11 +112,16 @@ public class Generator {
 	
 	private List<EntityGroup> entityGroupList;
 	
+	private List<Relationship> relationshipList;
+	
 	@Autowired
 	ProjectRepository projectRepository;
 	
 	@Autowired
 	EnumEntityRepository enumEntityRepository;
+	
+	@Autowired
+	RelationshipRepository relationshipRepository;
 	
 	@Autowired
 	RestGenerator restGenerator;
@@ -132,6 +140,9 @@ public class Generator {
 	
 	@Autowired
 	WebappGenerator webappGenerator;
+	
+	@Autowired
+	JsGenerator jsGenerator;
 	
 	public static String appName;
 	
@@ -155,6 +166,7 @@ public class Generator {
 		List<Project> projectList=projectRepository.findByName(applicationName);
 		if (projectList.size()==0)
 			throw new Exception();
+		this.relationshipList=relationshipRepository.findByRelationshipIdAndPriorityAndNameAndRelationshipTypeAndTabAndEntityAndEntityAndAnnotation(null, null, null, null, null, null, null, null);
 		this.project=projectList.get(0);
 		this.entityGroupList=project.getEntityGroupList();
 		this.enumEntityList=project.getEnumEntityList();
@@ -224,6 +236,8 @@ public class Generator {
 		}
 		if (generateView)
 		{
+			jsGenerator.generateServiceFile();
+			jsGenerator.generateControllerFile();
 			for (Entity modelEntity: modelEntityList)
 			{
 				if (modelEntity.getDisableViewGeneration()) continue;
@@ -274,6 +288,14 @@ public class Generator {
 	}
 	
 	
+	public List<Entity> getEntityList()
+	{
+		return modelEntityList;
+	}
 	
+	public List<Relationship> getRelationshipList()
+	{
+		return relationshipList;
+	}
 
 }

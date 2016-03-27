@@ -876,11 +876,14 @@ public class JsGenerator {
 			
 		//} else
 		//{
-
+		initChildrenList(sb, entity);
 if (entity.getEntityGroup()!=null)
 {
 			sb.append(Utility.getEntityCallName(entityName)+"Service.searchOne(row.entity).then(function(response) { \n");
 			sb.append("console.log(response.data);\n");
+			
+			
+			
 			sb.append(Utility.getEntityCallName(entityName)+"Service.setSelectedEntity(response.data[0]);\n");
 			sb.append("});\n");
 }

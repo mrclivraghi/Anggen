@@ -118,30 +118,30 @@ public class JsGenerator {
 	
 	public void generateControllerFile()
 	{
-		StringBuilder sb = new StringBuilder();
-		sb.append(generator.applicationName+"App");
 		for (Entity entity: generator.getEntityList())
 		{
+			StringBuilder sb = new StringBuilder();
+			sb.append(generator.applicationName+"App");
 			init(entity, null, null, null, null, null);
 			sb.append(generateController());
-		}
 		File file = new File("");
 		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+generator.applicationName+"/";
-		saveAsJsFile(directoryAngularFiles, generator.applicationName+"-controller", sb.toString());
+		saveAsJsFile(directoryAngularFiles, entity.getName()+".controller", sb.toString());
+		}
 	}
 	
 	public void generateServiceFile()
 	{
-		StringBuilder sb = new StringBuilder();
-		sb.append(generator.applicationName+"App");
 		for (Entity entity: generator.getEntityList())
 		{
+			StringBuilder sb = new StringBuilder();
+			sb.append(generator.applicationName+"App");
 			init(entity, null, null, null, null, null);
 			sb.append(generateService ());
-		}
 		File file = new File("");
 		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+generator.applicationName+"/";
-		saveAsJsFile(directoryAngularFiles, generator.applicationName+"-service", sb.toString());
+		saveAsJsFile(directoryAngularFiles, entity.getName()+".service", sb.toString());
+		}
 	}
 	
 	private String getNavigation()
@@ -229,11 +229,11 @@ public class JsGenerator {
 		.append("this.entityList.push(entity);\n")
 		.append("};\n")
 
-		.append("this.emptyList= function(list)\n")
+/*		.append("this.emptyList= function(list)\n")
 		.append("{\n")
 		.append("while (list.length>0)\n")
 		.append("list.pop();\n")
-		.append("}\n")
+		.append("}\n")*/
 
 		.append("this.setEntityList= function(entityList)\n")
 		.append("{ \n")
@@ -254,36 +254,8 @@ public class JsGenerator {
 		.append("entity = {};\n")
 		.append("this.selectedEntity.show = false;\n")
 		.append("} //else\n")
-		.append("var keyList = Object.keys(entity);\n")
-		.append("if (keyList.length == 0)\n")
-		.append("keyList = Object.keys(this.selectedEntity);\n")
-		.append("for (i = 0; i < keyList.length; i++) {\n")
-		.append("var val = keyList[i];\n")
-		.append("if (val != undefined) {\n")
-		.append("if (val.toLowerCase().indexOf(\"list\") > -1\n")
-		.append("&& (typeof entity[val] == \"object\" || typeof this.selectedEntity[val]==\"object\")) {\n")
-		.append("if (entity[val] != null\n")
-		.append("&& entity[val] != undefined) {\n")
-		.append("if (this.selectedEntity[val]!=undefined)\n")
-		.append("while (this.selectedEntity[val].length > 0)\n")
-		.append("this.selectedEntity[val].pop();\n")
-		.append("if (entity[val] != null)\n")
-		.append("for (j = 0; j < entity[val].length; j++)\n")
-		.append("this.selectedEntity[val]\n")
-		.append(".push(entity[val][j]);\n")
-		.append("} else \n")
-		.append("this.emptyList(this.selectedEntity[val]);\n")
-		.append("} else {\n")
-		.append("if (val.toLowerCase().indexOf(\"time\") > -1\n")
-		.append("&& typeof val == \"string\") {\n")
-		.append("var date = new Date(entity[val]);\n")
-		.append("this.selectedEntity[val] = new Date(entity[val]);\n")
-		.append("} else {\n")
-		.append("this.selectedEntity[val] = entity[val];\n")
-		.append("}\n")
-		.append("}\n")
-		.append("}\n")
-		.append("};\n");
+		.append("cloneObject(entity,this.selectedEntity);\n");
+		
 		sb.append("};\n");
 		//search
 		sb.append("this.search = function() {\n");
@@ -341,9 +313,27 @@ public class JsGenerator {
 				sb.append("};\n");
 			}
 		
+		sb.append(generateGridOptions());
 		
 		sb.append("})\n");
 		
+		
+		
+		//sb.append("}\n");	
+	/*	Entity mainEntity=entity;
+		Boolean mainIsParent= false; //isParent;
+		String mainParentName = entityName;//parentEntityName;
+		EntityManager mainEntityManager= new EntityManagerImpl(mainEntity);
+		String mainServiceList = serviceList;
+		for (Relationship relationship: relationshipList)
+		{
+			init(relationship.getEntityTarget(), false, entityName,relationship.getRelationshipType(),mainEntityManager.isLastLevel(relationship.getEntityTarget()),mainServiceList);
+			sb.append(getPagination(mainParentName));
+		}
+		init(mainEntity,mainIsParent,mainParentName,relationshipType,entityManager.isLastLevel(mainEntity),serviceList);
+		
+		
+		*/
 		return sb.toString();
 	}
 	/**
@@ -714,21 +704,7 @@ public class JsGenerator {
 		//sb.append("if ("+Utility.getEntityCallName(entityName)+"Service.isParent()) \n");
 		//sb.append("{\n");
 
-			sb.append(getPagination(null));
-		//sb.append("}\n");	
-		Entity mainEntity=entity;
-		Boolean mainIsParent= false; //isParent;
-		String mainParentName = entityName;//parentEntityName;
-		RelationshipType mainEntityList = relationshipType;
-		EntityManager mainEntityManager= new EntityManagerImpl(mainEntity);
-		String mainServiceList = serviceList;
-		for (Relationship relationship: relationshipList)
-		{
-			init(relationship.getEntityTarget(), false, entityName,relationship.getRelationshipType(),mainEntityManager.isLastLevel(relationship.getEntityTarget()),mainServiceList);
-			sb.append(getPagination(mainParentName));
-		}
-		init(mainEntity,mainIsParent,mainParentName,relationshipType,entityManager.isLastLevel(mainEntity),serviceList);
-		sb.append("$scope.downloadEntityList=function()\n");
+			sb.append("$scope.downloadEntityList=function()\n");
 		sb.append("{\n");
 		sb.append("var mystyle = {\n");
 		sb.append(" headers:true, \n");
@@ -783,6 +759,33 @@ public class JsGenerator {
 			sb.append("};\n");
 		}
 
+		sb.append("$scope."+entityName+"GridOptions={};\n")
+		.append("cloneObject("+entityName+"Service.gridOptions,$scope."+entityName+"GridOptions);\n");
+		sb.append("$scope."+entityName+"GridOptions.data="+Utility.getEntityCallName(entityName)+"Service.entityList;\n");
+		
+		sb.append(getGridApi(null));//sb.append("}\n");	
+		Entity mainEntity=entity;
+		Boolean mainIsParent= false; //isParent;
+		String mainParentName = entityName;//parentEntityName;
+		EntityManager mainEntityManager= new EntityManagerImpl(mainEntity);
+		String mainServiceList = serviceList;
+		
+		for (Relationship relationship: relationshipList)
+			if (relationship.getEntityTarget().getEntityGroup()!=null)
+		{
+			init(relationship.getEntityTarget(), false, entityName,relationship.getRelationshipType(),mainEntityManager.isLastLevel(relationship.getEntityTarget()),mainServiceList);
+			sb.append("$scope."+entityName+"GridOptions={};\n");
+			sb.append("cloneObject("+entityName+"Service.gridOptions,$scope."+entityName+"GridOptions);\n");
+			sb.append("$scope."+entityName+"GridOptions.data=$scope.selectedEntity."+entityName+"List;\n");
+			sb.append(getGridApi(mainParentName));
+		}
+		init(mainEntity,mainIsParent,mainParentName,relationshipType,entityManager.isLastLevel(mainEntity),serviceList);
+		
+		
+		
+		
+		
+		
 		sb.append("})\n");
 		return sb.toString();
 	}
@@ -790,11 +793,11 @@ public class JsGenerator {
 	 * Create the pagination option for ui-grid
 	 * @return
 	 */
-	private String getPagination(String parentEntityName)
+	private String generateGridOptions()
 	{
 		StringBuilder sb = new StringBuilder();
 		//pagination options
-		sb.append("$scope."+entityName+ (relationshipType==RelationshipType.MANY_TO_MANY || relationshipType==RelationshipType.ONE_TO_MANY || relationshipType==RelationshipType.MANY_TO_MANY_BACK? "List":"")+"GridOptions = {\n");
+		sb.append("this.gridOptions = {\n");
 		sb.append("enablePaginationControls: true,\n");
 		sb.append("multiSelect: false,\n");
 		sb.append("enableSelectAll: false,\n");
@@ -834,12 +837,22 @@ public class JsGenerator {
 		sb.setCharAt(sb.length()-2, ' ');
 		sb.append("]\n");
 
-		if (parentEntityName==null)
+		/*if (parentEntityName==null)
 			sb.append(",data: "+Utility.getEntityCallName(entityName)+"Service.entityList\n");
 		else
 			sb.append(",data: $scope.selectedEntity."+entityName+"List\n");
+		*/
+		
 		sb.append(" };\n");
-		//if (parentEntityName!=null && parentEntityName.equals("entity"))
+
+		return sb.toString();
+	}
+	
+	
+	private String getGridApi(String parentEntityName)
+	{
+		StringBuilder sb = new StringBuilder();
+				//if (parentEntityName!=null && parentEntityName.equals("entity"))
 		//	System.out.println("**tento di generare** "+entityName+" - parent "+parentEntityName+" - lastLevel"+lastLevel+"- isParent "+isParent);
 			
 	//	if (lastLevel ) 
@@ -847,8 +860,8 @@ public class JsGenerator {
 		//if (parentEntityName!=null && parentEntityName.equals("entity"))
 		//System.out.println("**GENERO** "+entityName+" - parent "+parentEntityName+" - lastLevel"+lastLevel+"- isParent "+isParent);
 		//on row selection
-		sb.append("$scope."+entityName+ (relationshipType==RelationshipType.MANY_TO_MANY || relationshipType==RelationshipType.ONE_TO_MANY || relationshipType==RelationshipType.MANY_TO_MANY_BACK? "List":"")+"GridOptions.onRegisterApi = function(gridApi){\n");
-		sb.append("$scope."+entityName+"GridApi = gridApi;");
+		sb.append("$scope."+entityName+"GridOptions.onRegisterApi = function(gridApi){\n");
+		sb.append("$scope."+entityName+"GridApi = gridApi;\n");
 		sb.append("gridApi.selection.on.rowSelectionChanged($scope,function(row){\n");
 		//if (isParent)
 		//	changeChildrenVisibility(sb, false);

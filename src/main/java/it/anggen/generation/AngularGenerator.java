@@ -575,7 +575,7 @@ public class AngularGenerator {
 							//.button(CssGenerator.getButton("show"+Utility.getFirstUpper(field.getName())+"Detail"))
 							//.content("Add new "+field.getName());
 							html.div((new HtmlAttributes()).add("id",EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()).add("ng-if", "selectedEntity."+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()+"List.length>0"))
-							.div((new HtmlAttributes()).add("style","top: 100px").add("ui-grid",EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()+"ListGridOptions").add("ui-grid-pagination", "").add("ui-grid-selection",""))
+							.div((new HtmlAttributes()).add("style","top: 100px").add("ui-grid",EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()+"GridOptions").add("ui-grid-pagination", "").add("ui-grid-selection",""))
 							._div();
 							renderValidator(html,entityAttribute);
 							html._div()._div();

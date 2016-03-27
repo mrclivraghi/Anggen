@@ -105,8 +105,14 @@ public class HtmlGenerator {
 			if (includeEntityFile)
 			{
 				html.macros().javascript("js/angular/"+generator.applicationName+"/main-app.js");
-				html.macros().javascript("js/angular/"+generator.applicationName+"/"+generator.applicationName+"-service.js");
-				html.macros().javascript("js/angular/"+generator.applicationName+"/"+generator.applicationName+"-controller.js");
+				//html.macros().javascript("js/angular/"+generator.applicationName+"/"+generator.applicationName+"-service.js");
+				//html.macros().javascript("js/angular/"+generator.applicationName+"/"+generator.applicationName+"-controller.js");
+				for (Entity entity: generator.getEntityList())
+				{
+					html.macros().javascript("js/angular/"+generator.applicationName+"/"+entity.getName()+".service.js");
+					html.macros().javascript("js/angular/"+generator.applicationName+"/"+entity.getName()+".controller.js");
+					
+				}
 			}
 			
 			html.macros().javascript("js/date.js")

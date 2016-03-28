@@ -53,6 +53,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.codahale.metrics.annotation.Timed;
 import com.sun.codemodel.ClassType;
 import com.sun.codemodel.JAnnotationUse;
 import com.sun.codemodel.JBlock;
@@ -671,6 +672,7 @@ public class RestGenerator {
 
 				//manage
 				JMethod manage = myClass.method(JMod.PUBLIC, String.class, "manage");
+				manage.annotate(Timed.class);
 				JAnnotationUse requestMappingManage = manage.annotate(RequestMapping.class);
 				requestMappingManage.param("method", RequestMethod.GET);
 				JBlock manageBlock = manage.body();
@@ -690,6 +692,7 @@ public class RestGenerator {
 				if (entity.getGenerateFrontEnd())
 				{
 					JMethod manageFront = myClass.method(JMod.PUBLIC, String.class, "manageFront");
+					manageFront.annotate(Timed.class);
 					JAnnotationUse requestMappingManageFront = manageFront.annotate(RequestMapping.class);
 					requestMappingManageFront.param("method", RequestMethod.GET);
 					requestMappingManageFront.param("value", "/front");
@@ -705,6 +708,7 @@ public class RestGenerator {
 			//getpage
 
 			JMethod getPage = myClass.method(JMod.PUBLIC, ResponseEntity.class, "findPage");
+			getPage.annotate(Timed.class);
 			JAnnotationUse reqMapping = getPage.annotate(RequestMapping.class);
 			reqMapping.param("value", "/pages/{pageNumber}");
 			reqMapping.param("method", RequestMethod.GET);
@@ -721,6 +725,8 @@ public class RestGenerator {
 			
 			//search
 			JMethod search = myClass.method(JMod.PUBLIC, ResponseEntity.class, "search");
+			search.annotate(Timed.class);
+			
 			search.annotate(ResponseBody.class);
 			JAnnotationUse requestMappingSearch = search.annotate(RequestMapping.class);
 			requestMappingSearch.param("value", "/search");
@@ -741,6 +747,8 @@ public class RestGenerator {
 			searchBlock.directStatement("return "+response+".body("+lowerClass+"List);");
 			//getById  
 			JMethod getById=myClass.method(JMod.PUBLIC, ResponseEntity.class, "get"+className+"ById");
+			getById.annotate(Timed.class);
+			
 			getById.annotate(ResponseBody.class);
 			JAnnotationUse requestMappingGetById = getById.annotate(RequestMapping.class);
 			requestMappingGetById.param("value", "/{"+lowerClass+"Id}");
@@ -758,6 +766,8 @@ public class RestGenerator {
 			getByIdBlock.directStatement("return "+response+".body("+lowerClass+"List);");
 			//deleteById
 			JMethod delete = myClass.method(JMod.PUBLIC, ResponseEntity.class, "delete"+className+"ById");
+			delete.annotate(Timed.class);
+			
 			delete.annotate(ResponseBody.class);
 			JAnnotationUse requestMappingDelete = delete.annotate(RequestMapping.class);
 			requestMappingDelete.param("value", "/{"+Utility.getFirstLower(className)+"Id}");
@@ -774,6 +784,8 @@ public class RestGenerator {
 			
 			//Insert
 			JMethod insert = myClass.method(JMod.PUBLIC, ResponseEntity.class, "insert"+className+"");
+			insert.annotate(Timed.class);
+			
 			insert.annotate(ResponseBody.class);
 			JAnnotationUse requestMappingInsert = insert.annotate(RequestMapping.class);
 			requestMappingInsert.param("method",RequestMethod.PUT);
@@ -791,6 +803,8 @@ public class RestGenerator {
 			insertBlock.directStatement("return "+response+".body(inserted"+className+");");
 			//UpdateOrder
 			JMethod update = myClass.method(JMod.PUBLIC, ResponseEntity.class, "update"+className+"");
+			update.annotate(Timed.class);
+			
 			update.annotate(ResponseBody.class);
 			JAnnotationUse requestMappingUpdate = update.annotate(RequestMapping.class);
 			requestMappingUpdate.param("method",RequestMethod.POST);
@@ -886,6 +900,7 @@ public class RestGenerator {
 				if (field.getFieldType()==FieldType.FILE)
 				{
 					JMethod loadFileMethod= myClass.method(JMod.PRIVATE, ResponseEntity.class, "loadFile"+Utility.getFirstUpper(field.getName()));
+					loadFileMethod.annotate(Timed.class);
 					loadFileMethod.annotate(ResponseBody.class);
 					JAnnotationUse requestMappingLoadfile=loadFileMethod.annotate(RequestMapping.class);
 					requestMappingLoadfile.param("value", "/{"+Utility.getFirstLower(className)+"Id}/load"+Utility.getFirstUpper(field.getName()));

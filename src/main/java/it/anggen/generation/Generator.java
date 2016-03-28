@@ -39,7 +39,6 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.apache.commons.dbcp.BasicDataSource;
-import org.hibernate.loader.plan.build.internal.returns.EntityAttributeFetchImpl;
 import org.reflections.Reflections;
 import org.rendersnake.HtmlAttributes;
 import org.rendersnake.HtmlCanvas;

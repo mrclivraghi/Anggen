@@ -40,9 +40,21 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         log.info("Web application configuration, using profiles: {}", Arrays.toString(env.getActiveProfiles()));
         EnumSet<DispatcherType> disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC);
         initMetrics(servletContext, disps);
+        initCachingHttpHeadersFilter(servletContext, disps);
         log.info("Web application fully configured");
     }
 
+    private void initCachingHttpHeadersFilter(ServletContext servletContext,
+    		EnumSet<DispatcherType> disps) {
+    	log.debug("Registering Caching HTTP Headers Filter");
+    	/*FilterRegistration.Dynamic cachingHttpHeadersFilter =
+    			servletContext.addFilter("cachingHttpHeadersFilter",
+    					new CachingHttpHeadersFilter());
+
+    	cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/*");
+    	cachingHttpHeadersFilter.setAsyncSupported(true);*/
+}
+    
     /**
      * Initializes Metrics.
      */

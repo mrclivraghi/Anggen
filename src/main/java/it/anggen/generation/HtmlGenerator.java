@@ -268,6 +268,26 @@ public class HtmlGenerator {
 				ulHtml._li();
 				sb.append(ulHtml.toHtml());
 			}
+			
+			//administration menù
+			HtmlCanvas ulHtml= new HtmlCanvas();
+			ulHtml.li((new HtmlAttributes()).add("class", "dropdown"))
+			.a((new HtmlAttributes()).add("href", "#").add("class", "dropdown-toggle").add("data-toggle", "dropdown").add("role", "button").add("aria-haspopup", "true").add("aria-expanded", "false"));
+			HtmlCanvas caretHtml = new HtmlCanvas();
+			
+			caretHtml.span((new HtmlAttributes()).add("class", "caret"))
+			._span();
+			ulHtml.content("Administration"+caretHtml.toHtml(),false);
+			ulHtml.ul((new HtmlAttributes()).add("class", "dropdown-menu"));
+			
+			String ulContent="";
+			{
+				ulContent=ulContent+"<li><a href=\"metrics\">Metrics</a></li>";
+			}
+			
+			ulHtml.content(ulContent,false);
+			ulHtml._li();
+			sb.append(ulHtml.toHtml());
 			html.content(sb.toString(),false);
 			html._div() //end real nav menu
 			._div()

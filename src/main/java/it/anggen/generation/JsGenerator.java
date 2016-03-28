@@ -789,6 +789,11 @@ public class JsGenerator {
 		
 		updateParentEntities(sb);
 		
+		//close entity detail
+		sb.append("$scope.closeEntityDetail = function(){ \n")
+		.append(""+Utility.getEntityCallName(entityName)+"Service.setSelectedEntity(null);\n")
+		.append(""+Utility.getEntityCallName(entityName)+"Service.selectedEntity.show=false;\n")
+		.append("}");
 		
 		
 		sb.append("};\n");
@@ -1137,6 +1142,7 @@ if (entity.getEntityGroup()!=null)
 		
 		for (Relationship relationship : generator.getRelationshipList())
 		if (relationship.getEntityTarget().getEntityId()==entity.getEntityId())
+			if (relationship.getEntity()!=null)
 		{
 			String entitySource = Utility.getFirstLower(relationship.getEntity().getName());
 			String entityTarget = Utility.getFirstLower(relationship.getEntityTarget().getName());

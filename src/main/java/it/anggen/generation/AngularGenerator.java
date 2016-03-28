@@ -297,7 +297,10 @@ public class AngularGenerator {
 		else
 		{
 			baseEntity="selectedEntity";
-			html.content("Detail "+entityName+" {{ selectedEntity."+entityName+"Id }}");
+			HtmlCanvas closeCanvas = new HtmlCanvas();
+			closeCanvas.button((new HtmlAttributes()).add("type", "button").add("class", "close").add("aria-label", "Close").add("ng-click", "closeEntityDetail()"))
+			.span((new HtmlAttributes()).add("aria-hidden", "true")).content("&times;",false)._button();
+			html.content("Detail "+entityName+" {{ selectedEntity."+entityName+"Id }}"+closeCanvas.toHtml(),false);
 		}
 		html.div(CssGenerator.getPanelBody());
 		

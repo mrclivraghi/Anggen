@@ -10,6 +10,9 @@ import it.anggen.model.entity.EnumEntity;
 import it.anggen.model.entity.Project;
 import it.anggen.model.field.EnumField;
 import it.anggen.model.relationship.Relationship;
+import it.anggen.reflection.EntityAttributeManager;
+import it.anggen.reflection.EntityManager;
+import it.anggen.reflection.EntityManagerImpl;
 import it.anggen.repository.entity.EnumEntityRepository;
 import it.anggen.repository.entity.ProjectRepository;
 import it.anggen.repository.field.EnumFieldRepository;
@@ -36,6 +39,7 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.apache.commons.dbcp.BasicDataSource;
+import org.hibernate.loader.plan.build.internal.returns.EntityAttributeFetchImpl;
 import org.reflections.Reflections;
 import org.rendersnake.HtmlAttributes;
 import org.rendersnake.HtmlCanvas;
@@ -176,31 +180,32 @@ public class Generator {
 		{
 			this.modelEntityList.addAll(entityGroup.getEntityList());
 		}
+		checkModel();
 	}
 
 	
 	private void checkModel() throws Exception
 	{
-		/*for (Class myClass: allClasses)
+		
+		for (Entity entity: modelEntityList)
 		{
-			if (myClass.getName().contains("Example"))
-				System.out.println("");
-			
-			ReflectionManager reflectionManager = new ReflectionManager(myClass);
-			if (reflectionManager.getKeyClass()== null)
-				throw new Exception(myClass.getName()+": there is no primary key");
-			
-			for (Field field: reflectionManager.getFieldList())
-			{
-				if (ReflectionManager.hasId(field) && !field.getName().equals(reflectionManager.parseName()+"Id"))
-					throw new Exception(myClass.getName()+": primary key name is wrong. it's "+field.getName()+" instead of "+reflectionManager.parseName()+"Id");
-				if (ReflectionManager.isListField(field) && !(field.getName().equals(reflectionManager.parseName(field.getFieldClass().getName())+"")))
-						throw new Exception(""+myClass.getName()+": list field name is wrong. It's "+field.getName()+"List instead of "+reflectionManager.parseName(field.getFieldClass().getName())+"List");
-				if (ReflectionManager.hasBetween(field) && !reflectionManager.isKnownClass(field.getFieldClass()))
-					throw new Exception(myClass.getName()+": Between annotation is invalid for type "+field.getFieldClass().getName());
+			EntityManager entityManager = new EntityManagerImpl(entity);
+			if (entityManager.getKeyClass()==null)
+					throw new Exception(entity.getName()+": there is no primary key");
 				
-			}
-		}*/
+			for (it.anggen.model.field.Field field: entity.getFieldList())
+			{
+				EntityAttributeManager entityAttributeManager = new EntityAttributeManager(field);
+				
+				if (entityAttributeManager.getPrimaryKey() && !field.getName().equals(Utility.getFirstLower(entity.getName())+"Id") )
+					throw new Exception(entity.getName()+": primary key name is wrong. it's "+field.getName()+" instead of "+Utility.getFirstLower(entity.getName())+"Id");
+				
+				if (entityAttributeManager.getBetweenFilter() && !entityAttributeManager.getFieldTypeName().equals(null))
+					throw new Exception(entity.getName()+": Between annotation is invalid for type "+entityAttributeManager.getFieldTypeName());
+			
+			}	
+		}
+		
 	}
 	
 	

@@ -51,6 +51,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -157,6 +159,11 @@ public class EntityGenerator {
 		JAnnotationUse maxDescendantLevel= myClass.annotate(MaxDescendantLevel.class);
 		maxDescendantLevel.param("value", entity.getDescendantMaxLevel());
 		
+		if (entity.getCache())
+		{
+			JAnnotationUse cacheAnnotation= myClass.annotate(Cache.class);
+			cacheAnnotation.param("usage", CacheConcurrencyStrategy.NONSTRICT_READ_WRITE);
+		}
 		
 		JVar entityId= myClass.field(JMod.PUBLIC+JMod.STATIC+JMod.FINAL, Long.class, "staticEntityId");
 		entityId.init(JExpr.lit(entity.getEntityId()));

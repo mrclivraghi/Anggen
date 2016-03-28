@@ -24,6 +24,7 @@ import it.anggen.utils.EntityAttribute;
 import it.anggen.utils.ReflectionManager;
 import it.anggen.utils.Utility;
 import it.anggen.utils.annotation.Between;
+import it.anggen.utils.annotation.Cache;
 import it.anggen.utils.annotation.DescriptionField;
 import it.anggen.utils.annotation.DisableViewGeneration;
 import it.anggen.utils.annotation.Embedded;
@@ -588,6 +589,11 @@ public class BeanToDBConverter {
 			if (annotationArray[i].annotationType()==GenerateFrontEnd.class)
 			{
 				entity.setGenerateFrontEnd(true);
+			} 
+			
+			if (annotationArray[i].annotationType()==Cache.class)
+			{
+				entity.setCache(true);
 			} 
 			
 			if (annotationArray[i].annotationType()==MaxDescendantLevel.class)

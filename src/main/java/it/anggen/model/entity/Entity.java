@@ -34,6 +34,11 @@ public class Entity {
     @javax.persistence.Column(name = "generate_front_end")
     @it.anggen.utils.annotation.Priority(2)
     private java.lang.Boolean generateFrontEnd;
+    
+    @javax.persistence.Column(name = "cache")
+    @it.anggen.utils.annotation.Priority(2)
+    private Boolean cache;
+    
     @javax.persistence.Column(name = "descendant_max_level")
     @it.anggen.utils.annotation.Priority(2)
     private Integer descendantMaxLevel;
@@ -186,5 +191,13 @@ public class Entity {
     public void setSecurityType(it.anggen.model.SecurityType securityType) {
         this.securityType=securityType;
     }
+
+	public Boolean getCache() {
+		return cache;
+	}
+
+	public void setCache(Boolean cache) {
+		this.cache = cache;
+	}
 
 }

@@ -159,7 +159,7 @@ public class EntityGenerator {
 		JAnnotationUse maxDescendantLevel= myClass.annotate(MaxDescendantLevel.class);
 		maxDescendantLevel.param("value", entity.getDescendantMaxLevel());
 		
-		if (entity.getCache())
+		if (entity.getCache()!=null && entity.getCache())
 		{
 			JAnnotationUse cacheAnnotation= myClass.annotate(Cache.class);
 			cacheAnnotation.param("usage", CacheConcurrencyStrategy.NONSTRICT_READ_WRITE);

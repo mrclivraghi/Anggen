@@ -17,20 +17,20 @@ import org.hibernate.annotations.Type;
 @MaxDescendantLevel(100)
 public class EntityGroup {
 
-    public final static java.lang.Long staticEntityId = 10L;
+    public final static java.lang.Long staticEntityId = 14L;
+    @javax.persistence.Column(name = "entity_id")
+    @it.anggen.utils.annotation.Priority(2)
+    private java.lang.Long entityId;
     @javax.persistence.Column(name = "entity_group_id")
+    @it.anggen.utils.annotation.Priority(1)
+    @it.anggen.utils.annotation.DescriptionField
     @Id
     @GeneratedValue
-    @it.anggen.utils.annotation.DescriptionField
-    @it.anggen.utils.annotation.Priority(1)
     private java.lang.Long entityGroupId;
     @javax.persistence.Column(name = "name")
     @it.anggen.utils.annotation.Priority(2)
     @it.anggen.utils.annotation.DescriptionField
     private String name;
-    @javax.persistence.Column(name = "entity_id")
-    @it.anggen.utils.annotation.Priority(2)
-    private java.lang.Long entityId;
     @ManyToOne(fetch = javax.persistence.FetchType.EAGER)
     @javax.persistence.JoinColumn(name = "project_id_project")
     @it.anggen.utils.annotation.Priority(4)
@@ -46,6 +46,14 @@ public class EntityGroup {
     @it.anggen.utils.annotation.Priority(4)
     private List<RestrictionEntityGroup> restrictionEntityGroupList;
 
+    public java.lang.Long getEntityId() {
+        return this.entityId;
+    }
+
+    public void setEntityId(java.lang.Long entityId) {
+        this.entityId=entityId;
+    }
+
     public java.lang.Long getEntityGroupId() {
         return this.entityGroupId;
     }
@@ -60,14 +68,6 @@ public class EntityGroup {
 
     public void setName(String name) {
         this.name=name;
-    }
-
-    public java.lang.Long getEntityId() {
-        return this.entityId;
-    }
-
-    public void setEntityId(java.lang.Long entityId) {
-        this.entityId=entityId;
     }
 
     public it.anggen.model.entity.Project getProject() {

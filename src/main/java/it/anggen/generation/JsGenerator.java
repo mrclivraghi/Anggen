@@ -156,7 +156,14 @@ public class JsGenerator {
 		.append("})\n")
 		.append(".when('/home/',{\n")
 		.append("templateUrl:'./home/'\n")
+		.append("})\n")
+		.append(".when('/metrics/',{\n")
+		.append(" templateUrl: 'js/metrics/metrics.html',\n")
+		.append("controller: 'MetricsMonitoringController',\n")
+		.append("controllerAs: 'vm'\n")
 		.append("})\n");
+
+		
 		for (Entity entity: generator.getEntityList())
 		{
 			sb.append(".when('/"+Utility.getFirstUpper(entity.getName())+"/',{\n")

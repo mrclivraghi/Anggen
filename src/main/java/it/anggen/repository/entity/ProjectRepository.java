@@ -14,6 +14,9 @@ public interface ProjectRepository
 {
 
 
+    @Query("select p from Project p")
+    public List<it.anggen.model.entity.Project> findAll();
+
     public List<it.anggen.model.entity.Project> findByProjectId(java.lang.Integer projectId);
 
     public List<it.anggen.model.entity.Project> findByName(java.lang.String name);

@@ -2,6 +2,7 @@
 package it.anggen.controller.security;
 
 import java.util.List;
+import com.codahale.metrics.annotation.Timed;
 import it.anggen.searchbean.security.RestrictionFieldSearchBean;
 import it.anggen.security.SecurityService;
 import it.anggen.service.security.RestrictionFieldService;
@@ -27,6 +28,7 @@ public class RestrictionFieldController {
     @Value("${application.security}")
     private Boolean securityEnabled;
 
+    @Timed
     @RequestMapping(method = RequestMethod.GET)
     public String manage() {
         if (securityEnabled && !securityService.hasPermission(it.anggen.model.security.RestrictionField.staticEntityId, it.anggen.model.RestrictionType.SEARCH)) 
@@ -35,6 +37,7 @@ return "forbidden";
         return "restrictionField";
     }
 
+    @Timed
     @RequestMapping(value = "/pages/{pageNumber}", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity findPage(
@@ -45,6 +48,7 @@ return "forbidden";
         return ResponseEntity.ok().body(page);
     }
 
+    @Timed
     @ResponseBody
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ResponseEntity search(
@@ -63,6 +67,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         return ResponseEntity.ok().body(restrictionFieldList);
     }
 
+    @Timed
     @ResponseBody
     @RequestMapping(value = "/{restrictionFieldId}", method = RequestMethod.GET)
     public ResponseEntity getRestrictionFieldById(
@@ -79,6 +84,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         return ResponseEntity.ok().body(restrictionFieldList);
     }
 
+    @Timed
     @ResponseBody
     @RequestMapping(value = "/{restrictionFieldId}", method = RequestMethod.DELETE)
     public ResponseEntity deleteRestrictionFieldById(
@@ -92,6 +98,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         return ResponseEntity.ok().build();
     }
 
+    @Timed
     @ResponseBody
     @RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity insertRestrictionField(
@@ -108,6 +115,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         return ResponseEntity.ok().body(insertedRestrictionField);
     }
 
+    @Timed
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity updateRestrictionField(
@@ -135,17 +143,17 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     private void getRightMapping(it.anggen.model.security.RestrictionField restrictionField) {
         if (restrictionField.getField()!=null)
         {
-        restrictionField.getField().setTab(null);
-        restrictionField.getField().setEntity(null);
         restrictionField.getField().setAnnotationList(null);
+        restrictionField.getField().setEntity(null);
+        restrictionField.getField().setTab(null);
         restrictionField.getField().setRestrictionFieldList(null);
         }
         if (restrictionField.getRole()!=null)
         {
-        restrictionField.getRole().setRestrictionEntityGroupList(null);
-        restrictionField.getRole().setRestrictionEntityList(null);
-        restrictionField.getRole().setRestrictionFieldList(null);
         restrictionField.getRole().setUserList(null);
+        restrictionField.getRole().setRestrictionEntityGroupList(null);
+        restrictionField.getRole().setRestrictionFieldList(null);
+        restrictionField.getRole().setRestrictionEntityList(null);
         }
     }
 

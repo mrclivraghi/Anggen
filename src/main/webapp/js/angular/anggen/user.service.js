@@ -81,8 +81,8 @@ paginationPageSize: 10,
 enableGridMenu: true,
 columnDefs: [    
 { name: 'userId'},
-{ name: 'username'},
-{ name: 'enabled'} 
+{ name: 'enabled'},
+{ name: 'username'} 
 ]
  };
 };

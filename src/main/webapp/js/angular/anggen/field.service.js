@@ -65,10 +65,10 @@ var promise= $http.post("field/"+this.selectedEntity.fieldId+"/load"+field+"/",f
 });
 return promise; 
 }
- this.initTabList= function()
+ this.initAnnotationList= function()
 {
 var promise= $http
-.post("tab/search",
+.post("annotation/search",
 {});
 return promise;
 };
@@ -79,10 +79,10 @@ var promise= $http
 {});
 return promise;
 };
- this.initAnnotationList= function()
+ this.initTabList= function()
 {
 var promise= $http
-.post("annotation/search",
+.post("tab/search",
 {});
 return promise;
 };
@@ -104,8 +104,8 @@ columnDefs: [
 { name: 'fieldId'},
 { name: 'priority'},
 { name: 'name'},
-{ name: 'tab.tabId', displayName: 'tab'},
-{ name: 'entity.entityId', displayName: 'entity'} 
+{ name: 'entity.entityId', displayName: 'entity'},
+{ name: 'tab.tabId', displayName: 'tab'} 
 ]
  };
 };

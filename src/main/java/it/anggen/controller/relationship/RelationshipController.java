@@ -2,6 +2,7 @@
 package it.anggen.controller.relationship;
 
 import java.util.List;
+import com.codahale.metrics.annotation.Timed;
 import it.anggen.searchbean.relationship.RelationshipSearchBean;
 import it.anggen.security.SecurityService;
 import it.anggen.service.relationship.RelationshipService;
@@ -27,6 +28,7 @@ public class RelationshipController {
     @Value("${application.security}")
     private Boolean securityEnabled;
 
+    @Timed
     @RequestMapping(method = RequestMethod.GET)
     public String manage() {
         if (securityEnabled && !securityService.hasPermission(it.anggen.model.relationship.Relationship.staticEntityId, it.anggen.model.RestrictionType.SEARCH)) 
@@ -35,6 +37,7 @@ return "forbidden";
         return "relationship";
     }
 
+    @Timed
     @RequestMapping(value = "/pages/{pageNumber}", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity findPage(
@@ -45,6 +48,7 @@ return "forbidden";
         return ResponseEntity.ok().body(page);
     }
 
+    @Timed
     @ResponseBody
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ResponseEntity search(
@@ -63,6 +67,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         return ResponseEntity.ok().body(relationshipList);
     }
 
+    @Timed
     @ResponseBody
     @RequestMapping(value = "/{relationshipId}", method = RequestMethod.GET)
     public ResponseEntity getRelationshipById(
@@ -79,6 +84,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         return ResponseEntity.ok().body(relationshipList);
     }
 
+    @Timed
     @ResponseBody
     @RequestMapping(value = "/{relationshipId}", method = RequestMethod.DELETE)
     public ResponseEntity deleteRelationshipById(
@@ -92,6 +98,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         return ResponseEntity.ok().build();
     }
 
+    @Timed
     @ResponseBody
     @RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity insertRelationship(
@@ -108,6 +115,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         return ResponseEntity.ok().body(insertedRelationship);
     }
 
+    @Timed
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity updateRelationship(
@@ -138,33 +146,33 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         {
 
-        annotation.setRelationship(null);
-        annotation.setField(null);
         annotation.setEnumField(null);
+        annotation.setField(null);
         annotation.setAnnotationAttributeList(null);
+        annotation.setRelationship(null);
         }
         if (relationship.getEntity()!=null)
         {
-        relationship.getEntity().setRestrictionEntityList(null);
-        relationship.getEntity().setEnumFieldList(null);
         relationship.getEntity().setFieldList(null);
+        relationship.getEntity().setEnumFieldList(null);
         relationship.getEntity().setTabList(null);
         relationship.getEntity().setEntityGroup(null);
+        relationship.getEntity().setRestrictionEntityList(null);
         relationship.getEntity().setRelationshipList(null);
         }
         if (relationship.getEntityTarget()!=null)
         {
-        relationship.getEntityTarget().setRestrictionEntityList(null);
-        relationship.getEntityTarget().setEnumFieldList(null);
         relationship.getEntityTarget().setFieldList(null);
+        relationship.getEntityTarget().setEnumFieldList(null);
         relationship.getEntityTarget().setTabList(null);
         relationship.getEntityTarget().setEntityGroup(null);
+        relationship.getEntityTarget().setRestrictionEntityList(null);
         relationship.getEntityTarget().setRelationshipList(null);
         }
         if (relationship.getTab()!=null)
         {
-        relationship.getTab().setFieldList(null);
         relationship.getTab().setEnumFieldList(null);
+        relationship.getTab().setFieldList(null);
         relationship.getTab().setEntity(null);
         relationship.getTab().setRelationshipList(null);
         }
@@ -196,7 +204,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         if (securityEnabled && relationship.getEntity()!=null  && !securityService.hasPermission(it.anggen.model.entity.Entity.staticEntityId, it.anggen.model.RestrictionType.SEARCH) )
         relationship.setEntity(null);
 
-        if (securityEnabled && relationship.getEntity()!=null  && !securityService.hasPermission(it.anggen.model.entity.Entity.staticEntityId, it.anggen.model.RestrictionType.SEARCH) )
+        if (securityEnabled && relationship.getEntityTarget()!=null  && !securityService.hasPermission(it.anggen.model.entity.Entity.staticEntityId, it.anggen.model.RestrictionType.SEARCH) )
         relationship.setEntityTarget(null);
 
         if (securityEnabled && relationship.getTab()!=null  && !securityService.hasPermission(it.anggen.model.entity.Tab.staticEntityId, it.anggen.model.RestrictionType.SEARCH) )

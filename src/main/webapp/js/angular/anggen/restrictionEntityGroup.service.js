@@ -88,10 +88,10 @@ paginationPageSize: 10,
 enableGridMenu: true,
 columnDefs: [    
 { name: 'restrictionEntityGroupId'},
-{ name: 'canUpdate'},
 { name: 'canCreate'},
-{ name: 'canDelete'},
 { name: 'canSearch'},
+{ name: 'canUpdate'},
+{ name: 'canDelete'},
 { name: 'entityGroup.entityGroupId', displayName: 'entityGroup'},
 { name: 'role.roleId', displayName: 'role'} 
 ]

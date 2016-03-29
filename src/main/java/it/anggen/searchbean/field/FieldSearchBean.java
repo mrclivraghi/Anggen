@@ -11,9 +11,9 @@ public class FieldSearchBean {
     public java.lang.Integer priority;
     public java.lang.String name;
     public it.anggen.model.FieldType fieldType;
-    public it.anggen.model.entity.Tab tab;
-    public it.anggen.model.entity.Entity entity;
     public List<Annotation> annotationList;
+    public it.anggen.model.entity.Entity entity;
+    public it.anggen.model.entity.Tab tab;
     public List<RestrictionField> restrictionFieldList;
 
     public java.lang.Long getFieldId() {
@@ -48,12 +48,12 @@ public class FieldSearchBean {
         this.fieldType=fieldType;
     }
 
-    public it.anggen.model.entity.Tab getTab() {
-        return this.tab;
+    public List<Annotation> getAnnotationList() {
+        return this.annotationList;
     }
 
-    public void setTab(it.anggen.model.entity.Tab tab) {
-        this.tab=tab;
+    public void setAnnotationList(List<Annotation> annotationList) {
+        this.annotationList=annotationList;
     }
 
     public it.anggen.model.entity.Entity getEntity() {
@@ -64,12 +64,12 @@ public class FieldSearchBean {
         this.entity=entity;
     }
 
-    public List<Annotation> getAnnotationList() {
-        return this.annotationList;
+    public it.anggen.model.entity.Tab getTab() {
+        return this.tab;
     }
 
-    public void setAnnotationList(List<Annotation> annotationList) {
-        this.annotationList=annotationList;
+    public void setTab(it.anggen.model.entity.Tab tab) {
+        this.tab=tab;
     }
 
     public List<RestrictionField> getRestrictionFieldList() {

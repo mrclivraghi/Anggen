@@ -32,7 +32,7 @@ public class EnumValueServiceImpl
 
     @Override
     public List<it.anggen.model.field.EnumValue> find(EnumValueSearchBean enumValue) {
-        return enumValueRepository.findByEnumValueIdAndValueAndNameAndEnumEntity(enumValue.getEnumValueId(),enumValue.getValue(),enumValue.getName(),enumValue.getEnumEntity());
+        return enumValueRepository.findByEnumValueIdAndNameAndValueAndEnumEntity(enumValue.getEnumValueId(),enumValue.getName(),enumValue.getValue(),enumValue.getEnumEntity());
     }
 
     @Override

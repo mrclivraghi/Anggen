@@ -11,8 +11,8 @@ public class RelationshipSearchBean {
     public java.lang.String name;
     public it.anggen.model.RelationshipType relationshipType;
     public List<Annotation> annotationList;
-    public it.anggen.model.entity.Entity entityTarget;
     public it.anggen.model.entity.Entity entity;
+    public it.anggen.model.entity.Entity entityTarget;
     public it.anggen.model.entity.Tab tab;
 
     public java.lang.Long getRelationshipId() {
@@ -55,20 +55,20 @@ public class RelationshipSearchBean {
         this.annotationList=annotationList;
     }
 
-    public it.anggen.model.entity.Entity getEntityTarget() {
-        return this.entityTarget;
-    }
-
-    public void setEntityTarget(it.anggen.model.entity.Entity entityTarget) {
-        this.entityTarget=entityTarget;
-    }
-
     public it.anggen.model.entity.Entity getEntity() {
         return this.entity;
     }
 
     public void setEntity(it.anggen.model.entity.Entity entity) {
         this.entity=entity;
+    }
+
+    public it.anggen.model.entity.Entity getEntityTarget() {
+        return this.entityTarget;
+    }
+
+    public void setEntityTarget(it.anggen.model.entity.Entity entityTarget) {
+        this.entityTarget=entityTarget;
     }
 
     public it.anggen.model.entity.Tab getTab() {

@@ -12,6 +12,9 @@ public interface RestrictionFieldRepository
 {
 
 
+    @Query("select r from RestrictionField r")
+    public List<it.anggen.model.security.RestrictionField> findAll();
+
     public List<it.anggen.model.security.RestrictionField> findByRestrictionFieldId(java.lang.Long restrictionFieldId);
 
     public List<it.anggen.model.security.RestrictionField> findByField(it.anggen.model.field.Field field);

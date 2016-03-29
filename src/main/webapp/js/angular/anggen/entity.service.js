@@ -3,7 +3,7 @@ function entityService($http,mainService)
 {
 this.entityList =		[];
 this.selectedEntity= 	{show: false 
-,restrictionEntityList: [],enumFieldList: [],fieldList: [],tabList: [],relationshipList: []};
+,fieldList: [],enumFieldList: [],tabList: [],restrictionEntityList: [],relationshipList: []};
 this.isParent=function()
 {
 return mainService.parentEntity=="Entity";
@@ -65,10 +65,10 @@ var promise= $http.post("entity/"+this.selectedEntity.entityId+"/load"+field+"/"
 });
 return promise; 
 }
- this.initRestrictionEntityList= function()
+ this.initFieldList= function()
 {
 var promise= $http
-.post("restrictionEntity/search",
+.post("field/search",
 {});
 return promise;
 };
@@ -76,13 +76,6 @@ return promise;
 {
 var promise= $http
 .post("enumField/search",
-{});
-return promise;
-};
- this.initFieldList= function()
-{
-var promise= $http
-.post("field/search",
 {});
 return promise;
 };
@@ -97,6 +90,13 @@ return promise;
 {
 var promise= $http
 .post("entityGroup/search",
+{});
+return promise;
+};
+ this.initRestrictionEntityList= function()
+{
+var promise= $http
+.post("restrictionEntity/search",
 {});
 return promise;
 };
@@ -116,11 +116,12 @@ paginationPageSize: 10,
 enableGridMenu: true,
 columnDefs: [    
 { name: 'entityId'},
-{ name: 'name'},
 { name: 'enableRestrictionData'},
+{ name: 'generateFrontEnd'},
+{ name: 'cache'},
 { name: 'descendantMaxLevel'},
 { name: 'disableViewGeneration'},
-{ name: 'generateFrontEnd'},
+{ name: 'name'},
 { name: 'entityGroup.entityGroupId', displayName: 'entityGroup'} 
 ]
  };

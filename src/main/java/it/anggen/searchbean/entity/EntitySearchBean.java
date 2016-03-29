@@ -11,17 +11,18 @@ import it.anggen.model.security.RestrictionEntity;
 public class EntitySearchBean {
 
     public java.lang.Long entityId;
-    public java.lang.String name;
     public java.lang.Boolean enableRestrictionData;
+    public java.lang.Boolean generateFrontEnd;
+    public java.lang.Boolean cache;
     public java.lang.Integer descendantMaxLevel;
     public java.lang.Boolean disableViewGeneration;
-    public java.lang.Boolean generateFrontEnd;
+    public java.lang.String name;
     public it.anggen.model.SecurityType securityType;
-    public List<RestrictionEntity> restrictionEntityList;
-    public List<EnumField> enumFieldList;
     public List<Field> fieldList;
+    public List<EnumField> enumFieldList;
     public List<Tab> tabList;
     public it.anggen.model.entity.EntityGroup entityGroup;
+    public List<RestrictionEntity> restrictionEntityList;
     public List<Relationship> relationshipList;
 
     public java.lang.Long getEntityId() {
@@ -32,20 +33,28 @@ public class EntitySearchBean {
         this.entityId=entityId;
     }
 
-    public java.lang.String getName() {
-        return this.name;
-    }
-
-    public void setName(java.lang.String name) {
-        this.name=name;
-    }
-
     public java.lang.Boolean getEnableRestrictionData() {
         return this.enableRestrictionData;
     }
 
     public void setEnableRestrictionData(java.lang.Boolean enableRestrictionData) {
         this.enableRestrictionData=enableRestrictionData;
+    }
+
+    public java.lang.Boolean getGenerateFrontEnd() {
+        return this.generateFrontEnd;
+    }
+
+    public void setGenerateFrontEnd(java.lang.Boolean generateFrontEnd) {
+        this.generateFrontEnd=generateFrontEnd;
+    }
+
+    public java.lang.Boolean getCache() {
+        return this.cache;
+    }
+
+    public void setCache(java.lang.Boolean cache) {
+        this.cache=cache;
     }
 
     public java.lang.Integer getDescendantMaxLevel() {
@@ -64,12 +73,12 @@ public class EntitySearchBean {
         this.disableViewGeneration=disableViewGeneration;
     }
 
-    public java.lang.Boolean getGenerateFrontEnd() {
-        return this.generateFrontEnd;
+    public java.lang.String getName() {
+        return this.name;
     }
 
-    public void setGenerateFrontEnd(java.lang.Boolean generateFrontEnd) {
-        this.generateFrontEnd=generateFrontEnd;
+    public void setName(java.lang.String name) {
+        this.name=name;
     }
 
     public it.anggen.model.SecurityType getSecurityType() {
@@ -80,12 +89,12 @@ public class EntitySearchBean {
         this.securityType=securityType;
     }
 
-    public List<RestrictionEntity> getRestrictionEntityList() {
-        return this.restrictionEntityList;
+    public List<Field> getFieldList() {
+        return this.fieldList;
     }
 
-    public void setRestrictionEntityList(List<RestrictionEntity> restrictionEntityList) {
-        this.restrictionEntityList=restrictionEntityList;
+    public void setFieldList(List<Field> fieldList) {
+        this.fieldList=fieldList;
     }
 
     public List<EnumField> getEnumFieldList() {
@@ -94,14 +103,6 @@ public class EntitySearchBean {
 
     public void setEnumFieldList(List<EnumField> enumFieldList) {
         this.enumFieldList=enumFieldList;
-    }
-
-    public List<Field> getFieldList() {
-        return this.fieldList;
-    }
-
-    public void setFieldList(List<Field> fieldList) {
-        this.fieldList=fieldList;
     }
 
     public List<Tab> getTabList() {
@@ -118,6 +119,14 @@ public class EntitySearchBean {
 
     public void setEntityGroup(it.anggen.model.entity.EntityGroup entityGroup) {
         this.entityGroup=entityGroup;
+    }
+
+    public List<RestrictionEntity> getRestrictionEntityList() {
+        return this.restrictionEntityList;
+    }
+
+    public void setRestrictionEntityList(List<RestrictionEntity> restrictionEntityList) {
+        this.restrictionEntityList=restrictionEntityList;
     }
 
     public List<Relationship> getRelationshipList() {

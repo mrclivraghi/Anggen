@@ -20,9 +20,9 @@ public class TabServiceImpl
     @org.springframework.beans.factory.annotation.Autowired
     public TabRepository tabRepository;
     @org.springframework.beans.factory.annotation.Autowired
-    public FieldRepository fieldRepository;
-    @org.springframework.beans.factory.annotation.Autowired
     public EnumFieldRepository enumFieldRepository;
+    @org.springframework.beans.factory.annotation.Autowired
+    public FieldRepository fieldRepository;
     @org.springframework.beans.factory.annotation.Autowired
     public RelationshipRepository relationshipRepository;
     private static Integer PAGE_SIZE = (5);
@@ -40,7 +40,7 @@ public class TabServiceImpl
 
     @Override
     public List<it.anggen.model.entity.Tab> find(TabSearchBean tab) {
-        return tabRepository.findByTabIdAndNameAndFieldAndEnumFieldAndEntityAndRelationship(tab.getTabId(),tab.getName(),tab.getFieldList()==null? null :tab.getFieldList().get(0),tab.getEnumFieldList()==null? null :tab.getEnumFieldList().get(0),tab.getEntity(),tab.getRelationshipList()==null? null :tab.getRelationshipList().get(0));
+        return tabRepository.findByTabIdAndNameAndEnumFieldAndFieldAndEntityAndRelationship(tab.getTabId(),tab.getName(),tab.getEnumFieldList()==null? null :tab.getEnumFieldList().get(0),tab.getFieldList()==null? null :tab.getFieldList().get(0),tab.getEntity(),tab.getRelationshipList()==null? null :tab.getRelationshipList().get(0));
     }
 
     @Override
@@ -57,15 +57,15 @@ public class TabServiceImpl
     @Override
     @Transactional
     public it.anggen.model.entity.Tab update(it.anggen.model.entity.Tab tab) {
-        if (tab.getFieldList()!=null)
-        for (it.anggen.model.field.Field field: tab.getFieldList())
-        {
-        field.setTab(tab);
-        }
         if (tab.getEnumFieldList()!=null)
         for (it.anggen.model.field.EnumField enumField: tab.getEnumFieldList())
         {
         enumField.setTab(tab);
+        }
+        if (tab.getFieldList()!=null)
+        for (it.anggen.model.field.Field field: tab.getFieldList())
+        {
+        field.setTab(tab);
         }
         if (tab.getRelationshipList()!=null)
         for (it.anggen.model.relationship.Relationship relationship: tab.getRelationshipList())

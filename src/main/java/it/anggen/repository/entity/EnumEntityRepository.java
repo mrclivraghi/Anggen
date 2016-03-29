@@ -13,21 +13,24 @@ public interface EnumEntityRepository
 {
 
 
+    @Query("select e from EnumEntity e")
+    public List<it.anggen.model.entity.EnumEntity> findAll();
+
     public List<it.anggen.model.entity.EnumEntity> findByEnumEntityId(java.lang.Long enumEntityId);
 
     public List<it.anggen.model.entity.EnumEntity> findByName(java.lang.String name);
 
     public List<it.anggen.model.entity.EnumEntity> findByProject(it.anggen.model.entity.Project project);
 
-    @Query("select e from EnumEntity e where  (:enumEntityId is null or cast(:enumEntityId as string)=cast(e.enumEntityId as string)) and (:name is null or :name='' or cast(:name as string)=e.name) and (:project=e.project or :project is null) and (:enumValue in elements(e.enumValueList)  or :enumValue is null) ")
-    public List<it.anggen.model.entity.EnumEntity> findByEnumEntityIdAndNameAndProjectAndEnumValue(
+    @Query("select e from EnumEntity e where  (:enumEntityId is null or cast(:enumEntityId as string)=cast(e.enumEntityId as string)) and (:name is null or :name='' or cast(:name as string)=e.name) and (:enumValue in elements(e.enumValueList)  or :enumValue is null) and (:project=e.project or :project is null) ")
+    public List<it.anggen.model.entity.EnumEntity> findByEnumEntityIdAndNameAndEnumValueAndProject(
         @org.springframework.data.repository.query.Param("enumEntityId")
         java.lang.Long enumEntityId,
         @org.springframework.data.repository.query.Param("name")
         java.lang.String name,
-        @org.springframework.data.repository.query.Param("project")
-        it.anggen.model.entity.Project project,
         @org.springframework.data.repository.query.Param("enumValue")
-        EnumValue enumValue);
+        EnumValue enumValue,
+        @org.springframework.data.repository.query.Param("project")
+        it.anggen.model.entity.Project project);
 
 }

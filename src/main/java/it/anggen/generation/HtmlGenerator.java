@@ -101,10 +101,13 @@ public class HtmlGenerator {
 			.macros().javascript("js/pdfmake.js")
 			.macros().javascript("js/vfs_fonts.js")
 			.macros().javascript("js/angular-route.js")
-			.macros().javascript("js/ui-grid.js");
+			.macros().javascript("js/ui-grid.js")
+			.macros().javascript("js/ui-bootstrap-tpls-1.2.5.min.js");
 			if (includeEntityFile)
 			{
 				html.macros().javascript("js/angular/"+generator.applicationName+"/main-app.js");
+				html.macros().javascript("js/metrics/metrics.controller.js");
+				html.macros().javascript("js/metrics/metrics.service.js");
 				//html.macros().javascript("js/angular/"+generator.applicationName+"/"+generator.applicationName+"-service.js");
 				//html.macros().javascript("js/angular/"+generator.applicationName+"/"+generator.applicationName+"-controller.js");
 				for (Entity entity: generator.getEntityList())

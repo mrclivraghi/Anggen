@@ -5,8 +5,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.codahale.metrics.annotation.Timed;
-
 @Controller
 @RequestMapping("//")
 public class MainAppController {
@@ -18,7 +16,6 @@ public class MainAppController {
     }
 
     @RequestMapping(value = "/home", method = RequestMethod.GET)
-    @Timed
     public String home() {
         return "home";
     }

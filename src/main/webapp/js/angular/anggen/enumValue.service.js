@@ -81,8 +81,8 @@ paginationPageSize: 10,
 enableGridMenu: true,
 columnDefs: [    
 { name: 'enumValueId'},
-{ name: 'value'},
 { name: 'name'},
+{ name: 'value'},
 { name: 'enumEntity.enumEntityId', displayName: 'enumEntity'} 
 ]
  };

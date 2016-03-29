@@ -2,6 +2,7 @@
 package it.anggen.controller.security;
 
 import java.util.List;
+import com.codahale.metrics.annotation.Timed;
 import it.anggen.searchbean.security.RestrictionEntityGroupSearchBean;
 import it.anggen.security.SecurityService;
 import it.anggen.service.security.RestrictionEntityGroupService;
@@ -27,6 +28,7 @@ public class RestrictionEntityGroupController {
     @Value("${application.security}")
     private Boolean securityEnabled;
 
+    @Timed
     @RequestMapping(method = RequestMethod.GET)
     public String manage() {
         if (securityEnabled && !securityService.hasPermission(it.anggen.model.security.RestrictionEntityGroup.staticEntityId, it.anggen.model.RestrictionType.SEARCH)) 
@@ -35,6 +37,7 @@ return "forbidden";
         return "restrictionEntityGroup";
     }
 
+    @Timed
     @RequestMapping(value = "/pages/{pageNumber}", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity findPage(
@@ -45,6 +48,7 @@ return "forbidden";
         return ResponseEntity.ok().body(page);
     }
 
+    @Timed
     @ResponseBody
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ResponseEntity search(
@@ -63,6 +67,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         return ResponseEntity.ok().body(restrictionEntityGroupList);
     }
 
+    @Timed
     @ResponseBody
     @RequestMapping(value = "/{restrictionEntityGroupId}", method = RequestMethod.GET)
     public ResponseEntity getRestrictionEntityGroupById(
@@ -79,6 +84,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         return ResponseEntity.ok().body(restrictionEntityGroupList);
     }
 
+    @Timed
     @ResponseBody
     @RequestMapping(value = "/{restrictionEntityGroupId}", method = RequestMethod.DELETE)
     public ResponseEntity deleteRestrictionEntityGroupById(
@@ -92,6 +98,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         return ResponseEntity.ok().build();
     }
 
+    @Timed
     @ResponseBody
     @RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity insertRestrictionEntityGroup(
@@ -108,6 +115,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         return ResponseEntity.ok().body(insertedRestrictionEntityGroup);
     }
 
+    @Timed
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity updateRestrictionEntityGroup(
@@ -141,10 +149,10 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         }
         if (restrictionEntityGroup.getRole()!=null)
         {
-        restrictionEntityGroup.getRole().setRestrictionEntityGroupList(null);
-        restrictionEntityGroup.getRole().setRestrictionEntityList(null);
-        restrictionEntityGroup.getRole().setRestrictionFieldList(null);
         restrictionEntityGroup.getRole().setUserList(null);
+        restrictionEntityGroup.getRole().setRestrictionEntityGroupList(null);
+        restrictionEntityGroup.getRole().setRestrictionFieldList(null);
+        restrictionEntityGroup.getRole().setRestrictionEntityList(null);
         }
     }
 

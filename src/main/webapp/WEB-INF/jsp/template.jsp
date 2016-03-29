@@ -76,7 +76,7 @@
 <script type="text/javascript"
 	src="js/metrics/metrics.controller.js"></script>
 <script type="text/javascript"
-	src="js/metrics/ui-bootstrap-tpls-1.2.5.min.js	"></script>
+	src="js/ui-bootstrap-tpls-1.2.5.min.js	"></script>
 
 	
 	

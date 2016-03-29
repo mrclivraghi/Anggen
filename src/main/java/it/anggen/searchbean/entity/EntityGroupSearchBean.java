@@ -8,8 +8,8 @@ import it.anggen.model.security.RestrictionEntityGroup;
 public class EntityGroupSearchBean {
 
     public java.lang.Long entityGroupId;
-    public java.lang.Long entityId;
     public java.lang.String name;
+    public java.lang.Long entityId;
     public it.anggen.model.entity.Project project;
     public List<Entity> entityList;
     public List<RestrictionEntityGroup> restrictionEntityGroupList;
@@ -22,20 +22,20 @@ public class EntityGroupSearchBean {
         this.entityGroupId=entityGroupId;
     }
 
-    public java.lang.Long getEntityId() {
-        return this.entityId;
-    }
-
-    public void setEntityId(java.lang.Long entityId) {
-        this.entityId=entityId;
-    }
-
     public java.lang.String getName() {
         return this.name;
     }
 
     public void setName(java.lang.String name) {
         this.name=name;
+    }
+
+    public java.lang.Long getEntityId() {
+        return this.entityId;
+    }
+
+    public void setEntityId(java.lang.Long entityId) {
+        this.entityId=entityId;
     }
 
     public it.anggen.model.entity.Project getProject() {

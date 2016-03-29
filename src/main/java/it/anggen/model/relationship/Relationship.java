@@ -11,26 +11,29 @@ import it.anggen.model.RelationshipType;
 import it.anggen.model.field.Annotation;
 import it.anggen.utils.EntityAttribute;
 import it.anggen.utils.annotation.MaxDescendantLevel;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @javax.persistence.Entity
 @Table(schema = "meta", name = "relationship")
 @it.anggen.utils.annotation.SecurityType(type = it.anggen.model.SecurityType.ACCESS_WITH_PERMISSION)
 @MaxDescendantLevel(100)
-public class Relationship extends EntityAttribute{
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+public class Relationship extends EntityAttribute {
 
-    public final static java.lang.Long staticEntityId = 11L;
+    public final static java.lang.Long staticEntityId = 8L;
+    @javax.persistence.Column(name = "relationship_id")
+    @Id
+    @GeneratedValue
+    @it.anggen.utils.annotation.DescriptionField
+    @it.anggen.utils.annotation.Priority(1)
+    private java.lang.Long relationshipId;
     @javax.persistence.Column(name = "priority")
     @it.anggen.utils.annotation.Priority(2)
     private Integer priority;
-    @javax.persistence.Column(name = "relationship_id")
-    @it.anggen.utils.annotation.Priority(1)
-    @it.anggen.utils.annotation.DescriptionField
-    @Id
-    @GeneratedValue
-    private java.lang.Long relationshipId;
     @javax.persistence.Column(name = "name")
-    @it.anggen.utils.annotation.DescriptionField
     @it.anggen.utils.annotation.Priority(2)
+    @it.anggen.utils.annotation.DescriptionField
     private String name;
     @OneToMany(fetch = javax.persistence.FetchType.EAGER)
     @org.hibernate.annotations.Type(type = "it.anggen.model.field.Annotation")
@@ -39,14 +42,14 @@ public class Relationship extends EntityAttribute{
     private List<Annotation> annotationList;
     @javax.persistence.OneToOne(fetch = javax.persistence.FetchType.EAGER)
     @org.hibernate.annotations.Type(type = "it.anggen.model.entity.Entity")
-    @javax.persistence.JoinColumn(name = "entity_id_entity_target")
-    @it.anggen.utils.annotation.Priority(4)
-    private it.anggen.model.entity.Entity entityTarget;
-    @javax.persistence.OneToOne(fetch = javax.persistence.FetchType.EAGER)
-    @org.hibernate.annotations.Type(type = "it.anggen.model.entity.Entity")
     @javax.persistence.JoinColumn(name = "entity_id_entity")
     @it.anggen.utils.annotation.Priority(4)
     private it.anggen.model.entity.Entity entity;
+    @javax.persistence.OneToOne(fetch = javax.persistence.FetchType.EAGER)
+    @org.hibernate.annotations.Type(type = "it.anggen.model.entity.Entity")
+    @javax.persistence.JoinColumn(name = "entity_id_entity_target")
+    @it.anggen.utils.annotation.Priority(4)
+    private it.anggen.model.entity.Entity entityTarget;
     @ManyToOne(fetch = javax.persistence.FetchType.EAGER)
     @javax.persistence.JoinColumn(name = "tab_id_tab")
     @it.anggen.utils.annotation.Priority(4)
@@ -55,20 +58,20 @@ public class Relationship extends EntityAttribute{
     @it.anggen.utils.annotation.Priority(3)
     private RelationshipType relationshipType;
 
-    public Integer getPriority() {
-        return this.priority;
-    }
-
-    public void setPriority(Integer priority) {
-        this.priority=priority;
-    }
-
     public java.lang.Long getRelationshipId() {
         return this.relationshipId;
     }
 
     public void setRelationshipId(java.lang.Long relationshipId) {
         this.relationshipId=relationshipId;
+    }
+
+    public Integer getPriority() {
+        return this.priority;
+    }
+
+    public void setPriority(Integer priority) {
+        this.priority=priority;
     }
 
     public String getName() {
@@ -87,20 +90,20 @@ public class Relationship extends EntityAttribute{
         this.annotationList=annotationList;
     }
 
-    public it.anggen.model.entity.Entity getEntityTarget() {
-        return this.entityTarget;
-    }
-
-    public void setEntityTarget(it.anggen.model.entity.Entity entityTarget) {
-        this.entityTarget=entityTarget;
-    }
-
     public it.anggen.model.entity.Entity getEntity() {
         return this.entity;
     }
 
     public void setEntity(it.anggen.model.entity.Entity entity) {
         this.entity=entity;
+    }
+
+    public it.anggen.model.entity.Entity getEntityTarget() {
+        return this.entityTarget;
+    }
+
+    public void setEntityTarget(it.anggen.model.entity.Entity entityTarget) {
+        this.entityTarget=entityTarget;
     }
 
     public it.anggen.model.entity.Tab getTab() {

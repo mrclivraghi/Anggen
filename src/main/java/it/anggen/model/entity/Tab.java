@@ -19,27 +19,27 @@ import org.hibernate.annotations.Type;
 @MaxDescendantLevel(100)
 public class Tab {
 
-    public final static java.lang.Long staticEntityId = 9L;
+    public final static java.lang.Long staticEntityId = 17L;
     @javax.persistence.Column(name = "tab_id")
+    @it.anggen.utils.annotation.Priority(1)
+    @it.anggen.utils.annotation.DescriptionField
     @Id
     @GeneratedValue
-    @it.anggen.utils.annotation.DescriptionField
-    @it.anggen.utils.annotation.Priority(1)
     private java.lang.Long tabId;
     @javax.persistence.Column(name = "name")
     @it.anggen.utils.annotation.Priority(2)
     @it.anggen.utils.annotation.DescriptionField
     private String name;
     @OneToMany(fetch = javax.persistence.FetchType.EAGER)
-    @Type(type = "it.anggen.model.field.Field")
-    @javax.persistence.JoinColumn(name = "tab_id_tab")
-    @it.anggen.utils.annotation.Priority(4)
-    private List<Field> fieldList;
-    @OneToMany(fetch = javax.persistence.FetchType.EAGER)
     @Type(type = "it.anggen.model.field.EnumField")
     @javax.persistence.JoinColumn(name = "tab_id_tab")
     @it.anggen.utils.annotation.Priority(4)
     private List<EnumField> enumFieldList;
+    @OneToMany(fetch = javax.persistence.FetchType.EAGER)
+    @Type(type = "it.anggen.model.field.Field")
+    @javax.persistence.JoinColumn(name = "tab_id_tab")
+    @it.anggen.utils.annotation.Priority(4)
+    private List<Field> fieldList;
     @ManyToOne(fetch = javax.persistence.FetchType.EAGER)
     @javax.persistence.JoinColumn(name = "entity_id_entity")
     @it.anggen.utils.annotation.Priority(4)
@@ -66,20 +66,20 @@ public class Tab {
         this.name=name;
     }
 
-    public List<Field> getFieldList() {
-        return this.fieldList;
-    }
-
-    public void setFieldList(List<Field> fieldList) {
-        this.fieldList=fieldList;
-    }
-
     public List<EnumField> getEnumFieldList() {
         return this.enumFieldList;
     }
 
     public void setEnumFieldList(List<EnumField> enumFieldList) {
         this.enumFieldList=enumFieldList;
+    }
+
+    public List<Field> getFieldList() {
+        return this.fieldList;
+    }
+
+    public void setFieldList(List<Field> fieldList) {
+        this.fieldList=fieldList;
     }
 
     public it.anggen.model.entity.Entity getEntity() {

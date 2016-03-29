@@ -65,17 +65,17 @@ var promise= $http.post("enumEntity/"+this.selectedEntity.enumEntityId+"/load"+f
 });
 return promise; 
 }
- this.initProjectList= function()
-{
-var promise= $http
-.post("project/search",
-{});
-return promise;
-};
  this.initEnumValueList= function()
 {
 var promise= $http
 .post("enumValue/search",
+{});
+return promise;
+};
+ this.initProjectList= function()
+{
+var promise= $http
+.post("project/search",
 {});
 return promise;
 };

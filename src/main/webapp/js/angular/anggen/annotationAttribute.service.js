@@ -81,8 +81,8 @@ paginationPageSize: 10,
 enableGridMenu: true,
 columnDefs: [    
 { name: 'annotationAttributeId'},
-{ name: 'property'},
 { name: 'value'},
+{ name: 'property'},
 { name: 'annotation.annotationId', displayName: 'annotation'} 
 ]
  };

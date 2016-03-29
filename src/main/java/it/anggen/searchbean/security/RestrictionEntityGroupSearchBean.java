@@ -5,10 +5,10 @@ package it.anggen.searchbean.security;
 public class RestrictionEntityGroupSearchBean {
 
     public java.lang.Long restrictionEntityGroupId;
-    public java.lang.Boolean canUpdate;
     public java.lang.Boolean canCreate;
-    public java.lang.Boolean canDelete;
     public java.lang.Boolean canSearch;
+    public java.lang.Boolean canUpdate;
+    public java.lang.Boolean canDelete;
     public it.anggen.model.entity.EntityGroup entityGroup;
     public it.anggen.model.security.Role role;
 
@@ -20,14 +20,6 @@ public class RestrictionEntityGroupSearchBean {
         this.restrictionEntityGroupId=restrictionEntityGroupId;
     }
 
-    public java.lang.Boolean getCanUpdate() {
-        return this.canUpdate;
-    }
-
-    public void setCanUpdate(java.lang.Boolean canUpdate) {
-        this.canUpdate=canUpdate;
-    }
-
     public java.lang.Boolean getCanCreate() {
         return this.canCreate;
     }
@@ -36,20 +28,28 @@ public class RestrictionEntityGroupSearchBean {
         this.canCreate=canCreate;
     }
 
-    public java.lang.Boolean getCanDelete() {
-        return this.canDelete;
-    }
-
-    public void setCanDelete(java.lang.Boolean canDelete) {
-        this.canDelete=canDelete;
-    }
-
     public java.lang.Boolean getCanSearch() {
         return this.canSearch;
     }
 
     public void setCanSearch(java.lang.Boolean canSearch) {
         this.canSearch=canSearch;
+    }
+
+    public java.lang.Boolean getCanUpdate() {
+        return this.canUpdate;
+    }
+
+    public void setCanUpdate(java.lang.Boolean canUpdate) {
+        this.canUpdate=canUpdate;
+    }
+
+    public java.lang.Boolean getCanDelete() {
+        return this.canDelete;
+    }
+
+    public void setCanDelete(java.lang.Boolean canDelete) {
+        this.canDelete=canDelete;
     }
 
     public it.anggen.model.entity.EntityGroup getEntityGroup() {

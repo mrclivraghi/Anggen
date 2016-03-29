@@ -10,8 +10,8 @@ public class TabSearchBean {
 
     public java.lang.Long tabId;
     public java.lang.String name;
-    public List<Field> fieldList;
     public List<EnumField> enumFieldList;
+    public List<Field> fieldList;
     public it.anggen.model.entity.Entity entity;
     public List<Relationship> relationshipList;
 
@@ -31,20 +31,20 @@ public class TabSearchBean {
         this.name=name;
     }
 
-    public List<Field> getFieldList() {
-        return this.fieldList;
-    }
-
-    public void setFieldList(List<Field> fieldList) {
-        this.fieldList=fieldList;
-    }
-
     public List<EnumField> getEnumFieldList() {
         return this.enumFieldList;
     }
 
     public void setEnumFieldList(List<EnumField> enumFieldList) {
         this.enumFieldList=enumFieldList;
+    }
+
+    public List<Field> getFieldList() {
+        return this.fieldList;
+    }
+
+    public void setFieldList(List<Field> fieldList) {
+        this.fieldList=fieldList;
     }
 
     public it.anggen.model.entity.Entity getEntity() {

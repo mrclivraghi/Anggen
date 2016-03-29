@@ -95,8 +95,8 @@ paginationPageSize: 10,
 enableGridMenu: true,
 columnDefs: [    
 { name: 'entityGroupId'},
-{ name: 'entityId'},
 { name: 'name'},
+{ name: 'entityId'},
 { name: 'project.projectId', displayName: 'project'} 
 ]
  };

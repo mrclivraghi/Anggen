@@ -8,10 +8,10 @@ public class AnnotationSearchBean {
 
     public java.lang.Long annotationId;
     public it.anggen.model.AnnotationType annotationType;
-    public it.anggen.model.relationship.Relationship relationship;
-    public it.anggen.model.field.Field field;
     public it.anggen.model.field.EnumField enumField;
+    public it.anggen.model.field.Field field;
     public List<AnnotationAttribute> annotationAttributeList;
+    public it.anggen.model.relationship.Relationship relationship;
 
     public java.lang.Long getAnnotationId() {
         return this.annotationId;
@@ -29,12 +29,12 @@ public class AnnotationSearchBean {
         this.annotationType=annotationType;
     }
 
-    public it.anggen.model.relationship.Relationship getRelationship() {
-        return this.relationship;
+    public it.anggen.model.field.EnumField getEnumField() {
+        return this.enumField;
     }
 
-    public void setRelationship(it.anggen.model.relationship.Relationship relationship) {
-        this.relationship=relationship;
+    public void setEnumField(it.anggen.model.field.EnumField enumField) {
+        this.enumField=enumField;
     }
 
     public it.anggen.model.field.Field getField() {
@@ -45,20 +45,20 @@ public class AnnotationSearchBean {
         this.field=field;
     }
 
-    public it.anggen.model.field.EnumField getEnumField() {
-        return this.enumField;
-    }
-
-    public void setEnumField(it.anggen.model.field.EnumField enumField) {
-        this.enumField=enumField;
-    }
-
     public List<AnnotationAttribute> getAnnotationAttributeList() {
         return this.annotationAttributeList;
     }
 
     public void setAnnotationAttributeList(List<AnnotationAttribute> annotationAttributeList) {
         this.annotationAttributeList=annotationAttributeList;
+    }
+
+    public it.anggen.model.relationship.Relationship getRelationship() {
+        return this.relationship;
+    }
+
+    public void setRelationship(it.anggen.model.relationship.Relationship relationship) {
+        this.relationship=relationship;
     }
 
 }

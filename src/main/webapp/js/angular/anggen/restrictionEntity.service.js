@@ -89,9 +89,9 @@ enableGridMenu: true,
 columnDefs: [    
 { name: 'restrictionEntityId'},
 { name: 'canCreate'},
-{ name: 'canUpdate'},
 { name: 'canSearch'},
 { name: 'canDelete'},
+{ name: 'canUpdate'},
 { name: 'entity.entityId', displayName: 'entity'},
 { name: 'role.roleId', displayName: 'role'} 
 ]

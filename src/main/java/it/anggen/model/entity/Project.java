@@ -12,20 +12,23 @@ import javax.persistence.Table;
 import it.anggen.model.entity.EntityGroup;
 import it.anggen.model.entity.EnumEntity;
 import it.anggen.utils.annotation.MaxDescendantLevel;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Type;
 
 @Entity
 @Table(schema = "meta", name = "project")
 @it.anggen.utils.annotation.SecurityType(type = it.anggen.model.SecurityType.ACCESS_WITH_PERMISSION)
 @MaxDescendantLevel(100)
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Project {
 
-    public final static Long staticEntityId = 5L;
+    public final static Long staticEntityId = 9L;
     @javax.persistence.Column(name = "project_id")
-    @it.anggen.utils.annotation.DescriptionField
+    @it.anggen.utils.annotation.Priority(1)
     @Id
     @GeneratedValue
-    @it.anggen.utils.annotation.Priority(1)
+    @it.anggen.utils.annotation.DescriptionField
     private Integer projectId;
     @javax.persistence.Column(name = "name")
     @it.anggen.utils.annotation.Priority(2)

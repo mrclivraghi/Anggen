@@ -104,8 +104,8 @@ columnDefs: [
 { name: 'relationshipId'},
 { name: 'priority'},
 { name: 'name'},
-{ name: 'entityTarget.entityTargetId', displayName: 'entityTarget'},
 { name: 'entity.entityId', displayName: 'entity'},
+{ name: 'entityTarget.entityTargetId', displayName: 'entityTarget'},
 { name: 'tab.tabId', displayName: 'tab'} 
 ]
  };

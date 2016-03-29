@@ -2,6 +2,7 @@
 package it.anggen.controller.field;
 
 import java.util.List;
+import com.codahale.metrics.annotation.Timed;
 import it.anggen.searchbean.field.AnnotationSearchBean;
 import it.anggen.security.SecurityService;
 import it.anggen.service.field.AnnotationService;
@@ -27,6 +28,7 @@ public class AnnotationController {
     @Value("${application.security}")
     private Boolean securityEnabled;
 
+    @Timed
     @RequestMapping(method = RequestMethod.GET)
     public String manage() {
         if (securityEnabled && !securityService.hasPermission(it.anggen.model.field.Annotation.staticEntityId, it.anggen.model.RestrictionType.SEARCH)) 
@@ -35,6 +37,7 @@ return "forbidden";
         return "annotation";
     }
 
+    @Timed
     @RequestMapping(value = "/pages/{pageNumber}", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity findPage(
@@ -45,6 +48,7 @@ return "forbidden";
         return ResponseEntity.ok().body(page);
     }
 
+    @Timed
     @ResponseBody
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ResponseEntity search(
@@ -63,6 +67,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         return ResponseEntity.ok().body(annotationList);
     }
 
+    @Timed
     @ResponseBody
     @RequestMapping(value = "/{annotationId}", method = RequestMethod.GET)
     public ResponseEntity getAnnotationById(
@@ -79,6 +84,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         return ResponseEntity.ok().body(annotationList);
     }
 
+    @Timed
     @ResponseBody
     @RequestMapping(value = "/{annotationId}", method = RequestMethod.DELETE)
     public ResponseEntity deleteAnnotationById(
@@ -92,6 +98,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         return ResponseEntity.ok().build();
     }
 
+    @Timed
     @ResponseBody
     @RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity insertAnnotation(
@@ -108,6 +115,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         return ResponseEntity.ok().body(insertedAnnotation);
     }
 
+    @Timed
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity updateAnnotation(
@@ -133,26 +141,19 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     }
 
     private void getRightMapping(it.anggen.model.field.Annotation annotation) {
-        if (annotation.getRelationship()!=null)
+        if (annotation.getEnumField()!=null)
         {
-        annotation.getRelationship().setAnnotationList(null);
-        annotation.getRelationship().setEntity(null);
-        annotation.getRelationship().setEntityTarget(null);
-        annotation.getRelationship().setTab(null);
+        annotation.getEnumField().setAnnotationList(null);
+        annotation.getEnumField().setEnumEntity(null);
+        annotation.getEnumField().setEntity(null);
+        annotation.getEnumField().setTab(null);
         }
         if (annotation.getField()!=null)
         {
-        annotation.getField().setTab(null);
-        annotation.getField().setEntity(null);
         annotation.getField().setAnnotationList(null);
+        annotation.getField().setEntity(null);
+        annotation.getField().setTab(null);
         annotation.getField().setRestrictionFieldList(null);
-        }
-        if (annotation.getEnumField()!=null)
-        {
-        annotation.getEnumField().setTab(null);
-        annotation.getEnumField().setEnumEntity(null);
-        annotation.getEnumField().setEntity(null);
-        annotation.getEnumField().setAnnotationList(null);
         }
         if (annotation.getAnnotationAttributeList()!=null)
         for (it.anggen.model.field.AnnotationAttribute annotationAttribute :annotation.getAnnotationAttributeList())
@@ -161,17 +162,24 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         annotationAttribute.setAnnotation(null);
         }
+        if (annotation.getRelationship()!=null)
+        {
+        annotation.getRelationship().setAnnotationList(null);
+        annotation.getRelationship().setEntity(null);
+        annotation.getRelationship().setEntityTarget(null);
+        annotation.getRelationship().setTab(null);
+        }
     }
 
     private void rebuildSecurityMapping(it.anggen.model.field.Annotation annotation) {
-        if (securityEnabled && !securityService.hasPermission(it.anggen.model.relationship.Relationship.staticEntityId, it.anggen.model.RestrictionType.SEARCH))
-        annotation.setRelationship(annotationService.findById(annotation.getAnnotationId()).get(0).getRelationship());
-        if (securityEnabled && !securityService.hasPermission(it.anggen.model.field.Field.staticEntityId, it.anggen.model.RestrictionType.SEARCH))
-        annotation.setField(annotationService.findById(annotation.getAnnotationId()).get(0).getField());
         if (securityEnabled && !securityService.hasPermission(it.anggen.model.field.EnumField.staticEntityId, it.anggen.model.RestrictionType.SEARCH))
         annotation.setEnumField(annotationService.findById(annotation.getAnnotationId()).get(0).getEnumField());
+        if (securityEnabled && !securityService.hasPermission(it.anggen.model.field.Field.staticEntityId, it.anggen.model.RestrictionType.SEARCH))
+        annotation.setField(annotationService.findById(annotation.getAnnotationId()).get(0).getField());
         if (securityEnabled && !securityService.hasPermission(it.anggen.model.field.AnnotationAttribute.staticEntityId, it.anggen.model.RestrictionType.SEARCH))
         annotation.setAnnotationAttributeList(annotationService.findById(annotation.getAnnotationId()).get(0).getAnnotationAttributeList());
+        if (securityEnabled && !securityService.hasPermission(it.anggen.model.relationship.Relationship.staticEntityId, it.anggen.model.RestrictionType.SEARCH))
+        annotation.setRelationship(annotationService.findById(annotation.getAnnotationId()).get(0).getRelationship());
     }
 
     private List<it.anggen.model.field.Annotation> getSecurityMapping(List<it.anggen.model.field.Annotation> annotationList) {
@@ -183,17 +191,17 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     }
 
     private void getSecurityMapping(it.anggen.model.field.Annotation annotation) {
-        if (securityEnabled && annotation.getRelationship()!=null  && !securityService.hasPermission(it.anggen.model.relationship.Relationship.staticEntityId, it.anggen.model.RestrictionType.SEARCH) )
-        annotation.setRelationship(null);
+        if (securityEnabled && annotation.getEnumField()!=null  && !securityService.hasPermission(it.anggen.model.field.EnumField.staticEntityId, it.anggen.model.RestrictionType.SEARCH) )
+        annotation.setEnumField(null);
 
         if (securityEnabled && annotation.getField()!=null  && !securityService.hasPermission(it.anggen.model.field.Field.staticEntityId, it.anggen.model.RestrictionType.SEARCH) )
         annotation.setField(null);
 
-        if (securityEnabled && annotation.getEnumField()!=null  && !securityService.hasPermission(it.anggen.model.field.EnumField.staticEntityId, it.anggen.model.RestrictionType.SEARCH) )
-        annotation.setEnumField(null);
-
         if (securityEnabled && annotation.getAnnotationAttributeList()!=null && !securityService.hasPermission(it.anggen.model.field.AnnotationAttribute.staticEntityId, it.anggen.model.RestrictionType.SEARCH) )
         annotation.setAnnotationAttributeList(null);
+
+        if (securityEnabled && annotation.getRelationship()!=null  && !securityService.hasPermission(it.anggen.model.relationship.Relationship.staticEntityId, it.anggen.model.RestrictionType.SEARCH) )
+        annotation.setRelationship(null);
 
     }
 

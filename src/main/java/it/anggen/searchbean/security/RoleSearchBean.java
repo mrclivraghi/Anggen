@@ -11,10 +11,10 @@ public class RoleSearchBean {
 
     public java.lang.Integer roleId;
     public java.lang.String role;
-    public List<RestrictionEntityGroup> restrictionEntityGroupList;
-    public List<RestrictionEntity> restrictionEntityList;
-    public List<RestrictionField> restrictionFieldList;
     public List<User> userList;
+    public List<RestrictionEntityGroup> restrictionEntityGroupList;
+    public List<RestrictionField> restrictionFieldList;
+    public List<RestrictionEntity> restrictionEntityList;
 
     public java.lang.Integer getRoleId() {
         return this.roleId;
@@ -32,20 +32,20 @@ public class RoleSearchBean {
         this.role=role;
     }
 
+    public List<User> getUserList() {
+        return this.userList;
+    }
+
+    public void setUserList(List<User> userList) {
+        this.userList=userList;
+    }
+
     public List<RestrictionEntityGroup> getRestrictionEntityGroupList() {
         return this.restrictionEntityGroupList;
     }
 
     public void setRestrictionEntityGroupList(List<RestrictionEntityGroup> restrictionEntityGroupList) {
         this.restrictionEntityGroupList=restrictionEntityGroupList;
-    }
-
-    public List<RestrictionEntity> getRestrictionEntityList() {
-        return this.restrictionEntityList;
-    }
-
-    public void setRestrictionEntityList(List<RestrictionEntity> restrictionEntityList) {
-        this.restrictionEntityList=restrictionEntityList;
     }
 
     public List<RestrictionField> getRestrictionFieldList() {
@@ -56,12 +56,12 @@ public class RoleSearchBean {
         this.restrictionFieldList=restrictionFieldList;
     }
 
-    public List<User> getUserList() {
-        return this.userList;
+    public List<RestrictionEntity> getRestrictionEntityList() {
+        return this.restrictionEntityList;
     }
 
-    public void setUserList(List<User> userList) {
-        this.userList=userList;
+    public void setRestrictionEntityList(List<RestrictionEntity> restrictionEntityList) {
+        this.restrictionEntityList=restrictionEntityList;
     }
 
 }

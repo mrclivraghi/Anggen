@@ -280,7 +280,7 @@ public class Generator {
 			return false;
 		if (entity.getEntityGroup()==null)
 			return true;
-		if (!entity.getEntityGroup().getName().equals("security"))
+		if (!entity.getEntityGroup().getName().equals("security") && !entity.getEntityGroup().getName().equals("log"))
 			return false;
 		if (entity.getName().equals("restrictionField") || 
 				entity.getName().equals("restrictionEntityGroup") || 

@@ -274,7 +274,7 @@ public class WebappGenerator {
 			JCodeModel codeModel = new JCodeModel();
 			JDefinedClass securityConfig=null;
 			try {
-				securityConfig = codeModel._class(JMod.PUBLIC, packageName+"boot.config.SecurityConfig", ClassType.CLASS);
+				securityConfig = codeModel._class(JMod.PUBLIC, packageName+"boot.config."+Utility.getFirstUpper(applicationName)+"SecurityConfig", ClassType.CLASS);
 				securityConfig._extends(WebSecurityConfigurerAdapter.class);
 			} catch (JClassAlreadyExistsException e) {
 				// TODO Auto-generated catch block
@@ -304,9 +304,13 @@ public class WebappGenerator {
 			configureBlock.directStatement(".and()");
 			configureBlock.directStatement(".authorizeRequests().anyRequest().fullyAuthenticated().and()");
 			configureBlock.directStatement(".formLogin().and().csrf()");
-			configureBlock.directStatement(".csrfTokenRepository(csrfTokenRepository()).and()");
-			configureBlock.directStatement(".addFilterAfter(new "+ReflectionManager.getJDefinedCustomClass(packageName+"boot.CsrfHeaderFilter").fullName()+"(), "+CsrfFilter.class.getName()+".class);");
-			
+			if (!generator.security)
+				configureBlock.directStatement(".disable();");
+			else
+			{
+				configureBlock.directStatement(".csrfTokenRepository(csrfTokenRepository()).and()");
+				configureBlock.directStatement(".addFilterAfter(new "+ReflectionManager.getJDefinedCustomClass(packageName+"boot.CsrfHeaderFilter").fullName()+"(), "+CsrfFilter.class.getName()+".class);");
+			}
 			JMethod tokenRepository = securityConfig.method(JMod.PRIVATE, CsrfTokenRepository.class, "csrfTokenRepository");
 			JBlock tokenRepositoryBody=tokenRepository.body();
 			tokenRepositoryBody.directStatement(HttpSessionCsrfTokenRepository.class.getName()+" repository = new "+HttpSessionCsrfTokenRepository.class.getName()+"();");
@@ -392,7 +396,7 @@ public class WebappGenerator {
 		JMethod getRootConfig = waInit.method(JMod.PROTECTED, Class[].class, "getRootConfigClasses");
 		getRootConfig.annotate(Override.class);
 		JBlock rootConfigBlock = getRootConfig.body();
-		rootConfigBlock.directStatement("return new Class[] {"+packageName+"boot.config.SecurityConfig.class};");
+		rootConfigBlock.directStatement("return new Class[] {"+packageName+"boot.config."+Utility.getFirstUpper(applicationName)+"SecurityConfig.class};");
 	
 		
 		

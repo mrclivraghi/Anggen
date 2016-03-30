@@ -357,7 +357,8 @@ public class RestGenerator {
 	public void generateRESTClasses()
 	{
 		System.out.println("working for "+entity.getName());
-		String searchMethod="";
+		if (entity.getName().equals("logEntry"))
+			return;
 		generateRepository();
 		generateSearchBean();
 		generateServiceInterface();

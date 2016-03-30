@@ -15,6 +15,8 @@ import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.servlet.InstrumentedFilter;
 import com.codahale.metrics.servlets.MetricsServlet;
 
+import it.anggen.utils.AngenMetricServlet;
+
 import java.io.File;
 import java.util.*;
 import javax.inject.Inject;
@@ -74,7 +76,7 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
 
         log.debug("Registering Metrics Servlet");
         ServletRegistration.Dynamic metricsAdminServlet =
-            servletContext.addServlet("metricsServlet", new MetricsServlet());
+            servletContext.addServlet("metricsServlet", new AngenMetricServlet());
 
         metricsAdminServlet.addMapping("/metrics/metrics/*");
         metricsAdminServlet.setAsyncSupported(true);

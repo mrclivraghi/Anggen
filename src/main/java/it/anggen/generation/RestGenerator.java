@@ -11,6 +11,8 @@ import it.anggen.utils.Field;
 import it.anggen.utils.ReflectionManager;
 import it.anggen.utils.Utility;
 import it.anggen.model.FieldType;
+import it.anggen.model.LogType;
+import it.anggen.model.OperationType;
 import it.anggen.model.SecurityType;
 import it.anggen.model.entity.Entity;
 import it.anggen.model.relationship.Relationship;
@@ -652,8 +654,11 @@ public class RestGenerator {
 			JVar securityService= myClass.field(JMod.PRIVATE,SecurityService.class, "securityService");
 			securityService.annotate(Autowired.class);
 			
-			JVar logEntryService= myClass.field(JMod.PRIVATE,LogEntryService.class, "logEntryService");
-			logEntryService.annotate(Autowired.class);
+			if (!fullClassName.contains("LogEntry"))
+			{
+				JVar logEntryService= myClass.field(JMod.PRIVATE,LogEntryService.class, "logEntryService");
+				logEntryService.annotate(Autowired.class);
+			}
 			
 			if (entity.getEntityGroup()!=null && !entity.getEntityGroup().getName().equals("restrictiondata") && entity.getEnableRestrictionData())
 			{
@@ -744,6 +749,11 @@ public class RestGenerator {
 			// log.info("Searching mountain like {}",mountain);
 			searchBlock.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(lowerClass)+"Id()!=null)");
 			searchBlock.directStatement(" log.info(\"Searching "+lowerClass+" like {}\","+entityManager.getDescription(true)+");");
+			
+			searchBlock.directStatement("logEntryService.addLogEntry( \"Searching entity like \"+"+entityManager.getDescription(true) +",");
+			searchBlock.directStatement(LogType.class.getName()+".INFO, "+OperationType.class.getName()+".SEARCH_ENTITY, "+ReflectionManager.getJDefinedClass(entity).fullName()+".staticEntityId, securityService.getLoggedUser(),log);");
+       
+			
 			searchBlock.directStatement(""+lowerClass+"List="+lowerClass+"Service.find("+lowerClass+");");
 			searchBlock.directStatement("getSecurityMapping("+lowerClass+"List);");
 			searchBlock.directStatement("getRightMapping("+lowerClass+"List);");

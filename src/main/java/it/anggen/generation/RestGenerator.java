@@ -5,6 +5,7 @@ import it.anggen.reflection.EntityAttributeManager;
 import it.anggen.reflection.EntityManager;
 import it.anggen.reflection.EntityManagerImpl;
 import it.anggen.security.SecurityService;
+import it.anggen.service.log.LogEntryService;
 import it.anggen.utils.EntityAttribute;
 import it.anggen.utils.Field;
 import it.anggen.utils.ReflectionManager;
@@ -650,6 +651,9 @@ public class RestGenerator {
 			repository.annotate(Autowired.class);
 			JVar securityService= myClass.field(JMod.PRIVATE,SecurityService.class, "securityService");
 			securityService.annotate(Autowired.class);
+			
+			JVar logEntryService= myClass.field(JMod.PRIVATE,LogEntryService.class, "logEntryService");
+			logEntryService.annotate(Autowired.class);
 			
 			if (entity.getEntityGroup()!=null && !entity.getEntityGroup().getName().equals("restrictiondata") && entity.getEnableRestrictionData())
 			{

@@ -149,10 +149,14 @@ public class EntityGenerator {
 		myClass.annotate(javax.persistence.Entity.class);
 		JAnnotationUse annotationTable= myClass.annotate(Table.class);
 		//from properties
+		String schema=generator.schema;
+		
 		if (entity.getEntityGroup().getName().equals("security"))
-			annotationTable.param("schema", "sso");
+			schema="sso";
 		else
-			annotationTable.param("schema", generator.schema);
+			if (entity.getEntityGroup().getName().equals("log"))
+				schema="log";
+		annotationTable.param("schema", schema);
 		
 		JAnnotationUse securityType= myClass.annotate(SecurityType.class);
 		it.anggen.model.SecurityType secType = entity.getSecurityType();
@@ -214,7 +218,7 @@ public class EntityGenerator {
 					type.param("type", ReflectionManager.getJDefinedClass(relationship.getEntityTarget()).fullName());
 					JAnnotationUse joinTable = listField.annotate(JoinTable.class);
 					joinTable.param("name", namingStrategy.classToTableName(relationship.getEntity().getName())+"_"+namingStrategy.classToTableName(relationship.getEntityTarget().getName()));
-					joinTable.param("schema", generator.schema);
+					joinTable.param("schema", schema);
 					JAnnotationArrayMember listJoinColumns = joinTable.paramArray("joinColumns");
 					listJoinColumns.annotate(JoinColumn.class).param("name", relationship.getEntity().getName().toLowerCase()+"_id");
 					

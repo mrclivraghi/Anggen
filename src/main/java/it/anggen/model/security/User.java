@@ -41,7 +41,7 @@ public class User {
     private java.lang.String password;
     @ManyToMany(fetch = FetchType.EAGER)
     @Type(type = "it.anggen.model.security.Role")
-    @JoinTable(name = "user_role", schema = "meta", joinColumns = {
+    @JoinTable(name = "user_role", schema = "sso", joinColumns = {
         @JoinColumn(name = "user_id")
     }, inverseJoinColumns = {
         @JoinColumn(name = "role_id")

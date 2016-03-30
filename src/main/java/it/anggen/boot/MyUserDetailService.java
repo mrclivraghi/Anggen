@@ -46,7 +46,7 @@ public class MyUserDetailService
         	throw new UsernameNotFoundException("Username "+username+" not found");
         }
         it.anggen.model.security.User user = userList.get(0);
-        logEntryService.addLogEntry(username + " found ", LogType.INFO, OperationType.LOGIN_SUCCESS, User.staticEntityId, user, null);
+        //logEntryService.addLogEntry(username + " found ", LogType.INFO, OperationType.LOGIN_SUCCESS, User.staticEntityId, user, null);
         List<org.springframework.security.core.GrantedAuthority> authorities = buildUserAuthority(user.getRoleList());
         return buildUserForAuthentication(user, authorities);
     }
@@ -59,7 +59,7 @@ public class MyUserDetailService
     private List<GrantedAuthority> buildUserAuthority(List<Role> roleList) {
         Set<GrantedAuthority> setAuths = (new java.util.HashSet<org.springframework.security.core.GrantedAuthority>());
         for (it.anggen.model.security.Role role: roleList)
-        setAuths.add(new org.springframework.security.core.authority.SimpleGrantedAuthority(role.getRole()));
+        	setAuths.add(new org.springframework.security.core.authority.SimpleGrantedAuthority(role.getRole()));
         List<org.springframework.security.core.GrantedAuthority> result = new java.util.ArrayList<org.springframework.security.core.GrantedAuthority>(setAuths);
         return result;
     }

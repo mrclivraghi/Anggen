@@ -14,6 +14,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 
+import it.anggen.boot.AngGenAuthenticationProvider;
+
 @Configuration
 @EnableWebSecurity
 @Order(99)
@@ -24,6 +26,10 @@ public class AnggenSecurityConfig
     @Autowired
     @Qualifier("userDetailsService")
     private UserDetailsService userDetailsService;
+    
+    @Autowired
+    private AngGenAuthenticationProvider customAuthenticationProvider; 
+    
 
     @Override
     protected void configure(HttpSecurity http)
@@ -50,6 +56,7 @@ public class AnggenSecurityConfig
         throws Exception
     {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+        auth.authenticationProvider(customAuthenticationProvider);
     }
 
     @Bean

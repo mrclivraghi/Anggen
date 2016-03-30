@@ -839,8 +839,8 @@ public class RestGenerator {
 			JBlock updateBlock= update.body();
 			updateBlock.directStatement(addSecurityCheck(RestrictionType.UPDATE));
 			
-			insertBlock.directStatement("logEntryService.addLogEntry( \"Updating "+lowerClass+" with id \"+"+lowerClass+".get"+Utility.getFirstUpper(lowerClass)+"Id(),");
-			insertBlock.directStatement(LogType.class.getName()+".INFO, "+OperationType.class.getName()+".UPDATE_ENTITY, "+ReflectionManager.getJDefinedClass(entity).fullName()+".staticEntityId, securityService.getLoggedUser(),log);");
+			updateBlock.directStatement("logEntryService.addLogEntry( \"Updating "+lowerClass+" with id \"+"+lowerClass+".get"+Utility.getFirstUpper(lowerClass)+"Id(),");
+			updateBlock.directStatement(LogType.class.getName()+".INFO, "+OperationType.class.getName()+".UPDATE_ENTITY, "+ReflectionManager.getJDefinedClass(entity).fullName()+".staticEntityId, securityService.getLoggedUser(),log);");
        
 			
 			updateBlock.directStatement("rebuildSecurityMapping("+lowerClass+");");

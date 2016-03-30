@@ -887,9 +887,9 @@ public class RestGenerator {
 						reBuildBlock.directStatement("if (securityEnabled && securityService.hasRestriction("+ReflectionManager.getJDefinedClass(relationship.getEntityTarget()).fullName()+".staticEntityId, "+RestrictionType.class.getName()+".SEARCH))");
 					
 				if (EntityAttributeManager.getInstance(relationship).isList())
-					reBuildBlock.directStatement(entity.getName()+".set"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List("+entity.getName()+"Service.findById("+entity.getName()+".get"+Utility.getFirstUpper(entity.getName())+"Id()).get(0).get"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List());");
+					reBuildBlock.directStatement(entity.getName()+".set"+Utility.getFirstUpper(relationship.getName())+"List("+entity.getName()+"Service.findById("+entity.getName()+".get"+Utility.getFirstUpper(entity.getName())+"Id()).get(0).get"+Utility.getFirstUpper(relationship.getName())+"List());");
 				else
-					reBuildBlock.directStatement(entity.getName()+".set"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"("+entity.getName()+"Service.findById("+entity.getName()+".get"+Utility.getFirstUpper(entity.getName())+"Id()).get(0).get"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"());");
+					reBuildBlock.directStatement(entity.getName()+".set"+Utility.getFirstUpper(relationship.getName())+"("+entity.getName()+"Service.findById("+entity.getName()+".get"+Utility.getFirstUpper(entity.getName())+"Id()).get(0).get"+Utility.getFirstUpper(relationship.getName())+"());");
 			}
 			
 			//get security Mapping -List
@@ -1039,21 +1039,21 @@ public class RestGenerator {
 			if (EntityAttributeManager.getInstance(relationship).isList())
 			{
 				if (entity.getSecurityType()==null || entity.getSecurityType()==SecurityType.ACCESS_WITH_PERMISSION)
-					block.directStatement("if (securityEnabled && "+lowerClass+".get"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List()!=null && !securityService.hasPermission("+ReflectionManager.getJDefinedClass(relationship.getEntityTarget()).fullName()+".staticEntityId, "+RestrictionType.class.getName()+".SEARCH) )");
+					block.directStatement("if (securityEnabled && "+lowerClass+".get"+Utility.getFirstUpper(relationship.getName())+"List()!=null && !securityService.hasPermission("+ReflectionManager.getJDefinedClass(relationship.getEntityTarget()).fullName()+".staticEntityId, "+RestrictionType.class.getName()+".SEARCH) )");
 				else
 					if (entity.getSecurityType()==SecurityType.BLOCK_WITH_RESTRICTION)
-						block.directStatement("if (securityEnabled && "+lowerClass+".get"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List()!=null && securityService.hasRestriction("+ReflectionManager.getJDefinedClass(relationship.getEntityTarget()).fullName()+".staticEntityId, "+RestrictionType.class.getName()+".SEARCH) )");
-				block.directStatement(""+lowerClass+".set"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List(null);\n");
+						block.directStatement("if (securityEnabled && "+lowerClass+".get"+Utility.getFirstUpper(relationship.getName())+"List()!=null && securityService.hasRestriction("+ReflectionManager.getJDefinedClass(relationship.getEntityTarget()).fullName()+".staticEntityId, "+RestrictionType.class.getName()+".SEARCH) )");
+				block.directStatement(""+lowerClass+".set"+Utility.getFirstUpper(relationship.getName())+"List(null);\n");
 			}
 			 else
 			 {
 				 
 				 if (entity.getSecurityType()==null || entity.getSecurityType()==SecurityType.ACCESS_WITH_PERMISSION)
-						block.directStatement("if (securityEnabled && "+lowerClass+".get"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"()!=null  && !securityService.hasPermission("+ReflectionManager.getJDefinedClass(relationship.getEntityTarget()).fullName()+".staticEntityId, "+RestrictionType.class.getName()+".SEARCH) )");
+						block.directStatement("if (securityEnabled && "+lowerClass+".get"+Utility.getFirstUpper(relationship.getName())+"()!=null  && !securityService.hasPermission("+ReflectionManager.getJDefinedClass(relationship.getEntityTarget()).fullName()+".staticEntityId, "+RestrictionType.class.getName()+".SEARCH) )");
 				 else
 						if (entity.getSecurityType()==SecurityType.BLOCK_WITH_RESTRICTION)
-							block.directStatement("if (securityEnabled && "+lowerClass+".get"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"()!=null  && securityService.hasRestriction("+ReflectionManager.getJDefinedClass(relationship.getEntityTarget()).fullName()+".staticEntityId, "+RestrictionType.class.getName()+".SEARCH) )");
-				block.directStatement(""+lowerClass+".set"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"(null);\n");
+							block.directStatement("if (securityEnabled && "+lowerClass+".get"+Utility.getFirstUpper(relationship.getName())+"()!=null  && securityService.hasRestriction("+ReflectionManager.getJDefinedClass(relationship.getEntityTarget()).fullName()+".staticEntityId, "+RestrictionType.class.getName()+".SEARCH) )");
+				block.directStatement(""+lowerClass+".set"+Utility.getFirstUpper(relationship.getName())+"(null);\n");
 			 }
 		}
 	}

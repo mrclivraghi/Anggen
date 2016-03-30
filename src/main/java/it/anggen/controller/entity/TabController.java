@@ -6,6 +6,7 @@ import com.codahale.metrics.annotation.Timed;
 import it.anggen.searchbean.entity.TabSearchBean;
 import it.anggen.security.SecurityService;
 import it.anggen.service.entity.TabService;
+import it.anggen.service.log.LogEntryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,6 +25,8 @@ public class TabController {
     private TabService tabService;
     @org.springframework.beans.factory.annotation.Autowired
     private SecurityService securityService;
+    @org.springframework.beans.factory.annotation.Autowired
+    private LogEntryService logEntryService;
     private final static Logger log = LoggerFactory.getLogger(it.anggen.model.entity.Tab.class);
     @Value("${application.security}")
     private Boolean securityEnabled;
@@ -60,6 +63,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         List<it.anggen.model.entity.Tab> tabList;
         if (tab.getTabId()!=null)
          log.info("Searching tab like {}", tab.getName()+' '+ tab.getTabId());
+        logEntryService.addLogEntry( "Searching entity like "+ tab.getName()+' '+ tab.getTabId(),
+        it.anggen.model.LogType.INFO, it.anggen.model.OperationType.SEARCH_ENTITY, it.anggen.model.entity.Tab.staticEntityId, securityService.getLoggedUser(),log);
         tabList=tabService.find(tab);
         getSecurityMapping(tabList);
         getRightMapping(tabList);
@@ -76,7 +81,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         if (securityEnabled && !securityService.hasPermission(it.anggen.model.entity.Tab.staticEntityId, it.anggen.model.RestrictionType.SEARCH)) 
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
-        log.info("Searching tab with id {}",tabId);
+        logEntryService.addLogEntry( "Searching tab with id "+tabId,
+        it.anggen.model.LogType.INFO, it.anggen.model.OperationType.SEARCH_ENTITY, it.anggen.model.entity.Tab.staticEntityId, securityService.getLoggedUser(),log);
         List<it.anggen.model.entity.Tab> tabList=tabService.findById(Long.valueOf(tabId));
         getSecurityMapping(tabList);
         getRightMapping(tabList);
@@ -93,7 +99,9 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         if (securityEnabled && !securityService.hasPermission(it.anggen.model.entity.Tab.staticEntityId, it.anggen.model.RestrictionType.DELETE)) 
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
-        log.info("Deleting tab with id {}",tabId);
+        log.info("Deleting tab with id "+tabId);
+        logEntryService.addLogEntry( "Deleting tab with id {}"+tabId,
+        it.anggen.model.LogType.INFO, it.anggen.model.OperationType.DELETE_ENTITY, it.anggen.model.entity.Tab.staticEntityId, securityService.getLoggedUser(),log);
         tabService.deleteById(Long.valueOf(tabId));
         return ResponseEntity.ok().build();
     }
@@ -108,10 +116,11 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
         if (tab.getTabId()!=null)
-        log.info("Inserting tab like {}", tab.getName()+' '+ tab.getTabId());
+        log.info("Inserting tab like "+ tab.getName()+' '+ tab.getTabId());
         it.anggen.model.entity.Tab insertedTab=tabService.insert(tab);
         getRightMapping(insertedTab);
-        log.info("Inserted tab with id {}",insertedTab.getTabId());
+        logEntryService.addLogEntry( "Inserted tab with id "+ insertedTab.getTabId(),
+        it.anggen.model.LogType.INFO, it.anggen.model.OperationType.CREATE_ENTITY, it.anggen.model.entity.Tab.staticEntityId, securityService.getLoggedUser(),log);
         return ResponseEntity.ok().body(insertedTab);
     }
 
@@ -124,7 +133,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         if (securityEnabled && !securityService.hasPermission(it.anggen.model.entity.Tab.staticEntityId, it.anggen.model.RestrictionType.UPDATE)) 
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
-        log.info("Updating tab with id {}",tab.getTabId());
+        logEntryService.addLogEntry( "Updating tab with id "+tab.getTabId(),
+        it.anggen.model.LogType.INFO, it.anggen.model.OperationType.UPDATE_ENTITY, it.anggen.model.entity.Tab.staticEntityId, securityService.getLoggedUser(),log);
         rebuildSecurityMapping(tab);
         it.anggen.model.entity.Tab updatedTab=tabService.update(tab);
         getSecurityMapping(updatedTab);
@@ -147,8 +157,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         {
 
         relationship.setTab(null);
-        relationship.setEntity(null);
         relationship.setEntityTarget(null);
+        relationship.setEntity(null);
         relationship.setAnnotationList(null);
         }
         if (tab.getEntity()!=null)

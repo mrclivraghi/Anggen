@@ -15,7 +15,9 @@ import org.hibernate.annotations.Type;
 @Table(schema = "meta", name = "enum_field")
 @it.anggen.utils.annotation.SecurityType(type = it.anggen.model.SecurityType.ACCESS_WITH_PERMISSION)
 @MaxDescendantLevel(100)
-public class EnumField extends EntityAttribute{
+public class EnumField
+    extends EntityAttribute
+{
 
     public final static java.lang.Long staticEntityId = 17L;
     @javax.persistence.Column(name = "priority")

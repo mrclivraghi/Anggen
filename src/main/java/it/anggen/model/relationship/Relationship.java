@@ -16,9 +16,15 @@ import it.anggen.utils.annotation.MaxDescendantLevel;
 @Table(schema = "meta", name = "relationship")
 @it.anggen.utils.annotation.SecurityType(type = it.anggen.model.SecurityType.ACCESS_WITH_PERMISSION)
 @MaxDescendantLevel(100)
-public class Relationship extends EntityAttribute{
+public class Relationship
+    extends EntityAttribute
+{
 
     public final static java.lang.Long staticEntityId = 6L;
+    @javax.persistence.Column(name = "name")
+    @it.anggen.utils.annotation.DescriptionField
+    @it.anggen.utils.annotation.Priority(2)
+    private String name;
     @javax.persistence.Column(name = "relationship_id")
     @it.anggen.utils.annotation.Priority(1)
     @it.anggen.utils.annotation.DescriptionField
@@ -28,10 +34,6 @@ public class Relationship extends EntityAttribute{
     @javax.persistence.Column(name = "priority")
     @it.anggen.utils.annotation.Priority(2)
     private Integer priority;
-    @javax.persistence.Column(name = "name")
-    @it.anggen.utils.annotation.DescriptionField
-    @it.anggen.utils.annotation.Priority(2)
-    private String name;
     @ManyToOne(fetch = javax.persistence.FetchType.EAGER)
     @javax.persistence.JoinColumn(name = "tab_id_tab")
     @it.anggen.utils.annotation.Priority(4)
@@ -55,6 +57,14 @@ public class Relationship extends EntityAttribute{
     @it.anggen.utils.annotation.Priority(3)
     private RelationshipType relationshipType;
 
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name=name;
+    }
+
     public java.lang.Long getRelationshipId() {
         return this.relationshipId;
     }
@@ -69,14 +79,6 @@ public class Relationship extends EntityAttribute{
 
     public void setPriority(Integer priority) {
         this.priority=priority;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(String name) {
-        this.name=name;
     }
 
     public it.anggen.model.entity.Tab getTab() {

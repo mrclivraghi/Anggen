@@ -5,6 +5,7 @@ import java.util.List;
 import com.codahale.metrics.annotation.Timed;
 import it.anggen.searchbean.security.RoleSearchBean;
 import it.anggen.security.SecurityService;
+import it.anggen.service.log.LogEntryService;
 import it.anggen.service.security.RoleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +25,8 @@ public class RoleController {
     private RoleService roleService;
     @org.springframework.beans.factory.annotation.Autowired
     private SecurityService securityService;
+    @org.springframework.beans.factory.annotation.Autowired
+    private LogEntryService logEntryService;
     private final static Logger log = LoggerFactory.getLogger(it.anggen.model.security.Role.class);
     @Value("${application.security}")
     private Boolean securityEnabled;
@@ -60,6 +63,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         List<it.anggen.model.security.Role> roleList;
         if (role.getRoleId()!=null)
          log.info("Searching role like {}", role.getRoleId()+' '+ role.getRole());
+        logEntryService.addLogEntry( "Searching entity like "+ role.getRoleId()+' '+ role.getRole(),
+        it.anggen.model.LogType.INFO, it.anggen.model.OperationType.SEARCH_ENTITY, it.anggen.model.security.Role.staticEntityId, securityService.getLoggedUser(),log);
         roleList=roleService.find(role);
         getSecurityMapping(roleList);
         getRightMapping(roleList);
@@ -76,7 +81,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         if (securityEnabled && !securityService.hasPermission(it.anggen.model.security.Role.staticEntityId, it.anggen.model.RestrictionType.SEARCH)) 
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
-        log.info("Searching role with id {}",roleId);
+        logEntryService.addLogEntry( "Searching role with id "+roleId,
+        it.anggen.model.LogType.INFO, it.anggen.model.OperationType.SEARCH_ENTITY, it.anggen.model.security.Role.staticEntityId, securityService.getLoggedUser(),log);
         List<it.anggen.model.security.Role> roleList=roleService.findById(Integer.valueOf(roleId));
         getSecurityMapping(roleList);
         getRightMapping(roleList);
@@ -93,7 +99,9 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         if (securityEnabled && !securityService.hasPermission(it.anggen.model.security.Role.staticEntityId, it.anggen.model.RestrictionType.DELETE)) 
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
-        log.info("Deleting role with id {}",roleId);
+        log.info("Deleting role with id "+roleId);
+        logEntryService.addLogEntry( "Deleting role with id {}"+roleId,
+        it.anggen.model.LogType.INFO, it.anggen.model.OperationType.DELETE_ENTITY, it.anggen.model.security.Role.staticEntityId, securityService.getLoggedUser(),log);
         roleService.deleteById(Integer.valueOf(roleId));
         return ResponseEntity.ok().build();
     }
@@ -108,10 +116,11 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
         if (role.getRoleId()!=null)
-        log.info("Inserting role like {}", role.getRoleId()+' '+ role.getRole());
+        log.info("Inserting role like "+ role.getRoleId()+' '+ role.getRole());
         it.anggen.model.security.Role insertedRole=roleService.insert(role);
         getRightMapping(insertedRole);
-        log.info("Inserted role with id {}",insertedRole.getRoleId());
+        logEntryService.addLogEntry( "Inserted role with id "+ insertedRole.getRoleId(),
+        it.anggen.model.LogType.INFO, it.anggen.model.OperationType.CREATE_ENTITY, it.anggen.model.security.Role.staticEntityId, securityService.getLoggedUser(),log);
         return ResponseEntity.ok().body(insertedRole);
     }
 
@@ -124,7 +133,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         if (securityEnabled && !securityService.hasPermission(it.anggen.model.security.Role.staticEntityId, it.anggen.model.RestrictionType.UPDATE)) 
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
-        log.info("Updating role with id {}",role.getRoleId());
+        logEntryService.addLogEntry( "Updating role with id "+role.getRoleId(),
+        it.anggen.model.LogType.INFO, it.anggen.model.OperationType.UPDATE_ENTITY, it.anggen.model.security.Role.staticEntityId, securityService.getLoggedUser(),log);
         rebuildSecurityMapping(role);
         it.anggen.model.security.Role updatedRole=roleService.update(role);
         getSecurityMapping(updatedRole);

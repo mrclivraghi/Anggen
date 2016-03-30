@@ -5,6 +5,7 @@ import java.util.List;
 import com.codahale.metrics.annotation.Timed;
 import it.anggen.searchbean.security.RestrictionFieldSearchBean;
 import it.anggen.security.SecurityService;
+import it.anggen.service.log.LogEntryService;
 import it.anggen.service.security.RestrictionFieldService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +25,8 @@ public class RestrictionFieldController {
     private RestrictionFieldService restrictionFieldService;
     @org.springframework.beans.factory.annotation.Autowired
     private SecurityService securityService;
+    @org.springframework.beans.factory.annotation.Autowired
+    private LogEntryService logEntryService;
     private final static Logger log = LoggerFactory.getLogger(it.anggen.model.security.RestrictionField.class);
     @Value("${application.security}")
     private Boolean securityEnabled;
@@ -60,6 +63,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         List<it.anggen.model.security.RestrictionField> restrictionFieldList;
         if (restrictionField.getRestrictionFieldId()!=null)
          log.info("Searching restrictionField like {}", restrictionField.getRestrictionFieldId());
+        logEntryService.addLogEntry( "Searching entity like "+ restrictionField.getRestrictionFieldId(),
+        it.anggen.model.LogType.INFO, it.anggen.model.OperationType.SEARCH_ENTITY, it.anggen.model.security.RestrictionField.staticEntityId, securityService.getLoggedUser(),log);
         restrictionFieldList=restrictionFieldService.find(restrictionField);
         getSecurityMapping(restrictionFieldList);
         getRightMapping(restrictionFieldList);
@@ -76,7 +81,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         if (securityEnabled && !securityService.hasPermission(it.anggen.model.security.RestrictionField.staticEntityId, it.anggen.model.RestrictionType.SEARCH)) 
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
-        log.info("Searching restrictionField with id {}",restrictionFieldId);
+        logEntryService.addLogEntry( "Searching restrictionField with id "+restrictionFieldId,
+        it.anggen.model.LogType.INFO, it.anggen.model.OperationType.SEARCH_ENTITY, it.anggen.model.security.RestrictionField.staticEntityId, securityService.getLoggedUser(),log);
         List<it.anggen.model.security.RestrictionField> restrictionFieldList=restrictionFieldService.findById(Long.valueOf(restrictionFieldId));
         getSecurityMapping(restrictionFieldList);
         getRightMapping(restrictionFieldList);
@@ -93,7 +99,9 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         if (securityEnabled && !securityService.hasPermission(it.anggen.model.security.RestrictionField.staticEntityId, it.anggen.model.RestrictionType.DELETE)) 
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
-        log.info("Deleting restrictionField with id {}",restrictionFieldId);
+        log.info("Deleting restrictionField with id "+restrictionFieldId);
+        logEntryService.addLogEntry( "Deleting restrictionField with id {}"+restrictionFieldId,
+        it.anggen.model.LogType.INFO, it.anggen.model.OperationType.DELETE_ENTITY, it.anggen.model.security.RestrictionField.staticEntityId, securityService.getLoggedUser(),log);
         restrictionFieldService.deleteById(Long.valueOf(restrictionFieldId));
         return ResponseEntity.ok().build();
     }
@@ -108,10 +116,11 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
         if (restrictionField.getRestrictionFieldId()!=null)
-        log.info("Inserting restrictionField like {}", restrictionField.getRestrictionFieldId());
+        log.info("Inserting restrictionField like "+ restrictionField.getRestrictionFieldId());
         it.anggen.model.security.RestrictionField insertedRestrictionField=restrictionFieldService.insert(restrictionField);
         getRightMapping(insertedRestrictionField);
-        log.info("Inserted restrictionField with id {}",insertedRestrictionField.getRestrictionFieldId());
+        logEntryService.addLogEntry( "Inserted restrictionField with id "+ insertedRestrictionField.getRestrictionFieldId(),
+        it.anggen.model.LogType.INFO, it.anggen.model.OperationType.CREATE_ENTITY, it.anggen.model.security.RestrictionField.staticEntityId, securityService.getLoggedUser(),log);
         return ResponseEntity.ok().body(insertedRestrictionField);
     }
 
@@ -124,7 +133,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         if (securityEnabled && !securityService.hasPermission(it.anggen.model.security.RestrictionField.staticEntityId, it.anggen.model.RestrictionType.UPDATE)) 
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
-        log.info("Updating restrictionField with id {}",restrictionField.getRestrictionFieldId());
+        logEntryService.addLogEntry( "Updating restrictionField with id "+restrictionField.getRestrictionFieldId(),
+        it.anggen.model.LogType.INFO, it.anggen.model.OperationType.UPDATE_ENTITY, it.anggen.model.security.RestrictionField.staticEntityId, securityService.getLoggedUser(),log);
         rebuildSecurityMapping(restrictionField);
         it.anggen.model.security.RestrictionField updatedRestrictionField=restrictionFieldService.update(restrictionField);
         getSecurityMapping(updatedRestrictionField);

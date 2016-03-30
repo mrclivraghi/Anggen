@@ -13,7 +13,7 @@ import it.anggen.utils.annotation.DescriptionField;
 import it.anggen.utils.annotation.MaxDescendantLevel;
 
 @javax.persistence.Entity
-@Table(schema = "log", name = "log_entry")
+@Table(schema = "meta", name = "log_entry")
 @it.anggen.utils.annotation.SecurityType(type = it.anggen.model.SecurityType.ACCESS_WITH_PERMISSION)
 @MaxDescendantLevel(1)
 public class LogEntry {

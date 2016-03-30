@@ -17,7 +17,9 @@ import org.hibernate.annotations.Type;
 @Table(schema = "meta", name = "field")
 @it.anggen.utils.annotation.SecurityType(type = it.anggen.model.SecurityType.ACCESS_WITH_PERMISSION)
 @MaxDescendantLevel(100)
-public class Field extends EntityAttribute{
+public class Field
+    extends EntityAttribute
+{
 
     public final static java.lang.Long staticEntityId = 16L;
     @javax.persistence.Column(name = "priority")

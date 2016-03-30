@@ -10,8 +10,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-//@Configuration("anggenCsrfFilter")
-//@Order(2147483640)
+@Configuration("anggenCsrfFilter")
+@Order(2147483640)
 public class CsrfHeaderFilter
     extends OncePerRequestFilter
 {

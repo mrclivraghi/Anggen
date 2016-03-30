@@ -8,6 +8,8 @@ import it.anggen.model.OperationType;
 import it.anggen.model.entity.Entity;
 import it.anggen.model.security.User;
 import it.anggen.searchbean.log.LogEntrySearchBean;
+
+import org.apache.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -29,7 +31,7 @@ public interface LogEntryService {
         Integer pageNumber);
     
 
-    public void addLogEntry(String hostName, String info,String ipAddress,LogType logType,OperationType operationType, Long entityId, User user);
+    public void addLogEntry(String info,LogType logType,OperationType operationType, Long entityId, User user,org.slf4j.Logger log);
 
     
 }

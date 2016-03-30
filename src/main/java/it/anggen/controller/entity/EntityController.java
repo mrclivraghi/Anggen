@@ -75,13 +75,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
          log.info("Searching entity like {}", entity.getEntityId()+' '+ entity.getName());
         entityList=entityService.find(entity);
         
-        try {
-			logEntryService.addLogEntry(InetAddress.getLocalHost().getHostName(), "Searching entity like " + entity.getEntityId()+' '+ entity.getName(),
-					InetAddress.getLocalHost().toString(), LogType.INFO, OperationType.SEARCH_ENTITY, Entity.staticEntityId, securityService.getLoggedUser());
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			logEntryService.addLogEntry( "Searching entity like " + entity.getEntityId()+' '+ entity.getName(),
+					 LogType.INFO, OperationType.SEARCH_ENTITY, Entity.staticEntityId, securityService.getLoggedUser(),log);
         
         getSecurityMapping(entityList);
         getRightMapping(entityList);

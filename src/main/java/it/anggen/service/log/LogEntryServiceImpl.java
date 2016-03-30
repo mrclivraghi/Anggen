@@ -1,6 +1,8 @@
 
 package it.anggen.service.log;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.List;
 
@@ -13,6 +15,8 @@ import it.anggen.repository.entity.EntityRepository;
 import it.anggen.repository.log.LogEntryRepository;
 import it.anggen.searchbean.log.LogEntrySearchBean;
 import it.anggen.service.log.LogEntryService;
+
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -67,16 +71,39 @@ public class LogEntryServiceImpl
 
 
 	@Override
-	public void addLogEntry(String hostName, String info, String ipAddress, LogType logType,
-			OperationType operationType, Long entityId, User user) {
+	public void addLogEntry( String info,  LogType logType,
+			OperationType operationType, Long entityId, User user,Logger log) {
 		LogEntry logEntry = new LogEntry();
-		logEntry.setHostName(hostName);
+		try {
+			logEntry.setHostName(InetAddress.getLocalHost().getHostName());
+			logEntry.setIpAddress(InetAddress.getLocalHost().getHostAddress());
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		logEntry.setInfo(info);
-		logEntry.setIpAddress(ipAddress);
 		if (logType!=null)
 			logEntry.setLogType(logType);
 		else
 			logEntry.setLogType(LogType.WARNING);
+		
+		switch (logType)
+		{
+		case DEBUG: 
+			log.debug(info);
+			break;
+		case ERROR: 
+			log.error(info);
+			break;
+		case INFO: 
+			log.info(info);
+			break;
+		default: 
+			log.warn(info);
+			break;
+		
+		}
+		
 		logEntry.setOperationType(operationType);
 		logEntry.setEntityId(entityId);
 		if (user!=null && user.getUserId()!=null)

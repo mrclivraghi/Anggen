@@ -3,7 +3,7 @@ function roleService($http,mainService)
 {
 this.entityList =		[];
 this.selectedEntity= 	{show: false 
-,userList: [],restrictionEntityGroupList: [],restrictionFieldList: [],restrictionEntityList: []};
+,restrictionEntityList: [],restrictionFieldList: [],restrictionEntityGroupList: [],userList: []};
 this.isParent=function()
 {
 return mainService.parentEntity=="Role";
@@ -65,17 +65,10 @@ var promise= $http.post("role/"+this.selectedEntity.roleId+"/load"+field+"/",for
 });
 return promise; 
 }
- this.initUserList= function()
+ this.initRestrictionEntityList= function()
 {
 var promise= $http
-.post("user/search",
-{});
-return promise;
-};
- this.initRestrictionEntityGroupList= function()
-{
-var promise= $http
-.post("restrictionEntityGroup/search",
+.post("restrictionEntity/search",
 {});
 return promise;
 };
@@ -86,10 +79,17 @@ var promise= $http
 {});
 return promise;
 };
- this.initRestrictionEntityList= function()
+ this.initRestrictionEntityGroupList= function()
 {
 var promise= $http
-.post("restrictionEntity/search",
+.post("restrictionEntityGroup/search",
+{});
+return promise;
+};
+ this.initUserList= function()
+{
+var promise= $http
+.post("user/search",
 {});
 return promise;
 };

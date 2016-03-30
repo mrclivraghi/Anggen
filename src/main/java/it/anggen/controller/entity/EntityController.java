@@ -59,7 +59,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         List<it.anggen.model.entity.Entity> entityList;
         if (entity.getEntityId()!=null)
-         log.info("Searching entity like {}", entity.getName()+' '+ entity.getEntityId());
+         log.info("Searching entity like {}", entity.getEntityId()+' '+ entity.getName());
         entityList=entityService.find(entity);
         getSecurityMapping(entityList);
         getRightMapping(entityList);
@@ -108,7 +108,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
         if (entity.getEntityId()!=null)
-        log.info("Inserting entity like {}", entity.getName()+' '+ entity.getEntityId());
+        log.info("Inserting entity like {}", entity.getEntityId()+' '+ entity.getName());
         it.anggen.model.entity.Entity insertedEntity=entityService.insert(entity);
         getRightMapping(insertedEntity);
         log.info("Inserted entity with id {}",insertedEntity.getEntityId());
@@ -146,54 +146,54 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         {
 
-        field.setAnnotationList(null);
-        field.setEntity(null);
-        field.setTab(null);
         field.setRestrictionFieldList(null);
+        field.setTab(null);
+        field.setEntity(null);
+        field.setAnnotationList(null);
         }
         if (entity.getEnumFieldList()!=null)
         for (it.anggen.model.field.EnumField enumField :entity.getEnumFieldList())
 
         {
 
-        enumField.setAnnotationList(null);
-        enumField.setEnumEntity(null);
-        enumField.setEntity(null);
         enumField.setTab(null);
+        enumField.setEntity(null);
+        enumField.setEnumEntity(null);
+        enumField.setAnnotationList(null);
         }
         if (entity.getTabList()!=null)
         for (it.anggen.model.entity.Tab tab :entity.getTabList())
 
         {
 
-        tab.setEnumFieldList(null);
-        tab.setFieldList(null);
-        tab.setEntity(null);
         tab.setRelationshipList(null);
+        tab.setEntity(null);
+        tab.setFieldList(null);
+        tab.setEnumFieldList(null);
         }
         if (entity.getEntityGroup()!=null)
         {
-        entity.getEntityGroup().setProject(null);
-        entity.getEntityGroup().setEntityList(null);
         entity.getEntityGroup().setRestrictionEntityGroupList(null);
+        entity.getEntityGroup().setEntityList(null);
+        entity.getEntityGroup().setProject(null);
         }
         if (entity.getRestrictionEntityList()!=null)
         for (it.anggen.model.security.RestrictionEntity restrictionEntity :entity.getRestrictionEntityList())
 
         {
 
-        restrictionEntity.setEntity(null);
         restrictionEntity.setRole(null);
+        restrictionEntity.setEntity(null);
         }
         if (entity.getRelationshipList()!=null)
         for (it.anggen.model.relationship.Relationship relationship :entity.getRelationshipList())
 
         {
 
-        relationship.setAnnotationList(null);
+        relationship.setTab(null);
         relationship.setEntity(null);
         relationship.setEntityTarget(null);
-        relationship.setTab(null);
+        relationship.setAnnotationList(null);
         }
     }
 

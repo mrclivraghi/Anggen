@@ -65,31 +65,31 @@ var promise= $http.post("relationship/"+this.selectedEntity.relationshipId+"/loa
 });
 return promise; 
 }
- this.initAnnotationList= function()
-{
-var promise= $http
-.post("annotation/search",
-{});
-return promise;
-};
- this.initEntityList= function()
-{
-var promise= $http
-.post("entity/search",
-{});
-return promise;
-};
- this.initEntityList= function()
-{
-var promise= $http
-.post("entity/search",
-{});
-return promise;
-};
  this.initTabList= function()
 {
 var promise= $http
 .post("tab/search",
+{});
+return promise;
+};
+ this.initEntityList= function()
+{
+var promise= $http
+.post("entity/search",
+{});
+return promise;
+};
+ this.initEntityList= function()
+{
+var promise= $http
+.post("entity/search",
+{});
+return promise;
+};
+ this.initAnnotationList= function()
+{
+var promise= $http
+.post("annotation/search",
 {});
 return promise;
 };
@@ -102,11 +102,11 @@ paginationPageSize: 10,
 enableGridMenu: true,
 columnDefs: [    
 { name: 'relationshipId'},
-{ name: 'priority'},
 { name: 'name'},
-{ name: 'entity.entityId', displayName: 'entity'},
+{ name: 'priority'},
+{ name: 'tab.tabId', displayName: 'tab'},
 { name: 'entityTarget.entityTargetId', displayName: 'entityTarget'},
-{ name: 'tab.tabId', displayName: 'tab'} 
+{ name: 'entity.entityId', displayName: 'entity'} 
 ]
  };
 };

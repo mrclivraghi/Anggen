@@ -17,34 +17,34 @@ import org.hibernate.annotations.Type;
 @MaxDescendantLevel(100)
 public class EntityGroup {
 
-    public final static java.lang.Long staticEntityId = 14L;
+    public final static java.lang.Long staticEntityId = 13L;
     @javax.persistence.Column(name = "entity_id")
     @it.anggen.utils.annotation.Priority(2)
     private java.lang.Long entityId;
-    @javax.persistence.Column(name = "entity_group_id")
-    @it.anggen.utils.annotation.Priority(1)
+    @javax.persistence.Column(name = "name")
     @it.anggen.utils.annotation.DescriptionField
+    @it.anggen.utils.annotation.Priority(2)
+    private String name;
+    @javax.persistence.Column(name = "entity_group_id")
     @Id
     @GeneratedValue
-    private java.lang.Long entityGroupId;
-    @javax.persistence.Column(name = "name")
-    @it.anggen.utils.annotation.Priority(2)
     @it.anggen.utils.annotation.DescriptionField
-    private String name;
-    @ManyToOne(fetch = javax.persistence.FetchType.EAGER)
-    @javax.persistence.JoinColumn(name = "project_id_project")
-    @it.anggen.utils.annotation.Priority(4)
-    private it.anggen.model.entity.Project project;
-    @OneToMany(fetch = javax.persistence.FetchType.EAGER)
-    @Type(type = "it.anggen.model.entity.Entity")
-    @javax.persistence.JoinColumn(name = "entity_group_id_entity_group")
-    @it.anggen.utils.annotation.Priority(4)
-    private List<it.anggen.model.entity.Entity> entityList;
+    @it.anggen.utils.annotation.Priority(1)
+    private java.lang.Long entityGroupId;
     @OneToMany(fetch = javax.persistence.FetchType.EAGER)
     @Type(type = "it.anggen.model.security.RestrictionEntityGroup")
     @javax.persistence.JoinColumn(name = "entity_group_id_entity_group")
     @it.anggen.utils.annotation.Priority(4)
     private List<RestrictionEntityGroup> restrictionEntityGroupList;
+    @OneToMany(fetch = javax.persistence.FetchType.EAGER)
+    @Type(type = "it.anggen.model.entity.Entity")
+    @javax.persistence.JoinColumn(name = "entity_group_id_entity_group")
+    @it.anggen.utils.annotation.Priority(4)
+    private List<it.anggen.model.entity.Entity> entityList;
+    @ManyToOne(fetch = javax.persistence.FetchType.EAGER)
+    @javax.persistence.JoinColumn(name = "project_id_project")
+    @it.anggen.utils.annotation.Priority(4)
+    private it.anggen.model.entity.Project project;
 
     public java.lang.Long getEntityId() {
         return this.entityId;
@@ -52,14 +52,6 @@ public class EntityGroup {
 
     public void setEntityId(java.lang.Long entityId) {
         this.entityId=entityId;
-    }
-
-    public java.lang.Long getEntityGroupId() {
-        return this.entityGroupId;
-    }
-
-    public void setEntityGroupId(java.lang.Long entityGroupId) {
-        this.entityGroupId=entityGroupId;
     }
 
     public String getName() {
@@ -70,12 +62,20 @@ public class EntityGroup {
         this.name=name;
     }
 
-    public it.anggen.model.entity.Project getProject() {
-        return this.project;
+    public java.lang.Long getEntityGroupId() {
+        return this.entityGroupId;
     }
 
-    public void setProject(it.anggen.model.entity.Project project) {
-        this.project=project;
+    public void setEntityGroupId(java.lang.Long entityGroupId) {
+        this.entityGroupId=entityGroupId;
+    }
+
+    public List<RestrictionEntityGroup> getRestrictionEntityGroupList() {
+        return this.restrictionEntityGroupList;
+    }
+
+    public void setRestrictionEntityGroupList(List<RestrictionEntityGroup> restrictionEntityGroupList) {
+        this.restrictionEntityGroupList=restrictionEntityGroupList;
     }
 
     public List<it.anggen.model.entity.Entity> getEntityList() {
@@ -86,12 +86,12 @@ public class EntityGroup {
         this.entityList=entityList;
     }
 
-    public List<RestrictionEntityGroup> getRestrictionEntityGroupList() {
-        return this.restrictionEntityGroupList;
+    public it.anggen.model.entity.Project getProject() {
+        return this.project;
     }
 
-    public void setRestrictionEntityGroupList(List<RestrictionEntityGroup> restrictionEntityGroupList) {
-        this.restrictionEntityGroupList=restrictionEntityGroupList;
+    public void setProject(it.anggen.model.entity.Project project) {
+        this.project=project;
     }
 
 }

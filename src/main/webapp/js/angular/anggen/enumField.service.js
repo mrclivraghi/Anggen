@@ -65,17 +65,10 @@ var promise= $http.post("enumField/"+this.selectedEntity.enumFieldId+"/load"+fie
 });
 return promise; 
 }
- this.initAnnotationList= function()
+ this.initTabList= function()
 {
 var promise= $http
-.post("annotation/search",
-{});
-return promise;
-};
- this.initEnumEntityList= function()
-{
-var promise= $http
-.post("enumEntity/search",
+.post("tab/search",
 {});
 return promise;
 };
@@ -86,10 +79,17 @@ var promise= $http
 {});
 return promise;
 };
- this.initTabList= function()
+ this.initEnumEntityList= function()
 {
 var promise= $http
-.post("tab/search",
+.post("enumEntity/search",
+{});
+return promise;
+};
+ this.initAnnotationList= function()
+{
+var promise= $http
+.post("annotation/search",
 {});
 return promise;
 };
@@ -102,11 +102,11 @@ paginationPageSize: 10,
 enableGridMenu: true,
 columnDefs: [    
 { name: 'enumFieldId'},
-{ name: 'name'},
 { name: 'priority'},
-{ name: 'enumEntity.enumEntityId', displayName: 'enumEntity'},
+{ name: 'name'},
+{ name: 'tab.tabId', displayName: 'tab'},
 { name: 'entity.entityId', displayName: 'entity'},
-{ name: 'tab.tabId', displayName: 'tab'} 
+{ name: 'enumEntity.enumEntityId', displayName: 'enumEntity'} 
 ]
  };
 };

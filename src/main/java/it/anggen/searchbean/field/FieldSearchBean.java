@@ -11,10 +11,10 @@ public class FieldSearchBean {
     public java.lang.Integer priority;
     public java.lang.String name;
     public it.anggen.model.FieldType fieldType;
-    public List<Annotation> annotationList;
-    public it.anggen.model.entity.Entity entity;
-    public it.anggen.model.entity.Tab tab;
     public List<RestrictionField> restrictionFieldList;
+    public it.anggen.model.entity.Tab tab;
+    public it.anggen.model.entity.Entity entity;
+    public List<Annotation> annotationList;
 
     public java.lang.Long getFieldId() {
         return this.fieldId;
@@ -48,20 +48,12 @@ public class FieldSearchBean {
         this.fieldType=fieldType;
     }
 
-    public List<Annotation> getAnnotationList() {
-        return this.annotationList;
+    public List<RestrictionField> getRestrictionFieldList() {
+        return this.restrictionFieldList;
     }
 
-    public void setAnnotationList(List<Annotation> annotationList) {
-        this.annotationList=annotationList;
-    }
-
-    public it.anggen.model.entity.Entity getEntity() {
-        return this.entity;
-    }
-
-    public void setEntity(it.anggen.model.entity.Entity entity) {
-        this.entity=entity;
+    public void setRestrictionFieldList(List<RestrictionField> restrictionFieldList) {
+        this.restrictionFieldList=restrictionFieldList;
     }
 
     public it.anggen.model.entity.Tab getTab() {
@@ -72,12 +64,20 @@ public class FieldSearchBean {
         this.tab=tab;
     }
 
-    public List<RestrictionField> getRestrictionFieldList() {
-        return this.restrictionFieldList;
+    public it.anggen.model.entity.Entity getEntity() {
+        return this.entity;
     }
 
-    public void setRestrictionFieldList(List<RestrictionField> restrictionFieldList) {
-        this.restrictionFieldList=restrictionFieldList;
+    public void setEntity(it.anggen.model.entity.Entity entity) {
+        this.entity=entity;
+    }
+
+    public List<Annotation> getAnnotationList() {
+        return this.annotationList;
+    }
+
+    public void setAnnotationList(List<Annotation> annotationList) {
+        this.annotationList=annotationList;
     }
 
 }

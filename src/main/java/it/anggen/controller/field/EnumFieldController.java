@@ -59,7 +59,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         List<it.anggen.model.field.EnumField> enumFieldList;
         if (enumField.getEnumFieldId()!=null)
-         log.info("Searching enumField like {}", enumField.getEnumFieldId()+' '+ enumField.getName());
+         log.info("Searching enumField like {}", enumField.getName()+' '+ enumField.getEnumFieldId());
         enumFieldList=enumFieldService.find(enumField);
         getSecurityMapping(enumFieldList);
         getRightMapping(enumFieldList);
@@ -108,7 +108,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
         if (enumField.getEnumFieldId()!=null)
-        log.info("Inserting enumField like {}", enumField.getEnumFieldId()+' '+ enumField.getName());
+        log.info("Inserting enumField like {}", enumField.getName()+' '+ enumField.getEnumFieldId());
         it.anggen.model.field.EnumField insertedEnumField=enumFieldService.insert(enumField);
         getRightMapping(insertedEnumField);
         log.info("Inserted enumField with id {}",insertedEnumField.getEnumFieldId());
@@ -141,20 +141,12 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     }
 
     private void getRightMapping(it.anggen.model.field.EnumField enumField) {
-        if (enumField.getAnnotationList()!=null)
-        for (it.anggen.model.field.Annotation annotation :enumField.getAnnotationList())
-
+        if (enumField.getTab()!=null)
         {
-
-        annotation.setEnumField(null);
-        annotation.setField(null);
-        annotation.setAnnotationAttributeList(null);
-        annotation.setRelationship(null);
-        }
-        if (enumField.getEnumEntity()!=null)
-        {
-        enumField.getEnumEntity().setEnumValueList(null);
-        enumField.getEnumEntity().setProject(null);
+        enumField.getTab().setRelationshipList(null);
+        enumField.getTab().setEntity(null);
+        enumField.getTab().setFieldList(null);
+        enumField.getTab().setEnumFieldList(null);
         }
         if (enumField.getEntity()!=null)
         {
@@ -165,24 +157,32 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         enumField.getEntity().setRestrictionEntityList(null);
         enumField.getEntity().setRelationshipList(null);
         }
-        if (enumField.getTab()!=null)
+        if (enumField.getEnumEntity()!=null)
         {
-        enumField.getTab().setEnumFieldList(null);
-        enumField.getTab().setFieldList(null);
-        enumField.getTab().setEntity(null);
-        enumField.getTab().setRelationshipList(null);
+        enumField.getEnumEntity().setProject(null);
+        enumField.getEnumEntity().setEnumValueList(null);
+        }
+        if (enumField.getAnnotationList()!=null)
+        for (it.anggen.model.field.Annotation annotation :enumField.getAnnotationList())
+
+        {
+
+        annotation.setRelationship(null);
+        annotation.setAnnotationAttributeList(null);
+        annotation.setField(null);
+        annotation.setEnumField(null);
         }
     }
 
     private void rebuildSecurityMapping(it.anggen.model.field.EnumField enumField) {
-        if (securityEnabled && !securityService.hasPermission(it.anggen.model.field.Annotation.staticEntityId, it.anggen.model.RestrictionType.SEARCH))
-        enumField.setAnnotationList(enumFieldService.findById(enumField.getEnumFieldId()).get(0).getAnnotationList());
-        if (securityEnabled && !securityService.hasPermission(it.anggen.model.entity.EnumEntity.staticEntityId, it.anggen.model.RestrictionType.SEARCH))
-        enumField.setEnumEntity(enumFieldService.findById(enumField.getEnumFieldId()).get(0).getEnumEntity());
-        if (securityEnabled && !securityService.hasPermission(it.anggen.model.entity.Entity.staticEntityId, it.anggen.model.RestrictionType.SEARCH))
-        enumField.setEntity(enumFieldService.findById(enumField.getEnumFieldId()).get(0).getEntity());
         if (securityEnabled && !securityService.hasPermission(it.anggen.model.entity.Tab.staticEntityId, it.anggen.model.RestrictionType.SEARCH))
         enumField.setTab(enumFieldService.findById(enumField.getEnumFieldId()).get(0).getTab());
+        if (securityEnabled && !securityService.hasPermission(it.anggen.model.entity.Entity.staticEntityId, it.anggen.model.RestrictionType.SEARCH))
+        enumField.setEntity(enumFieldService.findById(enumField.getEnumFieldId()).get(0).getEntity());
+        if (securityEnabled && !securityService.hasPermission(it.anggen.model.entity.EnumEntity.staticEntityId, it.anggen.model.RestrictionType.SEARCH))
+        enumField.setEnumEntity(enumFieldService.findById(enumField.getEnumFieldId()).get(0).getEnumEntity());
+        if (securityEnabled && !securityService.hasPermission(it.anggen.model.field.Annotation.staticEntityId, it.anggen.model.RestrictionType.SEARCH))
+        enumField.setAnnotationList(enumFieldService.findById(enumField.getEnumFieldId()).get(0).getAnnotationList());
     }
 
     private List<it.anggen.model.field.EnumField> getSecurityMapping(List<it.anggen.model.field.EnumField> enumFieldList) {
@@ -194,17 +194,17 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     }
 
     private void getSecurityMapping(it.anggen.model.field.EnumField enumField) {
-        if (securityEnabled && enumField.getAnnotationList()!=null && !securityService.hasPermission(it.anggen.model.field.Annotation.staticEntityId, it.anggen.model.RestrictionType.SEARCH) )
-        enumField.setAnnotationList(null);
-
-        if (securityEnabled && enumField.getEnumEntity()!=null  && !securityService.hasPermission(it.anggen.model.entity.EnumEntity.staticEntityId, it.anggen.model.RestrictionType.SEARCH) )
-        enumField.setEnumEntity(null);
+        if (securityEnabled && enumField.getTab()!=null  && !securityService.hasPermission(it.anggen.model.entity.Tab.staticEntityId, it.anggen.model.RestrictionType.SEARCH) )
+        enumField.setTab(null);
 
         if (securityEnabled && enumField.getEntity()!=null  && !securityService.hasPermission(it.anggen.model.entity.Entity.staticEntityId, it.anggen.model.RestrictionType.SEARCH) )
         enumField.setEntity(null);
 
-        if (securityEnabled && enumField.getTab()!=null  && !securityService.hasPermission(it.anggen.model.entity.Tab.staticEntityId, it.anggen.model.RestrictionType.SEARCH) )
-        enumField.setTab(null);
+        if (securityEnabled && enumField.getEnumEntity()!=null  && !securityService.hasPermission(it.anggen.model.entity.EnumEntity.staticEntityId, it.anggen.model.RestrictionType.SEARCH) )
+        enumField.setEnumEntity(null);
+
+        if (securityEnabled && enumField.getAnnotationList()!=null && !securityService.hasPermission(it.anggen.model.field.Annotation.staticEntityId, it.anggen.model.RestrictionType.SEARCH) )
+        enumField.setAnnotationList(null);
 
     }
 

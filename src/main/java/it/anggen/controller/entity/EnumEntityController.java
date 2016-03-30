@@ -59,7 +59,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         List<it.anggen.model.entity.EnumEntity> enumEntityList;
         if (enumEntity.getEnumEntityId()!=null)
-         log.info("Searching enumEntity like {}", enumEntity.getName()+' '+ enumEntity.getEnumEntityId());
+         log.info("Searching enumEntity like {}", enumEntity.getEnumEntityId()+' '+ enumEntity.getName());
         enumEntityList=enumEntityService.find(enumEntity);
         getSecurityMapping(enumEntityList);
         getRightMapping(enumEntityList);
@@ -108,7 +108,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
         if (enumEntity.getEnumEntityId()!=null)
-        log.info("Inserting enumEntity like {}", enumEntity.getName()+' '+ enumEntity.getEnumEntityId());
+        log.info("Inserting enumEntity like {}", enumEntity.getEnumEntityId()+' '+ enumEntity.getName());
         it.anggen.model.entity.EnumEntity insertedEnumEntity=enumEntityService.insert(enumEntity);
         getRightMapping(insertedEnumEntity);
         log.info("Inserted enumEntity with id {}",insertedEnumEntity.getEnumEntityId());
@@ -141,6 +141,11 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     }
 
     private void getRightMapping(it.anggen.model.entity.EnumEntity enumEntity) {
+        if (enumEntity.getProject()!=null)
+        {
+        enumEntity.getProject().setEntityGroupList(null);
+        enumEntity.getProject().setEnumEntityList(null);
+        }
         if (enumEntity.getEnumValueList()!=null)
         for (it.anggen.model.field.EnumValue enumValue :enumEntity.getEnumValueList())
 
@@ -148,18 +153,13 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         enumValue.setEnumEntity(null);
         }
-        if (enumEntity.getProject()!=null)
-        {
-        enumEntity.getProject().setEnumEntityList(null);
-        enumEntity.getProject().setEntityGroupList(null);
-        }
     }
 
     private void rebuildSecurityMapping(it.anggen.model.entity.EnumEntity enumEntity) {
-        if (securityEnabled && !securityService.hasPermission(it.anggen.model.field.EnumValue.staticEntityId, it.anggen.model.RestrictionType.SEARCH))
-        enumEntity.setEnumValueList(enumEntityService.findById(enumEntity.getEnumEntityId()).get(0).getEnumValueList());
         if (securityEnabled && !securityService.hasPermission(it.anggen.model.entity.Project.staticEntityId, it.anggen.model.RestrictionType.SEARCH))
         enumEntity.setProject(enumEntityService.findById(enumEntity.getEnumEntityId()).get(0).getProject());
+        if (securityEnabled && !securityService.hasPermission(it.anggen.model.field.EnumValue.staticEntityId, it.anggen.model.RestrictionType.SEARCH))
+        enumEntity.setEnumValueList(enumEntityService.findById(enumEntity.getEnumEntityId()).get(0).getEnumValueList());
     }
 
     private List<it.anggen.model.entity.EnumEntity> getSecurityMapping(List<it.anggen.model.entity.EnumEntity> enumEntityList) {
@@ -171,11 +171,11 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     }
 
     private void getSecurityMapping(it.anggen.model.entity.EnumEntity enumEntity) {
-        if (securityEnabled && enumEntity.getEnumValueList()!=null && !securityService.hasPermission(it.anggen.model.field.EnumValue.staticEntityId, it.anggen.model.RestrictionType.SEARCH) )
-        enumEntity.setEnumValueList(null);
-
         if (securityEnabled && enumEntity.getProject()!=null  && !securityService.hasPermission(it.anggen.model.entity.Project.staticEntityId, it.anggen.model.RestrictionType.SEARCH) )
         enumEntity.setProject(null);
+
+        if (securityEnabled && enumEntity.getEnumValueList()!=null && !securityService.hasPermission(it.anggen.model.field.EnumValue.staticEntityId, it.anggen.model.RestrictionType.SEARCH) )
+        enumEntity.setEnumValueList(null);
 
     }
 

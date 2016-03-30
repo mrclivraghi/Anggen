@@ -3,7 +3,7 @@ function fieldService($http,mainService)
 {
 this.entityList =		[];
 this.selectedEntity= 	{show: false 
-,annotationList: [],restrictionFieldList: []};
+,restrictionFieldList: [],annotationList: []};
 this.isParent=function()
 {
 return mainService.parentEntity=="Field";
@@ -65,17 +65,10 @@ var promise= $http.post("field/"+this.selectedEntity.fieldId+"/load"+field+"/",f
 });
 return promise; 
 }
- this.initAnnotationList= function()
+ this.initRestrictionFieldList= function()
 {
 var promise= $http
-.post("annotation/search",
-{});
-return promise;
-};
- this.initEntityList= function()
-{
-var promise= $http
-.post("entity/search",
+.post("restrictionField/search",
 {});
 return promise;
 };
@@ -86,10 +79,17 @@ var promise= $http
 {});
 return promise;
 };
- this.initRestrictionFieldList= function()
+ this.initEntityList= function()
 {
 var promise= $http
-.post("restrictionField/search",
+.post("entity/search",
+{});
+return promise;
+};
+ this.initAnnotationList= function()
+{
+var promise= $http
+.post("annotation/search",
 {});
 return promise;
 };
@@ -104,8 +104,8 @@ columnDefs: [
 { name: 'fieldId'},
 { name: 'priority'},
 { name: 'name'},
-{ name: 'entity.entityId', displayName: 'entity'},
-{ name: 'tab.tabId', displayName: 'tab'} 
+{ name: 'tab.tabId', displayName: 'tab'},
+{ name: 'entity.entityId', displayName: 'entity'} 
 ]
  };
 };

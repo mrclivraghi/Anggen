@@ -59,7 +59,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         List<it.anggen.model.field.AnnotationAttribute> annotationAttributeList;
         if (annotationAttribute.getAnnotationAttributeId()!=null)
-         log.info("Searching annotationAttribute like {}", annotationAttribute.getAnnotationAttributeId()+' '+ annotationAttribute.getProperty());
+         log.info("Searching annotationAttribute like {}", annotationAttribute.getProperty()+' '+ annotationAttribute.getAnnotationAttributeId());
         annotationAttributeList=annotationAttributeService.find(annotationAttribute);
         getSecurityMapping(annotationAttributeList);
         getRightMapping(annotationAttributeList);
@@ -108,7 +108,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
         if (annotationAttribute.getAnnotationAttributeId()!=null)
-        log.info("Inserting annotationAttribute like {}", annotationAttribute.getAnnotationAttributeId()+' '+ annotationAttribute.getProperty());
+        log.info("Inserting annotationAttribute like {}", annotationAttribute.getProperty()+' '+ annotationAttribute.getAnnotationAttributeId());
         it.anggen.model.field.AnnotationAttribute insertedAnnotationAttribute=annotationAttributeService.insert(annotationAttribute);
         getRightMapping(insertedAnnotationAttribute);
         log.info("Inserted annotationAttribute with id {}",insertedAnnotationAttribute.getAnnotationAttributeId());
@@ -143,10 +143,10 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     private void getRightMapping(it.anggen.model.field.AnnotationAttribute annotationAttribute) {
         if (annotationAttribute.getAnnotation()!=null)
         {
-        annotationAttribute.getAnnotation().setEnumField(null);
-        annotationAttribute.getAnnotation().setField(null);
-        annotationAttribute.getAnnotation().setAnnotationAttributeList(null);
         annotationAttribute.getAnnotation().setRelationship(null);
+        annotationAttribute.getAnnotation().setAnnotationAttributeList(null);
+        annotationAttribute.getAnnotation().setField(null);
+        annotationAttribute.getAnnotation().setEnumField(null);
         }
     }
 

@@ -59,7 +59,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         List<it.anggen.model.security.User> userList;
         if (user.getUserId()!=null)
-         log.info("Searching user like {}", user.getUserId()+' '+ user.getUsername());
+         log.info("Searching user like {}", user.getUsername()+' '+ user.getUserId());
         userList=userService.find(user);
         getSecurityMapping(userList);
         getRightMapping(userList);
@@ -108,7 +108,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
         if (user.getUserId()!=null)
-        log.info("Inserting user like {}", user.getUserId()+' '+ user.getUsername());
+        log.info("Inserting user like {}", user.getUsername()+' '+ user.getUserId());
         it.anggen.model.security.User insertedUser=userService.insert(user);
         getRightMapping(insertedUser);
         log.info("Inserted user with id {}",insertedUser.getUserId());
@@ -146,10 +146,10 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         {
 
-        role.setUserList(null);
-        role.setRestrictionEntityGroupList(null);
-        role.setRestrictionFieldList(null);
         role.setRestrictionEntityList(null);
+        role.setRestrictionFieldList(null);
+        role.setRestrictionEntityGroupList(null);
+        role.setUserList(null);
         }
     }
 

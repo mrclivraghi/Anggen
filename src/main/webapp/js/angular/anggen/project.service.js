@@ -3,7 +3,7 @@ function projectService($http,mainService)
 {
 this.entityList =		[];
 this.selectedEntity= 	{show: false 
-,enumEntityList: [],entityGroupList: []};
+,entityGroupList: [],enumEntityList: []};
 this.isParent=function()
 {
 return mainService.parentEntity=="Project";
@@ -65,17 +65,17 @@ var promise= $http.post("project/"+this.selectedEntity.projectId+"/load"+field+"
 });
 return promise; 
 }
- this.initEnumEntityList= function()
-{
-var promise= $http
-.post("enumEntity/search",
-{});
-return promise;
-};
  this.initEntityGroupList= function()
 {
 var promise= $http
 .post("entityGroup/search",
+{});
+return promise;
+};
+ this.initEnumEntityList= function()
+{
+var promise= $http
+.post("enumEntity/search",
 {});
 return promise;
 };

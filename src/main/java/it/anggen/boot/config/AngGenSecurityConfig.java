@@ -31,19 +31,19 @@ public class AngGenSecurityConfig
     {
         http
         .authorizeRequests()
-        .antMatchers("/css/**","/img/**","/js/**","/auth/**","/login/**").permitAll()
+        .antMatchers("/css/**","/img/**","/js/**","/auth/**","/login/**","/*").permitAll()
         .and()
-        .authorizeRequests().anyRequest().fullyAuthenticated().and()
-        .formLogin().and().csrf()
-        .csrfTokenRepository(csrfTokenRepository()).and()
-        .addFilterAfter(new it.anggen.boot.CsrfHeaderFilter(), org.springframework.security.web.csrf.CsrfFilter.class);
+       // .authorizeRequests().anyRequest().fullyAuthenticated().and()
+        .formLogin().and().csrf().disable();
+        //.csrfTokenRepository(csrfTokenRepository()).and()
+        //.addFilterAfter(new it.anggen.boot.CsrfHeaderFilter(), org.springframework.security.web.csrf.CsrfFilter.class);
     }
 
-    private CsrfTokenRepository csrfTokenRepository() {
+  /*  private CsrfTokenRepository csrfTokenRepository() {
         org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository repository = new org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository();
          repository.setHeaderName("X-XSRF-TOKEN");
         return repository;
-    }
+    }*/
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth)

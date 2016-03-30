@@ -22,6 +22,10 @@ public class Field
 {
 
     public final static java.lang.Long staticEntityId = 16L;
+    @javax.persistence.Column(name = "name")
+    @it.anggen.utils.annotation.DescriptionField
+    @it.anggen.utils.annotation.Priority(2)
+    private String name;
     @javax.persistence.Column(name = "priority")
     @it.anggen.utils.annotation.Priority(2)
     private Integer priority;
@@ -31,10 +35,6 @@ public class Field
     @it.anggen.utils.annotation.DescriptionField
     @it.anggen.utils.annotation.Priority(1)
     private java.lang.Long fieldId;
-    @javax.persistence.Column(name = "name")
-    @it.anggen.utils.annotation.DescriptionField
-    @it.anggen.utils.annotation.Priority(2)
-    private String name;
     @OneToMany(fetch = javax.persistence.FetchType.EAGER)
     @Type(type = "it.anggen.model.security.RestrictionField")
     @javax.persistence.JoinColumn(name = "field_id_field")
@@ -57,6 +57,14 @@ public class Field
     @it.anggen.utils.annotation.Priority(3)
     private FieldType fieldType;
 
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name=name;
+    }
+
     public Integer getPriority() {
         return this.priority;
     }
@@ -71,14 +79,6 @@ public class Field
 
     public void setFieldId(java.lang.Long fieldId) {
         this.fieldId=fieldId;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(String name) {
-        this.name=name;
     }
 
     public List<RestrictionField> getRestrictionFieldList() {

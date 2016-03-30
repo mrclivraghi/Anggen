@@ -192,7 +192,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         if (securityEnabled && !securityService.hasPermission(it.anggen.model.entity.Tab.staticEntityId, it.anggen.model.RestrictionType.SEARCH))
         relationship.setTab(relationshipService.findById(relationship.getRelationshipId()).get(0).getTab());
         if (securityEnabled && !securityService.hasPermission(it.anggen.model.entity.Entity.staticEntityId, it.anggen.model.RestrictionType.SEARCH))
-        relationship.setEntity(relationshipService.findById(relationship.getRelationshipId()).get(0).getEntity());
+        relationship.setEntityTarget(relationshipService.findById(relationship.getRelationshipId()).get(0).getEntityTarget());
         if (securityEnabled && !securityService.hasPermission(it.anggen.model.entity.Entity.staticEntityId, it.anggen.model.RestrictionType.SEARCH))
         relationship.setEntity(relationshipService.findById(relationship.getRelationshipId()).get(0).getEntity());
         if (securityEnabled && !securityService.hasPermission(it.anggen.model.field.Annotation.staticEntityId, it.anggen.model.RestrictionType.SEARCH))

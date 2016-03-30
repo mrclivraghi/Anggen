@@ -20,16 +20,16 @@ import org.hibernate.annotations.Type;
 public class Tab {
 
     public final static java.lang.Long staticEntityId = 4L;
-    @javax.persistence.Column(name = "name")
-    @it.anggen.utils.annotation.DescriptionField
-    @it.anggen.utils.annotation.Priority(2)
-    private String name;
     @javax.persistence.Column(name = "tab_id")
     @Id
     @GeneratedValue
     @it.anggen.utils.annotation.DescriptionField
     @it.anggen.utils.annotation.Priority(1)
     private java.lang.Long tabId;
+    @javax.persistence.Column(name = "name")
+    @it.anggen.utils.annotation.DescriptionField
+    @it.anggen.utils.annotation.Priority(2)
+    private String name;
     @OneToMany(fetch = javax.persistence.FetchType.EAGER)
     @Type(type = "it.anggen.model.relationship.Relationship")
     @javax.persistence.JoinColumn(name = "tab_id_tab")
@@ -50,20 +50,20 @@ public class Tab {
     @it.anggen.utils.annotation.Priority(4)
     private List<EnumField> enumFieldList;
 
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(String name) {
-        this.name=name;
-    }
-
     public java.lang.Long getTabId() {
         return this.tabId;
     }
 
     public void setTabId(java.lang.Long tabId) {
         this.tabId=tabId;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name=name;
     }
 
     public List<Relationship> getRelationshipList() {

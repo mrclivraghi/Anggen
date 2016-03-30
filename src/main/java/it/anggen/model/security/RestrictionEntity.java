@@ -13,24 +13,24 @@ import it.anggen.utils.annotation.MaxDescendantLevel;
 public class RestrictionEntity {
 
     public final static java.lang.Long staticEntityId = 11L;
-    @javax.persistence.Column(name = "restriction_entity_id")
-    @Id
-    @GeneratedValue
-    @it.anggen.utils.annotation.DescriptionField
-    @it.anggen.utils.annotation.Priority(1)
-    private java.lang.Long restrictionEntityId;
     @javax.persistence.Column(name = "can_delete")
     @it.anggen.utils.annotation.Priority(2)
     private java.lang.Boolean canDelete;
     @javax.persistence.Column(name = "can_update")
     @it.anggen.utils.annotation.Priority(2)
     private java.lang.Boolean canUpdate;
-    @javax.persistence.Column(name = "can_create")
-    @it.anggen.utils.annotation.Priority(2)
-    private java.lang.Boolean canCreate;
+    @javax.persistence.Column(name = "restriction_entity_id")
+    @Id
+    @GeneratedValue
+    @it.anggen.utils.annotation.DescriptionField
+    @it.anggen.utils.annotation.Priority(1)
+    private java.lang.Long restrictionEntityId;
     @javax.persistence.Column(name = "can_search")
     @it.anggen.utils.annotation.Priority(2)
     private java.lang.Boolean canSearch;
+    @javax.persistence.Column(name = "can_create")
+    @it.anggen.utils.annotation.Priority(2)
+    private java.lang.Boolean canCreate;
     @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.EAGER)
     @javax.persistence.JoinColumn(name = "role_id_role")
     @it.anggen.utils.annotation.Priority(4)
@@ -40,14 +40,6 @@ public class RestrictionEntity {
     @it.anggen.utils.annotation.Priority(4)
     @it.anggen.utils.annotation.DescriptionField
     private it.anggen.model.entity.Entity entity;
-
-    public java.lang.Long getRestrictionEntityId() {
-        return this.restrictionEntityId;
-    }
-
-    public void setRestrictionEntityId(java.lang.Long restrictionEntityId) {
-        this.restrictionEntityId=restrictionEntityId;
-    }
 
     public java.lang.Boolean getCanDelete() {
         return this.canDelete;
@@ -65,12 +57,12 @@ public class RestrictionEntity {
         this.canUpdate=canUpdate;
     }
 
-    public java.lang.Boolean getCanCreate() {
-        return this.canCreate;
+    public java.lang.Long getRestrictionEntityId() {
+        return this.restrictionEntityId;
     }
 
-    public void setCanCreate(java.lang.Boolean canCreate) {
-        this.canCreate=canCreate;
+    public void setRestrictionEntityId(java.lang.Long restrictionEntityId) {
+        this.restrictionEntityId=restrictionEntityId;
     }
 
     public java.lang.Boolean getCanSearch() {
@@ -79,6 +71,14 @@ public class RestrictionEntity {
 
     public void setCanSearch(java.lang.Boolean canSearch) {
         this.canSearch=canSearch;
+    }
+
+    public java.lang.Boolean getCanCreate() {
+        return this.canCreate;
+    }
+
+    public void setCanCreate(java.lang.Boolean canCreate) {
+        this.canCreate=canCreate;
     }
 
     public it.anggen.model.security.Role getRole() {

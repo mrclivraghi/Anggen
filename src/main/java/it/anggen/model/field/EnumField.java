@@ -20,13 +20,13 @@ public class EnumField
 {
 
     public final static java.lang.Long staticEntityId = 17L;
-    @javax.persistence.Column(name = "priority")
-    @it.anggen.utils.annotation.Priority(2)
-    private Integer priority;
     @javax.persistence.Column(name = "name")
     @it.anggen.utils.annotation.DescriptionField
     @it.anggen.utils.annotation.Priority(2)
     private String name;
+    @javax.persistence.Column(name = "priority")
+    @it.anggen.utils.annotation.Priority(2)
+    private Integer priority;
     @javax.persistence.Column(name = "enum_field_id")
     @Id
     @GeneratedValue
@@ -51,20 +51,20 @@ public class EnumField
     @it.anggen.utils.annotation.Priority(4)
     private List<Annotation> annotationList;
 
-    public Integer getPriority() {
-        return this.priority;
-    }
-
-    public void setPriority(Integer priority) {
-        this.priority=priority;
-    }
-
     public String getName() {
         return this.name;
     }
 
     public void setName(String name) {
         this.name=name;
+    }
+
+    public Integer getPriority() {
+        return this.priority;
+    }
+
+    public void setPriority(Integer priority) {
+        this.priority=priority;
     }
 
     public java.lang.Long getEnumFieldId() {

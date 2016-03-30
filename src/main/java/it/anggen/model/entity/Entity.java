@@ -22,31 +22,31 @@ import org.hibernate.annotations.Type;
 public class Entity {
 
     public final static java.lang.Long staticEntityId = 3L;
+    @javax.persistence.Column(name = "generate_front_end")
+    @it.anggen.utils.annotation.Priority(2)
+    private java.lang.Boolean generateFrontEnd;
+    @javax.persistence.Column(name = "enable_restriction_data")
+    @it.anggen.utils.annotation.Priority(2)
+    private java.lang.Boolean enableRestrictionData;
     @javax.persistence.Column(name = "descendant_max_level")
     @it.anggen.utils.annotation.Priority(2)
     private Integer descendantMaxLevel;
+    @javax.persistence.Column(name = "name")
+    @it.anggen.utils.annotation.DescriptionField
+    @it.anggen.utils.annotation.Priority(2)
+    private String name;
+    @javax.persistence.Column(name = "disable_view_generation")
+    @it.anggen.utils.annotation.Priority(2)
+    private java.lang.Boolean disableViewGeneration;
     @javax.persistence.Column(name = "entity_id")
     @it.anggen.utils.annotation.DescriptionField
     @Id
-    @GeneratedValue
+   // @GeneratedValue
     @it.anggen.utils.annotation.Priority(1)
     private java.lang.Long entityId;
     @javax.persistence.Column(name = "cache")
     @it.anggen.utils.annotation.Priority(2)
     private java.lang.Boolean cache;
-    @javax.persistence.Column(name = "generate_front_end")
-    @it.anggen.utils.annotation.Priority(2)
-    private java.lang.Boolean generateFrontEnd;
-    @javax.persistence.Column(name = "disable_view_generation")
-    @it.anggen.utils.annotation.Priority(2)
-    private java.lang.Boolean disableViewGeneration;
-    @javax.persistence.Column(name = "enable_restriction_data")
-    @it.anggen.utils.annotation.Priority(2)
-    private java.lang.Boolean enableRestrictionData;
-    @javax.persistence.Column(name = "name")
-    @it.anggen.utils.annotation.DescriptionField
-    @it.anggen.utils.annotation.Priority(2)
-    private String name;
     @OneToMany(fetch = javax.persistence.FetchType.EAGER)
     @Type(type = "it.anggen.model.field.Field")
     @javax.persistence.JoinColumn(name = "entity_id_entity")
@@ -80,12 +80,44 @@ public class Entity {
     @it.anggen.utils.annotation.Priority(3)
     private it.anggen.model.SecurityType securityType;
 
+    public java.lang.Boolean getGenerateFrontEnd() {
+        return this.generateFrontEnd;
+    }
+
+    public void setGenerateFrontEnd(java.lang.Boolean generateFrontEnd) {
+        this.generateFrontEnd=generateFrontEnd;
+    }
+
+    public java.lang.Boolean getEnableRestrictionData() {
+        return this.enableRestrictionData;
+    }
+
+    public void setEnableRestrictionData(java.lang.Boolean enableRestrictionData) {
+        this.enableRestrictionData=enableRestrictionData;
+    }
+
     public Integer getDescendantMaxLevel() {
         return this.descendantMaxLevel;
     }
 
     public void setDescendantMaxLevel(Integer descendantMaxLevel) {
         this.descendantMaxLevel=descendantMaxLevel;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name=name;
+    }
+
+    public java.lang.Boolean getDisableViewGeneration() {
+        return this.disableViewGeneration;
+    }
+
+    public void setDisableViewGeneration(java.lang.Boolean disableViewGeneration) {
+        this.disableViewGeneration=disableViewGeneration;
     }
 
     public java.lang.Long getEntityId() {
@@ -102,38 +134,6 @@ public class Entity {
 
     public void setCache(java.lang.Boolean cache) {
         this.cache=cache;
-    }
-
-    public java.lang.Boolean getGenerateFrontEnd() {
-        return this.generateFrontEnd;
-    }
-
-    public void setGenerateFrontEnd(java.lang.Boolean generateFrontEnd) {
-        this.generateFrontEnd=generateFrontEnd;
-    }
-
-    public java.lang.Boolean getDisableViewGeneration() {
-        return this.disableViewGeneration;
-    }
-
-    public void setDisableViewGeneration(java.lang.Boolean disableViewGeneration) {
-        this.disableViewGeneration=disableViewGeneration;
-    }
-
-    public java.lang.Boolean getEnableRestrictionData() {
-        return this.enableRestrictionData;
-    }
-
-    public void setEnableRestrictionData(java.lang.Boolean enableRestrictionData) {
-        this.enableRestrictionData=enableRestrictionData;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(String name) {
-        this.name=name;
     }
 
     public List<Field> getFieldList() {

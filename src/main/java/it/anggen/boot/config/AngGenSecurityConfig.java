@@ -17,7 +17,7 @@ import org.springframework.security.web.csrf.CsrfTokenRepository;
 @Configuration
 @EnableWebSecurity
 @Order(99)
-public class AngGenSecurityConfig
+public class AnggenSecurityConfig
     extends WebSecurityConfigurerAdapter
 {
 
@@ -31,11 +31,12 @@ public class AngGenSecurityConfig
     {
         http
         .authorizeRequests()
-        .antMatchers("/css/**","/img/**","/js/**","/auth/**","/login/**","/**").permitAll()
+        .antMatchers("/css/**","/img/**","/js/**","/auth/**","/login/**").permitAll()
         .and()
         .authorizeRequests().anyRequest().fullyAuthenticated().and()
         .formLogin().and().csrf()
-        .disable();
+        .csrfTokenRepository(csrfTokenRepository()).and()
+        .addFilterAfter(new it.anggen.boot.CsrfHeaderFilter(), org.springframework.security.web.csrf.CsrfFilter.class);
     }
 
     private CsrfTokenRepository csrfTokenRepository() {

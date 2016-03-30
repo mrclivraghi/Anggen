@@ -18,9 +18,6 @@ import org.hibernate.annotations.Type;
 public class EntityGroup {
 
     public final static java.lang.Long staticEntityId = 13L;
-    @javax.persistence.Column(name = "entity_id")
-    @it.anggen.utils.annotation.Priority(2)
-    private java.lang.Long entityId;
     @javax.persistence.Column(name = "name")
     @it.anggen.utils.annotation.DescriptionField
     @it.anggen.utils.annotation.Priority(2)
@@ -31,6 +28,9 @@ public class EntityGroup {
     @it.anggen.utils.annotation.DescriptionField
     @it.anggen.utils.annotation.Priority(1)
     private java.lang.Long entityGroupId;
+    @javax.persistence.Column(name = "entity_id")
+    @it.anggen.utils.annotation.Priority(2)
+    private java.lang.Long entityId;
     @OneToMany(fetch = javax.persistence.FetchType.EAGER)
     @Type(type = "it.anggen.model.security.RestrictionEntityGroup")
     @javax.persistence.JoinColumn(name = "entity_group_id_entity_group")
@@ -46,14 +46,6 @@ public class EntityGroup {
     @it.anggen.utils.annotation.Priority(4)
     private it.anggen.model.entity.Project project;
 
-    public java.lang.Long getEntityId() {
-        return this.entityId;
-    }
-
-    public void setEntityId(java.lang.Long entityId) {
-        this.entityId=entityId;
-    }
-
     public String getName() {
         return this.name;
     }
@@ -68,6 +60,14 @@ public class EntityGroup {
 
     public void setEntityGroupId(java.lang.Long entityGroupId) {
         this.entityGroupId=entityGroupId;
+    }
+
+    public java.lang.Long getEntityId() {
+        return this.entityId;
+    }
+
+    public void setEntityId(java.lang.Long entityId) {
+        this.entityId=entityId;
     }
 
     public List<RestrictionEntityGroup> getRestrictionEntityGroupList() {

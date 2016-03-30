@@ -1,10 +1,16 @@
 angular.module("anggenApp",['ngRoute','ui.bootstrap','ngFileUpload','ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter']);angular.module("anggenApp").service("securityService",function($http)
 {
 this.restrictionList;
+this.init= function() {
+var promise= $http.get("./authentication/");
+return promise; 
+};
 })
 .run(function($rootScope,securityService){
-securityService.restrictionList={};
-$rootScope.restrictionList={};
+securityService.init().then(function successCallback(response) {
+securityService.restrictionList=response.data;
+$rootScope.restrictionList=response.data;
+});
 });
 angular.module("anggenApp").service("mainService", function()
 {

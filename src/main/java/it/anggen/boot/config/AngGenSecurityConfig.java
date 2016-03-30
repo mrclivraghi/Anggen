@@ -17,7 +17,7 @@ import org.springframework.security.web.csrf.CsrfTokenRepository;
 @Configuration
 @EnableWebSecurity
 @Order(99)
-public class AnggenSecurityConfig
+public class AngGenSecurityConfig
     extends WebSecurityConfigurerAdapter
 {
 

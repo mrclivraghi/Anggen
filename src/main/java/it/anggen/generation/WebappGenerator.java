@@ -206,6 +206,8 @@ public class WebappGenerator {
 		member.param(packageName+"*");
 		declareVar(appConfig,"formatSql",String.class,"hibernate.format_sql");
 		declareVar(appConfig,"showSql",String.class,"hibernate.show_sql");
+		declareVar(appConfig,"cacheRegion",String.class,"hibernate.cache.region.factory_class");
+	       
 		//declareVar(appConfig,"dialect",String.class,"hibernate.dialect");
 		//declareVar(appConfig,"mode",String.class,"hibernate.hbm2ddl.auto");
 		//declareVar(appConfig,"namingStrategy",String.class,"hibernate.naming-strategy");
@@ -230,6 +232,7 @@ public class WebappGenerator {
 		hibPropertiesBlock.directStatement(Properties.class.getName()+"  prop = new "+Properties.class.getName()+"();");
 		hibPropertiesBlock.directStatement(" prop.put(\"hibernate.format_sql\", formatSql);");
 		hibPropertiesBlock.directStatement(" prop.put(\"hibernate.show_sql\", showSql);");
+		hibPropertiesBlock.directStatement(" prop.put(\"hibernate.cache.region.factory_class\", cacheRegion);");
 		//hibPropertiesBlock.directStatement(" prop.put(\"hibernate.dialect\", dialect);");
 		//hibPropertiesBlock.directStatement("prop.put(\"hibernate.hbm2ddl.auto\", mode);");
 		//hibPropertiesBlock.directStatement(" prop.put(\"hibernate.naming-strategy\",namingStrategy);");

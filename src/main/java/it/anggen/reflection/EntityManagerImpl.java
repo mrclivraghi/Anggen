@@ -246,7 +246,7 @@ public class EntityManagerImpl implements EntityManager{
 					if (withGetter)
 					{
 						if (EntityAttributeManager.getInstance(entityAttribute).isRelationship())
-							descriptionFields=descriptionFields+" "+entityName+".get"+Utility.getFirstUpper(entityAttribute.getName())+"().get"+Utility.getFirstUpper(entityAttribute.getName())+"Id+' '+";
+							descriptionFields=descriptionFields+" "+entityName+".get"+Utility.getFirstUpper(entityAttribute.getName())+"().get"+Utility.getFirstUpper(entityAttribute.getName())+"Id()+' '+";
 						else
 							descriptionFields=descriptionFields+" "+entityName+".get"+Utility.getFirstUpper(entityAttribute.getName())+"()+' '+";
 						

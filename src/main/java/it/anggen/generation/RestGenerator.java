@@ -799,7 +799,7 @@ public class RestGenerator {
 			
 			deleteBlock.directStatement("log.info(\"Deleting "+lowerClass+" with id \"+"+lowerClass+"Id);");
 			
-			deleteBlock.directStatement("logEntryService.addLogEntry( \"Deleting "+lowerClass+" with id {}\","+lowerClass+"Id,");
+			deleteBlock.directStatement("logEntryService.addLogEntry( \"Deleting "+lowerClass+" with id {}\"+"+lowerClass+"Id,");
 			deleteBlock.directStatement(LogType.class.getName()+".INFO, "+OperationType.class.getName()+".DELETE_ENTITY, "+ReflectionManager.getJDefinedClass(entity).fullName()+".staticEntityId, securityService.getLoggedUser(),log);");
        
 			
@@ -838,7 +838,6 @@ public class RestGenerator {
 			orderParam.annotate(RequestBody.class);
 			JBlock updateBlock= update.body();
 			updateBlock.directStatement(addSecurityCheck(RestrictionType.UPDATE));
-			updateBlock.directStatement("log.info();");
 			
 			insertBlock.directStatement("logEntryService.addLogEntry( \"Updating "+lowerClass+" with id \"+"+lowerClass+".get"+Utility.getFirstUpper(lowerClass)+"Id(),");
 			insertBlock.directStatement(LogType.class.getName()+".INFO, "+OperationType.class.getName()+".UPDATE_ENTITY, "+ReflectionManager.getJDefinedClass(entity).fullName()+".staticEntityId, securityService.getLoggedUser(),log);");

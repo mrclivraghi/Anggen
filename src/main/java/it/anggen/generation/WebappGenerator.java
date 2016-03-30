@@ -35,6 +35,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -179,6 +180,7 @@ public class WebappGenerator {
 		genApp.annotate(Configuration.class);
 		genApp.annotate(EnableAutoConfiguration.class);
 		genApp.annotate(SpringBootApplication.class);
+		genApp.annotate(EnableCaching.class);
 		
 		JMethod mainMethod = genApp.method(JMod.PUBLIC+JMod.STATIC, void.class, "main");
 		mainMethod.param(String[].class, "args");

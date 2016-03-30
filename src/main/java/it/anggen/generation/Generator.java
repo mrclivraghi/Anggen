@@ -286,7 +286,8 @@ public class Generator {
 				entity.getName().equals("restrictionEntityGroup") || 
 				entity.getName().equals("restrictionEntity") || 
 				entity.getName().equals("user") || 
-				entity.getName().equals("role") )
+				entity.getName().equals("role") ||
+				entity.getName().equals("logEntry"))
 			return true;
 		return false;
 	}

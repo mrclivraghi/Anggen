@@ -169,7 +169,7 @@ public class Generator {
 		List<Project> projectList=projectRepository.findByName(applicationName);
 		if (projectList.size()==0)
 			throw new Exception();
-		this.relationshipList=relationshipRepository.findByRelationshipIdAndPriorityAndNameAndRelationshipTypeAndAnnotationAndEntityAndEntityAndTab(null, null, null, null, null, null, null, null);
+		this.relationshipList=relationshipRepository.findByRelationshipIdAndNameAndPriorityAndRelationshipTypeAndTabAndEntityAndEntityAndAnnotation(null, null, null, null, null, null, null, null);
 		this.project=projectList.get(0);
 		this.entityGroupList=project.getEntityGroupList();
 		this.enumEntityList=project.getEnumEntityList();
@@ -280,13 +280,14 @@ public class Generator {
 			return false;
 		if (entity.getEntityGroup()==null)
 			return true;
-		if (!entity.getEntityGroup().getName().equals("security"))
+		if (!entity.getEntityGroup().getName().equals("security") && !entity.getEntityGroup().getName().equals("log"))
 			return false;
 		if (entity.getName().equals("restrictionField") || 
 				entity.getName().equals("restrictionEntityGroup") || 
 				entity.getName().equals("restrictionEntity") || 
 				entity.getName().equals("user") || 
-				entity.getName().equals("role") )
+				entity.getName().equals("role") ||
+				entity.getName().equals("logEntry"))
 			return true;
 		return false;
 	}

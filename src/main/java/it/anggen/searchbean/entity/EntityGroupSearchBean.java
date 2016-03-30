@@ -10,9 +10,9 @@ public class EntityGroupSearchBean {
     public java.lang.Long entityGroupId;
     public java.lang.String name;
     public java.lang.Long entityId;
-    public it.anggen.model.entity.Project project;
-    public List<Entity> entityList;
     public List<RestrictionEntityGroup> restrictionEntityGroupList;
+    public List<Entity> entityList;
+    public it.anggen.model.entity.Project project;
 
     public java.lang.Long getEntityGroupId() {
         return this.entityGroupId;
@@ -38,12 +38,12 @@ public class EntityGroupSearchBean {
         this.entityId=entityId;
     }
 
-    public it.anggen.model.entity.Project getProject() {
-        return this.project;
+    public List<RestrictionEntityGroup> getRestrictionEntityGroupList() {
+        return this.restrictionEntityGroupList;
     }
 
-    public void setProject(it.anggen.model.entity.Project project) {
-        this.project=project;
+    public void setRestrictionEntityGroupList(List<RestrictionEntityGroup> restrictionEntityGroupList) {
+        this.restrictionEntityGroupList=restrictionEntityGroupList;
     }
 
     public List<Entity> getEntityList() {
@@ -54,12 +54,12 @@ public class EntityGroupSearchBean {
         this.entityList=entityList;
     }
 
-    public List<RestrictionEntityGroup> getRestrictionEntityGroupList() {
-        return this.restrictionEntityGroupList;
+    public it.anggen.model.entity.Project getProject() {
+        return this.project;
     }
 
-    public void setRestrictionEntityGroupList(List<RestrictionEntityGroup> restrictionEntityGroupList) {
-        this.restrictionEntityGroupList=restrictionEntityGroupList;
+    public void setProject(it.anggen.model.entity.Project project) {
+        this.project=project;
     }
 
 }

@@ -34,7 +34,7 @@ public class RelationshipServiceImpl
 
     @Override
     public List<it.anggen.model.relationship.Relationship> find(RelationshipSearchBean relationship) {
-        return relationshipRepository.findByRelationshipIdAndPriorityAndNameAndRelationshipTypeAndAnnotationAndEntityAndEntityAndTab(relationship.getRelationshipId(),relationship.getPriority(),relationship.getName(), (relationship.getRelationshipType()==null)? null : relationship.getRelationshipType().getValue(),relationship.getAnnotationList()==null? null :relationship.getAnnotationList().get(0),relationship.getEntity(),relationship.getEntity(),relationship.getTab());
+        return relationshipRepository.findByRelationshipIdAndNameAndPriorityAndRelationshipTypeAndTabAndEntityAndEntityAndAnnotation(relationship.getRelationshipId(),relationship.getName(),relationship.getPriority(), (relationship.getRelationshipType()==null)? null : relationship.getRelationshipType().getValue(),relationship.getTab(),relationship.getEntity(),relationship.getEntity(),relationship.getAnnotationList()==null? null :relationship.getAnnotationList().get(0));
     }
 
     @Override
@@ -57,26 +57,26 @@ public class RelationshipServiceImpl
         annotation.setRelationship(relationship);
         }
         it.anggen.model.relationship.Relationship returnedRelationship=relationshipRepository.save(relationship);
-        if (relationship.getEntity()!=null)
-        {
-        List<it.anggen.model.relationship.Relationship> relationshipList = relationshipRepository.findByEntity( relationship.getEntity());
-        if (!relationshipList.contains(returnedRelationship))
-        relationshipList.add(returnedRelationship);
-        returnedRelationship.getEntity().setRelationshipList(relationshipList);
-        }
-        if (relationship.getEntity()!=null)
-        {
-        List<it.anggen.model.relationship.Relationship> relationshipList = relationshipRepository.findByEntity( relationship.getEntity());
-        if (!relationshipList.contains(returnedRelationship))
-        relationshipList.add(returnedRelationship);
-        returnedRelationship.getEntity().setRelationshipList(relationshipList);
-        }
         if (relationship.getTab()!=null)
         {
         List<it.anggen.model.relationship.Relationship> relationshipList = relationshipRepository.findByTab( relationship.getTab());
         if (!relationshipList.contains(returnedRelationship))
         relationshipList.add(returnedRelationship);
         returnedRelationship.getTab().setRelationshipList(relationshipList);
+        }
+        if (relationship.getEntity()!=null)
+        {
+        List<it.anggen.model.relationship.Relationship> relationshipList = relationshipRepository.findByEntity( relationship.getEntity());
+        if (!relationshipList.contains(returnedRelationship))
+        relationshipList.add(returnedRelationship);
+        returnedRelationship.getEntity().setRelationshipList(relationshipList);
+        }
+        if (relationship.getEntity()!=null)
+        {
+        List<it.anggen.model.relationship.Relationship> relationshipList = relationshipRepository.findByEntity( relationship.getEntity());
+        if (!relationshipList.contains(returnedRelationship))
+        relationshipList.add(returnedRelationship);
+        returnedRelationship.getEntity().setRelationshipList(relationshipList);
         }
          return returnedRelationship;
     }

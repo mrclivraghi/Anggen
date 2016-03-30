@@ -16,8 +16,8 @@ import org.springframework.security.web.csrf.CsrfTokenRepository;
 
 @Configuration
 @EnableWebSecurity
-@Order(100)
-public class AngGenSecurityConfig
+@Order(99)
+public class AnggenSecurityConfig
     extends WebSecurityConfigurerAdapter
 {
 
@@ -31,19 +31,18 @@ public class AngGenSecurityConfig
     {
         http
         .authorizeRequests()
-        .antMatchers("/css/**","/img/**","/js/**","/auth/**","/login/**","/*").permitAll()
+        .antMatchers("/css/**","/img/**","/js/**","/auth/**","/login/**","/**").permitAll()
         .and()
-       // .authorizeRequests().anyRequest().fullyAuthenticated().and()
-        .formLogin().and().csrf().disable();
-        //.csrfTokenRepository(csrfTokenRepository()).and()
-        //.addFilterAfter(new it.anggen.boot.CsrfHeaderFilter(), org.springframework.security.web.csrf.CsrfFilter.class);
+        .authorizeRequests().anyRequest().fullyAuthenticated().and()
+        .formLogin().and().csrf()
+        .disable();
     }
 
-  /*  private CsrfTokenRepository csrfTokenRepository() {
+    private CsrfTokenRepository csrfTokenRepository() {
         org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository repository = new org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository();
          repository.setHeaderName("X-XSRF-TOKEN");
         return repository;
-    }*/
+    }
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth)

@@ -116,11 +116,11 @@ paginationPageSize: 10,
 enableGridMenu: true,
 columnDefs: [    
 { name: 'entityId'},
+{ name: 'disableViewGeneration'},
 { name: 'enableRestrictionData'},
+{ name: 'descendantMaxLevel'},
 { name: 'generateFrontEnd'},
 { name: 'cache'},
-{ name: 'descendantMaxLevel'},
-{ name: 'disableViewGeneration'},
 { name: 'name'},
 { name: 'entityGroup.entityGroupId', displayName: 'entityGroup'} 
 ]

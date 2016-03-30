@@ -35,6 +35,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -179,6 +180,7 @@ public class WebappGenerator {
 		genApp.annotate(Configuration.class);
 		genApp.annotate(EnableAutoConfiguration.class);
 		genApp.annotate(SpringBootApplication.class);
+		genApp.annotate(EnableCaching.class);
 		
 		JMethod mainMethod = genApp.method(JMod.PUBLIC+JMod.STATIC, void.class, "main");
 		mainMethod.param(String[].class, "args");
@@ -192,7 +194,7 @@ public class WebappGenerator {
 		JCodeModel codeModel = new JCodeModel();
 		JDefinedClass appConfig=null;
 		try {
-			appConfig = codeModel._class(JMod.PUBLIC, packageName+"boot.config.AppConfig", ClassType.CLASS);
+			appConfig = codeModel._class(JMod.PUBLIC, packageName+"boot.config."+Utility.getFirstUpper(applicationName)+"Config", ClassType.CLASS);
 		} catch (JClassAlreadyExistsException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -204,6 +206,8 @@ public class WebappGenerator {
 		member.param(packageName+"*");
 		declareVar(appConfig,"formatSql",String.class,"hibernate.format_sql");
 		declareVar(appConfig,"showSql",String.class,"hibernate.show_sql");
+		declareVar(appConfig,"cacheRegion",String.class,"hibernate.cache.region.factory_class");
+	       
 		//declareVar(appConfig,"dialect",String.class,"hibernate.dialect");
 		//declareVar(appConfig,"mode",String.class,"hibernate.hbm2ddl.auto");
 		//declareVar(appConfig,"namingStrategy",String.class,"hibernate.naming-strategy");
@@ -228,6 +232,7 @@ public class WebappGenerator {
 		hibPropertiesBlock.directStatement(Properties.class.getName()+"  prop = new "+Properties.class.getName()+"();");
 		hibPropertiesBlock.directStatement(" prop.put(\"hibernate.format_sql\", formatSql);");
 		hibPropertiesBlock.directStatement(" prop.put(\"hibernate.show_sql\", showSql);");
+		hibPropertiesBlock.directStatement(" prop.put(\"hibernate.cache.region.factory_class\", cacheRegion);");
 		//hibPropertiesBlock.directStatement(" prop.put(\"hibernate.dialect\", dialect);");
 		//hibPropertiesBlock.directStatement("prop.put(\"hibernate.hbm2ddl.auto\", mode);");
 		//hibPropertiesBlock.directStatement(" prop.put(\"hibernate.naming-strategy\",namingStrategy);");
@@ -269,7 +274,7 @@ public class WebappGenerator {
 			JCodeModel codeModel = new JCodeModel();
 			JDefinedClass securityConfig=null;
 			try {
-				securityConfig = codeModel._class(JMod.PUBLIC, packageName+"boot.config.SecurityConfig", ClassType.CLASS);
+				securityConfig = codeModel._class(JMod.PUBLIC, packageName+"boot.config."+Utility.getFirstUpper(applicationName)+"SecurityConfig", ClassType.CLASS);
 				securityConfig._extends(WebSecurityConfigurerAdapter.class);
 			} catch (JClassAlreadyExistsException e) {
 				// TODO Auto-generated catch block
@@ -299,9 +304,13 @@ public class WebappGenerator {
 			configureBlock.directStatement(".and()");
 			configureBlock.directStatement(".authorizeRequests().anyRequest().fullyAuthenticated().and()");
 			configureBlock.directStatement(".formLogin().and().csrf()");
-			configureBlock.directStatement(".csrfTokenRepository(csrfTokenRepository()).and()");
-			configureBlock.directStatement(".addFilterAfter(new "+ReflectionManager.getJDefinedCustomClass(packageName+"boot.CsrfHeaderFilter").fullName()+"(), "+CsrfFilter.class.getName()+".class);");
-			
+			if (!generator.security)
+				configureBlock.directStatement(".disable();");
+			else
+			{
+				configureBlock.directStatement(".csrfTokenRepository(csrfTokenRepository()).and()");
+				configureBlock.directStatement(".addFilterAfter(new "+ReflectionManager.getJDefinedCustomClass(packageName+"boot.CsrfHeaderFilter").fullName()+"(), "+CsrfFilter.class.getName()+".class);");
+			}
 			JMethod tokenRepository = securityConfig.method(JMod.PRIVATE, CsrfTokenRepository.class, "csrfTokenRepository");
 			JBlock tokenRepositoryBody=tokenRepository.body();
 			tokenRepositoryBody.directStatement(HttpSessionCsrfTokenRepository.class.getName()+" repository = new "+HttpSessionCsrfTokenRepository.class.getName()+"();");
@@ -387,7 +396,7 @@ public class WebappGenerator {
 		JMethod getRootConfig = waInit.method(JMod.PROTECTED, Class[].class, "getRootConfigClasses");
 		getRootConfig.annotate(Override.class);
 		JBlock rootConfigBlock = getRootConfig.body();
-		rootConfigBlock.directStatement("return new Class[] {"+packageName+"boot.config.SecurityConfig.class};");
+		rootConfigBlock.directStatement("return new Class[] {"+packageName+"boot.config."+Utility.getFirstUpper(applicationName)+"SecurityConfig.class};");
 	
 		
 		

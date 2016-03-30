@@ -8,8 +8,8 @@ public class EnumEntitySearchBean {
 
     public java.lang.Long enumEntityId;
     public java.lang.String name;
-    public List<EnumValue> enumValueList;
     public it.anggen.model.entity.Project project;
+    public List<EnumValue> enumValueList;
 
     public java.lang.Long getEnumEntityId() {
         return this.enumEntityId;
@@ -27,20 +27,20 @@ public class EnumEntitySearchBean {
         this.name=name;
     }
 
-    public List<EnumValue> getEnumValueList() {
-        return this.enumValueList;
-    }
-
-    public void setEnumValueList(List<EnumValue> enumValueList) {
-        this.enumValueList=enumValueList;
-    }
-
     public it.anggen.model.entity.Project getProject() {
         return this.project;
     }
 
     public void setProject(it.anggen.model.entity.Project project) {
         this.project=project;
+    }
+
+    public List<EnumValue> getEnumValueList() {
+        return this.enumValueList;
+    }
+
+    public void setEnumValueList(List<EnumValue> enumValueList) {
+        this.enumValueList=enumValueList;
     }
 
 }

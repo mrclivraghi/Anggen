@@ -18,30 +18,30 @@ import org.hibernate.annotations.Type;
 @MaxDescendantLevel(100)
 public class Annotation {
 
-    public final static java.lang.Long staticEntityId = 2L;
+    public final static java.lang.Long staticEntityId = 14L;
     @javax.persistence.Column(name = "annotation_id")
-    @it.anggen.utils.annotation.Priority(1)
-    @it.anggen.utils.annotation.DescriptionField
     @Id
     @GeneratedValue
+    @it.anggen.utils.annotation.DescriptionField
+    @it.anggen.utils.annotation.Priority(1)
     private java.lang.Long annotationId;
     @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.EAGER)
-    @javax.persistence.JoinColumn(name = "enum_field_id_enum_field")
+    @javax.persistence.JoinColumn(name = "relationship_id_relationship")
     @it.anggen.utils.annotation.Priority(4)
-    private it.anggen.model.field.EnumField enumField;
-    @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.EAGER)
-    @javax.persistence.JoinColumn(name = "field_id_field")
-    @it.anggen.utils.annotation.Priority(4)
-    private it.anggen.model.field.Field field;
+    private it.anggen.model.relationship.Relationship relationship;
     @OneToMany(fetch = javax.persistence.FetchType.EAGER)
     @Type(type = "it.anggen.model.field.AnnotationAttribute")
     @javax.persistence.JoinColumn(name = "annotation_id_annotation")
     @it.anggen.utils.annotation.Priority(4)
     private List<AnnotationAttribute> annotationAttributeList;
     @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.EAGER)
-    @javax.persistence.JoinColumn(name = "relationship_id_relationship")
+    @javax.persistence.JoinColumn(name = "field_id_field")
     @it.anggen.utils.annotation.Priority(4)
-    private it.anggen.model.relationship.Relationship relationship;
+    private it.anggen.model.field.Field field;
+    @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.EAGER)
+    @javax.persistence.JoinColumn(name = "enum_field_id_enum_field")
+    @it.anggen.utils.annotation.Priority(4)
+    private it.anggen.model.field.EnumField enumField;
     @javax.persistence.Column(name = "annotation_type")
     @it.anggen.utils.annotation.Priority(3)
     @it.anggen.utils.annotation.DescriptionField
@@ -55,20 +55,12 @@ public class Annotation {
         this.annotationId=annotationId;
     }
 
-    public it.anggen.model.field.EnumField getEnumField() {
-        return this.enumField;
+    public it.anggen.model.relationship.Relationship getRelationship() {
+        return this.relationship;
     }
 
-    public void setEnumField(it.anggen.model.field.EnumField enumField) {
-        this.enumField=enumField;
-    }
-
-    public it.anggen.model.field.Field getField() {
-        return this.field;
-    }
-
-    public void setField(it.anggen.model.field.Field field) {
-        this.field=field;
+    public void setRelationship(it.anggen.model.relationship.Relationship relationship) {
+        this.relationship=relationship;
     }
 
     public List<AnnotationAttribute> getAnnotationAttributeList() {
@@ -79,12 +71,20 @@ public class Annotation {
         this.annotationAttributeList=annotationAttributeList;
     }
 
-    public it.anggen.model.relationship.Relationship getRelationship() {
-        return this.relationship;
+    public it.anggen.model.field.Field getField() {
+        return this.field;
     }
 
-    public void setRelationship(it.anggen.model.relationship.Relationship relationship) {
-        this.relationship=relationship;
+    public void setField(it.anggen.model.field.Field field) {
+        this.field=field;
+    }
+
+    public it.anggen.model.field.EnumField getEnumField() {
+        return this.enumField;
+    }
+
+    public void setEnumField(it.anggen.model.field.EnumField enumField) {
+        this.enumField=enumField;
     }
 
     public AnnotationType getAnnotationType() {

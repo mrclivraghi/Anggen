@@ -65,17 +65,10 @@ var promise= $http.post("annotation/"+this.selectedEntity.annotationId+"/load"+f
 });
 return promise; 
 }
- this.initEnumFieldList= function()
+ this.initRelationshipList= function()
 {
 var promise= $http
-.post("enumField/search",
-{});
-return promise;
-};
- this.initFieldList= function()
-{
-var promise= $http
-.post("field/search",
+.post("relationship/search",
 {});
 return promise;
 };
@@ -86,10 +79,17 @@ var promise= $http
 {});
 return promise;
 };
- this.initRelationshipList= function()
+ this.initFieldList= function()
 {
 var promise= $http
-.post("relationship/search",
+.post("field/search",
+{});
+return promise;
+};
+ this.initEnumFieldList= function()
+{
+var promise= $http
+.post("enumField/search",
 {});
 return promise;
 };
@@ -102,9 +102,9 @@ paginationPageSize: 10,
 enableGridMenu: true,
 columnDefs: [    
 { name: 'annotationId'},
-{ name: 'enumField.enumFieldId', displayName: 'enumField'},
+{ name: 'relationship.relationshipId', displayName: 'relationship'},
 { name: 'field.fieldId', displayName: 'field'},
-{ name: 'relationship.relationshipId', displayName: 'relationship'} 
+{ name: 'enumField.enumFieldId', displayName: 'enumField'} 
 ]
  };
 };

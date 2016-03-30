@@ -5,12 +5,12 @@ package it.anggen.searchbean.security;
 public class RestrictionEntitySearchBean {
 
     public java.lang.Long restrictionEntityId;
-    public java.lang.Boolean canCreate;
-    public java.lang.Boolean canSearch;
     public java.lang.Boolean canDelete;
     public java.lang.Boolean canUpdate;
-    public it.anggen.model.entity.Entity entity;
+    public java.lang.Boolean canCreate;
+    public java.lang.Boolean canSearch;
     public it.anggen.model.security.Role role;
+    public it.anggen.model.entity.Entity entity;
 
     public java.lang.Long getRestrictionEntityId() {
         return this.restrictionEntityId;
@@ -18,22 +18,6 @@ public class RestrictionEntitySearchBean {
 
     public void setRestrictionEntityId(java.lang.Long restrictionEntityId) {
         this.restrictionEntityId=restrictionEntityId;
-    }
-
-    public java.lang.Boolean getCanCreate() {
-        return this.canCreate;
-    }
-
-    public void setCanCreate(java.lang.Boolean canCreate) {
-        this.canCreate=canCreate;
-    }
-
-    public java.lang.Boolean getCanSearch() {
-        return this.canSearch;
-    }
-
-    public void setCanSearch(java.lang.Boolean canSearch) {
-        this.canSearch=canSearch;
     }
 
     public java.lang.Boolean getCanDelete() {
@@ -52,12 +36,20 @@ public class RestrictionEntitySearchBean {
         this.canUpdate=canUpdate;
     }
 
-    public it.anggen.model.entity.Entity getEntity() {
-        return this.entity;
+    public java.lang.Boolean getCanCreate() {
+        return this.canCreate;
     }
 
-    public void setEntity(it.anggen.model.entity.Entity entity) {
-        this.entity=entity;
+    public void setCanCreate(java.lang.Boolean canCreate) {
+        this.canCreate=canCreate;
+    }
+
+    public java.lang.Boolean getCanSearch() {
+        return this.canSearch;
+    }
+
+    public void setCanSearch(java.lang.Boolean canSearch) {
+        this.canSearch=canSearch;
     }
 
     public it.anggen.model.security.Role getRole() {
@@ -66,6 +58,14 @@ public class RestrictionEntitySearchBean {
 
     public void setRole(it.anggen.model.security.Role role) {
         this.role=role;
+    }
+
+    public it.anggen.model.entity.Entity getEntity() {
+        return this.entity;
+    }
+
+    public void setEntity(it.anggen.model.entity.Entity entity) {
+        this.entity=entity;
     }
 
 }

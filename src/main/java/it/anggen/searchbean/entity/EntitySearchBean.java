@@ -11,11 +11,11 @@ import it.anggen.model.security.RestrictionEntity;
 public class EntitySearchBean {
 
     public java.lang.Long entityId;
+    public java.lang.Boolean disableViewGeneration;
     public java.lang.Boolean enableRestrictionData;
+    public java.lang.Integer descendantMaxLevel;
     public java.lang.Boolean generateFrontEnd;
     public java.lang.Boolean cache;
-    public java.lang.Integer descendantMaxLevel;
-    public java.lang.Boolean disableViewGeneration;
     public java.lang.String name;
     public it.anggen.model.SecurityType securityType;
     public List<Field> fieldList;
@@ -33,12 +33,28 @@ public class EntitySearchBean {
         this.entityId=entityId;
     }
 
+    public java.lang.Boolean getDisableViewGeneration() {
+        return this.disableViewGeneration;
+    }
+
+    public void setDisableViewGeneration(java.lang.Boolean disableViewGeneration) {
+        this.disableViewGeneration=disableViewGeneration;
+    }
+
     public java.lang.Boolean getEnableRestrictionData() {
         return this.enableRestrictionData;
     }
 
     public void setEnableRestrictionData(java.lang.Boolean enableRestrictionData) {
         this.enableRestrictionData=enableRestrictionData;
+    }
+
+    public java.lang.Integer getDescendantMaxLevel() {
+        return this.descendantMaxLevel;
+    }
+
+    public void setDescendantMaxLevel(java.lang.Integer descendantMaxLevel) {
+        this.descendantMaxLevel=descendantMaxLevel;
     }
 
     public java.lang.Boolean getGenerateFrontEnd() {
@@ -55,22 +71,6 @@ public class EntitySearchBean {
 
     public void setCache(java.lang.Boolean cache) {
         this.cache=cache;
-    }
-
-    public java.lang.Integer getDescendantMaxLevel() {
-        return this.descendantMaxLevel;
-    }
-
-    public void setDescendantMaxLevel(java.lang.Integer descendantMaxLevel) {
-        this.descendantMaxLevel=descendantMaxLevel;
-    }
-
-    public java.lang.Boolean getDisableViewGeneration() {
-        return this.disableViewGeneration;
-    }
-
-    public void setDisableViewGeneration(java.lang.Boolean disableViewGeneration) {
-        this.disableViewGeneration=disableViewGeneration;
     }
 
     public java.lang.String getName() {

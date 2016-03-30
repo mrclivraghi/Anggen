@@ -5,11 +5,14 @@ import it.anggen.reflection.EntityAttributeManager;
 import it.anggen.reflection.EntityManager;
 import it.anggen.reflection.EntityManagerImpl;
 import it.anggen.security.SecurityService;
+import it.anggen.service.log.LogEntryService;
 import it.anggen.utils.EntityAttribute;
 import it.anggen.utils.Field;
 import it.anggen.utils.ReflectionManager;
 import it.anggen.utils.Utility;
 import it.anggen.model.FieldType;
+import it.anggen.model.LogType;
+import it.anggen.model.OperationType;
 import it.anggen.model.SecurityType;
 import it.anggen.model.entity.Entity;
 import it.anggen.model.relationship.Relationship;
@@ -354,7 +357,8 @@ public class RestGenerator {
 	public void generateRESTClasses()
 	{
 		System.out.println("working for "+entity.getName());
-		String searchMethod="";
+		if (entity.getName().equals("logEntry"))
+			return;
 		generateRepository();
 		generateSearchBean();
 		generateServiceInterface();
@@ -651,6 +655,12 @@ public class RestGenerator {
 			JVar securityService= myClass.field(JMod.PRIVATE,SecurityService.class, "securityService");
 			securityService.annotate(Autowired.class);
 			
+			if (!fullClassName.contains("LogEntry"))
+			{
+				JVar logEntryService= myClass.field(JMod.PRIVATE,LogEntryService.class, "logEntryService");
+				logEntryService.annotate(Autowired.class);
+			}
+			
 			if (entity.getEntityGroup()!=null && !entity.getEntityGroup().getName().equals("restrictiondata") && entity.getEnableRestrictionData())
 			{
 				String restrictionDataRepositoryName=ReflectionManager.getJDefinedClass(entity).fullName().replaceAll("."+Utility.getFirstUpper(entity.getName()),".Restriction"+Utility.getFirstUpper(entity.getName()) ).replaceAll("."+entity.getEntityGroup().getName()+".", ".restrictiondata.").replaceAll(".model.", ".repository.")+"Repository";
@@ -740,6 +750,11 @@ public class RestGenerator {
 			// log.info("Searching mountain like {}",mountain);
 			searchBlock.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(lowerClass)+"Id()!=null)");
 			searchBlock.directStatement(" log.info(\"Searching "+lowerClass+" like {}\","+entityManager.getDescription(true)+");");
+			
+			searchBlock.directStatement("logEntryService.addLogEntry( \"Searching entity like \"+"+entityManager.getDescription(true) +",");
+			searchBlock.directStatement(LogType.class.getName()+".INFO, "+OperationType.class.getName()+".SEARCH_ENTITY, "+ReflectionManager.getJDefinedClass(entity).fullName()+".staticEntityId, securityService.getLoggedUser(),log);");
+       
+			
 			searchBlock.directStatement(""+lowerClass+"List="+lowerClass+"Service.find("+lowerClass+");");
 			searchBlock.directStatement("getSecurityMapping("+lowerClass+"List);");
 			searchBlock.directStatement("getRightMapping("+lowerClass+"List);");
@@ -757,7 +772,12 @@ public class RestGenerator {
 			orderParam.annotate(PathVariable.class);
 			JBlock getByIdBlock= getById.body();
 			getByIdBlock.directStatement(addSecurityCheck(RestrictionType.SEARCH));
-			getByIdBlock.directStatement("log.info(\"Searching "+lowerClass+" with id {}\","+lowerClass+"Id);");
+			//getByIdBlock.directStatement("log.info();");
+			
+			getByIdBlock.directStatement("logEntryService.addLogEntry( \"Searching "+lowerClass+" with id \"+"+lowerClass+"Id,");
+			getByIdBlock.directStatement(LogType.class.getName()+".INFO, "+OperationType.class.getName()+".SEARCH_ENTITY, "+ReflectionManager.getJDefinedClass(entity).fullName()+".staticEntityId, securityService.getLoggedUser(),log);");
+       
+			
 			getByIdBlock.directStatement("List<"+ReflectionManager.getJDefinedClass(entity).fullName()+"> "+lowerClass+"List="+lowerClass+"Service.findById("+EntityAttributeManager.getInstance(null).getFieldTypeName(keyClass)+".valueOf("+lowerClass+"Id));");
 			getByIdBlock.directStatement("getSecurityMapping("+lowerClass+"List);");
 			getByIdBlock.directStatement("getRightMapping("+lowerClass+"List);");
@@ -777,7 +797,11 @@ public class RestGenerator {
 			JBlock deleteBlock= delete.body();
 			deleteBlock.directStatement(addSecurityCheck(RestrictionType.DELETE));
 			
-			deleteBlock.directStatement("log.info(\"Deleting "+lowerClass+" with id {}\","+lowerClass+"Id);");
+			deleteBlock.directStatement("log.info(\"Deleting "+lowerClass+" with id \"+"+lowerClass+"Id);");
+			
+			deleteBlock.directStatement("logEntryService.addLogEntry( \"Deleting "+lowerClass+" with id {}\"+"+lowerClass+"Id,");
+			deleteBlock.directStatement(LogType.class.getName()+".INFO, "+OperationType.class.getName()+".DELETE_ENTITY, "+ReflectionManager.getJDefinedClass(entity).fullName()+".staticEntityId, securityService.getLoggedUser(),log);");
+       
 			
 			deleteBlock.directStatement(lowerClass+"Service.deleteById("+EntityAttributeManager.getInstance(null).getFieldTypeName(keyClass)+".valueOf("+lowerClass+"Id));");
 			deleteBlock.directStatement("return "+response+".build();");
@@ -795,11 +819,13 @@ public class RestGenerator {
 			insertBlock.directStatement(addSecurityCheck(RestrictionType.INSERT));
 			
 			insertBlock.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(lowerClass)+"Id()!=null)");
-			insertBlock.directStatement("log.info(\"Inserting "+lowerClass+" like {}\","+entityManager.getDescription(true)+");");
+			insertBlock.directStatement("log.info(\"Inserting "+lowerClass+" like \"+"+entityManager.getDescription(true)+");");
 			insertBlock.directStatement(ReflectionManager.getJDefinedClass(entity).fullName()+" inserted"+className+"="+lowerClass+"Service.insert("+lowerClass+");");
 			insertBlock.directStatement("getRightMapping(inserted"+className+");");
-			insertBlock.directStatement("log.info(\"Inserted "+lowerClass+" with id {}\",inserted"+className+".get"+Utility.getFirstUpper(lowerClass)+"Id());");
 			
+			insertBlock.directStatement("logEntryService.addLogEntry( \"Inserted "+lowerClass+" with id \"+ inserted"+className+".get"+Utility.getFirstUpper(lowerClass)+"Id(),");
+			insertBlock.directStatement(LogType.class.getName()+".INFO, "+OperationType.class.getName()+".CREATE_ENTITY, "+ReflectionManager.getJDefinedClass(entity).fullName()+".staticEntityId, securityService.getLoggedUser(),log);");
+       
 			insertBlock.directStatement("return "+response+".body(inserted"+className+");");
 			//UpdateOrder
 			JMethod update = myClass.method(JMod.PUBLIC, ResponseEntity.class, "update"+className+"");
@@ -812,7 +838,11 @@ public class RestGenerator {
 			orderParam.annotate(RequestBody.class);
 			JBlock updateBlock= update.body();
 			updateBlock.directStatement(addSecurityCheck(RestrictionType.UPDATE));
-			updateBlock.directStatement("log.info(\"Updating "+lowerClass+" with id {}\","+lowerClass+".get"+Utility.getFirstUpper(lowerClass)+"Id());");
+			
+			updateBlock.directStatement("logEntryService.addLogEntry( \"Updating "+lowerClass+" with id \"+"+lowerClass+".get"+Utility.getFirstUpper(lowerClass)+"Id(),");
+			updateBlock.directStatement(LogType.class.getName()+".INFO, "+OperationType.class.getName()+".UPDATE_ENTITY, "+ReflectionManager.getJDefinedClass(entity).fullName()+".staticEntityId, securityService.getLoggedUser(),log);");
+       
+			
 			updateBlock.directStatement("rebuildSecurityMapping("+lowerClass+");");
 			updateBlock.directStatement(ReflectionManager.getJDefinedClass(entity).fullName()+" updated"+className+"="+lowerClass+"Service.update("+lowerClass+");");
 			updateBlock.directStatement("getSecurityMapping(updated"+className+");");
@@ -857,9 +887,9 @@ public class RestGenerator {
 						reBuildBlock.directStatement("if (securityEnabled && securityService.hasRestriction("+ReflectionManager.getJDefinedClass(relationship.getEntityTarget()).fullName()+".staticEntityId, "+RestrictionType.class.getName()+".SEARCH))");
 					
 				if (EntityAttributeManager.getInstance(relationship).isList())
-					reBuildBlock.directStatement(entity.getName()+".set"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List("+entity.getName()+"Service.findById("+entity.getName()+".get"+Utility.getFirstUpper(entity.getName())+"Id()).get(0).get"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List());");
+					reBuildBlock.directStatement(entity.getName()+".set"+Utility.getFirstUpper(relationship.getName())+"List("+entity.getName()+"Service.findById("+entity.getName()+".get"+Utility.getFirstUpper(entity.getName())+"Id()).get(0).get"+Utility.getFirstUpper(relationship.getName())+"List());");
 				else
-					reBuildBlock.directStatement(entity.getName()+".set"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"("+entity.getName()+"Service.findById("+entity.getName()+".get"+Utility.getFirstUpper(entity.getName())+"Id()).get(0).get"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"());");
+					reBuildBlock.directStatement(entity.getName()+".set"+Utility.getFirstUpper(relationship.getName())+"("+entity.getName()+"Service.findById("+entity.getName()+".get"+Utility.getFirstUpper(entity.getName())+"Id()).get(0).get"+Utility.getFirstUpper(relationship.getName())+"());");
 			}
 			
 			//get security Mapping -List
@@ -969,25 +999,25 @@ public class RestGenerator {
 			lowerClass=entity.getName();
 			if (EntityAttributeManager.getInstance(relationship).isList())
 			{
-				block.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List()!=null)");
-				block.directStatement("for ("+ReflectionManager.getJDefinedClass(relationship.getEntityTarget()).fullName()+" "+Utility.getFirstLower(relationship.getEntityTarget().getName())+" :"+lowerClass+".get"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List())\n");
+				block.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(relationship.getName())+"List()!=null)");
+				block.directStatement("for ("+ReflectionManager.getJDefinedClass(relationship.getEntityTarget()).fullName()+" "+Utility.getFirstLower(relationship.getName())+" :"+lowerClass+".get"+Utility.getFirstUpper(relationship.getName())+"List())\n");
 				block.directStatement("{\n");
-				lowerClass=relationship.getEntityTarget().getName();
+				lowerClass=relationship.getName();
 			}
 			 else
 			 {
 				 
-				 block.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"()!=null)");
+				 block.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(relationship.getName())+"()!=null)");
 				 block.directStatement("{");
-				 lowerClass=lowerClass+".get"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"()";
+				 lowerClass=lowerClass+".get"+Utility.getFirstUpper(relationship.getName())+"()";
 			 }
 			EntityManager targetEntityManager = new EntityManagerImpl(relationship.getEntityTarget());
 			for (Relationship targetRelationship: relationship.getEntityTarget().getRelationshipList())
 			{
 				if (EntityAttributeManager.getInstance(targetRelationship).isList())
-					block.directStatement(lowerClass+".set"+Utility.getFirstUpper(targetRelationship.getEntityTarget().getName())+"List(null);");
+					block.directStatement(lowerClass+".set"+Utility.getFirstUpper(targetRelationship.getName())+"List(null);");
 				else
-					block.directStatement(lowerClass+".set"+Utility.getFirstUpper(targetRelationship.getEntityTarget().getName())+"(null);");
+					block.directStatement(lowerClass+".set"+Utility.getFirstUpper(targetRelationship.getName())+"(null);");
 			}
 			
 			
@@ -1009,21 +1039,21 @@ public class RestGenerator {
 			if (EntityAttributeManager.getInstance(relationship).isList())
 			{
 				if (entity.getSecurityType()==null || entity.getSecurityType()==SecurityType.ACCESS_WITH_PERMISSION)
-					block.directStatement("if (securityEnabled && "+lowerClass+".get"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List()!=null && !securityService.hasPermission("+ReflectionManager.getJDefinedClass(relationship.getEntityTarget()).fullName()+".staticEntityId, "+RestrictionType.class.getName()+".SEARCH) )");
+					block.directStatement("if (securityEnabled && "+lowerClass+".get"+Utility.getFirstUpper(relationship.getName())+"List()!=null && !securityService.hasPermission("+ReflectionManager.getJDefinedClass(relationship.getEntityTarget()).fullName()+".staticEntityId, "+RestrictionType.class.getName()+".SEARCH) )");
 				else
 					if (entity.getSecurityType()==SecurityType.BLOCK_WITH_RESTRICTION)
-						block.directStatement("if (securityEnabled && "+lowerClass+".get"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List()!=null && securityService.hasRestriction("+ReflectionManager.getJDefinedClass(relationship.getEntityTarget()).fullName()+".staticEntityId, "+RestrictionType.class.getName()+".SEARCH) )");
-				block.directStatement(""+lowerClass+".set"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List(null);\n");
+						block.directStatement("if (securityEnabled && "+lowerClass+".get"+Utility.getFirstUpper(relationship.getName())+"List()!=null && securityService.hasRestriction("+ReflectionManager.getJDefinedClass(relationship.getEntityTarget()).fullName()+".staticEntityId, "+RestrictionType.class.getName()+".SEARCH) )");
+				block.directStatement(""+lowerClass+".set"+Utility.getFirstUpper(relationship.getName())+"List(null);\n");
 			}
 			 else
 			 {
 				 
 				 if (entity.getSecurityType()==null || entity.getSecurityType()==SecurityType.ACCESS_WITH_PERMISSION)
-						block.directStatement("if (securityEnabled && "+lowerClass+".get"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"()!=null  && !securityService.hasPermission("+ReflectionManager.getJDefinedClass(relationship.getEntityTarget()).fullName()+".staticEntityId, "+RestrictionType.class.getName()+".SEARCH) )");
+						block.directStatement("if (securityEnabled && "+lowerClass+".get"+Utility.getFirstUpper(relationship.getName())+"()!=null  && !securityService.hasPermission("+ReflectionManager.getJDefinedClass(relationship.getEntityTarget()).fullName()+".staticEntityId, "+RestrictionType.class.getName()+".SEARCH) )");
 				 else
 						if (entity.getSecurityType()==SecurityType.BLOCK_WITH_RESTRICTION)
-							block.directStatement("if (securityEnabled && "+lowerClass+".get"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"()!=null  && securityService.hasRestriction("+ReflectionManager.getJDefinedClass(relationship.getEntityTarget()).fullName()+".staticEntityId, "+RestrictionType.class.getName()+".SEARCH) )");
-				block.directStatement(""+lowerClass+".set"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"(null);\n");
+							block.directStatement("if (securityEnabled && "+lowerClass+".get"+Utility.getFirstUpper(relationship.getName())+"()!=null  && securityService.hasRestriction("+ReflectionManager.getJDefinedClass(relationship.getEntityTarget()).fullName()+".staticEntityId, "+RestrictionType.class.getName()+".SEARCH) )");
+				block.directStatement(""+lowerClass+".set"+Utility.getFirstUpper(relationship.getName())+"(null);\n");
 			 }
 		}
 	}

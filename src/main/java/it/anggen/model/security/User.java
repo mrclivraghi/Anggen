@@ -21,23 +21,23 @@ import org.hibernate.annotations.Type;
 @MaxDescendantLevel(100)
 public class User {
 
-    public final static java.lang.Long staticEntityId = 5L;
-    @javax.persistence.Column(name = "user_id")
-    @Id
-    @GeneratedValue
-    @it.anggen.utils.annotation.DescriptionField
-    @it.anggen.utils.annotation.Priority(1)
-    private java.lang.Long userId;
+    public final static java.lang.Long staticEntityId = 8L;
     @javax.persistence.Column(name = "username")
-    @it.anggen.utils.annotation.Priority(2)
     @it.anggen.utils.annotation.DescriptionField
+    @it.anggen.utils.annotation.Priority(2)
     private java.lang.String username;
     @javax.persistence.Column(name = "enabled")
     @it.anggen.utils.annotation.Priority(2)
     private Boolean enabled;
+    @javax.persistence.Column(name = "user_id")
+    @it.anggen.utils.annotation.Priority(1)
+    @it.anggen.utils.annotation.DescriptionField
+    @Id
+    @GeneratedValue
+    private java.lang.Long userId;
     @javax.persistence.Column(name = "password")
-    @Password
     @it.anggen.utils.annotation.Priority(2)
+    @Password
     private java.lang.String password;
     @ManyToMany(fetch = FetchType.EAGER)
     @Type(type = "it.anggen.model.security.Role")
@@ -48,14 +48,6 @@ public class User {
     })
     @it.anggen.utils.annotation.Priority(4)
     private List<Role> roleList;
-
-    public java.lang.Long getUserId() {
-        return this.userId;
-    }
-
-    public void setUserId(java.lang.Long userId) {
-        this.userId=userId;
-    }
 
     public java.lang.String getUsername() {
         return this.username;
@@ -71,6 +63,14 @@ public class User {
 
     public void setEnabled(Boolean enabled) {
         this.enabled=enabled;
+    }
+
+    public java.lang.Long getUserId() {
+        return this.userId;
+    }
+
+    public void setUserId(java.lang.Long userId) {
+        this.userId=userId;
     }
 
     public java.lang.String getPassword() {

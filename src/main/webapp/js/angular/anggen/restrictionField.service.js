@@ -65,17 +65,17 @@ var promise= $http.post("restrictionField/"+this.selectedEntity.restrictionField
 });
 return promise; 
 }
- this.initFieldList= function()
-{
-var promise= $http
-.post("field/search",
-{});
-return promise;
-};
  this.initRoleList= function()
 {
 var promise= $http
 .post("role/search",
+{});
+return promise;
+};
+ this.initFieldList= function()
+{
+var promise= $http
+.post("field/search",
 {});
 return promise;
 };
@@ -88,8 +88,8 @@ paginationPageSize: 10,
 enableGridMenu: true,
 columnDefs: [    
 { name: 'restrictionFieldId'},
-{ name: 'field.fieldId', displayName: 'field'},
-{ name: 'role.roleId', displayName: 'role'} 
+{ name: 'role.roleId', displayName: 'role'},
+{ name: 'field.fieldId', displayName: 'field'} 
 ]
  };
 };

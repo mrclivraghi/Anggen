@@ -5,12 +5,12 @@ package it.anggen.searchbean.security;
 public class RestrictionEntityGroupSearchBean {
 
     public java.lang.Long restrictionEntityGroupId;
-    public java.lang.Boolean canCreate;
-    public java.lang.Boolean canSearch;
     public java.lang.Boolean canUpdate;
+    public java.lang.Boolean canCreate;
     public java.lang.Boolean canDelete;
-    public it.anggen.model.entity.EntityGroup entityGroup;
+    public java.lang.Boolean canSearch;
     public it.anggen.model.security.Role role;
+    public it.anggen.model.entity.EntityGroup entityGroup;
 
     public java.lang.Long getRestrictionEntityGroupId() {
         return this.restrictionEntityGroupId;
@@ -18,22 +18,6 @@ public class RestrictionEntityGroupSearchBean {
 
     public void setRestrictionEntityGroupId(java.lang.Long restrictionEntityGroupId) {
         this.restrictionEntityGroupId=restrictionEntityGroupId;
-    }
-
-    public java.lang.Boolean getCanCreate() {
-        return this.canCreate;
-    }
-
-    public void setCanCreate(java.lang.Boolean canCreate) {
-        this.canCreate=canCreate;
-    }
-
-    public java.lang.Boolean getCanSearch() {
-        return this.canSearch;
-    }
-
-    public void setCanSearch(java.lang.Boolean canSearch) {
-        this.canSearch=canSearch;
     }
 
     public java.lang.Boolean getCanUpdate() {
@@ -44,6 +28,14 @@ public class RestrictionEntityGroupSearchBean {
         this.canUpdate=canUpdate;
     }
 
+    public java.lang.Boolean getCanCreate() {
+        return this.canCreate;
+    }
+
+    public void setCanCreate(java.lang.Boolean canCreate) {
+        this.canCreate=canCreate;
+    }
+
     public java.lang.Boolean getCanDelete() {
         return this.canDelete;
     }
@@ -52,12 +44,12 @@ public class RestrictionEntityGroupSearchBean {
         this.canDelete=canDelete;
     }
 
-    public it.anggen.model.entity.EntityGroup getEntityGroup() {
-        return this.entityGroup;
+    public java.lang.Boolean getCanSearch() {
+        return this.canSearch;
     }
 
-    public void setEntityGroup(it.anggen.model.entity.EntityGroup entityGroup) {
-        this.entityGroup=entityGroup;
+    public void setCanSearch(java.lang.Boolean canSearch) {
+        this.canSearch=canSearch;
     }
 
     public it.anggen.model.security.Role getRole() {
@@ -66,6 +58,14 @@ public class RestrictionEntityGroupSearchBean {
 
     public void setRole(it.anggen.model.security.Role role) {
         this.role=role;
+    }
+
+    public it.anggen.model.entity.EntityGroup getEntityGroup() {
+        return this.entityGroup;
+    }
+
+    public void setEntityGroup(it.anggen.model.entity.EntityGroup entityGroup) {
+        this.entityGroup=entityGroup;
     }
 
 }

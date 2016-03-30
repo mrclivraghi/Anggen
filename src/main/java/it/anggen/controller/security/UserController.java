@@ -5,6 +5,7 @@ import java.util.List;
 import com.codahale.metrics.annotation.Timed;
 import it.anggen.searchbean.security.UserSearchBean;
 import it.anggen.security.SecurityService;
+import it.anggen.service.log.LogEntryService;
 import it.anggen.service.security.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +25,8 @@ public class UserController {
     private UserService userService;
     @org.springframework.beans.factory.annotation.Autowired
     private SecurityService securityService;
+    @org.springframework.beans.factory.annotation.Autowired
+    private LogEntryService logEntryService;
     private final static Logger log = LoggerFactory.getLogger(it.anggen.model.security.User.class);
     @Value("${application.security}")
     private Boolean securityEnabled;
@@ -59,7 +62,9 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         List<it.anggen.model.security.User> userList;
         if (user.getUserId()!=null)
-         log.info("Searching user like {}", user.getUserId()+' '+ user.getUsername());
+         log.info("Searching user like {}", user.getUsername()+' '+ user.getUserId());
+        logEntryService.addLogEntry( "Searching entity like "+ user.getUsername()+' '+ user.getUserId(),
+        it.anggen.model.LogType.INFO, it.anggen.model.OperationType.SEARCH_ENTITY, it.anggen.model.security.User.staticEntityId, securityService.getLoggedUser(),log);
         userList=userService.find(user);
         getSecurityMapping(userList);
         getRightMapping(userList);
@@ -76,7 +81,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         if (securityEnabled && !securityService.hasPermission(it.anggen.model.security.User.staticEntityId, it.anggen.model.RestrictionType.SEARCH)) 
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
-        log.info("Searching user with id {}",userId);
+        logEntryService.addLogEntry( "Searching user with id "+userId,
+        it.anggen.model.LogType.INFO, it.anggen.model.OperationType.SEARCH_ENTITY, it.anggen.model.security.User.staticEntityId, securityService.getLoggedUser(),log);
         List<it.anggen.model.security.User> userList=userService.findById(Long.valueOf(userId));
         getSecurityMapping(userList);
         getRightMapping(userList);
@@ -93,7 +99,9 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         if (securityEnabled && !securityService.hasPermission(it.anggen.model.security.User.staticEntityId, it.anggen.model.RestrictionType.DELETE)) 
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
-        log.info("Deleting user with id {}",userId);
+        log.info("Deleting user with id "+userId);
+        logEntryService.addLogEntry( "Deleting user with id {}"+userId,
+        it.anggen.model.LogType.INFO, it.anggen.model.OperationType.DELETE_ENTITY, it.anggen.model.security.User.staticEntityId, securityService.getLoggedUser(),log);
         userService.deleteById(Long.valueOf(userId));
         return ResponseEntity.ok().build();
     }
@@ -108,10 +116,11 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
         if (user.getUserId()!=null)
-        log.info("Inserting user like {}", user.getUserId()+' '+ user.getUsername());
+        log.info("Inserting user like "+ user.getUsername()+' '+ user.getUserId());
         it.anggen.model.security.User insertedUser=userService.insert(user);
         getRightMapping(insertedUser);
-        log.info("Inserted user with id {}",insertedUser.getUserId());
+        logEntryService.addLogEntry( "Inserted user with id "+ insertedUser.getUserId(),
+        it.anggen.model.LogType.INFO, it.anggen.model.OperationType.CREATE_ENTITY, it.anggen.model.security.User.staticEntityId, securityService.getLoggedUser(),log);
         return ResponseEntity.ok().body(insertedUser);
     }
 
@@ -124,7 +133,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         if (securityEnabled && !securityService.hasPermission(it.anggen.model.security.User.staticEntityId, it.anggen.model.RestrictionType.UPDATE)) 
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
-        log.info("Updating user with id {}",user.getUserId());
+        logEntryService.addLogEntry( "Updating user with id "+user.getUserId(),
+        it.anggen.model.LogType.INFO, it.anggen.model.OperationType.UPDATE_ENTITY, it.anggen.model.security.User.staticEntityId, securityService.getLoggedUser(),log);
         rebuildSecurityMapping(user);
         it.anggen.model.security.User updatedUser=userService.update(user);
         getSecurityMapping(updatedUser);
@@ -146,10 +156,10 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         {
 
-        role.setUserList(null);
-        role.setRestrictionEntityGroupList(null);
-        role.setRestrictionFieldList(null);
         role.setRestrictionEntityList(null);
+        role.setRestrictionFieldList(null);
+        role.setRestrictionEntityGroupList(null);
+        role.setUserList(null);
         }
     }
 

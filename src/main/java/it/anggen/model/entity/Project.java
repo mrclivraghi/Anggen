@@ -12,38 +12,35 @@ import javax.persistence.Table;
 import it.anggen.model.entity.EntityGroup;
 import it.anggen.model.entity.EnumEntity;
 import it.anggen.utils.annotation.MaxDescendantLevel;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Type;
 
 @Entity
 @Table(schema = "meta", name = "project")
 @it.anggen.utils.annotation.SecurityType(type = it.anggen.model.SecurityType.ACCESS_WITH_PERMISSION)
 @MaxDescendantLevel(100)
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Project {
 
-    public final static Long staticEntityId = 9L;
+    public final static Long staticEntityId = 7L;
     @javax.persistence.Column(name = "project_id")
-    @it.anggen.utils.annotation.Priority(1)
+    @it.anggen.utils.annotation.DescriptionField
     @Id
     @GeneratedValue
-    @it.anggen.utils.annotation.DescriptionField
+    @it.anggen.utils.annotation.Priority(1)
     private Integer projectId;
     @javax.persistence.Column(name = "name")
-    @it.anggen.utils.annotation.Priority(2)
     @it.anggen.utils.annotation.DescriptionField
+    @it.anggen.utils.annotation.Priority(2)
     private String name;
-    @OneToMany(fetch = FetchType.EAGER)
-    @Type(type = "it.anggen.model.entity.EnumEntity")
-    @JoinColumn(name = "project_id_project")
-    @it.anggen.utils.annotation.Priority(4)
-    private List<EnumEntity> enumEntityList;
     @OneToMany(fetch = FetchType.EAGER)
     @Type(type = "it.anggen.model.entity.EntityGroup")
     @JoinColumn(name = "project_id_project")
     @it.anggen.utils.annotation.Priority(4)
     private List<EntityGroup> entityGroupList;
+    @OneToMany(fetch = FetchType.EAGER)
+    @Type(type = "it.anggen.model.entity.EnumEntity")
+    @JoinColumn(name = "project_id_project")
+    @it.anggen.utils.annotation.Priority(4)
+    private List<EnumEntity> enumEntityList;
 
     public Integer getProjectId() {
         return this.projectId;
@@ -61,20 +58,20 @@ public class Project {
         this.name=name;
     }
 
-    public List<EnumEntity> getEnumEntityList() {
-        return this.enumEntityList;
-    }
-
-    public void setEnumEntityList(List<EnumEntity> enumEntityList) {
-        this.enumEntityList=enumEntityList;
-    }
-
     public List<EntityGroup> getEntityGroupList() {
         return this.entityGroupList;
     }
 
     public void setEntityGroupList(List<EntityGroup> entityGroupList) {
         this.entityGroupList=entityGroupList;
+    }
+
+    public List<EnumEntity> getEnumEntityList() {
+        return this.enumEntityList;
+    }
+
+    public void setEnumEntityList(List<EnumEntity> enumEntityList) {
+        this.enumEntityList=enumEntityList;
     }
 
 }

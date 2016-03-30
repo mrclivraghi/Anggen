@@ -3,7 +3,7 @@ function entityGroupService($http,mainService)
 {
 this.entityList =		[];
 this.selectedEntity= 	{show: false 
-,entityList: [],restrictionEntityGroupList: []};
+,restrictionEntityGroupList: [],entityList: []};
 this.isParent=function()
 {
 return mainService.parentEntity=="EntityGroup";
@@ -65,10 +65,10 @@ var promise= $http.post("entityGroup/"+this.selectedEntity.entityGroupId+"/load"
 });
 return promise; 
 }
- this.initProjectList= function()
+ this.initRestrictionEntityGroupList= function()
 {
 var promise= $http
-.post("project/search",
+.post("restrictionEntityGroup/search",
 {});
 return promise;
 };
@@ -79,10 +79,10 @@ var promise= $http
 {});
 return promise;
 };
- this.initRestrictionEntityGroupList= function()
+ this.initProjectList= function()
 {
 var promise= $http
-.post("restrictionEntityGroup/search",
+.post("project/search",
 {});
 return promise;
 };

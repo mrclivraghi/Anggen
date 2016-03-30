@@ -106,7 +106,7 @@ public class JsGenerator {
 	public void generateMainApp()
 	{
 		StringBuilder sb = new StringBuilder();
-		sb.append("angular.module(\""+generator.applicationName+"App\",['ngRoute','ngFileUpload','ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter']);");
+		sb.append("angular.module(\""+generator.applicationName+"App\",['ngRoute','ui.bootstrap','ngFileUpload','ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter']);");
 		sb.append(getSecurityService());
 		sb.append(getMainController());
 		sb.append(getNavigation());

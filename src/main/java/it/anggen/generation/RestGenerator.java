@@ -1000,7 +1000,7 @@ public class RestGenerator {
 			if (EntityAttributeManager.getInstance(relationship).isList())
 			{
 				block.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(relationship.getName())+"List()!=null)");
-				block.directStatement("for ("+ReflectionManager.getJDefinedClass(relationship.getEntityTarget()).fullName()+" "+Utility.getFirstLower(relationship.getEntityTarget().getName())+" :"+lowerClass+".get"+Utility.getFirstUpper(relationship.getName())+"List())\n");
+				block.directStatement("for ("+ReflectionManager.getJDefinedClass(relationship.getEntityTarget()).fullName()+" "+Utility.getFirstLower(relationship.getName())+" :"+lowerClass+".get"+Utility.getFirstUpper(relationship.getName())+"List())\n");
 				block.directStatement("{\n");
 				lowerClass=relationship.getName();
 			}

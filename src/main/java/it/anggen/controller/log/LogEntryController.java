@@ -141,26 +141,10 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     }
 
     private void getRightMapping(it.anggen.model.log.LogEntry logEntry) {
-        if (logEntry.getUser()!=null)
-        {
-        logEntry.getUser().setRoleList(null);
-        }
-        if (logEntry.getEntity()!=null)
-        {
-        logEntry.getEntity().setFieldList(null);
-        logEntry.getEntity().setEnumFieldList(null);
-        logEntry.getEntity().setTabList(null);
-        logEntry.getEntity().setEntityGroup(null);
-        logEntry.getEntity().setRestrictionEntityList(null);
-        logEntry.getEntity().setRelationshipList(null);
-        }
+       
     }
 
     private void rebuildSecurityMapping(it.anggen.model.log.LogEntry logEntry) {
-        if (securityEnabled && !securityService.hasPermission(it.anggen.model.security.User.staticEntityId, it.anggen.model.RestrictionType.SEARCH))
-        logEntry.setUser(logEntryService.findById(logEntry.getLogEntryId()).get(0).getUser());
-        if (securityEnabled && !securityService.hasPermission(it.anggen.model.entity.Entity.staticEntityId, it.anggen.model.RestrictionType.SEARCH))
-        logEntry.setEntity(logEntryService.findById(logEntry.getLogEntryId()).get(0).getEntity());
     }
 
     private List<it.anggen.model.log.LogEntry> getSecurityMapping(List<it.anggen.model.log.LogEntry> logEntryList) {
@@ -172,11 +156,6 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     }
 
     private void getSecurityMapping(it.anggen.model.log.LogEntry logEntry) {
-        if (securityEnabled && logEntry.getUser()!=null  && !securityService.hasPermission(it.anggen.model.security.User.staticEntityId, it.anggen.model.RestrictionType.SEARCH) )
-        logEntry.setUser(null);
-
-        if (securityEnabled && logEntry.getEntity()!=null  && !securityService.hasPermission(it.anggen.model.entity.Entity.staticEntityId, it.anggen.model.RestrictionType.SEARCH) )
-        logEntry.setEntity(null);
 
     }
 

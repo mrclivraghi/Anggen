@@ -2,6 +2,8 @@
 package it.anggen.model.log;
 
 import java.util.Date;
+
+import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -11,7 +13,7 @@ import it.anggen.utils.annotation.DescriptionField;
 import it.anggen.utils.annotation.MaxDescendantLevel;
 
 @javax.persistence.Entity
-@Table(schema = "meta", name = "log_entry")
+@Table(schema = "log", name = "log_entry")
 @it.anggen.utils.annotation.SecurityType(type = it.anggen.model.SecurityType.ACCESS_WITH_PERMISSION)
 @MaxDescendantLevel(1)
 public class LogEntry {
@@ -30,12 +32,15 @@ public class LogEntry {
     private java.lang.Long logEntryId;
     @javax.persistence.Column(name = "info")
     private java.lang.String info;
-    @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.EAGER)
-    @javax.persistence.JoinColumn(name = "user_id_user")
-    private it.anggen.model.security.User user;
-    @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.EAGER)
-    @javax.persistence.JoinColumn(name = "entity_id_entity")
-    private it.anggen.model.entity.Entity entity;
+   
+    @Column(name = "user_id")
+    private Long userId;
+    
+    
+    @Column(name = "entity_id")
+    private Long entityId;
+    
+    
     @javax.persistence.Column(name = "log_type")
     private LogType logType;
     @javax.persistence.Column(name = "operation_type")
@@ -81,20 +86,20 @@ public class LogEntry {
         this.info=info;
     }
 
-    public it.anggen.model.security.User getUser() {
-        return this.user;
+    public Long getUserId() {
+        return this.userId;
     }
 
-    public void setUser(it.anggen.model.security.User user) {
-        this.user=user;
+    public void setUserId(Long userId) {
+        this.userId=userId;
     }
 
-    public it.anggen.model.entity.Entity getEntity() {
-        return this.entity;
+    public Long getEntityId() {
+        return this.entityId;
     }
 
-    public void setEntity(it.anggen.model.entity.Entity entity) {
-        this.entity=entity;
+    public void setEntityId(Long entityId) {
+        this.entityId=entityId;
     }
 
     public LogType getLogType() {

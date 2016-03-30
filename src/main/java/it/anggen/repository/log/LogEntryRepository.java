@@ -29,12 +29,19 @@ public interface LogEntryRepository
 
     public List<it.anggen.model.log.LogEntry> findByOperationType(java.lang.Integer operationType);
 
-    public List<it.anggen.model.log.LogEntry> findByUser(it.anggen.model.security.User user);
+    public List<it.anggen.model.log.LogEntry> findByUserId(Long userId);
 
-    public List<it.anggen.model.log.LogEntry> findByEntity(it.anggen.model.entity.Entity entity);
+    public List<it.anggen.model.log.LogEntry> findByEntityId(Long entityId);
 
-    @Query("select l from LogEntry l where  (:logEntryId is null or cast(:logEntryId as string)=cast(l.logEntryId as string)) and (:info is null or :info='' or cast(:info as string)=l.info) and (:hostName is null or :hostName='' or cast(:hostName as string)=l.hostName) and (:ipAddress is null or :ipAddress='' or cast(:ipAddress as string)=l.ipAddress) and (:logDate is null or cast(:logDate as string)=cast(date(l.logDate) as string)) and (:logType is null or cast(:logType as string)=cast(l.logType as string)) and (:operationType is null or cast(:operationType as string)=cast(l.operationType as string)) and (:user=l.user or :user is null) and (:entity=l.entity or :entity is null) ")
-    public List<it.anggen.model.log.LogEntry> findByLogEntryIdAndInfoAndHostNameAndIpAddressAndLogDateAndLogTypeAndOperationTypeAndUserAndEntity(
+    @Query("select l from LogEntry l where  (:logEntryId is null or cast(:logEntryId as string)=cast(l.logEntryId as string))"
+    		+ " and (:info is null or :info='' or cast(:info as string)=l.info) "
+    		+ "and (:hostName is null or :hostName='' or cast(:hostName as string)=l.hostName)"
+    		+ " and (:ipAddress is null or :ipAddress='' or cast(:ipAddress as string)=l.ipAddress) "
+    		+ "and (:logDate is null or cast(:logDate as string)=cast(date(l.logDate) as string)) and "
+    		+ "(:logType is null or cast(:logType as string)=cast(l.logType as string)) and "
+    		+ "(:operationType is null or cast(:operationType as string)=cast(l.operationType as string))"
+    		+ " ")
+    public List<it.anggen.model.log.LogEntry> findByLogEntryIdAndInfoAndHostNameAndIpAddressAndLogDateAndLogTypeAndOperationType(
         @org.springframework.data.repository.query.Param("logEntryId")
         java.lang.Long logEntryId,
         @org.springframework.data.repository.query.Param("info")
@@ -48,10 +55,6 @@ public interface LogEntryRepository
         @org.springframework.data.repository.query.Param("logType")
         java.lang.Integer logType,
         @org.springframework.data.repository.query.Param("operationType")
-        java.lang.Integer operationType,
-        @org.springframework.data.repository.query.Param("user")
-        it.anggen.model.security.User user,
-        @org.springframework.data.repository.query.Param("entity")
-        it.anggen.model.entity.Entity entity);
+        java.lang.Integer operationType);
 
 }

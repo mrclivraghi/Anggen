@@ -13,12 +13,16 @@ import it.anggen.model.field.Field;
 import it.anggen.model.relationship.Relationship;
 import it.anggen.model.security.RestrictionEntity;
 import it.anggen.utils.annotation.MaxDescendantLevel;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Type;
 
 @javax.persistence.Entity
 @Table(schema = "meta", name = "entity")
 @it.anggen.utils.annotation.SecurityType(type = it.anggen.model.SecurityType.ACCESS_WITH_PERMISSION)
 @MaxDescendantLevel(100)
+@Cache(usage=CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Entity {
 
     public final static java.lang.Long staticEntityId = 3L;

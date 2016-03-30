@@ -1,11 +1,19 @@
 
 package it.anggen.controller.entity;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.List;
 import com.codahale.metrics.annotation.Timed;
+
+import it.anggen.model.LogType;
+import it.anggen.model.OperationType;
+import it.anggen.model.entity.Entity;
 import it.anggen.searchbean.entity.EntitySearchBean;
 import it.anggen.security.SecurityService;
 import it.anggen.service.entity.EntityService;
+import it.anggen.service.log.LogEntryService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,7 +32,12 @@ public class EntityController {
     private EntityService entityService;
     @org.springframework.beans.factory.annotation.Autowired
     private SecurityService securityService;
+    
+    @org.springframework.beans.factory.annotation.Autowired
+    private LogEntryService logEntryService;
+    
     private final static Logger log = LoggerFactory.getLogger(it.anggen.model.entity.Entity.class);
+    
     @Value("${application.security}")
     private Boolean securityEnabled;
 
@@ -61,6 +74,15 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         if (entity.getEntityId()!=null)
          log.info("Searching entity like {}", entity.getEntityId()+' '+ entity.getName());
         entityList=entityService.find(entity);
+        
+        try {
+			logEntryService.addLogEntry(InetAddress.getLocalHost().getHostName(), "Searching entity like " + entity.getEntityId()+' '+ entity.getName(),
+					InetAddress.getLocalHost().toString(), LogType.INFO, OperationType.SEARCH_ENTITY, Entity.staticEntityId, securityService.getLoggedUser());
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
         getSecurityMapping(entityList);
         getRightMapping(entityList);
          log.info("Search: returning {} entity.",entityList.size());

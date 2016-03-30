@@ -2,6 +2,11 @@
 package it.anggen.service.log;
 
 import java.util.List;
+
+import it.anggen.model.LogType;
+import it.anggen.model.OperationType;
+import it.anggen.model.entity.Entity;
+import it.anggen.model.security.User;
 import it.anggen.searchbean.log.LogEntrySearchBean;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,5 +27,9 @@ public interface LogEntryService {
     public Page<it.anggen.model.log.LogEntry> findByPage(
         @PathVariable
         Integer pageNumber);
+    
 
+    public void addLogEntry(String hostName, String info,String ipAddress,LogType logType,OperationType operationType, Long entityId, User user);
+
+    
 }

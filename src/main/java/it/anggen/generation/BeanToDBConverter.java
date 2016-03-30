@@ -591,7 +591,7 @@ public class BeanToDBConverter {
 				entity.setGenerateFrontEnd(true);
 			} 
 			
-			if (annotationArray[i].annotationType()==Cache.class)
+			if (annotationArray[i].annotationType()==Cache.class || annotationArray[i].annotationType()==org.hibernate.annotations.Cache.class)
 			{
 				entity.setCache(true);
 			} 

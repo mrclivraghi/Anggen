@@ -194,7 +194,7 @@ public class WebappGenerator {
 		JCodeModel codeModel = new JCodeModel();
 		JDefinedClass appConfig=null;
 		try {
-			appConfig = codeModel._class(JMod.PUBLIC, packageName+"boot.config.AppConfig", ClassType.CLASS);
+			appConfig = codeModel._class(JMod.PUBLIC, packageName+"boot.config."+Utility.getFirstUpper(applicationName)+"Config", ClassType.CLASS);
 		} catch (JClassAlreadyExistsException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

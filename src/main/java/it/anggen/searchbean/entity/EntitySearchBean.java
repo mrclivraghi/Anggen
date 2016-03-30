@@ -18,10 +18,10 @@ public class EntitySearchBean {
     public java.lang.Boolean cache;
     public java.lang.String name;
     public it.anggen.model.SecurityType securityType;
-    public List<Field> fieldList;
     public List<EnumField> enumFieldList;
-    public List<Tab> tabList;
+    public List<Field> fieldList;
     public it.anggen.model.entity.EntityGroup entityGroup;
+    public List<Tab> tabList;
     public List<RestrictionEntity> restrictionEntityList;
     public List<Relationship> relationshipList;
 
@@ -89,14 +89,6 @@ public class EntitySearchBean {
         this.securityType=securityType;
     }
 
-    public List<Field> getFieldList() {
-        return this.fieldList;
-    }
-
-    public void setFieldList(List<Field> fieldList) {
-        this.fieldList=fieldList;
-    }
-
     public List<EnumField> getEnumFieldList() {
         return this.enumFieldList;
     }
@@ -105,12 +97,12 @@ public class EntitySearchBean {
         this.enumFieldList=enumFieldList;
     }
 
-    public List<Tab> getTabList() {
-        return this.tabList;
+    public List<Field> getFieldList() {
+        return this.fieldList;
     }
 
-    public void setTabList(List<Tab> tabList) {
-        this.tabList=tabList;
+    public void setFieldList(List<Field> fieldList) {
+        this.fieldList=fieldList;
     }
 
     public it.anggen.model.entity.EntityGroup getEntityGroup() {
@@ -119,6 +111,14 @@ public class EntitySearchBean {
 
     public void setEntityGroup(it.anggen.model.entity.EntityGroup entityGroup) {
         this.entityGroup=entityGroup;
+    }
+
+    public List<Tab> getTabList() {
+        return this.tabList;
+    }
+
+    public void setTabList(List<Tab> tabList) {
+        this.tabList=tabList;
     }
 
     public List<RestrictionEntity> getRestrictionEntityList() {

@@ -34,7 +34,7 @@ public class EnumFieldServiceImpl
 
     @Override
     public List<it.anggen.model.field.EnumField> find(EnumFieldSearchBean enumField) {
-        return enumFieldRepository.findByEnumFieldIdAndPriorityAndNameAndTabAndEntityAndEnumEntityAndAnnotation(enumField.getEnumFieldId(),enumField.getPriority(),enumField.getName(),enumField.getTab(),enumField.getEntity(),enumField.getEnumEntity(),enumField.getAnnotationList()==null? null :enumField.getAnnotationList().get(0));
+        return enumFieldRepository.findByEnumFieldIdAndNameAndPriorityAndAnnotationAndTabAndEnumEntityAndEntity(enumField.getEnumFieldId(),enumField.getName(),enumField.getPriority(),enumField.getAnnotationList()==null? null :enumField.getAnnotationList().get(0),enumField.getTab(),enumField.getEnumEntity(),enumField.getEntity());
     }
 
     @Override

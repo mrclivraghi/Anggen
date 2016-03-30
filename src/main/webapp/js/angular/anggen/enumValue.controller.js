@@ -1,5 +1,5 @@
 angular.module("anggenApp").controller("enumValueController",enumValueController);
-function enumValueController($scope,$http ,enumValueService, securityService, mainService ,enumEntityService,projectService,entityGroupService,restrictionEntityGroupService,roleService,restrictionEntityService,entityService,fieldService,restrictionFieldService,tabService,relationshipService,annotationService,annotationAttributeService,enumFieldService,userService)
+function enumValueController($scope,$http ,enumValueService, securityService, mainService ,enumEntityService,projectService,entityGroupService,restrictionEntityGroupService,roleService,restrictionEntityService,entityService,enumFieldService,annotationService,annotationAttributeService,fieldService,restrictionFieldService,tabService,relationshipService,userService)
 {
 $scope.searchBean=enumValueService.searchBean;
 $scope.entityList=enumValueService.entityList;

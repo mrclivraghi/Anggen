@@ -3,7 +3,7 @@ function fieldService($http,mainService)
 {
 this.entityList =		[];
 this.selectedEntity= 	{show: false 
-,restrictionFieldList: [],annotationList: []};
+,annotationList: [],restrictionFieldList: []};
 this.isParent=function()
 {
 return mainService.parentEntity=="Field";
@@ -65,6 +65,13 @@ var promise= $http.post("field/"+this.selectedEntity.fieldId+"/load"+field+"/",f
 });
 return promise; 
 }
+ this.initAnnotationList= function()
+{
+var promise= $http
+.post("annotation/search",
+{});
+return promise;
+};
  this.initRestrictionFieldList= function()
 {
 var promise= $http
@@ -86,13 +93,6 @@ var promise= $http
 {});
 return promise;
 };
- this.initAnnotationList= function()
-{
-var promise= $http
-.post("annotation/search",
-{});
-return promise;
-};
 this.gridOptions = {
 enablePaginationControls: true,
 multiSelect: false,
@@ -102,8 +102,8 @@ paginationPageSize: 10,
 enableGridMenu: true,
 columnDefs: [    
 { name: 'fieldId'},
-{ name: 'priority'},
 { name: 'name'},
+{ name: 'priority'},
 { name: 'tab.tabId', displayName: 'tab'},
 { name: 'entity.entityId', displayName: 'entity'} 
 ]

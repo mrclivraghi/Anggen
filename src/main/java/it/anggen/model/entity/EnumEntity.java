@@ -20,8 +20,8 @@ public class EnumEntity {
 
     public final static java.lang.Long staticEntityId = 15L;
     @javax.persistence.Column(name = "name")
-    @it.anggen.utils.annotation.DescriptionField
     @it.anggen.utils.annotation.Priority(2)
+    @it.anggen.utils.annotation.DescriptionField
     private String name;
     @javax.persistence.Column(name = "enum_entity_id")
     @Id

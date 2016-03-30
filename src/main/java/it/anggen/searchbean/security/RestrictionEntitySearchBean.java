@@ -9,8 +9,8 @@ public class RestrictionEntitySearchBean {
     public java.lang.Boolean canUpdate;
     public java.lang.Boolean canCreate;
     public java.lang.Boolean canSearch;
-    public it.anggen.model.security.Role role;
     public it.anggen.model.entity.Entity entity;
+    public it.anggen.model.security.Role role;
 
     public java.lang.Long getRestrictionEntityId() {
         return this.restrictionEntityId;
@@ -52,20 +52,20 @@ public class RestrictionEntitySearchBean {
         this.canSearch=canSearch;
     }
 
-    public it.anggen.model.security.Role getRole() {
-        return this.role;
-    }
-
-    public void setRole(it.anggen.model.security.Role role) {
-        this.role=role;
-    }
-
     public it.anggen.model.entity.Entity getEntity() {
         return this.entity;
     }
 
     public void setEntity(it.anggen.model.entity.Entity entity) {
         this.entity=entity;
+    }
+
+    public it.anggen.model.security.Role getRole() {
+        return this.role;
+    }
+
+    public void setRole(it.anggen.model.security.Role role) {
+        this.role=role;
     }
 
 }

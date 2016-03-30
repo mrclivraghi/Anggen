@@ -38,8 +38,8 @@ public interface EntityRepository
 
     public List<it.anggen.model.entity.Entity> findByEntityGroup(it.anggen.model.entity.EntityGroup entityGroup);
 
-    @Query("select e from Entity e where  (:entityId is null or cast(:entityId as string)=cast(e.entityId as string)) and (:disableViewGeneration is null or cast(:disableViewGeneration as string)=cast(e.disableViewGeneration as string)) and (:enableRestrictionData is null or cast(:enableRestrictionData as string)=cast(e.enableRestrictionData as string)) and (:descendantMaxLevel is null or cast(:descendantMaxLevel as string)=cast(e.descendantMaxLevel as string)) and (:generateFrontEnd is null or cast(:generateFrontEnd as string)=cast(e.generateFrontEnd as string)) and (:cache is null or cast(:cache as string)=cast(e.cache as string)) and (:name is null or :name='' or cast(:name as string)=e.name) and (:securityType is null or cast(:securityType as string)=cast(e.securityType as string)) and (:field in elements(e.fieldList)  or :field is null) and (:enumField in elements(e.enumFieldList)  or :enumField is null) and (:tab in elements(e.tabList)  or :tab is null) and (:entityGroup=e.entityGroup or :entityGroup is null) and (:restrictionEntity in elements(e.restrictionEntityList)  or :restrictionEntity is null) and (:relationship in elements(e.relationshipList)  or :relationship is null) ")
-    public List<it.anggen.model.entity.Entity> findByEntityIdAndDisableViewGenerationAndEnableRestrictionDataAndDescendantMaxLevelAndGenerateFrontEndAndCacheAndNameAndSecurityTypeAndFieldAndEnumFieldAndTabAndEntityGroupAndRestrictionEntityAndRelationship(
+    @Query("select e from Entity e where  (:entityId is null or cast(:entityId as string)=cast(e.entityId as string)) and (:disableViewGeneration is null or cast(:disableViewGeneration as string)=cast(e.disableViewGeneration as string)) and (:enableRestrictionData is null or cast(:enableRestrictionData as string)=cast(e.enableRestrictionData as string)) and (:descendantMaxLevel is null or cast(:descendantMaxLevel as string)=cast(e.descendantMaxLevel as string)) and (:generateFrontEnd is null or cast(:generateFrontEnd as string)=cast(e.generateFrontEnd as string)) and (:cache is null or cast(:cache as string)=cast(e.cache as string)) and (:name is null or :name='' or cast(:name as string)=e.name) and (:securityType is null or cast(:securityType as string)=cast(e.securityType as string)) and (:enumField in elements(e.enumFieldList)  or :enumField is null) and (:field in elements(e.fieldList)  or :field is null) and (:entityGroup=e.entityGroup or :entityGroup is null) and (:tab in elements(e.tabList)  or :tab is null) and (:restrictionEntity in elements(e.restrictionEntityList)  or :restrictionEntity is null) and (:relationship in elements(e.relationshipList)  or :relationship is null) ")
+    public List<it.anggen.model.entity.Entity> findByEntityIdAndDisableViewGenerationAndEnableRestrictionDataAndDescendantMaxLevelAndGenerateFrontEndAndCacheAndNameAndSecurityTypeAndEnumFieldAndFieldAndEntityGroupAndTabAndRestrictionEntityAndRelationship(
         @org.springframework.data.repository.query.Param("entityId")
         java.lang.Long entityId,
         @org.springframework.data.repository.query.Param("disableViewGeneration")
@@ -56,14 +56,14 @@ public interface EntityRepository
         java.lang.String name,
         @org.springframework.data.repository.query.Param("securityType")
         java.lang.Integer securityType,
-        @org.springframework.data.repository.query.Param("field")
-        Field field,
         @org.springframework.data.repository.query.Param("enumField")
         EnumField enumField,
-        @org.springframework.data.repository.query.Param("tab")
-        Tab tab,
+        @org.springframework.data.repository.query.Param("field")
+        Field field,
         @org.springframework.data.repository.query.Param("entityGroup")
         it.anggen.model.entity.EntityGroup entityGroup,
+        @org.springframework.data.repository.query.Param("tab")
+        Tab tab,
         @org.springframework.data.repository.query.Param("restrictionEntity")
         RestrictionEntity restrictionEntity,
         @org.springframework.data.repository.query.Param("relationship")

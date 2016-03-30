@@ -13,8 +13,8 @@ public class RoleSearchBean {
     public java.lang.String role;
     public List<RestrictionEntity> restrictionEntityList;
     public List<RestrictionField> restrictionFieldList;
-    public List<RestrictionEntityGroup> restrictionEntityGroupList;
     public List<User> userList;
+    public List<RestrictionEntityGroup> restrictionEntityGroupList;
 
     public java.lang.Integer getRoleId() {
         return this.roleId;
@@ -48,20 +48,20 @@ public class RoleSearchBean {
         this.restrictionFieldList=restrictionFieldList;
     }
 
-    public List<RestrictionEntityGroup> getRestrictionEntityGroupList() {
-        return this.restrictionEntityGroupList;
-    }
-
-    public void setRestrictionEntityGroupList(List<RestrictionEntityGroup> restrictionEntityGroupList) {
-        this.restrictionEntityGroupList=restrictionEntityGroupList;
-    }
-
     public List<User> getUserList() {
         return this.userList;
     }
 
     public void setUserList(List<User> userList) {
         this.userList=userList;
+    }
+
+    public List<RestrictionEntityGroup> getRestrictionEntityGroupList() {
+        return this.restrictionEntityGroupList;
+    }
+
+    public void setRestrictionEntityGroupList(List<RestrictionEntityGroup> restrictionEntityGroupList) {
+        this.restrictionEntityGroupList=restrictionEntityGroupList;
     }
 
 }

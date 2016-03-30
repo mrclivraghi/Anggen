@@ -18,10 +18,6 @@ import org.hibernate.annotations.Type;
 public class EntityGroup {
 
     public final static java.lang.Long staticEntityId = 13L;
-    @javax.persistence.Column(name = "name")
-    @it.anggen.utils.annotation.DescriptionField
-    @it.anggen.utils.annotation.Priority(2)
-    private String name;
     @javax.persistence.Column(name = "entity_group_id")
     @Id
     @GeneratedValue
@@ -31,28 +27,24 @@ public class EntityGroup {
     @javax.persistence.Column(name = "entity_id")
     @it.anggen.utils.annotation.Priority(2)
     private java.lang.Long entityId;
+    @javax.persistence.Column(name = "name")
+    @it.anggen.utils.annotation.Priority(2)
+    @it.anggen.utils.annotation.DescriptionField
+    private String name;
     @OneToMany(fetch = javax.persistence.FetchType.EAGER)
     @Type(type = "it.anggen.model.security.RestrictionEntityGroup")
     @javax.persistence.JoinColumn(name = "entity_group_id_entity_group")
     @it.anggen.utils.annotation.Priority(4)
     private List<RestrictionEntityGroup> restrictionEntityGroupList;
+    @ManyToOne(fetch = javax.persistence.FetchType.EAGER)
+    @javax.persistence.JoinColumn(name = "project_id_project")
+    @it.anggen.utils.annotation.Priority(4)
+    private it.anggen.model.entity.Project project;
     @OneToMany(fetch = javax.persistence.FetchType.EAGER)
     @Type(type = "it.anggen.model.entity.Entity")
     @javax.persistence.JoinColumn(name = "entity_group_id_entity_group")
     @it.anggen.utils.annotation.Priority(4)
     private List<it.anggen.model.entity.Entity> entityList;
-    @ManyToOne(fetch = javax.persistence.FetchType.EAGER)
-    @javax.persistence.JoinColumn(name = "project_id_project")
-    @it.anggen.utils.annotation.Priority(4)
-    private it.anggen.model.entity.Project project;
-
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(String name) {
-        this.name=name;
-    }
 
     public java.lang.Long getEntityGroupId() {
         return this.entityGroupId;
@@ -70,6 +62,14 @@ public class EntityGroup {
         this.entityId=entityId;
     }
 
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name=name;
+    }
+
     public List<RestrictionEntityGroup> getRestrictionEntityGroupList() {
         return this.restrictionEntityGroupList;
     }
@@ -78,20 +78,20 @@ public class EntityGroup {
         this.restrictionEntityGroupList=restrictionEntityGroupList;
     }
 
-    public List<it.anggen.model.entity.Entity> getEntityList() {
-        return this.entityList;
-    }
-
-    public void setEntityList(List<it.anggen.model.entity.Entity> entityList) {
-        this.entityList=entityList;
-    }
-
     public it.anggen.model.entity.Project getProject() {
         return this.project;
     }
 
     public void setProject(it.anggen.model.entity.Project project) {
         this.project=project;
+    }
+
+    public List<it.anggen.model.entity.Entity> getEntityList() {
+        return this.entityList;
+    }
+
+    public void setEntityList(List<it.anggen.model.entity.Entity> entityList) {
+        this.entityList=entityList;
     }
 
 }

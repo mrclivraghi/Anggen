@@ -65,17 +65,17 @@ var promise= $http.post("restrictionEntityGroup/"+this.selectedEntity.restrictio
 });
 return promise; 
 }
- this.initRoleList= function()
-{
-var promise= $http
-.post("role/search",
-{});
-return promise;
-};
  this.initEntityGroupList= function()
 {
 var promise= $http
 .post("entityGroup/search",
+{});
+return promise;
+};
+ this.initRoleList= function()
+{
+var promise= $http
+.post("role/search",
 {});
 return promise;
 };
@@ -92,8 +92,8 @@ columnDefs: [
 { name: 'canCreate'},
 { name: 'canDelete'},
 { name: 'canSearch'},
-{ name: 'role.roleId', displayName: 'role'},
-{ name: 'entityGroup.entityGroupId', displayName: 'entityGroup'} 
+{ name: 'entityGroup.entityGroupId', displayName: 'entityGroup'},
+{ name: 'role.roleId', displayName: 'role'} 
 ]
  };
 };

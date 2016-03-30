@@ -71,9 +71,6 @@ mainService.parentService.setEntityList(null);
 }
 mainService.parentEntity="Annotation";
 mainService.parentService=annotationService;
-mainService.parentService.initRelationshipList().then(function(response) {
-mainService.parentService.childrenList.relationshipList=response.data;
-});
 mainService.parentService.initAnnotationAttributeList().then(function(response) {
 mainService.parentService.childrenList.annotationAttributeList=response.data;
 });
@@ -82,6 +79,9 @@ mainService.parentService.childrenList.fieldList=response.data;
 });
 mainService.parentService.initEnumFieldList().then(function(response) {
 mainService.parentService.childrenList.enumFieldList=response.data;
+});
+mainService.parentService.initRelationshipList().then(function(response) {
+mainService.parentService.childrenList.relationshipList=response.data;
 });
 }
 }
@@ -100,6 +100,9 @@ mainService.parentService.setEntityList(null);
 }
 mainService.parentEntity="Field";
 mainService.parentService=fieldService;
+mainService.parentService.initAnnotationList().then(function(response) {
+mainService.parentService.childrenList.annotationList=response.data;
+});
 mainService.parentService.initRestrictionFieldList().then(function(response) {
 mainService.parentService.childrenList.restrictionFieldList=response.data;
 });
@@ -108,9 +111,6 @@ mainService.parentService.childrenList.tabList=response.data;
 });
 mainService.parentService.initEntityList().then(function(response) {
 mainService.parentService.childrenList.entityList=response.data;
-});
-mainService.parentService.initAnnotationList().then(function(response) {
-mainService.parentService.childrenList.annotationList=response.data;
 });
 }
 }
@@ -149,52 +149,17 @@ mainService.parentService.setEntityList(null);
 }
 mainService.parentEntity="EnumField";
 mainService.parentService=enumFieldService;
+mainService.parentService.initAnnotationList().then(function(response) {
+mainService.parentService.childrenList.annotationList=response.data;
+});
 mainService.parentService.initTabList().then(function(response) {
 mainService.parentService.childrenList.tabList=response.data;
-});
-mainService.parentService.initEntityList().then(function(response) {
-mainService.parentService.childrenList.entityList=response.data;
 });
 mainService.parentService.initEnumEntityList().then(function(response) {
 mainService.parentService.childrenList.enumEntityList=response.data;
 });
-mainService.parentService.initAnnotationList().then(function(response) {
-mainService.parentService.childrenList.annotationList=response.data;
-});
-}
-}
-})
-.when('/Entity/',{
-templateUrl: './entity/',
-controller:'entityController',
-resolve: {
-setParent: function(mainService,entityService){
-if (mainService.parentService!=null)
-{
-mainService.parentService.resetSearchBean();
-mainService.parentService.setSelectedEntity(null);
-mainService.parentService.selectedEntity.show=false;
-mainService.parentService.setEntityList(null);
-}
-mainService.parentEntity="Entity";
-mainService.parentService=entityService;
-mainService.parentService.initFieldList().then(function(response) {
-mainService.parentService.childrenList.fieldList=response.data;
-});
-mainService.parentService.initEnumFieldList().then(function(response) {
-mainService.parentService.childrenList.enumFieldList=response.data;
-});
-mainService.parentService.initTabList().then(function(response) {
-mainService.parentService.childrenList.tabList=response.data;
-});
-mainService.parentService.initEntityGroupList().then(function(response) {
-mainService.parentService.childrenList.entityGroupList=response.data;
-});
-mainService.parentService.initRestrictionEntityList().then(function(response) {
-mainService.parentService.childrenList.restrictionEntityList=response.data;
-});
-mainService.parentService.initRelationshipList().then(function(response) {
-mainService.parentService.childrenList.relationshipList=response.data;
+mainService.parentService.initEntityList().then(function(response) {
+mainService.parentService.childrenList.entityList=response.data;
 });
 }
 }
@@ -213,17 +178,17 @@ mainService.parentService.setEntityList(null);
 }
 mainService.parentEntity="Tab";
 mainService.parentService=tabService;
-mainService.parentService.initRelationshipList().then(function(response) {
-mainService.parentService.childrenList.relationshipList=response.data;
-});
-mainService.parentService.initEntityList().then(function(response) {
-mainService.parentService.childrenList.entityList=response.data;
-});
 mainService.parentService.initFieldList().then(function(response) {
 mainService.parentService.childrenList.fieldList=response.data;
 });
 mainService.parentService.initEnumFieldList().then(function(response) {
 mainService.parentService.childrenList.enumFieldList=response.data;
+});
+mainService.parentService.initRelationshipList().then(function(response) {
+mainService.parentService.childrenList.relationshipList=response.data;
+});
+mainService.parentService.initEntityList().then(function(response) {
+mainService.parentService.childrenList.entityList=response.data;
 });
 }
 }
@@ -245,11 +210,11 @@ mainService.parentService=entityGroupService;
 mainService.parentService.initRestrictionEntityGroupList().then(function(response) {
 mainService.parentService.childrenList.restrictionEntityGroupList=response.data;
 });
-mainService.parentService.initEntityList().then(function(response) {
-mainService.parentService.childrenList.entityList=response.data;
-});
 mainService.parentService.initProjectList().then(function(response) {
 mainService.parentService.childrenList.projectList=response.data;
+});
+mainService.parentService.initEntityList().then(function(response) {
+mainService.parentService.childrenList.entityList=response.data;
 });
 }
 }
@@ -268,11 +233,11 @@ mainService.parentService.setEntityList(null);
 }
 mainService.parentEntity="Project";
 mainService.parentService=projectService;
-mainService.parentService.initEntityGroupList().then(function(response) {
-mainService.parentService.childrenList.entityGroupList=response.data;
-});
 mainService.parentService.initEnumEntityList().then(function(response) {
 mainService.parentService.childrenList.enumEntityList=response.data;
+});
+mainService.parentService.initEntityGroupList().then(function(response) {
+mainService.parentService.childrenList.entityGroupList=response.data;
 });
 }
 }
@@ -300,6 +265,41 @@ mainService.parentService.childrenList.enumValueList=response.data;
 }
 }
 })
+.when('/Entity/',{
+templateUrl: './entity/',
+controller:'entityController',
+resolve: {
+setParent: function(mainService,entityService){
+if (mainService.parentService!=null)
+{
+mainService.parentService.resetSearchBean();
+mainService.parentService.setSelectedEntity(null);
+mainService.parentService.selectedEntity.show=false;
+mainService.parentService.setEntityList(null);
+}
+mainService.parentEntity="Entity";
+mainService.parentService=entityService;
+mainService.parentService.initEnumFieldList().then(function(response) {
+mainService.parentService.childrenList.enumFieldList=response.data;
+});
+mainService.parentService.initFieldList().then(function(response) {
+mainService.parentService.childrenList.fieldList=response.data;
+});
+mainService.parentService.initEntityGroupList().then(function(response) {
+mainService.parentService.childrenList.entityGroupList=response.data;
+});
+mainService.parentService.initTabList().then(function(response) {
+mainService.parentService.childrenList.tabList=response.data;
+});
+mainService.parentService.initRestrictionEntityList().then(function(response) {
+mainService.parentService.childrenList.restrictionEntityList=response.data;
+});
+mainService.parentService.initRelationshipList().then(function(response) {
+mainService.parentService.childrenList.relationshipList=response.data;
+});
+}
+}
+})
 .when('/RestrictionEntityGroup/',{
 templateUrl: './restrictionEntityGroup/',
 controller:'restrictionEntityGroupController',
@@ -314,11 +314,11 @@ mainService.parentService.setEntityList(null);
 }
 mainService.parentEntity="RestrictionEntityGroup";
 mainService.parentService=restrictionEntityGroupService;
-mainService.parentService.initRoleList().then(function(response) {
-mainService.parentService.childrenList.roleList=response.data;
-});
 mainService.parentService.initEntityGroupList().then(function(response) {
 mainService.parentService.childrenList.entityGroupList=response.data;
+});
+mainService.parentService.initRoleList().then(function(response) {
+mainService.parentService.childrenList.roleList=response.data;
 });
 }
 }
@@ -380,11 +380,11 @@ mainService.parentService.setEntityList(null);
 }
 mainService.parentEntity="RestrictionEntity";
 mainService.parentService=restrictionEntityService;
-mainService.parentService.initRoleList().then(function(response) {
-mainService.parentService.childrenList.roleList=response.data;
-});
 mainService.parentService.initEntityList().then(function(response) {
 mainService.parentService.childrenList.entityList=response.data;
+});
+mainService.parentService.initRoleList().then(function(response) {
+mainService.parentService.childrenList.roleList=response.data;
 });
 }
 }
@@ -409,11 +409,11 @@ mainService.parentService.childrenList.restrictionEntityList=response.data;
 mainService.parentService.initRestrictionFieldList().then(function(response) {
 mainService.parentService.childrenList.restrictionFieldList=response.data;
 });
-mainService.parentService.initRestrictionEntityGroupList().then(function(response) {
-mainService.parentService.childrenList.restrictionEntityGroupList=response.data;
-});
 mainService.parentService.initUserList().then(function(response) {
 mainService.parentService.childrenList.userList=response.data;
+});
+mainService.parentService.initRestrictionEntityGroupList().then(function(response) {
+mainService.parentService.childrenList.restrictionEntityGroupList=response.data;
 });
 }
 }
@@ -432,14 +432,14 @@ mainService.parentService.setEntityList(null);
 }
 mainService.parentEntity="Relationship";
 mainService.parentService=relationshipService;
+mainService.parentService.initEntityList().then(function(response) {
+mainService.parentService.childrenList.entityList=response.data;
+});
+mainService.parentService.initEntityList().then(function(response) {
+mainService.parentService.childrenList.entityList=response.data;
+});
 mainService.parentService.initTabList().then(function(response) {
 mainService.parentService.childrenList.tabList=response.data;
-});
-mainService.parentService.initEntityList().then(function(response) {
-mainService.parentService.childrenList.entityList=response.data;
-});
-mainService.parentService.initEntityList().then(function(response) {
-mainService.parentService.childrenList.entityList=response.data;
 });
 mainService.parentService.initAnnotationList().then(function(response) {
 mainService.parentService.childrenList.annotationList=response.data;
@@ -461,11 +461,11 @@ mainService.parentService.setEntityList(null);
 }
 mainService.parentEntity="LogEntry";
 mainService.parentService=logEntryService;
-mainService.parentService.initUserList().then(function(response) {
-mainService.parentService.childrenList.userList=response.data;
-});
 mainService.parentService.initEntityList().then(function(response) {
 mainService.parentService.childrenList.entityList=response.data;
+});
+mainService.parentService.initUserList().then(function(response) {
+mainService.parentService.childrenList.userList=response.data;
 });
 }
 }

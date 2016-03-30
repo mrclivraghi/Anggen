@@ -72,17 +72,17 @@ var promise= $http
 {});
 return promise;
 };
- this.initEntityList= function()
-{
-var promise= $http
-.post("entity/search",
-{});
-return promise;
-};
  this.initProjectList= function()
 {
 var promise= $http
 .post("project/search",
+{});
+return promise;
+};
+ this.initEntityList= function()
+{
+var promise= $http
+.post("entity/search",
 {});
 return promise;
 };
@@ -95,8 +95,8 @@ paginationPageSize: 10,
 enableGridMenu: true,
 columnDefs: [    
 { name: 'entityGroupId'},
-{ name: 'name'},
 { name: 'entityId'},
+{ name: 'name'},
 { name: 'project.projectId', displayName: 'project'} 
 ]
  };

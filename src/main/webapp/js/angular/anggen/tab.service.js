@@ -3,7 +3,7 @@ function tabService($http,mainService)
 {
 this.entityList =		[];
 this.selectedEntity= 	{show: false 
-,relationshipList: [],fieldList: [],enumFieldList: []};
+,fieldList: [],enumFieldList: [],relationshipList: []};
 this.isParent=function()
 {
 return mainService.parentEntity=="Tab";
@@ -65,20 +65,6 @@ var promise= $http.post("tab/"+this.selectedEntity.tabId+"/load"+field+"/",formD
 });
 return promise; 
 }
- this.initRelationshipList= function()
-{
-var promise= $http
-.post("relationship/search",
-{});
-return promise;
-};
- this.initEntityList= function()
-{
-var promise= $http
-.post("entity/search",
-{});
-return promise;
-};
  this.initFieldList= function()
 {
 var promise= $http
@@ -90,6 +76,20 @@ return promise;
 {
 var promise= $http
 .post("enumField/search",
+{});
+return promise;
+};
+ this.initRelationshipList= function()
+{
+var promise= $http
+.post("relationship/search",
+{});
+return promise;
+};
+ this.initEntityList= function()
+{
+var promise= $http
+.post("entity/search",
 {});
 return promise;
 };

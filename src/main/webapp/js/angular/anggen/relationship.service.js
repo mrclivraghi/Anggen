@@ -65,24 +65,24 @@ var promise= $http.post("relationship/"+this.selectedEntity.relationshipId+"/loa
 });
 return promise; 
 }
+ this.initEntityList= function()
+{
+var promise= $http
+.post("entity/search",
+{});
+return promise;
+};
+ this.initEntityList= function()
+{
+var promise= $http
+.post("entity/search",
+{});
+return promise;
+};
  this.initTabList= function()
 {
 var promise= $http
 .post("tab/search",
-{});
-return promise;
-};
- this.initEntityList= function()
-{
-var promise= $http
-.post("entity/search",
-{});
-return promise;
-};
- this.initEntityList= function()
-{
-var promise= $http
-.post("entity/search",
 {});
 return promise;
 };
@@ -104,9 +104,9 @@ columnDefs: [
 { name: 'relationshipId'},
 { name: 'name'},
 { name: 'priority'},
-{ name: 'tab.tabId', displayName: 'tab'},
+{ name: 'entity.entityId', displayName: 'entity'},
 { name: 'entityTarget.entityTargetId', displayName: 'entityTarget'},
-{ name: 'entity.entityId', displayName: 'entity'} 
+{ name: 'tab.tabId', displayName: 'tab'} 
 ]
  };
 };

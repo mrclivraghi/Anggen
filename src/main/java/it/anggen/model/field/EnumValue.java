@@ -27,8 +27,8 @@ public class EnumValue {
     @it.anggen.utils.annotation.Priority(2)
     private Integer value;
     @javax.persistence.Column(name = "name")
-    @it.anggen.utils.annotation.DescriptionField
     @it.anggen.utils.annotation.Priority(2)
+    @it.anggen.utils.annotation.DescriptionField
     private String name;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "enum_entity_id_enum_entity")

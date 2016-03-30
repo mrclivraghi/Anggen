@@ -65,17 +65,17 @@ var promise= $http.post("logEntry/"+this.selectedEntity.logEntryId+"/load"+field
 });
 return promise; 
 }
- this.initUserList= function()
-{
-var promise= $http
-.post("user/search",
-{});
-return promise;
-};
  this.initEntityList= function()
 {
 var promise= $http
 .post("entity/search",
+{});
+return promise;
+};
+ this.initUserList= function()
+{
+var promise= $http
+.post("user/search",
 {});
 return promise;
 };
@@ -92,8 +92,8 @@ columnDefs: [
 { name: 'hostName'},
 { name: 'ipAddress'},
 { name: 'logDate', cellFilter: "date:'dd-MM-yyyy'"},
-{ name: 'user.userId', displayName: 'user'},
-{ name: 'entity.entityId', displayName: 'entity'} 
+{ name: 'entity.entityId', displayName: 'entity'},
+{ name: 'user.userId', displayName: 'user'} 
 ]
  };
 };

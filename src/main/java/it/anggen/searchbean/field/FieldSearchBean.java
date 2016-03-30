@@ -8,13 +8,13 @@ import it.anggen.model.security.RestrictionField;
 public class FieldSearchBean {
 
     public java.lang.Long fieldId;
-    public java.lang.Integer priority;
     public java.lang.String name;
+    public java.lang.Integer priority;
     public it.anggen.model.FieldType fieldType;
+    public List<Annotation> annotationList;
     public List<RestrictionField> restrictionFieldList;
     public it.anggen.model.entity.Tab tab;
     public it.anggen.model.entity.Entity entity;
-    public List<Annotation> annotationList;
 
     public java.lang.Long getFieldId() {
         return this.fieldId;
@@ -22,14 +22,6 @@ public class FieldSearchBean {
 
     public void setFieldId(java.lang.Long fieldId) {
         this.fieldId=fieldId;
-    }
-
-    public java.lang.Integer getPriority() {
-        return this.priority;
-    }
-
-    public void setPriority(java.lang.Integer priority) {
-        this.priority=priority;
     }
 
     public java.lang.String getName() {
@@ -40,12 +32,28 @@ public class FieldSearchBean {
         this.name=name;
     }
 
+    public java.lang.Integer getPriority() {
+        return this.priority;
+    }
+
+    public void setPriority(java.lang.Integer priority) {
+        this.priority=priority;
+    }
+
     public it.anggen.model.FieldType getFieldType() {
         return this.fieldType;
     }
 
     public void setFieldType(it.anggen.model.FieldType fieldType) {
         this.fieldType=fieldType;
+    }
+
+    public List<Annotation> getAnnotationList() {
+        return this.annotationList;
+    }
+
+    public void setAnnotationList(List<Annotation> annotationList) {
+        this.annotationList=annotationList;
     }
 
     public List<RestrictionField> getRestrictionFieldList() {
@@ -70,14 +78,6 @@ public class FieldSearchBean {
 
     public void setEntity(it.anggen.model.entity.Entity entity) {
         this.entity=entity;
-    }
-
-    public List<Annotation> getAnnotationList() {
-        return this.annotationList;
-    }
-
-    public void setAnnotationList(List<Annotation> annotationList) {
-        this.annotationList=annotationList;
     }
 
 }

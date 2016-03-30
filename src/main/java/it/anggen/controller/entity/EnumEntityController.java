@@ -153,8 +153,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     private void getRightMapping(it.anggen.model.entity.EnumEntity enumEntity) {
         if (enumEntity.getProject()!=null)
         {
-        enumEntity.getProject().setEntityGroupList(null);
         enumEntity.getProject().setEnumEntityList(null);
+        enumEntity.getProject().setEntityGroupList(null);
         }
         if (enumEntity.getEnumValueList()!=null)
         for (it.anggen.model.field.EnumValue enumValue :enumEntity.getEnumValueList())

@@ -22,10 +22,6 @@ public class Field
 {
 
     public final static java.lang.Long staticEntityId = 16L;
-    @javax.persistence.Column(name = "name")
-    @it.anggen.utils.annotation.DescriptionField
-    @it.anggen.utils.annotation.Priority(2)
-    private String name;
     @javax.persistence.Column(name = "priority")
     @it.anggen.utils.annotation.Priority(2)
     private Integer priority;
@@ -35,6 +31,15 @@ public class Field
     @it.anggen.utils.annotation.DescriptionField
     @it.anggen.utils.annotation.Priority(1)
     private java.lang.Long fieldId;
+    @javax.persistence.Column(name = "name")
+    @it.anggen.utils.annotation.Priority(2)
+    @it.anggen.utils.annotation.DescriptionField
+    private String name;
+    @OneToMany(fetch = javax.persistence.FetchType.EAGER)
+    @Type(type = "it.anggen.model.field.Annotation")
+    @javax.persistence.JoinColumn(name = "field_id_field")
+    @it.anggen.utils.annotation.Priority(4)
+    private List<Annotation> annotationList;
     @OneToMany(fetch = javax.persistence.FetchType.EAGER)
     @Type(type = "it.anggen.model.security.RestrictionField")
     @javax.persistence.JoinColumn(name = "field_id_field")
@@ -48,22 +53,9 @@ public class Field
     @javax.persistence.JoinColumn(name = "entity_id_entity")
     @it.anggen.utils.annotation.Priority(4)
     private it.anggen.model.entity.Entity entity;
-    @OneToMany(fetch = javax.persistence.FetchType.EAGER)
-    @Type(type = "it.anggen.model.field.Annotation")
-    @javax.persistence.JoinColumn(name = "field_id_field")
-    @it.anggen.utils.annotation.Priority(4)
-    private List<Annotation> annotationList;
     @javax.persistence.Column(name = "field_type")
     @it.anggen.utils.annotation.Priority(3)
     private FieldType fieldType;
-
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(String name) {
-        this.name=name;
-    }
 
     public Integer getPriority() {
         return this.priority;
@@ -79,6 +71,22 @@ public class Field
 
     public void setFieldId(java.lang.Long fieldId) {
         this.fieldId=fieldId;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name=name;
+    }
+
+    public List<Annotation> getAnnotationList() {
+        return this.annotationList;
+    }
+
+    public void setAnnotationList(List<Annotation> annotationList) {
+        this.annotationList=annotationList;
     }
 
     public List<RestrictionField> getRestrictionFieldList() {
@@ -103,14 +111,6 @@ public class Field
 
     public void setEntity(it.anggen.model.entity.Entity entity) {
         this.entity=entity;
-    }
-
-    public List<Annotation> getAnnotationList() {
-        return this.annotationList;
-    }
-
-    public void setAnnotationList(List<Annotation> annotationList) {
-        this.annotationList=annotationList;
     }
 
     public FieldType getFieldType() {

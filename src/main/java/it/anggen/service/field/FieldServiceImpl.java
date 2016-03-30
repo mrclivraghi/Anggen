@@ -19,9 +19,9 @@ public class FieldServiceImpl
     @org.springframework.beans.factory.annotation.Autowired
     public FieldRepository fieldRepository;
     @org.springframework.beans.factory.annotation.Autowired
-    public RestrictionFieldRepository restrictionFieldRepository;
-    @org.springframework.beans.factory.annotation.Autowired
     public AnnotationRepository annotationRepository;
+    @org.springframework.beans.factory.annotation.Autowired
+    public RestrictionFieldRepository restrictionFieldRepository;
     private static Integer PAGE_SIZE = (5);
 
     @Override
@@ -37,7 +37,7 @@ public class FieldServiceImpl
 
     @Override
     public List<it.anggen.model.field.Field> find(FieldSearchBean field) {
-        return fieldRepository.findByFieldIdAndPriorityAndNameAndFieldTypeAndRestrictionFieldAndTabAndEntityAndAnnotation(field.getFieldId(),field.getPriority(),field.getName(), (field.getFieldType()==null)? null : field.getFieldType().getValue(),field.getRestrictionFieldList()==null? null :field.getRestrictionFieldList().get(0),field.getTab(),field.getEntity(),field.getAnnotationList()==null? null :field.getAnnotationList().get(0));
+        return fieldRepository.findByFieldIdAndNameAndPriorityAndFieldTypeAndAnnotationAndRestrictionFieldAndTabAndEntity(field.getFieldId(),field.getName(),field.getPriority(), (field.getFieldType()==null)? null : field.getFieldType().getValue(),field.getAnnotationList()==null? null :field.getAnnotationList().get(0),field.getRestrictionFieldList()==null? null :field.getRestrictionFieldList().get(0),field.getTab(),field.getEntity());
     }
 
     @Override
@@ -54,15 +54,15 @@ public class FieldServiceImpl
     @Override
     @Transactional
     public it.anggen.model.field.Field update(it.anggen.model.field.Field field) {
-        if (field.getRestrictionFieldList()!=null)
-        for (it.anggen.model.security.RestrictionField restrictionField: field.getRestrictionFieldList())
-        {
-        restrictionField.setField(field);
-        }
         if (field.getAnnotationList()!=null)
         for (it.anggen.model.field.Annotation annotation: field.getAnnotationList())
         {
         annotation.setField(field);
+        }
+        if (field.getRestrictionFieldList()!=null)
+        for (it.anggen.model.security.RestrictionField restrictionField: field.getRestrictionFieldList())
+        {
+        restrictionField.setField(field);
         }
         it.anggen.model.field.Field returnedField=fieldRepository.save(field);
         if (field.getTab()!=null)

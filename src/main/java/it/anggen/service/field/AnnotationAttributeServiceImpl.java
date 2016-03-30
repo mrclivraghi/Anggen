@@ -32,7 +32,7 @@ public class AnnotationAttributeServiceImpl
 
     @Override
     public List<it.anggen.model.field.AnnotationAttribute> find(AnnotationAttributeSearchBean annotationAttribute) {
-        return annotationAttributeRepository.findByAnnotationAttributeIdAndValueAndPropertyAndAnnotation(annotationAttribute.getAnnotationAttributeId(),annotationAttribute.getValue(),annotationAttribute.getProperty(),annotationAttribute.getAnnotation());
+        return annotationAttributeRepository.findByAnnotationAttributeIdAndPropertyAndValueAndAnnotation(annotationAttribute.getAnnotationAttributeId(),annotationAttribute.getProperty(),annotationAttribute.getValue(),annotationAttribute.getAnnotation());
     }
 
     @Override

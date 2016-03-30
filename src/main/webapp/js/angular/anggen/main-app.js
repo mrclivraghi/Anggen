@@ -1,4 +1,4 @@
-angular.module("anggenApp",['ngRoute','ngFileUpload','ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter']);angular.module("anggenApp").service("securityService",function($http)
+angular.module("anggenApp",['ngRoute','ngFileUpload','ui.bootstrap','ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter']);angular.module("anggenApp").service("securityService",function($http)
 {
 this.restrictionList;
 })

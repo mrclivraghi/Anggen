@@ -14,9 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 
-@Configuration
-@EnableWebSecurity
-@Order(99)
+
 public class SecurityConfig
     extends WebSecurityConfigurerAdapter
 {

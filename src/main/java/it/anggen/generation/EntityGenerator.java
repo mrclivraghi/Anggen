@@ -142,6 +142,10 @@ public class EntityGenerator {
 		} catch (JClassAlreadyExistsException e) {
 			e.printStackTrace();
 		}
+		
+		if (generator.applicationName.equals("anggen") && (className.equals("Field") || className.equals("EnumField") || className.equals("Relationship")))
+			myClass._extends(EntityAttribute.class);
+		
 		myClass.annotate(javax.persistence.Entity.class);
 		JAnnotationUse annotationTable= myClass.annotate(Table.class);
 		//from properties

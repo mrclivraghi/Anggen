@@ -240,12 +240,24 @@ public class EntityManagerImpl implements EntityManager{
 		
 		for (EntityAttribute entityAttribute: entityAttributeList)
 		{
+			
 				if (EntityAttributeManager.getInstance(entityAttribute).getDescriptionField())
 				{
 					if (withGetter)
-						descriptionFields=descriptionFields+" "+entityName+".get"+Utility.getFirstUpper(entityAttribute.getName())+"()+' '+";
+					{
+						if (EntityAttributeManager.getInstance(entityAttribute).isRelationship())
+							descriptionFields=descriptionFields+" "+entityName+".get"+Utility.getFirstUpper(entityAttribute.getName())+"().get"+Utility.getFirstUpper(entityAttribute.getName())+"Id+' '+";
+						else
+							descriptionFields=descriptionFields+" "+entityName+".get"+Utility.getFirstUpper(entityAttribute.getName())+"()+' '+";
+						
+					}
 					else
-						descriptionFields=descriptionFields+" "+entityName+"."+entityAttribute.getName()+"+' '+";
+					{
+						if (EntityAttributeManager.getInstance(entityAttribute).isRelationship())
+							descriptionFields=descriptionFields+" "+entityName+"."+entityAttribute.getName()+"."+Utility.getFirstUpper(entityAttribute.getName())+"Id+' '+";
+						else	
+							descriptionFields=descriptionFields+" "+entityName+"."+entityAttribute.getName()+"+' '+";
+					}
 
 				}
 		}

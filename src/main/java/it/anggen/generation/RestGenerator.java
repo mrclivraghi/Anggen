@@ -773,7 +773,7 @@ public class RestGenerator {
 			getByIdBlock.directStatement(addSecurityCheck(RestrictionType.SEARCH));
 			//getByIdBlock.directStatement("log.info();");
 			
-			getByIdBlock.directStatement("logEntryService.addLogEntry( \"Searching "+lowerClass+" with id {}\","+lowerClass+"Id,");
+			getByIdBlock.directStatement("logEntryService.addLogEntry( \"Searching "+lowerClass+" with id \"+"+lowerClass+"Id,");
 			getByIdBlock.directStatement(LogType.class.getName()+".INFO, "+OperationType.class.getName()+".SEARCH_ENTITY, "+ReflectionManager.getJDefinedClass(entity).fullName()+".staticEntityId, securityService.getLoggedUser(),log);");
        
 			
@@ -796,7 +796,7 @@ public class RestGenerator {
 			JBlock deleteBlock= delete.body();
 			deleteBlock.directStatement(addSecurityCheck(RestrictionType.DELETE));
 			
-			deleteBlock.directStatement("log.info(\"Deleting "+lowerClass+" with id {}\","+lowerClass+"Id);");
+			deleteBlock.directStatement("log.info(\"Deleting "+lowerClass+" with id \"+"+lowerClass+"Id);");
 			
 			deleteBlock.directStatement("logEntryService.addLogEntry( \"Deleting "+lowerClass+" with id {}\","+lowerClass+"Id,");
 			deleteBlock.directStatement(LogType.class.getName()+".INFO, "+OperationType.class.getName()+".DELETE_ENTITY, "+ReflectionManager.getJDefinedClass(entity).fullName()+".staticEntityId, securityService.getLoggedUser(),log);");
@@ -818,7 +818,7 @@ public class RestGenerator {
 			insertBlock.directStatement(addSecurityCheck(RestrictionType.INSERT));
 			
 			insertBlock.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(lowerClass)+"Id()!=null)");
-			insertBlock.directStatement("log.info(\"Inserting "+lowerClass+" like {}\","+entityManager.getDescription(true)+");");
+			insertBlock.directStatement("log.info(\"Inserting "+lowerClass+" like \"+"+entityManager.getDescription(true)+");");
 			insertBlock.directStatement(ReflectionManager.getJDefinedClass(entity).fullName()+" inserted"+className+"="+lowerClass+"Service.insert("+lowerClass+");");
 			insertBlock.directStatement("getRightMapping(inserted"+className+");");
 			

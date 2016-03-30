@@ -71,6 +71,7 @@ public class LogEntryServiceImpl
 
 
 	@Override
+	@Transactional
 	public void addLogEntry( String info,  LogType logType,
 			OperationType operationType, Long entityId, User user,Logger log) {
 		LogEntry logEntry = new LogEntry();
@@ -87,6 +88,7 @@ public class LogEntryServiceImpl
 		else
 			logEntry.setLogType(LogType.WARNING);
 		
+		if (log!=null)
 		switch (logType)
 		{
 		case DEBUG: 

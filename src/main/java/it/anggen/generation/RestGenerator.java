@@ -999,17 +999,17 @@ public class RestGenerator {
 			lowerClass=entity.getName();
 			if (EntityAttributeManager.getInstance(relationship).isList())
 			{
-				block.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List()!=null)");
-				block.directStatement("for ("+ReflectionManager.getJDefinedClass(relationship.getEntityTarget()).fullName()+" "+Utility.getFirstLower(relationship.getEntityTarget().getName())+" :"+lowerClass+".get"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List())\n");
+				block.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(relationship.getName())+"List()!=null)");
+				block.directStatement("for ("+ReflectionManager.getJDefinedClass(relationship.getEntityTarget()).fullName()+" "+Utility.getFirstLower(relationship.getEntityTarget().getName())+" :"+lowerClass+".get"+Utility.getFirstUpper(relationship.getName())+"List())\n");
 				block.directStatement("{\n");
-				lowerClass=relationship.getEntityTarget().getName();
+				lowerClass=relationship.getName();
 			}
 			 else
 			 {
 				 
-				 block.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"()!=null)");
+				 block.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(relationship.getName())+"()!=null)");
 				 block.directStatement("{");
-				 lowerClass=lowerClass+".get"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"()";
+				 lowerClass=lowerClass+".get"+Utility.getFirstUpper(relationship.getName())+"()";
 			 }
 			EntityManager targetEntityManager = new EntityManagerImpl(relationship.getEntityTarget());
 			for (Relationship targetRelationship: relationship.getEntityTarget().getRelationshipList())

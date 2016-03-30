@@ -25,7 +25,7 @@ public class EntityAttribute {
 		if (EntityAttributeManager.getInstance(this).isField())
 			return EntityAttributeManager.getInstance(this).asField().getName();
 		if (EntityAttributeManager.getInstance(this).isRelationship())
-			return EntityAttributeManager.getInstance(this).asRelationship().getEntityTarget().getName();
+			return EntityAttributeManager.getInstance(this).asRelationship().getName();
 		return EntityAttributeManager.getInstance(this).asEnumField().getName();
 	}
 	

@@ -771,7 +771,12 @@ public class RestGenerator {
 			orderParam.annotate(PathVariable.class);
 			JBlock getByIdBlock= getById.body();
 			getByIdBlock.directStatement(addSecurityCheck(RestrictionType.SEARCH));
-			getByIdBlock.directStatement("log.info(\"Searching "+lowerClass+" with id {}\","+lowerClass+"Id);");
+			//getByIdBlock.directStatement("log.info();");
+			
+			getByIdBlock.directStatement("logEntryService.addLogEntry( \"Searching "+lowerClass+" with id {}\","+lowerClass+"Id,");
+			getByIdBlock.directStatement(LogType.class.getName()+".INFO, "+OperationType.class.getName()+".SEARCH_ENTITY, "+ReflectionManager.getJDefinedClass(entity).fullName()+".staticEntityId, securityService.getLoggedUser(),log);");
+       
+			
 			getByIdBlock.directStatement("List<"+ReflectionManager.getJDefinedClass(entity).fullName()+"> "+lowerClass+"List="+lowerClass+"Service.findById("+EntityAttributeManager.getInstance(null).getFieldTypeName(keyClass)+".valueOf("+lowerClass+"Id));");
 			getByIdBlock.directStatement("getSecurityMapping("+lowerClass+"List);");
 			getByIdBlock.directStatement("getRightMapping("+lowerClass+"List);");
@@ -793,6 +798,10 @@ public class RestGenerator {
 			
 			deleteBlock.directStatement("log.info(\"Deleting "+lowerClass+" with id {}\","+lowerClass+"Id);");
 			
+			deleteBlock.directStatement("logEntryService.addLogEntry( \"Deleting "+lowerClass+" with id {}\","+lowerClass+"Id,");
+			deleteBlock.directStatement(LogType.class.getName()+".INFO, "+OperationType.class.getName()+".DELETE_ENTITY, "+ReflectionManager.getJDefinedClass(entity).fullName()+".staticEntityId, securityService.getLoggedUser(),log);");
+       
+			
 			deleteBlock.directStatement(lowerClass+"Service.deleteById("+EntityAttributeManager.getInstance(null).getFieldTypeName(keyClass)+".valueOf("+lowerClass+"Id));");
 			deleteBlock.directStatement("return "+response+".build();");
 			
@@ -812,8 +821,10 @@ public class RestGenerator {
 			insertBlock.directStatement("log.info(\"Inserting "+lowerClass+" like {}\","+entityManager.getDescription(true)+");");
 			insertBlock.directStatement(ReflectionManager.getJDefinedClass(entity).fullName()+" inserted"+className+"="+lowerClass+"Service.insert("+lowerClass+");");
 			insertBlock.directStatement("getRightMapping(inserted"+className+");");
-			insertBlock.directStatement("log.info(\"Inserted "+lowerClass+" with id {}\",inserted"+className+".get"+Utility.getFirstUpper(lowerClass)+"Id());");
 			
+			insertBlock.directStatement("logEntryService.addLogEntry( \"Inserted "+lowerClass+" with id \"+ inserted"+className+".get"+Utility.getFirstUpper(lowerClass)+"Id(),");
+			insertBlock.directStatement(LogType.class.getName()+".INFO, "+OperationType.class.getName()+".CREATE_ENTITY, "+ReflectionManager.getJDefinedClass(entity).fullName()+".staticEntityId, securityService.getLoggedUser(),log);");
+       
 			insertBlock.directStatement("return "+response+".body(inserted"+className+");");
 			//UpdateOrder
 			JMethod update = myClass.method(JMod.PUBLIC, ResponseEntity.class, "update"+className+"");
@@ -826,7 +837,12 @@ public class RestGenerator {
 			orderParam.annotate(RequestBody.class);
 			JBlock updateBlock= update.body();
 			updateBlock.directStatement(addSecurityCheck(RestrictionType.UPDATE));
-			updateBlock.directStatement("log.info(\"Updating "+lowerClass+" with id {}\","+lowerClass+".get"+Utility.getFirstUpper(lowerClass)+"Id());");
+			updateBlock.directStatement("log.info();");
+			
+			insertBlock.directStatement("logEntryService.addLogEntry( \"Updating "+lowerClass+" with id \"+"+lowerClass+".get"+Utility.getFirstUpper(lowerClass)+"Id(),");
+			insertBlock.directStatement(LogType.class.getName()+".INFO, "+OperationType.class.getName()+".UPDATE_ENTITY, "+ReflectionManager.getJDefinedClass(entity).fullName()+".staticEntityId, securityService.getLoggedUser(),log);");
+       
+			
 			updateBlock.directStatement("rebuildSecurityMapping("+lowerClass+");");
 			updateBlock.directStatement(ReflectionManager.getJDefinedClass(entity).fullName()+" updated"+className+"="+lowerClass+"Service.update("+lowerClass+");");
 			updateBlock.directStatement("getSecurityMapping(updated"+className+");");

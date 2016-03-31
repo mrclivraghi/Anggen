@@ -2,5 +2,7 @@
 .settings/*.*
 ./target/*.*
 /target/
+./bower_components/*.*
+/bower_components/
 /src/main/java/it/generated/
 ./src/main/java/it/generated/*.*

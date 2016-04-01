@@ -3,12 +3,12 @@
 
   angular
     .module('serverTestApp')
-    .controller('MainController', MainController);
+    .controller('HomeController', HomeController);
 
   /** @ngInject */
-  function MainController($timeout, toastr) {
+  function HomeController($element,$timeout) {
     var vm = this;
 
-   
+
   }
 })();

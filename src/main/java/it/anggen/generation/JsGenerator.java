@@ -105,15 +105,13 @@ public class JsGenerator {
 	
 	public void generateMainApp()
 	{
-		StringBuilder sb = new StringBuilder();
-		sb.append("angular.module(\""+generator.applicationName+"App\",['ngRoute','ui.bootstrap','ngFileUpload','ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter']);");
-		sb.append(getSecurityService());
-		sb.append(getMainController());
-		sb.append(getNavigation());
+		//sb.append("angular.module(\""+generator.applicationName+"App\",['ngRoute','ui.bootstrap','ngFileUpload','ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter']);");
+		generateSecurityService();
+		generateMainService();
+		generateMainController();
+		generateNavigation();
 		
-		File file = new File("");
-		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+generator.applicationName+"/";
-		saveAsJsFile(directoryAngularFiles, "main-app", sb.toString());
+
 	}
 	
 	public void generateControllerFile()
@@ -121,9 +119,16 @@ public class JsGenerator {
 		for (Entity entity: generator.getEntityList())
 		{
 			StringBuilder sb = new StringBuilder();
-			sb.append("angular.module(\""+generator.applicationName+"App\")");
+			sb.append("(function() { \n")
+			.append("'use strict'; \n")
+			.append("\n");
+			
+			sb.append("angular\n.module(\""+generator.applicationName+"App\")\n");
 			init(entity, null, null, null, null, null);
 			sb.append(generateController());
+			
+			sb.append("}\n")
+			.append("})();\n");
 		File file = new File("");
 		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+entity.getName()+"/";
 		saveAsJsFile(directoryAngularFiles, entity.getName()+".controller", sb.toString());
@@ -135,16 +140,23 @@ public class JsGenerator {
 		for (Entity entity: generator.getEntityList())
 		{
 			StringBuilder sb = new StringBuilder();
-			sb.append("angular.module(\""+generator.applicationName+"App\")");
+			sb.append("(function() { \n")
+			.append("'use strict'; \n")
+			.append("\n");
+			
+			sb.append("angular\n.module(\""+generator.applicationName+"App\")\n");
 			init(entity, null, null, null, null, null);
 			sb.append(generateService ());
+			
+			sb.append("}\n")
+			.append("})();\n");
 		File file = new File("");
 		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+entity.getName()+"/";
 		saveAsJsFile(directoryAngularFiles, entity.getName()+".service", sb.toString());
 		}
 	}
 	
-	private String getNavigation()
+	private void generateNavigation()
 	{
 		StringBuilder sb = new StringBuilder();
 		sb.append("angular.module(\""+generator.applicationName+"App\")");
@@ -203,7 +215,11 @@ public class JsGenerator {
 		sb.append(";");
 		sb.append("$locationProvider.html5Mode(true);\n");
 		sb.append("});\n");
-		return sb.toString();
+		
+		
+		File file = new File("");
+		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+generator.applicationName+"/";
+		saveAsJsFile(directoryAngularFiles, "main-app", sb.toString());
 	}
 	
 	/**
@@ -213,8 +229,11 @@ public class JsGenerator {
 	private String generateService()
 	{
 		StringBuilder sb = new StringBuilder();
-		sb.append(".service(\""+entityName+"Service\", "+entityName+"Service);\n");
-		sb.append("function "+entityName+"Service($http,mainService)\n")
+		sb.append(".service(\""+entityName+"Service\", "+Utility.getFirstUpper(entityName)+"Service);\n");
+		
+		sb.append("/** @ngInject */");
+		
+		sb.append("function "+Utility.getFirstUpper(entityName)+"Service($http,mainService)\n")
 		.append("{\n")
 		.append("this.entityList =		[];\n")
 		.append("this.selectedEntity= 	{show: false \n");
@@ -380,9 +399,9 @@ public class JsGenerator {
 	{
 		StringBuilder sb = new StringBuilder();
 
-		sb.append(".controller(\""+entityName+"Controller\","+entityName+"Controller);\n");
-		
-		sb.append("function "+entityName+"Controller($scope,$http "+getServices()+")\n");
+		sb.append(".controller(\""+entityName+"Controller\","+Utility.getFirstUpper(entityName)+"Controller);\n");
+		sb.append("/** @ngInject */");
+		sb.append("function "+Utility.getFirstUpper(entityName)+"Controller($scope,$http "+getServices()+")\n");
 		sb.append("{\n");
 		//search var
 		sb.append("$scope.searchBean="+Utility.getEntityCallName(entityName)+"Service.searchBean;\n");
@@ -803,7 +822,7 @@ public class JsGenerator {
 		.append("}");
 		
 		
-		sb.append("};\n");
+		sb.append("}\n");
 		return sb.toString();
 	}
 	/**
@@ -966,33 +985,72 @@ if (entity.getEntityGroup()!=null)
 			}
 	}
 	
-	
-	private String getMainController()
+	private void generateMainService()
 	{
+
 		StringBuilder sb = new StringBuilder();	
-		sb.append("angular.module(\""+generator.applicationName+"App\").service(\"mainService\", function()\n");
+		
+		sb.append("(function() { \n")
+		.append("'use strict'; \n")
+		.append("\n");
+		
+		
+		sb.append("angular.module(\""+generator.applicationName+"App\").service(\"MainService\", MainService);\n");
+		
+		sb.append("/** @ngInject */\n");
+		sb.append("function MainService()\n");
 		sb.append("{\n");
 		sb.append("this.parentEntity=\"\";\n");
 		sb.append(" this.parentService=null; \n");
 		sb.append("});\n");
-		sb.append("angular.module(\""+generator.applicationName+"App\").controller(\"MainController\",function($scope, $route, $routeParams, $location,mainService)\n");
-		sb.append("{\n");
-		sb.append("$scope.$route = $route;\n");
-		sb.append("$scope.$location = $location;\n");
-		sb.append("$scope.$routeParams = $routeParams;\n");
+		
+		sb.append("})();\n");
+		
+		File file = new File("");
+		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+"main/";
+		saveAsJsFile(directoryAngularFiles, "main.service", sb.toString());
 
+	
+	}
+	
+	private void generateMainController()
+	{
+		StringBuilder sb = new StringBuilder();	
+		
+		sb.append("(function() { \n")
+		.append("'use strict'; \n")
+		.append("\n");
+		
+		sb.append("angular.module(\""+generator.applicationName+"App\").controller(\"MainController\",MainController);\n\n");
+		
+		
+		sb.append("/** @ngInject */\n");
+		sb.append("function MainController($scope){\n");
 
-		sb.append("});\n");
-		return sb.toString();
+		sb.append("};\n");
+		sb.append("})();\n");
+		
+		File file = new File("");
+		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+"main/";
+		saveAsJsFile(directoryAngularFiles, "main.controller", sb.toString());
 
 	}
 	
 	
 	
-	private String getSecurityService()
+	private void generateSecurityService()
 	{
 		StringBuilder sb = new StringBuilder();	
-			sb.append("angular.module(\""+generator.applicationName+"App\").service(\"securityService\",function($http)\n");
+		
+		sb.append("(function() { \n")
+		.append("'use strict'; \n")
+		.append("\n");
+		
+		
+			sb.append("angular.module(\""+generator.applicationName+"App\").service(\"securityService\",SecurityService);\n");
+			
+			sb.append("/** @ngInject */\n");
+			sb.append("function SecurityService($http)\n");
 			sb.append("{\n");
 			sb.append("this.restrictionList;\n");
 			if (generator.security)
@@ -1002,7 +1060,12 @@ if (entity.getEntityGroup()!=null)
 				sb.append("return promise; \n");
 				sb.append("};\n");
 			}
-			sb.append("})\n");
+			sb.append("}\n");
+			sb.append("})();\n");
+			
+			//TODO run ?
+			/*
+			
 		String services = serviceList;
 		if (services==null)
 			services="";
@@ -1025,10 +1088,12 @@ if (entity.getEntityGroup()!=null)
 
 		
 		
-		sb.append("});\n");
+		sb.append("});\n"); */
 
 
-		return sb.toString();
+		File file = new File("");
+		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+"security/";
+		saveAsJsFile(directoryAngularFiles, "security.service", sb.toString());
 	}
 	
 	/**
@@ -1040,7 +1105,7 @@ if (entity.getEntityGroup()!=null)
 		StringBuilder buildJS= new StringBuilder();
 		buildJS.append("angular.module(\""+entityName+"App\",['ngFileUpload','ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter'])\n");
 		//JsGenerator jsGenerator = new JsGenerator(entity, true,null,null);
-		buildJS.append(getSecurityService());
+		generateSecurityService();
 		buildJS.append(generateService());
 		if (entityName.equals("entity"))
 			System.out.println("");

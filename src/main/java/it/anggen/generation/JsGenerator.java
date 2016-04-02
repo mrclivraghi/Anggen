@@ -316,31 +316,31 @@ public class JsGenerator {
 		//search
 		sb.append("this.search = function() {\n");
 		sb.append("this.setSelectedEntity(null);\n");
-		sb.append("var promise= $http.post(\""+entityName+"/search\",this.searchBean);\n");
+		sb.append("var promise= $http.post(\""+generator.restUrl+entityName+"/search\",this.searchBean);\n");
 		sb.append("return promise; \n");
 		sb.append("};\n");
 		//searchOne
 
 		sb.append("this.searchOne=function(entity) {\n");
 		//sb.append("this.setSelectedEntity(null);\n");
-		sb.append("var promise= $http.get(\""+entityName+"/\"+entity."+entityName+"Id);\n");
+		sb.append("var promise= $http.get(\""+generator.restUrl+entityName+"/\"+entity."+entityName+"Id);\n");
 		sb.append("return promise; \n");
 		sb.append("};\n");
 
 
 		//insert
 		sb.append("this.insert = function() {\n");
-		sb.append("var promise= $http.put(\""+entityName+"/\",this.selectedEntity);\n");
+		sb.append("var promise= $http.put(\""+generator.restUrl+entityName+"/\",this.selectedEntity);\n");
 		sb.append("return promise; \n");
 		sb.append("};\n");
 		//update
 		sb.append("this.update = function() {\n");
-		sb.append("var promise= $http.post(\""+entityName+"/\",this.selectedEntity);\n");
+		sb.append("var promise= $http.post(\""+generator.restUrl+entityName+"/\",this.selectedEntity);\n");
 		sb.append("return promise; \n");
 		sb.append("}\n");
 		//delete
 		sb.append("this.del = function() {\n");
-		sb.append("var url=\""+entityName+"/\"+this.selectedEntity."+entityName+"Id;\n");
+		sb.append("var url=\""+generator.restUrl+entityName+"/\"+this.selectedEntity."+entityName+"Id;\n");
 		sb.append("var promise= $http[\"delete\"](url);\n");
 		sb.append("return promise; \n");
 		sb.append("}\n");
@@ -350,7 +350,7 @@ public class JsGenerator {
 		sb.append("var formData = new FormData();\n");
 		sb.append("if (file!=null)\n");
 		sb.append("formData.append('file',file);\n");
-		sb.append("var promise= $http.post(\""+entityName+"/\"+this.selectedEntity."+entityName+"Id+\"/load\"+field+\"/\",formData,{\n");
+		sb.append("var promise= $http.post(\""+generator.restUrl+entityName+"/\"+this.selectedEntity."+entityName+"Id+\"/load\"+field+\"/\",formData,{\n");
 		sb.append(" headers: {'Content-Type': undefined}\n");
 		sb.append("});\n");
 		sb.append("return promise; \n");
@@ -363,7 +363,7 @@ public class JsGenerator {
 				sb.append(" this.init"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List= function()\n");
 				sb.append("{\n");
 				sb.append("var promise= $http\n");
-				sb.append(".post(\""+Utility.getEntityCallName(relationship.getEntityTarget().getName())+"/search\",\n");
+				sb.append(".post(\""+generator.restUrl+Utility.getEntityCallName(relationship.getEntityTarget().getName())+"/search\",\n");
 				sb.append("{});\n");
 				sb.append("return promise;\n");
 				sb.append("};\n");
@@ -1085,7 +1085,7 @@ if (entity.getEntityGroup()!=null)
 			if (generator.security)
 			{
 				sb.append("this.init= function() {\n");
-				sb.append("var promise= $http.get(\"./authentication/\");\n");
+				sb.append("var promise= $http.get(\""+generator.restUrl+"authentication/\");\n");
 				sb.append("return promise; \n");
 				sb.append("};\n");
 			}

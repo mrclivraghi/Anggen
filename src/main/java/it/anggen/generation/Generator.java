@@ -107,6 +107,9 @@ public class Generator {
 	@Value("${generate.view}")
 	private Boolean generateView;
 	
+	@Value("${application.rest.url}")
+	public String restUrl;
+	
 	private Project project;
 	
 	private List<Entity> modelEntityList;

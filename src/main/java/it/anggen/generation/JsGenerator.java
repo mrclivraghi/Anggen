@@ -428,8 +428,8 @@ public class JsGenerator {
 	{
 		StringBuilder sb = new StringBuilder();
 
-		sb.append(".controller(\""+entityName+"Controller\","+Utility.getFirstUpper(entityName)+"Controller);\n");
-		sb.append("/** @ngInject */");
+		sb.append(".controller(\""+Utility.getFirstUpper(entityName)+"Controller\","+Utility.getFirstUpper(entityName)+"Controller);\n");
+		sb.append("/** @ngInject */\n");
 		sb.append("function "+Utility.getFirstUpper(entityName)+"Controller($scope,$http "+getServices()+")\n");
 		sb.append("{\n");
 		//search var
@@ -970,7 +970,7 @@ if (entity.getEntityGroup()!=null)
 		List<Entity> parentClassList= new ArrayList<Entity>();
 		parentClassList.add(entity);
 		String services="";
-		services=services+","+entityName+"Service, securityService, mainService ";
+		services=services+","+entityName+"Service, SecurityService, MainService ";
 		if (descendantEntityList!=null)
 		for (Entity descendantEntity : descendantEntityList)
 			if (descendantEntity.getEntityGroup()!=null)
@@ -984,7 +984,7 @@ if (entity.getEntityGroup()!=null)
 	private String checkSecurity(String entity,String action)
 	{
 		StringBuilder sb = new StringBuilder();
-		sb.append("if (securityService.restrictionList."+entity+"==undefined || securityService.restrictionList."+entity+".can"+Utility.getFirstUpper(action)+")\n");
+		sb.append("if (SecurityService.restrictionList."+entity+"==undefined || SecurityService.restrictionList."+entity+".can"+Utility.getFirstUpper(action)+")\n");
 		return sb.toString();
 	}
 	
@@ -1076,7 +1076,7 @@ if (entity.getEntityGroup()!=null)
 		.append("\n");
 		
 		
-			sb.append("angular.module(\""+generator.applicationName+"App\").service(\"securityService\",SecurityService);\n");
+			sb.append("angular.module(\""+generator.applicationName+"App\").service(\"SecurityService\",SecurityService);\n");
 			
 			sb.append("/** @ngInject */\n");
 			sb.append("function SecurityService($http)\n");
@@ -1098,16 +1098,16 @@ if (entity.getEntityGroup()!=null)
 		String services = serviceList;
 		if (services==null)
 			services="";
-		sb.append(".run(function($rootScope,securityService"+services+"){\n");
+		sb.append(".run(function($rootScope,SecurityService"+services+"){\n");
 
 		if (generator.security)
 		{
-			sb.append("securityService.init().then(function successCallback(response) {\n");
-			sb.append("securityService.restrictionList=response.data;\n");
+			sb.append("SecurityService.init().then(function successCallback(response) {\n");
+			sb.append("SecurityService.restrictionList=response.data;\n");
 			sb.append("$rootScope.restrictionList=response.data;\n");
 		} else
 		{
-			sb.append("securityService.restrictionList={};\n");
+			sb.append("SecurityService.restrictionList={};\n");
 			sb.append("$rootScope.restrictionList={};\n");
 		}
 			//initChildrenList(sb);

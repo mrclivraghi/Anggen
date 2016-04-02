@@ -6,7 +6,7 @@
 	.config(routerConfig);
 
 	/** @ngInject */
-	function routerConfig($stateProvider, $urlRouterProvider) {
+	function routerConfig($stateProvider/*, $urlRouterProvider*/) {
 			$stateProvider
 			.state('main',{
           url:'/app',
@@ -42,7 +42,7 @@
       })
 	  
 	  ;
-			$urlRouterProvider.otherwise('/app/home');
+			//$urlRouterProvider.otherwise('/app/home');
 		}
 		
 })();

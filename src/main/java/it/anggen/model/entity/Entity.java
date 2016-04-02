@@ -40,7 +40,7 @@ public class Entity {
     @javax.persistence.Column(name = "entity_id")
     @it.anggen.utils.annotation.DescriptionField
     @Id
-    @GeneratedValue
+    //@GeneratedValue
     @it.anggen.utils.annotation.Priority(1)
     private java.lang.Long entityId;
     @javax.persistence.Column(name = "name")

@@ -240,6 +240,7 @@ public class Generator {
 		}
 		if (generateView)
 		{
+			jsGenerator.generateMainApp();
 			jsGenerator.generateServiceFile();
 			jsGenerator.generateControllerFile();
 			for (Entity modelEntity: modelEntityList)

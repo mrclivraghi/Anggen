@@ -252,7 +252,7 @@ public class HtmlGenerator {
 			for (EntityGroup entityGroup: entityGroupList)
 			{
 				HtmlCanvas ulHtml= new HtmlCanvas();
-				ulHtml.li((new HtmlAttributes()).add("uib-dropdown", "").add("on-toggle", "toggled(\"open\""))
+				ulHtml.li((new HtmlAttributes()).add("uib-dropdown", "").add("on-toggle", "toggled(\"open\")"))
 				.a((new HtmlAttributes()).add("href", "#").add("class", "dropdown-toggle").add("data-toggle", "dropdown").add("role", "button").add("aria-haspopup", "true").add("aria-expanded", "false").add("uib-dropdown-toggle", ""));
 				HtmlCanvas caretHtml = new HtmlCanvas();
 				

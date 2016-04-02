@@ -127,8 +127,7 @@ public class JsGenerator {
 			init(entity, null, null, null, null, null);
 			sb.append(generateController());
 			
-			sb.append("}\n")
-			.append("})();\n");
+			sb.append("})();\n");
 		File file = new File("");
 		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+entity.getName()+"/";
 		saveAsJsFile(directoryAngularFiles, entity.getName()+".controller", sb.toString());
@@ -148,8 +147,7 @@ public class JsGenerator {
 			init(entity, null, null, null, null, null);
 			sb.append(generateService ());
 			
-			sb.append("}\n")
-			.append("})();\n");
+			sb.append("})();\n");
 		File file = new File("");
 		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+entity.getName()+"/";
 		saveAsJsFile(directoryAngularFiles, entity.getName()+".service", sb.toString());
@@ -193,7 +191,7 @@ public class JsGenerator {
 		.append(" controller:'HomeController', \n")
 		.append("controllerAs: 'vm' \n")
 		.append(" }\n")
-		
+		.append("}\n")
 		.append("})\n");
 
 		
@@ -235,7 +233,7 @@ public class JsGenerator {
 			}
 			
 			sb.append("}\n")
-			.append("}*/\n") // end resolve
+			.append("*/}\n") // end resolve
 			
 			
 			.append("})\n");
@@ -243,14 +241,13 @@ public class JsGenerator {
 		
 		sb.append(";");
 		sb.append("$urlRouterProvider.otherwise('/app/home');\n");
+		
 		sb.append("}\n");
-		
-		
 		sb.append("})();\n");
 		
 		
 		File file = new File("");
-		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory;
+		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+"../";
 		saveAsJsFile(directoryAngularFiles, "index.route", sb.toString());
 	}
 	
@@ -1034,7 +1031,7 @@ if (entity.getEntityGroup()!=null)
 		sb.append("{\n");
 		sb.append("this.parentEntity=\"\";\n");
 		sb.append(" this.parentService=null; \n");
-		sb.append("});\n");
+		sb.append("}\n");
 		
 		sb.append("})();\n");
 		

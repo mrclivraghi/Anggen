@@ -132,7 +132,6 @@ public class WebappGenerator {
 		htmlGenerator.setDirectory();
 		htmlGenerator.generateTemplate();
 		htmlGenerator.generateHomePage();
-		jsGenerator.generateMainApp();
 	}
 	
 	private void generateMainAppController() {

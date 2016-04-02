@@ -125,7 +125,7 @@ public class JsGenerator {
 			init(entity, null, null, null, null, null);
 			sb.append(generateController());
 		File file = new File("");
-		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+generator.applicationName+"/";
+		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+entity.getName()+"/";
 		saveAsJsFile(directoryAngularFiles, entity.getName()+".controller", sb.toString());
 		}
 	}
@@ -139,7 +139,7 @@ public class JsGenerator {
 			init(entity, null, null, null, null, null);
 			sb.append(generateService ());
 		File file = new File("");
-		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+generator.applicationName+"/";
+		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+entity.getName()+"/";
 		saveAsJsFile(directoryAngularFiles, entity.getName()+".service", sb.toString());
 		}
 	}

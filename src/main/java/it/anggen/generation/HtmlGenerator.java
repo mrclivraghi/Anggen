@@ -171,7 +171,7 @@ public class HtmlGenerator {
 		if (!dir.exists())
 			dir.mkdirs();
 		
-		File myJsp=new File(directoryViewPages+entityName+".jsp");
+		File myJsp=new File(directoryViewPages+entityName+"/"+entityName+".html");
 		PrintWriter writer;
 		try {
 			System.out.println("Written "+myJsp.getAbsolutePath());

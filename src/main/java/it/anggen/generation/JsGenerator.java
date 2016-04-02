@@ -159,30 +159,57 @@ public class JsGenerator {
 	private void generateNavigation()
 	{
 		StringBuilder sb = new StringBuilder();
-		sb.append("angular.module(\""+generator.applicationName+"App\")");
-		sb.append(".config(function($routeProvider, $locationProvider) \n");
+		
+		sb.append("(function() { \n")
+		.append("'use strict'; \n")
+		.append("\n");
+		
+		
+		sb.append("angular\n.module(\""+generator.applicationName+"App\").config(routerConfig);\n");
+		
+		sb.append("/** @ngInject */\n");
+		sb.append("function routerConfig($stateProvider,$urlRouterProvider)\n");
+		
 		sb.append("{\n");
-		sb.append("$routeProvider\n")
-		.append(".when('/',{\n")
-		.append("templateUrl:'./home/'\n")
-		.append("})\n")
-		.append(".when('/home/',{\n")
-		.append("templateUrl:'./home/'\n")
-		.append("})\n")
-		.append(".when('/metrics/',{\n")
-		.append(" templateUrl: 'js/metrics/metrics.html',\n")
-		.append("controller: 'MetricsMonitoringController',\n")
-		.append("controllerAs: 'vm'\n")
+		sb.append("$stateProvider\n")
+		.append(".state('main',{\n")
+		
+		.append(" url:'/app',\n")
+		.append("abstract:true,\n")
+		.append("templateUrl:'app/main/main.html',\n")
+		
+		.append(" controller:'MainController', \n")
+		.append("controllerAs: 'main' ,\n")
+		.append("name: 'main'\n")
+		.append(" })\n")
+		
+		
+.append(".state('main.home',{\n")
+		
+		.append(" url:'/home',\n")
+		.append("views:{\n")
+		.append("'pageContent': {\n")
+		.append("templateUrl:'app/components/home/home.html',\n")
+		.append(" controller:'HomeController', \n")
+		.append("controllerAs: 'vm' \n")
+		.append(" }\n")
+		
 		.append("})\n");
 
 		
 		for (Entity entity: generator.getEntityList())
 		{
-			sb.append(".when('/"+Utility.getFirstUpper(entity.getName())+"/',{\n")
-			.append("templateUrl: './"+Utility.getFirstLower(entity.getName())+"/',\n")
-			.append("controller:'"+Utility.getFirstLower(entity.getName())+"Controller',\n")
+			sb.append(".state('main."+entity.getName()+"',{\n")
+			
+			.append(" url:'/"+entity.getName()+"',\n")
+			.append("views:{\n")
+			.append("'pageContent': {\n")
+			.append("templateUrl:'app/components/"+entity.getName()+"/"+entity.getName()+".html',\n")
+			.append(" controller:'"+Utility.getFirstUpper(entity.getName())+"Controller', \n")
+			.append("controllerAs: 'vm' \n")
+			.append(" }\n")
 
-			.append("resolve: {\n")
+			.append("/*resolve: {\n")
 			.append("setParent: function(mainService,"+Utility.getFirstLower(entity.getName())+"Service){\n")
 
 			.append("if (mainService.parentService!=null)\n")
@@ -208,18 +235,23 @@ public class JsGenerator {
 			}
 			
 			sb.append("}\n")
-			.append("}\n")
+			.append("}*/\n") // end resolve
+			
+			
 			.append("})\n");
 		}
 		
 		sb.append(";");
-		sb.append("$locationProvider.html5Mode(true);\n");
-		sb.append("});\n");
+		sb.append("$urlRouterProvider.otherwise('/app/home');\n");
+		sb.append("}\n");
+		
+		
+		sb.append("})();\n");
 		
 		
 		File file = new File("");
-		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+generator.applicationName+"/";
-		saveAsJsFile(directoryAngularFiles, "main-app", sb.toString());
+		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory;
+		saveAsJsFile(directoryAngularFiles, "index.route", sb.toString());
 	}
 	
 	/**

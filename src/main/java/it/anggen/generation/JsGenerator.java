@@ -262,7 +262,7 @@ public class JsGenerator {
 		
 		sb.append("/** @ngInject */");
 		
-		sb.append("function "+Utility.getFirstUpper(entityName)+"Service($http,mainService)\n")
+		sb.append("function "+Utility.getFirstUpper(entityName)+"Service($http,MainService)\n")
 		.append("{\n")
 		.append("this.entityList =		[];\n")
 		.append("this.selectedEntity= 	{show: false \n");

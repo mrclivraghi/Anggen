@@ -1,12 +1,17 @@
-angular.module("anggenApp").service("relationshipService", relationshipService);
-function relationshipService($http,mainService)
+(function() { 
+
+angular
+.module("serverTestApp")
+.service("relationshipService", RelationshipService);
+/** @ngInject */
+function RelationshipService($http,MainService)
 {
 this.entityList =		[];
 this.selectedEntity= 	{show: false 
 ,annotationList: []};
 this.isParent=function()
 {
-return mainService.parentEntity=="Relationship";
+return MainService.parentEntity=="Relationship";
 };
 this.childrenList=[]; 
 this.addEntity=function (entity)
@@ -110,3 +115,4 @@ columnDefs: [
 ]
  };
 };
+})();

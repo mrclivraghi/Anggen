@@ -1,5 +1,10 @@
-angular.module("anggenApp").controller("enumValueController",enumValueController);
-function enumValueController($scope,$http ,enumValueService, securityService, mainService ,enumEntityService,projectService,entityGroupService,restrictionEntityGroupService,roleService,restrictionEntityService,entityService,enumFieldService,annotationService,annotationAttributeService,fieldService,restrictionFieldService,tabService,relationshipService,userService)
+(function() { 
+
+angular
+.module("serverTestApp")
+.controller("EnumValueController",EnumValueController);
+/** @ngInject */
+function EnumValueController($scope,$http ,enumValueService, SecurityService, MainService ,enumEntityService,projectService,entityGroupService,relationshipService,entityService,tabService,fieldService,annotationService,annotationAttributeService,enumFieldService,restrictionFieldService,roleService)
 {
 $scope.searchBean=enumValueService.searchBean;
 $scope.entityList=enumValueService.entityList;
@@ -139,7 +144,7 @@ enumEntityService.searchOne(enumValueService.selectedEntity.enumEntityList[index
 function successCallback(response) {
 console.log("response-ok");
 console.log(response);
-if (securityService.restrictionList.project==undefined || securityService.restrictionList.project.canSearch)
+if (SecurityService.restrictionList.project==undefined || SecurityService.restrictionList.project.canSearch)
 enumEntityService.initProjectList().then(function successCallback(response) {
 enumEntityService.childrenList.projectList=response.data;
 },function errorCallback(response) { 
@@ -147,7 +152,7 @@ AlertError.init({selector: "#alertError"});
 AlertError.show("Si è verificato un errore");
 return; 
 });
-if (securityService.restrictionList.enumValue==undefined || securityService.restrictionList.enumValue.canSearch)
+if (SecurityService.restrictionList.enumValue==undefined || SecurityService.restrictionList.enumValue.canSearch)
 enumEntityService.initEnumValueList().then(function successCallback(response) {
 enumEntityService.childrenList.enumValueList=response.data;
 },function errorCallback(response) { 
@@ -168,7 +173,7 @@ else
 {
 if (enumValueService.selectedEntity.enumEntity==null || enumValueService.selectedEntity.enumEntity==undefined)
 {
-if (securityService.restrictionList.project==undefined || securityService.restrictionList.project.canSearch)
+if (SecurityService.restrictionList.project==undefined || SecurityService.restrictionList.project.canSearch)
 enumEntityService.initProjectList().then(function successCallback(response) {
 enumEntityService.childrenList.projectList=response.data;
 },function errorCallback(response) { 
@@ -176,7 +181,7 @@ AlertError.init({selector: "#alertError"});
 AlertError.show("Si è verificato un errore");
 return; 
 });
-if (securityService.restrictionList.enumValue==undefined || securityService.restrictionList.enumValue.canSearch)
+if (SecurityService.restrictionList.enumValue==undefined || SecurityService.restrictionList.enumValue.canSearch)
 enumEntityService.initEnumValueList().then(function successCallback(response) {
 enumEntityService.childrenList.enumValueList=response.data;
 },function errorCallback(response) { 
@@ -190,7 +195,7 @@ enumEntityService.selectedEntity.show=true;
 else
 enumEntityService.searchOne(enumValueService.selectedEntity.enumEntity).then(
 function successCallback(response) {
-if (securityService.restrictionList.project==undefined || securityService.restrictionList.project.canSearch)
+if (SecurityService.restrictionList.project==undefined || SecurityService.restrictionList.project.canSearch)
 enumEntityService.initProjectList().then(function successCallback(response) {
 enumEntityService.childrenList.projectList=response.data;
 },function errorCallback(response) { 
@@ -198,7 +203,7 @@ AlertError.init({selector: "#alertError"});
 AlertError.show("Si è verificato un errore");
 return; 
 });
-if (securityService.restrictionList.enumValue==undefined || securityService.restrictionList.enumValue.canSearch)
+if (SecurityService.restrictionList.enumValue==undefined || SecurityService.restrictionList.enumValue.canSearch)
 enumEntityService.initEnumValueList().then(function successCallback(response) {
 enumEntityService.childrenList.enumValueList=response.data;
 },function errorCallback(response) { 
@@ -241,7 +246,7 @@ $scope.enumValueGridApi = gridApi;
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
-if (securityService.restrictionList.enumEntity==undefined || securityService.restrictionList.enumEntity.canSearch)
+if (SecurityService.restrictionList.enumEntity==undefined || SecurityService.restrictionList.enumEntity.canSearch)
 enumValueService.initEnumEntityList().then(function successCallback(response) {
 enumValueService.childrenList.enumEntityList=response.data;
 },function errorCallback(response) { 
@@ -268,7 +273,7 @@ $scope.enumEntityGridApi = gridApi;
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
-if (securityService.restrictionList.project==undefined || securityService.restrictionList.project.canSearch)
+if (SecurityService.restrictionList.project==undefined || SecurityService.restrictionList.project.canSearch)
 enumEntityService.initProjectList().then(function successCallback(response) {
 enumEntityService.childrenList.projectList=response.data;
 },function errorCallback(response) { 
@@ -276,7 +281,7 @@ AlertError.init({selector: "#alertError"});
 AlertError.show("Si è verificato un errore");
 return; 
 });
-if (securityService.restrictionList.enumValue==undefined || securityService.restrictionList.enumValue.canSearch)
+if (SecurityService.restrictionList.enumValue==undefined || SecurityService.restrictionList.enumValue.canSearch)
 enumEntityService.initEnumValueList().then(function successCallback(response) {
 enumEntityService.childrenList.enumValueList=response.data;
 },function errorCallback(response) { 
@@ -315,4 +320,5 @@ return;
 $scope.closeEntityDetail = function(){ 
 enumValueService.setSelectedEntity(null);
 enumValueService.selectedEntity.show=false;
-}};
+}}
+})();

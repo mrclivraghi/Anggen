@@ -1,12 +1,17 @@
-angular.module("anggenApp").service("restrictionFieldService", restrictionFieldService);
-function restrictionFieldService($http,mainService)
+(function() { 
+
+angular
+.module("serverTestApp")
+.service("restrictionFieldService", RestrictionFieldService);
+/** @ngInject */
+function RestrictionFieldService($http,MainService)
 {
 this.entityList =		[];
 this.selectedEntity= 	{show: false 
 };
 this.isParent=function()
 {
-return mainService.parentEntity=="RestrictionField";
+return MainService.parentEntity=="RestrictionField";
 };
 this.childrenList=[]; 
 this.addEntity=function (entity)
@@ -93,3 +98,4 @@ columnDefs: [
 ]
  };
 };
+})();

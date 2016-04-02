@@ -1,12 +1,17 @@
-angular.module("anggenApp").service("logEntryService", logEntryService);
-function logEntryService($http,mainService)
+(function() { 
+
+angular
+.module("serverTestApp")
+.service("logEntryService", LogEntryService);
+/** @ngInject */
+function LogEntryService($http,MainService)
 {
 this.entityList =		[];
 this.selectedEntity= 	{show: false 
 };
 this.isParent=function()
 {
-return mainService.parentEntity=="LogEntry";
+return MainService.parentEntity=="LogEntry";
 };
 this.childrenList=[]; 
 this.addEntity=function (entity)
@@ -65,20 +70,6 @@ var promise= $http.post("logEntry/"+this.selectedEntity.logEntryId+"/load"+field
 });
 return promise; 
 }
- this.initEntityList= function()
-{
-var promise= $http
-.post("entity/search",
-{});
-return promise;
-};
- this.initUserList= function()
-{
-var promise= $http
-.post("user/search",
-{});
-return promise;
-};
 this.gridOptions = {
 enablePaginationControls: true,
 multiSelect: false,
@@ -88,12 +79,13 @@ paginationPageSize: 10,
 enableGridMenu: true,
 columnDefs: [    
 { name: 'logEntryId'},
-{ name: 'info'},
+{ name: 'logDate', cellFilter: "date:'dd-MM-yyyy'"},
 { name: 'hostName'},
 { name: 'ipAddress'},
-{ name: 'logDate', cellFilter: "date:'dd-MM-yyyy'"},
-{ name: 'entity.entityId', displayName: 'entity'},
-{ name: 'user.userId', displayName: 'user'} 
+{ name: 'info'},
+{ name: 'userId'},
+{ name: 'entityId'} 
 ]
  };
 };
+})();

@@ -120,7 +120,7 @@ public class JsGenerator {
 		{
 			StringBuilder sb = new StringBuilder();
 			sb.append("(function() { \n")
-			.append("'use strict'; \n")
+			//.append("'use strict'; \n")
 			.append("\n");
 			
 			sb.append("angular\n.module(\""+generator.applicationName+"App\")\n");
@@ -140,7 +140,7 @@ public class JsGenerator {
 		{
 			StringBuilder sb = new StringBuilder();
 			sb.append("(function() { \n")
-			.append("'use strict'; \n")
+			//.append("'use strict'; \n")
 			.append("\n");
 			
 			sb.append("angular\n.module(\""+generator.applicationName+"App\")\n");
@@ -208,27 +208,27 @@ public class JsGenerator {
 			.append(" }\n")
 
 			.append("/*resolve: {\n")
-			.append("setParent: function(mainService,"+Utility.getFirstLower(entity.getName())+"Service){\n")
+			.append("setParent: function(MainService,"+Utility.getFirstLower(entity.getName())+"Service){\n")
 
-			.append("if (mainService.parentService!=null)\n")
+			.append("if (MainService.parentService!=null)\n")
 			.append("{\n")
 
-			.append("mainService.parentService.resetSearchBean();\n")
-			.append("mainService.parentService.setSelectedEntity(null);\n")
-			.append("mainService.parentService.selectedEntity.show=false;\n")
-			.append("mainService.parentService.setEntityList(null);\n") 
+			.append("MainService.parentService.resetSearchBean();\n")
+			.append("MainService.parentService.setSelectedEntity(null);\n")
+			.append("MainService.parentService.selectedEntity.show=false;\n")
+			.append("MainService.parentService.setEntityList(null);\n") 
 			.append("}\n")
 
-			.append("mainService.parentEntity=\""+Utility.getFirstUpper(entity.getName())+"\";\n")
+			.append("MainService.parentEntity=\""+Utility.getFirstUpper(entity.getName())+"\";\n")
 
-			.append("mainService.parentService="+Utility.getFirstLower(entity.getName())+"Service;\n");
+			.append("MainService.parentService="+Utility.getFirstLower(entity.getName())+"Service;\n");
 			
 			//todo get descendant e init children
 			for (Relationship relationship : entity.getRelationshipList())
 			{
 
-				sb.append("mainService.parentService.init"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List().then(function(response) {\n")
-				.append("mainService.parentService.childrenList."+Utility.getFirstLower(relationship.getEntityTarget().getName())+"List=response.data;\n")
+				sb.append("MainService.parentService.init"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List().then(function(response) {\n")
+				.append("MainService.parentService.childrenList."+Utility.getFirstLower(relationship.getEntityTarget().getName())+"List=response.data;\n")
 				.append("});\n");
 			}
 			
@@ -260,7 +260,7 @@ public class JsGenerator {
 		StringBuilder sb = new StringBuilder();
 		sb.append(".service(\""+entityName+"Service\", "+Utility.getFirstUpper(entityName)+"Service);\n");
 		
-		sb.append("/** @ngInject */");
+		sb.append("/** @ngInject */\n");
 		
 		sb.append("function "+Utility.getFirstUpper(entityName)+"Service($http,MainService)\n")
 		.append("{\n")
@@ -276,7 +276,7 @@ public class JsGenerator {
 		//check if is parent
 		.append("this.isParent=function()\n")
 		.append("{\n")
-		.append("return mainService.parentEntity==\""+Utility.getFirstUpper(entityName)+"\";\n")
+		.append("return MainService.parentEntity==\""+Utility.getFirstUpper(entityName)+"\";\n")
 		.append("};\n")
 		
 		.append("this.childrenList=[]; \n")
@@ -380,10 +380,10 @@ public class JsGenerator {
 		Boolean mainIsParent= false; //isParent;
 		String mainParentName = entityName;//parentEntityName;
 		EntityManager mainEntityManager= new EntityManagerImpl(mainEntity);
-		String mainServiceList = serviceList;
+		String MainServiceList = serviceList;
 		for (Relationship relationship: relationshipList)
 		{
-			init(relationship.getEntityTarget(), false, entityName,relationship.getRelationshipType(),mainEntityManager.isLastLevel(relationship.getEntityTarget()),mainServiceList);
+			init(relationship.getEntityTarget(), false, entityName,relationship.getRelationshipType(),mainEntityManager.isLastLevel(relationship.getEntityTarget()),MainServiceList);
 			sb.append(getPagination(mainParentName));
 		}
 		init(mainEntity,mainIsParent,mainParentName,relationshipType,entityManager.isLastLevel(mainEntity),serviceList);
@@ -828,12 +828,12 @@ public class JsGenerator {
 		Boolean mainIsParent= false; //isParent;
 		String mainParentName = entityName;//parentEntityName;
 		EntityManager mainEntityManager= new EntityManagerImpl(mainEntity);
-		String mainServiceList = serviceList;
+		String MainServiceList = serviceList;
 		
 		for (Relationship relationship: relationshipList)
 			if (relationship.getEntityTarget().getEntityGroup()!=null)
 		{
-			init(relationship.getEntityTarget(), false, entityName,relationship.getRelationshipType(),mainEntityManager.isLastLevel(relationship.getEntityTarget()),mainServiceList);
+			init(relationship.getEntityTarget(), false, entityName,relationship.getRelationshipType(),mainEntityManager.isLastLevel(relationship.getEntityTarget()),MainServiceList);
 			sb.append("$scope."+entityName+"GridOptions={};\n");
 			sb.append("cloneObject("+entityName+"Service.gridOptions,$scope."+entityName+"GridOptions);\n");
 			sb.append("$scope."+entityName+"GridOptions.data=$scope.selectedEntity."+entityName+"List;\n");
@@ -1158,10 +1158,10 @@ if (entity.getEntityGroup()!=null)
 		
 		String entityName=entity.getName();
 		EntityManager mainEntityManager = new EntityManagerImpl(entity);
-		String mainServiceList = serviceList;
+		String MainServiceList = serviceList;
 		for (Relationship descendantRelationship : descendantRelationshipSet)
 		{
-			init(descendantRelationship.getEntityTarget(),false,entityName,descendantRelationship.getRelationshipType(),mainEntityManager.isLastLevel(descendantRelationship.getEntityTarget()),mainServiceList);
+			init(descendantRelationship.getEntityTarget(),false,entityName,descendantRelationship.getRelationshipType(),mainEntityManager.isLastLevel(descendantRelationship.getEntityTarget()),MainServiceList);
 			buildJS.append(generateService());
 			buildJS.append(generateController());
 			
@@ -1250,8 +1250,8 @@ if (entity.getEntityGroup()!=null)
 			
 			//update childrenEntityList
 			/*
-			 * mainService.parentService.initRoleList().then(function(response) {
-mainService.parentService.childrenList.roleList=response.data;
+			 * MainService.parentService.initRoleList().then(function(response) {
+MainService.parentService.childrenList.roleList=response.data;
 });
 			 */
 			sb.append(entitySource+"Service.init"+Utility.getFirstUpper(entityTarget)+"List().then(function(response) {\n");

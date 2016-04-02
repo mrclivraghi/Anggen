@@ -1,12 +1,17 @@
-angular.module("anggenApp").service("tabService", tabService);
-function tabService($http,mainService)
+(function() { 
+
+angular
+.module("serverTestApp")
+.service("tabService", TabService);
+/** @ngInject */
+function TabService($http,MainService)
 {
 this.entityList =		[];
 this.selectedEntity= 	{show: false 
 ,fieldList: [],enumFieldList: [],relationshipList: []};
 this.isParent=function()
 {
-return mainService.parentEntity=="Tab";
+return MainService.parentEntity=="Tab";
 };
 this.childrenList=[]; 
 this.addEntity=function (entity)
@@ -65,6 +70,13 @@ var promise= $http.post("tab/"+this.selectedEntity.tabId+"/load"+field+"/",formD
 });
 return promise; 
 }
+ this.initEntityList= function()
+{
+var promise= $http
+.post("entity/search",
+{});
+return promise;
+};
  this.initFieldList= function()
 {
 var promise= $http
@@ -86,13 +98,6 @@ var promise= $http
 {});
 return promise;
 };
- this.initEntityList= function()
-{
-var promise= $http
-.post("entity/search",
-{});
-return promise;
-};
 this.gridOptions = {
 enablePaginationControls: true,
 multiSelect: false,
@@ -107,3 +112,4 @@ columnDefs: [
 ]
  };
 };
+})();

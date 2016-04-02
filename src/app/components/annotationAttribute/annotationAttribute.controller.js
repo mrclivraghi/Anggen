@@ -1,5 +1,10 @@
-angular.module("anggenApp").controller("annotationAttributeController",annotationAttributeController);
-function annotationAttributeController($scope,$http ,annotationAttributeService, securityService, mainService ,annotationService,fieldService,restrictionFieldService,roleService,restrictionEntityService,entityService,enumFieldService,tabService,relationshipService,enumEntityService,projectService,entityGroupService,restrictionEntityGroupService,enumValueService,userService)
+(function() { 
+
+angular
+.module("serverTestApp")
+.controller("AnnotationAttributeController",AnnotationAttributeController);
+/** @ngInject */
+function AnnotationAttributeController($scope,$http ,annotationAttributeService, SecurityService, MainService ,annotationService,fieldService,restrictionFieldService,roleService,enumFieldService,tabService,entityService,entityGroupService,relationshipService,projectService,enumEntityService,enumValueService)
 {
 $scope.searchBean=annotationAttributeService.searchBean;
 $scope.entityList=annotationAttributeService.entityList;
@@ -139,7 +144,7 @@ annotationService.searchOne(annotationAttributeService.selectedEntity.annotation
 function successCallback(response) {
 console.log("response-ok");
 console.log(response);
-if (securityService.restrictionList.annotationAttribute==undefined || securityService.restrictionList.annotationAttribute.canSearch)
+if (SecurityService.restrictionList.annotationAttribute==undefined || SecurityService.restrictionList.annotationAttribute.canSearch)
 annotationService.initAnnotationAttributeList().then(function successCallback(response) {
 annotationService.childrenList.annotationAttributeList=response.data;
 },function errorCallback(response) { 
@@ -147,7 +152,7 @@ AlertError.init({selector: "#alertError"});
 AlertError.show("Si è verificato un errore");
 return; 
 });
-if (securityService.restrictionList.field==undefined || securityService.restrictionList.field.canSearch)
+if (SecurityService.restrictionList.field==undefined || SecurityService.restrictionList.field.canSearch)
 annotationService.initFieldList().then(function successCallback(response) {
 annotationService.childrenList.fieldList=response.data;
 },function errorCallback(response) { 
@@ -155,7 +160,7 @@ AlertError.init({selector: "#alertError"});
 AlertError.show("Si è verificato un errore");
 return; 
 });
-if (securityService.restrictionList.enumField==undefined || securityService.restrictionList.enumField.canSearch)
+if (SecurityService.restrictionList.enumField==undefined || SecurityService.restrictionList.enumField.canSearch)
 annotationService.initEnumFieldList().then(function successCallback(response) {
 annotationService.childrenList.enumFieldList=response.data;
 },function errorCallback(response) { 
@@ -163,7 +168,7 @@ AlertError.init({selector: "#alertError"});
 AlertError.show("Si è verificato un errore");
 return; 
 });
-if (securityService.restrictionList.relationship==undefined || securityService.restrictionList.relationship.canSearch)
+if (SecurityService.restrictionList.relationship==undefined || SecurityService.restrictionList.relationship.canSearch)
 annotationService.initRelationshipList().then(function successCallback(response) {
 annotationService.childrenList.relationshipList=response.data;
 },function errorCallback(response) { 
@@ -185,7 +190,7 @@ else
 {
 if (annotationAttributeService.selectedEntity.annotation==null || annotationAttributeService.selectedEntity.annotation==undefined)
 {
-if (securityService.restrictionList.annotationAttribute==undefined || securityService.restrictionList.annotationAttribute.canSearch)
+if (SecurityService.restrictionList.annotationAttribute==undefined || SecurityService.restrictionList.annotationAttribute.canSearch)
 annotationService.initAnnotationAttributeList().then(function successCallback(response) {
 annotationService.childrenList.annotationAttributeList=response.data;
 },function errorCallback(response) { 
@@ -193,7 +198,7 @@ AlertError.init({selector: "#alertError"});
 AlertError.show("Si è verificato un errore");
 return; 
 });
-if (securityService.restrictionList.field==undefined || securityService.restrictionList.field.canSearch)
+if (SecurityService.restrictionList.field==undefined || SecurityService.restrictionList.field.canSearch)
 annotationService.initFieldList().then(function successCallback(response) {
 annotationService.childrenList.fieldList=response.data;
 },function errorCallback(response) { 
@@ -201,7 +206,7 @@ AlertError.init({selector: "#alertError"});
 AlertError.show("Si è verificato un errore");
 return; 
 });
-if (securityService.restrictionList.enumField==undefined || securityService.restrictionList.enumField.canSearch)
+if (SecurityService.restrictionList.enumField==undefined || SecurityService.restrictionList.enumField.canSearch)
 annotationService.initEnumFieldList().then(function successCallback(response) {
 annotationService.childrenList.enumFieldList=response.data;
 },function errorCallback(response) { 
@@ -209,7 +214,7 @@ AlertError.init({selector: "#alertError"});
 AlertError.show("Si è verificato un errore");
 return; 
 });
-if (securityService.restrictionList.relationship==undefined || securityService.restrictionList.relationship.canSearch)
+if (SecurityService.restrictionList.relationship==undefined || SecurityService.restrictionList.relationship.canSearch)
 annotationService.initRelationshipList().then(function successCallback(response) {
 annotationService.childrenList.relationshipList=response.data;
 },function errorCallback(response) { 
@@ -224,7 +229,7 @@ annotationService.selectedEntity.show=true;
 else
 annotationService.searchOne(annotationAttributeService.selectedEntity.annotation).then(
 function successCallback(response) {
-if (securityService.restrictionList.annotationAttribute==undefined || securityService.restrictionList.annotationAttribute.canSearch)
+if (SecurityService.restrictionList.annotationAttribute==undefined || SecurityService.restrictionList.annotationAttribute.canSearch)
 annotationService.initAnnotationAttributeList().then(function successCallback(response) {
 annotationService.childrenList.annotationAttributeList=response.data;
 },function errorCallback(response) { 
@@ -232,7 +237,7 @@ AlertError.init({selector: "#alertError"});
 AlertError.show("Si è verificato un errore");
 return; 
 });
-if (securityService.restrictionList.field==undefined || securityService.restrictionList.field.canSearch)
+if (SecurityService.restrictionList.field==undefined || SecurityService.restrictionList.field.canSearch)
 annotationService.initFieldList().then(function successCallback(response) {
 annotationService.childrenList.fieldList=response.data;
 },function errorCallback(response) { 
@@ -240,7 +245,7 @@ AlertError.init({selector: "#alertError"});
 AlertError.show("Si è verificato un errore");
 return; 
 });
-if (securityService.restrictionList.enumField==undefined || securityService.restrictionList.enumField.canSearch)
+if (SecurityService.restrictionList.enumField==undefined || SecurityService.restrictionList.enumField.canSearch)
 annotationService.initEnumFieldList().then(function successCallback(response) {
 annotationService.childrenList.enumFieldList=response.data;
 },function errorCallback(response) { 
@@ -248,7 +253,7 @@ AlertError.init({selector: "#alertError"});
 AlertError.show("Si è verificato un errore");
 return; 
 });
-if (securityService.restrictionList.relationship==undefined || securityService.restrictionList.relationship.canSearch)
+if (SecurityService.restrictionList.relationship==undefined || SecurityService.restrictionList.relationship.canSearch)
 annotationService.initRelationshipList().then(function successCallback(response) {
 annotationService.childrenList.relationshipList=response.data;
 },function errorCallback(response) { 
@@ -292,7 +297,7 @@ $scope.annotationAttributeGridApi = gridApi;
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
-if (securityService.restrictionList.annotation==undefined || securityService.restrictionList.annotation.canSearch)
+if (SecurityService.restrictionList.annotation==undefined || SecurityService.restrictionList.annotation.canSearch)
 annotationAttributeService.initAnnotationList().then(function successCallback(response) {
 annotationAttributeService.childrenList.annotationList=response.data;
 },function errorCallback(response) { 
@@ -319,7 +324,7 @@ $scope.annotationGridApi = gridApi;
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
-if (securityService.restrictionList.annotationAttribute==undefined || securityService.restrictionList.annotationAttribute.canSearch)
+if (SecurityService.restrictionList.annotationAttribute==undefined || SecurityService.restrictionList.annotationAttribute.canSearch)
 annotationService.initAnnotationAttributeList().then(function successCallback(response) {
 annotationService.childrenList.annotationAttributeList=response.data;
 },function errorCallback(response) { 
@@ -327,7 +332,7 @@ AlertError.init({selector: "#alertError"});
 AlertError.show("Si è verificato un errore");
 return; 
 });
-if (securityService.restrictionList.field==undefined || securityService.restrictionList.field.canSearch)
+if (SecurityService.restrictionList.field==undefined || SecurityService.restrictionList.field.canSearch)
 annotationService.initFieldList().then(function successCallback(response) {
 annotationService.childrenList.fieldList=response.data;
 },function errorCallback(response) { 
@@ -335,7 +340,7 @@ AlertError.init({selector: "#alertError"});
 AlertError.show("Si è verificato un errore");
 return; 
 });
-if (securityService.restrictionList.enumField==undefined || securityService.restrictionList.enumField.canSearch)
+if (SecurityService.restrictionList.enumField==undefined || SecurityService.restrictionList.enumField.canSearch)
 annotationService.initEnumFieldList().then(function successCallback(response) {
 annotationService.childrenList.enumFieldList=response.data;
 },function errorCallback(response) { 
@@ -343,7 +348,7 @@ AlertError.init({selector: "#alertError"});
 AlertError.show("Si è verificato un errore");
 return; 
 });
-if (securityService.restrictionList.relationship==undefined || securityService.restrictionList.relationship.canSearch)
+if (SecurityService.restrictionList.relationship==undefined || SecurityService.restrictionList.relationship.canSearch)
 annotationService.initRelationshipList().then(function successCallback(response) {
 annotationService.childrenList.relationshipList=response.data;
 },function errorCallback(response) { 
@@ -383,4 +388,5 @@ return;
 $scope.closeEntityDetail = function(){ 
 annotationAttributeService.setSelectedEntity(null);
 annotationAttributeService.selectedEntity.show=false;
-}};
+}}
+})();

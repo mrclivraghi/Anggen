@@ -1,12 +1,17 @@
-angular.module("anggenApp").service("fieldService", fieldService);
-function fieldService($http,mainService)
+(function() { 
+
+angular
+.module("serverTestApp")
+.service("fieldService", FieldService);
+/** @ngInject */
+function FieldService($http,MainService)
 {
 this.entityList =		[];
 this.selectedEntity= 	{show: false 
 ,annotationList: [],restrictionFieldList: []};
 this.isParent=function()
 {
-return mainService.parentEntity=="Field";
+return MainService.parentEntity=="Field";
 };
 this.childrenList=[]; 
 this.addEntity=function (entity)
@@ -102,10 +107,11 @@ paginationPageSize: 10,
 enableGridMenu: true,
 columnDefs: [    
 { name: 'fieldId'},
-{ name: 'name'},
 { name: 'priority'},
+{ name: 'name'},
 { name: 'tab.tabId', displayName: 'tab'},
 { name: 'entity.entityId', displayName: 'entity'} 
 ]
  };
 };
+})();

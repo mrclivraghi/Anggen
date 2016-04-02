@@ -34,27 +34,27 @@ templateUrl:'app/components/role/role.html',
 controllerAs: 'vm' 
  }
 /*resolve: {
-setParent: function(mainService,roleService){
-if (mainService.parentService!=null)
+setParent: function(MainService,roleService){
+if (MainService.parentService!=null)
 {
-mainService.parentService.resetSearchBean();
-mainService.parentService.setSelectedEntity(null);
-mainService.parentService.selectedEntity.show=false;
-mainService.parentService.setEntityList(null);
+MainService.parentService.resetSearchBean();
+MainService.parentService.setSelectedEntity(null);
+MainService.parentService.selectedEntity.show=false;
+MainService.parentService.setEntityList(null);
 }
-mainService.parentEntity="Role";
-mainService.parentService=roleService;
-mainService.parentService.initRestrictionFieldList().then(function(response) {
-mainService.parentService.childrenList.restrictionFieldList=response.data;
+MainService.parentEntity="Role";
+MainService.parentService=roleService;
+MainService.parentService.initRestrictionFieldList().then(function(response) {
+MainService.parentService.childrenList.restrictionFieldList=response.data;
 });
-mainService.parentService.initEnumFieldList().then(function(response) {
-mainService.parentService.childrenList.enumFieldList=response.data;
+MainService.parentService.initEnumFieldList().then(function(response) {
+MainService.parentService.childrenList.enumFieldList=response.data;
 });
-mainService.parentService.initAnnotationList().then(function(response) {
-mainService.parentService.childrenList.annotationList=response.data;
+MainService.parentService.initAnnotationList().then(function(response) {
+MainService.parentService.childrenList.annotationList=response.data;
 });
-mainService.parentService.initRelationshipList().then(function(response) {
-mainService.parentService.childrenList.relationshipList=response.data;
+MainService.parentService.initRelationshipList().then(function(response) {
+MainService.parentService.childrenList.relationshipList=response.data;
 });
 }
 */}
@@ -68,21 +68,21 @@ templateUrl:'app/components/restrictionField/restrictionField.html',
 controllerAs: 'vm' 
  }
 /*resolve: {
-setParent: function(mainService,restrictionFieldService){
-if (mainService.parentService!=null)
+setParent: function(MainService,restrictionFieldService){
+if (MainService.parentService!=null)
 {
-mainService.parentService.resetSearchBean();
-mainService.parentService.setSelectedEntity(null);
-mainService.parentService.selectedEntity.show=false;
-mainService.parentService.setEntityList(null);
+MainService.parentService.resetSearchBean();
+MainService.parentService.setSelectedEntity(null);
+MainService.parentService.selectedEntity.show=false;
+MainService.parentService.setEntityList(null);
 }
-mainService.parentEntity="RestrictionField";
-mainService.parentService=restrictionFieldService;
-mainService.parentService.initRoleList().then(function(response) {
-mainService.parentService.childrenList.roleList=response.data;
+MainService.parentEntity="RestrictionField";
+MainService.parentService=restrictionFieldService;
+MainService.parentService.initRoleList().then(function(response) {
+MainService.parentService.childrenList.roleList=response.data;
 });
-mainService.parentService.initFieldList().then(function(response) {
-mainService.parentService.childrenList.fieldList=response.data;
+MainService.parentService.initFieldList().then(function(response) {
+MainService.parentService.childrenList.fieldList=response.data;
 });
 }
 */}
@@ -96,21 +96,21 @@ templateUrl:'app/components/project/project.html',
 controllerAs: 'vm' 
  }
 /*resolve: {
-setParent: function(mainService,projectService){
-if (mainService.parentService!=null)
+setParent: function(MainService,projectService){
+if (MainService.parentService!=null)
 {
-mainService.parentService.resetSearchBean();
-mainService.parentService.setSelectedEntity(null);
-mainService.parentService.selectedEntity.show=false;
-mainService.parentService.setEntityList(null);
+MainService.parentService.resetSearchBean();
+MainService.parentService.setSelectedEntity(null);
+MainService.parentService.selectedEntity.show=false;
+MainService.parentService.setEntityList(null);
 }
-mainService.parentEntity="Project";
-mainService.parentService=projectService;
-mainService.parentService.initEnumEntityList().then(function(response) {
-mainService.parentService.childrenList.enumEntityList=response.data;
+MainService.parentEntity="Project";
+MainService.parentService=projectService;
+MainService.parentService.initEnumEntityList().then(function(response) {
+MainService.parentService.childrenList.enumEntityList=response.data;
 });
-mainService.parentService.initEntityGroupList().then(function(response) {
-mainService.parentService.childrenList.entityGroupList=response.data;
+MainService.parentService.initEntityGroupList().then(function(response) {
+MainService.parentService.childrenList.entityGroupList=response.data;
 });
 }
 */}
@@ -124,27 +124,27 @@ templateUrl:'app/components/tab/tab.html',
 controllerAs: 'vm' 
  }
 /*resolve: {
-setParent: function(mainService,tabService){
-if (mainService.parentService!=null)
+setParent: function(MainService,tabService){
+if (MainService.parentService!=null)
 {
-mainService.parentService.resetSearchBean();
-mainService.parentService.setSelectedEntity(null);
-mainService.parentService.selectedEntity.show=false;
-mainService.parentService.setEntityList(null);
+MainService.parentService.resetSearchBean();
+MainService.parentService.setSelectedEntity(null);
+MainService.parentService.selectedEntity.show=false;
+MainService.parentService.setEntityList(null);
 }
-mainService.parentEntity="Tab";
-mainService.parentService=tabService;
-mainService.parentService.initEntityList().then(function(response) {
-mainService.parentService.childrenList.entityList=response.data;
+MainService.parentEntity="Tab";
+MainService.parentService=tabService;
+MainService.parentService.initEntityList().then(function(response) {
+MainService.parentService.childrenList.entityList=response.data;
 });
-mainService.parentService.initFieldList().then(function(response) {
-mainService.parentService.childrenList.fieldList=response.data;
+MainService.parentService.initFieldList().then(function(response) {
+MainService.parentService.childrenList.fieldList=response.data;
 });
-mainService.parentService.initEnumFieldList().then(function(response) {
-mainService.parentService.childrenList.enumFieldList=response.data;
+MainService.parentService.initEnumFieldList().then(function(response) {
+MainService.parentService.childrenList.enumFieldList=response.data;
 });
-mainService.parentService.initRelationshipList().then(function(response) {
-mainService.parentService.childrenList.relationshipList=response.data;
+MainService.parentService.initRelationshipList().then(function(response) {
+MainService.parentService.childrenList.relationshipList=response.data;
 });
 }
 */}
@@ -158,33 +158,33 @@ templateUrl:'app/components/entity/entity.html',
 controllerAs: 'vm' 
  }
 /*resolve: {
-setParent: function(mainService,entityService){
-if (mainService.parentService!=null)
+setParent: function(MainService,entityService){
+if (MainService.parentService!=null)
 {
-mainService.parentService.resetSearchBean();
-mainService.parentService.setSelectedEntity(null);
-mainService.parentService.selectedEntity.show=false;
-mainService.parentService.setEntityList(null);
+MainService.parentService.resetSearchBean();
+MainService.parentService.setSelectedEntity(null);
+MainService.parentService.selectedEntity.show=false;
+MainService.parentService.setEntityList(null);
 }
-mainService.parentEntity="Entity";
-mainService.parentService=entityService;
-mainService.parentService.initTabList().then(function(response) {
-mainService.parentService.childrenList.tabList=response.data;
+MainService.parentEntity="Entity";
+MainService.parentService=entityService;
+MainService.parentService.initTabList().then(function(response) {
+MainService.parentService.childrenList.tabList=response.data;
 });
-mainService.parentService.initEntityGroupList().then(function(response) {
-mainService.parentService.childrenList.entityGroupList=response.data;
+MainService.parentService.initEntityGroupList().then(function(response) {
+MainService.parentService.childrenList.entityGroupList=response.data;
 });
-mainService.parentService.initEnumFieldList().then(function(response) {
-mainService.parentService.childrenList.enumFieldList=response.data;
+MainService.parentService.initEnumFieldList().then(function(response) {
+MainService.parentService.childrenList.enumFieldList=response.data;
 });
-mainService.parentService.initFieldList().then(function(response) {
-mainService.parentService.childrenList.fieldList=response.data;
+MainService.parentService.initFieldList().then(function(response) {
+MainService.parentService.childrenList.fieldList=response.data;
 });
-mainService.parentService.initEnumFieldList().then(function(response) {
-mainService.parentService.childrenList.enumFieldList=response.data;
+MainService.parentService.initEnumFieldList().then(function(response) {
+MainService.parentService.childrenList.enumFieldList=response.data;
 });
-mainService.parentService.initRelationshipList().then(function(response) {
-mainService.parentService.childrenList.relationshipList=response.data;
+MainService.parentService.initRelationshipList().then(function(response) {
+MainService.parentService.childrenList.relationshipList=response.data;
 });
 }
 */}
@@ -198,21 +198,21 @@ templateUrl:'app/components/enumEntity/enumEntity.html',
 controllerAs: 'vm' 
  }
 /*resolve: {
-setParent: function(mainService,enumEntityService){
-if (mainService.parentService!=null)
+setParent: function(MainService,enumEntityService){
+if (MainService.parentService!=null)
 {
-mainService.parentService.resetSearchBean();
-mainService.parentService.setSelectedEntity(null);
-mainService.parentService.selectedEntity.show=false;
-mainService.parentService.setEntityList(null);
+MainService.parentService.resetSearchBean();
+MainService.parentService.setSelectedEntity(null);
+MainService.parentService.selectedEntity.show=false;
+MainService.parentService.setEntityList(null);
 }
-mainService.parentEntity="EnumEntity";
-mainService.parentService=enumEntityService;
-mainService.parentService.initProjectList().then(function(response) {
-mainService.parentService.childrenList.projectList=response.data;
+MainService.parentEntity="EnumEntity";
+MainService.parentService=enumEntityService;
+MainService.parentService.initProjectList().then(function(response) {
+MainService.parentService.childrenList.projectList=response.data;
 });
-mainService.parentService.initEnumValueList().then(function(response) {
-mainService.parentService.childrenList.enumValueList=response.data;
+MainService.parentService.initEnumValueList().then(function(response) {
+MainService.parentService.childrenList.enumValueList=response.data;
 });
 }
 */}
@@ -226,24 +226,24 @@ templateUrl:'app/components/entityGroup/entityGroup.html',
 controllerAs: 'vm' 
  }
 /*resolve: {
-setParent: function(mainService,entityGroupService){
-if (mainService.parentService!=null)
+setParent: function(MainService,entityGroupService){
+if (MainService.parentService!=null)
 {
-mainService.parentService.resetSearchBean();
-mainService.parentService.setSelectedEntity(null);
-mainService.parentService.selectedEntity.show=false;
-mainService.parentService.setEntityList(null);
+MainService.parentService.resetSearchBean();
+MainService.parentService.setSelectedEntity(null);
+MainService.parentService.selectedEntity.show=false;
+MainService.parentService.setEntityList(null);
 }
-mainService.parentEntity="EntityGroup";
-mainService.parentService=entityGroupService;
-mainService.parentService.initRelationshipList().then(function(response) {
-mainService.parentService.childrenList.relationshipList=response.data;
+MainService.parentEntity="EntityGroup";
+MainService.parentService=entityGroupService;
+MainService.parentService.initRelationshipList().then(function(response) {
+MainService.parentService.childrenList.relationshipList=response.data;
 });
-mainService.parentService.initProjectList().then(function(response) {
-mainService.parentService.childrenList.projectList=response.data;
+MainService.parentService.initProjectList().then(function(response) {
+MainService.parentService.childrenList.projectList=response.data;
 });
-mainService.parentService.initEntityList().then(function(response) {
-mainService.parentService.childrenList.entityList=response.data;
+MainService.parentService.initEntityList().then(function(response) {
+MainService.parentService.childrenList.entityList=response.data;
 });
 }
 */}
@@ -257,27 +257,27 @@ templateUrl:'app/components/annotation/annotation.html',
 controllerAs: 'vm' 
  }
 /*resolve: {
-setParent: function(mainService,annotationService){
-if (mainService.parentService!=null)
+setParent: function(MainService,annotationService){
+if (MainService.parentService!=null)
 {
-mainService.parentService.resetSearchBean();
-mainService.parentService.setSelectedEntity(null);
-mainService.parentService.selectedEntity.show=false;
-mainService.parentService.setEntityList(null);
+MainService.parentService.resetSearchBean();
+MainService.parentService.setSelectedEntity(null);
+MainService.parentService.selectedEntity.show=false;
+MainService.parentService.setEntityList(null);
 }
-mainService.parentEntity="Annotation";
-mainService.parentService=annotationService;
-mainService.parentService.initAnnotationAttributeList().then(function(response) {
-mainService.parentService.childrenList.annotationAttributeList=response.data;
+MainService.parentEntity="Annotation";
+MainService.parentService=annotationService;
+MainService.parentService.initAnnotationAttributeList().then(function(response) {
+MainService.parentService.childrenList.annotationAttributeList=response.data;
 });
-mainService.parentService.initFieldList().then(function(response) {
-mainService.parentService.childrenList.fieldList=response.data;
+MainService.parentService.initFieldList().then(function(response) {
+MainService.parentService.childrenList.fieldList=response.data;
 });
-mainService.parentService.initEnumFieldList().then(function(response) {
-mainService.parentService.childrenList.enumFieldList=response.data;
+MainService.parentService.initEnumFieldList().then(function(response) {
+MainService.parentService.childrenList.enumFieldList=response.data;
 });
-mainService.parentService.initRelationshipList().then(function(response) {
-mainService.parentService.childrenList.relationshipList=response.data;
+MainService.parentService.initRelationshipList().then(function(response) {
+MainService.parentService.childrenList.relationshipList=response.data;
 });
 }
 */}
@@ -291,27 +291,27 @@ templateUrl:'app/components/enumField/enumField.html',
 controllerAs: 'vm' 
  }
 /*resolve: {
-setParent: function(mainService,enumFieldService){
-if (mainService.parentService!=null)
+setParent: function(MainService,enumFieldService){
+if (MainService.parentService!=null)
 {
-mainService.parentService.resetSearchBean();
-mainService.parentService.setSelectedEntity(null);
-mainService.parentService.selectedEntity.show=false;
-mainService.parentService.setEntityList(null);
+MainService.parentService.resetSearchBean();
+MainService.parentService.setSelectedEntity(null);
+MainService.parentService.selectedEntity.show=false;
+MainService.parentService.setEntityList(null);
 }
-mainService.parentEntity="EnumField";
-mainService.parentService=enumFieldService;
-mainService.parentService.initAnnotationList().then(function(response) {
-mainService.parentService.childrenList.annotationList=response.data;
+MainService.parentEntity="EnumField";
+MainService.parentService=enumFieldService;
+MainService.parentService.initAnnotationList().then(function(response) {
+MainService.parentService.childrenList.annotationList=response.data;
 });
-mainService.parentService.initTabList().then(function(response) {
-mainService.parentService.childrenList.tabList=response.data;
+MainService.parentService.initTabList().then(function(response) {
+MainService.parentService.childrenList.tabList=response.data;
 });
-mainService.parentService.initEnumEntityList().then(function(response) {
-mainService.parentService.childrenList.enumEntityList=response.data;
+MainService.parentService.initEnumEntityList().then(function(response) {
+MainService.parentService.childrenList.enumEntityList=response.data;
 });
-mainService.parentService.initEntityList().then(function(response) {
-mainService.parentService.childrenList.entityList=response.data;
+MainService.parentService.initEntityList().then(function(response) {
+MainService.parentService.childrenList.entityList=response.data;
 });
 }
 */}
@@ -325,18 +325,18 @@ templateUrl:'app/components/enumValue/enumValue.html',
 controllerAs: 'vm' 
  }
 /*resolve: {
-setParent: function(mainService,enumValueService){
-if (mainService.parentService!=null)
+setParent: function(MainService,enumValueService){
+if (MainService.parentService!=null)
 {
-mainService.parentService.resetSearchBean();
-mainService.parentService.setSelectedEntity(null);
-mainService.parentService.selectedEntity.show=false;
-mainService.parentService.setEntityList(null);
+MainService.parentService.resetSearchBean();
+MainService.parentService.setSelectedEntity(null);
+MainService.parentService.selectedEntity.show=false;
+MainService.parentService.setEntityList(null);
 }
-mainService.parentEntity="EnumValue";
-mainService.parentService=enumValueService;
-mainService.parentService.initEnumEntityList().then(function(response) {
-mainService.parentService.childrenList.enumEntityList=response.data;
+MainService.parentEntity="EnumValue";
+MainService.parentService=enumValueService;
+MainService.parentService.initEnumEntityList().then(function(response) {
+MainService.parentService.childrenList.enumEntityList=response.data;
 });
 }
 */}
@@ -350,27 +350,27 @@ templateUrl:'app/components/field/field.html',
 controllerAs: 'vm' 
  }
 /*resolve: {
-setParent: function(mainService,fieldService){
-if (mainService.parentService!=null)
+setParent: function(MainService,fieldService){
+if (MainService.parentService!=null)
 {
-mainService.parentService.resetSearchBean();
-mainService.parentService.setSelectedEntity(null);
-mainService.parentService.selectedEntity.show=false;
-mainService.parentService.setEntityList(null);
+MainService.parentService.resetSearchBean();
+MainService.parentService.setSelectedEntity(null);
+MainService.parentService.selectedEntity.show=false;
+MainService.parentService.setEntityList(null);
 }
-mainService.parentEntity="Field";
-mainService.parentService=fieldService;
-mainService.parentService.initAnnotationList().then(function(response) {
-mainService.parentService.childrenList.annotationList=response.data;
+MainService.parentEntity="Field";
+MainService.parentService=fieldService;
+MainService.parentService.initAnnotationList().then(function(response) {
+MainService.parentService.childrenList.annotationList=response.data;
 });
-mainService.parentService.initRestrictionFieldList().then(function(response) {
-mainService.parentService.childrenList.restrictionFieldList=response.data;
+MainService.parentService.initRestrictionFieldList().then(function(response) {
+MainService.parentService.childrenList.restrictionFieldList=response.data;
 });
-mainService.parentService.initTabList().then(function(response) {
-mainService.parentService.childrenList.tabList=response.data;
+MainService.parentService.initTabList().then(function(response) {
+MainService.parentService.childrenList.tabList=response.data;
 });
-mainService.parentService.initEntityList().then(function(response) {
-mainService.parentService.childrenList.entityList=response.data;
+MainService.parentService.initEntityList().then(function(response) {
+MainService.parentService.childrenList.entityList=response.data;
 });
 }
 */}
@@ -384,18 +384,18 @@ templateUrl:'app/components/annotationAttribute/annotationAttribute.html',
 controllerAs: 'vm' 
  }
 /*resolve: {
-setParent: function(mainService,annotationAttributeService){
-if (mainService.parentService!=null)
+setParent: function(MainService,annotationAttributeService){
+if (MainService.parentService!=null)
 {
-mainService.parentService.resetSearchBean();
-mainService.parentService.setSelectedEntity(null);
-mainService.parentService.selectedEntity.show=false;
-mainService.parentService.setEntityList(null);
+MainService.parentService.resetSearchBean();
+MainService.parentService.setSelectedEntity(null);
+MainService.parentService.selectedEntity.show=false;
+MainService.parentService.setEntityList(null);
 }
-mainService.parentEntity="AnnotationAttribute";
-mainService.parentService=annotationAttributeService;
-mainService.parentService.initAnnotationList().then(function(response) {
-mainService.parentService.childrenList.annotationList=response.data;
+MainService.parentEntity="AnnotationAttribute";
+MainService.parentService=annotationAttributeService;
+MainService.parentService.initAnnotationList().then(function(response) {
+MainService.parentService.childrenList.annotationList=response.data;
 });
 }
 */}
@@ -409,27 +409,27 @@ templateUrl:'app/components/relationship/relationship.html',
 controllerAs: 'vm' 
  }
 /*resolve: {
-setParent: function(mainService,relationshipService){
-if (mainService.parentService!=null)
+setParent: function(MainService,relationshipService){
+if (MainService.parentService!=null)
 {
-mainService.parentService.resetSearchBean();
-mainService.parentService.setSelectedEntity(null);
-mainService.parentService.selectedEntity.show=false;
-mainService.parentService.setEntityList(null);
+MainService.parentService.resetSearchBean();
+MainService.parentService.setSelectedEntity(null);
+MainService.parentService.selectedEntity.show=false;
+MainService.parentService.setEntityList(null);
 }
-mainService.parentEntity="Relationship";
-mainService.parentService=relationshipService;
-mainService.parentService.initEntityList().then(function(response) {
-mainService.parentService.childrenList.entityList=response.data;
+MainService.parentEntity="Relationship";
+MainService.parentService=relationshipService;
+MainService.parentService.initEntityList().then(function(response) {
+MainService.parentService.childrenList.entityList=response.data;
 });
-mainService.parentService.initEntityList().then(function(response) {
-mainService.parentService.childrenList.entityList=response.data;
+MainService.parentService.initEntityList().then(function(response) {
+MainService.parentService.childrenList.entityList=response.data;
 });
-mainService.parentService.initTabList().then(function(response) {
-mainService.parentService.childrenList.tabList=response.data;
+MainService.parentService.initTabList().then(function(response) {
+MainService.parentService.childrenList.tabList=response.data;
 });
-mainService.parentService.initAnnotationList().then(function(response) {
-mainService.parentService.childrenList.annotationList=response.data;
+MainService.parentService.initAnnotationList().then(function(response) {
+MainService.parentService.childrenList.annotationList=response.data;
 });
 }
 */}
@@ -443,16 +443,16 @@ templateUrl:'app/components/logEntry/logEntry.html',
 controllerAs: 'vm' 
  }
 /*resolve: {
-setParent: function(mainService,logEntryService){
-if (mainService.parentService!=null)
+setParent: function(MainService,logEntryService){
+if (MainService.parentService!=null)
 {
-mainService.parentService.resetSearchBean();
-mainService.parentService.setSelectedEntity(null);
-mainService.parentService.selectedEntity.show=false;
-mainService.parentService.setEntityList(null);
+MainService.parentService.resetSearchBean();
+MainService.parentService.setSelectedEntity(null);
+MainService.parentService.selectedEntity.show=false;
+MainService.parentService.setEntityList(null);
 }
-mainService.parentEntity="LogEntry";
-mainService.parentService=logEntryService;
+MainService.parentEntity="LogEntry";
+MainService.parentService=logEntryService;
 }
 */}
 })

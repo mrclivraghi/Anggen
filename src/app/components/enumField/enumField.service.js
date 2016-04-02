@@ -1,12 +1,17 @@
-angular.module("anggenApp").service("enumFieldService", enumFieldService);
-function enumFieldService($http,mainService)
+(function() { 
+
+angular
+.module("serverTestApp")
+.service("enumFieldService", EnumFieldService);
+/** @ngInject */
+function EnumFieldService($http,MainService)
 {
 this.entityList =		[];
 this.selectedEntity= 	{show: false 
 ,annotationList: []};
 this.isParent=function()
 {
-return mainService.parentEntity=="EnumField";
+return MainService.parentEntity=="EnumField";
 };
 this.childrenList=[]; 
 this.addEntity=function (entity)
@@ -110,3 +115,4 @@ columnDefs: [
 ]
  };
 };
+})();

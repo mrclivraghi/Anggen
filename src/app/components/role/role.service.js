@@ -1,12 +1,17 @@
-angular.module("anggenApp").service("roleService", roleService);
-function roleService($http,mainService)
+(function() { 
+
+angular
+.module("serverTestApp")
+.service("roleService", RoleService);
+/** @ngInject */
+function RoleService($http,MainService)
 {
 this.entityList =		[];
 this.selectedEntity= 	{show: false 
-,restrictionEntityList: [],restrictionFieldList: [],userList: [],restrictionEntityGroupList: []};
+,restrictionFieldList: [],enumFieldList: [],annotationList: [],relationshipList: []};
 this.isParent=function()
 {
-return mainService.parentEntity=="Role";
+return MainService.parentEntity=="Role";
 };
 this.childrenList=[]; 
 this.addEntity=function (entity)
@@ -65,13 +70,6 @@ var promise= $http.post("role/"+this.selectedEntity.roleId+"/load"+field+"/",for
 });
 return promise; 
 }
- this.initRestrictionEntityList= function()
-{
-var promise= $http
-.post("restrictionEntity/search",
-{});
-return promise;
-};
  this.initRestrictionFieldList= function()
 {
 var promise= $http
@@ -79,17 +77,24 @@ var promise= $http
 {});
 return promise;
 };
- this.initUserList= function()
+ this.initEnumFieldList= function()
 {
 var promise= $http
-.post("user/search",
+.post("enumField/search",
 {});
 return promise;
 };
- this.initRestrictionEntityGroupList= function()
+ this.initAnnotationList= function()
 {
 var promise= $http
-.post("restrictionEntityGroup/search",
+.post("annotation/search",
+{});
+return promise;
+};
+ this.initRelationshipList= function()
+{
+var promise= $http
+.post("relationship/search",
 {});
 return promise;
 };
@@ -106,3 +111,4 @@ columnDefs: [
 ]
  };
 };
+})();

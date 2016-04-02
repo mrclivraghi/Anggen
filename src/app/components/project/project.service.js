@@ -1,12 +1,17 @@
-angular.module("anggenApp").service("projectService", projectService);
-function projectService($http,mainService)
+(function() { 
+
+angular
+.module("serverTestApp")
+.service("projectService", ProjectService);
+/** @ngInject */
+function ProjectService($http,MainService)
 {
 this.entityList =		[];
 this.selectedEntity= 	{show: false 
 ,enumEntityList: [],entityGroupList: []};
 this.isParent=function()
 {
-return mainService.parentEntity=="Project";
+return MainService.parentEntity=="Project";
 };
 this.childrenList=[]; 
 this.addEntity=function (entity)
@@ -92,3 +97,4 @@ columnDefs: [
 ]
  };
 };
+})();

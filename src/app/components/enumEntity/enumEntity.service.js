@@ -1,12 +1,17 @@
-angular.module("anggenApp").service("enumEntityService", enumEntityService);
-function enumEntityService($http,mainService)
+(function() { 
+
+angular
+.module("serverTestApp")
+.service("enumEntityService", EnumEntityService);
+/** @ngInject */
+function EnumEntityService($http,MainService)
 {
 this.entityList =		[];
 this.selectedEntity= 	{show: false 
 ,enumValueList: []};
 this.isParent=function()
 {
-return mainService.parentEntity=="EnumEntity";
+return MainService.parentEntity=="EnumEntity";
 };
 this.childrenList=[]; 
 this.addEntity=function (entity)
@@ -93,3 +98,4 @@ columnDefs: [
 ]
  };
 };
+})();

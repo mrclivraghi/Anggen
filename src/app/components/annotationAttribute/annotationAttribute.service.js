@@ -1,12 +1,17 @@
-angular.module("anggenApp").service("annotationAttributeService", annotationAttributeService);
-function annotationAttributeService($http,mainService)
+(function() { 
+
+angular
+.module("serverTestApp")
+.service("annotationAttributeService", AnnotationAttributeService);
+/** @ngInject */
+function AnnotationAttributeService($http,MainService)
 {
 this.entityList =		[];
 this.selectedEntity= 	{show: false 
 };
 this.isParent=function()
 {
-return mainService.parentEntity=="AnnotationAttribute";
+return MainService.parentEntity=="AnnotationAttribute";
 };
 this.childrenList=[]; 
 this.addEntity=function (entity)
@@ -87,3 +92,4 @@ columnDefs: [
 ]
  };
 };
+})();

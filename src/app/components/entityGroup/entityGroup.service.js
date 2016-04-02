@@ -1,12 +1,17 @@
-angular.module("anggenApp").service("entityGroupService", entityGroupService);
-function entityGroupService($http,mainService)
+(function() { 
+
+angular
+.module("serverTestApp")
+.service("entityGroupService", EntityGroupService);
+/** @ngInject */
+function EntityGroupService($http,MainService)
 {
 this.entityList =		[];
 this.selectedEntity= 	{show: false 
-,restrictionEntityGroupList: [],entityList: []};
+,relationshipList: [],entityList: []};
 this.isParent=function()
 {
-return mainService.parentEntity=="EntityGroup";
+return MainService.parentEntity=="EntityGroup";
 };
 this.childrenList=[]; 
 this.addEntity=function (entity)
@@ -65,10 +70,10 @@ var promise= $http.post("entityGroup/"+this.selectedEntity.entityGroupId+"/load"
 });
 return promise; 
 }
- this.initRestrictionEntityGroupList= function()
+ this.initRelationshipList= function()
 {
 var promise= $http
-.post("restrictionEntityGroup/search",
+.post("relationship/search",
 {});
 return promise;
 };
@@ -101,3 +106,4 @@ columnDefs: [
 ]
  };
 };
+})();

@@ -1,12 +1,17 @@
-angular.module("anggenApp").service("enumValueService", enumValueService);
-function enumValueService($http,mainService)
+(function() { 
+
+angular
+.module("serverTestApp")
+.service("enumValueService", EnumValueService);
+/** @ngInject */
+function EnumValueService($http,MainService)
 {
 this.entityList =		[];
 this.selectedEntity= 	{show: false 
 };
 this.isParent=function()
 {
-return mainService.parentEntity=="EnumValue";
+return MainService.parentEntity=="EnumValue";
 };
 this.childrenList=[]; 
 this.addEntity=function (entity)
@@ -81,9 +86,10 @@ paginationPageSize: 10,
 enableGridMenu: true,
 columnDefs: [    
 { name: 'enumValueId'},
-{ name: 'name'},
 { name: 'value'},
+{ name: 'name'},
 { name: 'enumEntity.enumEntityId', displayName: 'enumEntity'} 
 ]
  };
 };
+})();

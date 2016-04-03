@@ -110,6 +110,7 @@ public class JsGenerator {
 		generateMainService();
 		generateMainController();
 		generateNavigation();
+		generateIndexRun();
 		
 
 	}
@@ -1092,13 +1093,31 @@ if (entity.getEntityGroup()!=null)
 			sb.append("}\n");
 			sb.append("})();\n");
 			
-			//TODO run ?
-			/*
-			
+
+
+
+		File file = new File("");
+		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+"security/";
+		saveAsJsFile(directoryAngularFiles, "security.service", sb.toString());
+	}
+	
+	private void generateIndexRun()
+	{
+		StringBuilder sb = new StringBuilder();
+		sb.append("(function() {\n")
+		.append("  'use strict'\n")
+		.append("\n")
+		.append("  angular\n")
+		.append("    .module('"+generator.applicationName+"App')\n")
+		.append("    .run(runBlock);\n")
+		.append("\n")
+		.append("  /** @ngInject */\n")
+		.append("  function runBlock($log,SecurityService,$rootScope) { \n");
+		
 		String services = serviceList;
 		if (services==null)
 			services="";
-		sb.append(".run(function($rootScope,SecurityService"+services+"){\n");
+		//sb.append(".run(function($rootScope,SecurityService"+services+"){\n");
 
 		if (generator.security)
 		{
@@ -1110,20 +1129,23 @@ if (entity.getEntityGroup()!=null)
 			sb.append("SecurityService.restrictionList={};\n");
 			sb.append("$rootScope.restrictionList={};\n");
 		}
-			//initChildrenList(sb);
-				
+		//initChildrenList(sb);
+
 		if (generator.security)
 			sb.append("});\n");
 
-		
-		
-		sb.append("});\n"); */
+		sb.append("$log.debug('runBlock end');\n");
 
-
+		sb.append("}\n"); 
+		
+		sb.append("})();\n");
+		
 		File file = new File("");
-		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+"security/";
-		saveAsJsFile(directoryAngularFiles, "security.service", sb.toString());
+		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+"../";
+		saveAsJsFile(directoryAngularFiles, "index.run", sb.toString());
+		
 	}
+	
 	
 	/**
 	 * Create the JS string

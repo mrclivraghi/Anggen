@@ -39,8 +39,19 @@ public class AuthenticationController {
 	@RequestMapping(value="/username",method = RequestMethod.GET)
     public ResponseEntity manage() {
         String username= SecurityContextHolder.getContext().getAuthentication().getName();
+        if (username.equals("anonymousUser"))
+        	username="";
         return ResponseEntity.ok().body(username);
     }
+	
+	@ResponseBody
+	@RequestMapping(value="/login",method=RequestMethod.POST)
+	public ResponseEntity login()
+	{
+		
+		return ResponseEntity.ok().body(null);
+	}
+	
 	
 	@ResponseBody
 	@RequestMapping(method=RequestMethod.GET)

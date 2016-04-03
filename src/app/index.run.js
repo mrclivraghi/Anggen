@@ -1,14 +1,14 @@
 (function() {
-  'use strict';
+  'use strict'
 
   angular
     .module('serverTestApp')
     .run(runBlock);
 
   /** @ngInject */
-  function runBlock($log) {
-
-    $log.debug('runBlock end');
-  }
-
+  function runBlock($log,SecurityService,$rootScope) { 
+SecurityService.restrictionList={};
+$rootScope.restrictionList={};
+$log.debug('runBlock end');
+}
 })();

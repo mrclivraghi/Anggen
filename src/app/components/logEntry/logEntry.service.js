@@ -41,23 +41,23 @@ cloneObject(entity,this.selectedEntity);
 };
 this.search = function() {
 this.setSelectedEntity(null);
-var promise= $http.post("logEntry/search",this.searchBean);
+var promise= $http.post("http://localhost:8080/ServerTestApp/logEntry/search",this.searchBean);
 return promise; 
 };
 this.searchOne=function(entity) {
-var promise= $http.get("logEntry/"+entity.logEntryId);
+var promise= $http.get("http://localhost:8080/ServerTestApp/logEntry/"+entity.logEntryId);
 return promise; 
 };
 this.insert = function() {
-var promise= $http.put("logEntry/",this.selectedEntity);
+var promise= $http.put("http://localhost:8080/ServerTestApp/logEntry/",this.selectedEntity);
 return promise; 
 };
 this.update = function() {
-var promise= $http.post("logEntry/",this.selectedEntity);
+var promise= $http.post("http://localhost:8080/ServerTestApp/logEntry/",this.selectedEntity);
 return promise; 
 }
 this.del = function() {
-var url="logEntry/"+this.selectedEntity.logEntryId;
+var url="http://localhost:8080/ServerTestApp/logEntry/"+this.selectedEntity.logEntryId;
 var promise= $http["delete"](url);
 return promise; 
 }
@@ -65,7 +65,7 @@ this.loadFile= function(file,field){
 var formData = new FormData();
 if (file!=null)
 formData.append('file',file);
-var promise= $http.post("logEntry/"+this.selectedEntity.logEntryId+"/load"+field+"/",formData,{
+var promise= $http.post("http://localhost:8080/ServerTestApp/logEntry/"+this.selectedEntity.logEntryId+"/load"+field+"/",formData,{
  headers: {'Content-Type': undefined}
 });
 return promise; 

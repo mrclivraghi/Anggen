@@ -3,7 +3,8 @@
 
   angular
     .module('serverTestApp')
-    .config(config);
+    .config(config)
+	.config(setHttpProvider);
 
   /** @ngInject */
   function config($logProvider, toastrConfig) {
@@ -17,5 +18,34 @@
     toastrConfig.preventDuplicates = true;
     toastrConfig.progressBar = true;
   }
+  
+  /** @ngInject */
+  function setHttpProvider($httpProvider) {
+  $httpProvider.defaults.headers.common = {};
+  $httpProvider.defaults.headers.post = {};
+  $httpProvider.defaults.headers.put = {};
+  $httpProvider.defaults.headers.patch = {};
+  $httpProvider.defaults.useXDomain = true;
+delete $httpProvider.defaults.headers.common['X-Requested-With'];
+  $httpProvider.defaults.headers.common.Accept = 'application/json';
+       // $httpProvider.defaults.headers.common['X-Ebsn-Client']="site";
+       // $httpProvider.defaults.headers.common['X-Ebsn-Client-Version'] = '0.0.1';
+        $httpProvider.defaults.cache=true;
+        $httpProvider.defaults.withCredentials = true;
+        $httpProvider.defaults.headers.post['Content-Type'] = 'application/json; charset=UTF-8';
+  
+  
+/* $httpProvider.defaults.headers.common = {};
+   $httpProvider.defaults.headers.common.Accept = 'application/json';
+ // $httpProvider.defaults.headers.post = {};
+   $httpProvider.defaults.headers.common["Content-Type"] = 'application/json;charset=UTF-8';
+   $httpProvider.defaults.useXDomain = true;
+delete $httpProvider.defaults.headers.common['X-Requested-With'];
+  */ 
+  //$httpProvider.defaults.headers.put = {};
+  //$httpProvider.defaults.headers.patch = {};
+}
+  
+  
 
 })();

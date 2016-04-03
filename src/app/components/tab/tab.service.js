@@ -41,23 +41,23 @@ cloneObject(entity,this.selectedEntity);
 };
 this.search = function() {
 this.setSelectedEntity(null);
-var promise= $http.post("tab/search",this.searchBean);
+var promise= $http.post("http://localhost:8080/ServerTestApp/tab/search",this.searchBean);
 return promise; 
 };
 this.searchOne=function(entity) {
-var promise= $http.get("tab/"+entity.tabId);
+var promise= $http.get("http://localhost:8080/ServerTestApp/tab/"+entity.tabId);
 return promise; 
 };
 this.insert = function() {
-var promise= $http.put("tab/",this.selectedEntity);
+var promise= $http.put("http://localhost:8080/ServerTestApp/tab/",this.selectedEntity);
 return promise; 
 };
 this.update = function() {
-var promise= $http.post("tab/",this.selectedEntity);
+var promise= $http.post("http://localhost:8080/ServerTestApp/tab/",this.selectedEntity);
 return promise; 
 }
 this.del = function() {
-var url="tab/"+this.selectedEntity.tabId;
+var url="http://localhost:8080/ServerTestApp/tab/"+this.selectedEntity.tabId;
 var promise= $http["delete"](url);
 return promise; 
 }
@@ -65,7 +65,7 @@ this.loadFile= function(file,field){
 var formData = new FormData();
 if (file!=null)
 formData.append('file',file);
-var promise= $http.post("tab/"+this.selectedEntity.tabId+"/load"+field+"/",formData,{
+var promise= $http.post("http://localhost:8080/ServerTestApp/tab/"+this.selectedEntity.tabId+"/load"+field+"/",formData,{
  headers: {'Content-Type': undefined}
 });
 return promise; 
@@ -73,28 +73,28 @@ return promise;
  this.initEntityList= function()
 {
 var promise= $http
-.post("entity/search",
+.post("http://localhost:8080/ServerTestApp/entity/search",
 {});
 return promise;
 };
  this.initFieldList= function()
 {
 var promise= $http
-.post("field/search",
+.post("http://localhost:8080/ServerTestApp/field/search",
 {});
 return promise;
 };
  this.initEnumFieldList= function()
 {
 var promise= $http
-.post("enumField/search",
+.post("http://localhost:8080/ServerTestApp/enumField/search",
 {});
 return promise;
 };
  this.initRelationshipList= function()
 {
 var promise= $http
-.post("relationship/search",
+.post("http://localhost:8080/ServerTestApp/relationship/search",
 {});
 return promise;
 };

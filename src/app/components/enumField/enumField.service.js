@@ -41,23 +41,23 @@ cloneObject(entity,this.selectedEntity);
 };
 this.search = function() {
 this.setSelectedEntity(null);
-var promise= $http.post("enumField/search",this.searchBean);
+var promise= $http.post("http://localhost:8080/ServerTestApp/enumField/search",this.searchBean);
 return promise; 
 };
 this.searchOne=function(entity) {
-var promise= $http.get("enumField/"+entity.enumFieldId);
+var promise= $http.get("http://localhost:8080/ServerTestApp/enumField/"+entity.enumFieldId);
 return promise; 
 };
 this.insert = function() {
-var promise= $http.put("enumField/",this.selectedEntity);
+var promise= $http.put("http://localhost:8080/ServerTestApp/enumField/",this.selectedEntity);
 return promise; 
 };
 this.update = function() {
-var promise= $http.post("enumField/",this.selectedEntity);
+var promise= $http.post("http://localhost:8080/ServerTestApp/enumField/",this.selectedEntity);
 return promise; 
 }
 this.del = function() {
-var url="enumField/"+this.selectedEntity.enumFieldId;
+var url="http://localhost:8080/ServerTestApp/enumField/"+this.selectedEntity.enumFieldId;
 var promise= $http["delete"](url);
 return promise; 
 }
@@ -65,7 +65,7 @@ this.loadFile= function(file,field){
 var formData = new FormData();
 if (file!=null)
 formData.append('file',file);
-var promise= $http.post("enumField/"+this.selectedEntity.enumFieldId+"/load"+field+"/",formData,{
+var promise= $http.post("http://localhost:8080/ServerTestApp/enumField/"+this.selectedEntity.enumFieldId+"/load"+field+"/",formData,{
  headers: {'Content-Type': undefined}
 });
 return promise; 
@@ -73,28 +73,28 @@ return promise;
  this.initAnnotationList= function()
 {
 var promise= $http
-.post("annotation/search",
+.post("http://localhost:8080/ServerTestApp/annotation/search",
 {});
 return promise;
 };
  this.initTabList= function()
 {
 var promise= $http
-.post("tab/search",
+.post("http://localhost:8080/ServerTestApp/tab/search",
 {});
 return promise;
 };
  this.initEnumEntityList= function()
 {
 var promise= $http
-.post("enumEntity/search",
+.post("http://localhost:8080/ServerTestApp/enumEntity/search",
 {});
 return promise;
 };
  this.initEntityList= function()
 {
 var promise= $http
-.post("entity/search",
+.post("http://localhost:8080/ServerTestApp/entity/search",
 {});
 return promise;
 };

@@ -41,23 +41,23 @@ cloneObject(entity,this.selectedEntity);
 };
 this.search = function() {
 this.setSelectedEntity(null);
-var promise= $http.post("restrictionField/search",this.searchBean);
+var promise= $http.post("http://localhost:8080/ServerTestApp/restrictionField/search",this.searchBean);
 return promise; 
 };
 this.searchOne=function(entity) {
-var promise= $http.get("restrictionField/"+entity.restrictionFieldId);
+var promise= $http.get("http://localhost:8080/ServerTestApp/restrictionField/"+entity.restrictionFieldId);
 return promise; 
 };
 this.insert = function() {
-var promise= $http.put("restrictionField/",this.selectedEntity);
+var promise= $http.put("http://localhost:8080/ServerTestApp/restrictionField/",this.selectedEntity);
 return promise; 
 };
 this.update = function() {
-var promise= $http.post("restrictionField/",this.selectedEntity);
+var promise= $http.post("http://localhost:8080/ServerTestApp/restrictionField/",this.selectedEntity);
 return promise; 
 }
 this.del = function() {
-var url="restrictionField/"+this.selectedEntity.restrictionFieldId;
+var url="http://localhost:8080/ServerTestApp/restrictionField/"+this.selectedEntity.restrictionFieldId;
 var promise= $http["delete"](url);
 return promise; 
 }
@@ -65,7 +65,7 @@ this.loadFile= function(file,field){
 var formData = new FormData();
 if (file!=null)
 formData.append('file',file);
-var promise= $http.post("restrictionField/"+this.selectedEntity.restrictionFieldId+"/load"+field+"/",formData,{
+var promise= $http.post("http://localhost:8080/ServerTestApp/restrictionField/"+this.selectedEntity.restrictionFieldId+"/load"+field+"/",formData,{
  headers: {'Content-Type': undefined}
 });
 return promise; 
@@ -73,14 +73,14 @@ return promise;
  this.initRoleList= function()
 {
 var promise= $http
-.post("role/search",
+.post("http://localhost:8080/ServerTestApp/role/search",
 {});
 return promise;
 };
  this.initFieldList= function()
 {
 var promise= $http
-.post("field/search",
+.post("http://localhost:8080/ServerTestApp/field/search",
 {});
 return promise;
 };

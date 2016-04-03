@@ -110,6 +110,9 @@ public class Generator {
 	@Value("${application.rest.url}")
 	public String restUrl;
 	
+	@Value("${application.cors.origin}")
+	public String corsOrigin;
+	
 	private Project project;
 	
 	private List<Entity> modelEntityList;

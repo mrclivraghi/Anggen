@@ -12,7 +12,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
+import it.anggen.boot.CorsFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -30,6 +32,7 @@ public class AnggenSecurityConfig
         throws Exception
     {
         http
+        //.addFilterBefore(new CorsFilter(), ChannelProcessingFilter.class)
         .authorizeRequests()
         .antMatchers("/css/**","/img/**","/js/**","/auth/**","/login/**","/**").permitAll()
         .and()

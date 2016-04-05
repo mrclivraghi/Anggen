@@ -49,7 +49,6 @@ public class AngGenAuthenticationProvider implements AuthenticationProvider {
             List<GrantedAuthority> grantedAuths = buildUserAuthority(userList.get(0).getRoleList());
             logEntryService.addLogEntry(userList.get(0).getUserId() +"has logged in ", LogType.INFO, OperationType.LOGIN_SUCCESS, User.staticEntityId, userList.get(0), null);
             Authentication auth = new UsernamePasswordAuthenticationToken(username, password, grantedAuths);
-            ((CredentialsContainer) auth).eraseCredentials();
             return auth;
         } else {
         	 logEntryService.addLogEntry(username +"-"+password+ " are bad ", LogType.INFO, OperationType.LOGIN_FAILED, User.staticEntityId, null, null);

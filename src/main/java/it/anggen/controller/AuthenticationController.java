@@ -13,19 +13,25 @@ import it.anggen.model.security.RestrictionField;
 import it.anggen.model.security.User;
 import it.anggen.searchbean.security.UserSearchBean;
 import it.anggen.service.security.UserService;
+import it.anggen.utils.MessageResponse;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Controller
 @RequestMapping("/authentication")
@@ -36,12 +42,16 @@ public class AuthenticationController {
 	
 	
 	@ResponseBody
-	@RequestMapping(value="/username",method = RequestMethod.GET)
+	@RequestMapping(value="/username",method = RequestMethod.POST)
     public ResponseEntity manage() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username= SecurityContextHolder.getContext().getAuthentication().getName();
+        ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        HttpSession session= attr.getRequest().getSession(true); // true == allow create
+        System.out.println(attr.getSessionId());
         if (username.equals("anonymousUser"))
         	username="";
-        return ResponseEntity.ok().body(username);
+        return ResponseEntity.ok().body(new MessageResponse(username,!username.equals("")));
     }
 	
 	@ResponseBody

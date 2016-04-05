@@ -43,23 +43,22 @@ deregistrationsCallbacks[0] = $rootScope.$on('security:loginRequired', function(
     });
 
 	$log.debug("check login");
-	
 	SecurityService.isLoggedIn().then(function successCallback(response) {
-	
-		if (response.data==undefined || response.data=="")
+		if (!response.data.authenticated)
 		{
-
 			$rootScope.$broadcast('security:loginRequired');
 			}
 			else
-			$log.debug("loggato come "+response.data);
+			{
+			$log.debug("loggato come ");
+			$log.debug(response.data.message);
+			}
 		
 },function errorCallback(response) { 
 	AlertError.init({selector: "#alertError"});
 	AlertError.show("Si è verificato un errore");
 	return; 
 });
-	
 	
 $log.debug('runBlock end');
 }

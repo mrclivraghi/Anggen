@@ -17,16 +17,47 @@
     return directive;
 
     /** @ngInject */
-    function LoginController(SecurityService) {
+    function LoginController($scope,SecurityService,$rootScope) {
       var vm = this;
       
       function doLogin(username,password){
-        SecurityService.login(username,password).then(function(data){
-                //cartController.cart=data.data;
-        });
+        SecurityService.login(username,password).then(function successCallback(response) {
+					if (response.data.authenticated)
+					{
+						$rootScope.$broadcast('security:loggedIn');
+					} 
+				},function errorCallback(response) { 
+					console.log("errore callback");
+					console.log(response);
+				});
       }
       
+	  function checkUsername()
+	  {
+	  
+		SecurityService.isLoggedIn(vm).then(function successCallback(response) {
+		if (!response.data.authenticated)
+		{
+			$rootScope.$broadcast('security:loginRequired');
+			}
+			else
+			{
+			$rootScope.$broadcast('security:loggedIn');
+			}
+		
+		},function errorCallback(response) { 
+			AlertError.init({selector: "#alertError"});
+			AlertError.show("Si è verificato un errore");
+			return; 
+		});
+		
+		
+		
+		
+	  }
+	  
       vm.onSubmit = doLogin;
+	  vm.checkUsername=checkUsername;
       
     }
 

@@ -13,7 +13,7 @@ select * from meta.tab where tab_id=731
 select * from meta.enum_entity 
 select * from meta.enum_field 
 
-select * from log.log_entry 
+select * from log.log_entry order by log_date desc
 
 
 select * from meta.enum_value order by enum_entity_id_enum_entity

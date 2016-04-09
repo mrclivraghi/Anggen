@@ -1071,31 +1071,59 @@ if (entity.getEntityGroup()!=null)
 	private void generateSecurityService()
 	{
 		StringBuilder sb = new StringBuilder();	
-		
+
 		sb.append("(function() { \n")
 		.append("'use strict'; \n")
 		.append("\n");
-		
-		
-			sb.append("angular.module(\""+generator.applicationName+"App\").service(\"SecurityService\",SecurityService);\n");
-			
-			sb.append("/** @ngInject */\n");
-			sb.append("function SecurityService($http)\n");
-			sb.append("{\n");
-			sb.append("this.restrictionList={};\n");
-			
-			if (generator.security)
-			{
-				sb.append("this.init= function() {\n");
-				sb.append("var promise= $http.get(\""+generator.restUrl+"authentication/\");\n");
-				sb.append("return promise; \n");
-				sb.append("};\n");
-			}
-			
-			
-			sb.append("}\n");
-			sb.append("})();\n");
-			
+
+
+		sb.append("angular.module(\""+generator.applicationName+"App\").service(\"SecurityService\",SecurityService);\n");
+
+		sb.append("/** @ngInject */\n");
+		sb.append("function SecurityService($http)\n");
+		sb.append("{\n");
+		sb.append("this.restrictionList={};\n");
+
+		if (generator.security)
+		{
+			sb.append("this.init= function() {\n");
+			sb.append("var promise= $http.get(\""+generator.restUrl+"authentication/\");\n");
+			sb.append("return promise; \n");
+			sb.append("};\n");
+		}
+
+		sb.append("this.isLoggedIn = function()\n")
+		.append("{\n")
+		.append("var promise= $http.post(\""+generator.restUrl+"authentication/username/\");\n")
+		.append("return promise;\n")
+		.append("}\n")
+
+		.append("function serializeObj(obj) {\n")
+		.append("var result = [];\n")
+
+		.append("for (var property in obj)\n")
+		.append("result.push(encodeURIComponent(property) + \"=\" + encodeURIComponent(obj[property]));\n")
+
+		.append("return result.join(\"&\");\n")
+		.append("}\n")
+
+		.append("this.login= function(username,password)\n")
+		.append("{\n")
+		.append("var credentials={};\n")
+		.append("credentials.username=username;\n")
+		.append("credentials.password=password;\n")
+		.append("credentials=serializeObj(credentials);\n")
+		.append("console.log(credentials);\n")
+		.append("var promise=$http.post(\""+generator.restUrl+"auth/authenticate/\",credentials,{ headers: {'Content-Type': 'application/x-www-form-urlencoded' }});\n")
+		.append("return promise;\n")
+		.append("}\n");
+
+
+
+
+		sb.append("}\n");
+		sb.append("})();\n");
+
 
 
 

@@ -1133,10 +1133,64 @@ if (entity.getEntityGroup()!=null)
 			//sb.append("SecurityService.restrictionList={};\n");
 			//sb.append("$rootScope.restrictionList={};\n");
 		}
-		//initChildrenList(sb);
 
-		if (generator.security)
+
+		
+		sb.append("var deregistrationsCallbacks=[];\n")
+
+
+
+		.append("deregistrationsCallbacks[0] = $rootScope.$on('security:loginRequired', function(evt,args) {\n")
+		.append("showLogin();\n")
+		.append(" }); \n")
+
+		.append("var loginWindow;\n")
+		.append("function showLogin(){\n")
+		.append("loginWindow = $uibModal.open({\n")
+		.append("size:'md',\n")
+		.append("animation: true,\n")
+		.append(" templateUrl:'app/components/login/login-modal.html',\n")
+		.append(" backdrop: 'static',\n")
+		.append(" keyboard: false\n")
+		.append("});\n")
+		.append("function close(){\n")
+		.append("if(loginWindow){\n")
+		.append("loginWindow.dismiss();\n")
+		.append("loginWindow = null;\n")
+		.append("}\n")
+		.append("}           \n")
+		.append("deregistrationsCallbacks[1] = $rootScope.$on('security:loggedIn',close);\n")
+
+		            
+		.append("}\n")
+
+		.append("//deregistration of events on $destroy\n")
+		.append("deregistrationsCallbacks[2] = $rootScope.$on('$destroy', function(evt,args) {\n")
+		.append(" $log.debug(\"deregistering global events\");\n")
+		.append("for(var i=0;i<deregistrationsCallbacks.length;i++){\n")
+		.append("  deregistrationsCallbacks[i]();\n")
+		.append(" }\n")
+		.append(" });\n")
+
+		.append("$log.debug(\"check login\");\n")
+		.append("SecurityService.isLoggedIn().then(function successCallback(response) {\n")
+		.append("if (!response.data.authenticated)\n")
+		.append("{\n")
+		.append("$rootScope.$broadcast('security:loginRequired');\n")
+		.append("}\n")
+		.append("else\n")
+		.append("{\n")
+		.append("$log.debug(\"loggato come \");\n")
+		.append("$log.debug(response.data.message);\n")
+		.append("}\n")
+				
+		.append("},function errorCallback(response) { \n");
+		manageRestError(sb);
 			sb.append("});\n");
+		
+		
+
+		
 
 		sb.append("$log.debug('runBlock end');\n");
 

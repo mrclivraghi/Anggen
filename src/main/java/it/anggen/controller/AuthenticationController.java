@@ -103,6 +103,7 @@ public class AuthenticationController {
 			RestrictionItem fakeRestrictionItem= null;
 			for (RestrictionEntityGroup restrictionEntityGroup: restrictionEntityGroupList)
 			{
+				if (restrictionEntity.getEntity()!=null && restrictionEntity.getEntity().getEntityGroup()!=null && restrictionEntityGroup.getEntityGroup()!=null)
 				if (restrictionEntity.getEntity().getEntityGroup().getEntityGroupId().equals(restrictionEntityGroup.getEntityGroup().getEntityGroupId()))
 				{
 					fakeRestrictionItem= new RestrictionItem();
@@ -115,7 +116,7 @@ public class AuthenticationController {
 				}
 			}
 			
-			String entityName=restrictionEntity.getEntity().getName();
+			String entityName=restrictionEntity.getEntity()== null ? "" :restrictionEntity.getEntity().getName();
 			restrictionMap.put(entityName, fakeRestrictionItem);
 		}
 		
@@ -127,8 +128,9 @@ public class AuthenticationController {
 	{
 		for (RestrictionItem restrictionItem: restrictionMap.values())
 		{
+			if (restrictionItem==null) continue;
 			Map<String,Boolean> restrictionFieldMap= new HashMap<String, Boolean>();
-			if (restrictionItem.getEntity()!=null)
+			if (restrictionItem!=null && restrictionItem.getEntity()!=null)
 			for (Field field: restrictionItem.getEntity().getFieldList())
 			{
 				for (RestrictionField restrictionField: field.getRestrictionFieldList())

@@ -1132,6 +1132,51 @@ if (entity.getEntityGroup()!=null)
 		saveAsJsFile(directoryAngularFiles, "security.service", sb.toString());
 	}
 	
+	
+	private void generateIndexConfig()
+	{
+
+		StringBuilder sb = new StringBuilder();
+		sb.append("(function() {\n")
+		.append("  'use strict'\n")
+		.append("\n")
+		.append("  angular\n")
+		.append("    .module('"+generator.applicationName+"App')\n")
+		.append("    .config(config);\n")
+		.append("    .config(setHttpProvider);\n")
+		.append("\n")
+		.append("  /** @ngInject */\n");
+		sb.append("function config($logProvider, toastrConfig) {\n")
+		.append("// Enable log\n")
+		.append(" $logProvider.debugEnabled(true);\n")
+		.append(" // Set options third-party lib\n")
+		.append(" toastrConfig.allowHtml = true;\n")
+		.append(" toastrConfig.timeOut = 3000;\n")
+		.append("toastrConfig.positionClass = 'toast-top-right';\n")
+		.append(" toastrConfig.preventDuplicates = true;\n")
+		.append("toastrConfig.progressBar = true;\n")
+		.append("}\n")
+		.append("\n")
+		.append("/** @ngInject */\n")
+		.append("function setHttpProvider($httpProvider) {\n")
+		  
+		.append("$httpProvider.defaults.headers.common.Accept = 'application/json';\n")
+		.append(" $httpProvider.defaults.withCredentials = true;\n")
+		.append("}\n");
+		
+		sb.append("})();\n");
+		
+		File file = new File("");
+		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+"../";
+		saveAsJsFile(directoryAngularFiles, "index.run", sb.toString());
+		
+	
+	}
+	
+	
+	
+	
+	
 	private void generateIndexRun()
 	{
 		StringBuilder sb = new StringBuilder();

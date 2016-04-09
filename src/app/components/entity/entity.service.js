@@ -4,7 +4,7 @@ angular
 .module("serverTestApp")
 .service("entityService", EntityService);
 /** @ngInject */
-function EntityService($http,MainService)
+function EntityService($http,MainService,$resource)
 {
 this.entityList =		[];
 this.selectedEntity= 	{show: false 
@@ -41,7 +41,8 @@ cloneObject(entity,this.selectedEntity);
 };
 this.search = function() {
 this.setSelectedEntity(null);
-var promise= $http.post("http://localhost:8080/ServerTestApp/entity/search",this.searchBean);
+//var promise= $resource("http://localhost:8080/ServerTestApp/entity/search");
+var promise= $http.post("http://127.0.0.1:8080/ServerTestApp/entity/search/",this.searchBean);
 return promise; 
 };
 this.searchOne=function(entity) {

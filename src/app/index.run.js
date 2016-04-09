@@ -21,7 +21,9 @@ deregistrationsCallbacks[0] = $rootScope.$on('security:loginRequired', function(
             loginWindow = $uibModal.open({
               size:'md',
               animation: true,
-              templateUrl:'app/components/login/login-modal.html'
+              templateUrl:'app/components/login/login-modal.html',
+			  backdrop: 'static',
+			  keyboard: false
             });
             function close(){
                 if(loginWindow){

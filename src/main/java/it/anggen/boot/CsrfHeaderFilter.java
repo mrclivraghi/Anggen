@@ -22,12 +22,14 @@ public class CsrfHeaderFilter
         throws IOException, ServletException
     {
         org.springframework.security.web.csrf.CsrfToken csrf = (org.springframework.security.web.csrf.CsrfToken) request.getAttribute(org.springframework.security.web.csrf.CsrfToken.class.getName());
+        System.out.println("Token CSRF null");
         if (csrf != null) {
         javax.servlet.http.Cookie cookie = org.springframework.web.util.WebUtils.getCookie(request, "XSRF-TOKEN");
         String token = csrf.getToken();
+        System.out.println("Token CSRF "+token);
         if (cookie == null || token != null	&& !token.equals(cookie.getValue())) {
         cookie = new javax.servlet.http.Cookie("XSRF-TOKEN", token);
-        cookie.setPath("/ServerTestApp");
+        cookie.setPath("/");
         response.addCookie(cookie);
         }
         }

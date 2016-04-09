@@ -1,9 +1,22 @@
 (function() {
   'use strict';
-
+/*
   angular
     .module('serverTestApp')
-    .config(config)
+	.factory('sessionInjector', ['SessionService', function(SessionService) {  
+    var sessionInjector = {
+        request: function(config) {
+            if (!SessionService.isAnonymus) {
+                config.headers['x-session-token'] = SessionService.token;
+            }
+            return config;
+        }
+    };
+    return sessionInjector;
+}]);*/
+angular.
+module('serverTestApp')
+ .config(config)
 	.config(setHttpProvider);
 
   /** @ngInject */
@@ -21,32 +34,40 @@
   
   /** @ngInject */
   function setHttpProvider($httpProvider) {
-  $httpProvider.defaults.headers.common = {};
-  $httpProvider.defaults.headers.post = {};
-  $httpProvider.defaults.headers.put = {};
-  $httpProvider.defaults.headers.patch = {};
-   $httpProvider.defaults.headers.get = {};
-  //$httpProvider.defaults.useXDomain = true;
-delete $httpProvider.defaults.headers.common['X-Requested-With'];
-  $httpProvider.defaults.headers.common.Accept = 'application/json';
-       // $httpProvider.defaults.headers.common['Access-Control-Allow-Origin']="http://localhost:3000";
-		//$httpProvider.defaults.headers.post['Access-Control-Allow-Credentials']="true";
-       // $httpProvider.defaults.headers.common['X-Ebsn-Client-Version'] = '0.0.1';
-        $httpProvider.defaults.cache=true;
-        //$httpProvider.defaults.withCredentials = true;
-        $httpProvider.defaults.headers.post['Content-Type'] = 'application/json; charset=UTF-8';
-		//$httpProvider.defaults.headers.get['Cache-Control'] = 'no-cache';
   
-  
-/* $httpProvider.defaults.headers.common = {};
    $httpProvider.defaults.headers.common.Accept = 'application/json';
- // $httpProvider.defaults.headers.post = {};
-   $httpProvider.defaults.headers.common["Content-Type"] = 'application/json;charset=UTF-8';
-   $httpProvider.defaults.useXDomain = true;
-delete $httpProvider.defaults.headers.common['X-Requested-With'];
-  */ 
-  //$httpProvider.defaults.headers.put = {};
-  //$httpProvider.defaults.headers.patch = {};
+        //$httpProvider.defaults.headers.common['X-Ebsn-Client']="site";
+        //$httpProvider.defaults.headers.common['X-Ebsn-Client-Version'] = '0.0.1';
+        //$httpProvider.defaults.cache=true;
+        $httpProvider.defaults.withCredentials = true;
+        //$httpProvider.defaults.headers.post['Content-Type'] = 'application/json; charset=UTF-8';
+		//$httpProvider.defaults.useXDomain = true;
+        //delete $httpProvider.defaults.headers.common['X-Requested-With'];
+       /* $httpProvider.defaults.transformRequest = function(data) {
+            if (angular.isUndefined(data)) {
+                return data;
+            }
+            var str = [];
+            for(var p in data)
+            str.push(encodeURIComponent(p) + "=" + encodeURIComponent(data[p]));
+            return str.join("&");
+        };
+        
+		
+		/*$httpProvider.interceptors.push(function($q,$rootScope,$log,$injector,$window) {
+        
+            return {
+              request: function(config) {
+                  return config;
+              },
+              response: function(response) {
+                return response;
+              },
+              responseError: function(response) {
+                  
+                }
+            }
+          });*/
 }
   
   

@@ -10,9 +10,11 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.tomcat.util.http.fileupload.RequestContext;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -33,12 +35,17 @@ public class CorsFilter implements javax.servlet.Filter  {
 				    response.setHeader("Access-Control-Allow-Credentials", "true");
 				    response.setHeader("Access-Control-Allow-Methods", "POST, PUT, GET, OPTIONS, DELETE");
 				    response.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Key");
-				    response.setHeader("Access-Control-Max-Age", "3600");
-				    response.setHeader("Access-Control-Request-Headers","accept, content-type, postman-token");
-				    System.out.println(request.getRequestedSessionId()+"-corsFilter");
+				  response.setHeader("Access-Control-Max-Age", "3600");
+				  response.setHeader("Access-Control-Request-Headers","accept, content-type");//, postman-token
+				   
 				    if (!request.getMethod().equals("OPTIONS")) {
+				    	 System.out.println(request.getSession().getId()+"-corsFilter"+request.getRequestedSessionId()+"-"+request.getMethod());
+				    	 //System.out.println(RequestContextHolder.currentRequestAttributes().getSessionId()+"real session id underlying");
+				    	 
+				    	 System.out.println(request.getQueryString());
 				      chain.doFilter(req, res);
 				    } else {
+				    	 System.out.println(request.getRequestedSessionId()+"-corsFilter OPTION");
 				    }
 		
 	}

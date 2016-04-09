@@ -1,0 +1,18 @@
+<div class="side-menu">
+	<div class="header">Login<i class="icon-Profile pull-right"></i></div>
+	<div class="side-menu-inner">		
+		<p>Insert your data</p>
+		<div class="form-wrap">
+			<form ng-submit="vm.onSubmit(vm.username,vm.password)">
+				<div class="field-wrap">
+					<div class="input-wrap"><input type="text" name="tigros_card" placeholder="username"  ng-model="vm.username"></div>
+				</div>
+				<div class="field-wrap">
+					<div class="input-wrap"><input type="password" name="pwd" placeholder="Password" ng-model="vm.password"></div>
+				</div>
+				<button type="submit" class="btn btn-primary btn-block">Login</button>
+				<button type="button" class="btn btn-primary btn-block" ng-click="vm.checkUsername()">check</button>
+			</form>
+		</div>
+	</div>
+</div><!-- /.side-menu-right -->

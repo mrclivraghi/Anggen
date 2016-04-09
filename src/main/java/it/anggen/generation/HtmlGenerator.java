@@ -171,7 +171,7 @@ public class HtmlGenerator {
 		if (!dir.exists())
 			dir.mkdirs();
 		
-		File myJsp=new File(directoryViewPages+entityName+".jsp");
+		File myJsp=new File(directoryViewPages+entityName+"/"+entityName+".html");
 		PrintWriter writer;
 		try {
 			System.out.println("Written "+myJsp.getAbsolutePath());
@@ -252,19 +252,19 @@ public class HtmlGenerator {
 			for (EntityGroup entityGroup: entityGroupList)
 			{
 				HtmlCanvas ulHtml= new HtmlCanvas();
-				ulHtml.li((new HtmlAttributes()).add("class", "dropdown"))
-				.a((new HtmlAttributes()).add("href", "#").add("class", "dropdown-toggle").add("data-toggle", "dropdown").add("role", "button").add("aria-haspopup", "true").add("aria-expanded", "false"));
+				ulHtml.li((new HtmlAttributes()).add("uib-dropdown", "").add("on-toggle", "toggled(\"open\")"))
+				.a((new HtmlAttributes()).add("href", "#").add("class", "dropdown-toggle").add("data-toggle", "dropdown").add("role", "button").add("aria-haspopup", "true").add("aria-expanded", "false").add("uib-dropdown-toggle", ""));
 				HtmlCanvas caretHtml = new HtmlCanvas();
 				
 				caretHtml.span((new HtmlAttributes()).add("class", "caret"))
 				._span();
 				ulHtml.content(entityGroup.getName()+caretHtml.toHtml(),false);
-				ulHtml.ul((new HtmlAttributes()).add("class", "dropdown-menu"));
+				ulHtml.ul((new HtmlAttributes()).add("uib-dropdown-menu", "").add("aria-labelledby", "simple-dropdown"));
 				
 				String ulContent="";
 				for (Entity entity: entityGroup.getEntityList())
 				{
-					ulContent=ulContent+"<li ng-if=\"restrictionList."+entity.getName()+".canSearch || restrictionList."+entity.getName()+"==undefined\"><a href=\""+Utility.getFirstUpper(entity.getName())+"\">"+Utility.getFirstUpper(entity.getName())+"</a></li>";
+					ulContent=ulContent+"<li ng-if=\"restrictionList."+entity.getName()+".canSearch || restrictionList."+entity.getName()+"==undefined\"><a href=\"#/app/"+Utility.getFirstLower(entity.getName())+"\" role=\"menuitem\">"+Utility.getFirstUpper(entity.getName())+"</a></li>";
 				}
 				
 				ulHtml.content(ulContent,false);
@@ -302,12 +302,11 @@ public class HtmlGenerator {
 		
 		File file = new File(""); 
 		String directoryViewPages = file.getAbsolutePath()+generator.menuDirectory;
-		File menuFile=new File(directoryViewPages+generator.applicationName+generator.menuName);
+		File menuFile=new File(directoryViewPages+generator.menuName);
 		PrintWriter writer;
 		try {
 			System.out.println("Written "+menuFile.getAbsolutePath());
 			writer = new PrintWriter(menuFile, "UTF-8");
-			writer.write("<%@ taglib prefix=\"c\" uri=\"http://java.sun.com/jsp/jstl/core\" %>");
 			writer.write(html.toHtml());
 			writer.close();
 		} catch (FileNotFoundException | UnsupportedEncodingException e) {

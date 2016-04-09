@@ -10,6 +10,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -38,14 +39,20 @@ public class AngGenAuthenticationProvider implements AuthenticationProvider {
         String password = authentication.getCredentials().toString();
         PasswordEncoder encoder = new org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder();
         List<User> userList = userRepository.findByUserIdAndPasswordAndEnabledAndUsernameAndRole(null, null, true, username, null);
+        if (userList==null || userList.size()==0)
+        {
+        	 logEntryService.addLogEntry(username + " is wrong ", LogType.INFO, OperationType.LOGIN_FAILED, User.staticEntityId, null, null);
+             throw new BadCredentialsException("Username is wrong");
+        }
+        
         if (userList!=null && userList.size()==1 && encoder.matches(password, userList.get(0).getPassword())) {
             List<GrantedAuthority> grantedAuths = buildUserAuthority(userList.get(0).getRoleList());
             logEntryService.addLogEntry(userList.get(0).getUserId() +"has logged in ", LogType.INFO, OperationType.LOGIN_SUCCESS, User.staticEntityId, userList.get(0), null);
-            
-            return new UsernamePasswordAuthenticationToken(username, password, grantedAuths);
+            Authentication auth = new UsernamePasswordAuthenticationToken(username, password, grantedAuths);
+            return auth;
         } else {
         	 logEntryService.addLogEntry(username +"-"+password+ " are bad ", LogType.INFO, OperationType.LOGIN_FAILED, User.staticEntityId, null, null);
-            throw new BadCredentialsException("Your credentials are not right");
+            throw new BadCredentialsException("Your password is wrong");
         }
 	}
 

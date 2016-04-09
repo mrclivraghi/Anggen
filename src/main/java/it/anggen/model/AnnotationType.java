@@ -1,7 +1,14 @@
 
 package it.anggen.model;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+import org.hibernate.annotations.Tuplizer;
+
+@Entity
+@Table(name="annotation_type",schema="meta")
 public enum AnnotationType {
 
     PRIMARY_KEY(0),
@@ -19,7 +26,11 @@ public enum AnnotationType {
     PRIORITY(12),
     EMBEDDED(13),
     CACHE(14);
+	
+	@Id
     private final int value;
+    
+    private String name=toString();
 
     private AnnotationType(int value) {
         this.value=value; 

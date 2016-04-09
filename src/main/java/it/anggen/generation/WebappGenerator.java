@@ -65,6 +65,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
@@ -129,10 +131,10 @@ public class WebappGenerator {
 		generateSpringBootApplication();
 		generateForbiddenJsp();
 		generateMainAppController();
+		generateWebConfig();
 		htmlGenerator.setDirectory();
 		htmlGenerator.generateTemplate();
 		htmlGenerator.generateHomePage();
-		jsGenerator.generateMainApp();
 	}
 	
 	private void generateMainAppController() {
@@ -166,6 +168,34 @@ public class WebappGenerator {
 		saveFile(codeModel);
 		
 	}
+	
+	private void generateWebConfig() {
+		JCodeModel codeModel = new JCodeModel();
+		JDefinedClass webConfigClass=null;
+		try {
+			webConfigClass = codeModel._class(JMod.PUBLIC, packageName+"boot.config."+Utility.getFirstUpper(applicationName)+"WebConfig", ClassType.CLASS);
+			} catch (JClassAlreadyExistsException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		webConfigClass.annotate(Configuration.class);
+		webConfigClass.annotate(EnableWebMvc.class);
+		
+		webConfigClass._extends(WebMvcConfigurerAdapter.class);
+		
+		JMethod addCorsMapping = webConfigClass.method(JMod.PUBLIC, void.class, "addCorsMapping");
+		addCorsMapping.annotate(Override.class);
+		
+		JBlock addCorsBlock = addCorsMapping.body();
+		addCorsBlock.directStatement("super.addCorsMappings(registry);\n");
+		addCorsBlock.directStatement("registry.addMapping(\"/**\")\n");
+		addCorsBlock.directStatement(".allowedOrigins(\""+generator.corsOrigin+"\");\n");
+		
+		saveFile(codeModel);
+		
+	}
+	
+	
 
 	private void generateSpringBootApplication()
 	{

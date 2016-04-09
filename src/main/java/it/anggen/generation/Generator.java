@@ -107,6 +107,12 @@ public class Generator {
 	@Value("${generate.view}")
 	private Boolean generateView;
 	
+	@Value("${application.rest.url}")
+	public String restUrl;
+	
+	@Value("${application.cors.origin}")
+	public String corsOrigin;
+	
 	private Project project;
 	
 	private List<Entity> modelEntityList;
@@ -240,6 +246,7 @@ public class Generator {
 		}
 		if (generateView)
 		{
+			jsGenerator.generateMainApp();
 			jsGenerator.generateServiceFile();
 			jsGenerator.generateControllerFile();
 			for (Entity modelEntity: modelEntityList)

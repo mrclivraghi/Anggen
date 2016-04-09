@@ -1,0 +1,23 @@
+@CHARSET "ISO-8859-1";
+.default-panel{
+	width: 90%;
+	margin-left: 5%;AAAAAAAAAAAAAAAAAAA
+}
+.right-input{
+	width:45%;
+	/*float: right;*/
+	margin-top:15px;
+	}
+
+.left-input{
+	width:45%;
+	float: left;
+}
+
+.custom-alert{
+	position:absolute;
+	width:200px;
+	height:80px;
+	right: 50px;
+	bottom: 20px;
+}

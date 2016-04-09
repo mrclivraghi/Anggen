@@ -1082,7 +1082,8 @@ if (entity.getEntityGroup()!=null)
 			sb.append("/** @ngInject */\n");
 			sb.append("function SecurityService($http)\n");
 			sb.append("{\n");
-			sb.append("this.restrictionList;\n");
+			sb.append("this.restrictionList={};\n");
+			
 			if (generator.security)
 			{
 				sb.append("this.init= function() {\n");
@@ -1090,6 +1091,8 @@ if (entity.getEntityGroup()!=null)
 				sb.append("return promise; \n");
 				sb.append("};\n");
 			}
+			
+			
 			sb.append("}\n");
 			sb.append("})();\n");
 			
@@ -1123,11 +1126,12 @@ if (entity.getEntityGroup()!=null)
 		{
 			sb.append("SecurityService.init().then(function successCallback(response) {\n");
 			sb.append("SecurityService.restrictionList=response.data;\n");
-			sb.append("$rootScope.restrictionList=response.data;\n");
+			sb.append("});\n");
+			//sb.append("$rootScope.restrictionList=response.data;\n");
 		} else
 		{
-			sb.append("SecurityService.restrictionList={};\n");
-			sb.append("$rootScope.restrictionList={};\n");
+			//sb.append("SecurityService.restrictionList={};\n");
+			//sb.append("$rootScope.restrictionList={};\n");
 		}
 		//initChildrenList(sb);
 

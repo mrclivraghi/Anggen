@@ -21,7 +21,7 @@ import org.hibernate.annotations.Type;
 @Table(schema = "meta", name = "entity")
 @it.anggen.utils.annotation.SecurityType(type = it.anggen.model.SecurityType.ACCESS_WITH_PERMISSION)
 @MaxDescendantLevel(100)
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+//@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Entity {
 
     public final static java.lang.Long staticEntityId = 3L;

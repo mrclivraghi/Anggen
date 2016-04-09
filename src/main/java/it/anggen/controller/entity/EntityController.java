@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.RequestContextHolder;
 
 @Controller
 @RequestMapping("/entity")
@@ -69,6 +70,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         getSecurityMapping(entityList);
         getRightMapping(entityList);
          log.info("Search: returning {} entity.",entityList.size());
+         System.out.println(RequestContextHolder.currentRequestAttributes().getSessionId());
         return ResponseEntity.ok().body(entityList);
     }
 

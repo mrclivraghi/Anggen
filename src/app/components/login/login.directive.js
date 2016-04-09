@@ -17,13 +17,14 @@
     return directive;
 
     /** @ngInject */
-    function LoginController($scope,SecurityService,$rootScope) {
+    function LoginController($scope,SecurityService,$rootScope,$log) {
       var vm = this;
       
       function doLogin(username,password){
         SecurityService.login(username,password).then(function successCallback(response) {
 					if (response.data.authenticated)
 					{
+						$log.debug("login ok, chiudo");
 						$rootScope.$broadcast('security:loggedIn');
 					} 
 				},function errorCallback(response) { 

@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.servlet.ModelAndView;
 
 import it.anggen.boot.AngGenAuthenticationProvider;
@@ -64,10 +65,25 @@ public class LoginController {
 		{
 			return ResponseEntity.ok().body(new MessageResponse(e.getMessage(),false));
 		} 
+		System.out.println(RequestContextHolder.currentRequestAttributes().getSessionId());
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		((CredentialsContainer) authentication).eraseCredentials();
 		return ResponseEntity.ok().body(authentication);
 	}
+	
+	
+	@RequestMapping(value="logout",method=RequestMethod.POST,produces="application/json")
+	@ResponseBody
+	public ResponseEntity logout()
+	{
+		Authentication authentication=null;
+		SecurityContextHolder.getContext().setAuthentication(null);
+		System.out.println(RequestContextHolder.currentRequestAttributes().getSessionId());
+		return ResponseEntity.ok().body(new MessageResponse("loggedOut", false));
+	}
+	
+	
+	
 
     
 

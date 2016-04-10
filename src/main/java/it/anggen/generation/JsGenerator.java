@@ -1252,7 +1252,7 @@ if (entity.getEntityGroup()!=null)
 		if (generator.security)
 		{
 			sb.append("SecurityService.init().then(function successCallback(response) {\n");
-			sb.append("SecurityService.restrictionList=response.data;\n");
+			sb.append("$rootScope.restrictionList=response.data;\n");
 			sb.append("});\n");
 			//sb.append("$rootScope.restrictionList=response.data;\n");
 		} else
@@ -1309,8 +1309,14 @@ if (entity.getEntityGroup()!=null)
 		.append("{\n")
 		.append("$log.debug(\"loggato come \");\n")
 		.append("$log.debug(response.data.message);\n")
+
+		.append("SecurityService.init().then(function successCallback(response) {\n")
+		.append("$rootScope.restrictionList=response.data;\n")
+		.append("});\n")
+
+
 		.append("}\n")
-				
+
 		.append("},function errorCallback(response) { \n");
 		manageRestError(sb);
 			sb.append("});\n");

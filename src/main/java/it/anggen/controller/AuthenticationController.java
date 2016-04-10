@@ -87,17 +87,15 @@ public class AuthenticationController {
 			UserManager userManager = new UserManager(loggedUserList.get(0));
 	       return ResponseEntity.status(HttpStatus.ACCEPTED).body(buildRestrictionMap(userManager.getRestrictionEntityList(),userManager.getRestrictionEntityGroupList(),userManager.getRestrictionFieldList()));
 		}else
-			return ResponseEntity.status(HttpStatus.ACCEPTED).body(buildRestrictionMap(null,null,null));
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
 	}
 	
 	private Map<String,RestrictionGroup> buildRestrictionMap(List<RestrictionEntity> restrictionEntityList, List<RestrictionEntityGroup> restrictionEntityGroupList, List<RestrictionField> restrictionFieldList)
 	{
 		Map<Long,RestrictionEntityGroup> restrictionEntityGroupMap = new HashMap<Long,RestrictionEntityGroup>();
 		Map<Long,RestrictionEntity> restrictionEntityMap = new HashMap<Long,RestrictionEntity>();
-		if (restrictionEntityList!=null)
 		for (RestrictionEntity restrictionEntity : restrictionEntityList)
 			restrictionEntityMap.put(restrictionEntity.getEntity().getEntityId(), restrictionEntity);
-		if (restrictionEntityGroupList!=null)
 		for (RestrictionEntityGroup restrictionEntityGroup: restrictionEntityGroupList)
 			restrictionEntityGroupMap.put(restrictionEntityGroup.getEntityGroup().getEntityGroupId(), restrictionEntityGroup);
 		

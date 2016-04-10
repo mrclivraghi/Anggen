@@ -1251,9 +1251,7 @@ if (entity.getEntityGroup()!=null)
 
 		if (generator.security)
 		{
-			sb.append("SecurityService.init().then(function successCallback(response) {\n");
-			sb.append("$rootScope.restrictionList=response.data;\n");
-			sb.append("});\n");
+			
 			//sb.append("$rootScope.restrictionList=response.data;\n");
 		} else
 		{
@@ -1281,6 +1279,11 @@ if (entity.getEntityGroup()!=null)
 		.append(" keyboard: false\n")
 		.append("});\n")
 		.append("function close(){\n")
+		
+		.append("SecurityService.init().then(function successCallback(response) {\n")
+		.append("$rootScope.restrictionList=response.data;\n")
+		.append("});\n")
+		
 		.append("if(loginWindow){\n")
 		.append("loginWindow.dismiss();\n")
 		.append("loginWindow = null;\n")

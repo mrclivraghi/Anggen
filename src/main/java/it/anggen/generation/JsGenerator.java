@@ -1190,10 +1190,10 @@ if (entity.getEntityGroup()!=null)
 			.append("templateUrl:'app/components/"+entity.getName()+"/"+entity.getName()+".html',\n")
 			.append(" controller:'"+Utility.getFirstUpper(entity.getName())+"Controller', \n")
 			.append("controllerAs: 'vm' \n")
-			.append(" }\n")
+			.append(" },\n")
 
-			.append("/*resolve: {\n")
-			.append("setParent: function(MainService,"+Utility.getFirstLower(entity.getName())+"Service){\n")
+			.append("resolve: {\n");
+			/*.append("setParent: function(MainService,"+Utility.getFirstLower(entity.getName())+"Service){\n")
 
 			.append("if (MainService.parentService!=null)\n")
 			.append("{\n")
@@ -1207,18 +1207,23 @@ if (entity.getEntityGroup()!=null)
 			.append("MainService.parentEntity=\""+Utility.getFirstUpper(entity.getName())+"\";\n")
 
 			.append("MainService.parentService="+Utility.getFirstLower(entity.getName())+"Service;\n");
-			
+			*/
 			//todo get descendant e init children
 			for (Relationship relationship : entity.getRelationshipList())
 			{
 
-				sb.append("MainService.parentService.init"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List().then(function(response) {\n")
-				.append("MainService.parentService.childrenList."+Utility.getFirstLower(relationship.getEntityTarget().getName())+"List=response.data;\n")
-				.append("});\n");
+				sb.append(relationship.getEntityTarget().getName()+"ChildrenList: function() {\n");
+				sb.append(entity.getName()+"Service.init"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List().then(function(response) {\n")
+				.append("return response.data;\n")
+				.append("});\n")
+				
+				.append("}, \n ");
 			}
 			
 			sb.append("}\n")
-			.append("*/}\n") // end resolve
+			
+			
+			.append("}\n") // end resolve
 			
 			
 			.append("})\n");

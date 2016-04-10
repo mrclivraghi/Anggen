@@ -20,7 +20,7 @@ public class MvcWebApplicationInitializer
 
     @Override
     protected Class[] getRootConfigClasses() {
-        return new Class[] {it.anggen.boot.config.AnggenSecurityConfig.class};
+        return new Class[] {it.anggen.boot.config.ServerTestSecurityConfig.class};
     }
 
 }

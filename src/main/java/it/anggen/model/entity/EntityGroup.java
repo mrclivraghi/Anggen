@@ -2,15 +2,11 @@
 package it.anggen.model.entity;
 
 import java.util.List;
-
-import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import it.anggen.model.SecurityType;
 import it.anggen.model.security.RestrictionEntityGroup;
 import it.anggen.utils.annotation.MaxDescendantLevel;
 import org.hibernate.annotations.Type;
@@ -21,38 +17,33 @@ import org.hibernate.annotations.Type;
 @MaxDescendantLevel(100)
 public class EntityGroup {
 
-    public final static java.lang.Long staticEntityId = 8L;
+    public final static java.lang.Long staticEntityId = 5L;
     @javax.persistence.Column(name = "entity_group_id")
+    @it.anggen.utils.annotation.Priority(1)
+    @it.anggen.utils.annotation.DescriptionField
     @Id
     @GeneratedValue
-    @it.anggen.utils.annotation.DescriptionField
-    @it.anggen.utils.annotation.Priority(1)
     private java.lang.Long entityGroupId;
-
     @javax.persistence.Column(name = "name")
-    @it.anggen.utils.annotation.Priority(2)
     @it.anggen.utils.annotation.DescriptionField
+    @it.anggen.utils.annotation.Priority(2)
     private String name;
-    
-    
-    @Column(name="security_type")
-    private SecurityType securityType;
-    
-    
     @OneToMany(fetch = javax.persistence.FetchType.EAGER)
     @Type(type = "it.anggen.model.security.RestrictionEntityGroup")
     @javax.persistence.JoinColumn(name = "entity_group_id_entity_group")
     @it.anggen.utils.annotation.Priority(4)
     private List<RestrictionEntityGroup> restrictionEntityGroupList;
-    @ManyToOne(fetch = javax.persistence.FetchType.EAGER)
-    @javax.persistence.JoinColumn(name = "project_id_project")
-    @it.anggen.utils.annotation.Priority(4)
-    private it.anggen.model.entity.Project project;
     @OneToMany(fetch = javax.persistence.FetchType.EAGER)
     @Type(type = "it.anggen.model.entity.Entity")
     @javax.persistence.JoinColumn(name = "entity_group_id_entity_group")
     @it.anggen.utils.annotation.Priority(4)
     private List<it.anggen.model.entity.Entity> entityList;
+    @ManyToOne(fetch = javax.persistence.FetchType.EAGER)
+    @javax.persistence.JoinColumn(name = "project_id_project")
+    @it.anggen.utils.annotation.Priority(4)
+    private it.anggen.model.entity.Project project;
+    @javax.persistence.Column(name = "security_type")
+    private it.anggen.model.SecurityType securityType;
 
     public java.lang.Long getEntityGroupId() {
         return this.entityGroupId;
@@ -78,14 +69,6 @@ public class EntityGroup {
         this.restrictionEntityGroupList=restrictionEntityGroupList;
     }
 
-    public it.anggen.model.entity.Project getProject() {
-        return this.project;
-    }
-
-    public void setProject(it.anggen.model.entity.Project project) {
-        this.project=project;
-    }
-
     public List<it.anggen.model.entity.Entity> getEntityList() {
         return this.entityList;
     }
@@ -94,12 +77,20 @@ public class EntityGroup {
         this.entityList=entityList;
     }
 
-	public SecurityType getSecurityType() {
-		return securityType;
-	}
+    public it.anggen.model.entity.Project getProject() {
+        return this.project;
+    }
 
-	public void setSecurityType(SecurityType securityType) {
-		this.securityType = securityType;
-	}
+    public void setProject(it.anggen.model.entity.Project project) {
+        this.project=project;
+    }
+
+    public it.anggen.model.SecurityType getSecurityType() {
+        return this.securityType;
+    }
+
+    public void setSecurityType(it.anggen.model.SecurityType securityType) {
+        this.securityType=securityType;
+    }
 
 }

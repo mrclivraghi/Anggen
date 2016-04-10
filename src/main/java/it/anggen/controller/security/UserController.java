@@ -62,8 +62,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         List<it.anggen.model.security.User> userList;
         if (user.getUserId()!=null)
-         log.info("Searching user like {}", user.getUsername()+' '+ user.getUserId());
-        logEntryService.addLogEntry( "Searching entity like "+ user.getUsername()+' '+ user.getUserId(),
+         log.info("Searching user like {}", user.getUserId()+' '+ user.getUsername());
+        logEntryService.addLogEntry( "Searching entity like "+ user.getUserId()+' '+ user.getUsername(),
         it.anggen.model.LogType.INFO, it.anggen.model.OperationType.SEARCH_ENTITY, it.anggen.model.security.User.staticEntityId, securityService.getLoggedUser(),log);
         userList=userService.find(user);
         getSecurityMapping(userList);
@@ -116,7 +116,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
         if (user.getUserId()!=null)
-        log.info("Inserting user like "+ user.getUsername()+' '+ user.getUserId());
+        log.info("Inserting user like "+ user.getUserId()+' '+ user.getUsername());
         it.anggen.model.security.User insertedUser=userService.insert(user);
         getRightMapping(insertedUser);
         logEntryService.addLogEntry( "Inserted user with id "+ insertedUser.getUserId(),

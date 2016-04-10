@@ -62,8 +62,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         List<it.anggen.model.entity.EnumEntity> enumEntityList;
         if (enumEntity.getEnumEntityId()!=null)
-         log.info("Searching enumEntity like {}", enumEntity.getEnumEntityId()+' '+ enumEntity.getName());
-        logEntryService.addLogEntry( "Searching entity like "+ enumEntity.getEnumEntityId()+' '+ enumEntity.getName(),
+         log.info("Searching enumEntity like {}", enumEntity.getName()+' '+ enumEntity.getEnumEntityId());
+        logEntryService.addLogEntry( "Searching entity like "+ enumEntity.getName()+' '+ enumEntity.getEnumEntityId(),
         it.anggen.model.LogType.INFO, it.anggen.model.OperationType.SEARCH_ENTITY, it.anggen.model.entity.EnumEntity.staticEntityId, securityService.getLoggedUser(),log);
         enumEntityList=enumEntityService.find(enumEntity);
         getSecurityMapping(enumEntityList);
@@ -116,7 +116,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
         if (enumEntity.getEnumEntityId()!=null)
-        log.info("Inserting enumEntity like "+ enumEntity.getEnumEntityId()+' '+ enumEntity.getName());
+        log.info("Inserting enumEntity like "+ enumEntity.getName()+' '+ enumEntity.getEnumEntityId());
         it.anggen.model.entity.EnumEntity insertedEnumEntity=enumEntityService.insert(enumEntity);
         getRightMapping(insertedEnumEntity);
         logEntryService.addLogEntry( "Inserted enumEntity with id "+ insertedEnumEntity.getEnumEntityId(),

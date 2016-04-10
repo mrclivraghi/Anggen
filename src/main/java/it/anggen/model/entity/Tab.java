@@ -19,17 +19,21 @@ import org.hibernate.annotations.Type;
 @MaxDescendantLevel(100)
 public class Tab {
 
-    public final static java.lang.Long staticEntityId = 14L;
+    public final static java.lang.Long staticEntityId = 6L;
     @javax.persistence.Column(name = "name")
-    @it.anggen.utils.annotation.Priority(2)
     @it.anggen.utils.annotation.DescriptionField
+    @it.anggen.utils.annotation.Priority(2)
     private String name;
     @javax.persistence.Column(name = "tab_id")
+    @it.anggen.utils.annotation.Priority(1)
+    @it.anggen.utils.annotation.DescriptionField
     @Id
     @GeneratedValue
-    @it.anggen.utils.annotation.DescriptionField
-    @it.anggen.utils.annotation.Priority(1)
     private java.lang.Long tabId;
+    @ManyToOne(fetch = javax.persistence.FetchType.EAGER)
+    @javax.persistence.JoinColumn(name = "entity_id_entity")
+    @it.anggen.utils.annotation.Priority(4)
+    private it.anggen.model.entity.Entity entity;
     @OneToMany(fetch = javax.persistence.FetchType.EAGER)
     @Type(type = "it.anggen.model.field.Field")
     @javax.persistence.JoinColumn(name = "tab_id_tab")
@@ -45,10 +49,6 @@ public class Tab {
     @javax.persistence.JoinColumn(name = "tab_id_tab")
     @it.anggen.utils.annotation.Priority(4)
     private List<Relationship> relationshipList;
-    @ManyToOne(fetch = javax.persistence.FetchType.EAGER)
-    @javax.persistence.JoinColumn(name = "entity_id_entity")
-    @it.anggen.utils.annotation.Priority(4)
-    private it.anggen.model.entity.Entity entity;
 
     public String getName() {
         return this.name;
@@ -64,6 +64,14 @@ public class Tab {
 
     public void setTabId(java.lang.Long tabId) {
         this.tabId=tabId;
+    }
+
+    public it.anggen.model.entity.Entity getEntity() {
+        return this.entity;
+    }
+
+    public void setEntity(it.anggen.model.entity.Entity entity) {
+        this.entity=entity;
     }
 
     public List<Field> getFieldList() {
@@ -88,14 +96,6 @@ public class Tab {
 
     public void setRelationshipList(List<Relationship> relationshipList) {
         this.relationshipList=relationshipList;
-    }
-
-    public it.anggen.model.entity.Entity getEntity() {
-        return this.entity;
-    }
-
-    public void setEntity(it.anggen.model.entity.Entity entity) {
-        this.entity=entity;
     }
 
 }

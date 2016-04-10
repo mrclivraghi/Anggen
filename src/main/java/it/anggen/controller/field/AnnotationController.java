@@ -160,17 +160,17 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         }
         if (annotation.getField()!=null)
         {
-        annotation.getField().setAnnotationList(null);
         annotation.getField().setRestrictionFieldList(null);
-        annotation.getField().setTab(null);
         annotation.getField().setEntity(null);
+        annotation.getField().setTab(null);
+        annotation.getField().setAnnotationList(null);
         }
         if (annotation.getEnumField()!=null)
         {
-        annotation.getEnumField().setAnnotationList(null);
-        annotation.getEnumField().setTab(null);
-        annotation.getEnumField().setEnumEntity(null);
         annotation.getEnumField().setEntity(null);
+        annotation.getEnumField().setEnumEntity(null);
+        annotation.getEnumField().setTab(null);
+        annotation.getEnumField().setAnnotationList(null);
         }
         if (annotation.getRelationship()!=null)
         {

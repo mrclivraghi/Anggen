@@ -37,7 +37,7 @@ public class EntityGroupServiceImpl
 
     @Override
     public List<it.anggen.model.entity.EntityGroup> find(EntityGroupSearchBean entityGroup) {
-        return entityGroupRepository.findByEntityGroupIdAndNameAndRestrictionEntityGroupAndProjectAndEntity(entityGroup.getEntityGroupId(),entityGroup.getName(),entityGroup.getRestrictionEntityGroupList()==null? null :entityGroup.getRestrictionEntityGroupList().get(0),entityGroup.getProject(),entityGroup.getEntityList()==null? null :entityGroup.getEntityList().get(0));
+        return entityGroupRepository.findByEntityGroupIdAndNameAndSecurityTypeAndRestrictionEntityGroupAndEntityAndProject(entityGroup.getEntityGroupId(),entityGroup.getName(), (entityGroup.getSecurityType()==null)? null : entityGroup.getSecurityType().getValue(),entityGroup.getRestrictionEntityGroupList()==null? null :entityGroup.getRestrictionEntityGroupList().get(0),entityGroup.getEntityList()==null? null :entityGroup.getEntityList().get(0),entityGroup.getProject());
     }
 
     @Override

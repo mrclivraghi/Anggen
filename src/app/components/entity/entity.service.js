@@ -8,7 +8,7 @@ function EntityService($http,MainService)
 {
 this.entityList =		[];
 this.selectedEntity= 	{show: false 
-,fieldList: [],enumFieldList: [],tabList: [],restrictionEntityList: [],relationshipList: []};
+,restrictionEntityList: [],tabList: [],enumFieldList: [],fieldList: [],relationshipList: []};
 this.isParent=function()
 {
 return MainService.parentEntity=="Entity";
@@ -70,17 +70,10 @@ var promise= $http.post("http://127.0.0.1:8080/ServerTestApp/entity/"+this.selec
 });
 return promise; 
 }
- this.initFieldList= function()
+ this.initRestrictionEntityList= function()
 {
 var promise= $http
-.post("http://127.0.0.1:8080/ServerTestApp/field/search",
-{});
-return promise;
-};
- this.initEnumFieldList= function()
-{
-var promise= $http
-.post("http://127.0.0.1:8080/ServerTestApp/enumField/search",
+.post("http://127.0.0.1:8080/ServerTestApp/restrictionEntity/search",
 {});
 return promise;
 };
@@ -98,10 +91,17 @@ var promise= $http
 {});
 return promise;
 };
- this.initRestrictionEntityList= function()
+ this.initEnumFieldList= function()
 {
 var promise= $http
-.post("http://127.0.0.1:8080/ServerTestApp/restrictionEntity/search",
+.post("http://127.0.0.1:8080/ServerTestApp/enumField/search",
+{});
+return promise;
+};
+ this.initFieldList= function()
+{
+var promise= $http
+.post("http://127.0.0.1:8080/ServerTestApp/field/search",
 {});
 return promise;
 };

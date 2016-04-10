@@ -4,7 +4,7 @@ angular
 .module("serverTestApp")
 .controller("LogEntryController",LogEntryController);
 /** @ngInject */
-function LogEntryController($scope,$http ,logEntryService, SecurityService, MainService )
+function LogEntryController($scope,$http,$rootScope ,logEntryService, SecurityService, MainService )
 {
 $scope.searchBean=logEntryService.searchBean;
 $scope.entityList=logEntryService.entityList;

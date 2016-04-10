@@ -70,6 +70,13 @@ var promise= $http.post("http://127.0.0.1:8080/ServerTestApp/tab/"+this.selected
 });
 return promise; 
 }
+ this.initEntityList= function()
+{
+var promise= $http
+.post("http://127.0.0.1:8080/ServerTestApp/entity/search",
+{});
+return promise;
+};
  this.initFieldList= function()
 {
 var promise= $http
@@ -88,13 +95,6 @@ return promise;
 {
 var promise= $http
 .post("http://127.0.0.1:8080/ServerTestApp/relationship/search",
-{});
-return promise;
-};
- this.initEntityList= function()
-{
-var promise= $http
-.post("http://127.0.0.1:8080/ServerTestApp/entity/search",
 {});
 return promise;
 };

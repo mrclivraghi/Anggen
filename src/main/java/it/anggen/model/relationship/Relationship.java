@@ -16,24 +16,22 @@ import it.anggen.utils.annotation.MaxDescendantLevel;
 @Table(schema = "meta", name = "relationship")
 @it.anggen.utils.annotation.SecurityType(type = it.anggen.model.SecurityType.ACCESS_WITH_PERMISSION)
 @MaxDescendantLevel(100)
-public class Relationship
-    extends EntityAttribute
-{
+public class Relationship extends EntityAttribute{
 
-    public final static java.lang.Long staticEntityId = 18L;
+    public final static java.lang.Long staticEntityId = 11L;
+    @javax.persistence.Column(name = "name")
+    @it.anggen.utils.annotation.DescriptionField
+    @it.anggen.utils.annotation.Priority(2)
+    private String name;
+    @javax.persistence.Column(name = "relationship_id")
+    @Id
+    @GeneratedValue
+    @it.anggen.utils.annotation.DescriptionField
+    @it.anggen.utils.annotation.Priority(1)
+    private java.lang.Long relationshipId;
     @javax.persistence.Column(name = "priority")
     @it.anggen.utils.annotation.Priority(2)
     private Integer priority;
-    @javax.persistence.Column(name = "name")
-    @it.anggen.utils.annotation.Priority(2)
-    @it.anggen.utils.annotation.DescriptionField
-    private String name;
-    @javax.persistence.Column(name = "relationship_id")
-    @it.anggen.utils.annotation.Priority(1)
-    @it.anggen.utils.annotation.DescriptionField
-    @Id
-    @GeneratedValue
-    private java.lang.Long relationshipId;
     @javax.persistence.OneToOne(fetch = javax.persistence.FetchType.EAGER)
     @org.hibernate.annotations.Type(type = "it.anggen.model.entity.Entity")
     @javax.persistence.JoinColumn(name = "entity_id_entity")
@@ -57,14 +55,6 @@ public class Relationship
     @it.anggen.utils.annotation.Priority(3)
     private RelationshipType relationshipType;
 
-    public Integer getPriority() {
-        return this.priority;
-    }
-
-    public void setPriority(Integer priority) {
-        this.priority=priority;
-    }
-
     public String getName() {
         return this.name;
     }
@@ -79,6 +69,14 @@ public class Relationship
 
     public void setRelationshipId(java.lang.Long relationshipId) {
         this.relationshipId=relationshipId;
+    }
+
+    public Integer getPriority() {
+        return this.priority;
+    }
+
+    public void setPriority(Integer priority) {
+        this.priority=priority;
     }
 
     public it.anggen.model.entity.Entity getEntity() {

@@ -34,7 +34,7 @@ public class RelationshipServiceImpl
 
     @Override
     public List<it.anggen.model.relationship.Relationship> find(RelationshipSearchBean relationship) {
-        return relationshipRepository.findByRelationshipIdAndNameAndPriorityAndRelationshipTypeAndEntityAndEntityAndTabAndAnnotation(relationship.getRelationshipId(),relationship.getName(),relationship.getPriority(), (relationship.getRelationshipType()==null)? null : relationship.getRelationshipType().getValue(),relationship.getEntity(),relationship.getEntity(),relationship.getTab(),relationship.getAnnotationList()==null? null :relationship.getAnnotationList().get(0));
+        return relationshipRepository.findByRelationshipIdAndPriorityAndNameAndRelationshipTypeAndEntityAndEntityAndTabAndAnnotation(relationship.getRelationshipId(),relationship.getPriority(),relationship.getName(), (relationship.getRelationshipType()==null)? null : relationship.getRelationshipType().getValue(),relationship.getEntity(),relationship.getEntity(),relationship.getTab(),relationship.getAnnotationList()==null? null :relationship.getAnnotationList().get(0));
     }
 
     @Override

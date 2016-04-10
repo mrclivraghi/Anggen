@@ -53,9 +53,9 @@ $rootScope.restrictionList=response.data;
 });
 }
 },function errorCallback(response) { 
-AlertError.init({selector: "#alertError"});
-AlertError.show("Si è verificato un errore");
-return; 
+//AlertError.init({selector: "#alertError"});
+//AlertError.show("Si è verificato un errore");
+//return; 
 });
 $log.debug('runBlock end');
 }

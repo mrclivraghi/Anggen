@@ -179,7 +179,7 @@ public class WebappGenerator {
 			e.printStackTrace();
 		}
 		webConfigClass.annotate(Configuration.class);
-		webConfigClass.annotate(EnableWebMvc.class);
+		//webConfigClass.annotate(EnableWebMvc.class);
 		
 		webConfigClass._extends(WebMvcConfigurerAdapter.class);
 		

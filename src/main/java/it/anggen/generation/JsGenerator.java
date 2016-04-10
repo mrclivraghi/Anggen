@@ -1043,7 +1043,7 @@ if (entity.getEntityGroup()!=null)
 		.append("\n")
 		.append("  angular\n")
 		.append("    .module('"+generator.applicationName+"App')\n")
-		.append("    .config(config);\n")
+		.append("    .config(config)\n")
 		.append("    .config(setHttpProvider);\n")
 		.append("\n")
 		.append("  /** @ngInject */\n");
@@ -1116,7 +1116,7 @@ if (entity.getEntityGroup()!=null)
 		
 		File file = new File("");
 		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+"../";
-		saveAsJsFile(directoryAngularFiles, "index.constants", sb.toString());
+		saveAsJsFile(directoryAngularFiles, "index.module", sb.toString());
 		
 	
 	}

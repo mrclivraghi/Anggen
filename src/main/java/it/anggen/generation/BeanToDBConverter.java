@@ -186,7 +186,7 @@ public class BeanToDBConverter {
 		Map<String,EnumEntity> enumEntityMap = new HashMap<String,EnumEntity>();
 		Set<Class<?>> mainPackageClassSet = ReflectionManager.getClassInPackage(modelPackage);
 		Set<Class<?>> securityPackageClassSet= null;
-		if (!projectName.equals("anggen") && !packageList.contains("it.anggen.model.security"))
+		if (!projectName.equals("serverTest") && !packageList.contains("it.anggen.model.security"))
 		{
 			List<String> securityPackageList = ReflectionManager.getSubPackages("it.anggen.model.security");
 			packageList.addAll(securityPackageList);
@@ -818,7 +818,7 @@ public class BeanToDBConverter {
 	
 	private Boolean isAngGenSecurity(Entity entity)
 	{
-		if (projectName.equals("anggen"))
+		if (projectName.equals("serverTest"))
 			return false;
 		if (entity.getName().equals("restrictionField") || 
 				entity.getName().equals("restrictionEntityGroup") || 

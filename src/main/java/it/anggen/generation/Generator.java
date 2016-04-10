@@ -283,7 +283,7 @@ public class Generator {
 
 	private Boolean isAngGenSecurity(Entity entity)
 	{
-		if (appName.equals("anggen"))
+		if (appName.equals("serverTest"))
 			return false;
 		if (entity.getEntityGroup()==null)
 			return true;

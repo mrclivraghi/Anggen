@@ -752,7 +752,6 @@ public class JsGenerator {
 		.append(""+Utility.getEntityCallName(entityName)+"Service.selectedEntity.show=false;\n")
 		.append("}\n");
 		
-		sb.append("$scope.initChildrenList();\n");
 		
 		sb.append("}\n");
 		return sb.toString();

@@ -181,7 +181,7 @@ public class JsGenerator {
 		.append("return MainService.parentEntity==\""+Utility.getFirstUpper(entityName)+"\";\n")
 		.append("};\n")
 		
-		.append("this.childrenList=[]; \n")
+		.append("this.childrenList={}; \n")
 		.append("this.addEntity=function (entity)\n")
 		.append("{\n")
 		.append("this.entityList.push(entity);\n")

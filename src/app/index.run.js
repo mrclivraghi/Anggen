@@ -7,61 +7,65 @@
 
   /** @ngInject */
   function runBlock($log,SecurityService,$rootScope,$uibModal) { 
-$rootScope.restrictionList={};
+
 var deregistrationsCallbacks=[];
-
-
-
 deregistrationsCallbacks[0] = $rootScope.$on('security:loginRequired', function(evt,args) {
-        showLogin();
-    }); 
-
- var loginWindow;
-    function showLogin(){
-            loginWindow = $uibModal.open({
-              size:'md',
-              animation: true,
-              templateUrl:'app/components/login/login-modal.html',
-			  backdrop: 'static',
-			  keyboard: false
-            });
-            function close(){
-                if(loginWindow){
-                    loginWindow.dismiss();
-                    loginWindow = null;
-                }
-            }           
-            deregistrationsCallbacks[1] = $rootScope.$on('security:loggedIn',close);
-
-            
-    }
-
-//deregistration of events on $destroy
-    deregistrationsCallbacks[2] = $rootScope.$on('$destroy', function(evt,args) {
-        $log.debug("deregistering global events");
-        for(var i=0;i<deregistrationsCallbacks.length;i++){
-            deregistrationsCallbacks[i]();
-        }
-    });
-
-	$log.debug("check login");
-	SecurityService.isLoggedIn().then(function successCallback(response) {
-		if (!response.data.authenticated)
-		{
-			$rootScope.$broadcast('security:loginRequired');
-			}
-			else
-			{
-			$log.debug("loggato come ");
-			$log.debug(response.data.message);
-			}
-		
-},function errorCallback(response) { 
-	AlertError.init({selector: "#alertError"});
-	AlertError.show("Si è verificato un errore");
-	return; 
+showLogin();
+ }); 
+var loginWindow;
+function showLogin(){
+loginWindow = $uibModal.open({
+size:'md',
+animation: true,
+ templateUrl:'app/components/login/login-modal.html',
+ backdrop: 'static',
+ keyboard: false
 });
-	
+function close(){
+
+SecurityService.init().then(function successCallback(response) {
+$rootScope.restrictionList=response.data;
+//$rootScope.restrictionList=response.data;
+});
+
+if(loginWindow){
+loginWindow.dismiss();
+loginWindow = null;
+}
+}           
+deregistrationsCallbacks[1] = $rootScope.$on('security:loggedIn',close);
+}
+//deregistration of events on $destroy
+deregistrationsCallbacks[2] = $rootScope.$on('$destroy', function(evt,args) {
+ $log.debug("deregistering global events");
+for(var i=0;i<deregistrationsCallbacks.length;i++){
+  deregistrationsCallbacks[i]();
+ }
+ });
+$log.debug("check login");
+SecurityService.isLoggedIn().then(function successCallback(response) {
+if (!response.data.authenticated)
+{
+$rootScope.$broadcast('security:loginRequired');
+}
+else
+{
+$log.debug("loggato come ");
+$log.debug(response.data.message);
+SecurityService.init().then(function successCallback(response) {
+$rootScope.restrictionList=response.data;
+//$log.debug(response.data);
+//cloneObject(response.data,SecurityService.restrictionList);
+
+//SecurityService.setRestrictionList(response.data);
+$log.debug(SecurityService.restrictionList);
+});
+}
+},function errorCallback(response) { 
+AlertError.init({selector: "#alertError"});
+AlertError.show("Si è verificato un errore");
+return; 
+});
 $log.debug('runBlock end');
 }
 })();

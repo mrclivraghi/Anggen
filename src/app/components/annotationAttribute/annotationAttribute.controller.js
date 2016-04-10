@@ -4,7 +4,7 @@ angular
 .module("serverTestApp")
 .controller("AnnotationAttributeController",AnnotationAttributeController);
 /** @ngInject */
-function AnnotationAttributeController($scope,$http ,annotationAttributeService, SecurityService, MainService ,annotationService,fieldService,restrictionFieldService,roleService,enumFieldService,tabService,entityService,entityGroupService,relationshipService,projectService,enumEntityService,enumValueService)
+function AnnotationAttributeController($scope,$http ,annotationAttributeService, SecurityService, MainService ,annotationService,fieldService,restrictionFieldService,roleService,restrictionEntityService,entityService,enumFieldService,tabService,relationshipService,enumEntityService,projectService,entityGroupService,restrictionEntityGroupService,enumValueService,userService)
 {
 $scope.searchBean=annotationAttributeService.searchBean;
 $scope.entityList=annotationAttributeService.entityList;

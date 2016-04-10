@@ -1,12 +1,17 @@
-angular.module("anggenApp").service("userService", userService);
-function userService($http,mainService)
+(function() { 
+
+angular
+.module("serverTestApp")
+.service("userService", UserService);
+/** @ngInject */
+function UserService($http,MainService)
 {
 this.entityList =		[];
 this.selectedEntity= 	{show: false 
 ,roleList: []};
 this.isParent=function()
 {
-return mainService.parentEntity=="User";
+return MainService.parentEntity=="User";
 };
 this.childrenList=[]; 
 this.addEntity=function (entity)
@@ -36,23 +41,23 @@ cloneObject(entity,this.selectedEntity);
 };
 this.search = function() {
 this.setSelectedEntity(null);
-var promise= $http.post("user/search",this.searchBean);
+var promise= $http.post("http://127.0.0.1:8080/ServerTestApp/user/search",this.searchBean);
 return promise; 
 };
 this.searchOne=function(entity) {
-var promise= $http.get("user/"+entity.userId);
+var promise= $http.get("http://127.0.0.1:8080/ServerTestApp/user/"+entity.userId);
 return promise; 
 };
 this.insert = function() {
-var promise= $http.put("user/",this.selectedEntity);
+var promise= $http.put("http://127.0.0.1:8080/ServerTestApp/user/",this.selectedEntity);
 return promise; 
 };
 this.update = function() {
-var promise= $http.post("user/",this.selectedEntity);
+var promise= $http.post("http://127.0.0.1:8080/ServerTestApp/user/",this.selectedEntity);
 return promise; 
 }
 this.del = function() {
-var url="user/"+this.selectedEntity.userId;
+var url="http://127.0.0.1:8080/ServerTestApp/user/"+this.selectedEntity.userId;
 var promise= $http["delete"](url);
 return promise; 
 }
@@ -60,7 +65,7 @@ this.loadFile= function(file,field){
 var formData = new FormData();
 if (file!=null)
 formData.append('file',file);
-var promise= $http.post("user/"+this.selectedEntity.userId+"/load"+field+"/",formData,{
+var promise= $http.post("http://127.0.0.1:8080/ServerTestApp/user/"+this.selectedEntity.userId+"/load"+field+"/",formData,{
  headers: {'Content-Type': undefined}
 });
 return promise; 
@@ -68,7 +73,7 @@ return promise;
  this.initRoleList= function()
 {
 var promise= $http
-.post("role/search",
+.post("http://127.0.0.1:8080/ServerTestApp/role/search",
 {});
 return promise;
 };
@@ -86,3 +91,4 @@ columnDefs: [
 ]
  };
 };
+})();

@@ -4,7 +4,7 @@ angular
 .module("serverTestApp")
 .controller("AnnotationController",AnnotationController);
 /** @ngInject */
-function AnnotationController($scope,$http ,annotationService, SecurityService, MainService ,annotationAttributeService,fieldService,restrictionFieldService,roleService,enumFieldService,tabService,entityService,entityGroupService,relationshipService,projectService,enumEntityService,enumValueService)
+function AnnotationController($scope,$http ,annotationService, SecurityService, MainService ,annotationAttributeService,fieldService,restrictionFieldService,roleService,restrictionEntityService,entityService,enumFieldService,tabService,relationshipService,enumEntityService,projectService,entityGroupService,restrictionEntityGroupService,enumValueService,userService)
 {
 $scope.searchBean=annotationService.searchBean;
 $scope.entityList=annotationService.entityList;
@@ -902,15 +902,15 @@ relationshipService.selectedEntity.show = row.isSelected;
 });
   };
 function updateParentEntities() { 
-roleService.initAnnotationList().then(function(response) {
-roleService.childrenList.annotationList=response.data;
+annotationAttributeService.initAnnotationList().then(function(response) {
+annotationAttributeService.childrenList.annotationList=response.data;
 });
 
-if (roleService.selectedEntity.roleId!=undefined) roleService.searchOne(roleService.selectedEntity).then(
+if (annotationAttributeService.selectedEntity.annotationAttributeId!=undefined) annotationAttributeService.searchOne(annotationAttributeService.selectedEntity).then(
 function successCallback(response) {
 console.log("response-ok");
 console.log(response);
-roleService.setSelectedEntity(response.data[0]);
+annotationAttributeService.setSelectedEntity(response.data[0]);
   }, function errorCallback(response) {
 AlertError.init({selector: "#alertError"});
 AlertError.show("Si è verificato un errore");
@@ -941,21 +941,6 @@ function successCallback(response) {
 console.log("response-ok");
 console.log(response);
 fieldService.setSelectedEntity(response.data[0]);
-  }, function errorCallback(response) {
-AlertError.init({selector: "#alertError"});
-AlertError.show("Si è verificato un errore");
-return; 
-  }	
-);
-annotationAttributeService.initAnnotationList().then(function(response) {
-annotationAttributeService.childrenList.annotationList=response.data;
-});
-
-if (annotationAttributeService.selectedEntity.annotationAttributeId!=undefined) annotationAttributeService.searchOne(annotationAttributeService.selectedEntity).then(
-function successCallback(response) {
-console.log("response-ok");
-console.log(response);
-annotationAttributeService.setSelectedEntity(response.data[0]);
   }, function errorCallback(response) {
 AlertError.init({selector: "#alertError"});
 AlertError.show("Si è verificato un errore");

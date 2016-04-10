@@ -41,23 +41,23 @@ cloneObject(entity,this.selectedEntity);
 };
 this.search = function() {
 this.setSelectedEntity(null);
-var promise= $http.post("http://localhost:8080/ServerTestApp/annotationAttribute/search",this.searchBean);
+var promise= $http.post("http://127.0.0.1:8080/ServerTestApp/annotationAttribute/search",this.searchBean);
 return promise; 
 };
 this.searchOne=function(entity) {
-var promise= $http.get("http://localhost:8080/ServerTestApp/annotationAttribute/"+entity.annotationAttributeId);
+var promise= $http.get("http://127.0.0.1:8080/ServerTestApp/annotationAttribute/"+entity.annotationAttributeId);
 return promise; 
 };
 this.insert = function() {
-var promise= $http.put("http://localhost:8080/ServerTestApp/annotationAttribute/",this.selectedEntity);
+var promise= $http.put("http://127.0.0.1:8080/ServerTestApp/annotationAttribute/",this.selectedEntity);
 return promise; 
 };
 this.update = function() {
-var promise= $http.post("http://localhost:8080/ServerTestApp/annotationAttribute/",this.selectedEntity);
+var promise= $http.post("http://127.0.0.1:8080/ServerTestApp/annotationAttribute/",this.selectedEntity);
 return promise; 
 }
 this.del = function() {
-var url="http://localhost:8080/ServerTestApp/annotationAttribute/"+this.selectedEntity.annotationAttributeId;
+var url="http://127.0.0.1:8080/ServerTestApp/annotationAttribute/"+this.selectedEntity.annotationAttributeId;
 var promise= $http["delete"](url);
 return promise; 
 }
@@ -65,7 +65,7 @@ this.loadFile= function(file,field){
 var formData = new FormData();
 if (file!=null)
 formData.append('file',file);
-var promise= $http.post("http://localhost:8080/ServerTestApp/annotationAttribute/"+this.selectedEntity.annotationAttributeId+"/load"+field+"/",formData,{
+var promise= $http.post("http://127.0.0.1:8080/ServerTestApp/annotationAttribute/"+this.selectedEntity.annotationAttributeId+"/load"+field+"/",formData,{
  headers: {'Content-Type': undefined}
 });
 return promise; 
@@ -73,7 +73,7 @@ return promise;
  this.initAnnotationList= function()
 {
 var promise= $http
-.post("http://localhost:8080/ServerTestApp/annotation/search",
+.post("http://127.0.0.1:8080/ServerTestApp/annotation/search",
 {});
 return promise;
 };

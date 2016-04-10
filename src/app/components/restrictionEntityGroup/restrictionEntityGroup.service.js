@@ -1,12 +1,17 @@
-angular.module("anggenApp").service("restrictionEntityGroupService", restrictionEntityGroupService);
-function restrictionEntityGroupService($http,mainService)
+(function() { 
+
+angular
+.module("serverTestApp")
+.service("restrictionEntityGroupService", RestrictionEntityGroupService);
+/** @ngInject */
+function RestrictionEntityGroupService($http,MainService)
 {
 this.entityList =		[];
 this.selectedEntity= 	{show: false 
 };
 this.isParent=function()
 {
-return mainService.parentEntity=="RestrictionEntityGroup";
+return MainService.parentEntity=="RestrictionEntityGroup";
 };
 this.childrenList=[]; 
 this.addEntity=function (entity)
@@ -36,23 +41,23 @@ cloneObject(entity,this.selectedEntity);
 };
 this.search = function() {
 this.setSelectedEntity(null);
-var promise= $http.post("restrictionEntityGroup/search",this.searchBean);
+var promise= $http.post("http://127.0.0.1:8080/ServerTestApp/restrictionEntityGroup/search",this.searchBean);
 return promise; 
 };
 this.searchOne=function(entity) {
-var promise= $http.get("restrictionEntityGroup/"+entity.restrictionEntityGroupId);
+var promise= $http.get("http://127.0.0.1:8080/ServerTestApp/restrictionEntityGroup/"+entity.restrictionEntityGroupId);
 return promise; 
 };
 this.insert = function() {
-var promise= $http.put("restrictionEntityGroup/",this.selectedEntity);
+var promise= $http.put("http://127.0.0.1:8080/ServerTestApp/restrictionEntityGroup/",this.selectedEntity);
 return promise; 
 };
 this.update = function() {
-var promise= $http.post("restrictionEntityGroup/",this.selectedEntity);
+var promise= $http.post("http://127.0.0.1:8080/ServerTestApp/restrictionEntityGroup/",this.selectedEntity);
 return promise; 
 }
 this.del = function() {
-var url="restrictionEntityGroup/"+this.selectedEntity.restrictionEntityGroupId;
+var url="http://127.0.0.1:8080/ServerTestApp/restrictionEntityGroup/"+this.selectedEntity.restrictionEntityGroupId;
 var promise= $http["delete"](url);
 return promise; 
 }
@@ -60,7 +65,7 @@ this.loadFile= function(file,field){
 var formData = new FormData();
 if (file!=null)
 formData.append('file',file);
-var promise= $http.post("restrictionEntityGroup/"+this.selectedEntity.restrictionEntityGroupId+"/load"+field+"/",formData,{
+var promise= $http.post("http://127.0.0.1:8080/ServerTestApp/restrictionEntityGroup/"+this.selectedEntity.restrictionEntityGroupId+"/load"+field+"/",formData,{
  headers: {'Content-Type': undefined}
 });
 return promise; 
@@ -68,14 +73,14 @@ return promise;
  this.initEntityGroupList= function()
 {
 var promise= $http
-.post("entityGroup/search",
+.post("http://127.0.0.1:8080/ServerTestApp/entityGroup/search",
 {});
 return promise;
 };
  this.initRoleList= function()
 {
 var promise= $http
-.post("role/search",
+.post("http://127.0.0.1:8080/ServerTestApp/role/search",
 {});
 return promise;
 };
@@ -88,12 +93,13 @@ paginationPageSize: 10,
 enableGridMenu: true,
 columnDefs: [    
 { name: 'restrictionEntityGroupId'},
-{ name: 'canUpdate'},
 { name: 'canCreate'},
 { name: 'canDelete'},
+{ name: 'canUpdate'},
 { name: 'canSearch'},
 { name: 'entityGroup.entityGroupId', displayName: 'entityGroup'},
 { name: 'role.roleId', displayName: 'role'} 
 ]
  };
 };
+})();

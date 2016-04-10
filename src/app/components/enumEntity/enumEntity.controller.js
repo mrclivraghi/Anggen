@@ -417,15 +417,15 @@ enumValueService.selectedEntity.show = row.isSelected;
 });
   };
 function updateParentEntities() { 
-projectService.initEnumEntityList().then(function(response) {
-projectService.childrenList.enumEntityList=response.data;
+enumValueService.initEnumEntityList().then(function(response) {
+enumValueService.childrenList.enumEntityList=response.data;
 });
 
-if (projectService.selectedEntity.projectId!=undefined) projectService.searchOne(projectService.selectedEntity).then(
+if (enumValueService.selectedEntity.enumValueId!=undefined) enumValueService.searchOne(enumValueService.selectedEntity).then(
 function successCallback(response) {
 console.log("response-ok");
 console.log(response);
-projectService.setSelectedEntity(response.data[0]);
+enumValueService.setSelectedEntity(response.data[0]);
   }, function errorCallback(response) {
 AlertError.init({selector: "#alertError"});
 AlertError.show("Si è verificato un errore");
@@ -447,15 +447,15 @@ AlertError.show("Si è verificato un errore");
 return; 
   }	
 );
-enumValueService.initEnumEntityList().then(function(response) {
-enumValueService.childrenList.enumEntityList=response.data;
+projectService.initEnumEntityList().then(function(response) {
+projectService.childrenList.enumEntityList=response.data;
 });
 
-if (enumValueService.selectedEntity.enumValueId!=undefined) enumValueService.searchOne(enumValueService.selectedEntity).then(
+if (projectService.selectedEntity.projectId!=undefined) projectService.searchOne(projectService.selectedEntity).then(
 function successCallback(response) {
 console.log("response-ok");
 console.log(response);
-enumValueService.setSelectedEntity(response.data[0]);
+projectService.setSelectedEntity(response.data[0]);
   }, function errorCallback(response) {
 AlertError.init({selector: "#alertError"});
 AlertError.show("Si è verificato un errore");

@@ -2,11 +2,11 @@
     'use strict';
 
     angular.module("serverTestApp")
-        .controller('MetricsMonitoringController', MetricsMonitoringController);
+        .controller('MetricsController', MetricsController);
 
-    MetricsMonitoringController.$inject = ['$scope','MetricsService'/*, '$uibModal'*/];
+    MetricsController.$inject = ['$scope','MetricsService'/*, '$uibModal'*/];
 
-    function MetricsMonitoringController ($scope, MetricsService/*, $uibModal*/) {
+    function MetricsController ($scope, MetricsService/*, $uibModal*/) {
         var vm = this;
 
         vm.cachesStats = {};

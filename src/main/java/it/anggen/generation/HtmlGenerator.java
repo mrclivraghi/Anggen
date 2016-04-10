@@ -267,6 +267,8 @@ public class HtmlGenerator {
 					ulContent=ulContent+"<li ng-if=\"$root.restrictionList."+entity.getName()+".canSearch || $root.restrictionList."+entity.getName()+"==undefined\"><a href=\"#/app/"+Utility.getFirstLower(entity.getName())+"\" role=\"menuitem\">"+Utility.getFirstUpper(entity.getName())+"</a></li>";
 				}
 				
+				
+				
 				ulHtml.content(ulContent,false);
 				ulHtml._li();
 				sb.append(ulHtml.toHtml());

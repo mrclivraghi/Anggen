@@ -15,7 +15,7 @@
         return service;
 
         function getMetrics () {
-            return $http.get('metrics/metrics').then(function (response) {
+            return $http.get('http://127.0.0.1:8080/ServerTestApp/metrics/metrics').then(function (response) {
                 return response.data;
             });
         }

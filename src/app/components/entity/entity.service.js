@@ -4,11 +4,11 @@ angular
 .module("serverTestApp")
 .service("entityService", EntityService);
 /** @ngInject */
-function EntityService($http,MainService,$resource)
+function EntityService($http,MainService)
 {
 this.entityList =		[];
 this.selectedEntity= 	{show: false 
-,tabList: [],enumFieldList: [],fieldList: [],enumFieldList: [],relationshipList: []};
+,fieldList: [],enumFieldList: [],tabList: [],restrictionEntityList: [],relationshipList: []};
 this.isParent=function()
 {
 return MainService.parentEntity=="Entity";
@@ -41,24 +41,23 @@ cloneObject(entity,this.selectedEntity);
 };
 this.search = function() {
 this.setSelectedEntity(null);
-//var promise= $resource("http://localhost:8080/ServerTestApp/entity/search");
-var promise= $http.post("http://127.0.0.1:8080/ServerTestApp/entity/search/",this.searchBean);
+var promise= $http.post("http://127.0.0.1:8080/ServerTestApp/entity/search",this.searchBean);
 return promise; 
 };
 this.searchOne=function(entity) {
-var promise= $http.get("http://localhost:8080/ServerTestApp/entity/"+entity.entityId);
+var promise= $http.get("http://127.0.0.1:8080/ServerTestApp/entity/"+entity.entityId);
 return promise; 
 };
 this.insert = function() {
-var promise= $http.put("http://localhost:8080/ServerTestApp/entity/",this.selectedEntity);
+var promise= $http.put("http://127.0.0.1:8080/ServerTestApp/entity/",this.selectedEntity);
 return promise; 
 };
 this.update = function() {
-var promise= $http.post("http://localhost:8080/ServerTestApp/entity/",this.selectedEntity);
+var promise= $http.post("http://127.0.0.1:8080/ServerTestApp/entity/",this.selectedEntity);
 return promise; 
 }
 this.del = function() {
-var url="http://localhost:8080/ServerTestApp/entity/"+this.selectedEntity.entityId;
+var url="http://127.0.0.1:8080/ServerTestApp/entity/"+this.selectedEntity.entityId;
 var promise= $http["delete"](url);
 return promise; 
 }
@@ -66,50 +65,50 @@ this.loadFile= function(file,field){
 var formData = new FormData();
 if (file!=null)
 formData.append('file',file);
-var promise= $http.post("http://localhost:8080/ServerTestApp/entity/"+this.selectedEntity.entityId+"/load"+field+"/",formData,{
+var promise= $http.post("http://127.0.0.1:8080/ServerTestApp/entity/"+this.selectedEntity.entityId+"/load"+field+"/",formData,{
  headers: {'Content-Type': undefined}
 });
 return promise; 
 }
+ this.initFieldList= function()
+{
+var promise= $http
+.post("http://127.0.0.1:8080/ServerTestApp/field/search",
+{});
+return promise;
+};
+ this.initEnumFieldList= function()
+{
+var promise= $http
+.post("http://127.0.0.1:8080/ServerTestApp/enumField/search",
+{});
+return promise;
+};
  this.initTabList= function()
 {
 var promise= $http
-.post("http://localhost:8080/ServerTestApp/tab/search",
+.post("http://127.0.0.1:8080/ServerTestApp/tab/search",
 {});
 return promise;
 };
  this.initEntityGroupList= function()
 {
 var promise= $http
-.post("http://localhost:8080/ServerTestApp/entityGroup/search",
+.post("http://127.0.0.1:8080/ServerTestApp/entityGroup/search",
 {});
 return promise;
 };
- this.initEnumFieldList= function()
+ this.initRestrictionEntityList= function()
 {
 var promise= $http
-.post("http://localhost:8080/ServerTestApp/enumField/search",
-{});
-return promise;
-};
- this.initFieldList= function()
-{
-var promise= $http
-.post("http://localhost:8080/ServerTestApp/field/search",
-{});
-return promise;
-};
- this.initEnumFieldList= function()
-{
-var promise= $http
-.post("http://localhost:8080/ServerTestApp/enumField/search",
+.post("http://127.0.0.1:8080/ServerTestApp/restrictionEntity/search",
 {});
 return promise;
 };
  this.initRelationshipList= function()
 {
 var promise= $http
-.post("http://localhost:8080/ServerTestApp/relationship/search",
+.post("http://127.0.0.1:8080/ServerTestApp/relationship/search",
 {});
 return promise;
 };
@@ -122,12 +121,12 @@ paginationPageSize: 10,
 enableGridMenu: true,
 columnDefs: [    
 { name: 'entityId'},
-{ name: 'generateFrontEnd'},
-{ name: 'name'},
-{ name: 'descendantMaxLevel'},
-{ name: 'cache'},
-{ name: 'disableViewGeneration'},
 { name: 'enableRestrictionData'},
+{ name: 'disableViewGeneration'},
+{ name: 'cache'},
+{ name: 'descendantMaxLevel'},
+{ name: 'name'},
+{ name: 'generateFrontEnd'},
 { name: 'entityGroup.entityGroupId', displayName: 'entityGroup'} 
 ]
  };

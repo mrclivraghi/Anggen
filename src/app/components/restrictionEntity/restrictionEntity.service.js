@@ -1,12 +1,17 @@
-angular.module("anggenApp").service("restrictionEntityService", restrictionEntityService);
-function restrictionEntityService($http,mainService)
+(function() { 
+
+angular
+.module("serverTestApp")
+.service("restrictionEntityService", RestrictionEntityService);
+/** @ngInject */
+function RestrictionEntityService($http,MainService)
 {
 this.entityList =		[];
 this.selectedEntity= 	{show: false 
 };
 this.isParent=function()
 {
-return mainService.parentEntity=="RestrictionEntity";
+return MainService.parentEntity=="RestrictionEntity";
 };
 this.childrenList=[]; 
 this.addEntity=function (entity)
@@ -36,23 +41,23 @@ cloneObject(entity,this.selectedEntity);
 };
 this.search = function() {
 this.setSelectedEntity(null);
-var promise= $http.post("restrictionEntity/search",this.searchBean);
+var promise= $http.post("http://127.0.0.1:8080/ServerTestApp/restrictionEntity/search",this.searchBean);
 return promise; 
 };
 this.searchOne=function(entity) {
-var promise= $http.get("restrictionEntity/"+entity.restrictionEntityId);
+var promise= $http.get("http://127.0.0.1:8080/ServerTestApp/restrictionEntity/"+entity.restrictionEntityId);
 return promise; 
 };
 this.insert = function() {
-var promise= $http.put("restrictionEntity/",this.selectedEntity);
+var promise= $http.put("http://127.0.0.1:8080/ServerTestApp/restrictionEntity/",this.selectedEntity);
 return promise; 
 };
 this.update = function() {
-var promise= $http.post("restrictionEntity/",this.selectedEntity);
+var promise= $http.post("http://127.0.0.1:8080/ServerTestApp/restrictionEntity/",this.selectedEntity);
 return promise; 
 }
 this.del = function() {
-var url="restrictionEntity/"+this.selectedEntity.restrictionEntityId;
+var url="http://127.0.0.1:8080/ServerTestApp/restrictionEntity/"+this.selectedEntity.restrictionEntityId;
 var promise= $http["delete"](url);
 return promise; 
 }
@@ -60,7 +65,7 @@ this.loadFile= function(file,field){
 var formData = new FormData();
 if (file!=null)
 formData.append('file',file);
-var promise= $http.post("restrictionEntity/"+this.selectedEntity.restrictionEntityId+"/load"+field+"/",formData,{
+var promise= $http.post("http://127.0.0.1:8080/ServerTestApp/restrictionEntity/"+this.selectedEntity.restrictionEntityId+"/load"+field+"/",formData,{
  headers: {'Content-Type': undefined}
 });
 return promise; 
@@ -68,14 +73,14 @@ return promise;
  this.initEntityList= function()
 {
 var promise= $http
-.post("entity/search",
+.post("http://127.0.0.1:8080/ServerTestApp/entity/search",
 {});
 return promise;
 };
  this.initRoleList= function()
 {
 var promise= $http
-.post("role/search",
+.post("http://127.0.0.1:8080/ServerTestApp/role/search",
 {});
 return promise;
 };
@@ -88,12 +93,13 @@ paginationPageSize: 10,
 enableGridMenu: true,
 columnDefs: [    
 { name: 'restrictionEntityId'},
+{ name: 'canSearch'},
 { name: 'canDelete'},
 { name: 'canUpdate'},
 { name: 'canCreate'},
-{ name: 'canSearch'},
 { name: 'entity.entityId', displayName: 'entity'},
 { name: 'role.roleId', displayName: 'role'} 
 ]
  };
 };
+})();

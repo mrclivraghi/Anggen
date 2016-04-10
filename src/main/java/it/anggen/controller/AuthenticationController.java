@@ -180,7 +180,7 @@ public class AuthenticationController {
 				tempRestrictionItemList.put(entity.getName(), fakeRestrictionItem);
 				
 			}
-			
+			tempRestrictionGroup.setRestrictionItemMap(tempRestrictionItemList);
 			restrictionMap.put(entityGroup.getName(), tempRestrictionGroup);
 			
 		}

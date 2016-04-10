@@ -332,7 +332,7 @@ public class JsGenerator {
 
 		sb.append(".controller(\""+Utility.getFirstUpper(entityName)+"Controller\","+Utility.getFirstUpper(entityName)+"Controller);\n");
 		sb.append("/** @ngInject */\n");
-		sb.append("function "+Utility.getFirstUpper(entityName)+"Controller($scope,$http "+getServices()+")\n");
+		sb.append("function "+Utility.getFirstUpper(entityName)+"Controller($scope,$http,$rootScope "+getServices()+")\n");
 		sb.append("{\n");
 		//search var
 		sb.append("$scope.searchBean="+Utility.getEntityCallName(entityName)+"Service.searchBean;\n");
@@ -883,10 +883,10 @@ if (entity.getEntityGroup()!=null)
 		return services;
 	}
 	
-	private String checkSecurity(String entity,String action)
+	private String checkSecurity(Entity entity,String action)
 	{
 		StringBuilder sb = new StringBuilder();
-		sb.append("if (SecurityService.restrictionList."+entity+"==undefined || SecurityService.restrictionList."+entity+".can"+Utility.getFirstUpper(action)+")\n");
+		sb.append("if ($rootScope.restrictionList."+entity.getEntityGroup().getName()+"!=undefined && $rootScope.restrictionList."+entity.getEntityGroup().getName()+".restrictionItemMap."+entity.getName()+".can"+Utility.getFirstUpper(action)+")\n");
 		return sb.toString();
 	}
 	
@@ -896,7 +896,7 @@ if (entity.getEntityGroup()!=null)
 			for (Relationship relationship: entity.getRelationshipList())
 			{
 
-				sb.append(checkSecurity(relationship.getEntityTarget().getName(), "search"));
+				sb.append(checkSecurity(relationship.getEntityTarget(), "search"));
 				sb.append(entity.getName()+"Service.init"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List().then(function successCallback(response) {\n");
 				sb.append(entity.getName()+"Service.childrenList."+Utility.getFirstLower(relationship.getEntityTarget().getName())+"List=response.data;\n");
 				sb.append("},function errorCallback(response) { \n");

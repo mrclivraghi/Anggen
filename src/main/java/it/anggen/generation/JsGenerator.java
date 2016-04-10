@@ -85,32 +85,28 @@ public class JsGenerator {
 		this.entity=entity;
 		this.relationshipType=relationshipType;
 		entityManager = new EntityManagerImpl(entity);
-		
+
 		this.entityName=Utility.getFirstLower(entity.getName());
-		
+
 		this.fieldList=entity.getFieldList();
-		
+
 		this.relationshipList=entity.getRelationshipList();
 		this.lastLevel=lastLevel==null? true : lastLevel;
 		this.descendantEntityList=entityManager.getDescendantEntities();
-			this.serviceList=serviceList;
-		/*List<Class> parentClassList = new ArrayList<Class>();
-		parentClassList.add(classClass);
-		this.descendantClassList=reflectionManager.getDescendantClassList(classClass, parentClassList);
-		if (compositeClass!=null && compositeClass.fullName().contains("java.util.List"))
-			entityList=true;
-		else
-			entityList=false;*/
+		this.serviceList=serviceList;
 	}
 	
 	public void generateMainApp()
 	{
-		//sb.append("angular.module(\""+generator.applicationName+"App\",['ngRoute','ui.bootstrap','ngFileUpload','ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter']);");
 		generateSecurityService();
 		generateMainService();
 		generateMainController();
-		generateNavigation();
+		
+		generateIndexRoute();
 		generateIndexRun();
+		generateIndexConfig();
+		generateIndexConstants();
+		generateIndexModule();
 		
 
 	}
@@ -155,102 +151,7 @@ public class JsGenerator {
 		}
 	}
 	
-	private void generateNavigation()
-	{
-		StringBuilder sb = new StringBuilder();
-		
-		sb.append("(function() { \n")
-		.append("'use strict'; \n")
-		.append("\n");
-		
-		
-		sb.append("angular\n.module(\""+generator.applicationName+"App\").config(routerConfig);\n");
-		
-		sb.append("/** @ngInject */\n");
-		sb.append("function routerConfig($stateProvider,$urlRouterProvider)\n");
-		
-		sb.append("{\n");
-		sb.append("$stateProvider\n")
-		.append(".state('main',{\n")
-		
-		.append(" url:'/app',\n")
-		.append("abstract:true,\n")
-		.append("templateUrl:'app/main/main.html',\n")
-		
-		.append(" controller:'MainController', \n")
-		.append("controllerAs: 'main' ,\n")
-		.append("name: 'main'\n")
-		.append(" })\n")
-		
-		
-.append(".state('main.home',{\n")
-		
-		.append(" url:'/home',\n")
-		.append("views:{\n")
-		.append("'pageContent': {\n")
-		.append("templateUrl:'app/components/home/home.html',\n")
-		.append(" controller:'HomeController', \n")
-		.append("controllerAs: 'vm' \n")
-		.append(" }\n")
-		.append("}\n")
-		.append("})\n");
 
-		
-		for (Entity entity: generator.getEntityList())
-		{
-			sb.append(".state('main."+entity.getName()+"',{\n")
-			
-			.append(" url:'/"+entity.getName()+"',\n")
-			.append("views:{\n")
-			.append("'pageContent': {\n")
-			.append("templateUrl:'app/components/"+entity.getName()+"/"+entity.getName()+".html',\n")
-			.append(" controller:'"+Utility.getFirstUpper(entity.getName())+"Controller', \n")
-			.append("controllerAs: 'vm' \n")
-			.append(" }\n")
-
-			.append("/*resolve: {\n")
-			.append("setParent: function(MainService,"+Utility.getFirstLower(entity.getName())+"Service){\n")
-
-			.append("if (MainService.parentService!=null)\n")
-			.append("{\n")
-
-			.append("MainService.parentService.resetSearchBean();\n")
-			.append("MainService.parentService.setSelectedEntity(null);\n")
-			.append("MainService.parentService.selectedEntity.show=false;\n")
-			.append("MainService.parentService.setEntityList(null);\n") 
-			.append("}\n")
-
-			.append("MainService.parentEntity=\""+Utility.getFirstUpper(entity.getName())+"\";\n")
-
-			.append("MainService.parentService="+Utility.getFirstLower(entity.getName())+"Service;\n");
-			
-			//todo get descendant e init children
-			for (Relationship relationship : entity.getRelationshipList())
-			{
-
-				sb.append("MainService.parentService.init"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List().then(function(response) {\n")
-				.append("MainService.parentService.childrenList."+Utility.getFirstLower(relationship.getEntityTarget().getName())+"List=response.data;\n")
-				.append("});\n");
-			}
-			
-			sb.append("}\n")
-			.append("*/}\n") // end resolve
-			
-			
-			.append("})\n");
-		}
-		
-		sb.append(";");
-		sb.append("$urlRouterProvider.otherwise('/app/home');\n");
-		
-		sb.append("}\n");
-		sb.append("})();\n");
-		
-		
-		File file = new File("");
-		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+"../";
-		saveAsJsFile(directoryAngularFiles, "index.route", sb.toString());
-	}
 	
 	/**
 	 * Generate the service code for the entity
@@ -1056,7 +957,7 @@ if (entity.getEntityGroup()!=null)
 		
 		sb.append("/** @ngInject */\n");
 		sb.append("function MainController($scope){\n");
-
+		sb.append(" var vm= this; \n");
 		sb.append("};\n");
 		sb.append("})();\n");
 		
@@ -1168,13 +1069,154 @@ if (entity.getEntityGroup()!=null)
 		
 		File file = new File("");
 		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+"../";
-		saveAsJsFile(directoryAngularFiles, "index.run", sb.toString());
+		saveAsJsFile(directoryAngularFiles, "index.config", sb.toString());
 		
 	
 	}
 	
 	
+	private void generateIndexConstants()
+	{
+
+		StringBuilder sb = new StringBuilder();
+		sb.append("(function() {\n")
+		.append("  'use strict'\n")
+		.append("\n")
+		.append("  angular\n")
+		.append("    .module('"+generator.applicationName+"App')\n")
+		.append("    .constant('moment', moment);\n")
+		.append("\n");
+		
+		
+		sb.append("})();\n");
+		
+		File file = new File("");
+		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+"../";
+		saveAsJsFile(directoryAngularFiles, "index.constants", sb.toString());
+		
 	
+	}
+	
+	
+	private void generateIndexModule()
+	{
+
+		StringBuilder sb = new StringBuilder();
+		sb.append("(function() {\n")
+		.append("  'use strict'\n")
+		.append("\n")
+		.append("  angular\n")
+		.append("    .module('"+generator.applicationName+"App',['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize',"
+				+ " 'ngMessages', 'ngAria', 'ngResource',/*'ngRoute',*/ 'ui.router',"
+				+ "'ui.bootstrap', 'toastr','ui.grid', 'ui.grid.pagination','ui.grid.selection',"
+				+ "'ui.date', 'ui.grid.exporter','ngFileUpload']);\n")
+		.append("\n");
+		
+		sb.append("})();\n");
+		
+		File file = new File("");
+		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+"../";
+		saveAsJsFile(directoryAngularFiles, "index.constants", sb.toString());
+		
+	
+	}
+	
+	private void generateIndexRoute()
+	{
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("(function() { \n")
+		.append("'use strict'; \n")
+		.append("\n");
+		
+		
+		sb.append("angular\n.module(\""+generator.applicationName+"App\").config(routerConfig);\n");
+		
+		sb.append("/** @ngInject */\n");
+		sb.append("function routerConfig($stateProvider,$urlRouterProvider)\n");
+		
+		sb.append("{\n");
+		sb.append("$stateProvider\n")
+		.append(".state('main',{\n")
+		
+		.append(" url:'/app',\n")
+		.append("abstract:true,\n")
+		.append("templateUrl:'app/main/main.html',\n")
+		
+		.append(" controller:'MainController', \n")
+		.append("controllerAs: 'main' ,\n")
+		.append("name: 'main'\n")
+		.append(" })\n")
+		
+		
+.append(".state('main.home',{\n")
+		
+		.append(" url:'/home',\n")
+		.append("views:{\n")
+		.append("'pageContent': {\n")
+		.append("templateUrl:'app/components/home/home.html',\n")
+		.append(" controller:'HomeController', \n")
+		.append("controllerAs: 'vm' \n")
+		.append(" }\n")
+		.append("}\n")
+		.append("})\n");
+
+		
+		for (Entity entity: generator.getEntityList())
+		{
+			sb.append(".state('main."+entity.getName()+"',{\n")
+			
+			.append(" url:'/"+entity.getName()+"',\n")
+			.append("views:{\n")
+			.append("'pageContent': {\n")
+			.append("templateUrl:'app/components/"+entity.getName()+"/"+entity.getName()+".html',\n")
+			.append(" controller:'"+Utility.getFirstUpper(entity.getName())+"Controller', \n")
+			.append("controllerAs: 'vm' \n")
+			.append(" }\n")
+
+			.append("/*resolve: {\n")
+			.append("setParent: function(MainService,"+Utility.getFirstLower(entity.getName())+"Service){\n")
+
+			.append("if (MainService.parentService!=null)\n")
+			.append("{\n")
+
+			.append("MainService.parentService.resetSearchBean();\n")
+			.append("MainService.parentService.setSelectedEntity(null);\n")
+			.append("MainService.parentService.selectedEntity.show=false;\n")
+			.append("MainService.parentService.setEntityList(null);\n") 
+			.append("}\n")
+
+			.append("MainService.parentEntity=\""+Utility.getFirstUpper(entity.getName())+"\";\n")
+
+			.append("MainService.parentService="+Utility.getFirstLower(entity.getName())+"Service;\n");
+			
+			//todo get descendant e init children
+			for (Relationship relationship : entity.getRelationshipList())
+			{
+
+				sb.append("MainService.parentService.init"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List().then(function(response) {\n")
+				.append("MainService.parentService.childrenList."+Utility.getFirstLower(relationship.getEntityTarget().getName())+"List=response.data;\n")
+				.append("});\n");
+			}
+			
+			sb.append("}\n")
+			.append("*/}\n") // end resolve
+			
+			
+			.append("})\n");
+		}
+		
+		sb.append(";");
+		sb.append("$urlRouterProvider.otherwise('/app/home');\n");
+		
+		sb.append("}\n");
+		sb.append("})();\n");
+		
+		
+		File file = new File("");
+		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+"../";
+		saveAsJsFile(directoryAngularFiles, "index.route", sb.toString());
+	}
 	
 	
 	private void generateIndexRun()
@@ -1188,7 +1230,7 @@ if (entity.getEntityGroup()!=null)
 		.append("    .run(runBlock);\n")
 		.append("\n")
 		.append("  /** @ngInject */\n")
-		.append("  function runBlock($log,SecurityService,$rootScope) { \n");
+		.append("  function runBlock($log,SecurityService,$rootScope,$uibModal) { \n");
 		
 		String services = serviceList;
 		if (services==null)

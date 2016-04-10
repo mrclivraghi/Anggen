@@ -285,7 +285,7 @@ public class HtmlGenerator {
 			
 			String ulContent="";
 			{
-				ulContent=ulContent+"<li><a href=\"metrics\">Metrics</a></li>";
+				ulContent=ulContent+"<li><a href=\"#/app/metrics\">Metrics</a></li>";
 			}
 			
 			ulHtml.content(ulContent,false);

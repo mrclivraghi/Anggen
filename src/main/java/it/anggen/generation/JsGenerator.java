@@ -1159,8 +1159,20 @@ if (entity.getEntityGroup()!=null)
 		.append("controllerAs: 'vm' \n")
 		.append(" }\n")
 		.append("}\n")
-		.append("})\n");
+		.append("})\n")
 
+		
+.append(".state('main.metrics',{\n")
+		
+		.append(" url:'/metrics',\n")
+		.append("views:{\n")
+		.append("'pageContent': {\n")
+		.append("templateUrl:'app/components/metrics/metrics.html',\n")
+		.append(" controller:'MetricsController', \n")
+		.append("controllerAs: 'vm' \n")
+		.append(" }\n")
+		.append("}\n")
+		.append("})\n");
 		
 		for (Entity entity: generator.getEntityList())
 		{

@@ -2,8 +2,9 @@ package it.anggen.controller;
 
 import it.anggen.reflection.EntityManager;
 import it.anggen.reflection.EntityManagerImpl;
-import it.anggen.security.RestrictionItem;
 import it.anggen.security.UserManager;
+import it.anggen.security.view.RestrictionGroup;
+import it.anggen.security.view.RestrictionItem;
 import it.anggen.model.entity.Entity;
 import it.anggen.model.field.Annotation;
 import it.anggen.model.field.Field;
@@ -78,12 +79,20 @@ public class AuthenticationController {
 			return ResponseEntity.status(HttpStatus.ACCEPTED).body(buildRestrictionMap(null,null,null));
 	}
 	
-	private Map<String,RestrictionItem> buildRestrictionMap(List<RestrictionEntity> restrictionEntityList, List<RestrictionEntityGroup> restrictionEntityGroupList, List<RestrictionField> restrictionFieldList)
+	private Map<String,RestrictionGroup> buildRestrictionMap(List<RestrictionEntity> restrictionEntityList, List<RestrictionEntityGroup> restrictionEntityGroupList, List<RestrictionField> restrictionFieldList)
 	{
-		Map<String,RestrictionItem> restrictionMap= new HashMap<String, RestrictionItem>();
+		Map<String,RestrictionGroup> restrictionMap= new HashMap<String, RestrictionGroup>();
 		if (restrictionEntityGroupList!=null)
 		for (RestrictionEntityGroup restrictionEntityGroup: restrictionEntityGroupList)
 		{
+			
+			RestrictionGroup tempRestrictionGroup = new RestrictionGroup();
+			//tempRestrictionGroup.setEntityGroup(restrictionEntityGroup.getEntityGroup());
+			tempRestrictionGroup.setCanCreate(restrictionEntityGroup.getCanCreate());
+			tempRestrictionGroup.setCanDelete(restrictionEntityGroup.getCanDelete());
+			tempRestrictionGroup.setCanSearch(restrictionEntityGroup.getCanSearch());
+			tempRestrictionGroup.setCanUpdate(restrictionEntityGroup.getCanUpdate());
+			Map<String,RestrictionItem> tempRestrictionItemList= new HashMap<String,RestrictionItem>();
 			for (Entity entity:restrictionEntityGroup.getEntityGroup().getEntityList())
 			{
 				RestrictionItem fakeRestrictionItem= new RestrictionItem();
@@ -91,42 +100,34 @@ public class AuthenticationController {
 				fakeRestrictionItem.setCanDelete(restrictionEntityGroup.getCanDelete());
 				fakeRestrictionItem.setCanSearch(restrictionEntityGroup.getCanSearch());
 				fakeRestrictionItem.setCanUpdate(restrictionEntityGroup.getCanUpdate());
-				//fakeRestrictionItem.setEntity(entity);
-				restrictionMap.put(entity.getName(), fakeRestrictionItem);
-				
+				fakeRestrictionItem.setEntity(entity);
+				tempRestrictionItemList.put(entity.getName(), fakeRestrictionItem);
 			}
+			tempRestrictionGroup.setRestrictionItemMap(tempRestrictionItemList);
+			
+			restrictionMap.put(restrictionEntityGroup.getEntityGroup().getName(), tempRestrictionGroup);
+			
 		}
 		
 		if (restrictionEntityList!=null)
 		for (RestrictionEntity restrictionEntity: restrictionEntityList)
 		{
-			RestrictionItem fakeRestrictionItem= null;
-			for (RestrictionEntityGroup restrictionEntityGroup: restrictionEntityGroupList)
-			{
-				if (restrictionEntity.getEntity()!=null && restrictionEntity.getEntity().getEntityGroup()!=null && restrictionEntityGroup.getEntityGroup()!=null)
-				if (restrictionEntity.getEntity().getEntityGroup().getEntityGroupId().equals(restrictionEntityGroup.getEntityGroup().getEntityGroupId()))
-				{
-					fakeRestrictionItem= new RestrictionItem();
-					fakeRestrictionItem.setCanCreate(restrictionEntity.getCanCreate() && restrictionEntityGroup.getCanCreate());
-					fakeRestrictionItem.setCanDelete(restrictionEntity.getCanDelete() && restrictionEntityGroup.getCanDelete());
-					fakeRestrictionItem.setCanUpdate(restrictionEntity.getCanUpdate() && restrictionEntityGroup.getCanUpdate());
-					fakeRestrictionItem.setCanSearch(restrictionEntity.getCanSearch() && restrictionEntityGroup.getCanSearch());
-					//fakeRestrictionItem.setEntity(restrictionEntity.getEntity());
-					break;
-				}
-			}
-			
-			String entityName=restrictionEntity.getEntity()== null ? "" :restrictionEntity.getEntity().getName();
-			restrictionMap.put(entityName, fakeRestrictionItem);
+			RestrictionItem fakeRestrictionItem= restrictionMap.get(restrictionEntity.getEntity().getEntityGroup().getName()).getRestrictionItemMap().get(restrictionEntity.getEntity().getName());
+			fakeRestrictionItem.setCanCreate(restrictionEntity.getCanCreate() && fakeRestrictionItem.getCanCreate());
+			fakeRestrictionItem.setCanDelete(restrictionEntity.getCanDelete() && fakeRestrictionItem.getCanDelete());
+			fakeRestrictionItem.setCanUpdate(restrictionEntity.getCanUpdate() && fakeRestrictionItem.getCanUpdate());
+			fakeRestrictionItem.setCanSearch(restrictionEntity.getCanSearch() && fakeRestrictionItem.getCanSearch());
 		}
 		
 		addRestrictionField(restrictionMap,restrictionFieldList);
 		return restrictionMap;
 	}
 	
-	private void addRestrictionField(Map<String,RestrictionItem> restrictionMap, List<RestrictionField> restrictionFieldList)
+	private void addRestrictionField(Map<String,RestrictionGroup> restrictionMap, List<RestrictionField> restrictionFieldList)
 	{
-		for (RestrictionItem restrictionItem: restrictionMap.values())
+		
+		for (RestrictionGroup restrictionGroup: restrictionMap.values())
+		for (RestrictionItem restrictionItem: restrictionGroup.getRestrictionItemMap().values())
 		{
 			if (restrictionItem==null) continue;
 			Map<String,Boolean> restrictionFieldMap= new HashMap<String, Boolean>();

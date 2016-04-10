@@ -2,8 +2,8 @@ package it.anggen.controller;
 
 import it.anggen.reflection.EntityManager;
 import it.anggen.reflection.EntityManagerImpl;
-import it.anggen.security.RestrictionItem;
 import it.anggen.security.UserManager;
+import it.anggen.security.view.RestrictionItem;
 import it.anggen.model.entity.Entity;
 import it.anggen.model.field.Annotation;
 import it.anggen.model.field.Field;

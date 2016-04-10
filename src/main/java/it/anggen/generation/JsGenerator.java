@@ -339,11 +339,11 @@ public class JsGenerator {
 		sb.append("$scope.entityList="+Utility.getEntityCallName(entityName)+"Service.entityList;\n");
 		sb.append("$scope.selectedEntity="+Utility.getEntityCallName(entityName)+"Service.selectedEntity;\n");
 
-		sb.append("$scope.childrenList={}; \n");
-		for (Relationship relationship : entity.getRelationshipList())
+		sb.append("$scope.childrenList="+Utility.getEntityCallName(entityName)+"Service.childrenList; \n");
+		/*for (Relationship relationship : entity.getRelationshipList())
 		{
 			sb.append("$scope.childrenList."+relationship.getName()+"ChildrenList="+relationship.getName()+"ChildrenList;\n");
-		}
+		}*/
 		//search function
 		sb.append("$scope.reset = function()\n");
 		sb.append("{\n");
@@ -892,7 +892,7 @@ if (entity.getEntityGroup()!=null)
 		}
 		for (Relationship relationship : entity.getRelationshipList())
 		{
-			services=services+","+relationship.getEntityTarget().getName()+"ChildrenList";
+			//services=services+","+relationship.getEntityTarget().getName()+"ChildrenList";
 		}
 		return services;
 	}
@@ -1222,7 +1222,7 @@ if (entity.getEntityGroup()!=null)
 
 				sb.append(relationship.getName()+"ChildrenList: function("+Utility.getFirstLower(entity.getName())+"Service) {\n");
 				sb.append(Utility.getFirstLower(entity.getName())+"Service.init"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List().then(function(response) {\n")
-				.append("return response.data;\n")
+				.append(Utility.getFirstLower(entity.getName())+"Service.childrenList."+Utility.getFirstLower(relationship.getName())+"List=response.data;\n")
 				.append("});\n")
 				
 				.append("}, \n ");

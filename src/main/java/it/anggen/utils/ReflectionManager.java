@@ -706,7 +706,7 @@ public class ReflectionManager {
 		JCodeModel	codeModel = new JCodeModel();
 		JDefinedClass myClass= null;
 		try {
-			String thePackage=Generator.generatedPackage+Generator.appName+".model."+entity.getEntityGroup().getName().toLowerCase()+".";
+			String thePackage=Generator.generatedPackage+Generator.appName.replace("serverTest","anggen")+".model."+entity.getEntityGroup().getName().toLowerCase()+".";
 			if (entity.getEntityGroup().getName().equals("security"))
 				thePackage=thePackage.replaceAll("."+Generator.appName+".", ".anggen.");
 			//	if (entity.getName().endsWith("Repository"))
@@ -722,7 +722,7 @@ public class ReflectionManager {
 		JCodeModel	codeModel = new JCodeModel();
 		JDefinedClass myClass= null;
 		try {
-			String thePackage=Generator.generatedPackage+Generator.appName+".repository."+entity.getEntityGroup().getName().toLowerCase()+".";
+			String thePackage=Generator.generatedPackage+Generator.appName.replace("serverTest","anggen")+".repository."+entity.getEntityGroup().getName().toLowerCase()+".";
 			if (entity.getEntityGroup().getName().equals("security"))
 				thePackage=thePackage.replaceAll("."+Generator.appName+".", ".anggen.");
 		//	if (entity.getName().endsWith("Repository"))
@@ -738,7 +738,7 @@ public class ReflectionManager {
 		JCodeModel	codeModel = new JCodeModel();
 		JDefinedClass myClass= null;
 		try {
-			String thePackage=Generator.generatedPackage+Generator.appName+".model.";
+			String thePackage=Generator.generatedPackage+Generator.appName.replace("serverTest","anggen")+".model.";
 		//	if (entity.getName().endsWith("Repository"))
 	//			thePackage=thePackage.replace(".model", ".repository.");
 			myClass = codeModel._class(thePackage+Utility.getFirstUpper(enumField.getName()), ClassType.CLASS);
@@ -754,7 +754,7 @@ public class ReflectionManager {
 			
 		//	if (entity.getName().endsWith("Repository"))
 	//			thePackage=thePackage.replace(".model", ".repository.");
-			myClass = codeModel._class(fullName, ClassType.CLASS);
+			myClass = codeModel._class(fullName.replace("serverTest","anggen"), ClassType.CLASS);
 		} catch (JClassAlreadyExistsException e) {
 			e.printStackTrace();
 		}

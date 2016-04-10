@@ -38,7 +38,7 @@ public class AngGenAuthenticationProvider implements AuthenticationProvider {
 		String username = authentication.getName();
         String password = authentication.getCredentials().toString();
         PasswordEncoder encoder = new org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder();
-        List<User> userList = userRepository.findByUserIdAndPasswordAndEnabledAndUsernameAndRole(null, null, true, username, null);
+        List<User> userList = userRepository.findByUserIdAndEnabledAndUsernameAndPasswordAndRole(null, true, null, username, null);
         if (userList==null || userList.size()==0)
         {
         	 logEntryService.addLogEntry(username + " is wrong ", LogType.INFO, OperationType.LOGIN_FAILED, User.staticEntityId, null, null);

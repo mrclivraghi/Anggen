@@ -138,7 +138,7 @@ public class EntityGenerator {
 		String lowerClassName = Utility.getFirstLower(className);
 		JDefinedClass myClass= null;
 		try {
-			myClass = codeModel._class(generator.mainPackage+generator.applicationName+".model."+entity.getEntityGroup().getName()+"."+className, ClassType.CLASS);
+			myClass = codeModel._class(generator.mainPackage+generator.applicationName.replace("serverTest","anggen")+".model."+entity.getEntityGroup().getName()+"."+className, ClassType.CLASS);
 		} catch (JClassAlreadyExistsException e) {
 			e.printStackTrace();
 		}

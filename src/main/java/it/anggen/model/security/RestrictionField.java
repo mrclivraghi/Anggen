@@ -15,12 +15,12 @@ import it.anggen.utils.annotation.MaxDescendantLevel;
 @MaxDescendantLevel(100)
 public class RestrictionField {
 
-    public final static java.lang.Long staticEntityId = 17L;
+    public final static java.lang.Long staticEntityId = 15L;
     @Column(name = "restriction_field_id")
+    @it.anggen.utils.annotation.Priority(1)
+    @DescriptionField
     @Id
     @GeneratedValue
-    @DescriptionField
-    @it.anggen.utils.annotation.Priority(1)
     private java.lang.Long restrictionFieldId;
     @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.EAGER)
     @javax.persistence.JoinColumn(name = "role_id_role")

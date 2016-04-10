@@ -332,7 +332,7 @@ public class JsGenerator {
 
 		sb.append(".controller(\""+Utility.getFirstUpper(entityName)+"Controller\","+Utility.getFirstUpper(entityName)+"Controller);\n");
 		sb.append("/** @ngInject */\n");
-		sb.append("function "+Utility.getFirstUpper(entityName)+"Controller($scope,$http "+getServices()+")\n");
+		sb.append("function "+Utility.getFirstUpper(entityName)+"Controller($scope,$http,$rootScope "+getServices()+")\n");
 		sb.append("{\n");
 		//search var
 		sb.append("$scope.searchBean="+Utility.getEntityCallName(entityName)+"Service.searchBean;\n");
@@ -750,8 +750,9 @@ public class JsGenerator {
 		sb.append("$scope.closeEntityDetail = function(){ \n")
 		.append(""+Utility.getEntityCallName(entityName)+"Service.setSelectedEntity(null);\n")
 		.append(""+Utility.getEntityCallName(entityName)+"Service.selectedEntity.show=false;\n")
-		.append("}");
+		.append("}\n");
 		
+		sb.append("$scope.initChildrenList();\n");
 		
 		sb.append("}\n");
 		return sb.toString();
@@ -827,6 +828,11 @@ public class JsGenerator {
 		//if (parentEntityName!=null && parentEntityName.equals("entity"))
 		//System.out.println("**GENERO** "+entityName+" - parent "+parentEntityName+" - lastLevel"+lastLevel+"- isParent "+isParent);
 		//on row selection
+		
+		sb.append("$scope.initChildrenList = function () { \n");
+		initChildrenList(sb, entity);
+		sb.append("}\n");
+		
 		sb.append("$scope."+entityName+"GridOptions.onRegisterApi = function(gridApi){\n");
 		sb.append("$scope."+entityName+"GridApi = gridApi;\n");
 		sb.append("gridApi.selection.on.rowSelectionChanged($scope,function(row){\n");
@@ -841,7 +847,8 @@ public class JsGenerator {
 			
 		//} else
 		//{
-		initChildrenList(sb, entity);
+		//sb.append("$scope.initChildrenList();");
+		//initChildrenList(sb, entity);
 if (entity.getEntityGroup()!=null)
 {
 			sb.append(Utility.getEntityCallName(entityName)+"Service.searchOne(row.entity).then(function(response) { \n");
@@ -883,10 +890,10 @@ if (entity.getEntityGroup()!=null)
 		return services;
 	}
 	
-	private String checkSecurity(String entity,String action)
+	private String checkSecurity(Entity entity,String action)
 	{
 		StringBuilder sb = new StringBuilder();
-		sb.append("if (SecurityService.restrictionList."+entity+"==undefined || SecurityService.restrictionList."+entity+".can"+Utility.getFirstUpper(action)+")\n");
+		sb.append("if ($rootScope.restrictionList."+entity.getEntityGroup().getName()+"!=undefined && $rootScope.restrictionList."+entity.getEntityGroup().getName()+".restrictionItemMap."+entity.getName()+".can"+Utility.getFirstUpper(action)+")\n");
 		return sb.toString();
 	}
 	
@@ -896,7 +903,7 @@ if (entity.getEntityGroup()!=null)
 			for (Relationship relationship: entity.getRelationshipList())
 			{
 
-				sb.append(checkSecurity(relationship.getEntityTarget().getName(), "search"));
+				sb.append(checkSecurity(relationship.getEntityTarget(), "search"));
 				sb.append(entity.getName()+"Service.init"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List().then(function successCallback(response) {\n");
 				sb.append(entity.getName()+"Service.childrenList."+Utility.getFirstLower(relationship.getEntityTarget().getName())+"List=response.data;\n");
 				sb.append("},function errorCallback(response) { \n");
@@ -1251,9 +1258,7 @@ if (entity.getEntityGroup()!=null)
 
 		if (generator.security)
 		{
-			sb.append("SecurityService.init().then(function successCallback(response) {\n");
-			sb.append("$rootScope.restrictionList=response.data;\n");
-			sb.append("});\n");
+			
 			//sb.append("$rootScope.restrictionList=response.data;\n");
 		} else
 		{
@@ -1281,6 +1286,11 @@ if (entity.getEntityGroup()!=null)
 		.append(" keyboard: false\n")
 		.append("});\n")
 		.append("function close(){\n")
+		
+		.append("SecurityService.init().then(function successCallback(response) {\n")
+		.append("$rootScope.restrictionList=response.data;\n")
+		.append("});\n")
+		
 		.append("if(loginWindow){\n")
 		.append("loginWindow.dismiss();\n")
 		.append("loginWindow = null;\n")

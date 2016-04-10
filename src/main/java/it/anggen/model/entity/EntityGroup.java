@@ -17,34 +17,33 @@ import org.hibernate.annotations.Type;
 @MaxDescendantLevel(100)
 public class EntityGroup {
 
-    public final static java.lang.Long staticEntityId = 8L;
+    public final static java.lang.Long staticEntityId = 5L;
     @javax.persistence.Column(name = "entity_group_id")
+    @it.anggen.utils.annotation.Priority(1)
+    @it.anggen.utils.annotation.DescriptionField
     @Id
     @GeneratedValue
-    @it.anggen.utils.annotation.DescriptionField
-    @it.anggen.utils.annotation.Priority(1)
     private java.lang.Long entityGroupId;
-    @javax.persistence.Column(name = "entity_id")
-    @it.anggen.utils.annotation.Priority(2)
-    private java.lang.Long entityId;
     @javax.persistence.Column(name = "name")
-    @it.anggen.utils.annotation.Priority(2)
     @it.anggen.utils.annotation.DescriptionField
+    @it.anggen.utils.annotation.Priority(2)
     private String name;
     @OneToMany(fetch = javax.persistence.FetchType.EAGER)
     @Type(type = "it.anggen.model.security.RestrictionEntityGroup")
     @javax.persistence.JoinColumn(name = "entity_group_id_entity_group")
     @it.anggen.utils.annotation.Priority(4)
     private List<RestrictionEntityGroup> restrictionEntityGroupList;
-    @ManyToOne(fetch = javax.persistence.FetchType.EAGER)
-    @javax.persistence.JoinColumn(name = "project_id_project")
-    @it.anggen.utils.annotation.Priority(4)
-    private it.anggen.model.entity.Project project;
     @OneToMany(fetch = javax.persistence.FetchType.EAGER)
     @Type(type = "it.anggen.model.entity.Entity")
     @javax.persistence.JoinColumn(name = "entity_group_id_entity_group")
     @it.anggen.utils.annotation.Priority(4)
     private List<it.anggen.model.entity.Entity> entityList;
+    @ManyToOne(fetch = javax.persistence.FetchType.EAGER)
+    @javax.persistence.JoinColumn(name = "project_id_project")
+    @it.anggen.utils.annotation.Priority(4)
+    private it.anggen.model.entity.Project project;
+    @javax.persistence.Column(name = "security_type")
+    private it.anggen.model.SecurityType securityType;
 
     public java.lang.Long getEntityGroupId() {
         return this.entityGroupId;
@@ -52,14 +51,6 @@ public class EntityGroup {
 
     public void setEntityGroupId(java.lang.Long entityGroupId) {
         this.entityGroupId=entityGroupId;
-    }
-
-    public java.lang.Long getEntityId() {
-        return this.entityId;
-    }
-
-    public void setEntityId(java.lang.Long entityId) {
-        this.entityId=entityId;
     }
 
     public String getName() {
@@ -78,6 +69,14 @@ public class EntityGroup {
         this.restrictionEntityGroupList=restrictionEntityGroupList;
     }
 
+    public List<it.anggen.model.entity.Entity> getEntityList() {
+        return this.entityList;
+    }
+
+    public void setEntityList(List<it.anggen.model.entity.Entity> entityList) {
+        this.entityList=entityList;
+    }
+
     public it.anggen.model.entity.Project getProject() {
         return this.project;
     }
@@ -86,12 +85,12 @@ public class EntityGroup {
         this.project=project;
     }
 
-    public List<it.anggen.model.entity.Entity> getEntityList() {
-        return this.entityList;
+    public it.anggen.model.SecurityType getSecurityType() {
+        return this.securityType;
     }
 
-    public void setEntityList(List<it.anggen.model.entity.Entity> entityList) {
-        this.entityList=entityList;
+    public void setSecurityType(it.anggen.model.SecurityType securityType) {
+        this.securityType=securityType;
     }
 
 }

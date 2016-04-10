@@ -16,31 +16,31 @@ import it.anggen.utils.annotation.MaxDescendantLevel;
 @MaxDescendantLevel(100)
 public class EnumValue {
 
-    public final static java.lang.Long staticEntityId = 2L;
-    @javax.persistence.Column(name = "enum_value_id")
-    @Id
-    @GeneratedValue
+    public final static java.lang.Long staticEntityId = 10L;
+    @javax.persistence.Column(name = "name")
     @it.anggen.utils.annotation.DescriptionField
-    @it.anggen.utils.annotation.Priority(1)
-    private java.lang.Long enumValueId;
+    @it.anggen.utils.annotation.Priority(2)
+    private String name;
     @javax.persistence.Column(name = "value")
     @it.anggen.utils.annotation.Priority(2)
     private Integer value;
-    @javax.persistence.Column(name = "name")
-    @it.anggen.utils.annotation.Priority(2)
+    @javax.persistence.Column(name = "enum_value_id")
+    @it.anggen.utils.annotation.Priority(1)
     @it.anggen.utils.annotation.DescriptionField
-    private String name;
+    @Id
+    @GeneratedValue
+    private java.lang.Long enumValueId;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "enum_entity_id_enum_entity")
     @it.anggen.utils.annotation.Priority(4)
     private it.anggen.model.entity.EnumEntity enumEntity;
 
-    public java.lang.Long getEnumValueId() {
-        return this.enumValueId;
+    public String getName() {
+        return this.name;
     }
 
-    public void setEnumValueId(java.lang.Long enumValueId) {
-        this.enumValueId=enumValueId;
+    public void setName(String name) {
+        this.name=name;
     }
 
     public Integer getValue() {
@@ -51,12 +51,12 @@ public class EnumValue {
         this.value=value;
     }
 
-    public String getName() {
-        return this.name;
+    public java.lang.Long getEnumValueId() {
+        return this.enumValueId;
     }
 
-    public void setName(String name) {
-        this.name=name;
+    public void setEnumValueId(java.lang.Long enumValueId) {
+        this.enumValueId=enumValueId;
     }
 
     public it.anggen.model.entity.EnumEntity getEnumEntity() {

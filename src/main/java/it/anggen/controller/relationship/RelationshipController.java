@@ -153,28 +153,28 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     private void getRightMapping(it.anggen.model.relationship.Relationship relationship) {
         if (relationship.getEntity()!=null)
         {
+        relationship.getEntity().setRestrictionEntityList(null);
+        relationship.getEntity().setTabList(null);
+        relationship.getEntity().setEntityGroup(null);
         relationship.getEntity().setEnumFieldList(null);
         relationship.getEntity().setFieldList(null);
-        relationship.getEntity().setEntityGroup(null);
-        relationship.getEntity().setTabList(null);
-        relationship.getEntity().setRestrictionEntityList(null);
         relationship.getEntity().setRelationshipList(null);
         }
         if (relationship.getEntityTarget()!=null)
         {
+        relationship.getEntityTarget().setRestrictionEntityList(null);
+        relationship.getEntityTarget().setTabList(null);
+        relationship.getEntityTarget().setEntityGroup(null);
         relationship.getEntityTarget().setEnumFieldList(null);
         relationship.getEntityTarget().setFieldList(null);
-        relationship.getEntityTarget().setEntityGroup(null);
-        relationship.getEntityTarget().setTabList(null);
-        relationship.getEntityTarget().setRestrictionEntityList(null);
         relationship.getEntityTarget().setRelationshipList(null);
         }
         if (relationship.getTab()!=null)
         {
+        relationship.getTab().setEntity(null);
         relationship.getTab().setFieldList(null);
         relationship.getTab().setEnumFieldList(null);
         relationship.getTab().setRelationshipList(null);
-        relationship.getTab().setEntity(null);
         }
         if (relationship.getAnnotationList()!=null)
         for (it.anggen.model.field.Annotation annotation :relationship.getAnnotationList())

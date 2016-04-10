@@ -77,17 +77,17 @@ var promise= $http
 {});
 return promise;
 };
- this.initProjectList= function()
-{
-var promise= $http
-.post("http://127.0.0.1:8080/ServerTestApp/project/search",
-{});
-return promise;
-};
  this.initEntityList= function()
 {
 var promise= $http
 .post("http://127.0.0.1:8080/ServerTestApp/entity/search",
+{});
+return promise;
+};
+ this.initProjectList= function()
+{
+var promise= $http
+.post("http://127.0.0.1:8080/ServerTestApp/project/search",
 {});
 return promise;
 };
@@ -100,7 +100,6 @@ paginationPageSize: 10,
 enableGridMenu: true,
 columnDefs: [    
 { name: 'entityGroupId'},
-{ name: 'entityId'},
 { name: 'name'},
 { name: 'project.projectId', displayName: 'project'} 
 ]

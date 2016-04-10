@@ -156,8 +156,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         {
 
-        restrictionEntity.setEntity(null);
         restrictionEntity.setRole(null);
+        restrictionEntity.setEntity(null);
         }
         if (role.getRestrictionFieldList()!=null)
         for (it.anggen.model.security.RestrictionField restrictionField :role.getRestrictionFieldList())
@@ -179,8 +179,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         {
 
-        restrictionEntityGroup.setEntityGroup(null);
         restrictionEntityGroup.setRole(null);
+        restrictionEntityGroup.setEntityGroup(null);
         }
     }
 

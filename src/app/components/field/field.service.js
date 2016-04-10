@@ -8,7 +8,7 @@ function FieldService($http,MainService)
 {
 this.entityList =		[];
 this.selectedEntity= 	{show: false 
-,annotationList: [],restrictionFieldList: []};
+,restrictionFieldList: [],annotationList: []};
 this.isParent=function()
 {
 return MainService.parentEntity=="Field";
@@ -70,17 +70,17 @@ var promise= $http.post("http://127.0.0.1:8080/ServerTestApp/field/"+this.select
 });
 return promise; 
 }
- this.initAnnotationList= function()
-{
-var promise= $http
-.post("http://127.0.0.1:8080/ServerTestApp/annotation/search",
-{});
-return promise;
-};
  this.initRestrictionFieldList= function()
 {
 var promise= $http
 .post("http://127.0.0.1:8080/ServerTestApp/restrictionField/search",
+{});
+return promise;
+};
+ this.initEntityList= function()
+{
+var promise= $http
+.post("http://127.0.0.1:8080/ServerTestApp/entity/search",
 {});
 return promise;
 };
@@ -91,10 +91,10 @@ var promise= $http
 {});
 return promise;
 };
- this.initEntityList= function()
+ this.initAnnotationList= function()
 {
 var promise= $http
-.post("http://127.0.0.1:8080/ServerTestApp/entity/search",
+.post("http://127.0.0.1:8080/ServerTestApp/annotation/search",
 {});
 return promise;
 };
@@ -109,8 +109,8 @@ columnDefs: [
 { name: 'fieldId'},
 { name: 'priority'},
 { name: 'name'},
-{ name: 'tab.tabId', displayName: 'tab'},
-{ name: 'entity.entityId', displayName: 'entity'} 
+{ name: 'entity.entityId', displayName: 'entity'},
+{ name: 'tab.tabId', displayName: 'tab'} 
 ]
  };
 };

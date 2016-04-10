@@ -1,14 +1,13 @@
-package it.anggen.security;
+package it.anggen.security.view;
 
 import it.anggen.model.entity.Entity;
+import it.anggen.model.entity.EntityGroup;
 import it.anggen.model.security.RestrictionField;
 
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.Column;
-
-public class RestrictionItem {
+public class RestrictionGroup {
 
 	private Boolean canCreate;
 	
@@ -18,12 +17,10 @@ public class RestrictionItem {
 	
 	private Boolean canDelete;
 	
-	private Map<String,Boolean> restrictionFieldMap;
+	private Map<String,RestrictionItem> restrictionItemMap;
 	
-	private Entity entity;
 	
-	public RestrictionItem() {
-		// TODO Auto-generated constructor stub
+	public RestrictionGroup() {
 	}
 
 	public Boolean getCanCreate() {
@@ -58,26 +55,13 @@ public class RestrictionItem {
 		this.canDelete = canDelete;
 	}
 
-	public Map<String,Boolean> getRestrictionFieldMap() {
-		return restrictionFieldMap;
+	public Map<String,RestrictionItem> getRestrictionItemMap() {
+		return restrictionItemMap;
 	}
 
-	public void setRestrictionFieldList(Map<String,Boolean> restrictionFieldMap) {
-		this.restrictionFieldMap = restrictionFieldMap;
+	public void setRestrictionItemMap(Map<String,RestrictionItem> restrictionItemMap) {
+		this.restrictionItemMap = restrictionItemMap;
 	}
 
-	/**
-	 * @return the entity
-	 */
-	public Entity getEntity() {
-		return entity;
-	}
-
-	/**
-	 * @param entity the entity to set
-	 */
-	public void setEntity(Entity entity) {
-		this.entity = entity;
-	}
 
 }

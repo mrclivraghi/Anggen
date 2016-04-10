@@ -22,13 +22,13 @@ public class EntityServiceImpl
     @org.springframework.beans.factory.annotation.Autowired
     public EntityRepository entityRepository;
     @org.springframework.beans.factory.annotation.Autowired
-    public EnumFieldRepository enumFieldRepository;
-    @org.springframework.beans.factory.annotation.Autowired
-    public FieldRepository fieldRepository;
+    public RestrictionEntityRepository restrictionEntityRepository;
     @org.springframework.beans.factory.annotation.Autowired
     public TabRepository tabRepository;
     @org.springframework.beans.factory.annotation.Autowired
-    public RestrictionEntityRepository restrictionEntityRepository;
+    public EnumFieldRepository enumFieldRepository;
+    @org.springframework.beans.factory.annotation.Autowired
+    public FieldRepository fieldRepository;
     @org.springframework.beans.factory.annotation.Autowired
     public RelationshipRepository relationshipRepository;
     private static Integer PAGE_SIZE = (5);
@@ -46,7 +46,7 @@ public class EntityServiceImpl
 
     @Override
     public List<it.anggen.model.entity.Entity> find(EntitySearchBean entity) {
-        return entityRepository.findByEntityIdAndDisableViewGenerationAndEnableRestrictionDataAndDescendantMaxLevelAndGenerateFrontEndAndCacheAndNameAndSecurityTypeAndEnumFieldAndFieldAndEntityGroupAndTabAndRestrictionEntityAndRelationship(entity.getEntityId(),entity.getDisableViewGeneration(),entity.getEnableRestrictionData(),entity.getDescendantMaxLevel(),entity.getGenerateFrontEnd(),entity.getCache(),entity.getName(), (entity.getSecurityType()==null)? null : entity.getSecurityType().getValue(),entity.getEnumFieldList()==null? null :entity.getEnumFieldList().get(0),entity.getFieldList()==null? null :entity.getFieldList().get(0),entity.getEntityGroup(),entity.getTabList()==null? null :entity.getTabList().get(0),entity.getRestrictionEntityList()==null? null :entity.getRestrictionEntityList().get(0),entity.getRelationshipList()==null? null :entity.getRelationshipList().get(0));
+        return entityRepository.findByEntityIdAndEnableRestrictionDataAndDisableViewGenerationAndCacheAndDescendantMaxLevelAndNameAndGenerateFrontEndAndSecurityTypeAndRestrictionEntityAndTabAndEntityGroupAndEnumFieldAndFieldAndRelationship(entity.getEntityId(),entity.getEnableRestrictionData(),entity.getDisableViewGeneration(),entity.getCache(),entity.getDescendantMaxLevel(),entity.getName(),entity.getGenerateFrontEnd(), (entity.getSecurityType()==null)? null : entity.getSecurityType().getValue(),entity.getRestrictionEntityList()==null? null :entity.getRestrictionEntityList().get(0),entity.getTabList()==null? null :entity.getTabList().get(0),entity.getEntityGroup(),entity.getEnumFieldList()==null? null :entity.getEnumFieldList().get(0),entity.getFieldList()==null? null :entity.getFieldList().get(0),entity.getRelationshipList()==null? null :entity.getRelationshipList().get(0));
     }
 
     @Override
@@ -63,6 +63,16 @@ public class EntityServiceImpl
     @Override
     @Transactional
     public it.anggen.model.entity.Entity update(it.anggen.model.entity.Entity entity) {
+        if (entity.getRestrictionEntityList()!=null)
+        for (it.anggen.model.security.RestrictionEntity restrictionEntity: entity.getRestrictionEntityList())
+        {
+        restrictionEntity.setEntity(entity);
+        }
+        if (entity.getTabList()!=null)
+        for (it.anggen.model.entity.Tab tab: entity.getTabList())
+        {
+        tab.setEntity(entity);
+        }
         if (entity.getEnumFieldList()!=null)
         for (it.anggen.model.field.EnumField enumField: entity.getEnumFieldList())
         {
@@ -72,16 +82,6 @@ public class EntityServiceImpl
         for (it.anggen.model.field.Field field: entity.getFieldList())
         {
         field.setEntity(entity);
-        }
-        if (entity.getTabList()!=null)
-        for (it.anggen.model.entity.Tab tab: entity.getTabList())
-        {
-        tab.setEntity(entity);
-        }
-        if (entity.getRestrictionEntityList()!=null)
-        for (it.anggen.model.security.RestrictionEntity restrictionEntity: entity.getRestrictionEntityList())
-        {
-        restrictionEntity.setEntity(entity);
         }
         if (entity.getRelationshipList()!=null)
         for (it.anggen.model.relationship.Relationship relationship: entity.getRelationshipList())

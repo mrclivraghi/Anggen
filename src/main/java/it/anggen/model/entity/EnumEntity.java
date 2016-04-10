@@ -18,17 +18,17 @@ import org.hibernate.annotations.Type;
 @MaxDescendantLevel(1)
 public class EnumEntity {
 
-    public final static java.lang.Long staticEntityId = 15L;
-    @javax.persistence.Column(name = "name")
-    @it.anggen.utils.annotation.Priority(2)
-    @it.anggen.utils.annotation.DescriptionField
-    private String name;
+    public final static java.lang.Long staticEntityId = 14L;
     @javax.persistence.Column(name = "enum_entity_id")
+    @it.anggen.utils.annotation.Priority(1)
+    @it.anggen.utils.annotation.DescriptionField
     @Id
     @GeneratedValue
-    @it.anggen.utils.annotation.DescriptionField
-    @it.anggen.utils.annotation.Priority(1)
     private java.lang.Long enumEntityId;
+    @javax.persistence.Column(name = "name")
+    @it.anggen.utils.annotation.DescriptionField
+    @it.anggen.utils.annotation.Priority(2)
+    private String name;
     @ManyToOne(fetch = javax.persistence.FetchType.EAGER)
     @javax.persistence.JoinColumn(name = "project_id_project")
     @it.anggen.utils.annotation.Priority(4)
@@ -39,20 +39,20 @@ public class EnumEntity {
     @it.anggen.utils.annotation.Priority(4)
     private List<EnumValue> enumValueList;
 
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(String name) {
-        this.name=name;
-    }
-
     public java.lang.Long getEnumEntityId() {
         return this.enumEntityId;
     }
 
     public void setEnumEntityId(java.lang.Long enumEntityId) {
         this.enumEntityId=enumEntityId;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name=name;
     }
 
     public it.anggen.model.entity.Project getProject() {

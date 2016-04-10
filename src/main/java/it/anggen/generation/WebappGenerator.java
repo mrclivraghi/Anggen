@@ -111,10 +111,10 @@ public class WebappGenerator {
 	public void init() {
 		applicationName=generator.applicationName;
 		
-		packageName=generator.mainPackage+applicationName.toLowerCase()+".";
+		packageName=generator.mainPackage+applicationName.replace("serverTest","anggen").toLowerCase()+".";
 		File file = new File(""); 
 		this.directory = file.getAbsolutePath()+"\\src\\main\\java";
-		this.modelPackage=generator.mainPackage+generator.applicationName+".model.";
+		this.modelPackage=generator.mainPackage+generator.applicationName.replace("serverTest","anggen")+".model.";
 		
 		
 	}

@@ -6,22 +6,18 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.access.channel.ChannelProcessingFilter;
-import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
-import it.anggen.boot.CorsFilter;
 
 @Configuration
 @EnableWebSecurity
 @Order(99)
-public class AnggenSecurityConfig
+public class ServerTestSecurityConfig
     extends WebSecurityConfigurerAdapter
 {
 
@@ -35,15 +31,12 @@ public class AnggenSecurityConfig
     {
         http
         .authorizeRequests()
-        .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-        .antMatchers("/css/**","/img/**","/js/**","/auth/**","/login/**","/authentication/**").permitAll()
+        .antMatchers("/css/**","/img/**","/js/**","/auth/**","/login/**").permitAll()
         .and()
         .authorizeRequests().anyRequest().fullyAuthenticated().and()
-        .formLogin().and().csrf().disable()
-        //.addFilterBefore(new TestFilter(),CorsFilter.class);
-        //.csrfTokenRepository(csrfTokenRepository()).and()
-        //.addFilterAfter(new it.anggen.boot.CsrfHeaderFilter(), org.springframework.security.web.csrf.CsrfFilter.class);
-        ;
+        .formLogin().and().csrf()
+        .csrfTokenRepository(csrfTokenRepository()).and()
+        .addFilterAfter(new it.anggen.boot.CsrfHeaderFilter(), org.springframework.security.web.csrf.CsrfFilter.class);
     }
 
     private CsrfTokenRepository csrfTokenRepository() {

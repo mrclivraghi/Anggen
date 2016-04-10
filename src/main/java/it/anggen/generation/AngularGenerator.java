@@ -84,7 +84,8 @@ public class AngularGenerator {
 	 */
 	public void generateEntityView(HtmlCanvas html) throws IOException {
 		HtmlAttributes mainControllerAttributes = new HtmlAttributes();
-		mainControllerAttributes.add("ng-controller", Utility.getFirstUpper(entityName)+"Controller");
+		if (!isParent)
+			mainControllerAttributes.add("ng-controller", Utility.getFirstUpper(entityName)+"Controller");
 		if (generator.easyTreeMenu)
 		{
 			mainControllerAttributes.add("style", "position: absolute; left: 250px; width:80%; top: 30px;");
@@ -403,21 +404,21 @@ public class AngularGenerator {
 		{
 			html.div((new HtmlAttributes()).add("class", "pull-left"))
 			.form((new HtmlAttributes()).add("id", entityName+"ActionButton").add("ng-if", "selectedEntity.show"))
-			.button(CssGenerator.getButton("insert").add("ng-if", "selectedEntity."+entityName+"Id==undefined").add("ng-show",checkSecurity(entityName, "create")))
+			.button(CssGenerator.getButton("insert").add("ng-if", "selectedEntity."+entityName+"Id==undefined").add("ng-show",checkSecurity(entity, "create")))
 			.content("Insert")
-			.button(CssGenerator.getButton("update").add("ng-if", "selectedEntity."+entityName+"Id>0").add("ng-show",checkSecurity(entityName, "update")))
+			.button(CssGenerator.getButton("update").add("ng-if", "selectedEntity."+entityName+"Id>0").add("ng-show",checkSecurity(entity, "update")))
 			.content("Update")
-			.button(CssGenerator.getButton("del").add("ng-if", "selectedEntity."+entityName+"Id>0").add("ng-show",checkSecurity(entityName, "delete")))
+			.button(CssGenerator.getButton("del").add("ng-if", "selectedEntity."+entityName+"Id>0").add("ng-show",checkSecurity(entity, "delete")))
 			.content("Delete");
 			if (!isParent)
-				html.button(CssGenerator.getButton("remove").add("ng-if", "selectedEntity."+entityName+"Id>0").add("ng-show",checkSecurity(entityName, "delete")))
+				html.button(CssGenerator.getButton("remove").add("ng-if", "selectedEntity."+entityName+"Id>0").add("ng-show",checkSecurity(entity, "delete")))
 				.content("Remove");
 			html._form()._div();
 		} else
 		{
 			html.div(CssGenerator.getPanelBody());
 			html.div((new HtmlAttributes()).add("class", "pull-left right-input"))
-			.button(CssGenerator.getButton("addNew").add("ng-show",checkSecurity(entityName, "create")))
+			.button(CssGenerator.getButton("addNew").add("ng-show",checkSecurity(entity, "create")))
 			.content("Add new")
 			.button(CssGenerator.getButton("search"))
 			.content("Find")
@@ -441,7 +442,7 @@ public class AngularGenerator {
 		
 		String securityCondition="true ";
 		if (EntityAttributeManager.getInstance(entityAttribute).getParent()!=null && !EntityAttributeManager.getInstance(entityAttribute).getParent().equals(entity))
-			securityCondition=checkSecurity(EntityAttributeManager.getInstance(entityAttribute).getParent().getName(), "search") ;
+			securityCondition=checkSecurity(EntityAttributeManager.getInstance(entityAttribute).getParent(), "search") ;
 		
 		
 		
@@ -532,7 +533,7 @@ public class AngularGenerator {
 					EntityManager entityAttributeManager = new EntityManagerImpl(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget());
 					if (search)
 					{
-						html.div((new HtmlAttributes()).add("class", style+" right-input").add("style","height: 59px;").add("ng-show",securityCondition+(securityCondition.equals("")?"":" && ")+ checkSecurity(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName(),"search"),false));
+						html.div((new HtmlAttributes()).add("class", style+" right-input").add("style","height: 59px;").add("ng-show",securityCondition+(securityCondition.equals("")?"":" && ")+ checkSecurity(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget(),"search"),false));
 						
 						html.div((new HtmlAttributes()).add("class", "input-group"));
 						html.span((new HtmlAttributes()).add("class","input-group-addon")).content(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName());
@@ -552,7 +553,7 @@ public class AngularGenerator {
 							HtmlCanvas downloadCanvas= new HtmlCanvas();
 							if (!lastLevel)
 							downloadCanvas
-							.button(CssGenerator.getButton("show"+Utility.getFirstUpper(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName())+"Detail"," pull-right").add("style", "margin-top: -7px").add("ng-show",checkSecurity(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName(),"create"),false))
+							.button(CssGenerator.getButton("show"+Utility.getFirstUpper(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName())+"Detail"," pull-right").add("style", "margin-top: -7px").add("ng-show",checkSecurity(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget(),"create"),false))
 							.content("Add new "+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName());
 							//<button type="button" class="btn btn-info btn-lg" data-toggle="modal" 
 							//data-target="#myModal">Open Modal</button>
@@ -568,7 +569,7 @@ public class AngularGenerator {
 							style="pull-left";
 							renderModalInsertExistingPanel(html,entityAttribute);
 							html.br().br();
-							html.div((new HtmlAttributes()).add("class", style).add("style", "width: 100%").add("ng-show", securityCondition+(securityCondition.equals("")?"":" && ")+checkSecurity(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName(),"search"),false));
+							html.div((new HtmlAttributes()).add("class", style).add("style", "width: 100%").add("ng-show", securityCondition+(securityCondition.equals("")?"":" && ")+checkSecurity(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget(),"search"),false));
 							//html._div();
 							html.div(CssGenerator.getPanel())
 							.div(CssGenerator.getPanelHeader())
@@ -674,10 +675,10 @@ public class AngularGenerator {
 	}
 	
 	
-	private String checkSecurity(String entity,String action)
+	private String checkSecurity(Entity entity,String action)
 	{
 		StringBuilder sb = new StringBuilder();
-		sb.append("(restrictionList."+entity+"==undefined || restrictionList."+entity+".can"+Utility.getFirstUpper(action)+"==true)");
+		sb.append("($root.restrictionList."+entity.getEntityGroup().getName()+".restrictionItemMap."+entity.getName()+".can"+Utility.getFirstUpper(action)+"==true)");
 		return sb.toString();
 	}
 	

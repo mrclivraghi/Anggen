@@ -4,7 +4,7 @@ angular
 .module("serverTestApp")
 .controller("EntityGroupController",EntityGroupController);
 /** @ngInject */
-function EntityGroupController($scope,$http ,entityGroupService, SecurityService, MainService ,restrictionEntityGroupService,roleService,restrictionEntityService,entityService,fieldService,annotationService,annotationAttributeService,enumFieldService,tabService,relationshipService,enumEntityService,projectService,enumValueService,restrictionFieldService,userService)
+function EntityGroupController($scope,$http,$rootScope ,entityGroupService, SecurityService, MainService ,restrictionEntityGroupService,roleService,restrictionEntityService,entityService,tabService,fieldService,restrictionFieldService,annotationService,annotationAttributeService,enumFieldService,enumEntityService,projectService,enumValueService,relationshipService,userService)
 {
 $scope.searchBean=entityGroupService.searchBean;
 $scope.entityList=entityGroupService.entityList;
@@ -19,8 +19,8 @@ entityGroupService.setEntityList(null);
 if (entityGroupService.isParent()) 
 {
 restrictionEntityGroupService.selectedEntity.show=false;
-projectService.selectedEntity.show=false;
 entityService.selectedEntity.show=false;
+projectService.selectedEntity.show=false;
 }
 }
 $scope.addNew= function()
@@ -31,8 +31,8 @@ entityGroupService.selectedEntity.show=true;
 if (entityGroupService.isParent()) 
 {
 restrictionEntityGroupService.selectedEntity.show=false;
-projectService.selectedEntity.show=false;
 entityService.selectedEntity.show=false;
+projectService.selectedEntity.show=false;
 }
 $('#entityGroupTabs li:eq(0) a').tab('show');
 };
@@ -84,8 +84,8 @@ if (!$scope.entityGroupDetailForm.$valid) return;
 if (entityGroupService.isParent()) 
 {
 restrictionEntityGroupService.selectedEntity.show=false;
-projectService.selectedEntity.show=false;
 entityService.selectedEntity.show=false;
+projectService.selectedEntity.show=false;
 entityGroupService.update().then(function successCallback(response) { 
 $scope.search();
 },function errorCallback(response) { 
@@ -135,10 +135,10 @@ $scope.refreshTableDetail= function()
 {
 if ($scope.restrictionEntityGroupGridApi!=undefined && $scope.restrictionEntityGroupGridApi!=null)
  $scope.restrictionEntityGroupGridApi.core.handleWindowResize(); 
-if ($scope.projectGridApi!=undefined && $scope.projectGridApi!=null)
- $scope.projectGridApi.core.handleWindowResize(); 
 if ($scope.entityGridApi!=undefined && $scope.entityGridApi!=null)
  $scope.entityGridApi.core.handleWindowResize(); 
+if ($scope.projectGridApi!=undefined && $scope.projectGridApi!=null)
+ $scope.projectGridApi.core.handleWindowResize(); 
 };
 $scope.loadFile = function(file,field)
 {
@@ -160,17 +160,17 @@ restrictionEntityGroupService.searchOne(entityGroupService.selectedEntity.restri
 function successCallback(response) {
 console.log("response-ok");
 console.log(response);
-if (SecurityService.restrictionList.entityGroup==undefined || SecurityService.restrictionList.entityGroup.canSearch)
-restrictionEntityGroupService.initEntityGroupList().then(function successCallback(response) {
-restrictionEntityGroupService.childrenList.entityGroupList=response.data;
+if ($rootScope.restrictionList.security!=undefined && $rootScope.restrictionList.security.restrictionItemMap.role.canSearch)
+restrictionEntityGroupService.initRoleList().then(function successCallback(response) {
+restrictionEntityGroupService.childrenList.roleList=response.data;
 },function errorCallback(response) { 
 AlertError.init({selector: "#alertError"});
 AlertError.show("Si è verificato un errore");
 return; 
 });
-if (SecurityService.restrictionList.role==undefined || SecurityService.restrictionList.role.canSearch)
-restrictionEntityGroupService.initRoleList().then(function successCallback(response) {
-restrictionEntityGroupService.childrenList.roleList=response.data;
+if ($rootScope.restrictionList.entity!=undefined && $rootScope.restrictionList.entity.restrictionItemMap.entityGroup.canSearch)
+restrictionEntityGroupService.initEntityGroupList().then(function successCallback(response) {
+restrictionEntityGroupService.childrenList.entityGroupList=response.data;
 },function errorCallback(response) { 
 AlertError.init({selector: "#alertError"});
 AlertError.show("Si è verificato un errore");
@@ -189,17 +189,17 @@ else
 {
 if (entityGroupService.selectedEntity.restrictionEntityGroup==null || entityGroupService.selectedEntity.restrictionEntityGroup==undefined)
 {
-if (SecurityService.restrictionList.entityGroup==undefined || SecurityService.restrictionList.entityGroup.canSearch)
-restrictionEntityGroupService.initEntityGroupList().then(function successCallback(response) {
-restrictionEntityGroupService.childrenList.entityGroupList=response.data;
+if ($rootScope.restrictionList.security!=undefined && $rootScope.restrictionList.security.restrictionItemMap.role.canSearch)
+restrictionEntityGroupService.initRoleList().then(function successCallback(response) {
+restrictionEntityGroupService.childrenList.roleList=response.data;
 },function errorCallback(response) { 
 AlertError.init({selector: "#alertError"});
 AlertError.show("Si è verificato un errore");
 return; 
 });
-if (SecurityService.restrictionList.role==undefined || SecurityService.restrictionList.role.canSearch)
-restrictionEntityGroupService.initRoleList().then(function successCallback(response) {
-restrictionEntityGroupService.childrenList.roleList=response.data;
+if ($rootScope.restrictionList.entity!=undefined && $rootScope.restrictionList.entity.restrictionItemMap.entityGroup.canSearch)
+restrictionEntityGroupService.initEntityGroupList().then(function successCallback(response) {
+restrictionEntityGroupService.childrenList.entityGroupList=response.data;
 },function errorCallback(response) { 
 AlertError.init({selector: "#alertError"});
 AlertError.show("Si è verificato un errore");
@@ -211,17 +211,17 @@ restrictionEntityGroupService.selectedEntity.show=true;
 else
 restrictionEntityGroupService.searchOne(entityGroupService.selectedEntity.restrictionEntityGroup).then(
 function successCallback(response) {
-if (SecurityService.restrictionList.entityGroup==undefined || SecurityService.restrictionList.entityGroup.canSearch)
-restrictionEntityGroupService.initEntityGroupList().then(function successCallback(response) {
-restrictionEntityGroupService.childrenList.entityGroupList=response.data;
+if ($rootScope.restrictionList.security!=undefined && $rootScope.restrictionList.security.restrictionItemMap.role.canSearch)
+restrictionEntityGroupService.initRoleList().then(function successCallback(response) {
+restrictionEntityGroupService.childrenList.roleList=response.data;
 },function errorCallback(response) { 
 AlertError.init({selector: "#alertError"});
 AlertError.show("Si è verificato un errore");
 return; 
 });
-if (SecurityService.restrictionList.role==undefined || SecurityService.restrictionList.role.canSearch)
-restrictionEntityGroupService.initRoleList().then(function successCallback(response) {
-restrictionEntityGroupService.childrenList.roleList=response.data;
+if ($rootScope.restrictionList.entity!=undefined && $rootScope.restrictionList.entity.restrictionItemMap.entityGroup.canSearch)
+restrictionEntityGroupService.initEntityGroupList().then(function successCallback(response) {
+restrictionEntityGroupService.childrenList.entityGroupList=response.data;
 },function errorCallback(response) { 
 AlertError.init({selector: "#alertError"});
 AlertError.show("Si è verificato un errore");
@@ -238,92 +238,6 @@ return;
 }
 $('#restrictionEntityGroupTabs li:eq(0) a').tab('show');
 };
-$scope.showProjectDetail= function(index)
-{
-if (index!=null)
-{
-projectService.searchOne(entityGroupService.selectedEntity.projectList[index]).then(
-function successCallback(response) {
-console.log("response-ok");
-console.log(response);
-if (SecurityService.restrictionList.enumEntity==undefined || SecurityService.restrictionList.enumEntity.canSearch)
-projectService.initEnumEntityList().then(function successCallback(response) {
-projectService.childrenList.enumEntityList=response.data;
-},function errorCallback(response) { 
-AlertError.init({selector: "#alertError"});
-AlertError.show("Si è verificato un errore");
-return; 
-});
-if (SecurityService.restrictionList.entityGroup==undefined || SecurityService.restrictionList.entityGroup.canSearch)
-projectService.initEntityGroupList().then(function successCallback(response) {
-projectService.childrenList.entityGroupList=response.data;
-},function errorCallback(response) { 
-AlertError.init({selector: "#alertError"});
-AlertError.show("Si è verificato un errore");
-return; 
-});
-projectService.setSelectedEntity(response.data[0]);
-projectService.selectedEntity.show=true;
-  }, function errorCallback(response) {
-AlertError.init({selector: "#alertError"});
-AlertError.show("Si è verificato un errore");
-return; 
-  }	
-);
-}
-else 
-{
-if (entityGroupService.selectedEntity.project==null || entityGroupService.selectedEntity.project==undefined)
-{
-if (SecurityService.restrictionList.enumEntity==undefined || SecurityService.restrictionList.enumEntity.canSearch)
-projectService.initEnumEntityList().then(function successCallback(response) {
-projectService.childrenList.enumEntityList=response.data;
-},function errorCallback(response) { 
-AlertError.init({selector: "#alertError"});
-AlertError.show("Si è verificato un errore");
-return; 
-});
-if (SecurityService.restrictionList.entityGroup==undefined || SecurityService.restrictionList.entityGroup.canSearch)
-projectService.initEntityGroupList().then(function successCallback(response) {
-projectService.childrenList.entityGroupList=response.data;
-},function errorCallback(response) { 
-AlertError.init({selector: "#alertError"});
-AlertError.show("Si è verificato un errore");
-return; 
-});
-projectService.setSelectedEntity(null); 
-projectService.selectedEntity.show=true; 
-}
-else
-projectService.searchOne(entityGroupService.selectedEntity.project).then(
-function successCallback(response) {
-if (SecurityService.restrictionList.enumEntity==undefined || SecurityService.restrictionList.enumEntity.canSearch)
-projectService.initEnumEntityList().then(function successCallback(response) {
-projectService.childrenList.enumEntityList=response.data;
-},function errorCallback(response) { 
-AlertError.init({selector: "#alertError"});
-AlertError.show("Si è verificato un errore");
-return; 
-});
-if (SecurityService.restrictionList.entityGroup==undefined || SecurityService.restrictionList.entityGroup.canSearch)
-projectService.initEntityGroupList().then(function successCallback(response) {
-projectService.childrenList.entityGroupList=response.data;
-},function errorCallback(response) { 
-AlertError.init({selector: "#alertError"});
-AlertError.show("Si è verificato un errore");
-return; 
-});
-projectService.setSelectedEntity(response.data[0]);
-projectService.selectedEntity.show=true;
-  }, function errorCallback(response) {
-AlertError.init({selector: "#alertError"});
-AlertError.show("Si è verificato un errore");
-return; 
-  }	
-);
-}
-$('#projectTabs li:eq(0) a').tab('show');
-};
 $scope.showEntityDetail= function(index)
 {
 if (index!=null)
@@ -332,39 +246,7 @@ entityService.searchOne(entityGroupService.selectedEntity.entityList[index]).the
 function successCallback(response) {
 console.log("response-ok");
 console.log(response);
-if (SecurityService.restrictionList.field==undefined || SecurityService.restrictionList.field.canSearch)
-entityService.initFieldList().then(function successCallback(response) {
-entityService.childrenList.fieldList=response.data;
-},function errorCallback(response) { 
-AlertError.init({selector: "#alertError"});
-AlertError.show("Si è verificato un errore");
-return; 
-});
-if (SecurityService.restrictionList.enumField==undefined || SecurityService.restrictionList.enumField.canSearch)
-entityService.initEnumFieldList().then(function successCallback(response) {
-entityService.childrenList.enumFieldList=response.data;
-},function errorCallback(response) { 
-AlertError.init({selector: "#alertError"});
-AlertError.show("Si è verificato un errore");
-return; 
-});
-if (SecurityService.restrictionList.tab==undefined || SecurityService.restrictionList.tab.canSearch)
-entityService.initTabList().then(function successCallback(response) {
-entityService.childrenList.tabList=response.data;
-},function errorCallback(response) { 
-AlertError.init({selector: "#alertError"});
-AlertError.show("Si è verificato un errore");
-return; 
-});
-if (SecurityService.restrictionList.entityGroup==undefined || SecurityService.restrictionList.entityGroup.canSearch)
-entityService.initEntityGroupList().then(function successCallback(response) {
-entityService.childrenList.entityGroupList=response.data;
-},function errorCallback(response) { 
-AlertError.init({selector: "#alertError"});
-AlertError.show("Si è verificato un errore");
-return; 
-});
-if (SecurityService.restrictionList.restrictionEntity==undefined || SecurityService.restrictionList.restrictionEntity.canSearch)
+if ($rootScope.restrictionList.security!=undefined && $rootScope.restrictionList.security.restrictionItemMap.restrictionEntity.canSearch)
 entityService.initRestrictionEntityList().then(function successCallback(response) {
 entityService.childrenList.restrictionEntityList=response.data;
 },function errorCallback(response) { 
@@ -372,7 +254,39 @@ AlertError.init({selector: "#alertError"});
 AlertError.show("Si è verificato un errore");
 return; 
 });
-if (SecurityService.restrictionList.relationship==undefined || SecurityService.restrictionList.relationship.canSearch)
+if ($rootScope.restrictionList.entity!=undefined && $rootScope.restrictionList.entity.restrictionItemMap.tab.canSearch)
+entityService.initTabList().then(function successCallback(response) {
+entityService.childrenList.tabList=response.data;
+},function errorCallback(response) { 
+AlertError.init({selector: "#alertError"});
+AlertError.show("Si è verificato un errore");
+return; 
+});
+if ($rootScope.restrictionList.entity!=undefined && $rootScope.restrictionList.entity.restrictionItemMap.entityGroup.canSearch)
+entityService.initEntityGroupList().then(function successCallback(response) {
+entityService.childrenList.entityGroupList=response.data;
+},function errorCallback(response) { 
+AlertError.init({selector: "#alertError"});
+AlertError.show("Si è verificato un errore");
+return; 
+});
+if ($rootScope.restrictionList.field!=undefined && $rootScope.restrictionList.field.restrictionItemMap.enumField.canSearch)
+entityService.initEnumFieldList().then(function successCallback(response) {
+entityService.childrenList.enumFieldList=response.data;
+},function errorCallback(response) { 
+AlertError.init({selector: "#alertError"});
+AlertError.show("Si è verificato un errore");
+return; 
+});
+if ($rootScope.restrictionList.field!=undefined && $rootScope.restrictionList.field.restrictionItemMap.field.canSearch)
+entityService.initFieldList().then(function successCallback(response) {
+entityService.childrenList.fieldList=response.data;
+},function errorCallback(response) { 
+AlertError.init({selector: "#alertError"});
+AlertError.show("Si è verificato un errore");
+return; 
+});
+if ($rootScope.restrictionList.relationship!=undefined && $rootScope.restrictionList.relationship.restrictionItemMap.relationship.canSearch)
 entityService.initRelationshipList().then(function successCallback(response) {
 entityService.childrenList.relationshipList=response.data;
 },function errorCallback(response) { 
@@ -394,39 +308,7 @@ else
 {
 if (entityGroupService.selectedEntity.entity==null || entityGroupService.selectedEntity.entity==undefined)
 {
-if (SecurityService.restrictionList.field==undefined || SecurityService.restrictionList.field.canSearch)
-entityService.initFieldList().then(function successCallback(response) {
-entityService.childrenList.fieldList=response.data;
-},function errorCallback(response) { 
-AlertError.init({selector: "#alertError"});
-AlertError.show("Si è verificato un errore");
-return; 
-});
-if (SecurityService.restrictionList.enumField==undefined || SecurityService.restrictionList.enumField.canSearch)
-entityService.initEnumFieldList().then(function successCallback(response) {
-entityService.childrenList.enumFieldList=response.data;
-},function errorCallback(response) { 
-AlertError.init({selector: "#alertError"});
-AlertError.show("Si è verificato un errore");
-return; 
-});
-if (SecurityService.restrictionList.tab==undefined || SecurityService.restrictionList.tab.canSearch)
-entityService.initTabList().then(function successCallback(response) {
-entityService.childrenList.tabList=response.data;
-},function errorCallback(response) { 
-AlertError.init({selector: "#alertError"});
-AlertError.show("Si è verificato un errore");
-return; 
-});
-if (SecurityService.restrictionList.entityGroup==undefined || SecurityService.restrictionList.entityGroup.canSearch)
-entityService.initEntityGroupList().then(function successCallback(response) {
-entityService.childrenList.entityGroupList=response.data;
-},function errorCallback(response) { 
-AlertError.init({selector: "#alertError"});
-AlertError.show("Si è verificato un errore");
-return; 
-});
-if (SecurityService.restrictionList.restrictionEntity==undefined || SecurityService.restrictionList.restrictionEntity.canSearch)
+if ($rootScope.restrictionList.security!=undefined && $rootScope.restrictionList.security.restrictionItemMap.restrictionEntity.canSearch)
 entityService.initRestrictionEntityList().then(function successCallback(response) {
 entityService.childrenList.restrictionEntityList=response.data;
 },function errorCallback(response) { 
@@ -434,7 +316,39 @@ AlertError.init({selector: "#alertError"});
 AlertError.show("Si è verificato un errore");
 return; 
 });
-if (SecurityService.restrictionList.relationship==undefined || SecurityService.restrictionList.relationship.canSearch)
+if ($rootScope.restrictionList.entity!=undefined && $rootScope.restrictionList.entity.restrictionItemMap.tab.canSearch)
+entityService.initTabList().then(function successCallback(response) {
+entityService.childrenList.tabList=response.data;
+},function errorCallback(response) { 
+AlertError.init({selector: "#alertError"});
+AlertError.show("Si è verificato un errore");
+return; 
+});
+if ($rootScope.restrictionList.entity!=undefined && $rootScope.restrictionList.entity.restrictionItemMap.entityGroup.canSearch)
+entityService.initEntityGroupList().then(function successCallback(response) {
+entityService.childrenList.entityGroupList=response.data;
+},function errorCallback(response) { 
+AlertError.init({selector: "#alertError"});
+AlertError.show("Si è verificato un errore");
+return; 
+});
+if ($rootScope.restrictionList.field!=undefined && $rootScope.restrictionList.field.restrictionItemMap.enumField.canSearch)
+entityService.initEnumFieldList().then(function successCallback(response) {
+entityService.childrenList.enumFieldList=response.data;
+},function errorCallback(response) { 
+AlertError.init({selector: "#alertError"});
+AlertError.show("Si è verificato un errore");
+return; 
+});
+if ($rootScope.restrictionList.field!=undefined && $rootScope.restrictionList.field.restrictionItemMap.field.canSearch)
+entityService.initFieldList().then(function successCallback(response) {
+entityService.childrenList.fieldList=response.data;
+},function errorCallback(response) { 
+AlertError.init({selector: "#alertError"});
+AlertError.show("Si è verificato un errore");
+return; 
+});
+if ($rootScope.restrictionList.relationship!=undefined && $rootScope.restrictionList.relationship.restrictionItemMap.relationship.canSearch)
 entityService.initRelationshipList().then(function successCallback(response) {
 entityService.childrenList.relationshipList=response.data;
 },function errorCallback(response) { 
@@ -449,39 +363,7 @@ entityService.selectedEntity.show=true;
 else
 entityService.searchOne(entityGroupService.selectedEntity.entity).then(
 function successCallback(response) {
-if (SecurityService.restrictionList.field==undefined || SecurityService.restrictionList.field.canSearch)
-entityService.initFieldList().then(function successCallback(response) {
-entityService.childrenList.fieldList=response.data;
-},function errorCallback(response) { 
-AlertError.init({selector: "#alertError"});
-AlertError.show("Si è verificato un errore");
-return; 
-});
-if (SecurityService.restrictionList.enumField==undefined || SecurityService.restrictionList.enumField.canSearch)
-entityService.initEnumFieldList().then(function successCallback(response) {
-entityService.childrenList.enumFieldList=response.data;
-},function errorCallback(response) { 
-AlertError.init({selector: "#alertError"});
-AlertError.show("Si è verificato un errore");
-return; 
-});
-if (SecurityService.restrictionList.tab==undefined || SecurityService.restrictionList.tab.canSearch)
-entityService.initTabList().then(function successCallback(response) {
-entityService.childrenList.tabList=response.data;
-},function errorCallback(response) { 
-AlertError.init({selector: "#alertError"});
-AlertError.show("Si è verificato un errore");
-return; 
-});
-if (SecurityService.restrictionList.entityGroup==undefined || SecurityService.restrictionList.entityGroup.canSearch)
-entityService.initEntityGroupList().then(function successCallback(response) {
-entityService.childrenList.entityGroupList=response.data;
-},function errorCallback(response) { 
-AlertError.init({selector: "#alertError"});
-AlertError.show("Si è verificato un errore");
-return; 
-});
-if (SecurityService.restrictionList.restrictionEntity==undefined || SecurityService.restrictionList.restrictionEntity.canSearch)
+if ($rootScope.restrictionList.security!=undefined && $rootScope.restrictionList.security.restrictionItemMap.restrictionEntity.canSearch)
 entityService.initRestrictionEntityList().then(function successCallback(response) {
 entityService.childrenList.restrictionEntityList=response.data;
 },function errorCallback(response) { 
@@ -489,7 +371,39 @@ AlertError.init({selector: "#alertError"});
 AlertError.show("Si è verificato un errore");
 return; 
 });
-if (SecurityService.restrictionList.relationship==undefined || SecurityService.restrictionList.relationship.canSearch)
+if ($rootScope.restrictionList.entity!=undefined && $rootScope.restrictionList.entity.restrictionItemMap.tab.canSearch)
+entityService.initTabList().then(function successCallback(response) {
+entityService.childrenList.tabList=response.data;
+},function errorCallback(response) { 
+AlertError.init({selector: "#alertError"});
+AlertError.show("Si è verificato un errore");
+return; 
+});
+if ($rootScope.restrictionList.entity!=undefined && $rootScope.restrictionList.entity.restrictionItemMap.entityGroup.canSearch)
+entityService.initEntityGroupList().then(function successCallback(response) {
+entityService.childrenList.entityGroupList=response.data;
+},function errorCallback(response) { 
+AlertError.init({selector: "#alertError"});
+AlertError.show("Si è verificato un errore");
+return; 
+});
+if ($rootScope.restrictionList.field!=undefined && $rootScope.restrictionList.field.restrictionItemMap.enumField.canSearch)
+entityService.initEnumFieldList().then(function successCallback(response) {
+entityService.childrenList.enumFieldList=response.data;
+},function errorCallback(response) { 
+AlertError.init({selector: "#alertError"});
+AlertError.show("Si è verificato un errore");
+return; 
+});
+if ($rootScope.restrictionList.field!=undefined && $rootScope.restrictionList.field.restrictionItemMap.field.canSearch)
+entityService.initFieldList().then(function successCallback(response) {
+entityService.childrenList.fieldList=response.data;
+},function errorCallback(response) { 
+AlertError.init({selector: "#alertError"});
+AlertError.show("Si è verificato un errore");
+return; 
+});
+if ($rootScope.restrictionList.relationship!=undefined && $rootScope.restrictionList.relationship.restrictionItemMap.relationship.canSearch)
 entityService.initRelationshipList().then(function successCallback(response) {
 entityService.childrenList.relationshipList=response.data;
 },function errorCallback(response) { 
@@ -508,6 +422,92 @@ return;
 );
 }
 $('#entityTabs li:eq(0) a').tab('show');
+};
+$scope.showProjectDetail= function(index)
+{
+if (index!=null)
+{
+projectService.searchOne(entityGroupService.selectedEntity.projectList[index]).then(
+function successCallback(response) {
+console.log("response-ok");
+console.log(response);
+if ($rootScope.restrictionList.entity!=undefined && $rootScope.restrictionList.entity.restrictionItemMap.enumEntity.canSearch)
+projectService.initEnumEntityList().then(function successCallback(response) {
+projectService.childrenList.enumEntityList=response.data;
+},function errorCallback(response) { 
+AlertError.init({selector: "#alertError"});
+AlertError.show("Si è verificato un errore");
+return; 
+});
+if ($rootScope.restrictionList.entity!=undefined && $rootScope.restrictionList.entity.restrictionItemMap.entityGroup.canSearch)
+projectService.initEntityGroupList().then(function successCallback(response) {
+projectService.childrenList.entityGroupList=response.data;
+},function errorCallback(response) { 
+AlertError.init({selector: "#alertError"});
+AlertError.show("Si è verificato un errore");
+return; 
+});
+projectService.setSelectedEntity(response.data[0]);
+projectService.selectedEntity.show=true;
+  }, function errorCallback(response) {
+AlertError.init({selector: "#alertError"});
+AlertError.show("Si è verificato un errore");
+return; 
+  }	
+);
+}
+else 
+{
+if (entityGroupService.selectedEntity.project==null || entityGroupService.selectedEntity.project==undefined)
+{
+if ($rootScope.restrictionList.entity!=undefined && $rootScope.restrictionList.entity.restrictionItemMap.enumEntity.canSearch)
+projectService.initEnumEntityList().then(function successCallback(response) {
+projectService.childrenList.enumEntityList=response.data;
+},function errorCallback(response) { 
+AlertError.init({selector: "#alertError"});
+AlertError.show("Si è verificato un errore");
+return; 
+});
+if ($rootScope.restrictionList.entity!=undefined && $rootScope.restrictionList.entity.restrictionItemMap.entityGroup.canSearch)
+projectService.initEntityGroupList().then(function successCallback(response) {
+projectService.childrenList.entityGroupList=response.data;
+},function errorCallback(response) { 
+AlertError.init({selector: "#alertError"});
+AlertError.show("Si è verificato un errore");
+return; 
+});
+projectService.setSelectedEntity(null); 
+projectService.selectedEntity.show=true; 
+}
+else
+projectService.searchOne(entityGroupService.selectedEntity.project).then(
+function successCallback(response) {
+if ($rootScope.restrictionList.entity!=undefined && $rootScope.restrictionList.entity.restrictionItemMap.enumEntity.canSearch)
+projectService.initEnumEntityList().then(function successCallback(response) {
+projectService.childrenList.enumEntityList=response.data;
+},function errorCallback(response) { 
+AlertError.init({selector: "#alertError"});
+AlertError.show("Si è verificato un errore");
+return; 
+});
+if ($rootScope.restrictionList.entity!=undefined && $rootScope.restrictionList.entity.restrictionItemMap.entityGroup.canSearch)
+projectService.initEntityGroupList().then(function successCallback(response) {
+projectService.childrenList.entityGroupList=response.data;
+},function errorCallback(response) { 
+AlertError.init({selector: "#alertError"});
+AlertError.show("Si è verificato un errore");
+return; 
+});
+projectService.setSelectedEntity(response.data[0]);
+projectService.selectedEntity.show=true;
+  }, function errorCallback(response) {
+AlertError.init({selector: "#alertError"});
+AlertError.show("Si è verificato un errore");
+return; 
+  }	
+);
+}
+$('#projectTabs li:eq(0) a').tab('show');
 };
 $scope.downloadEntityList=function()
 {
@@ -528,14 +528,6 @@ column: {style:{Font:{Bold:"1"}}}
 };
 alasql('SELECT * INTO XLSXML("restrictionEntityGroup.xls",?) FROM ?',[mystyle,$scope.selectedEntity.restrictionEntityGroupList]);
 };
-$scope.downloadProjectList=function()
-{
-var mystyle = {
- headers:true, 
-column: {style:{Font:{Bold:"1"}}}
-};
-alasql('SELECT * INTO XLSXML("project.xls",?) FROM ?',[mystyle,$scope.selectedEntity.projectList]);
-};
 $scope.saveLinkedEntity= function() {
 entityGroupService.selectedEntity.entityList.push(entityGroupService.selectedEntity.entity);
 }
@@ -547,6 +539,14 @@ column: {style:{Font:{Bold:"1"}}}
 };
 alasql('SELECT * INTO XLSXML("entity.xls",?) FROM ?',[mystyle,$scope.selectedEntity.entityList]);
 };
+$scope.downloadProjectList=function()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+alasql('SELECT * INTO XLSXML("project.xls",?) FROM ?',[mystyle,$scope.selectedEntity.projectList]);
+};
 $scope.entityGroupGridOptions={};
 cloneObject(entityGroupService.gridOptions,$scope.entityGroupGridOptions);
 $scope.entityGroupGridOptions.data=entityGroupService.entityList;
@@ -555,7 +555,7 @@ $scope.entityGroupGridApi = gridApi;
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
-if (SecurityService.restrictionList.restrictionEntityGroup==undefined || SecurityService.restrictionList.restrictionEntityGroup.canSearch)
+if ($rootScope.restrictionList.security!=undefined && $rootScope.restrictionList.security.restrictionItemMap.restrictionEntityGroup.canSearch)
 entityGroupService.initRestrictionEntityGroupList().then(function successCallback(response) {
 entityGroupService.childrenList.restrictionEntityGroupList=response.data;
 },function errorCallback(response) { 
@@ -563,15 +563,7 @@ AlertError.init({selector: "#alertError"});
 AlertError.show("Si è verificato un errore");
 return; 
 });
-if (SecurityService.restrictionList.project==undefined || SecurityService.restrictionList.project.canSearch)
-entityGroupService.initProjectList().then(function successCallback(response) {
-entityGroupService.childrenList.projectList=response.data;
-},function errorCallback(response) { 
-AlertError.init({selector: "#alertError"});
-AlertError.show("Si è verificato un errore");
-return; 
-});
-if (SecurityService.restrictionList.entity==undefined || SecurityService.restrictionList.entity.canSearch)
+if ($rootScope.restrictionList.entity!=undefined && $rootScope.restrictionList.entity.restrictionItemMap.entity.canSearch)
 entityGroupService.initEntityList().then(function successCallback(response) {
 entityGroupService.childrenList.entityList=response.data;
 },function errorCallback(response) { 
@@ -579,6 +571,15 @@ AlertError.init({selector: "#alertError"});
 AlertError.show("Si è verificato un errore");
 return; 
 });
+if ($rootScope.restrictionList.entity!=undefined && $rootScope.restrictionList.entity.restrictionItemMap.project.canSearch)
+entityGroupService.initProjectList().then(function successCallback(response) {
+entityGroupService.childrenList.projectList=response.data;
+},function errorCallback(response) { 
+AlertError.init({selector: "#alertError"});
+AlertError.show("Si è verificato un errore");
+return; 
+});
+entityGroupService.childrenList.securityTypeList=["BLOCK_WITH_RESTRICTION","ACCESS_WITH_PERMISSION",];
 entityGroupService.searchOne(row.entity).then(function(response) { 
 console.log(response.data);
 entityGroupService.setSelectedEntity(response.data[0]);
@@ -598,17 +599,17 @@ $scope.restrictionEntityGroupGridApi = gridApi;
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
-if (SecurityService.restrictionList.entityGroup==undefined || SecurityService.restrictionList.entityGroup.canSearch)
-restrictionEntityGroupService.initEntityGroupList().then(function successCallback(response) {
-restrictionEntityGroupService.childrenList.entityGroupList=response.data;
+if ($rootScope.restrictionList.security!=undefined && $rootScope.restrictionList.security.restrictionItemMap.role.canSearch)
+restrictionEntityGroupService.initRoleList().then(function successCallback(response) {
+restrictionEntityGroupService.childrenList.roleList=response.data;
 },function errorCallback(response) { 
 AlertError.init({selector: "#alertError"});
 AlertError.show("Si è verificato un errore");
 return; 
 });
-if (SecurityService.restrictionList.role==undefined || SecurityService.restrictionList.role.canSearch)
-restrictionEntityGroupService.initRoleList().then(function successCallback(response) {
-restrictionEntityGroupService.childrenList.roleList=response.data;
+if ($rootScope.restrictionList.entity!=undefined && $rootScope.restrictionList.entity.restrictionItemMap.entityGroup.canSearch)
+restrictionEntityGroupService.initEntityGroupList().then(function successCallback(response) {
+restrictionEntityGroupService.childrenList.entityGroupList=response.data;
 },function errorCallback(response) { 
 AlertError.init({selector: "#alertError"});
 AlertError.show("Si è verificato un errore");
@@ -625,41 +626,6 @@ restrictionEntityGroupService.setSelectedEntity(null);
 restrictionEntityGroupService.selectedEntity.show = row.isSelected;
 });
   };
-$scope.projectGridOptions={};
-cloneObject(projectService.gridOptions,$scope.projectGridOptions);
-$scope.projectGridOptions.data=$scope.selectedEntity.projectList;
-$scope.projectGridOptions.onRegisterApi = function(gridApi){
-$scope.projectGridApi = gridApi;
-gridApi.selection.on.rowSelectionChanged($scope,function(row){
-if (row.isSelected)
-{
-if (SecurityService.restrictionList.enumEntity==undefined || SecurityService.restrictionList.enumEntity.canSearch)
-projectService.initEnumEntityList().then(function successCallback(response) {
-projectService.childrenList.enumEntityList=response.data;
-},function errorCallback(response) { 
-AlertError.init({selector: "#alertError"});
-AlertError.show("Si è verificato un errore");
-return; 
-});
-if (SecurityService.restrictionList.entityGroup==undefined || SecurityService.restrictionList.entityGroup.canSearch)
-projectService.initEntityGroupList().then(function successCallback(response) {
-projectService.childrenList.entityGroupList=response.data;
-},function errorCallback(response) { 
-AlertError.init({selector: "#alertError"});
-AlertError.show("Si è verificato un errore");
-return; 
-});
-projectService.searchOne(row.entity).then(function(response) { 
-console.log(response.data);
-projectService.setSelectedEntity(response.data[0]);
-});
-$('#projectTabs li:eq(0) a').tab('show');
-}
-else 
-projectService.setSelectedEntity(null);
-projectService.selectedEntity.show = row.isSelected;
-});
-  };
 $scope.entityGridOptions={};
 cloneObject(entityService.gridOptions,$scope.entityGridOptions);
 $scope.entityGridOptions.data=$scope.selectedEntity.entityList;
@@ -668,39 +634,7 @@ $scope.entityGridApi = gridApi;
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
-if (SecurityService.restrictionList.field==undefined || SecurityService.restrictionList.field.canSearch)
-entityService.initFieldList().then(function successCallback(response) {
-entityService.childrenList.fieldList=response.data;
-},function errorCallback(response) { 
-AlertError.init({selector: "#alertError"});
-AlertError.show("Si è verificato un errore");
-return; 
-});
-if (SecurityService.restrictionList.enumField==undefined || SecurityService.restrictionList.enumField.canSearch)
-entityService.initEnumFieldList().then(function successCallback(response) {
-entityService.childrenList.enumFieldList=response.data;
-},function errorCallback(response) { 
-AlertError.init({selector: "#alertError"});
-AlertError.show("Si è verificato un errore");
-return; 
-});
-if (SecurityService.restrictionList.tab==undefined || SecurityService.restrictionList.tab.canSearch)
-entityService.initTabList().then(function successCallback(response) {
-entityService.childrenList.tabList=response.data;
-},function errorCallback(response) { 
-AlertError.init({selector: "#alertError"});
-AlertError.show("Si è verificato un errore");
-return; 
-});
-if (SecurityService.restrictionList.entityGroup==undefined || SecurityService.restrictionList.entityGroup.canSearch)
-entityService.initEntityGroupList().then(function successCallback(response) {
-entityService.childrenList.entityGroupList=response.data;
-},function errorCallback(response) { 
-AlertError.init({selector: "#alertError"});
-AlertError.show("Si è verificato un errore");
-return; 
-});
-if (SecurityService.restrictionList.restrictionEntity==undefined || SecurityService.restrictionList.restrictionEntity.canSearch)
+if ($rootScope.restrictionList.security!=undefined && $rootScope.restrictionList.security.restrictionItemMap.restrictionEntity.canSearch)
 entityService.initRestrictionEntityList().then(function successCallback(response) {
 entityService.childrenList.restrictionEntityList=response.data;
 },function errorCallback(response) { 
@@ -708,7 +642,39 @@ AlertError.init({selector: "#alertError"});
 AlertError.show("Si è verificato un errore");
 return; 
 });
-if (SecurityService.restrictionList.relationship==undefined || SecurityService.restrictionList.relationship.canSearch)
+if ($rootScope.restrictionList.entity!=undefined && $rootScope.restrictionList.entity.restrictionItemMap.tab.canSearch)
+entityService.initTabList().then(function successCallback(response) {
+entityService.childrenList.tabList=response.data;
+},function errorCallback(response) { 
+AlertError.init({selector: "#alertError"});
+AlertError.show("Si è verificato un errore");
+return; 
+});
+if ($rootScope.restrictionList.entity!=undefined && $rootScope.restrictionList.entity.restrictionItemMap.entityGroup.canSearch)
+entityService.initEntityGroupList().then(function successCallback(response) {
+entityService.childrenList.entityGroupList=response.data;
+},function errorCallback(response) { 
+AlertError.init({selector: "#alertError"});
+AlertError.show("Si è verificato un errore");
+return; 
+});
+if ($rootScope.restrictionList.field!=undefined && $rootScope.restrictionList.field.restrictionItemMap.enumField.canSearch)
+entityService.initEnumFieldList().then(function successCallback(response) {
+entityService.childrenList.enumFieldList=response.data;
+},function errorCallback(response) { 
+AlertError.init({selector: "#alertError"});
+AlertError.show("Si è verificato un errore");
+return; 
+});
+if ($rootScope.restrictionList.field!=undefined && $rootScope.restrictionList.field.restrictionItemMap.field.canSearch)
+entityService.initFieldList().then(function successCallback(response) {
+entityService.childrenList.fieldList=response.data;
+},function errorCallback(response) { 
+AlertError.init({selector: "#alertError"});
+AlertError.show("Si è verificato un errore");
+return; 
+});
+if ($rootScope.restrictionList.relationship!=undefined && $rootScope.restrictionList.relationship.restrictionItemMap.relationship.canSearch)
 entityService.initRelationshipList().then(function successCallback(response) {
 entityService.childrenList.relationshipList=response.data;
 },function errorCallback(response) { 
@@ -728,16 +694,51 @@ entityService.setSelectedEntity(null);
 entityService.selectedEntity.show = row.isSelected;
 });
   };
-function updateParentEntities() { 
-projectService.initEntityGroupList().then(function(response) {
+$scope.projectGridOptions={};
+cloneObject(projectService.gridOptions,$scope.projectGridOptions);
+$scope.projectGridOptions.data=$scope.selectedEntity.projectList;
+$scope.projectGridOptions.onRegisterApi = function(gridApi){
+$scope.projectGridApi = gridApi;
+gridApi.selection.on.rowSelectionChanged($scope,function(row){
+if (row.isSelected)
+{
+if ($rootScope.restrictionList.entity!=undefined && $rootScope.restrictionList.entity.restrictionItemMap.enumEntity.canSearch)
+projectService.initEnumEntityList().then(function successCallback(response) {
+projectService.childrenList.enumEntityList=response.data;
+},function errorCallback(response) { 
+AlertError.init({selector: "#alertError"});
+AlertError.show("Si è verificato un errore");
+return; 
+});
+if ($rootScope.restrictionList.entity!=undefined && $rootScope.restrictionList.entity.restrictionItemMap.entityGroup.canSearch)
+projectService.initEntityGroupList().then(function successCallback(response) {
 projectService.childrenList.entityGroupList=response.data;
+},function errorCallback(response) { 
+AlertError.init({selector: "#alertError"});
+AlertError.show("Si è verificato un errore");
+return; 
+});
+projectService.searchOne(row.entity).then(function(response) { 
+console.log(response.data);
+projectService.setSelectedEntity(response.data[0]);
+});
+$('#projectTabs li:eq(0) a').tab('show');
+}
+else 
+projectService.setSelectedEntity(null);
+projectService.selectedEntity.show = row.isSelected;
+});
+  };
+function updateParentEntities() { 
+restrictionEntityGroupService.initEntityGroupList().then(function(response) {
+restrictionEntityGroupService.childrenList.entityGroupList=response.data;
 });
 
-if (projectService.selectedEntity.projectId!=undefined) projectService.searchOne(projectService.selectedEntity).then(
+if (restrictionEntityGroupService.selectedEntity.restrictionEntityGroupId!=undefined) restrictionEntityGroupService.searchOne(restrictionEntityGroupService.selectedEntity).then(
 function successCallback(response) {
 console.log("response-ok");
 console.log(response);
-projectService.setSelectedEntity(response.data[0]);
+restrictionEntityGroupService.setSelectedEntity(response.data[0]);
   }, function errorCallback(response) {
 AlertError.init({selector: "#alertError"});
 AlertError.show("Si è verificato un errore");
@@ -759,15 +760,15 @@ AlertError.show("Si è verificato un errore");
 return; 
   }	
 );
-restrictionEntityGroupService.initEntityGroupList().then(function(response) {
-restrictionEntityGroupService.childrenList.entityGroupList=response.data;
+projectService.initEntityGroupList().then(function(response) {
+projectService.childrenList.entityGroupList=response.data;
 });
 
-if (restrictionEntityGroupService.selectedEntity.restrictionEntityGroupId!=undefined) restrictionEntityGroupService.searchOne(restrictionEntityGroupService.selectedEntity).then(
+if (projectService.selectedEntity.projectId!=undefined) projectService.searchOne(projectService.selectedEntity).then(
 function successCallback(response) {
 console.log("response-ok");
 console.log(response);
-restrictionEntityGroupService.setSelectedEntity(response.data[0]);
+projectService.setSelectedEntity(response.data[0]);
   }, function errorCallback(response) {
 AlertError.init({selector: "#alertError"});
 AlertError.show("Si è verificato un errore");

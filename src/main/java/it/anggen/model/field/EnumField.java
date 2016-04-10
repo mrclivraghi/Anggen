@@ -15,41 +15,39 @@ import org.hibernate.annotations.Type;
 @Table(schema = "meta", name = "enum_field")
 @it.anggen.utils.annotation.SecurityType(type = it.anggen.model.SecurityType.ACCESS_WITH_PERMISSION)
 @MaxDescendantLevel(100)
-public class EnumField
-    extends EntityAttribute
-{
+public class EnumField extends EntityAttribute{
 
-    public final static java.lang.Long staticEntityId = 5L;
+    public final static java.lang.Long staticEntityId = 18L;
     @javax.persistence.Column(name = "enum_field_id")
+    @it.anggen.utils.annotation.Priority(1)
+    @it.anggen.utils.annotation.DescriptionField
     @Id
     @GeneratedValue
-    @it.anggen.utils.annotation.DescriptionField
-    @it.anggen.utils.annotation.Priority(1)
     private java.lang.Long enumFieldId;
     @javax.persistence.Column(name = "priority")
     @it.anggen.utils.annotation.Priority(2)
     private Integer priority;
     @javax.persistence.Column(name = "name")
-    @it.anggen.utils.annotation.Priority(2)
     @it.anggen.utils.annotation.DescriptionField
+    @it.anggen.utils.annotation.Priority(2)
     private String name;
-    @OneToMany(fetch = javax.persistence.FetchType.EAGER)
-    @Type(type = "it.anggen.model.field.Annotation")
-    @javax.persistence.JoinColumn(name = "enum_field_id_enum_field")
-    @it.anggen.utils.annotation.Priority(4)
-    private List<Annotation> annotationList;
     @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.EAGER)
-    @javax.persistence.JoinColumn(name = "tab_id_tab")
+    @javax.persistence.JoinColumn(name = "entity_id_entity")
     @it.anggen.utils.annotation.Priority(4)
-    private it.anggen.model.entity.Tab tab;
+    private it.anggen.model.entity.Entity entity;
     @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.EAGER)
     @javax.persistence.JoinColumn(name = "enum_entity_id_enum_entity")
     @it.anggen.utils.annotation.Priority(4)
     private it.anggen.model.entity.EnumEntity enumEntity;
     @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.EAGER)
-    @javax.persistence.JoinColumn(name = "entity_id_entity")
+    @javax.persistence.JoinColumn(name = "tab_id_tab")
     @it.anggen.utils.annotation.Priority(4)
-    private it.anggen.model.entity.Entity entity;
+    private it.anggen.model.entity.Tab tab;
+    @OneToMany(fetch = javax.persistence.FetchType.EAGER)
+    @Type(type = "it.anggen.model.field.Annotation")
+    @javax.persistence.JoinColumn(name = "enum_field_id_enum_field")
+    @it.anggen.utils.annotation.Priority(4)
+    private List<Annotation> annotationList;
 
     public java.lang.Long getEnumFieldId() {
         return this.enumFieldId;
@@ -75,20 +73,12 @@ public class EnumField
         this.name=name;
     }
 
-    public List<Annotation> getAnnotationList() {
-        return this.annotationList;
+    public it.anggen.model.entity.Entity getEntity() {
+        return this.entity;
     }
 
-    public void setAnnotationList(List<Annotation> annotationList) {
-        this.annotationList=annotationList;
-    }
-
-    public it.anggen.model.entity.Tab getTab() {
-        return this.tab;
-    }
-
-    public void setTab(it.anggen.model.entity.Tab tab) {
-        this.tab=tab;
+    public void setEntity(it.anggen.model.entity.Entity entity) {
+        this.entity=entity;
     }
 
     public it.anggen.model.entity.EnumEntity getEnumEntity() {
@@ -99,12 +89,20 @@ public class EnumField
         this.enumEntity=enumEntity;
     }
 
-    public it.anggen.model.entity.Entity getEntity() {
-        return this.entity;
+    public it.anggen.model.entity.Tab getTab() {
+        return this.tab;
     }
 
-    public void setEntity(it.anggen.model.entity.Entity entity) {
-        this.entity=entity;
+    public void setTab(it.anggen.model.entity.Tab tab) {
+        this.tab=tab;
+    }
+
+    public List<Annotation> getAnnotationList() {
+        return this.annotationList;
+    }
+
+    public void setAnnotationList(List<Annotation> annotationList) {
+        this.annotationList=annotationList;
     }
 
 }

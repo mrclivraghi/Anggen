@@ -7,12 +7,12 @@ import it.anggen.model.field.Annotation;
 public class EnumFieldSearchBean {
 
     public java.lang.Long enumFieldId;
-    public java.lang.String name;
     public java.lang.Integer priority;
-    public List<Annotation> annotationList;
-    public it.anggen.model.entity.Tab tab;
-    public it.anggen.model.entity.EnumEntity enumEntity;
+    public java.lang.String name;
     public it.anggen.model.entity.Entity entity;
+    public it.anggen.model.entity.EnumEntity enumEntity;
+    public it.anggen.model.entity.Tab tab;
+    public List<Annotation> annotationList;
 
     public java.lang.Long getEnumFieldId() {
         return this.enumFieldId;
@@ -20,14 +20,6 @@ public class EnumFieldSearchBean {
 
     public void setEnumFieldId(java.lang.Long enumFieldId) {
         this.enumFieldId=enumFieldId;
-    }
-
-    public java.lang.String getName() {
-        return this.name;
-    }
-
-    public void setName(java.lang.String name) {
-        this.name=name;
     }
 
     public java.lang.Integer getPriority() {
@@ -38,20 +30,20 @@ public class EnumFieldSearchBean {
         this.priority=priority;
     }
 
-    public List<Annotation> getAnnotationList() {
-        return this.annotationList;
+    public java.lang.String getName() {
+        return this.name;
     }
 
-    public void setAnnotationList(List<Annotation> annotationList) {
-        this.annotationList=annotationList;
+    public void setName(java.lang.String name) {
+        this.name=name;
     }
 
-    public it.anggen.model.entity.Tab getTab() {
-        return this.tab;
+    public it.anggen.model.entity.Entity getEntity() {
+        return this.entity;
     }
 
-    public void setTab(it.anggen.model.entity.Tab tab) {
-        this.tab=tab;
+    public void setEntity(it.anggen.model.entity.Entity entity) {
+        this.entity=entity;
     }
 
     public it.anggen.model.entity.EnumEntity getEnumEntity() {
@@ -62,12 +54,20 @@ public class EnumFieldSearchBean {
         this.enumEntity=enumEntity;
     }
 
-    public it.anggen.model.entity.Entity getEntity() {
-        return this.entity;
+    public it.anggen.model.entity.Tab getTab() {
+        return this.tab;
     }
 
-    public void setEntity(it.anggen.model.entity.Entity entity) {
-        this.entity=entity;
+    public void setTab(it.anggen.model.entity.Tab tab) {
+        this.tab=tab;
+    }
+
+    public List<Annotation> getAnnotationList() {
+        return this.annotationList;
+    }
+
+    public void setAnnotationList(List<Annotation> annotationList) {
+        this.annotationList=annotationList;
     }
 
 }

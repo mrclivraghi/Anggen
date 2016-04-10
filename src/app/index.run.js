@@ -7,7 +7,6 @@
 
   /** @ngInject */
   function runBlock($log,SecurityService,$rootScope,$uibModal) { 
-
 var deregistrationsCallbacks=[];
 deregistrationsCallbacks[0] = $rootScope.$on('security:loginRequired', function(evt,args) {
 showLogin();
@@ -22,12 +21,9 @@ animation: true,
  keyboard: false
 });
 function close(){
-
 SecurityService.init().then(function successCallback(response) {
 $rootScope.restrictionList=response.data;
-//$rootScope.restrictionList=response.data;
 });
-
 if(loginWindow){
 loginWindow.dismiss();
 loginWindow = null;
@@ -54,11 +50,6 @@ $log.debug("loggato come ");
 $log.debug(response.data.message);
 SecurityService.init().then(function successCallback(response) {
 $rootScope.restrictionList=response.data;
-//$log.debug(response.data);
-//cloneObject(response.data,SecurityService.restrictionList);
-
-//SecurityService.setRestrictionList(response.data);
-$log.debug(SecurityService.restrictionList);
 });
 }
 },function errorCallback(response) { 

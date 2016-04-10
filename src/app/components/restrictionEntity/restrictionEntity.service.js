@@ -70,17 +70,17 @@ var promise= $http.post("http://127.0.0.1:8080/ServerTestApp/restrictionEntity/"
 });
 return promise; 
 }
- this.initEntityList= function()
-{
-var promise= $http
-.post("http://127.0.0.1:8080/ServerTestApp/entity/search",
-{});
-return promise;
-};
  this.initRoleList= function()
 {
 var promise= $http
 .post("http://127.0.0.1:8080/ServerTestApp/role/search",
+{});
+return promise;
+};
+ this.initEntityList= function()
+{
+var promise= $http
+.post("http://127.0.0.1:8080/ServerTestApp/entity/search",
 {});
 return promise;
 };
@@ -93,12 +93,12 @@ paginationPageSize: 10,
 enableGridMenu: true,
 columnDefs: [    
 { name: 'restrictionEntityId'},
-{ name: 'canSearch'},
-{ name: 'canDelete'},
-{ name: 'canUpdate'},
 { name: 'canCreate'},
-{ name: 'entity.entityId', displayName: 'entity'},
-{ name: 'role.roleId', displayName: 'role'} 
+{ name: 'canUpdate'},
+{ name: 'canDelete'},
+{ name: 'canSearch'},
+{ name: 'role.roleId', displayName: 'role'},
+{ name: 'entity.entityId', displayName: 'entity'} 
 ]
  };
 };

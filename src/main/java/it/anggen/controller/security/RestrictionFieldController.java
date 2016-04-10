@@ -160,10 +160,10 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         }
         if (restrictionField.getField()!=null)
         {
-        restrictionField.getField().setAnnotationList(null);
         restrictionField.getField().setRestrictionFieldList(null);
-        restrictionField.getField().setTab(null);
         restrictionField.getField().setEntity(null);
+        restrictionField.getField().setTab(null);
+        restrictionField.getField().setAnnotationList(null);
         }
     }
 

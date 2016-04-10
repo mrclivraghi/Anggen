@@ -34,7 +34,7 @@ public class EnumFieldServiceImpl
 
     @Override
     public List<it.anggen.model.field.EnumField> find(EnumFieldSearchBean enumField) {
-        return enumFieldRepository.findByEnumFieldIdAndNameAndPriorityAndAnnotationAndTabAndEnumEntityAndEntity(enumField.getEnumFieldId(),enumField.getName(),enumField.getPriority(),enumField.getAnnotationList()==null? null :enumField.getAnnotationList().get(0),enumField.getTab(),enumField.getEnumEntity(),enumField.getEntity());
+        return enumFieldRepository.findByEnumFieldIdAndPriorityAndNameAndEntityAndEnumEntityAndTabAndAnnotation(enumField.getEnumFieldId(),enumField.getPriority(),enumField.getName(),enumField.getEntity(),enumField.getEnumEntity(),enumField.getTab(),enumField.getAnnotationList()==null? null :enumField.getAnnotationList().get(0));
     }
 
     @Override
@@ -57,19 +57,19 @@ public class EnumFieldServiceImpl
         annotation.setEnumField(enumField);
         }
         it.anggen.model.field.EnumField returnedEnumField=enumFieldRepository.save(enumField);
-        if (enumField.getTab()!=null)
-        {
-        List<it.anggen.model.field.EnumField> enumFieldList = enumFieldRepository.findByTab( enumField.getTab());
-        if (!enumFieldList.contains(returnedEnumField))
-        enumFieldList.add(returnedEnumField);
-        returnedEnumField.getTab().setEnumFieldList(enumFieldList);
-        }
         if (enumField.getEntity()!=null)
         {
         List<it.anggen.model.field.EnumField> enumFieldList = enumFieldRepository.findByEntity( enumField.getEntity());
         if (!enumFieldList.contains(returnedEnumField))
         enumFieldList.add(returnedEnumField);
         returnedEnumField.getEntity().setEnumFieldList(enumFieldList);
+        }
+        if (enumField.getTab()!=null)
+        {
+        List<it.anggen.model.field.EnumField> enumFieldList = enumFieldRepository.findByTab( enumField.getTab());
+        if (!enumFieldList.contains(returnedEnumField))
+        enumFieldList.add(returnedEnumField);
+        returnedEnumField.getTab().setEnumFieldList(enumFieldList);
         }
          return returnedEnumField;
     }

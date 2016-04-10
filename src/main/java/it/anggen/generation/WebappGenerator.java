@@ -330,7 +330,7 @@ public class WebappGenerator {
 			String enableAll="";
 			if (!generator.security)
 				enableAll=",\"/**\"";
-			configureBlock.directStatement(".antMatchers(\"/css/**\",\"/img/**\",\"/js/**\",\"/auth/**\",\"/login/**\""+enableAll+").permitAll()");
+			configureBlock.directStatement(".antMatchers(\"/css/**\",\"/img/**\",\"/js/**\",\"/auth/**\",\"/login/**\",\"/authentication/**\""+enableAll+").permitAll()");
 			configureBlock.directStatement(".and()");
 			configureBlock.directStatement(".authorizeRequests().anyRequest().fullyAuthenticated().and()");
 			configureBlock.directStatement(".formLogin().and().csrf()");

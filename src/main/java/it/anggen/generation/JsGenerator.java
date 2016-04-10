@@ -339,7 +339,11 @@ public class JsGenerator {
 		sb.append("$scope.entityList="+Utility.getEntityCallName(entityName)+"Service.entityList;\n");
 		sb.append("$scope.selectedEntity="+Utility.getEntityCallName(entityName)+"Service.selectedEntity;\n");
 
-		sb.append("$scope.childrenList="+Utility.getEntityCallName(entityName)+"Service.childrenList; \n");
+		sb.append("$scope.childrenList={}; \n");
+		for (Relationship relationship : entity.getRelationshipList())
+		{
+			sb.append("$scope.childrenList."+relationship.getName()+"ChildrenList="+relationship.getName()+"ChildrenList;\n");
+		}
 		//search function
 		sb.append("$scope.reset = function()\n");
 		sb.append("{\n");
@@ -886,6 +890,10 @@ if (entity.getEntityGroup()!=null)
 			services=services+","+descendantEntity.getName()+"Service";
 
 		}
+		for (Relationship relationship : entity.getRelationshipList())
+		{
+			services=services+","+relationship.getEntityTarget().getName()+"ChildrenList";
+		}
 		return services;
 	}
 	
@@ -1190,8 +1198,8 @@ if (entity.getEntityGroup()!=null)
 			.append("templateUrl:'app/components/"+entity.getName()+"/"+entity.getName()+".html',\n")
 			.append(" controller:'"+Utility.getFirstUpper(entity.getName())+"Controller', \n")
 			.append("controllerAs: 'vm' \n")
-			.append(" },\n")
-
+			.append(" }\n")
+			.append("},\n")
 			.append("resolve: {\n");
 			/*.append("setParent: function(MainService,"+Utility.getFirstLower(entity.getName())+"Service){\n")
 
@@ -1212,18 +1220,18 @@ if (entity.getEntityGroup()!=null)
 			for (Relationship relationship : entity.getRelationshipList())
 			{
 
-				sb.append(relationship.getEntityTarget().getName()+"ChildrenList: function() {\n");
-				sb.append(entity.getName()+"Service.init"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List().then(function(response) {\n")
+				sb.append(relationship.getName()+"ChildrenList: function("+Utility.getFirstLower(entity.getName())+"Service) {\n");
+				sb.append(Utility.getFirstLower(entity.getName())+"Service.init"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List().then(function(response) {\n")
 				.append("return response.data;\n")
 				.append("});\n")
 				
 				.append("}, \n ");
 			}
 			
-			sb.append("}\n")
 			
 			
-			.append("}\n") // end resolve
+			
+			sb.append("}\n") // end resolve
 			
 			
 			.append("})\n");
@@ -1402,9 +1410,9 @@ if (entity.getEntityGroup()!=null)
 
 	private void manageRestError(StringBuilder sb)
 	{
-		sb.append("AlertError.init({selector: \"#alertError\"});\n");
-		sb.append("AlertError.show(\"Si è verificato un errore\");\n");
-		sb.append("return; \n");
+		sb.append("//AlertError.init({selector: \"#alertError\"});\n");
+		sb.append("//AlertError.show(\"Si è verificato un errore\");\n");
+		sb.append("//return; \n");
 	}
 	
 

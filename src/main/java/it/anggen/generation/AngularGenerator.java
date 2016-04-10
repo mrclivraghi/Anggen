@@ -84,7 +84,8 @@ public class AngularGenerator {
 	 */
 	public void generateEntityView(HtmlCanvas html) throws IOException {
 		HtmlAttributes mainControllerAttributes = new HtmlAttributes();
-		mainControllerAttributes.add("ng-controller", Utility.getFirstUpper(entityName)+"Controller");
+		if (!isParent)
+			mainControllerAttributes.add("ng-controller", Utility.getFirstUpper(entityName)+"Controller");
 		if (generator.easyTreeMenu)
 		{
 			mainControllerAttributes.add("style", "position: absolute; left: 250px; width:80%; top: 30px;");

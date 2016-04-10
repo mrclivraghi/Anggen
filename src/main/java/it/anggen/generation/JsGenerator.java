@@ -750,8 +750,9 @@ public class JsGenerator {
 		sb.append("$scope.closeEntityDetail = function(){ \n")
 		.append(""+Utility.getEntityCallName(entityName)+"Service.setSelectedEntity(null);\n")
 		.append(""+Utility.getEntityCallName(entityName)+"Service.selectedEntity.show=false;\n")
-		.append("}");
+		.append("}\n");
 		
+		sb.append("$scope.initChildrenList();\n");
 		
 		sb.append("}\n");
 		return sb.toString();
@@ -827,6 +828,11 @@ public class JsGenerator {
 		//if (parentEntityName!=null && parentEntityName.equals("entity"))
 		//System.out.println("**GENERO** "+entityName+" - parent "+parentEntityName+" - lastLevel"+lastLevel+"- isParent "+isParent);
 		//on row selection
+		
+		sb.append("$scope.initChildrenList = function () { \n");
+		initChildrenList(sb, entity);
+		sb.append("}\n");
+		
 		sb.append("$scope."+entityName+"GridOptions.onRegisterApi = function(gridApi){\n");
 		sb.append("$scope."+entityName+"GridApi = gridApi;\n");
 		sb.append("gridApi.selection.on.rowSelectionChanged($scope,function(row){\n");
@@ -841,7 +847,8 @@ public class JsGenerator {
 			
 		//} else
 		//{
-		initChildrenList(sb, entity);
+		//sb.append("$scope.initChildrenList();");
+		//initChildrenList(sb, entity);
 if (entity.getEntityGroup()!=null)
 {
 			sb.append(Utility.getEntityCallName(entityName)+"Service.searchOne(row.entity).then(function(response) { \n");

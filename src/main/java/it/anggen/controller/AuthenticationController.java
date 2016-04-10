@@ -94,8 +94,10 @@ public class AuthenticationController {
 	{
 		Map<Long,RestrictionEntityGroup> restrictionEntityGroupMap = new HashMap<Long,RestrictionEntityGroup>();
 		Map<Long,RestrictionEntity> restrictionEntityMap = new HashMap<Long,RestrictionEntity>();
+		if (restrictionEntityList!=null)
 		for (RestrictionEntity restrictionEntity : restrictionEntityList)
 			restrictionEntityMap.put(restrictionEntity.getEntity().getEntityId(), restrictionEntity);
+		if (restrictionEntityGroupList!=null)
 		for (RestrictionEntityGroup restrictionEntityGroup: restrictionEntityGroupList)
 			restrictionEntityGroupMap.put(restrictionEntityGroup.getEntityGroup().getEntityGroupId(), restrictionEntityGroup);
 		

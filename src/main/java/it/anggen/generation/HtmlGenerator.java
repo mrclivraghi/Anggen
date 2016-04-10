@@ -264,7 +264,7 @@ public class HtmlGenerator {
 				String ulContent="";
 				for (Entity entity: entityGroup.getEntityList())
 				{
-					ulContent=ulContent+"<li ng-if=\"$root.restrictionList."+entity.getName()+".canSearch || $root.restrictionList."+entity.getName()+"==undefined\"><a href=\"#/app/"+Utility.getFirstLower(entity.getName())+"\" role=\"menuitem\">"+Utility.getFirstUpper(entity.getName())+"</a></li>";
+					ulContent=ulContent+"<li ng-if=\"$root.restrictionList."+entityGroup.getName()+".restrictionItemMap."+entity.getName()+".canSearch\"><a href=\"#/app/"+Utility.getFirstLower(entity.getName())+"\" role=\"menuitem\">"+Utility.getFirstUpper(entity.getName())+"</a></li>";
 				}
 				
 				

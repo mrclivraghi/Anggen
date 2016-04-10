@@ -20,7 +20,7 @@ public class Relationship
     extends EntityAttribute
 {
 
-    public final static java.lang.Long staticEntityId = 6L;
+    public final static java.lang.Long staticEntityId = 18L;
     @javax.persistence.Column(name = "priority")
     @it.anggen.utils.annotation.Priority(2)
     private Integer priority;

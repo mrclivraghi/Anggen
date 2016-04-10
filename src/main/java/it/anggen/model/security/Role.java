@@ -23,7 +23,7 @@ import org.hibernate.annotations.Type;
 @MaxDescendantLevel(100)
 public class Role {
 
-    public final static Long staticEntityId = 12L;
+    public final static Long staticEntityId = 13L;
     @javax.persistence.Column(name = "role_id")
     @it.anggen.utils.annotation.Priority(1)
     @it.anggen.utils.annotation.DescriptionField

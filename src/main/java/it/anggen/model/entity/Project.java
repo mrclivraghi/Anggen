@@ -20,7 +20,7 @@ import org.hibernate.annotations.Type;
 @MaxDescendantLevel(100)
 public class Project {
 
-    public final static Long staticEntityId = 7L;
+    public final static Long staticEntityId = 12L;
     @javax.persistence.Column(name = "project_id")
     @it.anggen.utils.annotation.DescriptionField
     @Id

@@ -14,7 +14,7 @@ import it.anggen.utils.annotation.MaxDescendantLevel;
 @MaxDescendantLevel(100)
 public class RestrictionEntityGroup {
 
-    public final static java.lang.Long staticEntityId = 5L;
+    public final static java.lang.Long staticEntityId = 9L;
     @javax.persistence.Column(name = "can_search")
     @it.anggen.utils.annotation.Priority(2)
     private java.lang.Boolean canSearch;

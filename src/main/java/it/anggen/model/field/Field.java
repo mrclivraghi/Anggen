@@ -21,7 +21,7 @@ public class Field
     extends EntityAttribute
 {
 
-    public final static java.lang.Long staticEntityId = 16L;
+    public final static java.lang.Long staticEntityId = 19L;
     @javax.persistence.Column(name = "priority")
     @it.anggen.utils.annotation.Priority(2)
     private Integer priority;

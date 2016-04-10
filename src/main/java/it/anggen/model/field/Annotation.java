@@ -18,7 +18,7 @@ import org.hibernate.annotations.Type;
 @MaxDescendantLevel(100)
 public class Annotation {
 
-    public final static java.lang.Long staticEntityId = 14L;
+    public final static java.lang.Long staticEntityId = 3L;
     @javax.persistence.Column(name = "annotation_id")
     @Id
     @GeneratedValue

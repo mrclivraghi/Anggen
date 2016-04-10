@@ -18,7 +18,7 @@ import it.anggen.utils.annotation.MaxDescendantLevel;
 @MaxDescendantLevel(1)
 public class LogEntry {
 
-    public final static java.lang.Long staticEntityId = 10L;
+    public final static java.lang.Long staticEntityId = 16L;
     @javax.persistence.Column(name = "log_date")
     private Date logDate;
     @javax.persistence.Column(name = "host_name")

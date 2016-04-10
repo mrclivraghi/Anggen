@@ -21,7 +21,7 @@ import org.hibernate.annotations.Type;
 @MaxDescendantLevel(100)
 public class User {
 
-    public final static java.lang.Long staticEntityId = 8L;
+    public final static java.lang.Long staticEntityId = 10L;
     @javax.persistence.Column(name = "enabled")
     @it.anggen.utils.annotation.Priority(2)
     private Boolean enabled;

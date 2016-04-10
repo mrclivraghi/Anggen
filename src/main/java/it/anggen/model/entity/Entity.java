@@ -24,7 +24,7 @@ import org.hibernate.annotations.Type;
 //@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Entity {
 
-    public final static java.lang.Long staticEntityId = 3L;
+    public final static java.lang.Long staticEntityId = 4L;
     @javax.persistence.Column(name = "enable_restriction_data")
     @it.anggen.utils.annotation.Priority(2)
     private java.lang.Boolean enableRestrictionData;

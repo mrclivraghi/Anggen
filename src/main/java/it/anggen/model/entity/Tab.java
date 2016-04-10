@@ -19,7 +19,7 @@ import org.hibernate.annotations.Type;
 @MaxDescendantLevel(100)
 public class Tab {
 
-    public final static java.lang.Long staticEntityId = 4L;
+    public final static java.lang.Long staticEntityId = 14L;
     @javax.persistence.Column(name = "name")
     @it.anggen.utils.annotation.Priority(2)
     @it.anggen.utils.annotation.DescriptionField

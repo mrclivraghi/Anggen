@@ -16,7 +16,7 @@ import it.anggen.utils.annotation.MaxDescendantLevel;
 @MaxDescendantLevel(100)
 public class AnnotationAttribute {
 
-    public final static java.lang.Long staticEntityId = 2L;
+    public final static java.lang.Long staticEntityId = 11L;
     @javax.persistence.Column(name = "property")
     @it.anggen.utils.annotation.Priority(2)
     @it.anggen.utils.annotation.DescriptionField

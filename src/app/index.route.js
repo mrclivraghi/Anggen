@@ -28,14 +28,27 @@
 
 
 		/*  MARCO MOD */
-		.state('main.realEntity',{
-			url: 'realEntity',
+		.state('entity',{
+			url:'/entity',
+			abstract:true,
+			templateUrl: 'app/controller/abstractEntity/abstractEntity.html',
+			controller:'HomeController', 
+			controllerAs: 'main' ,
+			name: 'main'
+		})
+		.state('entity.abstractEntity',{
+			url: '/abstractEntity',
+			
 			views: {
 				'entity': {
-					
+					templateUrl:'app/components/entity/entity.html',
+					controller:'EntityController', 
+					controllerAs: 'vm' 
 				},
 				'entityGroup': {
-					
+					templateUrl:'app/components/entityGroup/entityGroup.html',
+					controller:'EntityGroupController', 
+					controllerAs: 'vm' 
 				}
 				
 			}

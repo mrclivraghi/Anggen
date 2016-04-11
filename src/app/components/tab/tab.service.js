@@ -13,7 +13,7 @@ this.isParent=function()
 {
 return MainService.parentEntity=="Tab";
 };
-this.childrenList=[]; 
+this.childrenList={}; 
 this.addEntity=function (entity)
 {
 this.entityList.push(entity);

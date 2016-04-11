@@ -13,7 +13,7 @@ this.isParent=function()
 {
 return MainService.parentEntity=="Field";
 };
-this.childrenList=[]; 
+this.childrenList={}; 
 this.addEntity=function (entity)
 {
 this.entityList.push(entity);

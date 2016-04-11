@@ -13,7 +13,7 @@ this.isParent=function()
 {
 return MainService.parentEntity=="EnumValue";
 };
-this.childrenList=[]; 
+this.childrenList={}; 
 this.addEntity=function (entity)
 {
 this.entityList.push(entity);

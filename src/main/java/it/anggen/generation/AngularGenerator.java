@@ -125,7 +125,7 @@ public class AngularGenerator {
 		html._div();
 		if (isParent)
 		{
-			ArrayList<Entity> oldParentClassList = (ArrayList<Entity>) ((ArrayList<Entity>) parentEntity).clone();
+			/*ArrayList<Entity> oldParentClassList = (ArrayList<Entity>) ((ArrayList<Entity>) parentEntity).clone();
 			List<Entity> descendantEntityList = entityManager.getDescendantEntities(entity, parentEntity);
 			parentEntity=oldParentClassList;
 			if (descendantEntityList==null || descendantEntityList.size()==0) return;
@@ -138,7 +138,7 @@ public class AngularGenerator {
 				System.out.println(mainEntityManager.getDescription()+"-"+descendantEntity.getName()+" last level : "+mainEntityManager.isLastLevel(descendantEntity));
 				generateEntityView(html);
 				
-			}
+			}*/
 		}
 	}
 

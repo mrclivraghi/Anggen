@@ -254,7 +254,8 @@ public class Generator {
 				if (modelEntity.getDisableViewGeneration()) continue;
 				htmlGenerator.init(modelEntity);
 				try {
-					htmlGenerator.generateJSP();
+					htmlGenerator.generateSearchView();
+					htmlGenerator.generateDetailView();
 				} catch (IllegalAccessException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

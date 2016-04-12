@@ -82,10 +82,11 @@ public class AngularGenerator {
 	 * @param html
 	 * @throws IOException
 	 */
-	public void generateEntityView(HtmlCanvas html) throws IOException {
+	public void generateSearchView(HtmlCanvas html) throws IOException {
 		HtmlAttributes mainControllerAttributes = new HtmlAttributes();
 		if (!isParent)
 			mainControllerAttributes.add("ng-controller", Utility.getFirstUpper(entityName)+"Controller");
+		
 		if (generator.easyTreeMenu)
 		{
 			mainControllerAttributes.add("style", "position: absolute; left: 250px; width:80%; top: 30px;");
@@ -117,30 +118,23 @@ public class AngularGenerator {
 		._div()
 		._form();
 
+	
+		html._div();
+	}
+	
+	public void generateDetailHtml(HtmlCanvas html) throws IOException {
+		HtmlAttributes mainControllerAttributes = new HtmlAttributes();
+		html.div(mainControllerAttributes);
+		
 		//detail
 		html.form((new HtmlAttributes()).add("id", entityName+"DetailForm").add("name", entityName+"DetailForm").add("ng-show", "selectedEntity.show"));
 		renderTabForm(html, false);
 		html._form();
-	
 		html._div();
-		if (isParent)
-		{
-			/*ArrayList<Entity> oldParentClassList = (ArrayList<Entity>) ((ArrayList<Entity>) parentEntity).clone();
-			List<Entity> descendantEntityList = entityManager.getDescendantEntities(entity, parentEntity);
-			parentEntity=oldParentClassList;
-			if (descendantEntityList==null || descendantEntityList.size()==0) return;
-			EntityManager mainEntityManager = new EntityManagerImpl(entity);
-			
-			for (Entity descendantEntity: descendantEntityList)
-				if (descendantEntity.getEntityGroup()!=null)
-			{
-				init(descendantEntity, false, parentEntity,mainEntityManager.isLastLevel(descendantEntity));
-				System.out.println(mainEntityManager.getDescription()+"-"+descendantEntity.getName()+" last level : "+mainEntityManager.isLastLevel(descendantEntity));
-				generateEntityView(html);
-				
-			}*/
-		}
+	
 	}
+	
+	
 
 	/**
 	 * Generate the validator fields to show errors to the user.

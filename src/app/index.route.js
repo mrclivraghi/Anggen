@@ -55,7 +55,25 @@
 			
 			
 		})
-
+.state('entity.abstractRole',{
+			url: '/role',
+			
+			views: {
+				'entity': {
+					templateUrl:'app/components/role/role.html',
+					controller:'RoleController', 
+					controllerAs: 'vm' 
+				},
+				'entityGroup': {
+					templateUrl:'app/components/entityGroup/entityGroup.html',
+					controller:'EntityGroupController', 
+					controllerAs: 'vm' 
+				}
+				
+			}
+			
+			
+		})
 
 
 		.state('main.metrics',{

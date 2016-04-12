@@ -132,9 +132,6 @@ public class WebappGenerator {
 		generateForbiddenJsp();
 		generateMainAppController();
 		generateWebConfig();
-		htmlGenerator.setDirectory();
-		htmlGenerator.generateTemplate();
-		htmlGenerator.generateHomePage();
 	}
 	
 	private void generateMainAppController() {

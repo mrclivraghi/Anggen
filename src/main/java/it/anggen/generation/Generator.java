@@ -249,6 +249,9 @@ public class Generator {
 			jsGenerator.generateMainApp();
 			jsGenerator.generateServiceFile();
 			jsGenerator.generateControllerFile();
+			htmlGenerator.setDirectory();
+			htmlGenerator.generateTemplate();
+			htmlGenerator.generateHomePage();
 			for (Entity modelEntity: modelEntityList)
 			{
 				if (modelEntity.getDisableViewGeneration()) continue;

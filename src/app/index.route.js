@@ -28,30 +28,40 @@
 
 
 		/*  MARCO MOD */
-		.state('entity',{
-			url:'/entity',
+		.state('test',{
+			url:'/test',
 			abstract:true,
 			templateUrl: 'app/controller/abstractEntity/abstractEntity.html',
 			controller:'HomeController', 
 			controllerAs: 'main' ,
 			name: 'main'
 		})
-		.state('entity.abstractEntity',{
-			url: '/abstractEntity',
+		.state('test.abstractEntity',{
+			url: '/entity',
 			
-			views: {
+			/*views: {
+			'search': {
+					templateUrl:'app/components/entity/entity-search.html',
+					controller:'EntityController', 
+					controllerAs: 'vm' 
+				},
 				'entity': {
-					templateUrl:'app/components/entity/entity.html',
+					templateUrl:'app/components/entity/entity-detail.html',
 					controller:'EntityController', 
 					controllerAs: 'vm' 
 				},
 				'entityGroup': {
-					templateUrl:'app/components/entityGroup/entityGroup.html',
+					templateUrl:'app/components/entityGroup/entityGroup-detail.html',
 					controller:'EntityGroupController', 
+					controllerAs: 'vm' 
+				},
+				'relationship': {
+					templateUrl:'app/components/relationship/relationship-detail.html',
+					controller:'RelationshipController', 
 					controllerAs: 'vm' 
 				}
 				
-			}
+			}*/
 			
 			
 		})

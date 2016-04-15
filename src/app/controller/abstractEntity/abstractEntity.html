@@ -1,14 +1,17 @@
 <div id="canvas">
-<div>
-	<anggen-navbar></angen-navbar> 
-</div>
-	<div style="">
-		<div ui-view="search"></div>
-		
-		<div ui-view="entity"></div>
-		<div ui-view="entityGroup"></div>
-		
-	
+	<div>
+		<anggen-navbar></anggen-navbar>
 	</div>
-	
+	<div id="alertInfo" class="alert alert-success custom-alert"
+		style="display: none">
+		<span></span>
+	</div>
+	<div id="alertError" class="alert alert-danger custom-alert"
+		style="display: none">
+		<span></span>
+	</div>
+	<div id="ngViewContainer" style="">
+		---<entity-search></entity-search>----
+		<entity-detail fields="ciaoooo"></entity-detail>
+	</div>
 </div>

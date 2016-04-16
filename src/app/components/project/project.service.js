@@ -9,6 +9,7 @@ function ProjectService($http,MainService)
 this.entityList =		[];
 this.selectedEntity= 	{show: false 
 ,enumEntityList: [],entityGroupList: []};
+this.hidden= { hiddenFields: []};
 this.isParent=function()
 {
 return MainService.parentEntity=="Project";

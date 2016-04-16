@@ -4,11 +4,12 @@ angular
 .module("serverTestApp")
 .controller("AnnotationController",AnnotationController);
 /** @ngInject */
-function AnnotationController($scope,$http,$rootScope ,annotationService, SecurityService, MainService ,annotationAttributeService,fieldService,restrictionFieldService,roleService,restrictionEntityService,entityService,tabService,enumFieldService,enumEntityService,projectService,entityGroupService,restrictionEntityGroupService,enumValueService,relationshipService,userService)
+function AnnotationController($scope,$http,$rootScope ,annotationService, SecurityService, MainService ,annotationAttributeService,fieldService,entityService,restrictionEntityService,roleService,restrictionFieldService,userService,restrictionEntityGroupService,entityGroupService,projectService,enumEntityService,enumValueService,tabService,enumFieldService,relationshipService)
 {
 $scope.searchBean=annotationService.searchBean;
 $scope.entityList=annotationService.entityList;
 $scope.selectedEntity=annotationService.selectedEntity;
+$scope.hidden=annotationService.hidden;
 $scope.childrenList=annotationService.childrenList; 
 $scope.reset = function()
 {
@@ -224,14 +225,6 @@ fieldService.searchOne(annotationService.selectedEntity.fieldList[index]).then(
 function successCallback(response) {
 console.log("response-ok");
 console.log(response);
-if ($rootScope.restrictionList.security!=undefined && $rootScope.restrictionList.security.restrictionItemMap.restrictionField.canSearch)
-fieldService.initRestrictionFieldList().then(function successCallback(response) {
-fieldService.childrenList.restrictionFieldList=response.data;
-},function errorCallback(response) { 
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
-});
 if ($rootScope.restrictionList.entity!=undefined && $rootScope.restrictionList.entity.restrictionItemMap.entity.canSearch)
 fieldService.initEntityList().then(function successCallback(response) {
 fieldService.childrenList.entityList=response.data;
@@ -251,6 +244,14 @@ fieldService.childrenList.tabList=response.data;
 if ($rootScope.restrictionList.field!=undefined && $rootScope.restrictionList.field.restrictionItemMap.annotation.canSearch)
 fieldService.initAnnotationList().then(function successCallback(response) {
 fieldService.childrenList.annotationList=response.data;
+},function errorCallback(response) { 
+//AlertError.init({selector: "#alertError"});
+//AlertError.show("Si è verificato un errore");
+//return; 
+});
+if ($rootScope.restrictionList.security!=undefined && $rootScope.restrictionList.security.restrictionItemMap.restrictionField.canSearch)
+fieldService.initRestrictionFieldList().then(function successCallback(response) {
+fieldService.childrenList.restrictionFieldList=response.data;
 },function errorCallback(response) { 
 //AlertError.init({selector: "#alertError"});
 //AlertError.show("Si è verificato un errore");
@@ -270,14 +271,6 @@ else
 {
 if (annotationService.selectedEntity.field==null || annotationService.selectedEntity.field==undefined)
 {
-if ($rootScope.restrictionList.security!=undefined && $rootScope.restrictionList.security.restrictionItemMap.restrictionField.canSearch)
-fieldService.initRestrictionFieldList().then(function successCallback(response) {
-fieldService.childrenList.restrictionFieldList=response.data;
-},function errorCallback(response) { 
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
-});
 if ($rootScope.restrictionList.entity!=undefined && $rootScope.restrictionList.entity.restrictionItemMap.entity.canSearch)
 fieldService.initEntityList().then(function successCallback(response) {
 fieldService.childrenList.entityList=response.data;
@@ -297,6 +290,14 @@ fieldService.childrenList.tabList=response.data;
 if ($rootScope.restrictionList.field!=undefined && $rootScope.restrictionList.field.restrictionItemMap.annotation.canSearch)
 fieldService.initAnnotationList().then(function successCallback(response) {
 fieldService.childrenList.annotationList=response.data;
+},function errorCallback(response) { 
+//AlertError.init({selector: "#alertError"});
+//AlertError.show("Si è verificato un errore");
+//return; 
+});
+if ($rootScope.restrictionList.security!=undefined && $rootScope.restrictionList.security.restrictionItemMap.restrictionField.canSearch)
+fieldService.initRestrictionFieldList().then(function successCallback(response) {
+fieldService.childrenList.restrictionFieldList=response.data;
 },function errorCallback(response) { 
 //AlertError.init({selector: "#alertError"});
 //AlertError.show("Si è verificato un errore");
@@ -309,14 +310,6 @@ fieldService.selectedEntity.show=true;
 else
 fieldService.searchOne(annotationService.selectedEntity.field).then(
 function successCallback(response) {
-if ($rootScope.restrictionList.security!=undefined && $rootScope.restrictionList.security.restrictionItemMap.restrictionField.canSearch)
-fieldService.initRestrictionFieldList().then(function successCallback(response) {
-fieldService.childrenList.restrictionFieldList=response.data;
-},function errorCallback(response) { 
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
-});
 if ($rootScope.restrictionList.entity!=undefined && $rootScope.restrictionList.entity.restrictionItemMap.entity.canSearch)
 fieldService.initEntityList().then(function successCallback(response) {
 fieldService.childrenList.entityList=response.data;
@@ -336,6 +329,14 @@ fieldService.childrenList.tabList=response.data;
 if ($rootScope.restrictionList.field!=undefined && $rootScope.restrictionList.field.restrictionItemMap.annotation.canSearch)
 fieldService.initAnnotationList().then(function successCallback(response) {
 fieldService.childrenList.annotationList=response.data;
+},function errorCallback(response) { 
+//AlertError.init({selector: "#alertError"});
+//AlertError.show("Si è verificato un errore");
+//return; 
+});
+if ($rootScope.restrictionList.security!=undefined && $rootScope.restrictionList.security.restrictionItemMap.restrictionField.canSearch)
+fieldService.initRestrictionFieldList().then(function successCallback(response) {
+fieldService.childrenList.restrictionFieldList=response.data;
 },function errorCallback(response) { 
 //AlertError.init({selector: "#alertError"});
 //AlertError.show("Si è verificato un errore");
@@ -754,14 +755,6 @@ $scope.fieldGridOptions={};
 cloneObject(fieldService.gridOptions,$scope.fieldGridOptions);
 $scope.fieldGridOptions.data=$scope.selectedEntity.fieldList;
 $scope.initChildrenList = function () { 
-if ($rootScope.restrictionList.security!=undefined && $rootScope.restrictionList.security.restrictionItemMap.restrictionField.canSearch)
-fieldService.initRestrictionFieldList().then(function successCallback(response) {
-fieldService.childrenList.restrictionFieldList=response.data;
-},function errorCallback(response) { 
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
-});
 if ($rootScope.restrictionList.entity!=undefined && $rootScope.restrictionList.entity.restrictionItemMap.entity.canSearch)
 fieldService.initEntityList().then(function successCallback(response) {
 fieldService.childrenList.entityList=response.data;
@@ -781,6 +774,14 @@ fieldService.childrenList.tabList=response.data;
 if ($rootScope.restrictionList.field!=undefined && $rootScope.restrictionList.field.restrictionItemMap.annotation.canSearch)
 fieldService.initAnnotationList().then(function successCallback(response) {
 fieldService.childrenList.annotationList=response.data;
+},function errorCallback(response) { 
+//AlertError.init({selector: "#alertError"});
+//AlertError.show("Si è verificato un errore");
+//return; 
+});
+if ($rootScope.restrictionList.security!=undefined && $rootScope.restrictionList.security.restrictionItemMap.restrictionField.canSearch)
+fieldService.initRestrictionFieldList().then(function successCallback(response) {
+fieldService.childrenList.restrictionFieldList=response.data;
 },function errorCallback(response) { 
 //AlertError.init({selector: "#alertError"});
 //AlertError.show("Si è verificato un errore");

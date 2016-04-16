@@ -9,6 +9,7 @@ function EnumEntityController($scope,$http,$rootScope ,enumEntityService, Securi
 $scope.searchBean=enumEntityService.searchBean;
 $scope.entityList=enumEntityService.entityList;
 $scope.selectedEntity=enumEntityService.selectedEntity;
+$scope.hidden=enumEntityService.hidden;
 $scope.childrenList=enumEntityService.childrenList; 
 $scope.reset = function()
 {

@@ -9,6 +9,7 @@ function RelationshipController($scope,$http,$rootScope ,relationshipService, Se
 $scope.searchBean=relationshipService.searchBean;
 $scope.entityList=relationshipService.entityList;
 $scope.selectedEntity=relationshipService.selectedEntity;
+$scope.hidden=relationshipService.hidden;
 $scope.childrenList=relationshipService.childrenList; 
 $scope.reset = function()
 {

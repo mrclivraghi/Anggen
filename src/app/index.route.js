@@ -19,7 +19,7 @@
 			url:'/home',
 			views:{
 				'pageContent': {
-					templateUrl:'app/components/home/home.html',
+					templateUrl:'app/controller/entity/entity-template.html',
 					controller:'HomeController', 
 					controllerAs: 'vm' 
 				}

@@ -9,6 +9,7 @@ function LogEntryService($http,MainService)
 this.entityList =		[];
 this.selectedEntity= 	{show: false 
 };
+this.hidden= { hiddenFields: []};
 this.isParent=function()
 {
 return MainService.parentEntity=="LogEntry";

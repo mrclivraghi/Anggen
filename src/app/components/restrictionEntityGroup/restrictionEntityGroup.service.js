@@ -9,6 +9,7 @@ function RestrictionEntityGroupService($http,MainService)
 this.entityList =		[];
 this.selectedEntity= 	{show: false 
 };
+this.hidden= { hiddenFields: []};
 this.isParent=function()
 {
 return MainService.parentEntity=="RestrictionEntityGroup";
@@ -70,17 +71,17 @@ var promise= $http.post("http://127.0.0.1:8080/ServerTestApp/restrictionEntityGr
 });
 return promise; 
 }
- this.initRoleList= function()
-{
-var promise= $http
-.post("http://127.0.0.1:8080/ServerTestApp/role/search",
-{});
-return promise;
-};
  this.initEntityGroupList= function()
 {
 var promise= $http
 .post("http://127.0.0.1:8080/ServerTestApp/entityGroup/search",
+{});
+return promise;
+};
+ this.initRoleList= function()
+{
+var promise= $http
+.post("http://127.0.0.1:8080/ServerTestApp/role/search",
 {});
 return promise;
 };
@@ -97,8 +98,8 @@ columnDefs: [
 { name: 'canUpdate'},
 { name: 'canDelete'},
 { name: 'canCreate'},
-{ name: 'role.roleId', displayName: 'role'},
-{ name: 'entityGroup.entityGroupId', displayName: 'entityGroup'} 
+{ name: 'entityGroup.entityGroupId', displayName: 'entityGroup'},
+{ name: 'role.roleId', displayName: 'role'} 
 ]
  };
 };

@@ -9,6 +9,7 @@ function LogEntryController($scope,$http,$rootScope ,logEntryService, SecuritySe
 $scope.searchBean=logEntryService.searchBean;
 $scope.entityList=logEntryService.entityList;
 $scope.selectedEntity=logEntryService.selectedEntity;
+$scope.hidden=logEntryService.hidden;
 $scope.childrenList=logEntryService.childrenList; 
 $scope.reset = function()
 {

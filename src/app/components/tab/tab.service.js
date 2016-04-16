@@ -9,6 +9,7 @@ function TabService($http,MainService)
 this.entityList =		[];
 this.selectedEntity= 	{show: false 
 ,fieldList: [],enumFieldList: [],relationshipList: []};
+this.hidden= { hiddenFields: []};
 this.isParent=function()
 {
 return MainService.parentEntity=="Tab";

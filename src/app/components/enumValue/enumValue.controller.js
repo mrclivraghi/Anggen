@@ -4,11 +4,12 @@ angular
 .module("serverTestApp")
 .controller("EnumValueController",EnumValueController);
 /** @ngInject */
-function EnumValueController($scope,$http,$rootScope ,enumValueService, SecurityService, MainService ,enumEntityService,projectService,entityGroupService,restrictionEntityGroupService,roleService,restrictionEntityService,entityService,tabService,fieldService,restrictionFieldService,annotationService,annotationAttributeService,enumFieldService,relationshipService,userService)
+function EnumValueController($scope,$http,$rootScope ,enumValueService, SecurityService, MainService ,enumEntityService,projectService,entityGroupService,entityService,restrictionEntityService,roleService,restrictionFieldService,fieldService,tabService,enumFieldService,annotationService,annotationAttributeService,relationshipService,userService,restrictionEntityGroupService)
 {
 $scope.searchBean=enumValueService.searchBean;
 $scope.entityList=enumValueService.entityList;
 $scope.selectedEntity=enumValueService.selectedEntity;
+$scope.hidden=enumValueService.hidden;
 $scope.childrenList=enumValueService.childrenList; 
 $scope.reset = function()
 {

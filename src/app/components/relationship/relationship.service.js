@@ -9,6 +9,7 @@ function RelationshipService($http,MainService)
 this.entityList =		[];
 this.selectedEntity= 	{show: false 
 ,annotationList: []};
+this.hidden= { hiddenFields: []};
 this.isParent=function()
 {
 return MainService.parentEntity=="Relationship";

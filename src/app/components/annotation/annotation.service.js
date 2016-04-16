@@ -9,6 +9,7 @@ function AnnotationService($http,MainService)
 this.entityList =		[];
 this.selectedEntity= 	{show: false 
 ,annotationAttributeList: []};
+this.hidden= { hiddenFields: []};
 this.isParent=function()
 {
 return MainService.parentEntity=="Annotation";

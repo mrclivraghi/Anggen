@@ -4,11 +4,12 @@ angular
 .module("serverTestApp")
 .controller("AnnotationAttributeController",AnnotationAttributeController);
 /** @ngInject */
-function AnnotationAttributeController($scope,$http,$rootScope ,annotationAttributeService, SecurityService, MainService ,annotationService,fieldService,restrictionFieldService,roleService,restrictionEntityService,entityService,tabService,enumFieldService,enumEntityService,projectService,entityGroupService,restrictionEntityGroupService,enumValueService,relationshipService,userService)
+function AnnotationAttributeController($scope,$http,$rootScope ,annotationAttributeService, SecurityService, MainService ,annotationService,fieldService,entityService,restrictionEntityService,roleService,restrictionFieldService,userService,restrictionEntityGroupService,entityGroupService,projectService,enumEntityService,enumValueService,tabService,enumFieldService,relationshipService)
 {
 $scope.searchBean=annotationAttributeService.searchBean;
 $scope.entityList=annotationAttributeService.entityList;
 $scope.selectedEntity=annotationAttributeService.selectedEntity;
+$scope.hidden=annotationAttributeService.hidden;
 $scope.childrenList=annotationAttributeService.childrenList; 
 $scope.reset = function()
 {

@@ -9,6 +9,7 @@ function EnumFieldController($scope,$http,$rootScope ,enumFieldService, Security
 $scope.searchBean=enumFieldService.searchBean;
 $scope.entityList=enumFieldService.entityList;
 $scope.selectedEntity=enumFieldService.selectedEntity;
+$scope.hidden=enumFieldService.hidden;
 $scope.childrenList=enumFieldService.childrenList; 
 $scope.reset = function()
 {

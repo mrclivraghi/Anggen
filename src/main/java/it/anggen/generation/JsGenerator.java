@@ -327,6 +327,7 @@ public class JsGenerator {
 				for (Relationship relationship: relationshipList)
 				{
 					stringBuilder.append(relationship.getEntityTarget().getName()+"Service.selectedEntity.show="+show.toString()+";\n");
+					stringBuilder.append("delete $rootScope.openNode."+relationship.getEntityTarget().getName()+";\n");
 				}
 
 		}
@@ -466,6 +467,7 @@ public class JsGenerator {
 	//	}
 		sb.append("$scope.addNew= function()\n");
 		sb.append("{\n");
+		sb.append("$rootScope.openNode."+Utility.getEntityCallName(entityName)+"=true;\n");
 		sb.append(""+Utility.getEntityCallName(entityName)+"Service.setSelectedEntity(null);\n");
 		sb.append(""+Utility.getEntityCallName(entityName)+"Service.setEntityList(null);\n");
 		sb.append(""+Utility.getEntityCallName(entityName)+"Service.selectedEntity.show=true;\n");
@@ -481,6 +483,7 @@ public class JsGenerator {
 		sb.append("$scope.search=function()\n");
 		sb.append("{\n");
 		sb.append(""+Utility.getEntityCallName(entityName)+"Service.selectedEntity.show=false;\n");
+		sb.append("delete $rootScope.openNode."+entityName+";\n");
 		if (relationshipList!=null)
 			for (Relationship relationship: relationshipList)
 			{
@@ -606,7 +609,7 @@ public class JsGenerator {
 			sb.append("$scope.remove= function()\n");
 			sb.append("{\n");
 			sb.append(Utility.getEntityCallName(entityName)+"Service.selectedEntity.show=false;\n");
-			
+			sb.append("delete $rootScope.openNode."+entityName+";\n");
 			
 			/*if (relationshipType==RelationshipType.MANY_TO_MANY || relationshipType==RelationshipType.ONE_TO_MANY || relationshipType==RelationshipType.MANY_TO_MANY_BACK)
 			{
@@ -704,7 +707,7 @@ public class JsGenerator {
 				sb.append("{\n");
 				sb.append(relationship.getEntityTarget().getName()+"Service.searchOne("+entityName+"Service.selectedEntity."+relationship.getEntityTarget().getName()+"List[index]).then(\n");
 				sb.append("function successCallback(response) {\n");
-				sb.append("console.log(\"response-ok\");\n");
+				sb.append("console.log(\"INDEX!=NULLLLLLLLLLLL\");\n");
 				sb.append("console.log(response);\n");
 				initChildrenList(sb, relationship.getEntityTarget());
 				sb.append(Utility.getEntityCallName(relationship.getEntityTarget().getName())+"Service.setSelectedEntity(response.data[0]);\n");
@@ -727,6 +730,7 @@ public class JsGenerator {
 				initChildrenList(sb, relationship.getEntityTarget());
 				sb.append(Utility.getEntityCallName(relationship.getEntityTarget().getName())+"Service.setSelectedEntity(null); \n");
 				sb.append(Utility.getEntityCallName(relationship.getEntityTarget().getName())+"Service.selectedEntity.show=true; \n");
+				sb.append("$rootScope.openNode."+Utility.getEntityCallName(relationship.getEntityTarget().getName())+"=true;\n");
 				//TODO set owner, list or entity?
 				sb.append("}\n");
 				sb.append("else\n");
@@ -738,6 +742,7 @@ public class JsGenerator {
 				initChildrenList(sb, relationship.getEntityTarget());
 				sb.append(Utility.getEntityCallName(relationship.getEntityTarget().getName())+"Service.setSelectedEntity(response.data[0]);\n");
 				sb.append(Utility.getEntityCallName(relationship.getEntityTarget().getName())+"Service.selectedEntity.show=true;\n");
+				sb.append("$rootScope.openNode."+Utility.getEntityCallName(relationship.getEntityTarget().getName())+"=true;\n");
 
 				sb.append("  }, function errorCallback(response) {\n");
 				manageRestError(sb);
@@ -841,6 +846,7 @@ public class JsGenerator {
 		sb.append("$scope.closeEntityDetail = function(){ \n")
 		.append(""+Utility.getEntityCallName(entityName)+"Service.setSelectedEntity(null);\n")
 		.append(""+Utility.getEntityCallName(entityName)+"Service.selectedEntity.show=false;\n")
+		.append("delete $rootScope.openNode."+entityName+";\n")
 		.append("}\n");
 		
 		
@@ -1242,11 +1248,11 @@ if (entity.getEntityGroup()!=null)
 		
 		.append(" url:'/app',\n")
 		.append("abstract:true,\n")
-		.append("templateUrl:'app/controller/abstractEntity/abstractEntity.html',\n")
+		.append("templateUrl:'app/main/main.html',\n")
 		
 		.append(" controller:'MainController', \n")
 		.append("controllerAs: 'main' ,\n")
-		.append("name: 'main'\n")
+		.append("name: 'main'\n") 
 		.append(" })\n")
 		
 		
@@ -1432,7 +1438,7 @@ if (entity.getEntityGroup()!=null)
 		
 		
 
-		
+		sb.append("$rootScope.openNode= {};\n");
 
 		sb.append("$log.debug('runBlock end');\n");
 

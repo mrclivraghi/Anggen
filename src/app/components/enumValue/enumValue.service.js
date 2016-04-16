@@ -7,6 +7,7 @@ angular
 function EnumValueService($http,MainService)
 {
 this.entityList =		[];
+this.preparedData={};
 this.selectedEntity= 	{show: false 
 };
 this.hidden= { hiddenFields: []};
@@ -14,7 +15,6 @@ this.isParent=function()
 {
 return MainService.parentEntity=="EnumValue";
 };
-this.childrenList={}; 
 this.addEntity=function (entity)
 {
 this.entityList.push(entity);

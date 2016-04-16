@@ -503,7 +503,7 @@ public class AngularGenerator {
 			html.div(CssGenerator.getInputGroup());
 			html.span((new HtmlAttributes()).add("class","input-group-addon")).content(entityAttribute.getName());
 			html.select(getFieldHtmlAttributes(entityAttribute, baseEntity, !search, style)
-			.add("ng-options", entityAttribute.getName()+ " as "+entityAttribute.getName()+" for "+entityAttribute.getName()+" in childrenList."+entityAttribute.getName()+"List").enctype("UTF-8"));
+			.add("ng-options", entityAttribute.getName()+ " as "+entityAttribute.getName()+" for "+entityAttribute.getName()+" in "+entityAttribute.getName()+"PreparedData.entityList").enctype("UTF-8"));
 			html._select();
 			html._div();
 			if (!search)
@@ -588,7 +588,7 @@ public class AngularGenerator {
 					
 						html.select(CssGenerator.getSelect("").add("ng-model", baseEntity+"."+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()+"."+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()+"Id")
 								.add("id", entityAttribute.getName())
-								.add("ng-options", EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()+"."+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()+"Id as "+entityAttributeManager.getDescription()+" for "+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()+" in childrenList."+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()+"List").enctype("UTF-8"))
+								.add("ng-options", EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()+"."+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()+"Id as "+entityAttributeManager.getDescription()+" for "+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()+" in "+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()+"PreparedData.entityList").enctype("UTF-8"))
 								._select();
 						html._div()._div();
 					} else
@@ -649,7 +649,7 @@ public class AngularGenerator {
 							html.select(CssGenerator.getSelect("").add("ng-model", "selectedEntity."+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName())
 									.add("id", EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName())
 									.add("name", EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName())
-									.add("ng-options", EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()+" as "+entityAttributeManager.getDescription()+" for "+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()+" in childrenList."+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()+"List track by "+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()+"."+Utility.getEntityCallName(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName())+"Id").enctype("UTF-8"))
+									.add("ng-options", EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()+" as "+entityAttributeManager.getDescription()+" for "+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()+" in "+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()+"PreparedData.entityList track by "+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()+"."+Utility.getEntityCallName(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName())+"Id").enctype("UTF-8"))
 									._select();
 							renderValidator(html,entityAttribute);
 							if (!lastLevel)
@@ -707,7 +707,7 @@ public class AngularGenerator {
 			html.select(CssGenerator.getSelect("").add("ng-model", "selectedEntity."+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName())
 					.add("id", EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName())
 					.add("name", EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName())
-					.add("ng-options", EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()+" as "+entityAttributeManager.getDescription()+" for "+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()+" in childrenList."+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()+"List track by "+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()+"."+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()+"Id").enctype("UTF-8"))
+					.add("ng-options", EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()+" as "+entityAttributeManager.getDescription()+" for "+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()+" in "+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()+"PreparedData.entityList track by "+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()+"."+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()+"Id").enctype("UTF-8"))
 					._select();
 			renderValidator(html,entityAttribute);
 			html.span((new HtmlAttributes()).add("class", "input-group-btn"))

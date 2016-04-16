@@ -7,6 +7,7 @@ angular
 function RoleService($http,MainService)
 {
 this.entityList =		[];
+this.preparedData={};
 this.selectedEntity= 	{show: false 
 ,restrictionFieldList: [],userList: [],restrictionEntityGroupList: [],restrictionEntityList: []};
 this.hidden= { hiddenFields: []};
@@ -14,7 +15,6 @@ this.isParent=function()
 {
 return MainService.parentEntity=="Role";
 };
-this.childrenList={}; 
 this.addEntity=function (entity)
 {
 this.entityList.push(entity);

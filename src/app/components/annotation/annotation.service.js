@@ -7,6 +7,7 @@ angular
 function AnnotationService($http,MainService)
 {
 this.entityList =		[];
+this.preparedData={};
 this.selectedEntity= 	{show: false 
 ,annotationAttributeList: []};
 this.hidden= { hiddenFields: []};
@@ -14,7 +15,6 @@ this.isParent=function()
 {
 return MainService.parentEntity=="Annotation";
 };
-this.childrenList={}; 
 this.addEntity=function (entity)
 {
 this.entityList.push(entity);

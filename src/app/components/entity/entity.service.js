@@ -7,6 +7,7 @@ angular
 function EntityService($http,MainService)
 {
 this.entityList =		[];
+this.preparedData={};
 this.selectedEntity= 	{show: false 
 ,restrictionEntityList: [],tabList: [],enumFieldList: [],fieldList: [],relationshipList: []};
 this.hidden= { hiddenFields: []};
@@ -14,7 +15,6 @@ this.isParent=function()
 {
 return MainService.parentEntity=="Entity";
 };
-this.childrenList={}; 
 this.addEntity=function (entity)
 {
 this.entityList.push(entity);

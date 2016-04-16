@@ -181,7 +181,7 @@ roleService.setSelectedEntity(response.data);
 return; 
 });
 }
-$scope.trueFalseValues=[true,false];
+$scope.trueFalseValues=['',true,false];
 $scope.showRestrictionFieldDetail= function(index)
 {
 if (index!=null)

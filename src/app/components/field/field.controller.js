@@ -176,7 +176,7 @@ fieldService.setSelectedEntity(response.data);
 return; 
 });
 }
-$scope.trueFalseValues=[true,false];
+$scope.trueFalseValues=['',true,false];
 $scope.showEntityDetail= function(index)
 {
 if (index!=null)

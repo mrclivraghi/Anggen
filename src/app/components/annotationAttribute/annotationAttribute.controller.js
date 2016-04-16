@@ -142,7 +142,7 @@ annotationAttributeService.setSelectedEntity(response.data);
 return; 
 });
 }
-$scope.trueFalseValues=[true,false];
+$scope.trueFalseValues=['',true,false];
 $scope.showAnnotationDetail= function(index)
 {
 if (index!=null)

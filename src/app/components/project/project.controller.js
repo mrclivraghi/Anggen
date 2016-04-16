@@ -157,7 +157,7 @@ projectService.setSelectedEntity(response.data);
 return; 
 });
 }
-$scope.trueFalseValues=[true,false];
+$scope.trueFalseValues=['',true,false];
 $scope.showEnumEntityDetail= function(index)
 {
 if (index!=null)

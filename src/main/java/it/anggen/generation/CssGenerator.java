@@ -4,6 +4,11 @@ import it.anggen.reflection.EntityAttributeManager;
 import it.anggen.utils.EntityAttribute;
 import it.anggen.utils.Field;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+
 import org.rendersnake.HtmlAttributes;
 import org.rendersnake.internal.CharactersWriteable;
 /**
@@ -144,6 +149,51 @@ public  class CssGenerator {
 			htmlAttributes.add("class", "form-control "+style );
 		return htmlAttributes;
 	}*/
+	
+	public static void generateMain(String angularDirectory)
+	{
+		StringBuilder sb = new StringBuilder();
+		sb.append("@CHARSET \"ISO-8859-1\";\n");
+		sb.append(".default-panel{\n");
+		sb.append("	width: 90%;\n");
+		sb.append("	margin-left: 5%;AAAAAAAAAAAAAAAAAAA\n");
+		sb.append("}\n");
+		sb.append(".right-input{\n");
+		sb.append("	width:45%;\n");
+		sb.append("	/*float: right;*/\n");
+		sb.append("	margin-top:15px;\n");
+		sb.append("	}\n");
+
+		sb.append(".left-input{\n");
+		sb.append("	width:45%;\n");
+		sb.append("	float: left;\n");
+		sb.append("}\n");
+
+		sb.append(".custom-alert{\n");
+		sb.append("	position:absolute;\n");
+		sb.append("	width:200px;\n");
+		sb.append("	height:80px;\n");
+		sb.append("	right: 50px;\n");
+		sb.append("	bottom: 20px;\n");
+		sb.append("}\n");
+
+		File file = new File("");
+		String directory= file.getAbsolutePath()+angularDirectory+"components/customLib/";
+		File dir = new File(directory);
+		if (!dir.exists())
+			dir.mkdirs();
+		file = new File(directory+"main.css");
+		PrintWriter writer;
+		try {
+			writer = new PrintWriter(file, "UTF-8");
+			writer.write(sb.toString());
+			writer.close();
+			System.out.println("written css file "+file.getAbsolutePath());
+		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	
 }

@@ -439,11 +439,19 @@ public class HtmlGenerator {
 	}
 	
 
-	public void generateIndex()
+	/*public void generateIndex()
 	{
 		HtmlCanvas html = new HtmlCanvas();
 		try {
-			html.h1().center().content("HOME PAGE")._h1();
+			StringBuilder sbHead = new StringBuilder();
+			sbHead.append("")
+			html.render(docType)
+			.html((new HtmlAttributes()).add("ng-app", generator.applicationName+"App"))
+			.head()
+			.content("",false)
+			.body()
+			.content("",false)
+			._html();
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -458,6 +466,6 @@ public class HtmlGenerator {
 		} catch (FileNotFoundException | UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 	
 }

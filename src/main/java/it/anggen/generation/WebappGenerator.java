@@ -129,9 +129,11 @@ public class WebappGenerator {
 		generateSecurityConfig();
 		generateSecurityWebappInitializer();
 		generateSpringBootApplication();
-		generateForbiddenJsp();
+		//generateForbiddenJsp();
 		generateMainAppController();
 		generateWebConfig();
+		
+		
 	}
 	
 	private void generateMainAppController() {
@@ -508,7 +510,13 @@ public class WebappGenerator {
 		saveFile(codeModel);
 	}
 	
-	private void generateForbiddenJsp()
+	
+	
+	
+	
+	
+	
+	private void generateForbiddenJsp_old()
 	{
 		HtmlCanvas html = new HtmlCanvas();
 		try {

@@ -1506,6 +1506,218 @@ if (entity.getEntityGroup()!=null)
 	}
 	
 	
+	private void generateHomeController()
+	{
+
+		StringBuilder sb = new StringBuilder();
+		sb.append("(function() {\n")
+		.append("  'use strict'\n")
+		.append("\n")
+		.append("  angular\n")
+
+		.append(" .module('"+generator.applicationName+"App')\n")
+		.append(" .controller('homeController', HomeController);\n")
+
+		.append("  /** @ngInject */\n")
+		.append(" function HomeController($element,$timeout,SecurityService,$log,$rootScope,$resource) {\n")
+		.append(" var vm = this;\n")
+
+		.append(" function checkUsername()\n")
+		.append(" {\n")
+		.append(" 	var Username= $resource(\""+generator.restUrl+"authentication/username/\");\n")
+		.append(" 	var result= Username.save({},function(data){\n")
+		.append("         $log.debug(data);\n")
+		.append("     });\n")
+		.append(" }\n")
+
+
+		.append(" vm.checkUsername=checkUsername;\n")
+		.append("  }\n");
+
+
+		sb.append("})();\n");
+
+		File file = new File("");
+		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+"home/";
+		saveAsJsFile(directoryAngularFiles, "home.controller", sb.toString());
+
+
+	}
+	
+	
+	public void generateUtilityJS()
+	{
+		StringBuilder sb = new StringBuilder();
+		sb.append("/**\n");
+		sb.append(" *  utility functionality\n");
+		sb.append("*/\n");
+
+		sb.append("function loadMenu()\n");
+		sb.append("{\n");
+		sb.append("var content = document.querySelector('link[rel=\"import\"]').import; \n");
+		sb.append(" $(\"body\").prepend(content.documentElement.getElementsByTagName(\"body\")[0]);\n");
+		sb.append("}\n");
+		sb.append("function activeMenu(path)\n");
+		sb.append("{\n");
+		sb.append("	$(\"a\").parent(\"li\").removeClass(\"active\");\n");
+		sb.append("	$(\"a[href='../\"+path+\"/']\").parent(\"li\").addClass(\"active\");\n");
+		sb.append("	if ($(\"a[href='../\"+path+\"/']\").parent(\"li\").parent(\"ul\").parent(\"li\")[0]!=undefined)\n");
+		sb.append("		$(\"a[href='../\"+path+\"/']\").parent(\"li\").parent(\"ul\").parent(\"li\").addClass(\"active\");\n");
+
+
+		sb.append("}\n");
+
+		sb.append("var AlertSuccess = (function() {\n");
+		sb.append("   \"use strict\";\n");
+
+		sb.append("   var elem,\n");
+		sb.append("       hideHandler,\n");
+		sb.append("       that = {};\n");
+
+		sb.append("    that.init = function(options) {\n");
+		sb.append("        elem = $(options.selector);\n");
+		sb.append("    };\n");
+
+		sb.append("    that.show = function(text) {\n");
+		sb.append("        clearTimeout(hideHandler);\n");
+
+		sb.append("        elem.find(\"span\").html(text);\n");
+		sb.append("        elem.delay(200).fadeIn().delay(2000).fadeOut();\n");
+		sb.append("   };\n");
+
+		sb.append("    return that;\n");
+		sb.append("}());\n");
+
+		sb.append("var AlertError = (function() {\n");
+		sb.append("  \"use strict\";\n");
+
+		sb.append("  var elem,\n");
+		sb.append("     hideHandler,\n");
+		sb.append("     that = {};\n");
+
+		sb.append("  that.init = function(options) {\n");
+		sb.append("      elem = $(options.selector);\n");
+		sb.append("  };\n");
+
+		sb.append("that.show = function(text) {\n");
+		sb.append("   clearTimeout(hideHandler);\n");
+
+		sb.append("     elem.find(\"span\").html(text);\n");
+		sb.append("    elem.delay(200).fadeIn().delay(2000).fadeOut();\n");
+		sb.append(" };\n");
+
+		sb.append("  return that;\n");
+		sb.append("}());\n");
+
+
+		sb.append("function cloneObject(sourceObject,targetObject)\n");
+		sb.append("{\n");
+
+		sb.append("var keyList = Object.keys(sourceObject);\n");
+		sb.append("if (keyList.length == 0)\n");
+		sb.append("	keyList = Object.keys(targetObject);\n");
+		sb.append("for (i = 0; i < keyList.length; i++) {\n");
+		sb.append("var val = keyList[i];\n");
+		sb.append("if (val != undefined) {\n");
+		sb.append("if (val.toLowerCase().indexOf(\"list\") > -1\n");
+		sb.append("	&& (typeof sourceObject[val] == \"object\" || typeof targetObject[val]==\"object\")) {\n");
+		sb.append("if (sourceObject[val] != null\n");
+		sb.append("	&& sourceObject[val] != undefined) {\n");
+		sb.append("if (targetObject[val]!=undefined)\n");
+		sb.append("	while (targetObject[val].length > 0)\n");
+		sb.append("		targetObject[val].pop();\n");
+		sb.append("if (sourceObject[val] != null)\n");
+		sb.append("		for (j = 0; j < sourceObject[val].length; j++)\n");
+		sb.append("				targetObject[val]\n");
+		sb.append("			.push(sourceObject[val][j]);\n");
+		sb.append("	} else \n");
+		sb.append("			emptyList(targetObject[val]);\n");
+		sb.append("	} else {\n");
+		sb.append("		if (val.toLowerCase().indexOf(\"time\") > -1\n");
+		sb.append("				&& typeof val == \"string\") {\n");
+		sb.append("			var date = new Date(sourceObject[val]);\n");
+		sb.append("			targetObject[val] = new Date(sourceObject[val]);\n");
+		sb.append("		} else {\n");
+		sb.append("			targetObject[val] = sourceObject[val];\n");
+		sb.append("		}\n");
+		sb.append("	}\n");
+		sb.append("}\n");
+		sb.append("};\n");
+
+		sb.append("}\n");
+		sb.append("function emptyList(list)\n");
+		sb.append("{\n");
+		sb.append("	while (list.length>0)\n");
+		sb.append("		list.pop();\n");
+		sb.append("}\n");
+
+
+
+		File file = new File("");
+		String directory= file.getAbsolutePath()+generator.angularDirectory+"customLib/";
+		saveAsJsFile(directory, "utility", sb.toString());
+	}
+	
+	
+	public void generateNavbarDirective()
+	{
+
+		StringBuilder sb = new StringBuilder();
+		sb.append("(function() {\n")
+		.append("  'use strict'\n")
+		.append("\n")
+		.append("  angular\n")
+		.append(".module('"+generator.applicationName+"App')\n")
+		.append(".directive('"+generator.applicationName+"Navbar', "+generator.applicationName+"Navbar);\n")
+
+		.append("/** @ngInject */\n")
+		.append("function "+generator.applicationName+"Navbar(SecurityService) {\n")
+		.append(" var directive = {\n")
+		.append("    restrict: 'E',\n")
+		.append("    templateUrl: 'app/components/navbar/navbar.html',\n")
+		.append("    scope: {\n")
+		.append("         creationDate: '='\n")
+		.append("    },\n")
+		.append("     controller: NavbarController,\n")
+		.append("     controllerAs: 'vm',\n")
+		.append("     bindToController: true\n")
+		.append("   };\n")
+
+		.append("   return directive;\n")
+
+		.append("  /** @ngInject */\n")
+		.append("  function NavbarController($scope,$http,$log,moment,$rootScope,SecurityService) {\n")
+		.append("    var vm = this;\n")
+		.append("  function doLogout()\n")
+		.append("  {\n")
+		.append("  $http.post(\""+generator.restUrl+"auth/logout/\").then(function(response)\n")
+		.append("{\n")
+		.append("		$log.debug(\"logout\");\n")
+		.append("  });\n")
+
+
+		.append("  }\n")
+		.append("  vm.doLogout=doLogout;\n")
+
+
+
+		.append(" }\n")
+		.append(" }\n")
+
+		.append("})();\n");
+
+
+
+
+		File file = new File("");
+		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+"navbar/";
+		saveAsJsFile(directoryAngularFiles, "navbar.directive", sb.toString());
+
+
+	}
+	
+	
+	
 	/**
 	 * Create the JS string
 	 * @return
@@ -1701,6 +1913,69 @@ MainService.parentService.childrenList.roleList=response.data;
 		return sb.toString();
 	}
 	
+	public void generateBowerFile()
+	{
+		StringBuilder sb = new StringBuilder();
+		sb.append("{\n");
+		sb.append(" \"name\": \""+generator.applicationName+"App\",\n");
+		sb.append("\"version\": \"0.0.0\",\n");
+		sb.append("\"dependencies\": {\n");
+		sb.append("\"angular-animate\": \"~1.5.3\",\n");
+		sb.append("\"angular-cookies\": \"~1.5.3\",\n");
+		sb.append("\"angular-touch\": \"~1.5.3\",\n");
+		sb.append("\"angular-sanitize\": \"~1.5.3\",\n");
+		sb.append("\"angular-messages\": \"~1.5.3\",\n");
+		sb.append("\"angular-aria\": \"~1.5.3\",\n");
+		sb.append(" \"jquery\": \"~2.1.4\",\n");
+		sb.append("\"angular-resource\": \"~1.5.3\",\n");
+		sb.append("\"angular-ui-router\": \"~0.2.15\",\n");
+		sb.append("\"bootstrap-sass\": \"~3.3.5\",\n");
+		sb.append("\"angular-bootstrap\": \"~1.2.5\",\n");
+		sb.append(" \"angular-toastr\": \"~1.5.0\",\n");
+		sb.append("\"moment\": \"~2.10.6\",\n");
+		sb.append("\"animate.css\": \"~3.4.0\",\n");
+		sb.append(" \"angular\": \"~1.5.3\",\n");
+		sb.append(" \"ng-file-upload\": \"^12.0.4\",\n");
+		sb.append(" \"angular-ui-grid\": \"^3.1.1\",\n");
+		sb.append("  \"angular-ui-date\": \"^1.0.0\",\n");
+		sb.append("  \"bootstrap\": \"^3.3.6\",\n");
+		sb.append("   \"utility\": \"./src/app/components/customLib/utility.js\",\n");
+		sb.append("  \"main\": \"./src/app/components/customLib/main.css\"\n");
+		sb.append(" },\n");
+		sb.append("  \"devDependencies\": {\n");
+		sb.append(" \"angular-mocks\": \"~1.5.3\"\n");
+		sb.append(" },\n");
+		sb.append("\"overrides\": {\n");
+		sb.append("\"bootstrap-sass\": {\n");
+		sb.append(" \"main\": [\n");
+		sb.append("  \"assets/stylesheets/_bootstrap.scss\",\n");
+		sb.append(" \"assets/fonts/bootstrap/glyphicons-halflings-regular.eot\",\n");
+		sb.append("\"assets/fonts/bootstrap/glyphicons-halflings-regular.svg\",\n");
+		sb.append("\"assets/fonts/bootstrap/glyphicons-halflings-regular.ttf\",\n");
+		sb.append("\"assets/fonts/bootstrap/glyphicons-halflings-regular.woff\",\n");
+		sb.append(" \"assets/fonts/bootstrap/glyphicons-halflings-regular.woff2\"\n");
+		sb.append(" ]\n");
+		sb.append("}\n");
+		sb.append("},\n");
+		sb.append("\"resolutions\": {\n");
+		sb.append("\"jquery\": \"~2.1.4\",\n");
+		sb.append(" \"angular\": \"~1.5.3\"\n");
+		sb.append(" }\n");
+		sb.append("}\n");
+
+
+		File file= new File("");
+		File myJsp=new File(file.getAbsolutePath()+"bower.json");
+		PrintWriter writer;
+		try {
+			System.out.println("Written "+myJsp.getAbsolutePath());
+			writer = new PrintWriter(myJsp, "UTF-8");
+			writer.write(sb.toString());
+			writer.close();
+		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	
 	

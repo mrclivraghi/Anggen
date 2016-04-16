@@ -1,47 +1,33 @@
 (function() {
-  'use strict';
+  'use strict'
 
   angular
-    .module('serverTestApp')
-    .directive('anggenNavbar', anggenNavbar);
-
+.module('serverTestApp')
+.directive('serverTestNavbar', serverTestNavbar);
+/** @ngInject */
+function serverTestNavbar(SecurityService) {
+ var directive = {
+    restrict: 'E',
+    templateUrl: 'app/components/navbar/navbar.html',
+    scope: {
+         creationDate: '='
+    },
+     controller: NavbarController,
+     controllerAs: 'vm',
+     bindToController: true
+   };
+   return directive;
   /** @ngInject */
-  function anggenNavbar(SecurityService) {
-    var directive = {
-      restrict: 'E',
-      templateUrl: 'app/components/navbar/navbar.html',
-      scope: {
-          creationDate: '='
-      },
-      controller: NavbarController,
-      controllerAs: 'vm',
-      bindToController: true
-    };
-
-    return directive;
-
-    /** @ngInject */
-    function NavbarController($scope,$http,$log,moment,$rootScope,SecurityService) {
-      var vm = this;
-
-      // "vm.creationDate" is available by directive option "bindToController: true"
-      vm.relativeDate = moment(vm.creationDate).fromNow();
-	  function doLogout()
-	  {
-	  $http.post("http://localhost:8080/ServerTestApp/auth/logout/").then(function(response)
-	  {
-			$log.debug("logout");
-	  
-	  });
-	  
-	  
-	  }
-	  
-	  vm.doLogout=doLogout;
-	  
-	  
-	  
-    }
+  function NavbarController($scope,$http,$log,moment,$rootScope,SecurityService) {
+    var vm = this;
+  function doLogout()
+  {
+  $http.post("http://127.0.0.1:8080/ServerTestApp/auth/logout/").then(function(response)
+{
+		$log.debug("logout");
+  });
   }
-
+  vm.doLogout=doLogout;
+ }
+ }
 })();

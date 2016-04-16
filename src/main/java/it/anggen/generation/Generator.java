@@ -250,9 +250,15 @@ public class Generator {
 			jsGenerator.generateServiceFile();
 			jsGenerator.generateControllerFile();
 			jsGenerator.generateDirectiveFile();
+			jsGenerator.generateUtilityJS();
+			jsGenerator.generateNavbarDirective();
+			jsGenerator.generateBowerFile();
 			htmlGenerator.setDirectory();
 			//htmlGenerator.generateTemplate();
 			htmlGenerator.generateHomePage();
+			htmlGenerator.generateMain();
+			
+			CssGenerator.generateMain(angularDirectory);
 			for (Entity modelEntity: modelEntityList)
 			{
 				if (modelEntity.getDisableViewGeneration()) continue;

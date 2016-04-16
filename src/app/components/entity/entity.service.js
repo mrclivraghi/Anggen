@@ -10,6 +10,8 @@ this.entityList =		[];
 this.selectedEntity= 	{show: false 
 ,restrictionEntityList: [],tabList: [],enumFieldList: [],fieldList: [],relationshipList: []};
 this.hidden= { hiddenFields: []};
+this.preparedData= {};
+
 this.isParent=function()
 {
 return MainService.parentEntity=="Entity";
@@ -27,6 +29,9 @@ if (entityList!=null)
 for (i=0; i<entityList.length; i++)
 this.entityList.push(entityList[i]);
 };
+
+
+
 this.searchBean = 		new Object();
 this.resetSearchBean= function()
 {

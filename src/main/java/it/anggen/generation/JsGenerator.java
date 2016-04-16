@@ -177,6 +177,7 @@ public class JsGenerator {
 		sb.append("function "+Utility.getFirstUpper(entityName)+"Service($http,MainService)\n")
 		.append("{\n")
 		.append("this.entityList =		[];\n")
+		.append("this.preparedData={};\n")
 		.append("this.selectedEntity= 	{show: false \n");
 		for (Relationship relationship : relationshipList)
 		{
@@ -1439,6 +1440,18 @@ if (entity.getEntityGroup()!=null)
 		
 
 		sb.append("$rootScope.openNode= {};\n");
+
+		
+		/*  init all the list - heavy? */
+		for (Entity entity: generator.getEntityList())
+		{
+			sb.append(""+Utility.getFirstLower(entity.getName())+"Service.searchBean={};\n");
+			sb.append(""+Utility.getFirstLower(entity.getName())+"Service.search().then(function successCallback(response) {\n");
+			sb.append(""+Utility.getFirstLower(entity.getName())+"Service.preparedData.entityList=response.data;\n");
+			sb.append("},function errorCallback(response) { \n");
+				manageRestError(sb);
+			sb.append("});\n");
+		}
 
 		sb.append("$log.debug('runBlock end');\n");
 

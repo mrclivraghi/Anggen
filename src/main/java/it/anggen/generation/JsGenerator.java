@@ -1506,6 +1506,45 @@ if (entity.getEntityGroup()!=null)
 	}
 	
 	
+	private void generateHomeController()
+	{
+
+		StringBuilder sb = new StringBuilder();
+		sb.append("(function() {\n")
+		.append("  'use strict'\n")
+		.append("\n")
+		.append("  angular\n")
+
+		.append(" .module('"+generator.applicationName+"App')\n")
+		.append(" .controller('homeController', HomeController);\n")
+
+		.append("  /** @ngInject */\n")
+		.append(" function HomeController($element,$timeout,SecurityService,$log,$rootScope,$resource) {\n")
+		.append(" var vm = this;\n")
+
+		.append(" function checkUsername()\n")
+		.append(" {\n")
+		.append(" 	var Username= $resource(\""+generator.restUrl+"authentication/username/\");\n")
+		.append(" 	var result= Username.save({},function(data){\n")
+		.append("         $log.debug(data);\n")
+		.append("     });\n")
+		.append(" }\n")
+
+
+		.append(" vm.checkUsername=checkUsername;\n")
+		.append("  }\n");
+
+
+		sb.append("})();\n");
+
+		File file = new File("");
+		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+"home/";
+		saveAsJsFile(directoryAngularFiles, "home.controller", sb.toString());
+
+
+	}
+	
+	
 	public void generateUtilityJS()
 	{
 		StringBuilder sb = new StringBuilder();

@@ -224,7 +224,7 @@ public class HtmlGenerator {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		File dir = new File(directoryViewPages+"../controller/");
+		File dir = new File(directoryViewPages+"../controller/"+entityName+"/");
 		if (!dir.exists())
 			dir.mkdirs();
 		
@@ -429,6 +429,10 @@ public class HtmlGenerator {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		File dir = new File(directoryViewPages+"home/");
+		if (!dir.exists())
+			dir.mkdirs();
+		
 		File myFile=new File(directoryViewPages+"home/home.html");
 		PrintWriter writer;
 		try {

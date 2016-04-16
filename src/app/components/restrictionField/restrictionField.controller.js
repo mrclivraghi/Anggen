@@ -20,18 +20,23 @@ restrictionFieldService.setEntityList(null);
 if (restrictionFieldService.isParent()) 
 {
 fieldService.selectedEntity.show=false;
+delete $rootScope.openNode.field;
 roleService.selectedEntity.show=false;
+delete $rootScope.openNode.role;
 }
 }
 $scope.addNew= function()
 {
+$rootScope.openNode.restrictionField=true;
 restrictionFieldService.setSelectedEntity(null);
 restrictionFieldService.setEntityList(null);
 restrictionFieldService.selectedEntity.show=true;
 if (restrictionFieldService.isParent()) 
 {
 fieldService.selectedEntity.show=false;
+delete $rootScope.openNode.field;
 roleService.selectedEntity.show=false;
+delete $rootScope.openNode.role;
 }
 $('#restrictionFieldTabs li:eq(0) a').tab('show');
 };
@@ -39,6 +44,7 @@ $('#restrictionFieldTabs li:eq(0) a').tab('show');
 $scope.search=function()
 {
 restrictionFieldService.selectedEntity.show=false;
+delete $rootScope.openNode.restrictionField;
 restrictionFieldService.search().then(function successCallback(response) {
 restrictionFieldService.setEntityList(response.data);
 },function errorCallback(response) { 
@@ -77,7 +83,9 @@ if (!$scope.restrictionFieldDetailForm.$valid) return;
 if (restrictionFieldService.isParent()) 
 {
 fieldService.selectedEntity.show=false;
+delete $rootScope.openNode.field;
 roleService.selectedEntity.show=false;
+delete $rootScope.openNode.role;
 restrictionFieldService.update().then(function successCallback(response) { 
 $scope.search();
 },function errorCallback(response) { 
@@ -103,6 +111,7 @@ updateParentEntities();
 $scope.remove= function()
 {
 restrictionFieldService.selectedEntity.show=false;
+delete $rootScope.openNode.restrictionField;
 restrictionFieldService.setSelectedEntity(null);
 $scope.updateParent();
 };
@@ -148,7 +157,7 @@ if (index!=null)
 {
 fieldService.searchOne(restrictionFieldService.selectedEntity.fieldList[index]).then(
 function successCallback(response) {
-console.log("response-ok");
+console.log("INDEX!=NULLLLLLLLLLLL");
 console.log(response);
 if ($rootScope.restrictionList.entity!=undefined && $rootScope.restrictionList.entity.restrictionItemMap.entity.canSearch)
 fieldService.initEntityList().then(function successCallback(response) {
@@ -231,6 +240,7 @@ fieldService.childrenList.restrictionFieldList=response.data;
 fieldService.childrenList.fieldTypeList=["STRING","INTEGER","DATE","DOUBLE","TIME","BOOLEAN","LONG","FILE",];
 fieldService.setSelectedEntity(null); 
 fieldService.selectedEntity.show=true; 
+$rootScope.openNode.field=true;
 }
 else
 fieldService.searchOne(restrictionFieldService.selectedEntity.field).then(
@@ -270,6 +280,7 @@ fieldService.childrenList.restrictionFieldList=response.data;
 fieldService.childrenList.fieldTypeList=["STRING","INTEGER","DATE","DOUBLE","TIME","BOOLEAN","LONG","FILE",];
 fieldService.setSelectedEntity(response.data[0]);
 fieldService.selectedEntity.show=true;
+$rootScope.openNode.field=true;
   }, function errorCallback(response) {
 //AlertError.init({selector: "#alertError"});
 //AlertError.show("Si è verificato un errore");
@@ -285,7 +296,7 @@ if (index!=null)
 {
 roleService.searchOne(restrictionFieldService.selectedEntity.roleList[index]).then(
 function successCallback(response) {
-console.log("response-ok");
+console.log("INDEX!=NULLLLLLLLLLLL");
 console.log(response);
 if ($rootScope.restrictionList.security!=undefined && $rootScope.restrictionList.security.restrictionItemMap.restrictionField.canSearch)
 roleService.initRestrictionFieldList().then(function successCallback(response) {
@@ -366,6 +377,7 @@ roleService.childrenList.restrictionEntityList=response.data;
 });
 roleService.setSelectedEntity(null); 
 roleService.selectedEntity.show=true; 
+$rootScope.openNode.role=true;
 }
 else
 roleService.searchOne(restrictionFieldService.selectedEntity.role).then(
@@ -404,6 +416,7 @@ roleService.childrenList.restrictionEntityList=response.data;
 });
 roleService.setSelectedEntity(response.data[0]);
 roleService.selectedEntity.show=true;
+$rootScope.openNode.role=true;
   }, function errorCallback(response) {
 //AlertError.init({selector: "#alertError"});
 //AlertError.show("Si è verificato un errore");
@@ -465,12 +478,14 @@ if (row.isSelected)
 {
 restrictionFieldService.searchOne(row.entity).then(function(response) { 
 console.log(response.data);
+$rootScope.openNode.restrictionField=true;
 restrictionFieldService.setSelectedEntity(response.data[0]);
 });
 $('#restrictionFieldTabs li:eq(0) a').tab('show');
 }
 else 
 restrictionFieldService.setSelectedEntity(null);
+delete $rootScope.openNode.restrictionField;
 restrictionFieldService.selectedEntity.show = row.isSelected;
 });
   };
@@ -519,12 +534,14 @@ if (row.isSelected)
 {
 fieldService.searchOne(row.entity).then(function(response) { 
 console.log(response.data);
+$rootScope.openNode.field=true;
 fieldService.setSelectedEntity(response.data[0]);
 });
 $('#fieldTabs li:eq(0) a').tab('show');
 }
 else 
 fieldService.setSelectedEntity(null);
+delete $rootScope.openNode.field;
 fieldService.selectedEntity.show = row.isSelected;
 });
   };
@@ -572,12 +589,14 @@ if (row.isSelected)
 {
 roleService.searchOne(row.entity).then(function(response) { 
 console.log(response.data);
+$rootScope.openNode.role=true;
 roleService.setSelectedEntity(response.data[0]);
 });
 $('#roleTabs li:eq(0) a').tab('show');
 }
 else 
 roleService.setSelectedEntity(null);
+delete $rootScope.openNode.role;
 roleService.selectedEntity.show = row.isSelected;
 });
   };
@@ -616,6 +635,7 @@ fieldService.setSelectedEntity(response.data[0]);
 $scope.closeEntityDetail = function(){ 
 restrictionFieldService.setSelectedEntity(null);
 restrictionFieldService.selectedEntity.show=false;
+delete $rootScope.openNode.restrictionField;
 }
 }
 })();

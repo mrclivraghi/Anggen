@@ -23,6 +23,7 @@ if (logEntryService.isParent())
 }
 $scope.addNew= function()
 {
+$rootScope.openNode.logEntry=true;
 logEntryService.setSelectedEntity(null);
 logEntryService.setEntityList(null);
 logEntryService.selectedEntity.show=true;
@@ -35,6 +36,7 @@ $('#logEntryTabs li:eq(0) a').tab('show');
 $scope.search=function()
 {
 logEntryService.selectedEntity.show=false;
+delete $rootScope.openNode.logEntry;
 logEntryService.search().then(function successCallback(response) {
 logEntryService.setEntityList(response.data);
 },function errorCallback(response) { 
@@ -97,6 +99,7 @@ updateParentEntities();
 $scope.remove= function()
 {
 logEntryService.selectedEntity.show=false;
+delete $rootScope.openNode.logEntry;
 logEntryService.setSelectedEntity(null);
 $scope.updateParent();
 };
@@ -154,12 +157,14 @@ if (row.isSelected)
 {
 logEntryService.searchOne(row.entity).then(function(response) { 
 console.log(response.data);
+$rootScope.openNode.logEntry=true;
 logEntryService.setSelectedEntity(response.data[0]);
 });
 $('#logEntryTabs li:eq(0) a').tab('show');
 }
 else 
 logEntryService.setSelectedEntity(null);
+delete $rootScope.openNode.logEntry;
 logEntryService.selectedEntity.show = row.isSelected;
 });
   };
@@ -168,6 +173,7 @@ function updateParentEntities() {
 $scope.closeEntityDetail = function(){ 
 logEntryService.setSelectedEntity(null);
 logEntryService.selectedEntity.show=false;
+delete $rootScope.openNode.logEntry;
 }
 }
 })();

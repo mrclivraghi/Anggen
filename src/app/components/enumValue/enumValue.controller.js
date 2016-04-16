@@ -20,16 +20,19 @@ enumValueService.setEntityList(null);
 if (enumValueService.isParent()) 
 {
 enumEntityService.selectedEntity.show=false;
+delete $rootScope.openNode.enumEntity;
 }
 }
 $scope.addNew= function()
 {
+$rootScope.openNode.enumValue=true;
 enumValueService.setSelectedEntity(null);
 enumValueService.setEntityList(null);
 enumValueService.selectedEntity.show=true;
 if (enumValueService.isParent()) 
 {
 enumEntityService.selectedEntity.show=false;
+delete $rootScope.openNode.enumEntity;
 }
 $('#enumValueTabs li:eq(0) a').tab('show');
 };
@@ -37,6 +40,7 @@ $('#enumValueTabs li:eq(0) a').tab('show');
 $scope.search=function()
 {
 enumValueService.selectedEntity.show=false;
+delete $rootScope.openNode.enumValue;
 enumValueService.search().then(function successCallback(response) {
 enumValueService.setEntityList(response.data);
 },function errorCallback(response) { 
@@ -75,6 +79,7 @@ if (!$scope.enumValueDetailForm.$valid) return;
 if (enumValueService.isParent()) 
 {
 enumEntityService.selectedEntity.show=false;
+delete $rootScope.openNode.enumEntity;
 enumValueService.update().then(function successCallback(response) { 
 $scope.search();
 },function errorCallback(response) { 
@@ -100,6 +105,7 @@ updateParentEntities();
 $scope.remove= function()
 {
 enumValueService.selectedEntity.show=false;
+delete $rootScope.openNode.enumValue;
 enumValueService.setSelectedEntity(null);
 $scope.updateParent();
 };
@@ -143,7 +149,7 @@ if (index!=null)
 {
 enumEntityService.searchOne(enumValueService.selectedEntity.enumEntityList[index]).then(
 function successCallback(response) {
-console.log("response-ok");
+console.log("INDEX!=NULLLLLLLLLLLL");
 console.log(response);
 if ($rootScope.restrictionList.entity!=undefined && $rootScope.restrictionList.entity.restrictionItemMap.project.canSearch)
 enumEntityService.initProjectList().then(function successCallback(response) {
@@ -192,6 +198,7 @@ enumEntityService.childrenList.enumValueList=response.data;
 });
 enumEntityService.setSelectedEntity(null); 
 enumEntityService.selectedEntity.show=true; 
+$rootScope.openNode.enumEntity=true;
 }
 else
 enumEntityService.searchOne(enumValueService.selectedEntity.enumEntity).then(
@@ -214,6 +221,7 @@ enumEntityService.childrenList.enumValueList=response.data;
 });
 enumEntityService.setSelectedEntity(response.data[0]);
 enumEntityService.selectedEntity.show=true;
+$rootScope.openNode.enumEntity=true;
   }, function errorCallback(response) {
 //AlertError.init({selector: "#alertError"});
 //AlertError.show("Si è verificato un errore");
@@ -259,12 +267,14 @@ if (row.isSelected)
 {
 enumValueService.searchOne(row.entity).then(function(response) { 
 console.log(response.data);
+$rootScope.openNode.enumValue=true;
 enumValueService.setSelectedEntity(response.data[0]);
 });
 $('#enumValueTabs li:eq(0) a').tab('show');
 }
 else 
 enumValueService.setSelectedEntity(null);
+delete $rootScope.openNode.enumValue;
 enumValueService.selectedEntity.show = row.isSelected;
 });
   };
@@ -296,12 +306,14 @@ if (row.isSelected)
 {
 enumEntityService.searchOne(row.entity).then(function(response) { 
 console.log(response.data);
+$rootScope.openNode.enumEntity=true;
 enumEntityService.setSelectedEntity(response.data[0]);
 });
 $('#enumEntityTabs li:eq(0) a').tab('show');
 }
 else 
 enumEntityService.setSelectedEntity(null);
+delete $rootScope.openNode.enumEntity;
 enumEntityService.selectedEntity.show = row.isSelected;
 });
   };
@@ -325,6 +337,7 @@ enumEntityService.setSelectedEntity(response.data[0]);
 $scope.closeEntityDetail = function(){ 
 enumValueService.setSelectedEntity(null);
 enumValueService.selectedEntity.show=false;
+delete $rootScope.openNode.enumValue;
 }
 }
 })();

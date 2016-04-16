@@ -20,16 +20,19 @@ annotationAttributeService.setEntityList(null);
 if (annotationAttributeService.isParent()) 
 {
 annotationService.selectedEntity.show=false;
+delete $rootScope.openNode.annotation;
 }
 }
 $scope.addNew= function()
 {
+$rootScope.openNode.annotationAttribute=true;
 annotationAttributeService.setSelectedEntity(null);
 annotationAttributeService.setEntityList(null);
 annotationAttributeService.selectedEntity.show=true;
 if (annotationAttributeService.isParent()) 
 {
 annotationService.selectedEntity.show=false;
+delete $rootScope.openNode.annotation;
 }
 $('#annotationAttributeTabs li:eq(0) a').tab('show');
 };
@@ -37,6 +40,7 @@ $('#annotationAttributeTabs li:eq(0) a').tab('show');
 $scope.search=function()
 {
 annotationAttributeService.selectedEntity.show=false;
+delete $rootScope.openNode.annotationAttribute;
 annotationAttributeService.search().then(function successCallback(response) {
 annotationAttributeService.setEntityList(response.data);
 },function errorCallback(response) { 
@@ -75,6 +79,7 @@ if (!$scope.annotationAttributeDetailForm.$valid) return;
 if (annotationAttributeService.isParent()) 
 {
 annotationService.selectedEntity.show=false;
+delete $rootScope.openNode.annotation;
 annotationAttributeService.update().then(function successCallback(response) { 
 $scope.search();
 },function errorCallback(response) { 
@@ -100,6 +105,7 @@ updateParentEntities();
 $scope.remove= function()
 {
 annotationAttributeService.selectedEntity.show=false;
+delete $rootScope.openNode.annotationAttribute;
 annotationAttributeService.setSelectedEntity(null);
 $scope.updateParent();
 };
@@ -143,7 +149,7 @@ if (index!=null)
 {
 annotationService.searchOne(annotationAttributeService.selectedEntity.annotationList[index]).then(
 function successCallback(response) {
-console.log("response-ok");
+console.log("INDEX!=NULLLLLLLLLLLL");
 console.log(response);
 if ($rootScope.restrictionList.field!=undefined && $rootScope.restrictionList.field.restrictionItemMap.annotationAttribute.canSearch)
 annotationService.initAnnotationAttributeList().then(function successCallback(response) {
@@ -226,6 +232,7 @@ annotationService.childrenList.relationshipList=response.data;
 annotationService.childrenList.annotationTypeList=["PRIMARY_KEY","NOT_NULL","NOT_BLANK","DESCRIPTION_FIELD","BETWEEN_FILTER","EXCEL_EXPORT","FILTER_FIELD","IGNORE_SEARCH","IGNORE_UPDATE","IGNORE_TABLE_LIST","SIZE","PASSWORD","PRIORITY","EMBEDDED","CACHE",];
 annotationService.setSelectedEntity(null); 
 annotationService.selectedEntity.show=true; 
+$rootScope.openNode.annotation=true;
 }
 else
 annotationService.searchOne(annotationAttributeService.selectedEntity.annotation).then(
@@ -265,6 +272,7 @@ annotationService.childrenList.relationshipList=response.data;
 annotationService.childrenList.annotationTypeList=["PRIMARY_KEY","NOT_NULL","NOT_BLANK","DESCRIPTION_FIELD","BETWEEN_FILTER","EXCEL_EXPORT","FILTER_FIELD","IGNORE_SEARCH","IGNORE_UPDATE","IGNORE_TABLE_LIST","SIZE","PASSWORD","PRIORITY","EMBEDDED","CACHE",];
 annotationService.setSelectedEntity(response.data[0]);
 annotationService.selectedEntity.show=true;
+$rootScope.openNode.annotation=true;
   }, function errorCallback(response) {
 //AlertError.init({selector: "#alertError"});
 //AlertError.show("Si è verificato un errore");
@@ -310,12 +318,14 @@ if (row.isSelected)
 {
 annotationAttributeService.searchOne(row.entity).then(function(response) { 
 console.log(response.data);
+$rootScope.openNode.annotationAttribute=true;
 annotationAttributeService.setSelectedEntity(response.data[0]);
 });
 $('#annotationAttributeTabs li:eq(0) a').tab('show');
 }
 else 
 annotationAttributeService.setSelectedEntity(null);
+delete $rootScope.openNode.annotationAttribute;
 annotationAttributeService.selectedEntity.show = row.isSelected;
 });
   };
@@ -364,12 +374,14 @@ if (row.isSelected)
 {
 annotationService.searchOne(row.entity).then(function(response) { 
 console.log(response.data);
+$rootScope.openNode.annotation=true;
 annotationService.setSelectedEntity(response.data[0]);
 });
 $('#annotationTabs li:eq(0) a').tab('show');
 }
 else 
 annotationService.setSelectedEntity(null);
+delete $rootScope.openNode.annotation;
 annotationService.selectedEntity.show = row.isSelected;
 });
   };
@@ -393,6 +405,7 @@ annotationService.setSelectedEntity(response.data[0]);
 $scope.closeEntityDetail = function(){ 
 annotationAttributeService.setSelectedEntity(null);
 annotationAttributeService.selectedEntity.show=false;
+delete $rootScope.openNode.annotationAttribute;
 }
 }
 })();

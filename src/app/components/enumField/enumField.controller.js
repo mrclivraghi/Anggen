@@ -20,22 +20,31 @@ enumFieldService.setEntityList(null);
 if (enumFieldService.isParent()) 
 {
 entityService.selectedEntity.show=false;
+delete $rootScope.openNode.entity;
 enumEntityService.selectedEntity.show=false;
+delete $rootScope.openNode.enumEntity;
 tabService.selectedEntity.show=false;
+delete $rootScope.openNode.tab;
 annotationService.selectedEntity.show=false;
+delete $rootScope.openNode.annotation;
 }
 }
 $scope.addNew= function()
 {
+$rootScope.openNode.enumField=true;
 enumFieldService.setSelectedEntity(null);
 enumFieldService.setEntityList(null);
 enumFieldService.selectedEntity.show=true;
 if (enumFieldService.isParent()) 
 {
 entityService.selectedEntity.show=false;
+delete $rootScope.openNode.entity;
 enumEntityService.selectedEntity.show=false;
+delete $rootScope.openNode.enumEntity;
 tabService.selectedEntity.show=false;
+delete $rootScope.openNode.tab;
 annotationService.selectedEntity.show=false;
+delete $rootScope.openNode.annotation;
 }
 $('#enumFieldTabs li:eq(0) a').tab('show');
 };
@@ -43,6 +52,7 @@ $('#enumFieldTabs li:eq(0) a').tab('show');
 $scope.search=function()
 {
 enumFieldService.selectedEntity.show=false;
+delete $rootScope.openNode.enumField;
 enumFieldService.searchBean.annotationList=[];
 enumFieldService.searchBean.annotationList.push(enumFieldService.searchBean.annotation);
 delete enumFieldService.searchBean.annotation; 
@@ -84,9 +94,13 @@ if (!$scope.enumFieldDetailForm.$valid) return;
 if (enumFieldService.isParent()) 
 {
 entityService.selectedEntity.show=false;
+delete $rootScope.openNode.entity;
 enumEntityService.selectedEntity.show=false;
+delete $rootScope.openNode.enumEntity;
 tabService.selectedEntity.show=false;
+delete $rootScope.openNode.tab;
 annotationService.selectedEntity.show=false;
+delete $rootScope.openNode.annotation;
 enumFieldService.update().then(function successCallback(response) { 
 $scope.search();
 },function errorCallback(response) { 
@@ -112,6 +126,7 @@ updateParentEntities();
 $scope.remove= function()
 {
 enumFieldService.selectedEntity.show=false;
+delete $rootScope.openNode.enumField;
 enumFieldService.setSelectedEntity(null);
 $scope.updateParent();
 };
@@ -161,7 +176,7 @@ if (index!=null)
 {
 entityService.searchOne(enumFieldService.selectedEntity.entityList[index]).then(
 function successCallback(response) {
-console.log("response-ok");
+console.log("INDEX!=NULLLLLLLLLLLL");
 console.log(response);
 if ($rootScope.restrictionList.security!=undefined && $rootScope.restrictionList.security.restrictionItemMap.restrictionEntity.canSearch)
 entityService.initRestrictionEntityList().then(function successCallback(response) {
@@ -276,6 +291,7 @@ entityService.childrenList.relationshipList=response.data;
 entityService.childrenList.securityTypeList=["BLOCK_WITH_RESTRICTION","ACCESS_WITH_PERMISSION",];
 entityService.setSelectedEntity(null); 
 entityService.selectedEntity.show=true; 
+$rootScope.openNode.entity=true;
 }
 else
 entityService.searchOne(enumFieldService.selectedEntity.entity).then(
@@ -331,6 +347,7 @@ entityService.childrenList.relationshipList=response.data;
 entityService.childrenList.securityTypeList=["BLOCK_WITH_RESTRICTION","ACCESS_WITH_PERMISSION",];
 entityService.setSelectedEntity(response.data[0]);
 entityService.selectedEntity.show=true;
+$rootScope.openNode.entity=true;
   }, function errorCallback(response) {
 //AlertError.init({selector: "#alertError"});
 //AlertError.show("Si è verificato un errore");
@@ -346,7 +363,7 @@ if (index!=null)
 {
 enumEntityService.searchOne(enumFieldService.selectedEntity.enumEntityList[index]).then(
 function successCallback(response) {
-console.log("response-ok");
+console.log("INDEX!=NULLLLLLLLLLLL");
 console.log(response);
 if ($rootScope.restrictionList.entity!=undefined && $rootScope.restrictionList.entity.restrictionItemMap.project.canSearch)
 enumEntityService.initProjectList().then(function successCallback(response) {
@@ -395,6 +412,7 @@ enumEntityService.childrenList.enumValueList=response.data;
 });
 enumEntityService.setSelectedEntity(null); 
 enumEntityService.selectedEntity.show=true; 
+$rootScope.openNode.enumEntity=true;
 }
 else
 enumEntityService.searchOne(enumFieldService.selectedEntity.enumEntity).then(
@@ -417,6 +435,7 @@ enumEntityService.childrenList.enumValueList=response.data;
 });
 enumEntityService.setSelectedEntity(response.data[0]);
 enumEntityService.selectedEntity.show=true;
+$rootScope.openNode.enumEntity=true;
   }, function errorCallback(response) {
 //AlertError.init({selector: "#alertError"});
 //AlertError.show("Si è verificato un errore");
@@ -432,7 +451,7 @@ if (index!=null)
 {
 tabService.searchOne(enumFieldService.selectedEntity.tabList[index]).then(
 function successCallback(response) {
-console.log("response-ok");
+console.log("INDEX!=NULLLLLLLLLLLL");
 console.log(response);
 if ($rootScope.restrictionList.entity!=undefined && $rootScope.restrictionList.entity.restrictionItemMap.entity.canSearch)
 tabService.initEntityList().then(function successCallback(response) {
@@ -513,6 +532,7 @@ tabService.childrenList.relationshipList=response.data;
 });
 tabService.setSelectedEntity(null); 
 tabService.selectedEntity.show=true; 
+$rootScope.openNode.tab=true;
 }
 else
 tabService.searchOne(enumFieldService.selectedEntity.tab).then(
@@ -551,6 +571,7 @@ tabService.childrenList.relationshipList=response.data;
 });
 tabService.setSelectedEntity(response.data[0]);
 tabService.selectedEntity.show=true;
+$rootScope.openNode.tab=true;
   }, function errorCallback(response) {
 //AlertError.init({selector: "#alertError"});
 //AlertError.show("Si è verificato un errore");
@@ -566,7 +587,7 @@ if (index!=null)
 {
 annotationService.searchOne(enumFieldService.selectedEntity.annotationList[index]).then(
 function successCallback(response) {
-console.log("response-ok");
+console.log("INDEX!=NULLLLLLLLLLLL");
 console.log(response);
 if ($rootScope.restrictionList.field!=undefined && $rootScope.restrictionList.field.restrictionItemMap.annotationAttribute.canSearch)
 annotationService.initAnnotationAttributeList().then(function successCallback(response) {
@@ -649,6 +670,7 @@ annotationService.childrenList.relationshipList=response.data;
 annotationService.childrenList.annotationTypeList=["PRIMARY_KEY","NOT_NULL","NOT_BLANK","DESCRIPTION_FIELD","BETWEEN_FILTER","EXCEL_EXPORT","FILTER_FIELD","IGNORE_SEARCH","IGNORE_UPDATE","IGNORE_TABLE_LIST","SIZE","PASSWORD","PRIORITY","EMBEDDED","CACHE",];
 annotationService.setSelectedEntity(null); 
 annotationService.selectedEntity.show=true; 
+$rootScope.openNode.annotation=true;
 }
 else
 annotationService.searchOne(enumFieldService.selectedEntity.annotation).then(
@@ -688,6 +710,7 @@ annotationService.childrenList.relationshipList=response.data;
 annotationService.childrenList.annotationTypeList=["PRIMARY_KEY","NOT_NULL","NOT_BLANK","DESCRIPTION_FIELD","BETWEEN_FILTER","EXCEL_EXPORT","FILTER_FIELD","IGNORE_SEARCH","IGNORE_UPDATE","IGNORE_TABLE_LIST","SIZE","PASSWORD","PRIORITY","EMBEDDED","CACHE",];
 annotationService.setSelectedEntity(response.data[0]);
 annotationService.selectedEntity.show=true;
+$rootScope.openNode.annotation=true;
   }, function errorCallback(response) {
 //AlertError.init({selector: "#alertError"});
 //AlertError.show("Si è verificato un errore");
@@ -784,12 +807,14 @@ if (row.isSelected)
 {
 enumFieldService.searchOne(row.entity).then(function(response) { 
 console.log(response.data);
+$rootScope.openNode.enumField=true;
 enumFieldService.setSelectedEntity(response.data[0]);
 });
 $('#enumFieldTabs li:eq(0) a').tab('show');
 }
 else 
 enumFieldService.setSelectedEntity(null);
+delete $rootScope.openNode.enumField;
 enumFieldService.selectedEntity.show = row.isSelected;
 });
   };
@@ -854,12 +879,14 @@ if (row.isSelected)
 {
 entityService.searchOne(row.entity).then(function(response) { 
 console.log(response.data);
+$rootScope.openNode.entity=true;
 entityService.setSelectedEntity(response.data[0]);
 });
 $('#entityTabs li:eq(0) a').tab('show');
 }
 else 
 entityService.setSelectedEntity(null);
+delete $rootScope.openNode.entity;
 entityService.selectedEntity.show = row.isSelected;
 });
   };
@@ -891,12 +918,14 @@ if (row.isSelected)
 {
 enumEntityService.searchOne(row.entity).then(function(response) { 
 console.log(response.data);
+$rootScope.openNode.enumEntity=true;
 enumEntityService.setSelectedEntity(response.data[0]);
 });
 $('#enumEntityTabs li:eq(0) a').tab('show');
 }
 else 
 enumEntityService.setSelectedEntity(null);
+delete $rootScope.openNode.enumEntity;
 enumEntityService.selectedEntity.show = row.isSelected;
 });
   };
@@ -944,12 +973,14 @@ if (row.isSelected)
 {
 tabService.searchOne(row.entity).then(function(response) { 
 console.log(response.data);
+$rootScope.openNode.tab=true;
 tabService.setSelectedEntity(response.data[0]);
 });
 $('#tabTabs li:eq(0) a').tab('show');
 }
 else 
 tabService.setSelectedEntity(null);
+delete $rootScope.openNode.tab;
 tabService.selectedEntity.show = row.isSelected;
 });
   };
@@ -998,12 +1029,14 @@ if (row.isSelected)
 {
 annotationService.searchOne(row.entity).then(function(response) { 
 console.log(response.data);
+$rootScope.openNode.annotation=true;
 annotationService.setSelectedEntity(response.data[0]);
 });
 $('#annotationTabs li:eq(0) a').tab('show');
 }
 else 
 annotationService.setSelectedEntity(null);
+delete $rootScope.openNode.annotation;
 annotationService.selectedEntity.show = row.isSelected;
 });
   };
@@ -1057,6 +1090,7 @@ annotationService.setSelectedEntity(response.data[0]);
 $scope.closeEntityDetail = function(){ 
 enumFieldService.setSelectedEntity(null);
 enumFieldService.selectedEntity.show=false;
+delete $rootScope.openNode.enumField;
 }
 }
 })();

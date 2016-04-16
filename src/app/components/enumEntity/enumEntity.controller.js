@@ -20,18 +20,23 @@ enumEntityService.setEntityList(null);
 if (enumEntityService.isParent()) 
 {
 projectService.selectedEntity.show=false;
+delete $rootScope.openNode.project;
 enumValueService.selectedEntity.show=false;
+delete $rootScope.openNode.enumValue;
 }
 }
 $scope.addNew= function()
 {
+$rootScope.openNode.enumEntity=true;
 enumEntityService.setSelectedEntity(null);
 enumEntityService.setEntityList(null);
 enumEntityService.selectedEntity.show=true;
 if (enumEntityService.isParent()) 
 {
 projectService.selectedEntity.show=false;
+delete $rootScope.openNode.project;
 enumValueService.selectedEntity.show=false;
+delete $rootScope.openNode.enumValue;
 }
 $('#enumEntityTabs li:eq(0) a').tab('show');
 };
@@ -39,6 +44,7 @@ $('#enumEntityTabs li:eq(0) a').tab('show');
 $scope.search=function()
 {
 enumEntityService.selectedEntity.show=false;
+delete $rootScope.openNode.enumEntity;
 enumEntityService.searchBean.enumValueList=[];
 enumEntityService.searchBean.enumValueList.push(enumEntityService.searchBean.enumValue);
 delete enumEntityService.searchBean.enumValue; 
@@ -80,7 +86,9 @@ if (!$scope.enumEntityDetailForm.$valid) return;
 if (enumEntityService.isParent()) 
 {
 projectService.selectedEntity.show=false;
+delete $rootScope.openNode.project;
 enumValueService.selectedEntity.show=false;
+delete $rootScope.openNode.enumValue;
 enumEntityService.update().then(function successCallback(response) { 
 $scope.search();
 },function errorCallback(response) { 
@@ -106,6 +114,7 @@ updateParentEntities();
 $scope.remove= function()
 {
 enumEntityService.selectedEntity.show=false;
+delete $rootScope.openNode.enumEntity;
 enumEntityService.setSelectedEntity(null);
 $scope.updateParent();
 };
@@ -151,7 +160,7 @@ if (index!=null)
 {
 projectService.searchOne(enumEntityService.selectedEntity.projectList[index]).then(
 function successCallback(response) {
-console.log("response-ok");
+console.log("INDEX!=NULLLLLLLLLLLL");
 console.log(response);
 if ($rootScope.restrictionList.entity!=undefined && $rootScope.restrictionList.entity.restrictionItemMap.enumEntity.canSearch)
 projectService.initEnumEntityList().then(function successCallback(response) {
@@ -200,6 +209,7 @@ projectService.childrenList.entityGroupList=response.data;
 });
 projectService.setSelectedEntity(null); 
 projectService.selectedEntity.show=true; 
+$rootScope.openNode.project=true;
 }
 else
 projectService.searchOne(enumEntityService.selectedEntity.project).then(
@@ -222,6 +232,7 @@ projectService.childrenList.entityGroupList=response.data;
 });
 projectService.setSelectedEntity(response.data[0]);
 projectService.selectedEntity.show=true;
+$rootScope.openNode.project=true;
   }, function errorCallback(response) {
 //AlertError.init({selector: "#alertError"});
 //AlertError.show("Si è verificato un errore");
@@ -237,7 +248,7 @@ if (index!=null)
 {
 enumValueService.searchOne(enumEntityService.selectedEntity.enumValueList[index]).then(
 function successCallback(response) {
-console.log("response-ok");
+console.log("INDEX!=NULLLLLLLLLLLL");
 console.log(response);
 if ($rootScope.restrictionList.entity!=undefined && $rootScope.restrictionList.entity.restrictionItemMap.enumEntity.canSearch)
 enumValueService.initEnumEntityList().then(function successCallback(response) {
@@ -270,6 +281,7 @@ enumValueService.childrenList.enumEntityList=response.data;
 });
 enumValueService.setSelectedEntity(null); 
 enumValueService.selectedEntity.show=true; 
+$rootScope.openNode.enumValue=true;
 }
 else
 enumValueService.searchOne(enumEntityService.selectedEntity.enumValue).then(
@@ -284,6 +296,7 @@ enumValueService.childrenList.enumEntityList=response.data;
 });
 enumValueService.setSelectedEntity(response.data[0]);
 enumValueService.selectedEntity.show=true;
+$rootScope.openNode.enumValue=true;
   }, function errorCallback(response) {
 //AlertError.init({selector: "#alertError"});
 //AlertError.show("Si è verificato un errore");
@@ -348,12 +361,14 @@ if (row.isSelected)
 {
 enumEntityService.searchOne(row.entity).then(function(response) { 
 console.log(response.data);
+$rootScope.openNode.enumEntity=true;
 enumEntityService.setSelectedEntity(response.data[0]);
 });
 $('#enumEntityTabs li:eq(0) a').tab('show');
 }
 else 
 enumEntityService.setSelectedEntity(null);
+delete $rootScope.openNode.enumEntity;
 enumEntityService.selectedEntity.show = row.isSelected;
 });
   };
@@ -385,12 +400,14 @@ if (row.isSelected)
 {
 projectService.searchOne(row.entity).then(function(response) { 
 console.log(response.data);
+$rootScope.openNode.project=true;
 projectService.setSelectedEntity(response.data[0]);
 });
 $('#projectTabs li:eq(0) a').tab('show');
 }
 else 
 projectService.setSelectedEntity(null);
+delete $rootScope.openNode.project;
 projectService.selectedEntity.show = row.isSelected;
 });
   };
@@ -414,12 +431,14 @@ if (row.isSelected)
 {
 enumValueService.searchOne(row.entity).then(function(response) { 
 console.log(response.data);
+$rootScope.openNode.enumValue=true;
 enumValueService.setSelectedEntity(response.data[0]);
 });
 $('#enumValueTabs li:eq(0) a').tab('show');
 }
 else 
 enumValueService.setSelectedEntity(null);
+delete $rootScope.openNode.enumValue;
 enumValueService.selectedEntity.show = row.isSelected;
 });
   };
@@ -473,6 +492,7 @@ enumFieldService.setSelectedEntity(response.data[0]);
 $scope.closeEntityDetail = function(){ 
 enumEntityService.setSelectedEntity(null);
 enumEntityService.selectedEntity.show=false;
+delete $rootScope.openNode.enumEntity;
 }
 }
 })();

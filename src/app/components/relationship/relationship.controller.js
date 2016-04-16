@@ -20,22 +20,31 @@ relationshipService.setEntityList(null);
 if (relationshipService.isParent()) 
 {
 entityService.selectedEntity.show=false;
+delete $rootScope.openNode.entity;
 entityService.selectedEntity.show=false;
+delete $rootScope.openNode.entity;
 tabService.selectedEntity.show=false;
+delete $rootScope.openNode.tab;
 annotationService.selectedEntity.show=false;
+delete $rootScope.openNode.annotation;
 }
 }
 $scope.addNew= function()
 {
+$rootScope.openNode.relationship=true;
 relationshipService.setSelectedEntity(null);
 relationshipService.setEntityList(null);
 relationshipService.selectedEntity.show=true;
 if (relationshipService.isParent()) 
 {
 entityService.selectedEntity.show=false;
+delete $rootScope.openNode.entity;
 entityService.selectedEntity.show=false;
+delete $rootScope.openNode.entity;
 tabService.selectedEntity.show=false;
+delete $rootScope.openNode.tab;
 annotationService.selectedEntity.show=false;
+delete $rootScope.openNode.annotation;
 }
 $('#relationshipTabs li:eq(0) a').tab('show');
 };
@@ -43,6 +52,7 @@ $('#relationshipTabs li:eq(0) a').tab('show');
 $scope.search=function()
 {
 relationshipService.selectedEntity.show=false;
+delete $rootScope.openNode.relationship;
 relationshipService.searchBean.annotationList=[];
 relationshipService.searchBean.annotationList.push(relationshipService.searchBean.annotation);
 delete relationshipService.searchBean.annotation; 
@@ -84,9 +94,13 @@ if (!$scope.relationshipDetailForm.$valid) return;
 if (relationshipService.isParent()) 
 {
 entityService.selectedEntity.show=false;
+delete $rootScope.openNode.entity;
 entityService.selectedEntity.show=false;
+delete $rootScope.openNode.entity;
 tabService.selectedEntity.show=false;
+delete $rootScope.openNode.tab;
 annotationService.selectedEntity.show=false;
+delete $rootScope.openNode.annotation;
 relationshipService.update().then(function successCallback(response) { 
 $scope.search();
 },function errorCallback(response) { 
@@ -112,6 +126,7 @@ updateParentEntities();
 $scope.remove= function()
 {
 relationshipService.selectedEntity.show=false;
+delete $rootScope.openNode.relationship;
 relationshipService.setSelectedEntity(null);
 $scope.updateParent();
 };
@@ -161,7 +176,7 @@ if (index!=null)
 {
 entityService.searchOne(relationshipService.selectedEntity.entityList[index]).then(
 function successCallback(response) {
-console.log("response-ok");
+console.log("INDEX!=NULLLLLLLLLLLL");
 console.log(response);
 if ($rootScope.restrictionList.security!=undefined && $rootScope.restrictionList.security.restrictionItemMap.restrictionEntity.canSearch)
 entityService.initRestrictionEntityList().then(function successCallback(response) {
@@ -276,6 +291,7 @@ entityService.childrenList.relationshipList=response.data;
 entityService.childrenList.securityTypeList=["BLOCK_WITH_RESTRICTION","ACCESS_WITH_PERMISSION",];
 entityService.setSelectedEntity(null); 
 entityService.selectedEntity.show=true; 
+$rootScope.openNode.entity=true;
 }
 else
 entityService.searchOne(relationshipService.selectedEntity.entity).then(
@@ -331,6 +347,7 @@ entityService.childrenList.relationshipList=response.data;
 entityService.childrenList.securityTypeList=["BLOCK_WITH_RESTRICTION","ACCESS_WITH_PERMISSION",];
 entityService.setSelectedEntity(response.data[0]);
 entityService.selectedEntity.show=true;
+$rootScope.openNode.entity=true;
   }, function errorCallback(response) {
 //AlertError.init({selector: "#alertError"});
 //AlertError.show("Si è verificato un errore");
@@ -346,7 +363,7 @@ if (index!=null)
 {
 entityService.searchOne(relationshipService.selectedEntity.entityList[index]).then(
 function successCallback(response) {
-console.log("response-ok");
+console.log("INDEX!=NULLLLLLLLLLLL");
 console.log(response);
 if ($rootScope.restrictionList.security!=undefined && $rootScope.restrictionList.security.restrictionItemMap.restrictionEntity.canSearch)
 entityService.initRestrictionEntityList().then(function successCallback(response) {
@@ -461,6 +478,7 @@ entityService.childrenList.relationshipList=response.data;
 entityService.childrenList.securityTypeList=["BLOCK_WITH_RESTRICTION","ACCESS_WITH_PERMISSION",];
 entityService.setSelectedEntity(null); 
 entityService.selectedEntity.show=true; 
+$rootScope.openNode.entity=true;
 }
 else
 entityService.searchOne(relationshipService.selectedEntity.entity).then(
@@ -516,6 +534,7 @@ entityService.childrenList.relationshipList=response.data;
 entityService.childrenList.securityTypeList=["BLOCK_WITH_RESTRICTION","ACCESS_WITH_PERMISSION",];
 entityService.setSelectedEntity(response.data[0]);
 entityService.selectedEntity.show=true;
+$rootScope.openNode.entity=true;
   }, function errorCallback(response) {
 //AlertError.init({selector: "#alertError"});
 //AlertError.show("Si è verificato un errore");
@@ -531,7 +550,7 @@ if (index!=null)
 {
 tabService.searchOne(relationshipService.selectedEntity.tabList[index]).then(
 function successCallback(response) {
-console.log("response-ok");
+console.log("INDEX!=NULLLLLLLLLLLL");
 console.log(response);
 if ($rootScope.restrictionList.entity!=undefined && $rootScope.restrictionList.entity.restrictionItemMap.entity.canSearch)
 tabService.initEntityList().then(function successCallback(response) {
@@ -612,6 +631,7 @@ tabService.childrenList.relationshipList=response.data;
 });
 tabService.setSelectedEntity(null); 
 tabService.selectedEntity.show=true; 
+$rootScope.openNode.tab=true;
 }
 else
 tabService.searchOne(relationshipService.selectedEntity.tab).then(
@@ -650,6 +670,7 @@ tabService.childrenList.relationshipList=response.data;
 });
 tabService.setSelectedEntity(response.data[0]);
 tabService.selectedEntity.show=true;
+$rootScope.openNode.tab=true;
   }, function errorCallback(response) {
 //AlertError.init({selector: "#alertError"});
 //AlertError.show("Si è verificato un errore");
@@ -665,7 +686,7 @@ if (index!=null)
 {
 annotationService.searchOne(relationshipService.selectedEntity.annotationList[index]).then(
 function successCallback(response) {
-console.log("response-ok");
+console.log("INDEX!=NULLLLLLLLLLLL");
 console.log(response);
 if ($rootScope.restrictionList.field!=undefined && $rootScope.restrictionList.field.restrictionItemMap.annotationAttribute.canSearch)
 annotationService.initAnnotationAttributeList().then(function successCallback(response) {
@@ -748,6 +769,7 @@ annotationService.childrenList.relationshipList=response.data;
 annotationService.childrenList.annotationTypeList=["PRIMARY_KEY","NOT_NULL","NOT_BLANK","DESCRIPTION_FIELD","BETWEEN_FILTER","EXCEL_EXPORT","FILTER_FIELD","IGNORE_SEARCH","IGNORE_UPDATE","IGNORE_TABLE_LIST","SIZE","PASSWORD","PRIORITY","EMBEDDED","CACHE",];
 annotationService.setSelectedEntity(null); 
 annotationService.selectedEntity.show=true; 
+$rootScope.openNode.annotation=true;
 }
 else
 annotationService.searchOne(relationshipService.selectedEntity.annotation).then(
@@ -787,6 +809,7 @@ annotationService.childrenList.relationshipList=response.data;
 annotationService.childrenList.annotationTypeList=["PRIMARY_KEY","NOT_NULL","NOT_BLANK","DESCRIPTION_FIELD","BETWEEN_FILTER","EXCEL_EXPORT","FILTER_FIELD","IGNORE_SEARCH","IGNORE_UPDATE","IGNORE_TABLE_LIST","SIZE","PASSWORD","PRIORITY","EMBEDDED","CACHE",];
 annotationService.setSelectedEntity(response.data[0]);
 annotationService.selectedEntity.show=true;
+$rootScope.openNode.annotation=true;
   }, function errorCallback(response) {
 //AlertError.init({selector: "#alertError"});
 //AlertError.show("Si è verificato un errore");
@@ -884,12 +907,14 @@ if (row.isSelected)
 {
 relationshipService.searchOne(row.entity).then(function(response) { 
 console.log(response.data);
+$rootScope.openNode.relationship=true;
 relationshipService.setSelectedEntity(response.data[0]);
 });
 $('#relationshipTabs li:eq(0) a').tab('show');
 }
 else 
 relationshipService.setSelectedEntity(null);
+delete $rootScope.openNode.relationship;
 relationshipService.selectedEntity.show = row.isSelected;
 });
   };
@@ -954,12 +979,14 @@ if (row.isSelected)
 {
 entityService.searchOne(row.entity).then(function(response) { 
 console.log(response.data);
+$rootScope.openNode.entity=true;
 entityService.setSelectedEntity(response.data[0]);
 });
 $('#entityTabs li:eq(0) a').tab('show');
 }
 else 
 entityService.setSelectedEntity(null);
+delete $rootScope.openNode.entity;
 entityService.selectedEntity.show = row.isSelected;
 });
   };
@@ -1024,12 +1051,14 @@ if (row.isSelected)
 {
 entityService.searchOne(row.entity).then(function(response) { 
 console.log(response.data);
+$rootScope.openNode.entity=true;
 entityService.setSelectedEntity(response.data[0]);
 });
 $('#entityTabs li:eq(0) a').tab('show');
 }
 else 
 entityService.setSelectedEntity(null);
+delete $rootScope.openNode.entity;
 entityService.selectedEntity.show = row.isSelected;
 });
   };
@@ -1077,12 +1106,14 @@ if (row.isSelected)
 {
 tabService.searchOne(row.entity).then(function(response) { 
 console.log(response.data);
+$rootScope.openNode.tab=true;
 tabService.setSelectedEntity(response.data[0]);
 });
 $('#tabTabs li:eq(0) a').tab('show');
 }
 else 
 tabService.setSelectedEntity(null);
+delete $rootScope.openNode.tab;
 tabService.selectedEntity.show = row.isSelected;
 });
   };
@@ -1131,12 +1162,14 @@ if (row.isSelected)
 {
 annotationService.searchOne(row.entity).then(function(response) { 
 console.log(response.data);
+$rootScope.openNode.annotation=true;
 annotationService.setSelectedEntity(response.data[0]);
 });
 $('#annotationTabs li:eq(0) a').tab('show');
 }
 else 
 annotationService.setSelectedEntity(null);
+delete $rootScope.openNode.annotation;
 annotationService.selectedEntity.show = row.isSelected;
 });
   };
@@ -1190,6 +1223,7 @@ annotationService.setSelectedEntity(response.data[0]);
 $scope.closeEntityDetail = function(){ 
 relationshipService.setSelectedEntity(null);
 relationshipService.selectedEntity.show=false;
+delete $rootScope.openNode.relationship;
 }
 }
 })();

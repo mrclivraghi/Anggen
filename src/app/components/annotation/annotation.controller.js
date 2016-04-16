@@ -4,11 +4,12 @@ angular
 .module("serverTestApp")
 .controller("AnnotationController",AnnotationController);
 /** @ngInject */
-function AnnotationController($scope,$http,$rootScope ,annotationService, SecurityService, MainService ,annotationAttributeService,fieldService,restrictionFieldService,roleService,restrictionEntityService,entityService,tabService,enumFieldService,enumEntityService,projectService,entityGroupService,restrictionEntityGroupService,enumValueService,relationshipService,userService)
+function AnnotationController($scope,$http,$rootScope ,annotationService, SecurityService, MainService ,annotationAttributeService,fieldService,entityService,restrictionEntityService,roleService,restrictionFieldService,userService,restrictionEntityGroupService,entityGroupService,projectService,enumEntityService,enumValueService,tabService,enumFieldService,relationshipService)
 {
 $scope.searchBean=annotationService.searchBean;
 $scope.entityList=annotationService.entityList;
 $scope.selectedEntity=annotationService.selectedEntity;
+$scope.hidden=annotationService.hidden;
 $scope.childrenList=annotationService.childrenList; 
 $scope.reset = function()
 {
@@ -19,22 +20,31 @@ annotationService.setEntityList(null);
 if (annotationService.isParent()) 
 {
 annotationAttributeService.selectedEntity.show=false;
+delete $rootScope.openNode.annotationAttribute;
 fieldService.selectedEntity.show=false;
+delete $rootScope.openNode.field;
 enumFieldService.selectedEntity.show=false;
+delete $rootScope.openNode.enumField;
 relationshipService.selectedEntity.show=false;
+delete $rootScope.openNode.relationship;
 }
 }
 $scope.addNew= function()
 {
+$rootScope.openNode.annotation=true;
 annotationService.setSelectedEntity(null);
 annotationService.setEntityList(null);
 annotationService.selectedEntity.show=true;
 if (annotationService.isParent()) 
 {
 annotationAttributeService.selectedEntity.show=false;
+delete $rootScope.openNode.annotationAttribute;
 fieldService.selectedEntity.show=false;
+delete $rootScope.openNode.field;
 enumFieldService.selectedEntity.show=false;
+delete $rootScope.openNode.enumField;
 relationshipService.selectedEntity.show=false;
+delete $rootScope.openNode.relationship;
 }
 $('#annotationTabs li:eq(0) a').tab('show');
 };
@@ -42,6 +52,7 @@ $('#annotationTabs li:eq(0) a').tab('show');
 $scope.search=function()
 {
 annotationService.selectedEntity.show=false;
+delete $rootScope.openNode.annotation;
 annotationService.searchBean.annotationAttributeList=[];
 annotationService.searchBean.annotationAttributeList.push(annotationService.searchBean.annotationAttribute);
 delete annotationService.searchBean.annotationAttribute; 
@@ -83,9 +94,13 @@ if (!$scope.annotationDetailForm.$valid) return;
 if (annotationService.isParent()) 
 {
 annotationAttributeService.selectedEntity.show=false;
+delete $rootScope.openNode.annotationAttribute;
 fieldService.selectedEntity.show=false;
+delete $rootScope.openNode.field;
 enumFieldService.selectedEntity.show=false;
+delete $rootScope.openNode.enumField;
 relationshipService.selectedEntity.show=false;
+delete $rootScope.openNode.relationship;
 annotationService.update().then(function successCallback(response) { 
 $scope.search();
 },function errorCallback(response) { 
@@ -111,6 +126,7 @@ updateParentEntities();
 $scope.remove= function()
 {
 annotationService.selectedEntity.show=false;
+delete $rootScope.openNode.annotation;
 annotationService.setSelectedEntity(null);
 $scope.updateParent();
 };
@@ -160,7 +176,7 @@ if (index!=null)
 {
 annotationAttributeService.searchOne(annotationService.selectedEntity.annotationAttributeList[index]).then(
 function successCallback(response) {
-console.log("response-ok");
+console.log("INDEX!=NULLLLLLLLLLLL");
 console.log(response);
 if ($rootScope.restrictionList.field!=undefined && $rootScope.restrictionList.field.restrictionItemMap.annotation.canSearch)
 annotationAttributeService.initAnnotationList().then(function successCallback(response) {
@@ -193,6 +209,7 @@ annotationAttributeService.childrenList.annotationList=response.data;
 });
 annotationAttributeService.setSelectedEntity(null); 
 annotationAttributeService.selectedEntity.show=true; 
+$rootScope.openNode.annotationAttribute=true;
 }
 else
 annotationAttributeService.searchOne(annotationService.selectedEntity.annotationAttribute).then(
@@ -207,6 +224,7 @@ annotationAttributeService.childrenList.annotationList=response.data;
 });
 annotationAttributeService.setSelectedEntity(response.data[0]);
 annotationAttributeService.selectedEntity.show=true;
+$rootScope.openNode.annotationAttribute=true;
   }, function errorCallback(response) {
 //AlertError.init({selector: "#alertError"});
 //AlertError.show("Si è verificato un errore");
@@ -222,16 +240,8 @@ if (index!=null)
 {
 fieldService.searchOne(annotationService.selectedEntity.fieldList[index]).then(
 function successCallback(response) {
-console.log("response-ok");
+console.log("INDEX!=NULLLLLLLLLLLL");
 console.log(response);
-if ($rootScope.restrictionList.security!=undefined && $rootScope.restrictionList.security.restrictionItemMap.restrictionField.canSearch)
-fieldService.initRestrictionFieldList().then(function successCallback(response) {
-fieldService.childrenList.restrictionFieldList=response.data;
-},function errorCallback(response) { 
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
-});
 if ($rootScope.restrictionList.entity!=undefined && $rootScope.restrictionList.entity.restrictionItemMap.entity.canSearch)
 fieldService.initEntityList().then(function successCallback(response) {
 fieldService.childrenList.entityList=response.data;
@@ -251,6 +261,14 @@ fieldService.childrenList.tabList=response.data;
 if ($rootScope.restrictionList.field!=undefined && $rootScope.restrictionList.field.restrictionItemMap.annotation.canSearch)
 fieldService.initAnnotationList().then(function successCallback(response) {
 fieldService.childrenList.annotationList=response.data;
+},function errorCallback(response) { 
+//AlertError.init({selector: "#alertError"});
+//AlertError.show("Si è verificato un errore");
+//return; 
+});
+if ($rootScope.restrictionList.security!=undefined && $rootScope.restrictionList.security.restrictionItemMap.restrictionField.canSearch)
+fieldService.initRestrictionFieldList().then(function successCallback(response) {
+fieldService.childrenList.restrictionFieldList=response.data;
 },function errorCallback(response) { 
 //AlertError.init({selector: "#alertError"});
 //AlertError.show("Si è verificato un errore");
@@ -270,14 +288,6 @@ else
 {
 if (annotationService.selectedEntity.field==null || annotationService.selectedEntity.field==undefined)
 {
-if ($rootScope.restrictionList.security!=undefined && $rootScope.restrictionList.security.restrictionItemMap.restrictionField.canSearch)
-fieldService.initRestrictionFieldList().then(function successCallback(response) {
-fieldService.childrenList.restrictionFieldList=response.data;
-},function errorCallback(response) { 
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
-});
 if ($rootScope.restrictionList.entity!=undefined && $rootScope.restrictionList.entity.restrictionItemMap.entity.canSearch)
 fieldService.initEntityList().then(function successCallback(response) {
 fieldService.childrenList.entityList=response.data;
@@ -297,6 +307,14 @@ fieldService.childrenList.tabList=response.data;
 if ($rootScope.restrictionList.field!=undefined && $rootScope.restrictionList.field.restrictionItemMap.annotation.canSearch)
 fieldService.initAnnotationList().then(function successCallback(response) {
 fieldService.childrenList.annotationList=response.data;
+},function errorCallback(response) { 
+//AlertError.init({selector: "#alertError"});
+//AlertError.show("Si è verificato un errore");
+//return; 
+});
+if ($rootScope.restrictionList.security!=undefined && $rootScope.restrictionList.security.restrictionItemMap.restrictionField.canSearch)
+fieldService.initRestrictionFieldList().then(function successCallback(response) {
+fieldService.childrenList.restrictionFieldList=response.data;
 },function errorCallback(response) { 
 //AlertError.init({selector: "#alertError"});
 //AlertError.show("Si è verificato un errore");
@@ -305,18 +323,11 @@ fieldService.childrenList.annotationList=response.data;
 fieldService.childrenList.fieldTypeList=["STRING","INTEGER","DATE","DOUBLE","TIME","BOOLEAN","LONG","FILE",];
 fieldService.setSelectedEntity(null); 
 fieldService.selectedEntity.show=true; 
+$rootScope.openNode.field=true;
 }
 else
 fieldService.searchOne(annotationService.selectedEntity.field).then(
 function successCallback(response) {
-if ($rootScope.restrictionList.security!=undefined && $rootScope.restrictionList.security.restrictionItemMap.restrictionField.canSearch)
-fieldService.initRestrictionFieldList().then(function successCallback(response) {
-fieldService.childrenList.restrictionFieldList=response.data;
-},function errorCallback(response) { 
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
-});
 if ($rootScope.restrictionList.entity!=undefined && $rootScope.restrictionList.entity.restrictionItemMap.entity.canSearch)
 fieldService.initEntityList().then(function successCallback(response) {
 fieldService.childrenList.entityList=response.data;
@@ -341,9 +352,18 @@ fieldService.childrenList.annotationList=response.data;
 //AlertError.show("Si è verificato un errore");
 //return; 
 });
+if ($rootScope.restrictionList.security!=undefined && $rootScope.restrictionList.security.restrictionItemMap.restrictionField.canSearch)
+fieldService.initRestrictionFieldList().then(function successCallback(response) {
+fieldService.childrenList.restrictionFieldList=response.data;
+},function errorCallback(response) { 
+//AlertError.init({selector: "#alertError"});
+//AlertError.show("Si è verificato un errore");
+//return; 
+});
 fieldService.childrenList.fieldTypeList=["STRING","INTEGER","DATE","DOUBLE","TIME","BOOLEAN","LONG","FILE",];
 fieldService.setSelectedEntity(response.data[0]);
 fieldService.selectedEntity.show=true;
+$rootScope.openNode.field=true;
   }, function errorCallback(response) {
 //AlertError.init({selector: "#alertError"});
 //AlertError.show("Si è verificato un errore");
@@ -359,7 +379,7 @@ if (index!=null)
 {
 enumFieldService.searchOne(annotationService.selectedEntity.enumFieldList[index]).then(
 function successCallback(response) {
-console.log("response-ok");
+console.log("INDEX!=NULLLLLLLLLLLL");
 console.log(response);
 if ($rootScope.restrictionList.entity!=undefined && $rootScope.restrictionList.entity.restrictionItemMap.entity.canSearch)
 enumFieldService.initEntityList().then(function successCallback(response) {
@@ -440,6 +460,7 @@ enumFieldService.childrenList.annotationList=response.data;
 });
 enumFieldService.setSelectedEntity(null); 
 enumFieldService.selectedEntity.show=true; 
+$rootScope.openNode.enumField=true;
 }
 else
 enumFieldService.searchOne(annotationService.selectedEntity.enumField).then(
@@ -478,6 +499,7 @@ enumFieldService.childrenList.annotationList=response.data;
 });
 enumFieldService.setSelectedEntity(response.data[0]);
 enumFieldService.selectedEntity.show=true;
+$rootScope.openNode.enumField=true;
   }, function errorCallback(response) {
 //AlertError.init({selector: "#alertError"});
 //AlertError.show("Si è verificato un errore");
@@ -493,7 +515,7 @@ if (index!=null)
 {
 relationshipService.searchOne(annotationService.selectedEntity.relationshipList[index]).then(
 function successCallback(response) {
-console.log("response-ok");
+console.log("INDEX!=NULLLLLLLLLLLL");
 console.log(response);
 if ($rootScope.restrictionList.entity!=undefined && $rootScope.restrictionList.entity.restrictionItemMap.entity.canSearch)
 relationshipService.initEntityList().then(function successCallback(response) {
@@ -576,6 +598,7 @@ relationshipService.childrenList.annotationList=response.data;
 relationshipService.childrenList.relationshipTypeList=["ONE_TO_ONE","ONE_TO_MANY","MANY_TO_ONE","MANY_TO_MANY","MANY_TO_MANY_BACK",];
 relationshipService.setSelectedEntity(null); 
 relationshipService.selectedEntity.show=true; 
+$rootScope.openNode.relationship=true;
 }
 else
 relationshipService.searchOne(annotationService.selectedEntity.relationship).then(
@@ -615,6 +638,7 @@ relationshipService.childrenList.annotationList=response.data;
 relationshipService.childrenList.relationshipTypeList=["ONE_TO_ONE","ONE_TO_MANY","MANY_TO_ONE","MANY_TO_MANY","MANY_TO_MANY_BACK",];
 relationshipService.setSelectedEntity(response.data[0]);
 relationshipService.selectedEntity.show=true;
+$rootScope.openNode.relationship=true;
   }, function errorCallback(response) {
 //AlertError.init({selector: "#alertError"});
 //AlertError.show("Si è verificato un errore");
@@ -712,12 +736,14 @@ if (row.isSelected)
 {
 annotationService.searchOne(row.entity).then(function(response) { 
 console.log(response.data);
+$rootScope.openNode.annotation=true;
 annotationService.setSelectedEntity(response.data[0]);
 });
 $('#annotationTabs li:eq(0) a').tab('show');
 }
 else 
 annotationService.setSelectedEntity(null);
+delete $rootScope.openNode.annotation;
 annotationService.selectedEntity.show = row.isSelected;
 });
   };
@@ -741,12 +767,14 @@ if (row.isSelected)
 {
 annotationAttributeService.searchOne(row.entity).then(function(response) { 
 console.log(response.data);
+$rootScope.openNode.annotationAttribute=true;
 annotationAttributeService.setSelectedEntity(response.data[0]);
 });
 $('#annotationAttributeTabs li:eq(0) a').tab('show');
 }
 else 
 annotationAttributeService.setSelectedEntity(null);
+delete $rootScope.openNode.annotationAttribute;
 annotationAttributeService.selectedEntity.show = row.isSelected;
 });
   };
@@ -754,14 +782,6 @@ $scope.fieldGridOptions={};
 cloneObject(fieldService.gridOptions,$scope.fieldGridOptions);
 $scope.fieldGridOptions.data=$scope.selectedEntity.fieldList;
 $scope.initChildrenList = function () { 
-if ($rootScope.restrictionList.security!=undefined && $rootScope.restrictionList.security.restrictionItemMap.restrictionField.canSearch)
-fieldService.initRestrictionFieldList().then(function successCallback(response) {
-fieldService.childrenList.restrictionFieldList=response.data;
-},function errorCallback(response) { 
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
-});
 if ($rootScope.restrictionList.entity!=undefined && $rootScope.restrictionList.entity.restrictionItemMap.entity.canSearch)
 fieldService.initEntityList().then(function successCallback(response) {
 fieldService.childrenList.entityList=response.data;
@@ -786,6 +806,14 @@ fieldService.childrenList.annotationList=response.data;
 //AlertError.show("Si è verificato un errore");
 //return; 
 });
+if ($rootScope.restrictionList.security!=undefined && $rootScope.restrictionList.security.restrictionItemMap.restrictionField.canSearch)
+fieldService.initRestrictionFieldList().then(function successCallback(response) {
+fieldService.childrenList.restrictionFieldList=response.data;
+},function errorCallback(response) { 
+//AlertError.init({selector: "#alertError"});
+//AlertError.show("Si è verificato un errore");
+//return; 
+});
 fieldService.childrenList.fieldTypeList=["STRING","INTEGER","DATE","DOUBLE","TIME","BOOLEAN","LONG","FILE",];
 }
 $scope.fieldGridOptions.onRegisterApi = function(gridApi){
@@ -795,12 +823,14 @@ if (row.isSelected)
 {
 fieldService.searchOne(row.entity).then(function(response) { 
 console.log(response.data);
+$rootScope.openNode.field=true;
 fieldService.setSelectedEntity(response.data[0]);
 });
 $('#fieldTabs li:eq(0) a').tab('show');
 }
 else 
 fieldService.setSelectedEntity(null);
+delete $rootScope.openNode.field;
 fieldService.selectedEntity.show = row.isSelected;
 });
   };
@@ -848,12 +878,14 @@ if (row.isSelected)
 {
 enumFieldService.searchOne(row.entity).then(function(response) { 
 console.log(response.data);
+$rootScope.openNode.enumField=true;
 enumFieldService.setSelectedEntity(response.data[0]);
 });
 $('#enumFieldTabs li:eq(0) a').tab('show');
 }
 else 
 enumFieldService.setSelectedEntity(null);
+delete $rootScope.openNode.enumField;
 enumFieldService.selectedEntity.show = row.isSelected;
 });
   };
@@ -902,12 +934,14 @@ if (row.isSelected)
 {
 relationshipService.searchOne(row.entity).then(function(response) { 
 console.log(response.data);
+$rootScope.openNode.relationship=true;
 relationshipService.setSelectedEntity(response.data[0]);
 });
 $('#relationshipTabs li:eq(0) a').tab('show');
 }
 else 
 relationshipService.setSelectedEntity(null);
+delete $rootScope.openNode.relationship;
 relationshipService.selectedEntity.show = row.isSelected;
 });
   };
@@ -976,6 +1010,7 @@ relationshipService.setSelectedEntity(response.data[0]);
 $scope.closeEntityDetail = function(){ 
 annotationService.setSelectedEntity(null);
 annotationService.selectedEntity.show=false;
+delete $rootScope.openNode.annotation;
 }
 }
 })();

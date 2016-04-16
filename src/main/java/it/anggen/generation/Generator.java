@@ -249,12 +249,18 @@ public class Generator {
 			jsGenerator.generateMainApp();
 			jsGenerator.generateServiceFile();
 			jsGenerator.generateControllerFile();
+			jsGenerator.generateDirectiveFile();
+			htmlGenerator.setDirectory();
+			//htmlGenerator.generateTemplate();
+			htmlGenerator.generateHomePage();
 			for (Entity modelEntity: modelEntityList)
 			{
 				if (modelEntity.getDisableViewGeneration()) continue;
 				htmlGenerator.init(modelEntity);
 				try {
-					htmlGenerator.generateJSP();
+					htmlGenerator.generateSearchView();
+					htmlGenerator.generateDetailView();
+					htmlGenerator.generatePageContent();
 				} catch (IllegalAccessException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

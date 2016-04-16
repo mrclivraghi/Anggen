@@ -57,6 +57,7 @@ $rootScope.restrictionList=response.data;
 //AlertError.show("Si è verificato un errore");
 //return; 
 });
+$rootScope.openNode= {};
 $log.debug('runBlock end');
 }
 })();

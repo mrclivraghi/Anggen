@@ -8,12 +8,13 @@ function FieldService($http,MainService)
 {
 this.entityList =		[];
 this.selectedEntity= 	{show: false 
-,restrictionFieldList: [],annotationList: []};
+,annotationList: [],restrictionFieldList: []};
+this.hidden= { hiddenFields: []};
 this.isParent=function()
 {
 return MainService.parentEntity=="Field";
 };
-this.childrenList=[]; 
+this.childrenList={}; 
 this.addEntity=function (entity)
 {
 this.entityList.push(entity);
@@ -70,13 +71,6 @@ var promise= $http.post("http://127.0.0.1:8080/ServerTestApp/field/"+this.select
 });
 return promise; 
 }
- this.initRestrictionFieldList= function()
-{
-var promise= $http
-.post("http://127.0.0.1:8080/ServerTestApp/restrictionField/search",
-{});
-return promise;
-};
  this.initEntityList= function()
 {
 var promise= $http
@@ -95,6 +89,13 @@ return promise;
 {
 var promise= $http
 .post("http://127.0.0.1:8080/ServerTestApp/annotation/search",
+{});
+return promise;
+};
+ this.initRestrictionFieldList= function()
+{
+var promise= $http
+.post("http://127.0.0.1:8080/ServerTestApp/restrictionField/search",
 {});
 return promise;
 };

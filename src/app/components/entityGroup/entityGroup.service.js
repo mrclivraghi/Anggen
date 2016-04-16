@@ -8,12 +8,13 @@ function EntityGroupService($http,MainService)
 {
 this.entityList =		[];
 this.selectedEntity= 	{show: false 
-,restrictionEntityGroupList: [],entityList: []};
+,entityList: [],restrictionEntityGroupList: []};
+this.hidden= { hiddenFields: []};
 this.isParent=function()
 {
 return MainService.parentEntity=="EntityGroup";
 };
-this.childrenList=[]; 
+this.childrenList={}; 
 this.addEntity=function (entity)
 {
 this.entityList.push(entity);
@@ -70,13 +71,6 @@ var promise= $http.post("http://127.0.0.1:8080/ServerTestApp/entityGroup/"+this.
 });
 return promise; 
 }
- this.initRestrictionEntityGroupList= function()
-{
-var promise= $http
-.post("http://127.0.0.1:8080/ServerTestApp/restrictionEntityGroup/search",
-{});
-return promise;
-};
  this.initEntityList= function()
 {
 var promise= $http
@@ -88,6 +82,13 @@ return promise;
 {
 var promise= $http
 .post("http://127.0.0.1:8080/ServerTestApp/project/search",
+{});
+return promise;
+};
+ this.initRestrictionEntityGroupList= function()
+{
+var promise= $http
+.post("http://127.0.0.1:8080/ServerTestApp/restrictionEntityGroup/search",
 {});
 return promise;
 };

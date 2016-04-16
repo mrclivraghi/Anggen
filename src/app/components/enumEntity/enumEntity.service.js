@@ -9,11 +9,12 @@ function EnumEntityService($http,MainService)
 this.entityList =		[];
 this.selectedEntity= 	{show: false 
 ,enumValueList: []};
+this.hidden= { hiddenFields: []};
 this.isParent=function()
 {
 return MainService.parentEntity=="EnumEntity";
 };
-this.childrenList=[]; 
+this.childrenList={}; 
 this.addEntity=function (entity)
 {
 this.entityList.push(entity);

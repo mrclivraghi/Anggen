@@ -14,6 +14,7 @@ import it.anggen.model.entity.Entity;
 import it.anggen.model.entity.Tab;
 import it.anggen.model.field.Annotation;
 import it.anggen.model.field.AnnotationAttribute;
+import it.anggen.model.relationship.Relationship;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -82,10 +83,11 @@ public class AngularGenerator {
 	 * @param html
 	 * @throws IOException
 	 */
-	public void generateEntityView(HtmlCanvas html) throws IOException {
+	public void generateSearchView(HtmlCanvas html) throws IOException {
 		HtmlAttributes mainControllerAttributes = new HtmlAttributes();
 		if (!isParent)
 			mainControllerAttributes.add("ng-controller", Utility.getFirstUpper(entityName)+"Controller");
+		
 		if (generator.easyTreeMenu)
 		{
 			mainControllerAttributes.add("style", "position: absolute; left: 250px; width:80%; top: 30px;");
@@ -117,30 +119,23 @@ public class AngularGenerator {
 		._div()
 		._form();
 
+	
+		html._div();
+	}
+	
+	public void generateDetailHtml(HtmlCanvas html) throws IOException {
+		HtmlAttributes mainControllerAttributes = new HtmlAttributes();
+		html.div(mainControllerAttributes);
+		
 		//detail
 		html.form((new HtmlAttributes()).add("id", entityName+"DetailForm").add("name", entityName+"DetailForm").add("ng-show", "selectedEntity.show"));
 		renderTabForm(html, false);
 		html._form();
-	
 		html._div();
-		if (isParent)
-		{
-			ArrayList<Entity> oldParentClassList = (ArrayList<Entity>) ((ArrayList<Entity>) parentEntity).clone();
-			List<Entity> descendantEntityList = entityManager.getDescendantEntities(entity, parentEntity);
-			parentEntity=oldParentClassList;
-			if (descendantEntityList==null || descendantEntityList.size()==0) return;
-			EntityManager mainEntityManager = new EntityManagerImpl(entity);
-			
-			for (Entity descendantEntity: descendantEntityList)
-				if (descendantEntity.getEntityGroup()!=null)
-			{
-				init(descendantEntity, false, parentEntity,mainEntityManager.isLastLevel(descendantEntity));
-				System.out.println(mainEntityManager.getDescription()+"-"+descendantEntity.getName()+" last level : "+mainEntityManager.isLastLevel(descendantEntity));
-				generateEntityView(html);
-				
-			}
-		}
+	
 	}
+	
+	
 
 	/**
 	 * Generate the validator fields to show errors to the user.
@@ -276,6 +271,59 @@ public class AngularGenerator {
 		return htmlAttributes;
 	}
 
+	private String entityListToString(List<Entity> entityList)
+	{
+		String str="";
+		for (Entity entity: entityList)
+		{
+			str=str+entity.getName()+";";
+		}
+		if (!str.isEmpty())
+			str= str.substring(0, str.length()-1);
+		return str;
+	}
+	
+	private void generateDirectiveStructure(StringBuilder sb, Entity entity,Integer maxDescendantLevel,List<Entity> parentEntityList)
+	{
+		EntityManager entityManager = new EntityManagerImpl(entity);
+		sb.append("<"+entity.getName()+"-detail fields=\""+entityListToString(parentEntityList)+"\"></"+entity.getName()+"-detail>\n");
+		parentEntityList.add(entity);
+		for (Relationship relationship: entity.getRelationshipList())
+		{
+			generateDirectiveStructure(sb, entity, maxDescendantLevel-1, parentEntityList);
+		}
+		
+	}
+	
+	
+	public void generateTemplate(HtmlCanvas html) throws IOException
+	{
+		
+		html.div((new HtmlAttributes()).add("id", "ngViewContainer"));
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("<"+Utility.camelCaseToMinus(entityName)+"-search></"+Utility.camelCaseToMinus(entityName)+"-search>\n");
+		sb.append("<"+Utility.camelCaseToMinus(entityName)+"-detail></"+Utility.camelCaseToMinus(entityName)+"-detail>\n");
+		
+		//ArrayList<Entity> oldParentClassList = (ArrayList<Entity>) ((ArrayList<Entity>) parentEntity).clone();
+		List<Entity> descendantEntityList = entityManager.getDescendantEntities(entity, parentEntity);
+		//parentEntity=oldParentClassList;
+		//if (descendantEntityList==null || descendantEntityList.size()==0) return;
+		//EntityManager mainEntityManager = new EntityManagerImpl(entity);
+		
+		for (Entity descendantEntity: descendantEntityList)
+		if (descendantEntity.getEntityGroup()!=null)
+		{
+			//init(descendantEntity, false, parentEntity,mainEntityManager.isLastLevel(descendantEntity));
+			sb.append("<"+Utility.camelCaseToMinus(Utility.getFirstLower(descendantEntity.getName()))+
+					"-detail>"
+							+ "</"+Utility.camelCaseToMinus(Utility.getFirstLower(descendantEntity.getName()))+"-detail>\n");
+			
+		}
+		
+		html.content(sb.toString(),false);
+	}
+	
 
 	/**
 	 * Generate a html form that can be of two types: search or not.
@@ -301,7 +349,7 @@ public class AngularGenerator {
 			HtmlCanvas closeCanvas = new HtmlCanvas();
 			closeCanvas.button((new HtmlAttributes()).add("type", "button").add("class", "close").add("aria-label", "Close").add("ng-click", "closeEntityDetail()"))
 			.span((new HtmlAttributes()).add("aria-hidden", "true")).content("&times;",false)._button();
-			html.content("Detail "+entityName+" {{ selectedEntity."+entityName+"Id }}"+closeCanvas.toHtml(),false);
+			html.content("Detail "+entityName+" {{ selectedEntity."+entityName+"Id }} "+closeCanvas.toHtml(),false);
 		}
 		html.div(CssGenerator.getPanelBody());
 		
@@ -569,7 +617,9 @@ public class AngularGenerator {
 							style="pull-left";
 							renderModalInsertExistingPanel(html,entityAttribute);
 							html.br().br();
-							html.div((new HtmlAttributes()).add("class", style).add("style", "width: 100%").add("ng-show", securityCondition+(securityCondition.equals("")?"":" && ")+checkSecurity(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget(),"search"),false));
+							html.div((new HtmlAttributes()).add("class", style)
+									.add("style", "width: 100%").add("ng-show", securityCondition+(securityCondition.equals("")?"":" && ")+checkSecurity(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget(),"search"),false)
+									.add("ng-if", "!$root.openNode."+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()+""));
 							//html._div();
 							html.div(CssGenerator.getPanel())
 							.div(CssGenerator.getPanelHeader())
@@ -591,7 +641,9 @@ public class AngularGenerator {
 							//html.div(CssGenerator.getPanelBody());
 						}else
 						{//entity
-							html.div(CssGenerator.getExternalFieldPanel(style, search, entityName, entityAttribute).add("ng-show", securityCondition,false));
+							html.div(CssGenerator.getExternalFieldPanel(style, search, entityName, entityAttribute)
+									.add("ng-show", securityCondition,false)
+									.add("ng-if", "!$root.openNode."+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()+""));
 							html.div((new HtmlAttributes()).add("class", "input-group"));
 							html.span((new HtmlAttributes()).add("class", "input-group-addon")).content(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName());
 							html.select(CssGenerator.getSelect("").add("ng-model", "selectedEntity."+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName())
@@ -636,7 +688,11 @@ public class AngularGenerator {
 </div>*/
 		try {
 			EntityManager entityAttributeManager = new EntityManagerImpl(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget());
-			html.div((new HtmlAttributes()).add("id", entityName+"-"+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()).add("class", "modal fade").add("role", "dialog"))
+			html.div((new HtmlAttributes()).add("id", entityName+"-"+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName())
+					.add("class", "modal fade")
+					.add("role", "dialog")
+					.add("ng-if", "!$root.openNode."+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()+"")
+					)
 			.div((new HtmlAttributes()).add("class", "modal-dialog"))
 			.div((new HtmlAttributes()).add("class", "modal-content"))
 			.div((new HtmlAttributes()).add("class", "modal-header"))

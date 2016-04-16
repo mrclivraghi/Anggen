@@ -3,7 +3,7 @@
 
   angular
     .module('serverTestApp')
-    .controller('HomeController', HomeController);
+    .controller('homeController', HomeController);
 
   /** @ngInject */
   function HomeController($element,$timeout,SecurityService,$log,$rootScope,$resource) {

@@ -18,7 +18,7 @@ name: 'main'
 .state('main.home',{
  url:'/home',
 views:{
-'pageContent': {
+'search': {
 templateUrl:'app/components/home/home.html',
  controller:'HomeController', 
 controllerAs: 'vm' 
@@ -39,18 +39,13 @@ controllerAs: 'vm'
  url:'/role',
 views:{
 'pageContent': {
-templateUrl:'app/components/role/role.html',
- controller:'RoleController', 
+templateUrl:'app/controller/role/role-template.html',
+ controller:'homeController', 
 controllerAs: 'vm' 
  }
 },
 resolve: {
-restrictionEntityChildrenList: function(roleService) {
-roleService.initRestrictionEntityList().then(function(response) {
-roleService.childrenList.restrictionEntityList=response.data;
-});
-}, 
- restrictionFieldChildrenList: function(roleService) {
+restrictionFieldChildrenList: function(roleService) {
 roleService.initRestrictionFieldList().then(function(response) {
 roleService.childrenList.restrictionFieldList=response.data;
 });
@@ -65,26 +60,9 @@ roleService.initRestrictionEntityGroupList().then(function(response) {
 roleService.childrenList.restrictionEntityGroupList=response.data;
 });
 }, 
- }
-})
-.state('main.restrictionEntity',{
- url:'/restrictionEntity',
-views:{
-'pageContent': {
-templateUrl:'app/components/restrictionEntity/restrictionEntity.html',
- controller:'RestrictionEntityController', 
-controllerAs: 'vm' 
- }
-},
-resolve: {
-roleChildrenList: function(restrictionEntityService) {
-restrictionEntityService.initRoleList().then(function(response) {
-restrictionEntityService.childrenList.roleList=response.data;
-});
-}, 
- entityChildrenList: function(restrictionEntityService) {
-restrictionEntityService.initEntityList().then(function(response) {
-restrictionEntityService.childrenList.entityList=response.data;
+ restrictionEntityChildrenList: function(roleService) {
+roleService.initRestrictionEntityList().then(function(response) {
+roleService.childrenList.restrictionEntityList=response.data;
 });
 }, 
  }
@@ -93,20 +71,20 @@ restrictionEntityService.childrenList.entityList=response.data;
  url:'/restrictionField',
 views:{
 'pageContent': {
-templateUrl:'app/components/restrictionField/restrictionField.html',
- controller:'RestrictionFieldController', 
+templateUrl:'app/controller/restrictionField/restrictionField-template.html',
+ controller:'homeController', 
 controllerAs: 'vm' 
  }
 },
 resolve: {
-roleChildrenList: function(restrictionFieldService) {
-restrictionFieldService.initRoleList().then(function(response) {
-restrictionFieldService.childrenList.roleList=response.data;
-});
-}, 
- fieldChildrenList: function(restrictionFieldService) {
+fieldChildrenList: function(restrictionFieldService) {
 restrictionFieldService.initFieldList().then(function(response) {
 restrictionFieldService.childrenList.fieldList=response.data;
+});
+}, 
+ roleChildrenList: function(restrictionFieldService) {
+restrictionFieldService.initRoleList().then(function(response) {
+restrictionFieldService.childrenList.roleList=response.data;
 });
 }, 
  }
@@ -115,8 +93,8 @@ restrictionFieldService.childrenList.fieldList=response.data;
  url:'/user',
 views:{
 'pageContent': {
-templateUrl:'app/components/user/user.html',
- controller:'UserController', 
+templateUrl:'app/controller/user/user-template.html',
+ controller:'homeController', 
 controllerAs: 'vm' 
  }
 },
@@ -132,20 +110,42 @@ userService.childrenList.roleList=response.data;
  url:'/restrictionEntityGroup',
 views:{
 'pageContent': {
-templateUrl:'app/components/restrictionEntityGroup/restrictionEntityGroup.html',
- controller:'RestrictionEntityGroupController', 
+templateUrl:'app/controller/restrictionEntityGroup/restrictionEntityGroup-template.html',
+ controller:'homeController', 
 controllerAs: 'vm' 
  }
 },
 resolve: {
-roleChildrenList: function(restrictionEntityGroupService) {
+entityGroupChildrenList: function(restrictionEntityGroupService) {
+restrictionEntityGroupService.initEntityGroupList().then(function(response) {
+restrictionEntityGroupService.childrenList.entityGroupList=response.data;
+});
+}, 
+ roleChildrenList: function(restrictionEntityGroupService) {
 restrictionEntityGroupService.initRoleList().then(function(response) {
 restrictionEntityGroupService.childrenList.roleList=response.data;
 });
 }, 
- entityGroupChildrenList: function(restrictionEntityGroupService) {
-restrictionEntityGroupService.initEntityGroupList().then(function(response) {
-restrictionEntityGroupService.childrenList.entityGroupList=response.data;
+ }
+})
+.state('main.restrictionEntity',{
+ url:'/restrictionEntity',
+views:{
+'pageContent': {
+templateUrl:'app/controller/restrictionEntity/restrictionEntity-template.html',
+ controller:'homeController', 
+controllerAs: 'vm' 
+ }
+},
+resolve: {
+entityChildrenList: function(restrictionEntityService) {
+restrictionEntityService.initEntityList().then(function(response) {
+restrictionEntityService.childrenList.entityList=response.data;
+});
+}, 
+ roleChildrenList: function(restrictionEntityService) {
+restrictionEntityService.initRoleList().then(function(response) {
+restrictionEntityService.childrenList.roleList=response.data;
 });
 }, 
  }
@@ -154,8 +154,8 @@ restrictionEntityGroupService.childrenList.entityGroupList=response.data;
  url:'/logEntry',
 views:{
 'pageContent': {
-templateUrl:'app/components/logEntry/logEntry.html',
- controller:'LogEntryController', 
+templateUrl:'app/controller/logEntry/logEntry-template.html',
+ controller:'homeController', 
 controllerAs: 'vm' 
  }
 },
@@ -166,8 +166,8 @@ resolve: {
  url:'/entity',
 views:{
 'pageContent': {
-templateUrl:'app/components/entity/entity.html',
- controller:'EntityController', 
+templateUrl:'app/controller/entity/entity-template.html',
+ controller:'homeController', 
 controllerAs: 'vm' 
  }
 },
@@ -208,8 +208,8 @@ entityService.childrenList.relationshipList=response.data;
  url:'/enumEntity',
 views:{
 'pageContent': {
-templateUrl:'app/components/enumEntity/enumEntity.html',
- controller:'EnumEntityController', 
+templateUrl:'app/controller/enumEntity/enumEntity-template.html',
+ controller:'homeController', 
 controllerAs: 'vm' 
  }
 },
@@ -230,18 +230,13 @@ enumEntityService.childrenList.enumValueList=response.data;
  url:'/entityGroup',
 views:{
 'pageContent': {
-templateUrl:'app/components/entityGroup/entityGroup.html',
- controller:'EntityGroupController', 
+templateUrl:'app/controller/entityGroup/entityGroup-template.html',
+ controller:'homeController', 
 controllerAs: 'vm' 
  }
 },
 resolve: {
-restrictionEntityGroupChildrenList: function(entityGroupService) {
-entityGroupService.initRestrictionEntityGroupList().then(function(response) {
-entityGroupService.childrenList.restrictionEntityGroupList=response.data;
-});
-}, 
- entityChildrenList: function(entityGroupService) {
+entityChildrenList: function(entityGroupService) {
 entityGroupService.initEntityList().then(function(response) {
 entityGroupService.childrenList.entityList=response.data;
 });
@@ -251,14 +246,19 @@ entityGroupService.initProjectList().then(function(response) {
 entityGroupService.childrenList.projectList=response.data;
 });
 }, 
+ restrictionEntityGroupChildrenList: function(entityGroupService) {
+entityGroupService.initRestrictionEntityGroupList().then(function(response) {
+entityGroupService.childrenList.restrictionEntityGroupList=response.data;
+});
+}, 
  }
 })
 .state('main.tab',{
  url:'/tab',
 views:{
 'pageContent': {
-templateUrl:'app/components/tab/tab.html',
- controller:'TabController', 
+templateUrl:'app/controller/tab/tab-template.html',
+ controller:'homeController', 
 controllerAs: 'vm' 
  }
 },
@@ -289,8 +289,8 @@ tabService.childrenList.relationshipList=response.data;
  url:'/project',
 views:{
 'pageContent': {
-templateUrl:'app/components/project/project.html',
- controller:'ProjectController', 
+templateUrl:'app/controller/project/project-template.html',
+ controller:'homeController', 
 controllerAs: 'vm' 
  }
 },
@@ -311,8 +311,8 @@ projectService.childrenList.entityGroupList=response.data;
  url:'/annotation',
 views:{
 'pageContent': {
-templateUrl:'app/components/annotation/annotation.html',
- controller:'AnnotationController', 
+templateUrl:'app/controller/annotation/annotation-template.html',
+ controller:'homeController', 
 controllerAs: 'vm' 
  }
 },
@@ -343,8 +343,8 @@ annotationService.childrenList.relationshipList=response.data;
  url:'/enumValue',
 views:{
 'pageContent': {
-templateUrl:'app/components/enumValue/enumValue.html',
- controller:'EnumValueController', 
+templateUrl:'app/controller/enumValue/enumValue-template.html',
+ controller:'homeController', 
 controllerAs: 'vm' 
  }
 },
@@ -360,8 +360,8 @@ enumValueService.childrenList.enumEntityList=response.data;
  url:'/annotationAttribute',
 views:{
 'pageContent': {
-templateUrl:'app/components/annotationAttribute/annotationAttribute.html',
- controller:'AnnotationAttributeController', 
+templateUrl:'app/controller/annotationAttribute/annotationAttribute-template.html',
+ controller:'homeController', 
 controllerAs: 'vm' 
  }
 },
@@ -377,18 +377,13 @@ annotationAttributeService.childrenList.annotationList=response.data;
  url:'/field',
 views:{
 'pageContent': {
-templateUrl:'app/components/field/field.html',
- controller:'FieldController', 
+templateUrl:'app/controller/field/field-template.html',
+ controller:'homeController', 
 controllerAs: 'vm' 
  }
 },
 resolve: {
-restrictionFieldChildrenList: function(fieldService) {
-fieldService.initRestrictionFieldList().then(function(response) {
-fieldService.childrenList.restrictionFieldList=response.data;
-});
-}, 
- entityChildrenList: function(fieldService) {
+entityChildrenList: function(fieldService) {
 fieldService.initEntityList().then(function(response) {
 fieldService.childrenList.entityList=response.data;
 });
@@ -403,14 +398,19 @@ fieldService.initAnnotationList().then(function(response) {
 fieldService.childrenList.annotationList=response.data;
 });
 }, 
+ restrictionFieldChildrenList: function(fieldService) {
+fieldService.initRestrictionFieldList().then(function(response) {
+fieldService.childrenList.restrictionFieldList=response.data;
+});
+}, 
  }
 })
 .state('main.enumField',{
  url:'/enumField',
 views:{
 'pageContent': {
-templateUrl:'app/components/enumField/enumField.html',
- controller:'EnumFieldController', 
+templateUrl:'app/controller/enumField/enumField-template.html',
+ controller:'homeController', 
 controllerAs: 'vm' 
  }
 },
@@ -441,8 +441,8 @@ enumFieldService.childrenList.annotationList=response.data;
  url:'/relationship',
 views:{
 'pageContent': {
-templateUrl:'app/components/relationship/relationship.html',
- controller:'RelationshipController', 
+templateUrl:'app/controller/relationship/relationship-template.html',
+ controller:'homeController', 
 controllerAs: 'vm' 
  }
 },

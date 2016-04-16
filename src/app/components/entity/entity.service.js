@@ -9,11 +9,12 @@ function EntityService($http,MainService)
 this.entityList =		[];
 this.selectedEntity= 	{show: false 
 ,restrictionEntityList: [],tabList: [],enumFieldList: [],fieldList: [],relationshipList: []};
+this.hidden= { hiddenFields: []};
 this.isParent=function()
 {
 return MainService.parentEntity=="Entity";
 };
-this.childrenList=[]; 
+this.childrenList={}; 
 this.addEntity=function (entity)
 {
 this.entityList.push(entity);

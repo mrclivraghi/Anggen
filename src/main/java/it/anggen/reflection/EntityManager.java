@@ -30,4 +30,5 @@ public interface EntityManager {
 	public List<EntityAttribute> getChildrenFilter();
 	public Boolean isLastLevel(Entity entity);
 	public List<Relationship> getDescendantRelationship();
+	public List<Entity> getParentEntities(Entity ancestorEntity, Entity childEntity);
 }

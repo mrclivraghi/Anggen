@@ -9,11 +9,12 @@ function LogEntryService($http,MainService)
 this.entityList =		[];
 this.selectedEntity= 	{show: false 
 };
+this.hidden= { hiddenFields: []};
 this.isParent=function()
 {
 return MainService.parentEntity=="LogEntry";
 };
-this.childrenList=[]; 
+this.childrenList={}; 
 this.addEntity=function (entity)
 {
 this.entityList.push(entity);

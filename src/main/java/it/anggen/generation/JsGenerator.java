@@ -151,6 +151,16 @@ public class JsGenerator {
 		}
 	}
 	
+	public void generateDirectiveFile()
+	{
+		for (Entity entity: generator.getEntityList())
+		{
+			init(entity, null, null, null, null, null);
+			generateDetailDirective();
+			generateSearchDirective();
+		}
+	}
+	
 
 	
 	/**
@@ -174,7 +184,7 @@ public class JsGenerator {
 				sb.append(","+relationship.getEntityTarget().getName()+"List: []");
 		}
 		sb.append("};\n")
-		
+		.append("this.hidden= { hiddenFields: []};\n")
 		//check if is parent
 		.append("this.isParent=function()\n")
 		.append("{\n")
@@ -317,11 +327,89 @@ public class JsGenerator {
 				for (Relationship relationship: relationshipList)
 				{
 					stringBuilder.append(relationship.getEntityTarget().getName()+"Service.selectedEntity.show="+show.toString()+";\n");
+					stringBuilder.append("delete $rootScope.openNode."+relationship.getEntityTarget().getName()+";\n");
 				}
 
 		}
 
 	}
+	
+	private  void generateSearchDirective(){
+		StringBuilder sb = new StringBuilder();
+		sb.append("(function() {\n")
+		.append("'use strict';\n")
+
+		.append(" angular\n")
+		.append(" .module('serverTestApp')\n")
+		.append(" .directive('"+entityName+"Search', "+entityName+"Search);\n")
+
+		.append("/** @ngInject */\n")
+		.append("  function "+entityName+"Search("+entityName+"Service) {\n")
+		.append("  var directive = {\n")
+		.append("  restrict: 'E',\n")
+		.append(" templateUrl: 'app/components/"+entityName+"/"+entityName+"-search.html',\n")
+		.append("  scope: {\n")
+		.append("  fields: '='\n")
+		.append(" },\n")
+		.append("controller: '"+Utility.getFirstUpper(entityName)+"Controller',\n")
+		.append("controllerAs: 'vm',\n")
+		.append("bindToController: true,\n")
+		.append(" link: function(scope,element,attributes) {\n")
+		.append("if (attributes.fields)\n")
+		.append(""+entityName+"Service.hidden.hiddenFields=attributes.fields.split(\";\");\n")
+		.append(" }\n")
+		.append("};\n")
+
+		.append("return directive;\n")
+
+		.append(" }\n")
+
+		.append("})();\n");
+		File file = new File("");
+		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+entity.getName()+"/";
+		saveAsJsFile(directoryAngularFiles, entity.getName()+"Search.directive", sb.toString());
+
+	}
+	
+	
+	private  void generateDetailDirective(){
+		StringBuilder sb = new StringBuilder();
+		sb.append("(function() {\n")
+		.append("'use strict';\n")
+
+		.append(" angular\n")
+		.append(" .module('serverTestApp')\n")
+		.append(" .directive('"+entityName+"Detail', "+entityName+"Detail);\n")
+
+		.append("/** @ngInject */\n")
+		.append("  function "+entityName+"Detail("+entityName+"Service) {\n")
+		.append("  var directive = {\n")
+		.append("  restrict: 'E',\n")
+		.append(" templateUrl: 'app/components/"+entityName+"/"+entityName+"-detail.html',\n")
+		.append("  scope: {\n")
+		.append("  fields: '='\n")
+		.append(" },\n")
+		.append("controller: '"+Utility.getFirstUpper(entityName)+"Controller',\n")
+		.append("controllerAs: 'vm',\n")
+		.append("bindToController: true,\n")
+		.append(" link: function(scope,element,attributes) {\n")
+		.append("if (attributes.fields)\n")
+		.append(""+entityName+"Service.hidden.hiddenFields=attributes.fields.split(\";\");\n")
+		.append(" }\n")
+		.append("};\n")
+
+		.append("return directive;\n")
+
+		.append(" }\n")
+
+		.append("})();\n");
+		File file = new File("");
+		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+entity.getName()+"/";
+		saveAsJsFile(directoryAngularFiles, entity.getName()+"Detail.directive", sb.toString());
+
+	}
+	
+	
 	/**
 	 * Generate the angularJS controller
 	 * @return
@@ -338,7 +426,7 @@ public class JsGenerator {
 		sb.append("$scope.searchBean="+Utility.getEntityCallName(entityName)+"Service.searchBean;\n");
 		sb.append("$scope.entityList="+Utility.getEntityCallName(entityName)+"Service.entityList;\n");
 		sb.append("$scope.selectedEntity="+Utility.getEntityCallName(entityName)+"Service.selectedEntity;\n");
-
+		sb.append("$scope.hidden="+entityName+"Service.hidden;\n");
 		sb.append("$scope.childrenList="+Utility.getEntityCallName(entityName)+"Service.childrenList; \n");
 		/*for (Relationship relationship : entity.getRelationshipList())
 		{
@@ -379,6 +467,7 @@ public class JsGenerator {
 	//	}
 		sb.append("$scope.addNew= function()\n");
 		sb.append("{\n");
+		sb.append("$rootScope.openNode."+Utility.getEntityCallName(entityName)+"=true;\n");
 		sb.append(""+Utility.getEntityCallName(entityName)+"Service.setSelectedEntity(null);\n");
 		sb.append(""+Utility.getEntityCallName(entityName)+"Service.setEntityList(null);\n");
 		sb.append(""+Utility.getEntityCallName(entityName)+"Service.selectedEntity.show=true;\n");
@@ -394,6 +483,7 @@ public class JsGenerator {
 		sb.append("$scope.search=function()\n");
 		sb.append("{\n");
 		sb.append(""+Utility.getEntityCallName(entityName)+"Service.selectedEntity.show=false;\n");
+		sb.append("delete $rootScope.openNode."+entityName+";\n");
 		if (relationshipList!=null)
 			for (Relationship relationship: relationshipList)
 			{
@@ -519,7 +609,7 @@ public class JsGenerator {
 			sb.append("$scope.remove= function()\n");
 			sb.append("{\n");
 			sb.append(Utility.getEntityCallName(entityName)+"Service.selectedEntity.show=false;\n");
-			
+			sb.append("delete $rootScope.openNode."+entityName+";\n");
 			
 			/*if (relationshipType==RelationshipType.MANY_TO_MANY || relationshipType==RelationshipType.ONE_TO_MANY || relationshipType==RelationshipType.MANY_TO_MANY_BACK)
 			{
@@ -617,7 +707,7 @@ public class JsGenerator {
 				sb.append("{\n");
 				sb.append(relationship.getEntityTarget().getName()+"Service.searchOne("+entityName+"Service.selectedEntity."+relationship.getEntityTarget().getName()+"List[index]).then(\n");
 				sb.append("function successCallback(response) {\n");
-				sb.append("console.log(\"response-ok\");\n");
+				sb.append("console.log(\"INDEX!=NULLLLLLLLLLLL\");\n");
 				sb.append("console.log(response);\n");
 				initChildrenList(sb, relationship.getEntityTarget());
 				sb.append(Utility.getEntityCallName(relationship.getEntityTarget().getName())+"Service.setSelectedEntity(response.data[0]);\n");
@@ -640,6 +730,7 @@ public class JsGenerator {
 				initChildrenList(sb, relationship.getEntityTarget());
 				sb.append(Utility.getEntityCallName(relationship.getEntityTarget().getName())+"Service.setSelectedEntity(null); \n");
 				sb.append(Utility.getEntityCallName(relationship.getEntityTarget().getName())+"Service.selectedEntity.show=true; \n");
+				sb.append("$rootScope.openNode."+Utility.getEntityCallName(relationship.getEntityTarget().getName())+"=true;\n");
 				//TODO set owner, list or entity?
 				sb.append("}\n");
 				sb.append("else\n");
@@ -651,6 +742,7 @@ public class JsGenerator {
 				initChildrenList(sb, relationship.getEntityTarget());
 				sb.append(Utility.getEntityCallName(relationship.getEntityTarget().getName())+"Service.setSelectedEntity(response.data[0]);\n");
 				sb.append(Utility.getEntityCallName(relationship.getEntityTarget().getName())+"Service.selectedEntity.show=true;\n");
+				sb.append("$rootScope.openNode."+Utility.getEntityCallName(relationship.getEntityTarget().getName())+"=true;\n");
 
 				sb.append("  }, function errorCallback(response) {\n");
 				manageRestError(sb);
@@ -754,6 +846,7 @@ public class JsGenerator {
 		sb.append("$scope.closeEntityDetail = function(){ \n")
 		.append(""+Utility.getEntityCallName(entityName)+"Service.setSelectedEntity(null);\n")
 		.append(""+Utility.getEntityCallName(entityName)+"Service.selectedEntity.show=false;\n")
+		.append("delete $rootScope.openNode."+entityName+";\n")
 		.append("}\n");
 		
 		
@@ -856,8 +949,7 @@ if (entity.getEntityGroup()!=null)
 {
 			sb.append(Utility.getEntityCallName(entityName)+"Service.searchOne(row.entity).then(function(response) { \n");
 			sb.append("console.log(response.data);\n");
-			
-			
+			sb.append("$rootScope.openNode."+entityName+"=true;\n");
 			
 			sb.append(Utility.getEntityCallName(entityName)+"Service.setSelectedEntity(response.data[0]);\n");
 			sb.append("});\n");
@@ -867,6 +959,7 @@ if (entity.getEntityGroup()!=null)
 			sb.append("}\n");
 			sb.append("else \n");
 			sb.append(Utility.getEntityCallName(entityName)+"Service.setSelectedEntity(null);\n");
+			sb.append("delete $rootScope.openNode."+entityName+";\n");
 			sb.append(Utility.getEntityCallName(entityName)+"Service.selectedEntity.show = row.isSelected;\n");
 			sb.append("});\n");
 		sb.append("  };\n");
@@ -1159,7 +1252,7 @@ if (entity.getEntityGroup()!=null)
 		
 		.append(" controller:'MainController', \n")
 		.append("controllerAs: 'main' ,\n")
-		.append("name: 'main'\n")
+		.append("name: 'main'\n") 
 		.append(" })\n")
 		
 		
@@ -1167,7 +1260,7 @@ if (entity.getEntityGroup()!=null)
 		
 		.append(" url:'/home',\n")
 		.append("views:{\n")
-		.append("'pageContent': {\n")
+		.append("'search': {\n")
 		.append("templateUrl:'app/components/home/home.html',\n")
 		.append(" controller:'HomeController', \n")
 		.append("controllerAs: 'vm' \n")
@@ -1195,8 +1288,8 @@ if (entity.getEntityGroup()!=null)
 			.append(" url:'/"+entity.getName()+"',\n")
 			.append("views:{\n")
 			.append("'pageContent': {\n")
-			.append("templateUrl:'app/components/"+entity.getName()+"/"+entity.getName()+".html',\n")
-			.append(" controller:'"+Utility.getFirstUpper(entity.getName())+"Controller', \n")
+			.append("templateUrl:'app/controller/"+entity.getName()+"/"+entity.getName()+"-template.html',\n")
+			.append(" controller:'homeController', \n")
 			.append("controllerAs: 'vm' \n")
 			.append(" }\n")
 			.append("},\n")
@@ -1345,7 +1438,7 @@ if (entity.getEntityGroup()!=null)
 		
 		
 
-		
+		sb.append("$rootScope.openNode= {};\n");
 
 		sb.append("$log.debug('runBlock end');\n");
 

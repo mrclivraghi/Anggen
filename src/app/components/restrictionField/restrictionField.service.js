@@ -9,11 +9,12 @@ function RestrictionFieldService($http,MainService)
 this.entityList =		[];
 this.selectedEntity= 	{show: false 
 };
+this.hidden= { hiddenFields: []};
 this.isParent=function()
 {
 return MainService.parentEntity=="RestrictionField";
 };
-this.childrenList=[]; 
+this.childrenList={}; 
 this.addEntity=function (entity)
 {
 this.entityList.push(entity);
@@ -70,17 +71,17 @@ var promise= $http.post("http://127.0.0.1:8080/ServerTestApp/restrictionField/"+
 });
 return promise; 
 }
- this.initRoleList= function()
-{
-var promise= $http
-.post("http://127.0.0.1:8080/ServerTestApp/role/search",
-{});
-return promise;
-};
  this.initFieldList= function()
 {
 var promise= $http
 .post("http://127.0.0.1:8080/ServerTestApp/field/search",
+{});
+return promise;
+};
+ this.initRoleList= function()
+{
+var promise= $http
+.post("http://127.0.0.1:8080/ServerTestApp/role/search",
 {});
 return promise;
 };
@@ -93,8 +94,8 @@ paginationPageSize: 10,
 enableGridMenu: true,
 columnDefs: [    
 { name: 'restrictionFieldId'},
-{ name: 'role.roleId', displayName: 'role'},
-{ name: 'field.fieldId', displayName: 'field'} 
+{ name: 'field.fieldId', displayName: 'field'},
+{ name: 'role.roleId', displayName: 'role'} 
 ]
  };
 };

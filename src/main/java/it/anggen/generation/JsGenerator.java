@@ -949,8 +949,7 @@ if (entity.getEntityGroup()!=null)
 {
 			sb.append(Utility.getEntityCallName(entityName)+"Service.searchOne(row.entity).then(function(response) { \n");
 			sb.append("console.log(response.data);\n");
-			
-			
+			sb.append("$rootScope.openNode."+entityName+"=true;\n");
 			
 			sb.append(Utility.getEntityCallName(entityName)+"Service.setSelectedEntity(response.data[0]);\n");
 			sb.append("});\n");
@@ -960,6 +959,7 @@ if (entity.getEntityGroup()!=null)
 			sb.append("}\n");
 			sb.append("else \n");
 			sb.append(Utility.getEntityCallName(entityName)+"Service.setSelectedEntity(null);\n");
+			sb.append("delete $rootScope.openNode."+entityName+";\n");
 			sb.append(Utility.getEntityCallName(entityName)+"Service.selectedEntity.show = row.isSelected;\n");
 			sb.append("});\n");
 		sb.append("  };\n");

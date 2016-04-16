@@ -349,7 +349,7 @@ public class AngularGenerator {
 			HtmlCanvas closeCanvas = new HtmlCanvas();
 			closeCanvas.button((new HtmlAttributes()).add("type", "button").add("class", "close").add("aria-label", "Close").add("ng-click", "closeEntityDetail()"))
 			.span((new HtmlAttributes()).add("aria-hidden", "true")).content("&times;",false)._button();
-			html.content("Detail "+entityName+" {{ selectedEntity."+entityName+"Id }}"+closeCanvas.toHtml(),false);
+			html.content("Detail "+entityName+" {{ selectedEntity."+entityName+"Id }} "+closeCanvas.toHtml(),false);
 		}
 		html.div(CssGenerator.getPanelBody());
 		
@@ -619,7 +619,7 @@ public class AngularGenerator {
 							html.br().br();
 							html.div((new HtmlAttributes()).add("class", style)
 									.add("style", "width: 100%").add("ng-show", securityCondition+(securityCondition.equals("")?"":" && ")+checkSecurity(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget(),"search"),false)
-									.add("ng-if", "hidden.hiddenFields.indexOf('"+entityAttribute.getName()+"')<0"));
+									.add("ng-if", "!$root.openNode."+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()+""));
 							//html._div();
 							html.div(CssGenerator.getPanel())
 							.div(CssGenerator.getPanelHeader())
@@ -643,7 +643,7 @@ public class AngularGenerator {
 						{//entity
 							html.div(CssGenerator.getExternalFieldPanel(style, search, entityName, entityAttribute)
 									.add("ng-show", securityCondition,false)
-									.add("ng-if", "hidden.hiddenFields.indexOf('"+entityAttribute.getName()+"')<0"));
+									.add("ng-if", "!$root.openNode."+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()+""));
 							html.div((new HtmlAttributes()).add("class", "input-group"));
 							html.span((new HtmlAttributes()).add("class", "input-group-addon")).content(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName());
 							html.select(CssGenerator.getSelect("").add("ng-model", "selectedEntity."+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName())
@@ -691,7 +691,7 @@ public class AngularGenerator {
 			html.div((new HtmlAttributes()).add("id", entityName+"-"+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName())
 					.add("class", "modal fade")
 					.add("role", "dialog")
-					.add("ng-if", "hidden.hiddenFields.indexOf('"+entityAttribute.getName()+"')<0")
+					.add("ng-if", "!$root.openNode."+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()+"")
 					)
 			.div((new HtmlAttributes()).add("class", "modal-dialog"))
 			.div((new HtmlAttributes()).add("class", "modal-content"))

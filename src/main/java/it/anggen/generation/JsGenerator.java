@@ -102,7 +102,7 @@ public class JsGenerator {
 		generateMainService();
 		generateMainController();
 		
-		//generateIndexRoute();
+		generateIndexRoute();
 		generateIndexRun();
 		generateIndexConfig();
 		generateIndexConstants();
@@ -1282,8 +1282,8 @@ if (entity.getEntityGroup()!=null)
 			.append(" url:'/"+entity.getName()+"',\n")
 			.append("views:{\n")
 			.append("'pageContent': {\n")
-			.append("templateUrl:'app/components/"+entity.getName()+"/"+entity.getName()+".html',\n")
-			.append(" controller:'"+Utility.getFirstUpper(entity.getName())+"Controller', \n")
+			.append("templateUrl:'app/controller/"+entity.getName()+"/"+entity.getName()+"-template.html',\n")
+			.append(" controller:'homeController', \n")
 			.append("controllerAs: 'vm' \n")
 			.append(" }\n")
 			.append("},\n")

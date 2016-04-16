@@ -316,7 +316,7 @@ public class AngularGenerator {
 		{
 			//init(descendantEntity, false, parentEntity,mainEntityManager.isLastLevel(descendantEntity));
 			sb.append("<"+Utility.camelCaseToMinus(Utility.getFirstLower(descendantEntity.getName()))+
-					"-detail fields=\""+Utility.camelCaseToMinus(entityListToString(entityManager.getParentEntities(entity, descendantEntity)))+"\">"
+					"-detail>"
 							+ "</"+Utility.camelCaseToMinus(Utility.getFirstLower(descendantEntity.getName()))+"-detail>\n");
 			
 		}

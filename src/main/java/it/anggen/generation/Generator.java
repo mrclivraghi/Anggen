@@ -253,6 +253,8 @@ public class Generator {
 			htmlGenerator.setDirectory();
 			//htmlGenerator.generateTemplate();
 			htmlGenerator.generateHomePage();
+			htmlGenerator.generateMain();
+			htmlGenerator.generateIndex();
 			for (Entity modelEntity: modelEntityList)
 			{
 				if (modelEntity.getDisableViewGeneration()) continue;

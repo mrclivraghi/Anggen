@@ -242,6 +242,46 @@ public class HtmlGenerator {
 	}
 	
 	
+	public void generateMain()
+	{
+		HtmlCanvas html = new HtmlCanvas();
+		try {
+
+			html.div((new HtmlAttributes()).add("id", "canvas"))
+			.div().content("<anggen-navbar></angen-navbar> ",false)
+			.div((new HtmlAttributes()).add("id", "alertInfo").add("class","alert alert-success custom-alert").add("style","display: none")).span().content("")._div()
+			.div((new HtmlAttributes()).add("id", "alertError").add("class","alert alert-danger custom-alert").add("style","display: none")).span().content("")._div()
+			
+			.div((new HtmlAttributes()).add("style", ""))
+			.div((new HtmlAttributes()).add("ui-view", "pageContent"))
+			._div()
+			._div();
+			
+			
+			
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		File dir = new File(generator.angularDirectory+"main/");
+		if (!dir.exists())
+			dir.mkdirs();
+		
+		File myJsp=new File(generator.angularDirectory+"main/main.html");
+		PrintWriter writer;
+		try {
+			System.out.println("Written "+myJsp.getAbsolutePath());
+			writer = new PrintWriter(myJsp, "UTF-8");
+			writer.write(html.toHtml());
+			writer.close();
+		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		
+	
+		
+	}
+	
 	
 	
 	public void GenerateEasyTreeMenu(List<EntityGroup> entityGroupList)
@@ -386,11 +426,11 @@ public class HtmlGenerator {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		File myJsp=new File(directoryViewPages+"home.jsp");
+		File myFile=new File(directoryViewPages+"home/home.html");
 		PrintWriter writer;
 		try {
-			System.out.println("Written "+myJsp.getAbsolutePath());
-			writer = new PrintWriter(myJsp, "UTF-8");
+			System.out.println("Written "+myFile.getAbsolutePath());
+			writer = new PrintWriter(myFile, "UTF-8");
 			writer.write(html.toHtml());
 			writer.close();
 		} catch (FileNotFoundException | UnsupportedEncodingException e) {
@@ -399,53 +439,25 @@ public class HtmlGenerator {
 	}
 	
 
-	/*public void generateTemplate() {
+	public void generateIndex()
+	{
 		HtmlCanvas html = new HtmlCanvas();
 		try {
-			html.div((new HtmlAttributes()).add("id", "canvas"))
-			.div().content("<angen-navbar></angen-navbar>",false);
-			
-			html.div((new HtmlAttributes()).add("id", "alertInfo").add("class","alert alert-success custom-alert").add("style","display: none")).span().content("")._div();
-			html.div((new HtmlAttributes()).add("id", "alertError").add("class","alert alert-danger custom-alert").add("style","display: none")).span().content("")._div();
-			
-			html.div((new HtmlAttributes()).add("id","ngViewContainer").add("style", ""));
-			
-			html.div((new HtmlAttributes()).add("ui-view", "search"))
-			._div();
-			
-			
-			for (Entity entity: generator.getEntityList())
-			{
-				html.div((new HtmlAttributes()).add("ui-view", entity.getName()))
-				._div();
-			}
-			
-			
-			html._div(); //close ng-view container
-			
-			
-			
-			html._div();
-			
-		} catch (IOException e) {
-			e.printStackTrace();
+			html.h1().center().content("HOME PAGE")._h1();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
-		
-		File dir = new File(directoryViewPages+"../controller/"+entityName+"/");
-		if (!dir.exists())
-			dir.mkdirs();
-		
-		File myJsp=new File(directoryViewPages+"../controller/"+entityName+"/"+entityName+".html");
+		File myFile=new File(generator.angularDirectory+"index.html");
 		PrintWriter writer;
 		try {
-			System.out.println("Written "+myJsp.getAbsolutePath());
-			writer = new PrintWriter(myJsp, "UTF-8");
+			System.out.println("Written "+myFile.getAbsolutePath());
+			writer = new PrintWriter(myFile, "UTF-8");
 			writer.write(html.toHtml());
 			writer.close();
 		} catch (FileNotFoundException | UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		
-	}*/
+	}
 	
 }

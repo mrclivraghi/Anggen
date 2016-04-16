@@ -563,7 +563,9 @@ public class AngularGenerator {
 							style="pull-left";
 							renderModalInsertExistingPanel(html,entityAttribute);
 							html.br().br();
-							html.div((new HtmlAttributes()).add("class", style).add("style", "width: 100%").add("ng-show", securityCondition+(securityCondition.equals("")?"":" && ")+checkSecurity(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget(),"search"),false));
+							html.div((new HtmlAttributes()).add("class", style)
+									.add("style", "width: 100%").add("ng-show", securityCondition+(securityCondition.equals("")?"":" && ")+checkSecurity(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget(),"search"),false)
+									.add("ng-if", "hidden.hiddenFields.indexOf('"+entityAttribute.getName()+"')<0"));
 							//html._div();
 							html.div(CssGenerator.getPanel())
 							.div(CssGenerator.getPanelHeader())
@@ -630,7 +632,11 @@ public class AngularGenerator {
 </div>*/
 		try {
 			EntityManager entityAttributeManager = new EntityManagerImpl(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget());
-			html.div((new HtmlAttributes()).add("id", entityName+"-"+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()).add("class", "modal fade").add("role", "dialog"))
+			html.div((new HtmlAttributes()).add("id", entityName+"-"+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName())
+					.add("class", "modal fade")
+					.add("role", "dialog")
+					.add("ng-if", "hidden.hiddenFields.indexOf('"+entityAttribute.getName()+"')<0")
+					)
 			.div((new HtmlAttributes()).add("class", "modal-dialog"))
 			.div((new HtmlAttributes()).add("class", "modal-content"))
 			.div((new HtmlAttributes()).add("class", "modal-header"))

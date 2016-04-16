@@ -184,7 +184,7 @@ public class JsGenerator {
 				sb.append(","+relationship.getEntityTarget().getName()+"List: []");
 		}
 		sb.append("};\n")
-		
+		.append("this.hidden= { hiddenFields: []};\n")
 		//check if is parent
 		.append("this.isParent=function()\n")
 		.append("{\n")
@@ -354,8 +354,8 @@ public class JsGenerator {
 		.append("controllerAs: 'vm',\n")
 		.append("bindToController: true,\n")
 		.append(" link: function(scope,element,attributes) {\n")
-
-		.append("console.log(attributes.fields);\n")
+		.append("if (attributes.fields)\n")
+		.append(""+entityName+"Service.hidden.hiddenFields=attributes.fields.split(\";\");\n")
 		.append(" }\n")
 		.append("};\n")
 
@@ -425,7 +425,7 @@ public class JsGenerator {
 		sb.append("$scope.searchBean="+Utility.getEntityCallName(entityName)+"Service.searchBean;\n");
 		sb.append("$scope.entityList="+Utility.getEntityCallName(entityName)+"Service.entityList;\n");
 		sb.append("$scope.selectedEntity="+Utility.getEntityCallName(entityName)+"Service.selectedEntity;\n");
-
+		sb.append("$scope.hidden="+entityName+"Service.hidden;\n");
 		sb.append("$scope.childrenList="+Utility.getEntityCallName(entityName)+"Service.childrenList; \n");
 		/*for (Relationship relationship : entity.getRelationshipList())
 		{

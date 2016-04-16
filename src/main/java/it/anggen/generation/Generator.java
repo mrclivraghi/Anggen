@@ -249,8 +249,9 @@ public class Generator {
 			jsGenerator.generateMainApp();
 			jsGenerator.generateServiceFile();
 			jsGenerator.generateControllerFile();
+			jsGenerator.generateDirectiveFile();
 			htmlGenerator.setDirectory();
-			htmlGenerator.generateTemplate();
+			//htmlGenerator.generateTemplate();
 			htmlGenerator.generateHomePage();
 			for (Entity modelEntity: modelEntityList)
 			{

@@ -151,6 +151,16 @@ public class JsGenerator {
 		}
 	}
 	
+	public void generateDirectiveFile()
+	{
+		for (Entity entity: generator.getEntityList())
+		{
+			init(entity, null, null, null, null, null);
+			generateDetailDirective();
+			generateSearchDirective();
+		}
+	}
+	
 
 	
 	/**
@@ -322,6 +332,83 @@ public class JsGenerator {
 		}
 
 	}
+	
+	private  void generateSearchDirective(){
+		StringBuilder sb = new StringBuilder();
+		sb.append("(function() {\n")
+		.append("'use strict';\n")
+
+		.append(" angular\n")
+		.append(" .module('serverTestApp')\n")
+		.append(" .directive('"+entityName+"Search', "+entityName+"Search);\n")
+
+		.append("/** @ngInject */\n")
+		.append("  function "+entityName+"Search("+entityName+"Service) {\n")
+		.append("  var directive = {\n")
+		.append("  restrict: 'E',\n")
+		.append(" templateUrl: 'app/components/"+entityName+"/"+entityName+"-search.html',\n")
+		.append("  scope: {\n")
+		.append("  fields: '='\n")
+		.append(" },\n")
+		.append("controller: '"+Utility.getFirstUpper(entityName)+"Controller',\n")
+		.append("controllerAs: 'vm',\n")
+		.append("bindToController: true,\n")
+		.append(" link: function(scope,element,attributes) {\n")
+
+		.append("console.log(attributes.fields);\n")
+		.append(" }\n")
+		.append("};\n")
+
+		.append("return directive;\n")
+
+		.append(" }\n")
+
+		.append("})();\n");
+		File file = new File("");
+		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+entity.getName()+"/";
+		saveAsJsFile(directoryAngularFiles, entity.getName()+"Search.directive", sb.toString());
+
+	}
+	
+	
+	private  void generateDetailDirective(){
+		StringBuilder sb = new StringBuilder();
+		sb.append("(function() {\n")
+		.append("'use strict';\n")
+
+		.append(" angular\n")
+		.append(" .module('serverTestApp')\n")
+		.append(" .directive('"+entityName+"Detail', "+entityName+"Detail);\n")
+
+		.append("/** @ngInject */\n")
+		.append("  function "+entityName+"Detail("+entityName+"Service) {\n")
+		.append("  var directive = {\n")
+		.append("  restrict: 'E',\n")
+		.append(" templateUrl: 'app/components/"+entityName+"/"+entityName+"-detail.html',\n")
+		.append("  scope: {\n")
+		.append("  fields: '='\n")
+		.append(" },\n")
+		.append("controller: '"+Utility.getFirstUpper(entityName)+"Controller',\n")
+		.append("controllerAs: 'vm',\n")
+		.append("bindToController: true,\n")
+		.append(" link: function(scope,element,attributes) {\n")
+
+		.append("console.log(attributes.fields);\n")
+		.append(" }\n")
+		.append("};\n")
+
+		.append("return directive;\n")
+
+		.append(" }\n")
+
+		.append("})();\n");
+		File file = new File("");
+		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+entity.getName()+"/";
+		saveAsJsFile(directoryAngularFiles, entity.getName()+"Detail.directive", sb.toString());
+
+	}
+	
+	
 	/**
 	 * Generate the angularJS controller
 	 * @return
@@ -1155,7 +1242,7 @@ if (entity.getEntityGroup()!=null)
 		
 		.append(" url:'/app',\n")
 		.append("abstract:true,\n")
-		.append("templateUrl:'app/main/main.html',\n")
+		.append("templateUrl:'app/controller/abstractEntity/abstractEntity.html',\n")
 		
 		.append(" controller:'MainController', \n")
 		.append("controllerAs: 'main' ,\n")
@@ -1167,7 +1254,7 @@ if (entity.getEntityGroup()!=null)
 		
 		.append(" url:'/home',\n")
 		.append("views:{\n")
-		.append("'pageContent': {\n")
+		.append("'search': {\n")
 		.append("templateUrl:'app/components/home/home.html',\n")
 		.append(" controller:'HomeController', \n")
 		.append("controllerAs: 'vm' \n")

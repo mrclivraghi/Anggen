@@ -302,8 +302,8 @@ public class AngularGenerator {
 		html.div((new HtmlAttributes()).add("id", "ngViewContainer"));
 		
 		StringBuilder sb = new StringBuilder();
-		sb.append("<"+entityName+"-search></"+entityName+"-search>\n");
-		sb.append("<"+entityName+"-detail></"+entityName+"-detail>\n");
+		sb.append("<"+Utility.camelCaseToMinus(entityName)+"-search></"+Utility.camelCaseToMinus(entityName)+"-search>\n");
+		sb.append("<"+Utility.camelCaseToMinus(entityName)+"-detail></"+Utility.camelCaseToMinus(entityName)+"-detail>\n");
 		
 		//ArrayList<Entity> oldParentClassList = (ArrayList<Entity>) ((ArrayList<Entity>) parentEntity).clone();
 		List<Entity> descendantEntityList = entityManager.getDescendantEntities(entity, parentEntity);
@@ -315,7 +315,9 @@ public class AngularGenerator {
 		if (descendantEntity.getEntityGroup()!=null)
 		{
 			//init(descendantEntity, false, parentEntity,mainEntityManager.isLastLevel(descendantEntity));
-			sb.append("<"+Utility.getFirstLower(descendantEntity.getName())+"-detail fields=\""+entityListToString(entityManager.getParentEntities(entity, descendantEntity))+"\"></"+Utility.getFirstLower(descendantEntity.getName())+"-detail>\n");
+			sb.append("<"+Utility.camelCaseToMinus(Utility.getFirstLower(descendantEntity.getName()))+
+					"-detail fields=\""+Utility.camelCaseToMinus(entityListToString(entityManager.getParentEntities(entity, descendantEntity)))+"\">"
+							+ "</"+Utility.camelCaseToMinus(Utility.getFirstLower(descendantEntity.getName()))+"-detail>\n");
 			
 		}
 		

@@ -14,6 +14,7 @@ import it.anggen.model.entity.Entity;
 import it.anggen.model.entity.Tab;
 import it.anggen.model.field.Annotation;
 import it.anggen.model.field.AnnotationAttribute;
+import it.anggen.model.relationship.Relationship;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -270,6 +271,57 @@ public class AngularGenerator {
 		return htmlAttributes;
 	}
 
+	private String entityListToString(List<Entity> entityList)
+	{
+		String str="";
+		for (Entity entity: entityList)
+		{
+			str=str+entity.getName()+";";
+		}
+		if (!str.isEmpty())
+			str= str.substring(0, str.length()-1);
+		return str;
+	}
+	
+	private void generateDirectiveStructure(StringBuilder sb, Entity entity,Integer maxDescendantLevel,List<Entity> parentEntityList)
+	{
+		EntityManager entityManager = new EntityManagerImpl(entity);
+		sb.append("<"+entity.getName()+"-detail fields=\""+entityListToString(parentEntityList)+"\"></"+entity.getName()+"-detail>\n");
+		parentEntityList.add(entity);
+		for (Relationship relationship: entity.getRelationshipList())
+		{
+			generateDirectiveStructure(sb, entity, maxDescendantLevel-1, parentEntityList);
+		}
+		
+	}
+	
+	
+	public void generateTemplate(HtmlCanvas html) throws IOException
+	{
+		
+		html.div((new HtmlAttributes()).add("id", "ngViewContainer"));
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("<"+entityName+"-search></"+entityName+"-search>\n");
+		sb.append("<"+entityName+"-detail></"+entityName+"-detail>\n");
+		
+		//ArrayList<Entity> oldParentClassList = (ArrayList<Entity>) ((ArrayList<Entity>) parentEntity).clone();
+		List<Entity> descendantEntityList = entityManager.getDescendantEntities(entity, parentEntity);
+		//parentEntity=oldParentClassList;
+		//if (descendantEntityList==null || descendantEntityList.size()==0) return;
+		//EntityManager mainEntityManager = new EntityManagerImpl(entity);
+		
+		for (Entity descendantEntity: descendantEntityList)
+		if (descendantEntity.getEntityGroup()!=null)
+		{
+			//init(descendantEntity, false, parentEntity,mainEntityManager.isLastLevel(descendantEntity));
+			sb.append("<"+Utility.getFirstLower(descendantEntity.getName())+"-detail fields=\""+entityListToString(entityManager.getParentEntities(entity, descendantEntity))+"\"></"+Utility.getFirstLower(descendantEntity.getName())+"-detail>\n");
+			
+		}
+		
+		html.content(sb.toString(),false);
+	}
+	
 
 	/**
 	 * Generate a html form that can be of two types: search or not.

@@ -260,6 +260,7 @@ public class Generator {
 				try {
 					htmlGenerator.generateSearchView();
 					htmlGenerator.generateDetailView();
+					htmlGenerator.generatePageContent();
 				} catch (IllegalAccessException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

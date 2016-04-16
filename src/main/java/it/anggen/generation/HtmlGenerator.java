@@ -214,6 +214,35 @@ public class HtmlGenerator {
 	}
 	
 	
+	public void generatePageContent() throws IllegalAccessException
+	{
+		HtmlCanvas html = new HtmlCanvas();
+		angularGenerator.init(entity, true,new ArrayList<Entity>(),entityManager.isLastLevel(entity));
+		try {
+			angularGenerator.generateTemplate(html);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		File dir = new File(directoryViewPages+"../controller/");
+		if (!dir.exists())
+			dir.mkdirs();
+		
+		File myJsp=new File(directoryViewPages+"../controller/"+entityName+"/"+entityName+"-template.html");
+		PrintWriter writer;
+		try {
+			System.out.println("Written "+myJsp.getAbsolutePath());
+			writer = new PrintWriter(myJsp, "UTF-8");
+			writer.write(html.toHtml());
+			writer.close();
+		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
+	
 	
 	public void GenerateEasyTreeMenu(List<EntityGroup> entityGroupList)
 	{
@@ -370,7 +399,7 @@ public class HtmlGenerator {
 	}
 	
 
-	public void generateTemplate() {
+	/*public void generateTemplate() {
 		HtmlCanvas html = new HtmlCanvas();
 		try {
 			html.div((new HtmlAttributes()).add("id", "canvas"))
@@ -402,11 +431,11 @@ public class HtmlGenerator {
 			e.printStackTrace();
 		}
 		
-		File dir = new File(directoryViewPages);
+		File dir = new File(directoryViewPages+"../controller/"+entityName+"/");
 		if (!dir.exists())
 			dir.mkdirs();
 		
-		File myJsp=new File(directoryViewPages+"../controller/abstractEntity/abstractEntity.html");
+		File myJsp=new File(directoryViewPages+"../controller/"+entityName+"/"+entityName+".html");
 		PrintWriter writer;
 		try {
 			System.out.println("Written "+myJsp.getAbsolutePath());
@@ -417,6 +446,6 @@ public class HtmlGenerator {
 			e.printStackTrace();
 		}
 		
-	}
+	}*/
 	
 }

@@ -336,6 +336,32 @@ public class EntityManagerImpl implements EntityManager{
 		}
 	}
 	
+	
+	@Override
+	public List<Entity> getParentEntities(Entity ancestorEntity, Entity childEntity)
+	{
+		List<Entity> theRoad = new ArrayList<>();
+		
+		if (ancestorEntity.staticEntityId==childEntity.staticEntityId)
+		{
+			theRoad.add(ancestorEntity);
+			 return theRoad;
+		}
+		for (Relationship relationship : ancestorEntity.getRelationshipList())
+		{
+			List<Entity> childRoad = getParentEntities(relationship.getEntityTarget(), childEntity);
+			if (childRoad.size()>0)
+			{
+				theRoad.addAll(childRoad);
+				return theRoad;
+			}
+		}
+		return theRoad;
+	}
+
+	
+	
+	
 
 
 }

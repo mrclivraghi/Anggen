@@ -639,7 +639,9 @@ public class AngularGenerator {
 							//html.div(CssGenerator.getPanelBody());
 						}else
 						{//entity
-							html.div(CssGenerator.getExternalFieldPanel(style, search, entityName, entityAttribute).add("ng-show", securityCondition,false));
+							html.div(CssGenerator.getExternalFieldPanel(style, search, entityName, entityAttribute)
+									.add("ng-show", securityCondition,false)
+									.add("ng-if", "hidden.hiddenFields.indexOf('"+entityAttribute.getName()+"')<0"));
 							html.div((new HtmlAttributes()).add("class", "input-group"));
 							html.span((new HtmlAttributes()).add("class", "input-group-addon")).content(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName());
 							html.select(CssGenerator.getSelect("").add("ng-model", "selectedEntity."+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName())

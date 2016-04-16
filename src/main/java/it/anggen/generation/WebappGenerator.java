@@ -134,7 +134,6 @@ public class WebappGenerator {
 		generateWebConfig();
 		
 		
-		generateBowerFile();
 	}
 	
 	private void generateMainAppController() {
@@ -511,69 +510,6 @@ public class WebappGenerator {
 		saveFile(codeModel);
 	}
 	
-	private void generateBowerFile()
-	{
-		StringBuilder sb = new StringBuilder();
-		sb.append("{\n");
-		sb.append(" \"name\": \""+generator.applicationName+"App\",\n");
-		sb.append("\"version\": \"0.0.0\",\n");
-		sb.append("\"dependencies\": {\n");
-		sb.append("\"angular-animate\": \"~1.5.3\",\n");
-		sb.append("\"angular-cookies\": \"~1.5.3\",\n");
-		sb.append("\"angular-touch\": \"~1.5.3\",\n");
-		sb.append("\"angular-sanitize\": \"~1.5.3\",\n");
-		sb.append("\"angular-messages\": \"~1.5.3\",\n");
-		sb.append("\"angular-aria\": \"~1.5.3\",\n");
-		sb.append(" \"jquery\": \"~2.1.4\",\n");
-		sb.append("\"angular-resource\": \"~1.5.3\",\n");
-		sb.append("\"angular-ui-router\": \"~0.2.15\",\n");
-		sb.append("\"bootstrap-sass\": \"~3.3.5\",\n");
-		sb.append("\"angular-bootstrap\": \"~1.2.5\",\n");
-		sb.append(" \"angular-toastr\": \"~1.5.0\",\n");
-		sb.append("\"moment\": \"~2.10.6\",\n");
-		sb.append("\"animate.css\": \"~3.4.0\",\n");
-		sb.append(" \"angular\": \"~1.5.3\",\n");
-		sb.append(" \"ng-file-upload\": \"^12.0.4\",\n");
-		sb.append(" \"angular-ui-grid\": \"^3.1.1\",\n");
-		sb.append("  \"angular-ui-date\": \"^1.0.0\",\n");
-		sb.append("  \"bootstrap\": \"^3.3.6\",\n");
-		sb.append("   \"utility\": \"./src/app/components/customLib/utility.js\",\n");
-		sb.append("  \"main\": \"./src/app/components/customLib/main.css\"\n");
-		sb.append(" },\n");
-		sb.append("  \"devDependencies\": {\n");
-		sb.append(" \"angular-mocks\": \"~1.5.3\"\n");
-		sb.append(" },\n");
-		sb.append("\"overrides\": {\n");
-		sb.append("\"bootstrap-sass\": {\n");
-		sb.append(" \"main\": [\n");
-		sb.append("  \"assets/stylesheets/_bootstrap.scss\",\n");
-		sb.append(" \"assets/fonts/bootstrap/glyphicons-halflings-regular.eot\",\n");
-		sb.append("\"assets/fonts/bootstrap/glyphicons-halflings-regular.svg\",\n");
-		sb.append("\"assets/fonts/bootstrap/glyphicons-halflings-regular.ttf\",\n");
-		sb.append("\"assets/fonts/bootstrap/glyphicons-halflings-regular.woff\",\n");
-		sb.append(" \"assets/fonts/bootstrap/glyphicons-halflings-regular.woff2\"\n");
-		sb.append(" ]\n");
-		sb.append("}\n");
-		sb.append("},\n");
-		sb.append("\"resolutions\": {\n");
-		sb.append("\"jquery\": \"~2.1.4\",\n");
-		sb.append(" \"angular\": \"~1.5.3\"\n");
-		sb.append(" }\n");
-		sb.append("}\n");
-
-
-		File file= new File("");
-		File myJsp=new File(file.getAbsolutePath()+"bower.json");
-		PrintWriter writer;
-		try {
-			System.out.println("Written "+myJsp.getAbsolutePath());
-			writer = new PrintWriter(myJsp, "UTF-8");
-			writer.write(sb.toString());
-			writer.close();
-		} catch (FileNotFoundException | UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-	}
 	
 	
 	

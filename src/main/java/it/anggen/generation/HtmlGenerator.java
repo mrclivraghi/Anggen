@@ -263,11 +263,14 @@ public class HtmlGenerator {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		File dir = new File(generator.angularDirectory+"main/");
+		
+		File f = new File("");
+		
+		File dir = new File(f.getAbsolutePath()+generator.angularDirectory+"../main/");
 		if (!dir.exists())
 			dir.mkdirs();
 		
-		File myJsp=new File(generator.angularDirectory+"main/main.html");
+		File myJsp=new File(f.getAbsolutePath()+generator.angularDirectory+"../main/main.html");
 		PrintWriter writer;
 		try {
 			System.out.println("Written "+myJsp.getAbsolutePath());

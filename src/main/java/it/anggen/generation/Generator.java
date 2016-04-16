@@ -252,10 +252,12 @@ public class Generator {
 			jsGenerator.generateDirectiveFile();
 			jsGenerator.generateUtilityJS();
 			jsGenerator.generateNavbarDirective();
+			jsGenerator.generateBowerFile();
 			htmlGenerator.setDirectory();
 			//htmlGenerator.generateTemplate();
 			htmlGenerator.generateHomePage();
 			htmlGenerator.generateMain();
+			
 			CssGenerator.generateMain(angularDirectory);
 			for (Entity modelEntity: modelEntityList)
 			{

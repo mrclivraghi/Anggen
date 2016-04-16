@@ -178,7 +178,7 @@ public  class CssGenerator {
 		sb.append("}\n");
 
 		File file = new File("");
-		String directory= file.getAbsolutePath()+angularDirectory+"components/customLib/";
+		String directory= file.getAbsolutePath()+angularDirectory+"customLib/";
 		File dir = new File(directory);
 		if (!dir.exists())
 			dir.mkdirs();

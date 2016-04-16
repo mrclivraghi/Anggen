@@ -694,7 +694,7 @@ public class JsGenerator {
 		sb.append("});\n");
 		sb.append("}\n");
 
-		sb.append("$scope.trueFalseValues=[true,false];\n");
+		sb.append("$scope.trueFalseValues=['',true,false];\n");
 		//if (isParent)
 		{
 			for (Relationship relationship: relationshipList)

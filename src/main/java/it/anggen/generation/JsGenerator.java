@@ -1509,7 +1509,6 @@ if (entity.getEntityGroup()!=null)
 	public void generateUtilityJS()
 	{
 		StringBuilder sb = new StringBuilder();
-		sb.append("{\n");
 		sb.append("/**\n");
 		sb.append(" *  utility functionality\n");
 		sb.append("*/\n");
@@ -1630,7 +1629,7 @@ if (entity.getEntityGroup()!=null)
 		.append("\n")
 		.append("  angular\n")
 		.append(".module('"+generator.applicationName+"App')\n")
-		.append(".directive('"+generator.applicationName+"Navbar', anggenNavbar);\n")
+		.append(".directive('"+generator.applicationName+"Navbar', "+generator.applicationName+"Navbar);\n")
 
 		.append("/** @ngInject */\n")
 		.append("function "+generator.applicationName+"Navbar(SecurityService) {\n")
@@ -1653,8 +1652,8 @@ if (entity.getEntityGroup()!=null)
 		.append("  function doLogout()\n")
 		.append("  {\n")
 		.append("  $http.post(\""+generator.restUrl+"auth/logout/\").then(function(response)\n")
+		.append("{\n")
 		.append("		$log.debug(\"logout\");\n")
-
 		.append("  });\n")
 
 

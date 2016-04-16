@@ -248,7 +248,7 @@ public class HtmlGenerator {
 		try {
 
 			html.div((new HtmlAttributes()).add("id", "canvas"))
-			.div().content("<anggen-navbar></angen-navbar> ",false)
+			.div().content("<"+Utility.camelCaseToMinus(generator.applicationName)+"-navbar></"+Utility.camelCaseToMinus(generator.applicationName)+"-navbar> ",false)
 			.div((new HtmlAttributes()).add("id", "alertInfo").add("class","alert alert-success custom-alert").add("style","display: none")).span().content("")._div()
 			.div((new HtmlAttributes()).add("id", "alertError").add("class","alert alert-danger custom-alert").add("style","display: none")).span().content("")._div()
 			

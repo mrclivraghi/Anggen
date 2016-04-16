@@ -192,7 +192,7 @@ public class JsGenerator {
 		.append("return MainService.parentEntity==\""+Utility.getFirstUpper(entityName)+"\";\n")
 		.append("};\n")
 		
-		.append("this.childrenList={}; \n")
+		//.append("this.childrenList={}; \n")
 		.append("this.addEntity=function (entity)\n")
 		.append("{\n")
 		.append("this.entityList.push(entity);\n")
@@ -428,7 +428,9 @@ public class JsGenerator {
 		sb.append("$scope.entityList="+Utility.getEntityCallName(entityName)+"Service.entityList;\n");
 		sb.append("$scope.selectedEntity="+Utility.getEntityCallName(entityName)+"Service.selectedEntity;\n");
 		sb.append("$scope.hidden="+entityName+"Service.hidden;\n");
-		sb.append("$scope.childrenList="+Utility.getEntityCallName(entityName)+"Service.childrenList; \n");
+		//sb.append("$scope.childrenList="+Utility.getEntityCallName(entityName)+"Service.childrenList; \n");
+		bindChildrenList(sb, entity);
+		
 		/*for (Relationship relationship : entity.getRelationshipList())
 		{
 			sb.append("$scope.childrenList."+relationship.getName()+"ChildrenList="+relationship.getName()+"ChildrenList;\n");
@@ -710,7 +712,7 @@ public class JsGenerator {
 				sb.append("function successCallback(response) {\n");
 				sb.append("console.log(\"INDEX!=NULLLLLLLLLLLL\");\n");
 				sb.append("console.log(response);\n");
-				initChildrenList(sb, relationship.getEntityTarget());
+				//initChildrenList(sb, relationship.getEntityTarget());
 				sb.append(Utility.getEntityCallName(relationship.getEntityTarget().getName())+"Service.setSelectedEntity(response.data[0]);\n");
 				sb.append(Utility.getEntityCallName(relationship.getEntityTarget().getName())+"Service.selectedEntity.show=true;\n");
 
@@ -728,7 +730,7 @@ public class JsGenerator {
 				sb.append("{\n");
 				sb.append("if ("+Utility.getEntityCallName(entityName)+"Service.selectedEntity."+relationship.getEntityTarget().getName()+"==null || "+entityName+"Service.selectedEntity."+relationship.getEntityTarget().getName()+"==undefined)\n");
 				sb.append("{\n");
-				initChildrenList(sb, relationship.getEntityTarget());
+				//initChildrenList(sb, relationship.getEntityTarget());
 				sb.append(Utility.getEntityCallName(relationship.getEntityTarget().getName())+"Service.setSelectedEntity(null); \n");
 				sb.append(Utility.getEntityCallName(relationship.getEntityTarget().getName())+"Service.selectedEntity.show=true; \n");
 				sb.append("$rootScope.openNode."+Utility.getEntityCallName(relationship.getEntityTarget().getName())+"=true;\n");
@@ -740,7 +742,7 @@ public class JsGenerator {
 				sb.append("function successCallback(response) {\n");
 				//sb.append("console.log(\"response-ok\");\n");
 				//sb.append("console.log(response);\n");
-				initChildrenList(sb, relationship.getEntityTarget());
+				//initChildrenList(sb, relationship.getEntityTarget());
 				sb.append(Utility.getEntityCallName(relationship.getEntityTarget().getName())+"Service.setSelectedEntity(response.data[0]);\n");
 				sb.append(Utility.getEntityCallName(relationship.getEntityTarget().getName())+"Service.selectedEntity.show=true;\n");
 				sb.append("$rootScope.openNode."+Utility.getEntityCallName(relationship.getEntityTarget().getName())+"=true;\n");
@@ -927,7 +929,7 @@ public class JsGenerator {
 		//on row selection
 		
 		sb.append("$scope.initChildrenList = function () { \n");
-		initChildrenList(sb, entity);
+		//initChildrenList(sb, entity);
 		sb.append("}\n");
 		
 		sb.append("$scope."+entityName+"GridOptions.onRegisterApi = function(gridApi){\n");
@@ -991,6 +993,15 @@ if (entity.getEntityGroup()!=null)
 		return services;
 	}
 	
+	private String getallServices(){
+		String str="";
+		for (Entity entity: generator.getEntityList())
+		{
+			str=str+","+Utility.getFirstLower(entity.getName())+"Service";
+		}
+		return str;
+	}
+	
 	private String checkSecurity(Entity entity,String action)
 	{
 		StringBuilder sb = new StringBuilder();
@@ -998,7 +1009,31 @@ if (entity.getEntityGroup()!=null)
 		return sb.toString();
 	}
 	
-	private void initChildrenList(StringBuilder sb,Entity entity)
+	
+	private void bindChildrenList(StringBuilder sb, Entity entity)
+	{
+		if (entity.getRelationshipList()!=null)
+			for (Relationship relationship: entity.getRelationshipList())
+			{
+				sb.append("$scope."+relationship.getEntityTarget().getName()+"PreparedData="+relationship.getEntityTarget().getName()+"Service.preparedData;\n");
+			}
+		
+		if (entity.getEnumFieldList()!=null)
+			for (EnumField enumField: entity.getEnumFieldList())
+			{
+				sb.append("$scope."+enumField.getName()+"PreparedData={};");
+				sb.append("$scope."+enumField.getName()+"PreparedData.entityList=[");
+				for (EnumValue enumValue: enumField.getEnumEntity().getEnumValueList())
+				{
+					sb.append("\""+enumValue.getName()+"\",");
+				}
+				sb.append("];\n");
+
+			}
+	}
+	
+	
+	private void initChildrenList(StringBuilder sb,Entity entity,Boolean test)
 	{
 		if (entity.getRelationshipList()!=null)
 			for (Relationship relationship: entity.getRelationshipList())
@@ -1314,12 +1349,12 @@ if (entity.getEntityGroup()!=null)
 			for (Relationship relationship : entity.getRelationshipList())
 			{
 
-				sb.append(relationship.getName()+"ChildrenList: function("+Utility.getFirstLower(entity.getName())+"Service) {\n");
+				/*sb.append(relationship.getName()+"ChildrenList: function("+Utility.getFirstLower(entity.getName())+"Service) {\n");
 				sb.append(Utility.getFirstLower(entity.getName())+"Service.init"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List().then(function(response) {\n")
 				.append(Utility.getFirstLower(entity.getName())+"Service.childrenList."+Utility.getFirstLower(relationship.getName())+"List=response.data;\n")
 				.append("});\n")
 				
-				.append("}, \n ");
+				.append("}, \n ");*/
 			}
 			
 			
@@ -1355,7 +1390,7 @@ if (entity.getEntityGroup()!=null)
 		.append("    .run(runBlock);\n")
 		.append("\n")
 		.append("  /** @ngInject */\n")
-		.append("  function runBlock($log,SecurityService,$rootScope,$uibModal) { \n");
+		.append("  function runBlock($log,SecurityService,$rootScope,$uibModal"+getallServices()+") { \n");
 		
 		String services = serviceList;
 		if (services==null)
@@ -1392,7 +1427,7 @@ if (entity.getEntityGroup()!=null)
 		.append(" keyboard: false\n")
 		.append("});\n")
 		.append("function close(){\n")
-		
+		.append("initList();\n")
 		.append("SecurityService.init().then(function successCallback(response) {\n")
 		.append("$rootScope.restrictionList=response.data;\n")
 		.append("});\n")
@@ -1423,6 +1458,7 @@ if (entity.getEntityGroup()!=null)
 		.append("}\n")
 		.append("else\n")
 		.append("{\n")
+		.append("initList();\n")
 		.append("$log.debug(\"loggato come \");\n")
 		.append("$log.debug(response.data.message);\n")
 
@@ -1443,6 +1479,8 @@ if (entity.getEntityGroup()!=null)
 
 		
 		/*  init all the list - heavy? */
+		sb.append("function initList() {\n");
+		sb.append("$log.debug(\"inizio init\");\n");
 		for (Entity entity: generator.getEntityList())
 		{
 			sb.append(""+Utility.getFirstLower(entity.getName())+"Service.searchBean={};\n");
@@ -1452,6 +1490,8 @@ if (entity.getEntityGroup()!=null)
 				manageRestError(sb);
 			sb.append("});\n");
 		}
+		sb.append("$log.debug(\"fine init\");\n");
+		sb.append("}\n");
 
 		sb.append("$log.debug('runBlock end');\n");
 
@@ -1596,7 +1636,7 @@ MainService.parentService.childrenList.roleList=response.data;
 });
 			 */
 			sb.append(entitySource+"Service.init"+Utility.getFirstUpper(entityTarget)+"List().then(function(response) {\n");
-			sb.append(entitySource+"Service.childrenList."+entityTarget+"List=response.data;\n");
+			sb.append(Utility.getFirstLower(entityTarget)+"Service.preparedData.entityList=response.data;\n");
 			sb.append("});\n");
 			
 			sb.append("\n");

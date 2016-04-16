@@ -10,7 +10,8 @@ $scope.searchBean=logEntryService.searchBean;
 $scope.entityList=logEntryService.entityList;
 $scope.selectedEntity=logEntryService.selectedEntity;
 $scope.hidden=logEntryService.hidden;
-$scope.childrenList=logEntryService.childrenList; 
+$scope.logTypePreparedData={};$scope.logTypePreparedData.entityList=["INFO","DEBUG","WARNING","ERROR",];
+$scope.operationTypePreparedData={};$scope.operationTypePreparedData.entityList=["CREATE_ENTITY","UPDATE_ENTITY","DELETE_ENTITY","SEARCH_ENTITY","LOGIN_SUCCESS","LOGIN_FAILED","VIEW_METRICS","SECURITY_VIOLATION_ATTEMPT",];
 $scope.reset = function()
 {
 logEntryService.resetSearchBean();
@@ -147,8 +148,6 @@ $scope.logEntryGridOptions={};
 cloneObject(logEntryService.gridOptions,$scope.logEntryGridOptions);
 $scope.logEntryGridOptions.data=logEntryService.entityList;
 $scope.initChildrenList = function () { 
-logEntryService.childrenList.logTypeList=["INFO","DEBUG","WARNING","ERROR",];
-logEntryService.childrenList.operationTypeList=["CREATE_ENTITY","UPDATE_ENTITY","DELETE_ENTITY","SEARCH_ENTITY","LOGIN_SUCCESS","LOGIN_FAILED","VIEW_METRICS","SECURITY_VIOLATION_ATTEMPT",];
 }
 $scope.logEntryGridOptions.onRegisterApi = function(gridApi){
 $scope.logEntryGridApi = gridApi;

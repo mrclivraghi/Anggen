@@ -7,16 +7,14 @@ angular
 function EntityService($http,MainService)
 {
 this.entityList =		[];
+this.preparedData={};
 this.selectedEntity= 	{show: false 
 ,restrictionEntityList: [],tabList: [],enumFieldList: [],fieldList: [],relationshipList: []};
 this.hidden= { hiddenFields: []};
-this.preparedData= {};
-
 this.isParent=function()
 {
 return MainService.parentEntity=="Entity";
 };
-this.childrenList={}; 
 this.addEntity=function (entity)
 {
 this.entityList.push(entity);
@@ -29,9 +27,6 @@ if (entityList!=null)
 for (i=0; i<entityList.length; i++)
 this.entityList.push(entityList[i]);
 };
-
-
-
 this.searchBean = 		new Object();
 this.resetSearchBean= function()
 {

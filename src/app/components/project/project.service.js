@@ -7,6 +7,7 @@ angular
 function ProjectService($http,MainService)
 {
 this.entityList =		[];
+this.preparedData={};
 this.selectedEntity= 	{show: false 
 ,enumEntityList: [],entityGroupList: []};
 this.hidden= { hiddenFields: []};
@@ -14,7 +15,6 @@ this.isParent=function()
 {
 return MainService.parentEntity=="Project";
 };
-this.childrenList={}; 
 this.addEntity=function (entity)
 {
 this.entityList.push(entity);

@@ -10,7 +10,7 @@ $scope.searchBean=enumValueService.searchBean;
 $scope.entityList=enumValueService.entityList;
 $scope.selectedEntity=enumValueService.selectedEntity;
 $scope.hidden=enumValueService.hidden;
-$scope.childrenList=enumValueService.childrenList; 
+$scope.enumEntityPreparedData=enumEntityService.preparedData;
 $scope.reset = function()
 {
 enumValueService.resetSearchBean();
@@ -151,22 +151,6 @@ enumEntityService.searchOne(enumValueService.selectedEntity.enumEntityList[index
 function successCallback(response) {
 console.log("INDEX!=NULLLLLLLLLLLL");
 console.log(response);
-if ($rootScope.restrictionList.entity!=undefined && $rootScope.restrictionList.entity.restrictionItemMap.project.canSearch)
-enumEntityService.initProjectList().then(function successCallback(response) {
-enumEntityService.childrenList.projectList=response.data;
-},function errorCallback(response) { 
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
-});
-if ($rootScope.restrictionList.field!=undefined && $rootScope.restrictionList.field.restrictionItemMap.enumValue.canSearch)
-enumEntityService.initEnumValueList().then(function successCallback(response) {
-enumEntityService.childrenList.enumValueList=response.data;
-},function errorCallback(response) { 
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
-});
 enumEntityService.setSelectedEntity(response.data[0]);
 enumEntityService.selectedEntity.show=true;
   }, function errorCallback(response) {
@@ -180,22 +164,6 @@ else
 {
 if (enumValueService.selectedEntity.enumEntity==null || enumValueService.selectedEntity.enumEntity==undefined)
 {
-if ($rootScope.restrictionList.entity!=undefined && $rootScope.restrictionList.entity.restrictionItemMap.project.canSearch)
-enumEntityService.initProjectList().then(function successCallback(response) {
-enumEntityService.childrenList.projectList=response.data;
-},function errorCallback(response) { 
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
-});
-if ($rootScope.restrictionList.field!=undefined && $rootScope.restrictionList.field.restrictionItemMap.enumValue.canSearch)
-enumEntityService.initEnumValueList().then(function successCallback(response) {
-enumEntityService.childrenList.enumValueList=response.data;
-},function errorCallback(response) { 
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
-});
 enumEntityService.setSelectedEntity(null); 
 enumEntityService.selectedEntity.show=true; 
 $rootScope.openNode.enumEntity=true;
@@ -203,22 +171,6 @@ $rootScope.openNode.enumEntity=true;
 else
 enumEntityService.searchOne(enumValueService.selectedEntity.enumEntity).then(
 function successCallback(response) {
-if ($rootScope.restrictionList.entity!=undefined && $rootScope.restrictionList.entity.restrictionItemMap.project.canSearch)
-enumEntityService.initProjectList().then(function successCallback(response) {
-enumEntityService.childrenList.projectList=response.data;
-},function errorCallback(response) { 
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
-});
-if ($rootScope.restrictionList.field!=undefined && $rootScope.restrictionList.field.restrictionItemMap.enumValue.canSearch)
-enumEntityService.initEnumValueList().then(function successCallback(response) {
-enumEntityService.childrenList.enumValueList=response.data;
-},function errorCallback(response) { 
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
-});
 enumEntityService.setSelectedEntity(response.data[0]);
 enumEntityService.selectedEntity.show=true;
 $rootScope.openNode.enumEntity=true;
@@ -251,14 +203,6 @@ $scope.enumValueGridOptions={};
 cloneObject(enumValueService.gridOptions,$scope.enumValueGridOptions);
 $scope.enumValueGridOptions.data=enumValueService.entityList;
 $scope.initChildrenList = function () { 
-if ($rootScope.restrictionList.entity!=undefined && $rootScope.restrictionList.entity.restrictionItemMap.enumEntity.canSearch)
-enumValueService.initEnumEntityList().then(function successCallback(response) {
-enumValueService.childrenList.enumEntityList=response.data;
-},function errorCallback(response) { 
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
-});
 }
 $scope.enumValueGridOptions.onRegisterApi = function(gridApi){
 $scope.enumValueGridApi = gridApi;
@@ -282,22 +226,6 @@ $scope.enumEntityGridOptions={};
 cloneObject(enumEntityService.gridOptions,$scope.enumEntityGridOptions);
 $scope.enumEntityGridOptions.data=$scope.selectedEntity.enumEntityList;
 $scope.initChildrenList = function () { 
-if ($rootScope.restrictionList.entity!=undefined && $rootScope.restrictionList.entity.restrictionItemMap.project.canSearch)
-enumEntityService.initProjectList().then(function successCallback(response) {
-enumEntityService.childrenList.projectList=response.data;
-},function errorCallback(response) { 
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
-});
-if ($rootScope.restrictionList.field!=undefined && $rootScope.restrictionList.field.restrictionItemMap.enumValue.canSearch)
-enumEntityService.initEnumValueList().then(function successCallback(response) {
-enumEntityService.childrenList.enumValueList=response.data;
-},function errorCallback(response) { 
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
-});
 }
 $scope.enumEntityGridOptions.onRegisterApi = function(gridApi){
 $scope.enumEntityGridApi = gridApi;
@@ -319,7 +247,7 @@ enumEntityService.selectedEntity.show = row.isSelected;
   };
 function updateParentEntities() { 
 enumEntityService.initEnumValueList().then(function(response) {
-enumEntityService.childrenList.enumValueList=response.data;
+enumValueService.preparedData.entityList=response.data;
 });
 
 if (enumEntityService.selectedEntity.enumEntityId!=undefined) enumEntityService.searchOne(enumEntityService.selectedEntity).then(

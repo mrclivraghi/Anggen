@@ -1506,6 +1506,123 @@ if (entity.getEntityGroup()!=null)
 	}
 	
 	
+	public void generateUtilityJS()
+	{
+		StringBuilder sb = new StringBuilder();
+		sb.append("{\n");
+		sb.append("/**\n");
+		sb.append(" *  utility functionality\n");
+		sb.append("*/\n");
+
+		sb.append("function loadMenu()\n");
+		sb.append("{\n");
+		sb.append("var content = document.querySelector('link[rel=\"import\"]').import; \n");
+		sb.append(" $(\"body\").prepend(content.documentElement.getElementsByTagName(\"body\")[0]);\n");
+		sb.append("}\n");
+		sb.append("function activeMenu(path)\n");
+		sb.append("{\n");
+		sb.append("	$(\"a\").parent(\"li\").removeClass(\"active\");\n");
+		sb.append("	$(\"a[href='../\"+path+\"/']\").parent(\"li\").addClass(\"active\");\n");
+		sb.append("	if ($(\"a[href='../\"+path+\"/']\").parent(\"li\").parent(\"ul\").parent(\"li\")[0]!=undefined)\n");
+		sb.append("		$(\"a[href='../\"+path+\"/']\").parent(\"li\").parent(\"ul\").parent(\"li\").addClass(\"active\");\n");
+
+
+		sb.append("}\n");
+
+		sb.append("var AlertSuccess = (function() {\n");
+		sb.append("   \"use strict\";\n");
+
+		sb.append("   var elem,\n");
+		sb.append("       hideHandler,\n");
+		sb.append("       that = {};\n");
+
+		sb.append("    that.init = function(options) {\n");
+		sb.append("        elem = $(options.selector);\n");
+		sb.append("    };\n");
+
+		sb.append("    that.show = function(text) {\n");
+		sb.append("        clearTimeout(hideHandler);\n");
+
+		sb.append("        elem.find(\"span\").html(text);\n");
+		sb.append("        elem.delay(200).fadeIn().delay(2000).fadeOut();\n");
+		sb.append("   };\n");
+
+		sb.append("    return that;\n");
+		sb.append("}());\n");
+
+		sb.append("var AlertError = (function() {\n");
+		sb.append("  \"use strict\";\n");
+
+		sb.append("  var elem,\n");
+		sb.append("     hideHandler,\n");
+		sb.append("     that = {};\n");
+
+		sb.append("  that.init = function(options) {\n");
+		sb.append("      elem = $(options.selector);\n");
+		sb.append("  };\n");
+
+		sb.append("that.show = function(text) {\n");
+		sb.append("   clearTimeout(hideHandler);\n");
+
+		sb.append("     elem.find(\"span\").html(text);\n");
+		sb.append("    elem.delay(200).fadeIn().delay(2000).fadeOut();\n");
+		sb.append(" };\n");
+
+		sb.append("  return that;\n");
+		sb.append("}());\n");
+
+
+		sb.append("function cloneObject(sourceObject,targetObject)\n");
+		sb.append("{\n");
+
+		sb.append("var keyList = Object.keys(sourceObject);\n");
+		sb.append("if (keyList.length == 0)\n");
+		sb.append("	keyList = Object.keys(targetObject);\n");
+		sb.append("for (i = 0; i < keyList.length; i++) {\n");
+		sb.append("var val = keyList[i];\n");
+		sb.append("if (val != undefined) {\n");
+		sb.append("if (val.toLowerCase().indexOf(\"list\") > -1\n");
+		sb.append("	&& (typeof sourceObject[val] == \"object\" || typeof targetObject[val]==\"object\")) {\n");
+		sb.append("if (sourceObject[val] != null\n");
+		sb.append("	&& sourceObject[val] != undefined) {\n");
+		sb.append("if (targetObject[val]!=undefined)\n");
+		sb.append("	while (targetObject[val].length > 0)\n");
+		sb.append("		targetObject[val].pop();\n");
+		sb.append("if (sourceObject[val] != null)\n");
+		sb.append("		for (j = 0; j < sourceObject[val].length; j++)\n");
+		sb.append("				targetObject[val]\n");
+		sb.append("			.push(sourceObject[val][j]);\n");
+		sb.append("	} else \n");
+		sb.append("			emptyList(targetObject[val]);\n");
+		sb.append("	} else {\n");
+		sb.append("		if (val.toLowerCase().indexOf(\"time\") > -1\n");
+		sb.append("				&& typeof val == \"string\") {\n");
+		sb.append("			var date = new Date(sourceObject[val]);\n");
+		sb.append("			targetObject[val] = new Date(sourceObject[val]);\n");
+		sb.append("		} else {\n");
+		sb.append("			targetObject[val] = sourceObject[val];\n");
+		sb.append("		}\n");
+		sb.append("	}\n");
+		sb.append("}\n");
+		sb.append("};\n");
+
+		sb.append("}\n");
+		sb.append("function emptyList(list)\n");
+		sb.append("{\n");
+		sb.append("	while (list.length>0)\n");
+		sb.append("		list.pop();\n");
+		sb.append("}\n");
+
+
+
+		File file = new File("");
+		String directory= file.getAbsolutePath()+generator.angularDirectory+"components/customLib/";
+		saveAsJsFile(directory, "utility", sb.toString());
+	}
+	
+	
+	
+	
 	/**
 	 * Create the JS string
 	 * @return

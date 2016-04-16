@@ -250,11 +250,11 @@ public class Generator {
 			jsGenerator.generateServiceFile();
 			jsGenerator.generateControllerFile();
 			jsGenerator.generateDirectiveFile();
+			jsGenerator.generateUtilityJS();
 			htmlGenerator.setDirectory();
 			//htmlGenerator.generateTemplate();
 			htmlGenerator.generateHomePage();
 			htmlGenerator.generateMain();
-			htmlGenerator.generateIndex();
 			for (Entity modelEntity: modelEntityList)
 			{
 				if (modelEntity.getDisableViewGeneration()) continue;

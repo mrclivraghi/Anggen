@@ -102,7 +102,7 @@ public class JsGenerator {
 		generateMainService();
 		generateMainController();
 		
-		generateIndexRoute();
+		//generateIndexRoute();
 		generateIndexRun();
 		generateIndexConfig();
 		generateIndexConstants();
@@ -392,8 +392,8 @@ public class JsGenerator {
 		.append("controllerAs: 'vm',\n")
 		.append("bindToController: true,\n")
 		.append(" link: function(scope,element,attributes) {\n")
-
-		.append("console.log(attributes.fields);\n")
+		.append("if (attributes.fields)\n")
+		.append(""+entityName+"Service.hidden.hiddenFields=attributes.fields.split(\";\");\n")
 		.append(" }\n")
 		.append("};\n")
 

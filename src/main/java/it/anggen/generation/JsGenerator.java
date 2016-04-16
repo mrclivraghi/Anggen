@@ -1621,6 +1621,63 @@ if (entity.getEntityGroup()!=null)
 	}
 	
 	
+	public void generateNavbarDirective()
+	{
+
+		StringBuilder sb = new StringBuilder();
+		sb.append("(function() {\n")
+		.append("  'use strict'\n")
+		.append("\n")
+		.append("  angular\n")
+		.append(".module('"+generator.applicationName+"App')\n")
+		.append(".directive('"+generator.applicationName+"Navbar', anggenNavbar);\n")
+
+		.append("/** @ngInject */\n")
+		.append("function "+generator.applicationName+"Navbar(SecurityService) {\n")
+		.append(" var directive = {\n")
+		.append("    restrict: 'E',\n")
+		.append("    templateUrl: 'app/components/navbar/navbar.html',\n")
+		.append("    scope: {\n")
+		.append("         creationDate: '='\n")
+		.append("    },\n")
+		.append("     controller: NavbarController,\n")
+		.append("     controllerAs: 'vm',\n")
+		.append("     bindToController: true\n")
+		.append("   };\n")
+
+		.append("   return directive;\n")
+
+		.append("  /** @ngInject */\n")
+		.append("  function NavbarController($scope,$http,$log,moment,$rootScope,SecurityService) {\n")
+		.append("    var vm = this;\n")
+		.append("  function doLogout()\n")
+		.append("  {\n")
+		.append("  $http.post(\""+generator.restUrl+"auth/logout/\").then(function(response)\n")
+		.append("		$log.debug(\"logout\");\n")
+
+		.append("  });\n")
+
+
+		.append("  }\n")
+		.append("  vm.doLogout=doLogout;\n")
+
+
+
+		.append(" }\n")
+		.append(" }\n")
+
+		.append("})();\n");
+
+
+
+
+		File file = new File("");
+		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+"navbar/";
+		saveAsJsFile(directoryAngularFiles, "navbar.directive", sb.toString());
+
+
+	}
+	
 	
 	
 	/**

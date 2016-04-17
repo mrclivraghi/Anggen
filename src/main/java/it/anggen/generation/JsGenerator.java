@@ -514,6 +514,7 @@ public class JsGenerator {
 		sb.append("{\n");
 		
 			sb.append(Utility.getEntityCallName(entityName)+"Service.insert().then(function successCallback(response) { \n");
+			sb.append("$log.debug(response);\n");
 			sb.append("$scope.search();\n");
 			sb.append("},function errorCallback(response) { \n");
 			manageRestError(sb);
@@ -551,7 +552,10 @@ public class JsGenerator {
 				sb.append("});\n");
 				//sb.append(parentEntityName+"Service.selectedEntity."+entityName+"="+entityName+"Service.selectedEntity;\n\n");
 			}
-			*/sb.append("},function errorCallback(response) { \n");
+			
+			*/
+			sb.append("$log.debug(response);\n");
+			sb.append("},function errorCallback(response) { \n");
 			manageRestError(sb);
 			sb.append("});\n");
 			//sb.append("$scope.updateParent();\n\n");
@@ -571,6 +575,7 @@ public class JsGenerator {
 		
 			changeChildrenVisibility(sb, false);
 			sb.append(Utility.getEntityCallName(entityName)+"Service.update().then(function successCallback(response) { \n");
+			sb.append("$log.debug(response);\n");
 			sb.append("$scope.search();\n");
 			sb.append("},function errorCallback(response) { \n");
 			manageRestError(sb);
@@ -656,6 +661,7 @@ public class JsGenerator {
 			sb.append("$scope.updateParent();\n");
 		
 		sb.append(Utility.getEntityCallName(entityName)+"Service.del().then(function successCallback(response) { \n");
+		sb.append("$log.debug(response);\n");
 		sb.append("if ("+Utility.getEntityCallName(entityName)+"Service.isParent()) \n");
 		sb.append("{\n");
 

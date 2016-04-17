@@ -1545,13 +1545,21 @@ if (entity.getEntityGroup()!=null)
 	}
 	
 	
-	public void generateUtilityJS()
+	public void generateUtilityService()
 	{
 		StringBuilder sb = new StringBuilder();
-		sb.append("/**\n");
-		sb.append(" *  utility functionality\n");
-		sb.append("*/\n");
-
+		
+		sb.append("(function() { \n")
+		.append("'use strict'; \n")
+		.append("\n");
+		
+		
+		sb.append("angular.module(\""+generator.applicationName+"App\").service(\"UtilityService\", UtilityService);\n");
+		
+		sb.append("/** @ngInject */\n");
+		sb.append("function UtilityService()\n");
+		sb.append("{\n");
+		
 	/*	sb.append("function loadMenu()\n");
 		sb.append("{\n");
 		sb.append("var content = document.querySelector('link[rel=\"import\"]').import; \n");
@@ -1567,7 +1575,8 @@ if (entity.getEntityGroup()!=null)
 
 		sb.append("}\n");*/
 
-		sb.append("var AlertSuccess = (function() {\n");
+		//alert success
+		sb.append("this.AlertSuccess = (function() {\n");
 		sb.append("   \"use strict\";\n");
 
 		sb.append("   var elem,\n");
@@ -1575,7 +1584,7 @@ if (entity.getEntityGroup()!=null)
 		sb.append("       that = {};\n");
 
 		sb.append("    that.init = function(options) {\n");
-		sb.append("        elem = $(options.selector);\n");
+		sb.append("        elem = angular.element(options.selector);\n");
 		sb.append("    };\n");
 
 		sb.append("    that.show = function(text) {\n");
@@ -1588,7 +1597,8 @@ if (entity.getEntityGroup()!=null)
 		sb.append("    return that;\n");
 		sb.append("}());\n");
 
-		sb.append("var AlertError = (function() {\n");
+		//Alert error
+		sb.append("this.AlertError = (function() {\n");
 		sb.append("  \"use strict\";\n");
 
 		sb.append("  var elem,\n");
@@ -1609,14 +1619,14 @@ if (entity.getEntityGroup()!=null)
 		sb.append("  return that;\n");
 		sb.append("}());\n");
 
-
-		sb.append("function cloneObject(sourceObject,targetObject)\n");
+		//clone object
+		sb.append("this.cloneObject=function(sourceObject,targetObject)\n");
 		sb.append("{\n");
 
 		sb.append("var keyList = Object.keys(sourceObject);\n");
 		sb.append("if (keyList.length == 0)\n");
 		sb.append("	keyList = Object.keys(targetObject);\n");
-		sb.append("for (i = 0; i < keyList.length; i++) {\n");
+		sb.append("for (var i = 0; i < keyList.length; i++) {\n");
 		sb.append("var val = keyList[i];\n");
 		sb.append("if (val != undefined) {\n");
 		sb.append("if (val.toLowerCase().indexOf(\"list\") > -1\n");
@@ -1627,7 +1637,7 @@ if (entity.getEntityGroup()!=null)
 		sb.append("	while (targetObject[val].length > 0)\n");
 		sb.append("		targetObject[val].pop();\n");
 		sb.append("if (sourceObject[val] != null)\n");
-		sb.append("		for (j = 0; j < sourceObject[val].length; j++)\n");
+		sb.append("		for (var j = 0; j < sourceObject[val].length; j++)\n");
 		sb.append("				targetObject[val]\n");
 		sb.append("			.push(sourceObject[val][j]);\n");
 		sb.append("	} else \n");
@@ -1645,7 +1655,8 @@ if (entity.getEntityGroup()!=null)
 		sb.append("};\n");
 
 		sb.append("}\n");
-		sb.append("function emptyList(list)\n");
+		//empty list
+		sb.append("this.emptyList=function(list)\n");
 		sb.append("{\n");
 		sb.append("	while (list.length>0)\n");
 		sb.append("		list.pop();\n");
@@ -1653,9 +1664,13 @@ if (entity.getEntityGroup()!=null)
 
 
 
+		sb.append("}\n");
+		
+		sb.append("})();\n"); // end of service
+		
 		File file = new File("");
-		String directory= file.getAbsolutePath()+generator.angularDirectory+"customLib/";
-		saveAsJsFile(directory, "utility", sb.toString());
+		String directory= file.getAbsolutePath()+generator.angularDirectory+"utility/";
+		saveAsJsFile(directory, "utility.service", sb.toString());
 	}
 	
 	

@@ -735,7 +735,10 @@ public class AngularGenerator {
 	private String checkSecurity(Entity entity,String action)
 	{
 		StringBuilder sb = new StringBuilder();
-		sb.append("($root.restrictionList."+entity.getEntityGroup().getName()+".restrictionItemMap."+entity.getName()+".can"+Utility.getFirstUpper(action)+"==true)");
+		if (entity.getEntityGroup()!=null)
+			sb.append("($root.restrictionList."+entity.getEntityGroup().getName()+".restrictionItemMap."+entity.getName()+".can"+Utility.getFirstUpper(action)+"==true)");
+		else
+			sb.append("false");
 		return sb.toString();
 	}
 	

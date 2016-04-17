@@ -121,7 +121,7 @@ public class JsGenerator {
 			//.append("'use strict'; \n")
 			.append("\n");
 			
-			sb.append("angular\n.module(\""+generator.applicationName+"App\")\n");
+			sb.append("angular\n.module(\""+generator.applicationName+"\")\n");
 			init(entity, null, null, null, null, null);
 			sb.append(generateController());
 			
@@ -141,7 +141,7 @@ public class JsGenerator {
 			//.append("'use strict'; \n")
 			.append("\n");
 			
-			sb.append("angular\n.module(\""+generator.applicationName+"App\")\n");
+			sb.append("angular\n.module(\""+generator.applicationName+"\")\n");
 			init(entity, null, null, null, null, null);
 			sb.append(generateService ());
 			
@@ -342,7 +342,7 @@ public class JsGenerator {
 		.append("'use strict';\n")
 
 		.append(" angular\n")
-		.append(" .module('serverTestApp')\n")
+		.append(" .module('"+generator.applicationName+"')\n")
 		.append(" .directive('"+entityName+"Search', "+entityName+"Search);\n")
 
 		.append("/** @ngInject */\n")
@@ -380,7 +380,7 @@ public class JsGenerator {
 		.append("'use strict';\n")
 
 		.append(" angular\n")
-		.append(" .module('serverTestApp')\n")
+		.append(" .module('"+generator.applicationName+"')\n")
 		.append(" .directive('"+entityName+"Detail', "+entityName+"Detail);\n")
 
 		.append("/** @ngInject */\n")
@@ -1004,7 +1004,7 @@ if (entity.getEntityGroup()!=null)
 		.append("\n");
 		
 		
-		sb.append("angular.module(\""+generator.applicationName+"App\").service(\"MainService\", MainService);\n");
+		sb.append("angular.module(\""+generator.applicationName+"\").service(\"MainService\", MainService);\n");
 		
 		sb.append("/** @ngInject */\n");
 		sb.append("function MainService()\n");
@@ -1030,7 +1030,7 @@ if (entity.getEntityGroup()!=null)
 		.append("'use strict'; \n")
 		.append("\n");
 		
-		sb.append("angular.module(\""+generator.applicationName+"App\").controller(\"MainController\",MainController);\n\n");
+		sb.append("angular.module(\""+generator.applicationName+"\").controller(\"MainController\",MainController);\n\n");
 		
 		
 		sb.append("/** @ngInject */\n");
@@ -1055,7 +1055,7 @@ if (entity.getEntityGroup()!=null)
 		.append("\n");
 
 
-		sb.append("angular.module(\""+generator.applicationName+"App\").service(\"SecurityService\",SecurityService);\n");
+		sb.append("angular.module(\""+generator.applicationName+"\").service(\"SecurityService\",SecurityService);\n");
 
 		sb.append("/** @ngInject */\n");
 		sb.append("function SecurityService($http,$log)\n");
@@ -1119,7 +1119,7 @@ if (entity.getEntityGroup()!=null)
 		.append("  'use strict'\n")
 		.append("\n")
 		.append("  angular\n")
-		.append("    .module('"+generator.applicationName+"App')\n")
+		.append("    .module('"+generator.applicationName+"')\n")
 		.append("    .config(config)\n")
 		.append("    .config(setHttpProvider);\n")
 		.append("\n")
@@ -1160,7 +1160,7 @@ if (entity.getEntityGroup()!=null)
 		.append("  'use strict'\n")
 		.append("\n")
 		.append("  angular\n")
-		.append("    .module('"+generator.applicationName+"App');\n")
+		.append("    .module('"+generator.applicationName+"');\n")
 		.append("\n");
 		
 		
@@ -1182,7 +1182,7 @@ if (entity.getEntityGroup()!=null)
 		.append("  'use strict'\n")
 		.append("\n")
 		.append("  angular\n")
-		.append("    .module('"+generator.applicationName+"App',['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize',"
+		.append("    .module('"+generator.applicationName+"',['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize',"
 				+ " 'ngMessages', 'ngAria', 'ngResource',/*'ngRoute',*/ 'ui.router',"
 				+ "'ui.bootstrap', 'toastr','ui.grid', 'ui.grid.pagination','ui.grid.selection',"
 				+ "'ui.date', 'ui.grid.exporter','ngFileUpload']);\n")
@@ -1206,7 +1206,7 @@ if (entity.getEntityGroup()!=null)
 		.append("\n");
 		
 		
-		sb.append("angular\n.module(\""+generator.applicationName+"App\").config(routerConfig);\n");
+		sb.append("angular\n.module(\""+generator.applicationName+"\").config(routerConfig);\n");
 		
 		sb.append("/** @ngInject */\n");
 		sb.append("function routerConfig($stateProvider,$urlRouterProvider)\n");
@@ -1319,7 +1319,7 @@ if (entity.getEntityGroup()!=null)
 		.append("  'use strict'\n")
 		.append("\n")
 		.append("  angular\n")
-		.append("    .module('"+generator.applicationName+"App')\n")
+		.append("    .module('"+generator.applicationName+"')\n")
 		.append("    .run(runBlock);\n")
 		.append("\n")
 		.append("  /** @ngInject */\n")
@@ -1448,7 +1448,7 @@ if (entity.getEntityGroup()!=null)
 		.append("\n")
 		.append("  angular\n")
 
-		.append(" .module('"+generator.applicationName+"App')\n")
+		.append(" .module('"+generator.applicationName+"')\n")
 		.append(" .controller('HomeController', HomeController);\n")
 
 		.append("  /** @ngInject */\n")
@@ -1487,7 +1487,7 @@ if (entity.getEntityGroup()!=null)
 		.append("\n");
 		
 		
-		sb.append("angular.module(\""+generator.applicationName+"App\").service(\"UtilityService\", UtilityService);\n");
+		sb.append("angular.module(\""+generator.applicationName+"\").service(\"UtilityService\", UtilityService);\n");
 		
 		sb.append("/** @ngInject */\n");
 		sb.append("function UtilityService()\n");
@@ -1618,7 +1618,7 @@ if (entity.getEntityGroup()!=null)
 		.append("  'use strict'\n")
 		.append("\n")
 		.append("  angular\n")
-		.append(".module('"+generator.applicationName+"App')\n")
+		.append(".module('"+generator.applicationName+"')\n")
 		.append(".directive('"+generator.applicationName+"Navbar', "+generator.applicationName+"Navbar);\n")
 
 		.append("/** @ngInject */\n")
@@ -1678,7 +1678,7 @@ if (entity.getEntityGroup()!=null)
 		.append("'use strict'; \n")
 		.append("\n");
 
-		sb.append("angular.module(\""+generator.applicationName+"App\").directive(\"login\",login);\n\n");
+		sb.append("angular.module(\""+generator.applicationName+"\").directive(\"login\",login);\n\n");
 
 
 		sb.append("/** @ngInject */\n");
@@ -1755,7 +1755,7 @@ if (entity.getEntityGroup()!=null)
 	private String buildJS()
 	{
 		StringBuilder buildJS= new StringBuilder();
-		buildJS.append("angular.module(\""+entityName+"App\",['ngFileUpload','ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter'])\n");
+		buildJS.append("angular.module(\""+entityName+"\",['ngFileUpload','ngTouch', 'ui.grid', 'ui.grid.pagination','ui.grid.selection','ui.date', 'ui.grid.exporter'])\n");
 		//JsGenerator jsGenerator = new JsGenerator(entity, true,null,null);
 		generateSecurityService();
 		buildJS.append(generateService());
@@ -1948,7 +1948,7 @@ MainService.parentService.childrenList.roleList=response.data;
 	{
 		StringBuilder sb = new StringBuilder();
 		sb.append("{\n");
-		sb.append(" \"name\": \""+generator.applicationName+"App\",\n");
+		sb.append(" \"name\": \""+generator.applicationName+"\",\n");
 		sb.append("\"version\": \"0.0.0\",\n");
 		sb.append("\"dependencies\": {\n");
 		sb.append("\"angular-animate\": \"~1.5.3\",\n");

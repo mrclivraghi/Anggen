@@ -23,6 +23,7 @@ import java.util.Set;
 import org.rendersnake.DocType;
 import org.rendersnake.HtmlAttributes;
 import org.rendersnake.HtmlCanvas;
+import org.rendersnake.tools.PrettyWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -159,7 +160,7 @@ public class HtmlGenerator {
 	 */
 	public void generateSearchView() throws IllegalAccessException
 	{
-		HtmlCanvas html = new HtmlCanvas();
+		HtmlCanvas html = new HtmlCanvas(new PrettyWriter());
 		angularGenerator.init(entity, true,new ArrayList<Entity>(),entityManager.isLastLevel(entity));
 		try {
 			angularGenerator.generateSearchView(html);
@@ -176,9 +177,13 @@ public class HtmlGenerator {
 		try {
 			System.out.println("Written "+myJsp.getAbsolutePath());
 			writer = new PrintWriter(myJsp, "UTF-8");
+			//PrettyWriter w = new PrettyWriter(writer);
 			writer.write(html.toHtml());
 			writer.close();
 		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -188,7 +193,7 @@ public class HtmlGenerator {
 	
 	public void generateDetailView() throws IllegalAccessException
 	{
-		HtmlCanvas html = new HtmlCanvas();
+		HtmlCanvas html = new HtmlCanvas(new PrettyWriter());
 		angularGenerator.init(entity, true,new ArrayList<Entity>(),entityManager.isLastLevel(entity));
 		try {
 			angularGenerator.generateDetailHtml(html);
@@ -216,7 +221,7 @@ public class HtmlGenerator {
 	
 	public void generatePageContent() throws IllegalAccessException
 	{
-		HtmlCanvas html = new HtmlCanvas();
+		HtmlCanvas html = new HtmlCanvas(new PrettyWriter());
 		angularGenerator.init(entity, true,new ArrayList<Entity>(),entityManager.isLastLevel(entity));
 		try {
 			angularGenerator.generateTemplate(html);
@@ -244,7 +249,7 @@ public class HtmlGenerator {
 	
 	public void generateMain()
 	{
-		HtmlCanvas html = new HtmlCanvas();
+		HtmlCanvas html = new HtmlCanvas(new PrettyWriter());
 		try {
 
 			html.div((new HtmlAttributes()).add("id", "canvas"))
@@ -289,7 +294,7 @@ public class HtmlGenerator {
 	
 	public void GenerateEasyTreeMenu(List<EntityGroup> entityGroupList)
 	{
-		HtmlCanvas html= new HtmlCanvas();
+		HtmlCanvas html = new HtmlCanvas(new PrettyWriter());
 		try {
 			html.div((new HtmlAttributes()).add("id", "menu").add("style", "width: 250px;"))
 			.ul();
@@ -297,7 +302,7 @@ public class HtmlGenerator {
 			for (EntityGroup entityGroup: entityGroupList)
 			{
 				html.li((new HtmlAttributes()).add("class", "isFolder"));
-				HtmlCanvas folderHtml = new HtmlCanvas();
+				HtmlCanvas folderHtml = new HtmlCanvas(new PrettyWriter());
 				folderHtml.ul();
 				for (Entity entity: entityGroup.getEntityList())
 				{
@@ -333,7 +338,7 @@ public class HtmlGenerator {
 	 */
 	public void GenerateMenu(List<EntityGroup> entityGroupList)
 	{
-		HtmlCanvas html = new HtmlCanvas();
+		HtmlCanvas html = new HtmlCanvas(new PrettyWriter());
 		try {
 			
 			html.nav(CssGenerator.getNav())
@@ -354,10 +359,10 @@ public class HtmlGenerator {
 			StringBuilder sb = new StringBuilder();
 			for (EntityGroup entityGroup: entityGroupList)
 			{
-				HtmlCanvas ulHtml= new HtmlCanvas();
+				HtmlCanvas ulHtml= new HtmlCanvas(new PrettyWriter());
 				ulHtml.li((new HtmlAttributes()).add("uib-dropdown", "").add("on-toggle", "toggled(\"open\")"))
 				.a((new HtmlAttributes()).add("href", "#").add("class", "dropdown-toggle").add("data-toggle", "dropdown").add("role", "button").add("aria-haspopup", "true").add("aria-expanded", "false").add("uib-dropdown-toggle", ""));
-				HtmlCanvas caretHtml = new HtmlCanvas();
+				HtmlCanvas caretHtml = new HtmlCanvas(new PrettyWriter());
 				
 				caretHtml.span((new HtmlAttributes()).add("class", "caret"))
 				._span();
@@ -378,10 +383,10 @@ public class HtmlGenerator {
 			}
 			
 			//administration menù
-			HtmlCanvas ulHtml= new HtmlCanvas();
+			HtmlCanvas ulHtml= new HtmlCanvas(new PrettyWriter());
 			ulHtml.li((new HtmlAttributes()).add("class", "dropdown"))
 			.a((new HtmlAttributes()).add("href", "#").add("class", "dropdown-toggle").add("data-toggle", "dropdown").add("role", "button").add("aria-haspopup", "true").add("aria-expanded", "false"));
-			HtmlCanvas caretHtml = new HtmlCanvas();
+			HtmlCanvas caretHtml = new HtmlCanvas(new PrettyWriter());
 			
 			caretHtml.span((new HtmlAttributes()).add("class", "caret"))
 			._span();
@@ -422,7 +427,7 @@ public class HtmlGenerator {
 	}
 	
 	public void generateHomePage(){
-		HtmlCanvas html = new HtmlCanvas();
+		HtmlCanvas html = new HtmlCanvas(new PrettyWriter());
 		try {
 			html.h1().center().content("HOME PAGE")._h1();
 		} catch (IOException e1) {

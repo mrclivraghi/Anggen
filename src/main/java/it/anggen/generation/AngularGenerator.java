@@ -31,6 +31,7 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotBlank;
 import org.rendersnake.HtmlAttributes;
 import org.rendersnake.HtmlCanvas;
+import org.rendersnake.tools.PrettyWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -100,7 +101,7 @@ public class AngularGenerator {
 			renderTabForm(html, true);
 			html._form();
 		}
-		HtmlCanvas downloadCanvas= new HtmlCanvas();
+		HtmlCanvas downloadCanvas= new HtmlCanvas(new PrettyWriter());
 		downloadCanvas.button(CssGenerator.getButton("downloadEntityList","pull-right").add("style", "margin-top:-7px"))
 		.span((new HtmlAttributes()).add("class", "glyphicon glyphicon-download-alt").add("aria-hidden", "true"))
 		._span()
@@ -346,7 +347,7 @@ public class AngularGenerator {
 		else
 		{
 			baseEntity="selectedEntity";
-			HtmlCanvas closeCanvas = new HtmlCanvas();
+			HtmlCanvas closeCanvas = new HtmlCanvas(new PrettyWriter());
 			closeCanvas.button((new HtmlAttributes()).add("type", "button").add("class", "close").add("aria-label", "Close").add("ng-click", "closeEntityDetail()"))
 			.span((new HtmlAttributes()).add("aria-hidden", "true")).content("&times;",false)._button();
 			html.content("Detail "+entityName+" {{ selectedEntity."+entityName+"Id }} "+closeCanvas.toHtml(),false);
@@ -536,10 +537,10 @@ public class AngularGenerator {
 						if (inputType.equals("file"))
 						{
 
-							HtmlCanvas fileIcon = new HtmlCanvas();
+							HtmlCanvas fileIcon = new HtmlCanvas(new PrettyWriter());
 							fileIcon.span((new HtmlAttributes()).add("class", "glyphicon glyphicon-file kv-caption-icon"))._span();
 
-							HtmlCanvas folderIcon = new HtmlCanvas();
+							HtmlCanvas folderIcon = new HtmlCanvas(new PrettyWriter());
 							folderIcon.i((new HtmlAttributes()).add("class", "glyphicon glyphicon-folder-open"))._i();
 
 							html.div((new HtmlAttributes()).add("tabindex","500").add("class","form-control file-caption  kv-fileinput-caption"))
@@ -598,7 +599,7 @@ public class AngularGenerator {
 						if (EntityAttributeManager.getInstance(entityAttribute).isList())
 						{ //list
 							
-							HtmlCanvas downloadCanvas= new HtmlCanvas();
+							HtmlCanvas downloadCanvas= new HtmlCanvas(new PrettyWriter());
 							if (!lastLevel)
 							downloadCanvas
 							.button(CssGenerator.getButton("show"+Utility.getFirstUpper(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName())+"Detail"," pull-right").add("style", "margin-top: -7px").add("ng-show",checkSecurity(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget(),"create"),false))

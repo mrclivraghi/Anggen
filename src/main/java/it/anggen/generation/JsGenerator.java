@@ -988,12 +988,13 @@ if (entity.getEntityGroup()!=null)
 		for (Entity descendantEntity : descendantEntityList)
 			if (descendantEntity.getEntityGroup()!=null)
 		{
-			services=services+","+descendantEntity.getName()+"Service";
+			//services=services+","+descendantEntity.getName()+"Service";
 
 		}
+		if (entity.getRelationshipList()!=null)
 		for (Relationship relationship : entity.getRelationshipList())
 		{
-			//services=services+","+relationship.getEntityTarget().getName()+"ChildrenList";
+			services=services+","+relationship.getEntityTarget().getName()+"Service";
 		}
 		return services;
 	}
@@ -1614,7 +1615,7 @@ if (entity.getEntityGroup()!=null)
 		sb.append("     that = {};\n");
 
 		sb.append("  that.init = function(options) {\n");
-		sb.append("      elem = angular.elemnt(options.selector);\n");
+		sb.append("      elem = angular.element(options.selector);\n");
 		sb.append("  };\n");
 
 		sb.append("that.show = function(text) {\n");

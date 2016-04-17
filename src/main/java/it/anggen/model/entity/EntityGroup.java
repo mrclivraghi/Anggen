@@ -17,12 +17,12 @@ import org.hibernate.annotations.Type;
 @MaxDescendantLevel(100)
 public class EntityGroup {
 
-    public final static java.lang.Long staticEntityId = 5L;
+    public final static java.lang.Long staticEntityId = 4L;
     @javax.persistence.Column(name = "entity_group_id")
-    @it.anggen.utils.annotation.Priority(1)
-    @it.anggen.utils.annotation.DescriptionField
     @Id
     @GeneratedValue
+    @it.anggen.utils.annotation.DescriptionField
+    @it.anggen.utils.annotation.Priority(1)
     private java.lang.Long entityGroupId;
     @javax.persistence.Column(name = "name")
     @it.anggen.utils.annotation.DescriptionField

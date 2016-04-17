@@ -17,44 +17,28 @@ import it.anggen.utils.annotation.MaxDescendantLevel;
 @MaxDescendantLevel(1)
 public class LogEntry {
 
-    public final static java.lang.Long staticEntityId = 3L;
-    @javax.persistence.Column(name = "log_entry_id")
-    @DescriptionField
-    @Id
-    @GeneratedValue
-    private java.lang.Long logEntryId;
-    @javax.persistence.Column(name = "log_date")
-    private Date logDate;
+    public final static java.lang.Long staticEntityId = 18L;
     @javax.persistence.Column(name = "info")
     private java.lang.String info;
     @javax.persistence.Column(name = "host_name")
     private java.lang.String hostName;
     @javax.persistence.Column(name = "user_id")
     private java.lang.Long userId;
-    @javax.persistence.Column(name = "ip_address")
-    private java.lang.String ipAddress;
+    @javax.persistence.Column(name = "log_date")
+    private Date logDate;
+    @javax.persistence.Column(name = "log_entry_id")
+    @Id
+    @GeneratedValue
+    @DescriptionField
+    private java.lang.Long logEntryId;
     @javax.persistence.Column(name = "entity_id")
     private java.lang.Long entityId;
+    @javax.persistence.Column(name = "ip_address")
+    private java.lang.String ipAddress;
     @javax.persistence.Column(name = "log_type")
     private LogType logType;
     @javax.persistence.Column(name = "operation_type")
     private OperationType operationType;
-
-    public java.lang.Long getLogEntryId() {
-        return this.logEntryId;
-    }
-
-    public void setLogEntryId(java.lang.Long logEntryId) {
-        this.logEntryId=logEntryId;
-    }
-
-    public Date getLogDate() {
-        return this.logDate;
-    }
-
-    public void setLogDate(Date logDate) {
-        this.logDate=logDate;
-    }
 
     public java.lang.String getInfo() {
         return this.info;
@@ -80,12 +64,20 @@ public class LogEntry {
         this.userId=userId;
     }
 
-    public java.lang.String getIpAddress() {
-        return this.ipAddress;
+    public Date getLogDate() {
+        return this.logDate;
     }
 
-    public void setIpAddress(java.lang.String ipAddress) {
-        this.ipAddress=ipAddress;
+    public void setLogDate(Date logDate) {
+        this.logDate=logDate;
+    }
+
+    public java.lang.Long getLogEntryId() {
+        return this.logEntryId;
+    }
+
+    public void setLogEntryId(java.lang.Long logEntryId) {
+        this.logEntryId=logEntryId;
     }
 
     public java.lang.Long getEntityId() {
@@ -94,6 +86,14 @@ public class LogEntry {
 
     public void setEntityId(java.lang.Long entityId) {
         this.entityId=entityId;
+    }
+
+    public java.lang.String getIpAddress() {
+        return this.ipAddress;
+    }
+
+    public void setIpAddress(java.lang.String ipAddress) {
+        this.ipAddress=ipAddress;
     }
 
     public LogType getLogType() {

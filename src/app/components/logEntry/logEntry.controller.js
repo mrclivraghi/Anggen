@@ -6,23 +6,26 @@ angular
 /** @ngInject */
 function LogEntryController($scope,$http,$rootScope,$log,UtilityService ,logEntryService, SecurityService, MainService )
 {
-$scope.searchBean=logEntryService.searchBean;
-$scope.entityList=logEntryService.entityList;
-$scope.selectedEntity=logEntryService.selectedEntity;
-$scope.hidden=logEntryService.hidden;
-$scope.logTypePreparedData={};$scope.logTypePreparedData.entityList=["INFO","DEBUG","WARNING","ERROR",];
-$scope.operationTypePreparedData={};$scope.operationTypePreparedData.entityList=["CREATE_ENTITY","UPDATE_ENTITY","DELETE_ENTITY","SEARCH_ENTITY","LOGIN_SUCCESS","LOGIN_FAILED","VIEW_METRICS","SECURITY_VIOLATION_ATTEMPT",];
-$scope.reset = function()
+var vm=this;
+vm.searchBean=logEntryService.searchBean;
+vm.entityList=logEntryService.entityList;
+vm.selectedEntity=logEntryService.selectedEntity;
+vm.logTypePreparedData={};
+vm.logTypePreparedData.entityList=["INFO","DEBUG","WARNING","ERROR" ];
+vm.operationTypePreparedData={};
+vm.operationTypePreparedData.entityList=["CREATE_ENTITY","UPDATE_ENTITY","DELETE_ENTITY","SEARCH_ENTITY","LOGIN_SUCCESS","LOGIN_FAILED","VIEW_METRICS","SECURITY_VIOLATION_ATTEMPT" ];
+function reset()
 {
 logEntryService.resetSearchBean();
-$scope.searchBean=logEntryService.searchBean;logEntryService.setSelectedEntity(null);
+vm.searchBean=logEntryService.searchBean;
+logEntryService.setSelectedEntity(null);
 logEntryService.selectedEntity.show=false;
 logEntryService.setEntityList(null); 
 if (logEntryService.isParent()) 
 {
 }
 }
-$scope.addNew= function()
+function addNew()
 {
 $rootScope.openNode.logEntry=true;
 logEntryService.setSelectedEntity(null);
@@ -32,9 +35,9 @@ if (logEntryService.isParent())
 {
 }
 angular.element('#logEntryTabs li:eq(0) a').tab('show');
-};
+}
 		
-$scope.search=function()
+function search()
 {
 logEntryService.selectedEntity.show=false;
 delete $rootScope.openNode.logEntry;
@@ -46,15 +49,15 @@ UtilityService.AlertError.show("Si è verificato un errore");
 $log.debug(response);
 return; 
 });
-};
-$scope.insert=function()
+}
+function insert()
 {
 if (!$scope.logEntryDetailForm.$valid) return; 
 if (logEntryService.isParent()) 
 {
 logEntryService.insert().then(function successCallback(response) { 
 $log.debug(response);
-$scope.search();
+vm.search();
 },function errorCallback(response) { 
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
@@ -74,15 +77,15 @@ $log.debug(response);
 return; 
 });
 }
-};
-$scope.update=function()
+}
+function update()
 {
 if (!$scope.logEntryDetailForm.$valid) return; 
 if (logEntryService.isParent()) 
 {
 logEntryService.update().then(function successCallback(response) { 
 $log.debug(response);
-$scope.search();
+vm.search();
 },function errorCallback(response) { 
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
@@ -104,23 +107,20 @@ $log.debug(response);
 return; 
 });
 }
-};
-$scope.remove= function()
+}
+function remove()
 {
 logEntryService.selectedEntity.show=false;
 delete $rootScope.openNode.logEntry;
 logEntryService.setSelectedEntity(null);
-$scope.updateParent();
-};
-$scope.del=function()
+}
+function del()
 {
-if (!logEntryService.isParent()) 
-$scope.updateParent();
 logEntryService.del().then(function successCallback(response) { 
 $log.debug(response);
 if (logEntryService.isParent()) 
 {
-$scope.search();
+vm.search();
 } else { 
 logEntryService.setSelectedEntity(null);
 }
@@ -130,11 +130,12 @@ UtilityService.AlertError.show("Si è verificato un errore");
 $log.debug(response);
 return; 
 });
-};
-$scope.refreshTableDetail= function() 
+}
+function refreshTableDetail() 
 {
-};
-$scope.loadFile = function(file,field)
+}
+vm.refreshTableDetail=refreshTableDetail;
+function loadFile(file,field)
 {
 logEntryService.loadFile(file,field).then(function successCallback(response) {
 logEntryService.setSelectedEntity(response.data);
@@ -145,22 +146,22 @@ $log.debug(response);
 return; 
 });
 }
-$scope.trueFalseValues=['',true,false];
-$scope.downloadEntityList=function()
+vm.trueFalseValues=['',true,false];
+function downloadList()
 {
 var mystyle = {
  headers:true, 
 column: {style:{Font:{Bold:"1"}}}
 };
-UtilityService.alasql('SELECT * INTO XLSXML("logEntry.xls",?) FROM ?',[mystyle,$scope.entityList]);
-};
-$scope.logEntryGridOptions={};
-UtilityService.cloneObject(logEntryService.gridOptions,$scope.logEntryGridOptions);
-$scope.logEntryGridOptions.data=logEntryService.entityList;
-$scope.initChildrenList = function () { 
+UtilityService.alasql('SELECT * INTO XLSXML("logEntry.xls",?) FROM ?',[mystyle,vm.entityList]);
 }
-$scope.logEntryGridOptions.onRegisterApi = function(gridApi){
-$scope.logEntryGridApi = gridApi;
+vm.logEntryGridOptions={};
+UtilityService.cloneObject(logEntryService.gridOptions,vm.logEntryGridOptions);
+vm.logEntryGridOptions.data=logEntryService.entityList;
+vm.initChildrenList = function () { 
+}
+vm.logEntryGridOptions.onRegisterApi = function(gridApi){
+vm.logEntryGridApi = gridApi;
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
@@ -179,10 +180,20 @@ logEntryService.selectedEntity.show = row.isSelected;
   };
 function updateParentEntities() { 
 }
-$scope.closeEntityDetail = function(){ 
+function closeEntityDetail(){ 
 logEntryService.setSelectedEntity(null);
 logEntryService.selectedEntity.show=false;
 delete $rootScope.openNode.logEntry;
 }
+vm.reset=reset;
+vm.addNew=addNew;
+vm.insert=insert;
+vm.update=update;
+vm.search=search;
+vm.remove=remove;
+vm.del=del;
+vm.loadFile=loadFile;
+vm.downloadList=downloadList;
+vm.closeEntityDetail=closeEntityDetail;
 }
 })();

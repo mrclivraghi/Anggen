@@ -174,10 +174,10 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         }
         if (annotation.getRelationship()!=null)
         {
-        annotation.getRelationship().setEntity(null);
-        annotation.getRelationship().setEntityTarget(null);
-        annotation.getRelationship().setTab(null);
         annotation.getRelationship().setAnnotationList(null);
+        annotation.getRelationship().setEntityTarget(null);
+        annotation.getRelationship().setEntity(null);
+        annotation.getRelationship().setTab(null);
         }
     }
 

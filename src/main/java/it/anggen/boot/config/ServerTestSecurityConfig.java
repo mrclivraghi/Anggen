@@ -31,7 +31,7 @@ public class ServerTestSecurityConfig
     {
         http
         .authorizeRequests()
-        .antMatchers("/css/**","/img/**","/js/**","/auth/**","/login/**","/authentication/**","/**").permitAll()
+        .antMatchers("/css/**","/img/**","/js/**","/auth/**","/login/**","/authentication/**").permitAll()
         .and()
         .authorizeRequests().anyRequest().fullyAuthenticated().and()
         .formLogin().and().csrf().disable();

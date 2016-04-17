@@ -20,35 +20,27 @@ import org.hibernate.annotations.Type;
 @MaxDescendantLevel(100)
 public class Project {
 
-    public final static Long staticEntityId = 19L;
-    @javax.persistence.Column(name = "name")
-    @it.anggen.utils.annotation.DescriptionField
-    @it.anggen.utils.annotation.Priority(2)
-    private String name;
+    public final static Long staticEntityId = 17L;
     @javax.persistence.Column(name = "project_id")
-    @it.anggen.utils.annotation.Priority(1)
+    @it.anggen.utils.annotation.DescriptionField
     @Id
     @GeneratedValue
-    @it.anggen.utils.annotation.DescriptionField
+    @it.anggen.utils.annotation.Priority(1)
     private Integer projectId;
-    @OneToMany(fetch = FetchType.EAGER)
-    @Type(type = "it.anggen.model.entity.EnumEntity")
-    @JoinColumn(name = "project_id_project")
-    @it.anggen.utils.annotation.Priority(4)
-    private List<EnumEntity> enumEntityList;
+    @javax.persistence.Column(name = "name")
+    @it.anggen.utils.annotation.Priority(2)
+    @it.anggen.utils.annotation.DescriptionField
+    private String name;
     @OneToMany(fetch = FetchType.EAGER)
     @Type(type = "it.anggen.model.entity.EntityGroup")
     @JoinColumn(name = "project_id_project")
     @it.anggen.utils.annotation.Priority(4)
     private List<EntityGroup> entityGroupList;
-
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(String name) {
-        this.name=name;
-    }
+    @OneToMany(fetch = FetchType.EAGER)
+    @Type(type = "it.anggen.model.entity.EnumEntity")
+    @JoinColumn(name = "project_id_project")
+    @it.anggen.utils.annotation.Priority(4)
+    private List<EnumEntity> enumEntityList;
 
     public Integer getProjectId() {
         return this.projectId;
@@ -58,12 +50,12 @@ public class Project {
         this.projectId=projectId;
     }
 
-    public List<EnumEntity> getEnumEntityList() {
-        return this.enumEntityList;
+    public String getName() {
+        return this.name;
     }
 
-    public void setEnumEntityList(List<EnumEntity> enumEntityList) {
-        this.enumEntityList=enumEntityList;
+    public void setName(String name) {
+        this.name=name;
     }
 
     public List<EntityGroup> getEntityGroupList() {
@@ -72,6 +64,14 @@ public class Project {
 
     public void setEntityGroupList(List<EntityGroup> entityGroupList) {
         this.entityGroupList=entityGroupList;
+    }
+
+    public List<EnumEntity> getEnumEntityList() {
+        return this.enumEntityList;
+    }
+
+    public void setEnumEntityList(List<EnumEntity> enumEntityList) {
+        this.enumEntityList=enumEntityList;
     }
 
 }

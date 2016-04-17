@@ -23,17 +23,17 @@ import org.hibernate.annotations.Type;
 @MaxDescendantLevel(100)
 public class Role {
 
-    public final static Long staticEntityId = 2L;
+    public final static Long staticEntityId = 6L;
+    @javax.persistence.Column(name = "role_id")
+    @it.anggen.utils.annotation.Priority(1)
+    @it.anggen.utils.annotation.DescriptionField
+    @Id
+    @GeneratedValue
+    private Integer roleId;
     @javax.persistence.Column(name = "role")
     @it.anggen.utils.annotation.DescriptionField
     @it.anggen.utils.annotation.Priority(2)
     private String role;
-    @javax.persistence.Column(name = "role_id")
-    @Id
-    @GeneratedValue
-    @it.anggen.utils.annotation.DescriptionField
-    @it.anggen.utils.annotation.Priority(1)
-    private Integer roleId;
     @OneToMany(fetch = FetchType.EAGER)
     @Type(type = "it.anggen.model.security.RestrictionEntity")
     @JoinColumn(name = "role_id_role")
@@ -53,20 +53,20 @@ public class Role {
     @it.anggen.utils.annotation.Priority(4)
     private List<RestrictionEntityGroup> restrictionEntityGroupList;
 
-    public String getRole() {
-        return this.role;
-    }
-
-    public void setRole(String role) {
-        this.role=role;
-    }
-
     public Integer getRoleId() {
         return this.roleId;
     }
 
     public void setRoleId(Integer roleId) {
         this.roleId=roleId;
+    }
+
+    public String getRole() {
+        return this.role;
+    }
+
+    public void setRole(String role) {
+        this.role=role;
     }
 
     public List<RestrictionEntity> getRestrictionEntityList() {

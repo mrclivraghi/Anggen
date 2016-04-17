@@ -13,7 +13,7 @@ function login(){
 };
  return directive;
   /** @ngInject */
-  function LoginController($scope,SecurityService,$rootScope,$log) {
+  function LoginController($scope,SecurityService,UtilityService,$rootScope,$log) {
    var vm = this;
    function doLogin(username,password){
      SecurityService.login(username,password).then(function successCallback(response) {
@@ -26,9 +26,9 @@ function login(){
 				$log.debug("errore callback");
 				$log.debug(response);
 			});
-    }
-	  function checkUsername()
-	  {
+}
+function checkUsername()
+{
 	SecurityService.isLoggedIn(vm).then(function successCallback(response) {
 	if (!response.data.authenticated)
 	{
@@ -48,5 +48,5 @@ return;
  vm.onSubmit = doLogin;
 vm.checkUsername=checkUsername;
  }
-};
+}
 })();

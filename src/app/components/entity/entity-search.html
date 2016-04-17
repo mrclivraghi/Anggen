@@ -10,7 +10,7 @@
 						<span class="input-group-addon">entityId
 						</span>
 
-						<input class="form-control " aria-describedby="sizing-addon3" type="text" id="entity-entityId" ng-model="searchBean.entityId" ng-readonly="false" name="entityId" placeholder="entityId"/>
+						<input class="form-control " aria-describedby="sizing-addon3" type="text" id="entity-entityId" ng-model="vm.searchBean.entityId" ng-readonly="false" name="entityId" placeholder="entityId"/>
 						
 					</div>
 
@@ -18,10 +18,44 @@
 
 				<div class="pull-left right-input" ng-show="true ">
 					<div class="input-group">
-						<span class="input-group-addon">enableRestrictionData
+						<span class="input-group-addon">generateFrontEnd
 						</span>
 
-						<select class="form-control " aria-describedby="sizing-addon3" type="checkbox" id="entity-enableRestrictionData" ng-model="searchBean.enableRestrictionData" ng-readonly="false" name="enableRestrictionData" placeholder="enableRestrictionData" ng-options="value for value in trueFalseValues">
+						<select class="form-control " aria-describedby="sizing-addon3" type="checkbox" id="entity-generateFrontEnd" ng-model="vm.searchBean.generateFrontEnd" ng-readonly="false" name="generateFrontEnd" placeholder="generateFrontEnd" ng-options="value for value in vm.trueFalseValues">
+						</select>
+
+					</div>
+
+				</div>
+
+				<div class="pull-left right-input" ng-show="true ">
+					<div class="input-group">
+						<span class="input-group-addon">name
+						</span>
+
+						<input class="form-control " aria-describedby="sizing-addon3" type="text" id="entity-name" ng-model="vm.searchBean.name" ng-readonly="false" name="name" placeholder="name"/>
+						
+					</div>
+
+				</div>
+
+				<div class="pull-left right-input" ng-show="true ">
+					<div class="input-group">
+						<span class="input-group-addon">descendantMaxLevel
+						</span>
+
+						<input class="form-control " aria-describedby="sizing-addon3" type="text" id="entity-descendantMaxLevel" ng-model="vm.searchBean.descendantMaxLevel" ng-readonly="false" name="descendantMaxLevel" placeholder="descendantMaxLevel"/>
+						
+					</div>
+
+				</div>
+
+				<div class="pull-left right-input" ng-show="true ">
+					<div class="input-group">
+						<span class="input-group-addon">cache
+						</span>
+
+						<select class="form-control " aria-describedby="sizing-addon3" type="checkbox" id="entity-cache" ng-model="vm.searchBean.cache" ng-readonly="false" name="cache" placeholder="cache" ng-options="value for value in vm.trueFalseValues">
 						</select>
 
 					</div>
@@ -33,7 +67,7 @@
 						<span class="input-group-addon">disableViewGeneration
 						</span>
 
-						<select class="form-control " aria-describedby="sizing-addon3" type="checkbox" id="entity-disableViewGeneration" ng-model="searchBean.disableViewGeneration" ng-readonly="false" name="disableViewGeneration" placeholder="disableViewGeneration" ng-options="value for value in trueFalseValues">
+						<select class="form-control " aria-describedby="sizing-addon3" type="checkbox" id="entity-disableViewGeneration" ng-model="vm.searchBean.disableViewGeneration" ng-readonly="false" name="disableViewGeneration" placeholder="disableViewGeneration" ng-options="value for value in vm.trueFalseValues">
 						</select>
 
 					</div>
@@ -42,44 +76,10 @@
 
 				<div class="pull-left right-input" ng-show="true ">
 					<div class="input-group">
-						<span class="input-group-addon">cache
+						<span class="input-group-addon">enableRestrictionData
 						</span>
 
-						<select class="form-control " aria-describedby="sizing-addon3" type="checkbox" id="entity-cache" ng-model="searchBean.cache" ng-readonly="false" name="cache" placeholder="cache" ng-options="value for value in trueFalseValues">
-						</select>
-
-					</div>
-
-				</div>
-
-				<div class="pull-left right-input" ng-show="true ">
-					<div class="input-group">
-						<span class="input-group-addon">descendantMaxLevel
-						</span>
-
-						<input class="form-control " aria-describedby="sizing-addon3" type="text" id="entity-descendantMaxLevel" ng-model="searchBean.descendantMaxLevel" ng-readonly="false" name="descendantMaxLevel" placeholder="descendantMaxLevel"/>
-						
-					</div>
-
-				</div>
-
-				<div class="pull-left right-input" ng-show="true ">
-					<div class="input-group">
-						<span class="input-group-addon">name
-						</span>
-
-						<input class="form-control " aria-describedby="sizing-addon3" type="text" id="entity-name" ng-model="searchBean.name" ng-readonly="false" name="name" placeholder="name"/>
-						
-					</div>
-
-				</div>
-
-				<div class="pull-left right-input" ng-show="true ">
-					<div class="input-group">
-						<span class="input-group-addon">generateFrontEnd
-						</span>
-
-						<select class="form-control " aria-describedby="sizing-addon3" type="checkbox" id="entity-generateFrontEnd" ng-model="searchBean.generateFrontEnd" ng-readonly="false" name="generateFrontEnd" placeholder="generateFrontEnd" ng-options="value for value in trueFalseValues">
+						<select class="form-control " aria-describedby="sizing-addon3" type="checkbox" id="entity-enableRestrictionData" ng-model="vm.searchBean.enableRestrictionData" ng-readonly="false" name="enableRestrictionData" placeholder="enableRestrictionData" ng-options="value for value in vm.trueFalseValues">
 						</select>
 
 					</div>
@@ -91,7 +91,7 @@
 						<span class="input-group-addon">securityType
 						</span>
 
-						<select class="form-control pull-left" aria-describedby="sizing-addon3" type="text" id="entity-securityType" ng-model="searchBean.securityType" ng-readonly="false" name="securityType" placeholder="securityType" ng-options="securityType as securityType for securityType in securityTypePreparedData.entityList" enctype="UTF-8">
+						<select class="form-control pull-left" aria-describedby="sizing-addon3" type="text" id="entity-securityType" ng-model="vm.searchBean.securityType" ng-readonly="false" name="securityType" placeholder="securityType" ng-options="securityType as securityType for securityType in vm.securityTypePreparedData.entityList" enctype="UTF-8">
 						</select>
 
 					</div>
@@ -103,43 +103,7 @@
 						<span class="input-group-addon">restrictionEntity
 						</span>
 
-						<select class="form-control " aria-describedby="sizing-addon3" ng-model="searchBean.restrictionEntity.restrictionEntityId" id="restrictionEntity" ng-options="restrictionEntity.restrictionEntityId as  restrictionEntity.restrictionEntityId+&#39; &#39;+ restrictionEntity.entity.EntityId for restrictionEntity in restrictionEntityPreparedData.entityList" enctype="UTF-8">
-						</select>
-
-					</div>
-
-				</div>
-
-				<div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.entity.restrictionItemMap.tab.canSearch==true)">
-					<div class="input-group">
-						<span class="input-group-addon">tab
-						</span>
-
-						<select class="form-control " aria-describedby="sizing-addon3" ng-model="searchBean.tab.tabId" id="tab" ng-options="tab.tabId as  tab.name+&#39; &#39;+ tab.tabId for tab in tabPreparedData.entityList" enctype="UTF-8">
-						</select>
-
-					</div>
-
-				</div>
-
-				<div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.entity.restrictionItemMap.entityGroup.canSearch==true)">
-					<div class="input-group">
-						<span class="input-group-addon">entityGroup
-						</span>
-
-						<select class="form-control " aria-describedby="sizing-addon3" ng-model="searchBean.entityGroup.entityGroupId" id="entityGroup" ng-options="entityGroup.entityGroupId as  entityGroup.entityGroupId+&#39; &#39;+ entityGroup.name for entityGroup in entityGroupPreparedData.entityList" enctype="UTF-8">
-						</select>
-
-					</div>
-
-				</div>
-
-				<div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.field.restrictionItemMap.enumField.canSearch==true)">
-					<div class="input-group">
-						<span class="input-group-addon">enumField
-						</span>
-
-						<select class="form-control " aria-describedby="sizing-addon3" ng-model="searchBean.enumField.enumFieldId" id="enumField" ng-options="enumField.enumFieldId as  enumField.enumFieldId+&#39; &#39;+ enumField.name for enumField in enumFieldPreparedData.entityList" enctype="UTF-8">
+						<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.restrictionEntity.restrictionEntityId" id="restrictionEntity" ng-options="restrictionEntity.restrictionEntityId as  restrictionEntity.restrictionEntityId+&#39; &#39;+ restrictionEntity.entity.EntityId for restrictionEntity in vm.restrictionEntityPreparedData.entityList" enctype="UTF-8">
 						</select>
 
 					</div>
@@ -151,7 +115,43 @@
 						<span class="input-group-addon">field
 						</span>
 
-						<select class="form-control " aria-describedby="sizing-addon3" ng-model="searchBean.field.fieldId" id="field" ng-options="field.fieldId as  field.fieldId+&#39; &#39;+ field.name for field in fieldPreparedData.entityList" enctype="UTF-8">
+						<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.field.fieldId" id="field" ng-options="field.fieldId as  field.name+&#39; &#39;+ field.fieldId for field in vm.fieldPreparedData.entityList" enctype="UTF-8">
+						</select>
+
+					</div>
+
+				</div>
+
+				<div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.field.restrictionItemMap.enumField.canSearch==true)">
+					<div class="input-group">
+						<span class="input-group-addon">enumField
+						</span>
+
+						<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.enumField.enumFieldId" id="enumField" ng-options="enumField.enumFieldId as  enumField.enumFieldId+&#39; &#39;+ enumField.name for enumField in vm.enumFieldPreparedData.entityList" enctype="UTF-8">
+						</select>
+
+					</div>
+
+				</div>
+
+				<div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.entity.restrictionItemMap.entityGroup.canSearch==true)">
+					<div class="input-group">
+						<span class="input-group-addon">entityGroup
+						</span>
+
+						<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.entityGroup.entityGroupId" id="entityGroup" ng-options="entityGroup.entityGroupId as  entityGroup.entityGroupId+&#39; &#39;+ entityGroup.name for entityGroup in vm.entityGroupPreparedData.entityList" enctype="UTF-8">
+						</select>
+
+					</div>
+
+				</div>
+
+				<div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.entity.restrictionItemMap.tab.canSearch==true)">
+					<div class="input-group">
+						<span class="input-group-addon">tab
+						</span>
+
+						<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.tab.tabId" id="tab" ng-options="tab.tabId as  tab.name+&#39; &#39;+ tab.tabId for tab in vm.tabPreparedData.entityList" enctype="UTF-8">
 						</select>
 
 					</div>
@@ -163,7 +163,7 @@
 						<span class="input-group-addon">relationship
 						</span>
 
-						<select class="form-control " aria-describedby="sizing-addon3" ng-model="searchBean.relationship.relationshipId" id="relationship" ng-options="relationship.relationshipId as  relationship.name+&#39; &#39;+ relationship.relationshipId for relationship in relationshipPreparedData.entityList" enctype="UTF-8">
+						<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.relationship.relationshipId" id="relationship" ng-options="relationship.relationshipId as  relationship.name+&#39; &#39;+ relationship.relationshipId for relationship in vm.relationshipPreparedData.entityList" enctype="UTF-8">
 						</select>
 
 					</div>
@@ -175,13 +175,13 @@
 			<div class="panel-body">
 				<div class="panel-body">
 					<div class="pull-left right-input">
-						<button ng-click="addNew()" class="btn btn-default " ng-show="($root.restrictionList.entity.restrictionItemMap.entity.canCreate==true)">Add new
+						<button ng-click="vm.addNew()" class="btn btn-default " ng-show="($root.restrictionList.entity.restrictionItemMap.entity.canCreate==true)">Add new
 						</button>
 
-						<button ng-click="search()" class="btn btn-default ">Find
+						<button ng-click="vm.search()" class="btn btn-default ">Find
 						</button>
 
-						<button ng-click="reset()" class="btn btn-default ">Reset
+						<button ng-click="vm.reset()" class="btn btn-default ">Reset
 						</button>
 
 					</div>
@@ -194,9 +194,9 @@
 
 	</form>
 
-	<form id="entityList" ng-if="entityList.length&gt;0" enctype="UTF-8">
+	<form id="entityList" ng-if="vm.entityList.length&gt;0" enctype="UTF-8">
 		<div class="panel panel-default default-panel">
-			<div class="panel-heading">List entity<button ng-click="downloadEntityList()" class="btn btn-default pull-right" style="margin-top:-7px">
+			<div class="panel-heading">List entity<button ng-click="vm.downloadList()" class="btn btn-default pull-right" style="margin-top:-7px">
 	<span class="glyphicon glyphicon-download-alt" aria-hidden="true">
 	</span>
 </button>
@@ -204,7 +204,7 @@
 			</div>
 
 			<div class="panel-body">
-				<div ui-grid="entityGridOptions" ui-grid-pagination="" ui-grid-selection="" ui-grid-exporter="">
+				<div ui-grid="vm.entityGridOptions" ui-grid-pagination="" ui-grid-selection="" ui-grid-exporter="">
 				</div>
 
 			</div>

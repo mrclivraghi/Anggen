@@ -21,24 +21,24 @@ import org.hibernate.annotations.Type;
 @MaxDescendantLevel(100)
 public class User {
 
-    public final static java.lang.Long staticEntityId = 16L;
-    @javax.persistence.Column(name = "enabled")
-    @it.anggen.utils.annotation.Priority(2)
-    private Boolean enabled;
+    public final static java.lang.Long staticEntityId = 12L;
     @javax.persistence.Column(name = "user_id")
+    @it.anggen.utils.annotation.Priority(1)
+    @it.anggen.utils.annotation.DescriptionField
     @Id
     @GeneratedValue
-    @it.anggen.utils.annotation.DescriptionField
-    @it.anggen.utils.annotation.Priority(1)
     private java.lang.Long userId;
-    @javax.persistence.Column(name = "username")
-    @it.anggen.utils.annotation.DescriptionField
-    @it.anggen.utils.annotation.Priority(2)
-    private java.lang.String username;
     @javax.persistence.Column(name = "password")
     @it.anggen.utils.annotation.Priority(2)
     @Password
     private java.lang.String password;
+    @javax.persistence.Column(name = "username")
+    @it.anggen.utils.annotation.DescriptionField
+    @it.anggen.utils.annotation.Priority(2)
+    private java.lang.String username;
+    @javax.persistence.Column(name = "enabled")
+    @it.anggen.utils.annotation.Priority(2)
+    private Boolean enabled;
     @ManyToMany(fetch = FetchType.EAGER)
     @Type(type = "it.anggen.model.security.Role")
     @JoinTable(name = "user_role", schema = "sso", joinColumns = {
@@ -49,20 +49,20 @@ public class User {
     @it.anggen.utils.annotation.Priority(4)
     private List<Role> roleList;
 
-    public Boolean getEnabled() {
-        return this.enabled;
-    }
-
-    public void setEnabled(Boolean enabled) {
-        this.enabled=enabled;
-    }
-
     public java.lang.Long getUserId() {
         return this.userId;
     }
 
     public void setUserId(java.lang.Long userId) {
         this.userId=userId;
+    }
+
+    public java.lang.String getPassword() {
+        return this.password;
+    }
+
+    public void setPassword(java.lang.String password) {
+        this.password=password;
     }
 
     public java.lang.String getUsername() {
@@ -73,12 +73,12 @@ public class User {
         this.username=username;
     }
 
-    public java.lang.String getPassword() {
-        return this.password;
+    public Boolean getEnabled() {
+        return this.enabled;
     }
 
-    public void setPassword(java.lang.String password) {
-        this.password=password;
+    public void setEnabled(Boolean enabled) {
+        this.enabled=enabled;
     }
 
     public List<Role> getRoleList() {

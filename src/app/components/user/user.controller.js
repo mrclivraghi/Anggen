@@ -6,15 +6,16 @@ angular
 /** @ngInject */
 function UserController($scope,$http,$rootScope,$log,UtilityService ,userService, SecurityService, MainService ,roleService)
 {
-$scope.searchBean=userService.searchBean;
-$scope.entityList=userService.entityList;
-$scope.selectedEntity=userService.selectedEntity;
-$scope.hidden=userService.hidden;
-$scope.rolePreparedData=roleService.preparedData;
-$scope.reset = function()
+var vm=this;
+vm.searchBean=userService.searchBean;
+vm.entityList=userService.entityList;
+vm.selectedEntity=userService.selectedEntity;
+vm.rolePreparedData=roleService.preparedData;
+function reset()
 {
 userService.resetSearchBean();
-$scope.searchBean=userService.searchBean;userService.setSelectedEntity(null);
+vm.searchBean=userService.searchBean;
+userService.setSelectedEntity(null);
 userService.selectedEntity.show=false;
 userService.setEntityList(null); 
 if (userService.isParent()) 
@@ -23,7 +24,7 @@ roleService.selectedEntity.show=false;
 delete $rootScope.openNode.role;
 }
 }
-$scope.addNew= function()
+function addNew()
 {
 $rootScope.openNode.user=true;
 userService.setSelectedEntity(null);
@@ -35,9 +36,9 @@ roleService.selectedEntity.show=false;
 delete $rootScope.openNode.role;
 }
 angular.element('#userTabs li:eq(0) a').tab('show');
-};
+}
 		
-$scope.search=function()
+function search()
 {
 userService.selectedEntity.show=false;
 delete $rootScope.openNode.user;
@@ -52,15 +53,15 @@ UtilityService.AlertError.show("Si è verificato un errore");
 $log.debug(response);
 return; 
 });
-};
-$scope.insert=function()
+}
+function insert()
 {
 if (!$scope.userDetailForm.$valid) return; 
 if (userService.isParent()) 
 {
 userService.insert().then(function successCallback(response) { 
 $log.debug(response);
-$scope.search();
+vm.search();
 },function errorCallback(response) { 
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
@@ -80,8 +81,8 @@ $log.debug(response);
 return; 
 });
 }
-};
-$scope.update=function()
+}
+function update()
 {
 if (!$scope.userDetailForm.$valid) return; 
 if (userService.isParent()) 
@@ -90,7 +91,7 @@ roleService.selectedEntity.show=false;
 delete $rootScope.openNode.role;
 userService.update().then(function successCallback(response) { 
 $log.debug(response);
-$scope.search();
+vm.search();
 },function errorCallback(response) { 
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
@@ -112,23 +113,20 @@ $log.debug(response);
 return; 
 });
 }
-};
-$scope.remove= function()
+}
+function remove()
 {
 userService.selectedEntity.show=false;
 delete $rootScope.openNode.user;
 userService.setSelectedEntity(null);
-$scope.updateParent();
-};
-$scope.del=function()
+}
+function del()
 {
-if (!userService.isParent()) 
-$scope.updateParent();
 userService.del().then(function successCallback(response) { 
 $log.debug(response);
 if (userService.isParent()) 
 {
-$scope.search();
+vm.search();
 } else { 
 userService.setSelectedEntity(null);
 }
@@ -138,13 +136,14 @@ UtilityService.AlertError.show("Si è verificato un errore");
 $log.debug(response);
 return; 
 });
-};
-$scope.refreshTableDetail= function() 
+}
+function refreshTableDetail() 
 {
 if ($scope.roleGridApi!=undefined && $scope.roleGridApi!=null)
  $scope.roleGridApi.core.handleWindowResize(); 
-};
-$scope.loadFile = function(file,field)
+}
+vm.refreshTableDetail=refreshTableDetail;
+function loadFile(file,field)
 {
 userService.loadFile(file,field).then(function successCallback(response) {
 userService.setSelectedEntity(response.data);
@@ -155,8 +154,8 @@ $log.debug(response);
 return; 
 });
 }
-$scope.trueFalseValues=['',true,false];
-$scope.showRoleDetail= function(index)
+vm.trueFalseValues=['',true,false];
+ function showRoleDetail(index)
 {
 if (index!=null)
 {
@@ -197,33 +196,36 @@ return;
 );
 }
 angular.element('#roleTabs li:eq(0) a').tab('show');
-};
-$scope.downloadEntityList=function()
+}
+vm.showRoleDetail=showRoleDetail;
+function downloadList()
 {
 var mystyle = {
  headers:true, 
 column: {style:{Font:{Bold:"1"}}}
 };
-UtilityService.alasql('SELECT * INTO XLSXML("user.xls",?) FROM ?',[mystyle,$scope.entityList]);
-};
-$scope.saveLinkedRole= function() {
+UtilityService.alasql('SELECT * INTO XLSXML("user.xls",?) FROM ?',[mystyle,vm.entityList]);
+}
+function saveLinkedRole() {
 userService.selectedEntity.roleList.push(userService.selectedEntity.role);
 }
-$scope.downloadRoleList=function()
+vm.saveLinkedRole=saveLinkedRole;
+function downloadRoleList()
 {
 var mystyle = {
  headers:true, 
 column: {style:{Font:{Bold:"1"}}}
-};
-UtilityService.alasql('SELECT * INTO XLSXML("role.xls",?) FROM ?',[mystyle,$scope.selectedEntity.roleList]);
-};
-$scope.userGridOptions={};
-UtilityService.cloneObject(userService.gridOptions,$scope.userGridOptions);
-$scope.userGridOptions.data=userService.entityList;
-$scope.initChildrenList = function () { 
 }
-$scope.userGridOptions.onRegisterApi = function(gridApi){
-$scope.userGridApi = gridApi;
+UtilityService.alasql('SELECT * INTO XLSXML("role.xls",?) FROM ?',[mystyle,vm.selectedEntity.roleList]);
+}
+vm.downloadRoleList=downloadRoleList;
+vm.userGridOptions={};
+UtilityService.cloneObject(userService.gridOptions,vm.userGridOptions);
+vm.userGridOptions.data=userService.entityList;
+vm.initChildrenList = function () { 
+}
+vm.userGridOptions.onRegisterApi = function(gridApi){
+vm.userGridApi = gridApi;
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
@@ -240,13 +242,13 @@ delete $rootScope.openNode.user;
 userService.selectedEntity.show = row.isSelected;
 });
   };
-$scope.roleGridOptions={};
-UtilityService.cloneObject(roleService.gridOptions,$scope.roleGridOptions);
-$scope.roleGridOptions.data=$scope.selectedEntity.roleList;
-$scope.initChildrenList = function () { 
+vm.roleGridOptions={};
+UtilityService.cloneObject(roleService.gridOptions,vm.roleGridOptions);
+vm.roleGridOptions.data=vm.selectedEntity.roleList;
+vm.initChildrenList = function () { 
 }
-$scope.roleGridOptions.onRegisterApi = function(gridApi){
-$scope.roleGridApi = gridApi;
+vm.roleGridOptions.onRegisterApi = function(gridApi){
+vm.roleGridApi = gridApi;
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
@@ -281,10 +283,20 @@ return;
   }	
 );
 }
-$scope.closeEntityDetail = function(){ 
+function closeEntityDetail(){ 
 userService.setSelectedEntity(null);
 userService.selectedEntity.show=false;
 delete $rootScope.openNode.user;
 }
+vm.reset=reset;
+vm.addNew=addNew;
+vm.insert=insert;
+vm.update=update;
+vm.search=search;
+vm.remove=remove;
+vm.del=del;
+vm.loadFile=loadFile;
+vm.downloadList=downloadList;
+vm.closeEntityDetail=closeEntityDetail;
 }
 })();

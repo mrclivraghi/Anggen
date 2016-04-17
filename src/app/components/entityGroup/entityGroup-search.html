@@ -10,7 +10,7 @@
 						<span class="input-group-addon">entityGroupId
 						</span>
 
-						<input class="form-control " aria-describedby="sizing-addon3" type="text" id="entityGroup-entityGroupId" ng-model="searchBean.entityGroupId" ng-readonly="false" name="entityGroupId" placeholder="entityGroupId"/>
+						<input class="form-control " aria-describedby="sizing-addon3" type="text" id="entityGroup-entityGroupId" ng-model="vm.searchBean.entityGroupId" ng-readonly="false" name="entityGroupId" placeholder="entityGroupId"/>
 						
 					</div>
 
@@ -21,7 +21,7 @@
 						<span class="input-group-addon">name
 						</span>
 
-						<input class="form-control " aria-describedby="sizing-addon3" type="text" id="entityGroup-name" ng-model="searchBean.name" ng-readonly="false" name="name" placeholder="name"/>
+						<input class="form-control " aria-describedby="sizing-addon3" type="text" id="entityGroup-name" ng-model="vm.searchBean.name" ng-readonly="false" name="name" placeholder="name"/>
 						
 					</div>
 
@@ -32,31 +32,7 @@
 						<span class="input-group-addon">securityType
 						</span>
 
-						<select class="form-control pull-left" aria-describedby="sizing-addon3" type="text" id="entityGroup-securityType" ng-model="searchBean.securityType" ng-readonly="false" name="securityType" placeholder="securityType" ng-options="securityType as securityType for securityType in securityTypePreparedData.entityList" enctype="UTF-8">
-						</select>
-
-					</div>
-
-				</div>
-
-				<div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.entity.restrictionItemMap.entity.canSearch==true)">
-					<div class="input-group">
-						<span class="input-group-addon">entity
-						</span>
-
-						<select class="form-control " aria-describedby="sizing-addon3" ng-model="searchBean.entity.entityId" id="entity" ng-options="entity.entityId as  entity.entityId+&#39; &#39;+ entity.name for entity in entityPreparedData.entityList" enctype="UTF-8">
-						</select>
-
-					</div>
-
-				</div>
-
-				<div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.entity.restrictionItemMap.project.canSearch==true)">
-					<div class="input-group">
-						<span class="input-group-addon">project
-						</span>
-
-						<select class="form-control " aria-describedby="sizing-addon3" ng-model="searchBean.project.projectId" id="project" ng-options="project.projectId as  project.projectId+&#39; &#39;+ project.name for project in projectPreparedData.entityList" enctype="UTF-8">
+						<select class="form-control pull-left" aria-describedby="sizing-addon3" type="text" id="entityGroup-securityType" ng-model="vm.searchBean.securityType" ng-readonly="false" name="securityType" placeholder="securityType" ng-options="securityType as securityType for securityType in vm.securityTypePreparedData.entityList" enctype="UTF-8">
 						</select>
 
 					</div>
@@ -68,7 +44,31 @@
 						<span class="input-group-addon">restrictionEntityGroup
 						</span>
 
-						<select class="form-control " aria-describedby="sizing-addon3" ng-model="searchBean.restrictionEntityGroup.restrictionEntityGroupId" id="restrictionEntityGroup" ng-options="restrictionEntityGroup.restrictionEntityGroupId as  restrictionEntityGroup.restrictionEntityGroupId for restrictionEntityGroup in restrictionEntityGroupPreparedData.entityList" enctype="UTF-8">
+						<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.restrictionEntityGroup.restrictionEntityGroupId" id="restrictionEntityGroup" ng-options="restrictionEntityGroup.restrictionEntityGroupId as  restrictionEntityGroup.restrictionEntityGroupId for restrictionEntityGroup in vm.restrictionEntityGroupPreparedData.entityList" enctype="UTF-8">
+						</select>
+
+					</div>
+
+				</div>
+
+				<div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.entity.restrictionItemMap.entity.canSearch==true)">
+					<div class="input-group">
+						<span class="input-group-addon">entity
+						</span>
+
+						<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.entity.entityId" id="entity" ng-options="entity.entityId as  entity.name+&#39; &#39;+ entity.entityId for entity in vm.entityPreparedData.entityList" enctype="UTF-8">
+						</select>
+
+					</div>
+
+				</div>
+
+				<div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.entity.restrictionItemMap.project.canSearch==true)">
+					<div class="input-group">
+						<span class="input-group-addon">project
+						</span>
+
+						<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.project.projectId" id="project" ng-options="project.projectId as  project.name+&#39; &#39;+ project.projectId for project in vm.projectPreparedData.entityList" enctype="UTF-8">
 						</select>
 
 					</div>
@@ -80,13 +80,13 @@
 			<div class="panel-body">
 				<div class="panel-body">
 					<div class="pull-left right-input">
-						<button ng-click="addNew()" class="btn btn-default " ng-show="($root.restrictionList.entity.restrictionItemMap.entityGroup.canCreate==true)">Add new
+						<button ng-click="vm.addNew()" class="btn btn-default " ng-show="($root.restrictionList.entity.restrictionItemMap.entityGroup.canCreate==true)">Add new
 						</button>
 
-						<button ng-click="search()" class="btn btn-default ">Find
+						<button ng-click="vm.search()" class="btn btn-default ">Find
 						</button>
 
-						<button ng-click="reset()" class="btn btn-default ">Reset
+						<button ng-click="vm.reset()" class="btn btn-default ">Reset
 						</button>
 
 					</div>
@@ -99,9 +99,9 @@
 
 	</form>
 
-	<form id="entityGroupList" ng-if="entityList.length&gt;0" enctype="UTF-8">
+	<form id="entityGroupList" ng-if="vm.entityList.length&gt;0" enctype="UTF-8">
 		<div class="panel panel-default default-panel">
-			<div class="panel-heading">List entityGroup<button ng-click="downloadEntityList()" class="btn btn-default pull-right" style="margin-top:-7px">
+			<div class="panel-heading">List entityGroup<button ng-click="vm.downloadList()" class="btn btn-default pull-right" style="margin-top:-7px">
 	<span class="glyphicon glyphicon-download-alt" aria-hidden="true">
 	</span>
 </button>
@@ -109,7 +109,7 @@
 			</div>
 
 			<div class="panel-body">
-				<div ui-grid="entityGroupGridOptions" ui-grid-pagination="" ui-grid-selection="" ui-grid-exporter="">
+				<div ui-grid="vm.entityGroupGridOptions" ui-grid-pagination="" ui-grid-selection="" ui-grid-exporter="">
 				</div>
 
 			</div>

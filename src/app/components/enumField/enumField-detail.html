@@ -1,7 +1,7 @@
 <div>
-	<form id="enumFieldDetailForm" name="enumFieldDetailForm" ng-show="selectedEntity.show">
+	<form id="enumFieldDetailForm" name="enumFieldDetailForm" ng-show="vm.selectedEntity.show">
 		<div class="panel panel-default default-panel">
-			<div class="panel-heading">Detail enumField {{ selectedEntity.enumFieldId }} <button type="button" class="close" aria-label="Close" ng-click="closeEntityDetail()">
+			<div class="panel-heading">Detail enumField {{ vm.selectedEntity.enumFieldId }} <button type="button" class="close" aria-label="Close" ng-click="vm.closeEntityDetail()">
 	<span aria-hidden="true">&times;
 	</span>
 </button>
@@ -11,7 +11,7 @@
 			<div class="panel-body">
 				<ul class="nav nav-tabs" role="tablist" id="enumFieldTabs">
 					<li role="presentation">
-						<a href="#enumField-Detail" aria-controls="Detail" role="tab" data-toggle="tab" ng-click="refreshTableDetail()">Detail
+						<a href="#enumField-Detail" aria-controls="Detail" role="tab" data-toggle="tab" ng-click="vm.refreshTableDetail()">Detail
 						</a>
 
 					</li>
@@ -34,7 +34,7 @@ if (angular.element('#enumFieldTabs').scope()!=null && angular.element(('#enumFi
 								<span class="input-group-addon">enumFieldId
 								</span>
 
-								<input class="form-control " aria-describedby="sizing-addon3" type="text" id="enumField-enumFieldId" ng-model="selectedEntity.enumFieldId" ng-readonly="true" name="enumFieldId" placeholder="enumFieldId"/>
+								<input class="form-control " aria-describedby="sizing-addon3" type="text" id="enumField-enumFieldId" ng-model="vm.selectedEntity.enumFieldId" ng-readonly="true" name="enumFieldId" placeholder="enumFieldId"/>
 								
 							</div>
 
@@ -45,7 +45,7 @@ if (angular.element('#enumFieldTabs').scope()!=null && angular.element(('#enumFi
 								<span class="input-group-addon">name
 								</span>
 
-								<input class="form-control " aria-describedby="sizing-addon3" type="text" id="enumField-name" ng-model="selectedEntity.name" ng-readonly="restrictionList.enumField.restrictionFieldMap.name" name="name" placeholder="name"/>
+								<input class="form-control " aria-describedby="sizing-addon3" type="text" id="enumField-name" ng-model="vm.selectedEntity.name" ng-readonly="vm.restrictionList.enumField.restrictionFieldMap.name" name="name" placeholder="name"/>
 								
 							</div>
 
@@ -56,71 +56,8 @@ if (angular.element('#enumFieldTabs').scope()!=null && angular.element(('#enumFi
 								<span class="input-group-addon">priority
 								</span>
 
-								<input class="form-control " aria-describedby="sizing-addon3" type="text" id="enumField-priority" ng-model="selectedEntity.priority" ng-readonly="restrictionList.enumField.restrictionFieldMap.priority" name="priority" placeholder="priority"/>
+								<input class="form-control " aria-describedby="sizing-addon3" type="text" id="enumField-priority" ng-model="vm.selectedEntity.priority" ng-readonly="vm.restrictionList.enumField.restrictionFieldMap.priority" name="priority" placeholder="priority"/>
 								
-							</div>
-
-						</div>
-
-						<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !enumFieldDetailForm.entity.$valid, &#39;has-success&#39;: enumFieldDetailForm.entity.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.entity">
-							<div class="input-group">
-								<span class="input-group-addon">entity
-								</span>
-
-								<select class="form-control " aria-describedby="sizing-addon3" ng-model="selectedEntity.entity" id="entity" name="entity" ng-options="entity as  entity.entityId+&#39; &#39;+ entity.name for entity in entityPreparedData.entityList track by entity.entityId" enctype="UTF-8">
-								</select>
-
-								<span class="input-group-btn">
-									<button ng-click="showEntityDetail()" class="btn btn-default " id="entity" ng-if="selectedEntity.entity==null">Add new entity
-									</button>
-
-									<button ng-click="showEntityDetail()" class="btn btn-default " id="entity" ng-if="selectedEntity.entity!=null">Show detail
-									</button>
-
-								</span>
-
-							</div>
-
-						</div>
-
-						<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !enumFieldDetailForm.enumEntity.$valid, &#39;has-success&#39;: enumFieldDetailForm.enumEntity.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.enumEntity">
-							<div class="input-group">
-								<span class="input-group-addon">enumEntity
-								</span>
-
-								<select class="form-control " aria-describedby="sizing-addon3" ng-model="selectedEntity.enumEntity" id="enumEntity" name="enumEntity" ng-options="enumEntity as  enumEntity.name+&#39; &#39;+ enumEntity.enumEntityId for enumEntity in enumEntityPreparedData.entityList track by enumEntity.enumEntityId" enctype="UTF-8">
-								</select>
-
-								<span class="input-group-btn">
-									<button ng-click="showEnumEntityDetail()" class="btn btn-default " id="enumEntity" ng-if="selectedEntity.enumEntity==null">Add new enumEntity
-									</button>
-
-									<button ng-click="showEnumEntityDetail()" class="btn btn-default " id="enumEntity" ng-if="selectedEntity.enumEntity!=null">Show detail
-									</button>
-
-								</span>
-
-							</div>
-
-						</div>
-
-						<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !enumFieldDetailForm.tab.$valid, &#39;has-success&#39;: enumFieldDetailForm.tab.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.tab">
-							<div class="input-group">
-								<span class="input-group-addon">tab
-								</span>
-
-								<select class="form-control " aria-describedby="sizing-addon3" ng-model="selectedEntity.tab" id="tab" name="tab" ng-options="tab as  tab.name+&#39; &#39;+ tab.tabId for tab in tabPreparedData.entityList track by tab.tabId" enctype="UTF-8">
-								</select>
-
-								<span class="input-group-btn">
-									<button ng-click="showTabDetail()" class="btn btn-default " id="tab" ng-if="selectedEntity.tab==null">Add new tab
-									</button>
-
-									<button ng-click="showTabDetail()" class="btn btn-default " id="tab" ng-if="selectedEntity.tab!=null">Show detail
-									</button>
-
-								</span>
-
 							</div>
 
 						</div>
@@ -146,7 +83,7 @@ if (angular.element('#enumFieldTabs').scope()!=null && angular.element(('#enumFi
 											<span class="input-group-addon">annotation
 											</span>
 
-											<select class="form-control " aria-describedby="sizing-addon3" ng-model="selectedEntity.annotation" id="annotation" name="annotation" ng-options="annotation as  annotation.annotationId for annotation in annotationPreparedData.entityList track by annotation.annotationId" enctype="UTF-8">
+											<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.annotation" id="annotation" name="annotation" ng-options="annotation as  annotation.annotationId for annotation in vm.annotationPreparedData.entityList track by annotation.annotationId" enctype="UTF-8">
 											</select>
 
 											<span class="input-group-btn">
@@ -177,26 +114,89 @@ if (angular.element('#enumFieldTabs').scope()!=null && angular.element(('#enumFi
 
 						<div class="pull-left" style="width: 100%" ng-show="true  && ($root.restrictionList.field.restrictionItemMap.annotation.canSearch==true)" ng-if="!$root.openNode.annotation">
 							<div class="panel panel-default default-panel">
-								<div class="panel-heading">annotation<button ng-click="showAnnotationDetail()" class="btn btn-default  pull-right" style="margin-top: -7px" ng-show="($root.restrictionList.field.restrictionItemMap.annotation.canCreate==true)">Add new annotation</button>
+								<div class="panel-heading">annotation<button ng-click="vm.showAnnotationDetail()" class="btn btn-default  pull-right" style="margin-top: -7px" ng-show="($root.restrictionList.field.restrictionItemMap.annotation.canCreate==true)">Add new annotation</button>
 <button type="button" class="btn btn-default pull-right" style="margin-top: -7px" data-toggle="modal" data-target="#enumField-annotation">Link existing</button>
-<button ng-click="downloadAnnotationList()" class="btn btn-default pull-right" style="margin-top:-7px">
+<button ng-click="vm.downloadAnnotationList()" class="btn btn-default pull-right" style="margin-top:-7px">
 	<span class="glyphicon glyphicon-download-alt" aria-hidden="true">
 	</span>
 </button>
 
 								</div>
 
-								<div class="panel-body" ng-class="{&#39;has-error&#39;: !enumFieldDetailForm.annotation.$valid, &#39;has-success&#39;: enumFieldDetailForm.annotation.$valid}">
+								<div class="panel-body" ng-class="{&#39;has-error&#39;: !vm.enumFieldDetailForm.annotation.$valid, &#39;has-success&#39;: vm.enumFieldDetailForm.annotation.$valid}">
 									<label id="annotation">annotation
 									</label>
 
-									<div id="annotation" ng-if="selectedEntity.annotationList.length&gt;0">
-										<div style="top: 100px" ui-grid="annotationGridOptions" ui-grid-pagination="" ui-grid-selection="">
+									<div id="annotation" ng-if="vm.selectedEntity.annotationList.length&gt;0">
+										<div style="top: 100px" ui-grid="vm.annotationGridOptions" ui-grid-pagination="" ui-grid-selection="">
 										</div>
 
 									</div>
 
 								</div>
+
+							</div>
+
+						</div>
+
+						<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !enumFieldDetailForm.entity.$valid, &#39;has-success&#39;: enumFieldDetailForm.entity.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.entity">
+							<div class="input-group">
+								<span class="input-group-addon">entity
+								</span>
+
+								<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.entity" id="entity" name="entity" ng-options="entity as  entity.name+&#39; &#39;+ entity.entityId for entity in vm.entityPreparedData.entityList track by entity.entityId" enctype="UTF-8">
+								</select>
+
+								<span class="input-group-btn">
+									<button ng-click="vm.showEntityDetail()" class="btn btn-default " id="entity" ng-if="vm.selectedEntity.entity==null">Add new entity
+									</button>
+
+									<button ng-click="vm.showEntityDetail()" class="btn btn-default " id="entity" ng-if="vm.selectedEntity.entity!=null">Show detail
+									</button>
+
+								</span>
+
+							</div>
+
+						</div>
+
+						<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !enumFieldDetailForm.enumEntity.$valid, &#39;has-success&#39;: enumFieldDetailForm.enumEntity.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.enumEntity">
+							<div class="input-group">
+								<span class="input-group-addon">enumEntity
+								</span>
+
+								<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.enumEntity" id="enumEntity" name="enumEntity" ng-options="enumEntity as  enumEntity.enumEntityId+&#39; &#39;+ enumEntity.name for enumEntity in vm.enumEntityPreparedData.entityList track by enumEntity.enumEntityId" enctype="UTF-8">
+								</select>
+
+								<span class="input-group-btn">
+									<button ng-click="vm.showEnumEntityDetail()" class="btn btn-default " id="enumEntity" ng-if="vm.selectedEntity.enumEntity==null">Add new enumEntity
+									</button>
+
+									<button ng-click="vm.showEnumEntityDetail()" class="btn btn-default " id="enumEntity" ng-if="vm.selectedEntity.enumEntity!=null">Show detail
+									</button>
+
+								</span>
+
+							</div>
+
+						</div>
+
+						<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !enumFieldDetailForm.tab.$valid, &#39;has-success&#39;: enumFieldDetailForm.tab.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.tab">
+							<div class="input-group">
+								<span class="input-group-addon">tab
+								</span>
+
+								<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.tab" id="tab" name="tab" ng-options="tab as  tab.name+&#39; &#39;+ tab.tabId for tab in vm.tabPreparedData.entityList track by tab.tabId" enctype="UTF-8">
+								</select>
+
+								<span class="input-group-btn">
+									<button ng-click="vm.showTabDetail()" class="btn btn-default " id="tab" ng-if="vm.selectedEntity.tab==null">Add new tab
+									</button>
+
+									<button ng-click="vm.showTabDetail()" class="btn btn-default " id="tab" ng-if="vm.selectedEntity.tab!=null">Show detail
+									</button>
+
+								</span>
 
 							</div>
 
@@ -213,14 +213,14 @@ if (angular.element('#enumFieldTabs').scope()!=null && angular.element(('#enumFi
 
 			<div class="panel-body">
 				<div class="pull-left">
-					<form id="enumFieldActionButton" ng-if="selectedEntity.show">
-						<button ng-click="insert()" class="btn btn-default " ng-if="selectedEntity.enumFieldId==undefined" ng-show="($root.restrictionList.field.restrictionItemMap.enumField.canCreate==true)">Insert
+					<form id="enumFieldActionButton" ng-if="vm.selectedEntity.show">
+						<button ng-click="insert()" class="btn btn-default " ng-if="vm.selectedEntity.enumFieldId==undefined" ng-show="($root.restrictionList.field.restrictionItemMap.enumField.canCreate==true)">Insert
 						</button>
 
-						<button ng-click="update()" class="btn btn-default " ng-if="selectedEntity.enumFieldId&gt;0" ng-show="($root.restrictionList.field.restrictionItemMap.enumField.canUpdate==true)">Update
+						<button ng-click="update()" class="btn btn-default " ng-if="vm.selectedEntity.enumFieldId&gt;0" ng-show="($root.restrictionList.field.restrictionItemMap.enumField.canUpdate==true)">Update
 						</button>
 
-						<button ng-click="del()" class="btn btn-default " ng-if="selectedEntity.enumFieldId&gt;0" ng-show="($root.restrictionList.field.restrictionItemMap.enumField.canDelete==true)">Delete
+						<button ng-click="del()" class="btn btn-default " ng-if="vm.selectedEntity.enumFieldId&gt;0" ng-show="($root.restrictionList.field.restrictionItemMap.enumField.canDelete==true)">Delete
 						</button>
 
 					</form>

@@ -21,56 +21,56 @@ import org.hibernate.annotations.Type;
 @MaxDescendantLevel(100)
 public class Entity {
 
-    public final static java.lang.Long staticEntityId = 13L;
-    @javax.persistence.Column(name = "enable_restriction_data")
+    public final static java.lang.Long staticEntityId = 9L;
+    @javax.persistence.Column(name = "generate_front_end")
     @it.anggen.utils.annotation.Priority(2)
-    private java.lang.Boolean enableRestrictionData;
-    @javax.persistence.Column(name = "disable_view_generation")
-    @it.anggen.utils.annotation.Priority(2)
-    private java.lang.Boolean disableViewGeneration;
-    @javax.persistence.Column(name = "entity_id")
-    @it.anggen.utils.annotation.Priority(1)
-    @Id
-   // @GeneratedValue
-    @it.anggen.utils.annotation.DescriptionField
-    private java.lang.Long entityId;
-    @javax.persistence.Column(name = "cache")
-    @it.anggen.utils.annotation.Priority(2)
-    private java.lang.Boolean cache;
-    @javax.persistence.Column(name = "descendant_max_level")
-    @it.anggen.utils.annotation.Priority(2)
-    private Integer descendantMaxLevel;
+    private java.lang.Boolean generateFrontEnd;
     @javax.persistence.Column(name = "name")
     @it.anggen.utils.annotation.DescriptionField
     @it.anggen.utils.annotation.Priority(2)
     private String name;
-    @javax.persistence.Column(name = "generate_front_end")
+    @javax.persistence.Column(name = "entity_id")
+    @it.anggen.utils.annotation.DescriptionField
+    @Id
+    @GeneratedValue
+    @it.anggen.utils.annotation.Priority(1)
+    private java.lang.Long entityId;
+    @javax.persistence.Column(name = "cache")
     @it.anggen.utils.annotation.Priority(2)
-    private java.lang.Boolean generateFrontEnd;
+    private java.lang.Boolean cache;
+    @javax.persistence.Column(name = "disable_view_generation")
+    @it.anggen.utils.annotation.Priority(2)
+    private java.lang.Boolean disableViewGeneration;
+    @javax.persistence.Column(name = "descendant_max_level")
+    @it.anggen.utils.annotation.Priority(2)
+    private Integer descendantMaxLevel;
+    @javax.persistence.Column(name = "enable_restriction_data")
+    @it.anggen.utils.annotation.Priority(2)
+    private java.lang.Boolean enableRestrictionData;
     @OneToMany(fetch = javax.persistence.FetchType.EAGER)
     @Type(type = "it.anggen.model.security.RestrictionEntity")
     @javax.persistence.JoinColumn(name = "entity_id_entity")
     @it.anggen.utils.annotation.Priority(4)
     private List<RestrictionEntity> restrictionEntityList;
     @OneToMany(fetch = javax.persistence.FetchType.EAGER)
-    @Type(type = "it.anggen.model.entity.Tab")
+    @Type(type = "it.anggen.model.field.Field")
     @javax.persistence.JoinColumn(name = "entity_id_entity")
     @it.anggen.utils.annotation.Priority(4)
-    private List<Tab> tabList;
-    @ManyToOne(fetch = javax.persistence.FetchType.EAGER)
-    @javax.persistence.JoinColumn(name = "entity_group_id_entity_group")
-    @it.anggen.utils.annotation.Priority(4)
-    private it.anggen.model.entity.EntityGroup entityGroup;
+    private List<Field> fieldList;
     @OneToMany(fetch = javax.persistence.FetchType.EAGER)
     @Type(type = "it.anggen.model.field.EnumField")
     @javax.persistence.JoinColumn(name = "entity_id_entity")
     @it.anggen.utils.annotation.Priority(4)
     private List<EnumField> enumFieldList;
+    @ManyToOne(fetch = javax.persistence.FetchType.EAGER)
+    @javax.persistence.JoinColumn(name = "entity_group_id_entity_group")
+    @it.anggen.utils.annotation.Priority(4)
+    private it.anggen.model.entity.EntityGroup entityGroup;
     @OneToMany(fetch = javax.persistence.FetchType.EAGER)
-    @Type(type = "it.anggen.model.field.Field")
+    @Type(type = "it.anggen.model.entity.Tab")
     @javax.persistence.JoinColumn(name = "entity_id_entity")
     @it.anggen.utils.annotation.Priority(4)
-    private List<Field> fieldList;
+    private List<Tab> tabList;
     @OneToMany(fetch = javax.persistence.FetchType.EAGER)
     @Type(type = "it.anggen.model.relationship.Relationship")
     @javax.persistence.JoinColumn(name = "entity_id_entity")
@@ -80,20 +80,20 @@ public class Entity {
     @it.anggen.utils.annotation.Priority(3)
     private it.anggen.model.SecurityType securityType;
 
-    public java.lang.Boolean getEnableRestrictionData() {
-        return this.enableRestrictionData;
+    public java.lang.Boolean getGenerateFrontEnd() {
+        return this.generateFrontEnd;
     }
 
-    public void setEnableRestrictionData(java.lang.Boolean enableRestrictionData) {
-        this.enableRestrictionData=enableRestrictionData;
+    public void setGenerateFrontEnd(java.lang.Boolean generateFrontEnd) {
+        this.generateFrontEnd=generateFrontEnd;
     }
 
-    public java.lang.Boolean getDisableViewGeneration() {
-        return this.disableViewGeneration;
+    public String getName() {
+        return this.name;
     }
 
-    public void setDisableViewGeneration(java.lang.Boolean disableViewGeneration) {
-        this.disableViewGeneration=disableViewGeneration;
+    public void setName(String name) {
+        this.name=name;
     }
 
     public java.lang.Long getEntityId() {
@@ -112,6 +112,14 @@ public class Entity {
         this.cache=cache;
     }
 
+    public java.lang.Boolean getDisableViewGeneration() {
+        return this.disableViewGeneration;
+    }
+
+    public void setDisableViewGeneration(java.lang.Boolean disableViewGeneration) {
+        this.disableViewGeneration=disableViewGeneration;
+    }
+
     public Integer getDescendantMaxLevel() {
         return this.descendantMaxLevel;
     }
@@ -120,20 +128,12 @@ public class Entity {
         this.descendantMaxLevel=descendantMaxLevel;
     }
 
-    public String getName() {
-        return this.name;
+    public java.lang.Boolean getEnableRestrictionData() {
+        return this.enableRestrictionData;
     }
 
-    public void setName(String name) {
-        this.name=name;
-    }
-
-    public java.lang.Boolean getGenerateFrontEnd() {
-        return this.generateFrontEnd;
-    }
-
-    public void setGenerateFrontEnd(java.lang.Boolean generateFrontEnd) {
-        this.generateFrontEnd=generateFrontEnd;
+    public void setEnableRestrictionData(java.lang.Boolean enableRestrictionData) {
+        this.enableRestrictionData=enableRestrictionData;
     }
 
     public List<RestrictionEntity> getRestrictionEntityList() {
@@ -144,20 +144,12 @@ public class Entity {
         this.restrictionEntityList=restrictionEntityList;
     }
 
-    public List<Tab> getTabList() {
-        return this.tabList;
+    public List<Field> getFieldList() {
+        return this.fieldList;
     }
 
-    public void setTabList(List<Tab> tabList) {
-        this.tabList=tabList;
-    }
-
-    public it.anggen.model.entity.EntityGroup getEntityGroup() {
-        return this.entityGroup;
-    }
-
-    public void setEntityGroup(it.anggen.model.entity.EntityGroup entityGroup) {
-        this.entityGroup=entityGroup;
+    public void setFieldList(List<Field> fieldList) {
+        this.fieldList=fieldList;
     }
 
     public List<EnumField> getEnumFieldList() {
@@ -168,12 +160,20 @@ public class Entity {
         this.enumFieldList=enumFieldList;
     }
 
-    public List<Field> getFieldList() {
-        return this.fieldList;
+    public it.anggen.model.entity.EntityGroup getEntityGroup() {
+        return this.entityGroup;
     }
 
-    public void setFieldList(List<Field> fieldList) {
-        this.fieldList=fieldList;
+    public void setEntityGroup(it.anggen.model.entity.EntityGroup entityGroup) {
+        this.entityGroup=entityGroup;
+    }
+
+    public List<Tab> getTabList() {
+        return this.tabList;
+    }
+
+    public void setTabList(List<Tab> tabList) {
+        this.tabList=tabList;
     }
 
     public List<Relationship> getRelationshipList() {

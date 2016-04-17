@@ -10,7 +10,7 @@
 						<span class="input-group-addon">userId
 						</span>
 
-						<input class="form-control " aria-describedby="sizing-addon3" type="text" id="user-userId" ng-model="searchBean.userId" ng-readonly="false" name="userId" placeholder="userId"/>
+						<input class="form-control " aria-describedby="sizing-addon3" type="text" id="user-userId" ng-model="vm.searchBean.userId" ng-readonly="false" name="userId" placeholder="userId"/>
 						
 					</div>
 
@@ -21,7 +21,7 @@
 						<span class="input-group-addon">enabled
 						</span>
 
-						<select class="form-control " aria-describedby="sizing-addon3" type="checkbox" id="user-enabled" ng-model="searchBean.enabled" ng-readonly="false" name="enabled" placeholder="enabled" ng-options="value for value in trueFalseValues">
+						<select class="form-control " aria-describedby="sizing-addon3" type="checkbox" id="user-enabled" ng-model="vm.searchBean.enabled" ng-readonly="false" name="enabled" placeholder="enabled" ng-options="value for value in vm.trueFalseValues">
 						</select>
 
 					</div>
@@ -33,7 +33,7 @@
 						<span class="input-group-addon">username
 						</span>
 
-						<input class="form-control " aria-describedby="sizing-addon3" type="text" id="user-username" ng-model="searchBean.username" ng-readonly="false" name="username" placeholder="username"/>
+						<input class="form-control " aria-describedby="sizing-addon3" type="text" id="user-username" ng-model="vm.searchBean.username" ng-readonly="false" name="username" placeholder="username"/>
 						
 					</div>
 
@@ -44,7 +44,7 @@
 						<span class="input-group-addon">role
 						</span>
 
-						<select class="form-control " aria-describedby="sizing-addon3" ng-model="searchBean.role.roleId" id="role" ng-options="role.roleId as  role.roleId+&#39; &#39;+ role.role for role in rolePreparedData.entityList" enctype="UTF-8">
+						<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.role.roleId" id="role" ng-options="role.roleId as  role.role+&#39; &#39;+ role.roleId for role in vm.rolePreparedData.entityList" enctype="UTF-8">
 						</select>
 
 					</div>
@@ -56,13 +56,13 @@
 			<div class="panel-body">
 				<div class="panel-body">
 					<div class="pull-left right-input">
-						<button ng-click="addNew()" class="btn btn-default " ng-show="($root.restrictionList.security.restrictionItemMap.user.canCreate==true)">Add new
+						<button ng-click="vm.addNew()" class="btn btn-default " ng-show="($root.restrictionList.security.restrictionItemMap.user.canCreate==true)">Add new
 						</button>
 
-						<button ng-click="search()" class="btn btn-default ">Find
+						<button ng-click="vm.search()" class="btn btn-default ">Find
 						</button>
 
-						<button ng-click="reset()" class="btn btn-default ">Reset
+						<button ng-click="vm.reset()" class="btn btn-default ">Reset
 						</button>
 
 					</div>
@@ -75,9 +75,9 @@
 
 	</form>
 
-	<form id="userList" ng-if="entityList.length&gt;0" enctype="UTF-8">
+	<form id="userList" ng-if="vm.entityList.length&gt;0" enctype="UTF-8">
 		<div class="panel panel-default default-panel">
-			<div class="panel-heading">List user<button ng-click="downloadEntityList()" class="btn btn-default pull-right" style="margin-top:-7px">
+			<div class="panel-heading">List user<button ng-click="vm.downloadList()" class="btn btn-default pull-right" style="margin-top:-7px">
 	<span class="glyphicon glyphicon-download-alt" aria-hidden="true">
 	</span>
 </button>
@@ -85,7 +85,7 @@
 			</div>
 
 			<div class="panel-body">
-				<div ui-grid="userGridOptions" ui-grid-pagination="" ui-grid-selection="" ui-grid-exporter="">
+				<div ui-grid="vm.userGridOptions" ui-grid-pagination="" ui-grid-selection="" ui-grid-exporter="">
 				</div>
 
 			</div>

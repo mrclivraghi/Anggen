@@ -1,7 +1,7 @@
 <div>
-	<form id="restrictionEntityDetailForm" name="restrictionEntityDetailForm" ng-show="selectedEntity.show">
+	<form id="restrictionEntityDetailForm" name="restrictionEntityDetailForm" ng-show="vm.selectedEntity.show">
 		<div class="panel panel-default default-panel">
-			<div class="panel-heading">Detail restrictionEntity {{ selectedEntity.restrictionEntityId }} <button type="button" class="close" aria-label="Close" ng-click="closeEntityDetail()">
+			<div class="panel-heading">Detail restrictionEntity {{ vm.selectedEntity.restrictionEntityId }} <button type="button" class="close" aria-label="Close" ng-click="vm.closeEntityDetail()">
 	<span aria-hidden="true">&times;
 	</span>
 </button>
@@ -11,7 +11,7 @@
 			<div class="panel-body">
 				<ul class="nav nav-tabs" role="tablist" id="restrictionEntityTabs">
 					<li role="presentation">
-						<a href="#restrictionEntity-Detail" aria-controls="Detail" role="tab" data-toggle="tab" ng-click="refreshTableDetail()">Detail
+						<a href="#restrictionEntity-Detail" aria-controls="Detail" role="tab" data-toggle="tab" ng-click="vm.refreshTableDetail()">Detail
 						</a>
 
 					</li>
@@ -34,30 +34,18 @@ if (angular.element('#restrictionEntityTabs').scope()!=null && angular.element((
 								<span class="input-group-addon">restrictionEntityId
 								</span>
 
-								<input class="form-control " aria-describedby="sizing-addon3" type="text" id="restrictionEntity-restrictionEntityId" ng-model="selectedEntity.restrictionEntityId" ng-readonly="true" name="restrictionEntityId" placeholder="restrictionEntityId"/>
+								<input class="form-control " aria-describedby="sizing-addon3" type="text" id="restrictionEntity-restrictionEntityId" ng-model="vm.selectedEntity.restrictionEntityId" ng-readonly="true" name="restrictionEntityId" placeholder="restrictionEntityId"/>
 								
 							</div>
 
 						</div>
 
-						<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !restrictionEntityDetailForm.canSearch.$valid, &#39;has-success&#39;: restrictionEntityDetailForm.canSearch.$valid}" style="height:59px" ng-show="true ">
+						<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !restrictionEntityDetailForm.canCreate.$valid, &#39;has-success&#39;: restrictionEntityDetailForm.canCreate.$valid}" style="height:59px" ng-show="true ">
 							<div class="input-group">
-								<span class="input-group-addon">canSearch
+								<span class="input-group-addon">canCreate
 								</span>
 
-								<select class="form-control " aria-describedby="sizing-addon3" type="checkbox" id="restrictionEntity-canSearch" ng-model="selectedEntity.canSearch" ng-readonly="restrictionList.restrictionEntity.restrictionFieldMap.canSearch" name="canSearch" placeholder="canSearch" ng-options="value for value in trueFalseValues">
-								</select>
-
-							</div>
-
-						</div>
-
-						<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !restrictionEntityDetailForm.canDelete.$valid, &#39;has-success&#39;: restrictionEntityDetailForm.canDelete.$valid}" style="height:59px" ng-show="true ">
-							<div class="input-group">
-								<span class="input-group-addon">canDelete
-								</span>
-
-								<select class="form-control " aria-describedby="sizing-addon3" type="checkbox" id="restrictionEntity-canDelete" ng-model="selectedEntity.canDelete" ng-readonly="restrictionList.restrictionEntity.restrictionFieldMap.canDelete" name="canDelete" placeholder="canDelete" ng-options="value for value in trueFalseValues">
+								<select class="form-control " aria-describedby="sizing-addon3" type="checkbox" id="restrictionEntity-canCreate" ng-model="vm.selectedEntity.canCreate" ng-readonly="vm.restrictionList.restrictionEntity.restrictionFieldMap.canCreate" name="canCreate" placeholder="canCreate" ng-options="value for value in vm.trueFalseValues">
 								</select>
 
 							</div>
@@ -69,41 +57,32 @@ if (angular.element('#restrictionEntityTabs').scope()!=null && angular.element((
 								<span class="input-group-addon">canUpdate
 								</span>
 
-								<select class="form-control " aria-describedby="sizing-addon3" type="checkbox" id="restrictionEntity-canUpdate" ng-model="selectedEntity.canUpdate" ng-readonly="restrictionList.restrictionEntity.restrictionFieldMap.canUpdate" name="canUpdate" placeholder="canUpdate" ng-options="value for value in trueFalseValues">
+								<select class="form-control " aria-describedby="sizing-addon3" type="checkbox" id="restrictionEntity-canUpdate" ng-model="vm.selectedEntity.canUpdate" ng-readonly="vm.restrictionList.restrictionEntity.restrictionFieldMap.canUpdate" name="canUpdate" placeholder="canUpdate" ng-options="value for value in vm.trueFalseValues">
 								</select>
 
 							</div>
 
 						</div>
 
-						<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !restrictionEntityDetailForm.canCreate.$valid, &#39;has-success&#39;: restrictionEntityDetailForm.canCreate.$valid}" style="height:59px" ng-show="true ">
+						<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !restrictionEntityDetailForm.canSearch.$valid, &#39;has-success&#39;: restrictionEntityDetailForm.canSearch.$valid}" style="height:59px" ng-show="true ">
 							<div class="input-group">
-								<span class="input-group-addon">canCreate
+								<span class="input-group-addon">canSearch
 								</span>
 
-								<select class="form-control " aria-describedby="sizing-addon3" type="checkbox" id="restrictionEntity-canCreate" ng-model="selectedEntity.canCreate" ng-readonly="restrictionList.restrictionEntity.restrictionFieldMap.canCreate" name="canCreate" placeholder="canCreate" ng-options="value for value in trueFalseValues">
+								<select class="form-control " aria-describedby="sizing-addon3" type="checkbox" id="restrictionEntity-canSearch" ng-model="vm.selectedEntity.canSearch" ng-readonly="vm.restrictionList.restrictionEntity.restrictionFieldMap.canSearch" name="canSearch" placeholder="canSearch" ng-options="value for value in vm.trueFalseValues">
 								</select>
 
 							</div>
 
 						</div>
 
-						<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !restrictionEntityDetailForm.entity.$valid, &#39;has-success&#39;: restrictionEntityDetailForm.entity.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.entity">
+						<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !restrictionEntityDetailForm.canDelete.$valid, &#39;has-success&#39;: restrictionEntityDetailForm.canDelete.$valid}" style="height:59px" ng-show="true ">
 							<div class="input-group">
-								<span class="input-group-addon">entity
+								<span class="input-group-addon">canDelete
 								</span>
 
-								<select class="form-control " aria-describedby="sizing-addon3" ng-model="selectedEntity.entity" id="entity" name="entity" ng-options="entity as  entity.entityId+&#39; &#39;+ entity.name for entity in entityPreparedData.entityList track by entity.entityId" enctype="UTF-8">
+								<select class="form-control " aria-describedby="sizing-addon3" type="checkbox" id="restrictionEntity-canDelete" ng-model="vm.selectedEntity.canDelete" ng-readonly="vm.restrictionList.restrictionEntity.restrictionFieldMap.canDelete" name="canDelete" placeholder="canDelete" ng-options="value for value in vm.trueFalseValues">
 								</select>
-
-								<span class="input-group-btn">
-									<button ng-click="showEntityDetail()" class="btn btn-default " id="entity" ng-if="selectedEntity.entity==null">Add new entity
-									</button>
-
-									<button ng-click="showEntityDetail()" class="btn btn-default " id="entity" ng-if="selectedEntity.entity!=null">Show detail
-									</button>
-
-								</span>
 
 							</div>
 
@@ -114,14 +93,35 @@ if (angular.element('#restrictionEntityTabs').scope()!=null && angular.element((
 								<span class="input-group-addon">role
 								</span>
 
-								<select class="form-control " aria-describedby="sizing-addon3" ng-model="selectedEntity.role" id="role" name="role" ng-options="role as  role.roleId+&#39; &#39;+ role.role for role in rolePreparedData.entityList track by role.roleId" enctype="UTF-8">
+								<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.role" id="role" name="role" ng-options="role as  role.role+&#39; &#39;+ role.roleId for role in vm.rolePreparedData.entityList track by role.roleId" enctype="UTF-8">
 								</select>
 
 								<span class="input-group-btn">
-									<button ng-click="showRoleDetail()" class="btn btn-default " id="role" ng-if="selectedEntity.role==null">Add new role
+									<button ng-click="vm.showRoleDetail()" class="btn btn-default " id="role" ng-if="vm.selectedEntity.role==null">Add new role
 									</button>
 
-									<button ng-click="showRoleDetail()" class="btn btn-default " id="role" ng-if="selectedEntity.role!=null">Show detail
+									<button ng-click="vm.showRoleDetail()" class="btn btn-default " id="role" ng-if="vm.selectedEntity.role!=null">Show detail
+									</button>
+
+								</span>
+
+							</div>
+
+						</div>
+
+						<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !restrictionEntityDetailForm.entity.$valid, &#39;has-success&#39;: restrictionEntityDetailForm.entity.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.entity">
+							<div class="input-group">
+								<span class="input-group-addon">entity
+								</span>
+
+								<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.entity" id="entity" name="entity" ng-options="entity as  entity.name+&#39; &#39;+ entity.entityId for entity in vm.entityPreparedData.entityList track by entity.entityId" enctype="UTF-8">
+								</select>
+
+								<span class="input-group-btn">
+									<button ng-click="vm.showEntityDetail()" class="btn btn-default " id="entity" ng-if="vm.selectedEntity.entity==null">Add new entity
+									</button>
+
+									<button ng-click="vm.showEntityDetail()" class="btn btn-default " id="entity" ng-if="vm.selectedEntity.entity!=null">Show detail
 									</button>
 
 								</span>
@@ -141,14 +141,14 @@ if (angular.element('#restrictionEntityTabs').scope()!=null && angular.element((
 
 			<div class="panel-body">
 				<div class="pull-left">
-					<form id="restrictionEntityActionButton" ng-if="selectedEntity.show">
-						<button ng-click="insert()" class="btn btn-default " ng-if="selectedEntity.restrictionEntityId==undefined" ng-show="($root.restrictionList.security.restrictionItemMap.restrictionEntity.canCreate==true)">Insert
+					<form id="restrictionEntityActionButton" ng-if="vm.selectedEntity.show">
+						<button ng-click="insert()" class="btn btn-default " ng-if="vm.selectedEntity.restrictionEntityId==undefined" ng-show="($root.restrictionList.security.restrictionItemMap.restrictionEntity.canCreate==true)">Insert
 						</button>
 
-						<button ng-click="update()" class="btn btn-default " ng-if="selectedEntity.restrictionEntityId&gt;0" ng-show="($root.restrictionList.security.restrictionItemMap.restrictionEntity.canUpdate==true)">Update
+						<button ng-click="update()" class="btn btn-default " ng-if="vm.selectedEntity.restrictionEntityId&gt;0" ng-show="($root.restrictionList.security.restrictionItemMap.restrictionEntity.canUpdate==true)">Update
 						</button>
 
-						<button ng-click="del()" class="btn btn-default " ng-if="selectedEntity.restrictionEntityId&gt;0" ng-show="($root.restrictionList.security.restrictionItemMap.restrictionEntity.canDelete==true)">Delete
+						<button ng-click="del()" class="btn btn-default " ng-if="vm.selectedEntity.restrictionEntityId&gt;0" ng-show="($root.restrictionList.security.restrictionItemMap.restrictionEntity.canDelete==true)">Delete
 						</button>
 
 					</form>

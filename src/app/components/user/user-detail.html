@@ -1,7 +1,7 @@
 <div>
-	<form id="userDetailForm" name="userDetailForm" ng-show="selectedEntity.show">
+	<form id="userDetailForm" name="userDetailForm" ng-show="vm.selectedEntity.show">
 		<div class="panel panel-default default-panel">
-			<div class="panel-heading">Detail user {{ selectedEntity.userId }} <button type="button" class="close" aria-label="Close" ng-click="closeEntityDetail()">
+			<div class="panel-heading">Detail user {{ vm.selectedEntity.userId }} <button type="button" class="close" aria-label="Close" ng-click="vm.closeEntityDetail()">
 	<span aria-hidden="true">&times;
 	</span>
 </button>
@@ -11,7 +11,7 @@
 			<div class="panel-body">
 				<ul class="nav nav-tabs" role="tablist" id="userTabs">
 					<li role="presentation">
-						<a href="#user-Detail" aria-controls="Detail" role="tab" data-toggle="tab" ng-click="refreshTableDetail()">Detail
+						<a href="#user-Detail" aria-controls="Detail" role="tab" data-toggle="tab" ng-click="vm.refreshTableDetail()">Detail
 						</a>
 
 					</li>
@@ -34,7 +34,7 @@ if (angular.element('#userTabs').scope()!=null && angular.element(('#userTabs'))
 								<span class="input-group-addon">userId
 								</span>
 
-								<input class="form-control " aria-describedby="sizing-addon3" type="text" id="user-userId" ng-model="selectedEntity.userId" ng-readonly="true" name="userId" placeholder="userId"/>
+								<input class="form-control " aria-describedby="sizing-addon3" type="text" id="user-userId" ng-model="vm.selectedEntity.userId" ng-readonly="true" name="userId" placeholder="userId"/>
 								
 							</div>
 
@@ -45,7 +45,7 @@ if (angular.element('#userTabs').scope()!=null && angular.element(('#userTabs'))
 								<span class="input-group-addon">password
 								</span>
 
-								<input class="form-control " aria-describedby="sizing-addon3" type="password" id="user-password" ng-model="selectedEntity.password" ng-readonly="restrictionList.user.restrictionFieldMap.password" name="password" placeholder="password"/>
+								<input class="form-control " aria-describedby="sizing-addon3" type="password" id="user-password" ng-model="vm.selectedEntity.password" ng-readonly="vm.restrictionList.user.restrictionFieldMap.password" name="password" placeholder="password"/>
 								
 							</div>
 
@@ -56,7 +56,7 @@ if (angular.element('#userTabs').scope()!=null && angular.element(('#userTabs'))
 								<span class="input-group-addon">username
 								</span>
 
-								<input class="form-control " aria-describedby="sizing-addon3" type="text" id="user-username" ng-model="selectedEntity.username" ng-readonly="restrictionList.user.restrictionFieldMap.username" name="username" placeholder="username"/>
+								<input class="form-control " aria-describedby="sizing-addon3" type="text" id="user-username" ng-model="vm.selectedEntity.username" ng-readonly="vm.restrictionList.user.restrictionFieldMap.username" name="username" placeholder="username"/>
 								
 							</div>
 
@@ -67,7 +67,7 @@ if (angular.element('#userTabs').scope()!=null && angular.element(('#userTabs'))
 								<span class="input-group-addon">enabled
 								</span>
 
-								<select class="form-control " aria-describedby="sizing-addon3" type="checkbox" id="user-enabled" ng-model="selectedEntity.enabled" ng-readonly="restrictionList.user.restrictionFieldMap.enabled" name="enabled" placeholder="enabled" ng-options="value for value in trueFalseValues">
+								<select class="form-control " aria-describedby="sizing-addon3" type="checkbox" id="user-enabled" ng-model="vm.selectedEntity.enabled" ng-readonly="vm.restrictionList.user.restrictionFieldMap.enabled" name="enabled" placeholder="enabled" ng-options="value for value in vm.trueFalseValues">
 								</select>
 
 							</div>
@@ -95,7 +95,7 @@ if (angular.element('#userTabs').scope()!=null && angular.element(('#userTabs'))
 											<span class="input-group-addon">role
 											</span>
 
-											<select class="form-control " aria-describedby="sizing-addon3" ng-model="selectedEntity.role" id="role" name="role" ng-options="role as  role.roleId+&#39; &#39;+ role.role for role in rolePreparedData.entityList track by role.roleId" enctype="UTF-8">
+											<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.role" id="role" name="role" ng-options="role as  role.role+&#39; &#39;+ role.roleId for role in vm.rolePreparedData.entityList track by role.roleId" enctype="UTF-8">
 											</select>
 
 											<span class="input-group-btn">
@@ -126,21 +126,21 @@ if (angular.element('#userTabs').scope()!=null && angular.element(('#userTabs'))
 
 						<div class="pull-left" style="width: 100%" ng-show="true  && ($root.restrictionList.security.restrictionItemMap.role.canSearch==true)" ng-if="!$root.openNode.role">
 							<div class="panel panel-default default-panel">
-								<div class="panel-heading">role<button ng-click="showRoleDetail()" class="btn btn-default  pull-right" style="margin-top: -7px" ng-show="($root.restrictionList.security.restrictionItemMap.role.canCreate==true)">Add new role</button>
+								<div class="panel-heading">role<button ng-click="vm.showRoleDetail()" class="btn btn-default  pull-right" style="margin-top: -7px" ng-show="($root.restrictionList.security.restrictionItemMap.role.canCreate==true)">Add new role</button>
 <button type="button" class="btn btn-default pull-right" style="margin-top: -7px" data-toggle="modal" data-target="#user-role">Link existing</button>
-<button ng-click="downloadRoleList()" class="btn btn-default pull-right" style="margin-top:-7px">
+<button ng-click="vm.downloadRoleList()" class="btn btn-default pull-right" style="margin-top:-7px">
 	<span class="glyphicon glyphicon-download-alt" aria-hidden="true">
 	</span>
 </button>
 
 								</div>
 
-								<div class="panel-body" ng-class="{&#39;has-error&#39;: !userDetailForm.role.$valid, &#39;has-success&#39;: userDetailForm.role.$valid}">
+								<div class="panel-body" ng-class="{&#39;has-error&#39;: !vm.userDetailForm.role.$valid, &#39;has-success&#39;: vm.userDetailForm.role.$valid}">
 									<label id="role">role
 									</label>
 
-									<div id="role" ng-if="selectedEntity.roleList.length&gt;0">
-										<div style="top: 100px" ui-grid="roleGridOptions" ui-grid-pagination="" ui-grid-selection="">
+									<div id="role" ng-if="vm.selectedEntity.roleList.length&gt;0">
+										<div style="top: 100px" ui-grid="vm.roleGridOptions" ui-grid-pagination="" ui-grid-selection="">
 										</div>
 
 									</div>
@@ -162,14 +162,14 @@ if (angular.element('#userTabs').scope()!=null && angular.element(('#userTabs'))
 
 			<div class="panel-body">
 				<div class="pull-left">
-					<form id="userActionButton" ng-if="selectedEntity.show">
-						<button ng-click="insert()" class="btn btn-default " ng-if="selectedEntity.userId==undefined" ng-show="($root.restrictionList.security.restrictionItemMap.user.canCreate==true)">Insert
+					<form id="userActionButton" ng-if="vm.selectedEntity.show">
+						<button ng-click="insert()" class="btn btn-default " ng-if="vm.selectedEntity.userId==undefined" ng-show="($root.restrictionList.security.restrictionItemMap.user.canCreate==true)">Insert
 						</button>
 
-						<button ng-click="update()" class="btn btn-default " ng-if="selectedEntity.userId&gt;0" ng-show="($root.restrictionList.security.restrictionItemMap.user.canUpdate==true)">Update
+						<button ng-click="update()" class="btn btn-default " ng-if="vm.selectedEntity.userId&gt;0" ng-show="($root.restrictionList.security.restrictionItemMap.user.canUpdate==true)">Update
 						</button>
 
-						<button ng-click="del()" class="btn btn-default " ng-if="selectedEntity.userId&gt;0" ng-show="($root.restrictionList.security.restrictionItemMap.user.canDelete==true)">Delete
+						<button ng-click="del()" class="btn btn-default " ng-if="vm.selectedEntity.userId&gt;0" ng-show="($root.restrictionList.security.restrictionItemMap.user.canDelete==true)">Delete
 						</button>
 
 					</form>

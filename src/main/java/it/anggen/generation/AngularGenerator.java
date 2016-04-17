@@ -102,7 +102,7 @@ public class AngularGenerator {
 			html._form();
 		}
 		HtmlCanvas downloadCanvas= new HtmlCanvas(new PrettyWriter());
-		downloadCanvas.button(CssGenerator.getButton("downloadEntityList","pull-right").add("style", "margin-top:-7px"))
+		downloadCanvas.button(CssGenerator.getButton("vm.downloadList","pull-right").add("style", "margin-top:-7px"))
 		.span((new HtmlAttributes()).add("class", "glyphicon glyphicon-download-alt").add("aria-hidden", "true"))
 		._span()
 		._button();
@@ -341,7 +341,7 @@ public class AngularGenerator {
 		String baseEntity;
 		if (search)
 		{
-			baseEntity="searchBean";
+			baseEntity="vm.searchBean";
 			html.content("Search form "+entityName);
 		}
 		else
@@ -467,11 +467,11 @@ public class AngularGenerator {
 		{
 			html.div(CssGenerator.getPanelBody());
 			html.div((new HtmlAttributes()).add("class", "pull-left right-input"))
-			.button(CssGenerator.getButton("addNew").add("ng-show",checkSecurity(entity, "create")))
+			.button(CssGenerator.getButton("vm.addNew").add("ng-show",checkSecurity(entity, "create")))
 			.content("Add new")
-			.button(CssGenerator.getButton("search"))
+			.button(CssGenerator.getButton("vm.search"))
 			.content("Find")
-			.button(CssGenerator.getButton("reset"))
+			.button(CssGenerator.getButton("vm.reset"))
 			.content("Reset")
 			._div()
 			._div();

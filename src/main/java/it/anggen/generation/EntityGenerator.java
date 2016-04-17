@@ -143,7 +143,7 @@ public class EntityGenerator {
 			e.printStackTrace();
 		}
 		
-		if (generator.applicationName.equals("anggen") && (className.equals("Field") || className.equals("EnumField") || className.equals("Relationship")))
+		if ((generator.applicationName.equals("anggen") || generator.applicationName.equals("serverTest") ) && (className.equals("Field") || className.equals("EnumField") || className.equals("Relationship")))
 			myClass._extends(EntityAttribute.class);
 		
 		myClass.annotate(javax.persistence.Entity.class);

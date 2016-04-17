@@ -7,13 +7,13 @@ import it.anggen.model.field.Annotation;
 public class RelationshipSearchBean {
 
     public java.lang.Long relationshipId;
-    public java.lang.Integer priority;
     public java.lang.String name;
+    public java.lang.Integer priority;
     public it.anggen.model.RelationshipType relationshipType;
-    public it.anggen.model.entity.Entity entity;
-    public it.anggen.model.entity.Entity entityTarget;
-    public it.anggen.model.entity.Tab tab;
     public List<Annotation> annotationList;
+    public it.anggen.model.entity.Entity entityTarget;
+    public it.anggen.model.entity.Entity entity;
+    public it.anggen.model.entity.Tab tab;
 
     public java.lang.Long getRelationshipId() {
         return this.relationshipId;
@@ -21,14 +21,6 @@ public class RelationshipSearchBean {
 
     public void setRelationshipId(java.lang.Long relationshipId) {
         this.relationshipId=relationshipId;
-    }
-
-    public java.lang.Integer getPriority() {
-        return this.priority;
-    }
-
-    public void setPriority(java.lang.Integer priority) {
-        this.priority=priority;
     }
 
     public java.lang.String getName() {
@@ -39,6 +31,14 @@ public class RelationshipSearchBean {
         this.name=name;
     }
 
+    public java.lang.Integer getPriority() {
+        return this.priority;
+    }
+
+    public void setPriority(java.lang.Integer priority) {
+        this.priority=priority;
+    }
+
     public it.anggen.model.RelationshipType getRelationshipType() {
         return this.relationshipType;
     }
@@ -47,12 +47,12 @@ public class RelationshipSearchBean {
         this.relationshipType=relationshipType;
     }
 
-    public it.anggen.model.entity.Entity getEntity() {
-        return this.entity;
+    public List<Annotation> getAnnotationList() {
+        return this.annotationList;
     }
 
-    public void setEntity(it.anggen.model.entity.Entity entity) {
-        this.entity=entity;
+    public void setAnnotationList(List<Annotation> annotationList) {
+        this.annotationList=annotationList;
     }
 
     public it.anggen.model.entity.Entity getEntityTarget() {
@@ -63,20 +63,20 @@ public class RelationshipSearchBean {
         this.entityTarget=entityTarget;
     }
 
+    public it.anggen.model.entity.Entity getEntity() {
+        return this.entity;
+    }
+
+    public void setEntity(it.anggen.model.entity.Entity entity) {
+        this.entity=entity;
+    }
+
     public it.anggen.model.entity.Tab getTab() {
         return this.tab;
     }
 
     public void setTab(it.anggen.model.entity.Tab tab) {
         this.tab=tab;
-    }
-
-    public List<Annotation> getAnnotationList() {
-        return this.annotationList;
-    }
-
-    public void setAnnotationList(List<Annotation> annotationList) {
-        this.annotationList=annotationList;
     }
 
 }

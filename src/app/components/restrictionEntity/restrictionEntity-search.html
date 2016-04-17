@@ -10,7 +10,7 @@
 						<span class="input-group-addon">restrictionEntityId
 						</span>
 
-						<input class="form-control " aria-describedby="sizing-addon3" type="text" id="restrictionEntity-restrictionEntityId" ng-model="searchBean.restrictionEntityId" ng-readonly="false" name="restrictionEntityId" placeholder="restrictionEntityId"/>
+						<input class="form-control " aria-describedby="sizing-addon3" type="text" id="restrictionEntity-restrictionEntityId" ng-model="vm.searchBean.restrictionEntityId" ng-readonly="false" name="restrictionEntityId" placeholder="restrictionEntityId"/>
 						
 					</div>
 
@@ -21,7 +21,7 @@
 						<span class="input-group-addon">canCreate
 						</span>
 
-						<select class="form-control " aria-describedby="sizing-addon3" type="checkbox" id="restrictionEntity-canCreate" ng-model="searchBean.canCreate" ng-readonly="false" name="canCreate" placeholder="canCreate" ng-options="value for value in trueFalseValues">
+						<select class="form-control " aria-describedby="sizing-addon3" type="checkbox" id="restrictionEntity-canCreate" ng-model="vm.searchBean.canCreate" ng-readonly="false" name="canCreate" placeholder="canCreate" ng-options="value for value in vm.trueFalseValues">
 						</select>
 
 					</div>
@@ -33,19 +33,7 @@
 						<span class="input-group-addon">canUpdate
 						</span>
 
-						<select class="form-control " aria-describedby="sizing-addon3" type="checkbox" id="restrictionEntity-canUpdate" ng-model="searchBean.canUpdate" ng-readonly="false" name="canUpdate" placeholder="canUpdate" ng-options="value for value in trueFalseValues">
-						</select>
-
-					</div>
-
-				</div>
-
-				<div class="pull-left right-input" ng-show="true ">
-					<div class="input-group">
-						<span class="input-group-addon">canDelete
-						</span>
-
-						<select class="form-control " aria-describedby="sizing-addon3" type="checkbox" id="restrictionEntity-canDelete" ng-model="searchBean.canDelete" ng-readonly="false" name="canDelete" placeholder="canDelete" ng-options="value for value in trueFalseValues">
+						<select class="form-control " aria-describedby="sizing-addon3" type="checkbox" id="restrictionEntity-canUpdate" ng-model="vm.searchBean.canUpdate" ng-readonly="false" name="canUpdate" placeholder="canUpdate" ng-options="value for value in vm.trueFalseValues">
 						</select>
 
 					</div>
@@ -57,19 +45,19 @@
 						<span class="input-group-addon">canSearch
 						</span>
 
-						<select class="form-control " aria-describedby="sizing-addon3" type="checkbox" id="restrictionEntity-canSearch" ng-model="searchBean.canSearch" ng-readonly="false" name="canSearch" placeholder="canSearch" ng-options="value for value in trueFalseValues">
+						<select class="form-control " aria-describedby="sizing-addon3" type="checkbox" id="restrictionEntity-canSearch" ng-model="vm.searchBean.canSearch" ng-readonly="false" name="canSearch" placeholder="canSearch" ng-options="value for value in vm.trueFalseValues">
 						</select>
 
 					</div>
 
 				</div>
 
-				<div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.entity.restrictionItemMap.entity.canSearch==true)">
+				<div class="pull-left right-input" ng-show="true ">
 					<div class="input-group">
-						<span class="input-group-addon">entity
+						<span class="input-group-addon">canDelete
 						</span>
 
-						<select class="form-control " aria-describedby="sizing-addon3" ng-model="searchBean.entity.entityId" id="entity" ng-options="entity.entityId as  entity.entityId+&#39; &#39;+ entity.name for entity in entityPreparedData.entityList" enctype="UTF-8">
+						<select class="form-control " aria-describedby="sizing-addon3" type="checkbox" id="restrictionEntity-canDelete" ng-model="vm.searchBean.canDelete" ng-readonly="false" name="canDelete" placeholder="canDelete" ng-options="value for value in vm.trueFalseValues">
 						</select>
 
 					</div>
@@ -81,7 +69,19 @@
 						<span class="input-group-addon">role
 						</span>
 
-						<select class="form-control " aria-describedby="sizing-addon3" ng-model="searchBean.role.roleId" id="role" ng-options="role.roleId as  role.roleId+&#39; &#39;+ role.role for role in rolePreparedData.entityList" enctype="UTF-8">
+						<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.role.roleId" id="role" ng-options="role.roleId as  role.role+&#39; &#39;+ role.roleId for role in vm.rolePreparedData.entityList" enctype="UTF-8">
+						</select>
+
+					</div>
+
+				</div>
+
+				<div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.entity.restrictionItemMap.entity.canSearch==true)">
+					<div class="input-group">
+						<span class="input-group-addon">entity
+						</span>
+
+						<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.entity.entityId" id="entity" ng-options="entity.entityId as  entity.name+&#39; &#39;+ entity.entityId for entity in vm.entityPreparedData.entityList" enctype="UTF-8">
 						</select>
 
 					</div>
@@ -93,13 +93,13 @@
 			<div class="panel-body">
 				<div class="panel-body">
 					<div class="pull-left right-input">
-						<button ng-click="addNew()" class="btn btn-default " ng-show="($root.restrictionList.security.restrictionItemMap.restrictionEntity.canCreate==true)">Add new
+						<button ng-click="vm.addNew()" class="btn btn-default " ng-show="($root.restrictionList.security.restrictionItemMap.restrictionEntity.canCreate==true)">Add new
 						</button>
 
-						<button ng-click="search()" class="btn btn-default ">Find
+						<button ng-click="vm.search()" class="btn btn-default ">Find
 						</button>
 
-						<button ng-click="reset()" class="btn btn-default ">Reset
+						<button ng-click="vm.reset()" class="btn btn-default ">Reset
 						</button>
 
 					</div>
@@ -112,9 +112,9 @@
 
 	</form>
 
-	<form id="restrictionEntityList" ng-if="entityList.length&gt;0" enctype="UTF-8">
+	<form id="restrictionEntityList" ng-if="vm.entityList.length&gt;0" enctype="UTF-8">
 		<div class="panel panel-default default-panel">
-			<div class="panel-heading">List restrictionEntity<button ng-click="downloadEntityList()" class="btn btn-default pull-right" style="margin-top:-7px">
+			<div class="panel-heading">List restrictionEntity<button ng-click="vm.downloadList()" class="btn btn-default pull-right" style="margin-top:-7px">
 	<span class="glyphicon glyphicon-download-alt" aria-hidden="true">
 	</span>
 </button>
@@ -122,7 +122,7 @@
 			</div>
 
 			<div class="panel-body">
-				<div ui-grid="restrictionEntityGridOptions" ui-grid-pagination="" ui-grid-selection="" ui-grid-exporter="">
+				<div ui-grid="vm.restrictionEntityGridOptions" ui-grid-pagination="" ui-grid-selection="" ui-grid-exporter="">
 				</div>
 
 			</div>

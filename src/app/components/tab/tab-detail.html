@@ -1,7 +1,7 @@
 <div>
-	<form id="tabDetailForm" name="tabDetailForm" ng-show="selectedEntity.show">
+	<form id="tabDetailForm" name="tabDetailForm" ng-show="vm.selectedEntity.show">
 		<div class="panel panel-default default-panel">
-			<div class="panel-heading">Detail tab {{ selectedEntity.tabId }} <button type="button" class="close" aria-label="Close" ng-click="closeEntityDetail()">
+			<div class="panel-heading">Detail tab {{ vm.selectedEntity.tabId }} <button type="button" class="close" aria-label="Close" ng-click="vm.closeEntityDetail()">
 	<span aria-hidden="true">&times;
 	</span>
 </button>
@@ -11,7 +11,7 @@
 			<div class="panel-body">
 				<ul class="nav nav-tabs" role="tablist" id="tabTabs">
 					<li role="presentation">
-						<a href="#tab-Detail" aria-controls="Detail" role="tab" data-toggle="tab" ng-click="refreshTableDetail()">Detail
+						<a href="#tab-Detail" aria-controls="Detail" role="tab" data-toggle="tab" ng-click="vm.refreshTableDetail()">Detail
 						</a>
 
 					</li>
@@ -34,7 +34,7 @@ if (angular.element('#tabTabs').scope()!=null && angular.element(('#tabTabs')).s
 								<span class="input-group-addon">tabId
 								</span>
 
-								<input class="form-control " aria-describedby="sizing-addon3" type="text" id="tab-tabId" ng-model="selectedEntity.tabId" ng-readonly="true" name="tabId" placeholder="tabId"/>
+								<input class="form-control " aria-describedby="sizing-addon3" type="text" id="tab-tabId" ng-model="vm.selectedEntity.tabId" ng-readonly="true" name="tabId" placeholder="tabId"/>
 								
 							</div>
 
@@ -45,29 +45,8 @@ if (angular.element('#tabTabs').scope()!=null && angular.element(('#tabTabs')).s
 								<span class="input-group-addon">name
 								</span>
 
-								<input class="form-control " aria-describedby="sizing-addon3" type="text" id="tab-name" ng-model="selectedEntity.name" ng-readonly="restrictionList.tab.restrictionFieldMap.name" name="name" placeholder="name"/>
+								<input class="form-control " aria-describedby="sizing-addon3" type="text" id="tab-name" ng-model="vm.selectedEntity.name" ng-readonly="vm.restrictionList.tab.restrictionFieldMap.name" name="name" placeholder="name"/>
 								
-							</div>
-
-						</div>
-
-						<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !tabDetailForm.entity.$valid, &#39;has-success&#39;: tabDetailForm.entity.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.entity">
-							<div class="input-group">
-								<span class="input-group-addon">entity
-								</span>
-
-								<select class="form-control " aria-describedby="sizing-addon3" ng-model="selectedEntity.entity" id="entity" name="entity" ng-options="entity as  entity.entityId+&#39; &#39;+ entity.name for entity in entityPreparedData.entityList track by entity.entityId" enctype="UTF-8">
-								</select>
-
-								<span class="input-group-btn">
-									<button ng-click="showEntityDetail()" class="btn btn-default " id="entity" ng-if="selectedEntity.entity==null">Add new entity
-									</button>
-
-									<button ng-click="showEntityDetail()" class="btn btn-default " id="entity" ng-if="selectedEntity.entity!=null">Show detail
-									</button>
-
-								</span>
-
 							</div>
 
 						</div>
@@ -93,7 +72,7 @@ if (angular.element('#tabTabs').scope()!=null && angular.element(('#tabTabs')).s
 											<span class="input-group-addon">field
 											</span>
 
-											<select class="form-control " aria-describedby="sizing-addon3" ng-model="selectedEntity.field" id="field" name="field" ng-options="field as  field.fieldId+&#39; &#39;+ field.name for field in fieldPreparedData.entityList track by field.fieldId" enctype="UTF-8">
+											<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.field" id="field" name="field" ng-options="field as  field.name+&#39; &#39;+ field.fieldId for field in vm.fieldPreparedData.entityList track by field.fieldId" enctype="UTF-8">
 											</select>
 
 											<span class="input-group-btn">
@@ -124,21 +103,21 @@ if (angular.element('#tabTabs').scope()!=null && angular.element(('#tabTabs')).s
 
 						<div class="pull-left" style="width: 100%" ng-show="true  && ($root.restrictionList.field.restrictionItemMap.field.canSearch==true)" ng-if="!$root.openNode.field">
 							<div class="panel panel-default default-panel">
-								<div class="panel-heading">field<button ng-click="showFieldDetail()" class="btn btn-default  pull-right" style="margin-top: -7px" ng-show="($root.restrictionList.field.restrictionItemMap.field.canCreate==true)">Add new field</button>
+								<div class="panel-heading">field<button ng-click="vm.showFieldDetail()" class="btn btn-default  pull-right" style="margin-top: -7px" ng-show="($root.restrictionList.field.restrictionItemMap.field.canCreate==true)">Add new field</button>
 <button type="button" class="btn btn-default pull-right" style="margin-top: -7px" data-toggle="modal" data-target="#tab-field">Link existing</button>
-<button ng-click="downloadFieldList()" class="btn btn-default pull-right" style="margin-top:-7px">
+<button ng-click="vm.downloadFieldList()" class="btn btn-default pull-right" style="margin-top:-7px">
 	<span class="glyphicon glyphicon-download-alt" aria-hidden="true">
 	</span>
 </button>
 
 								</div>
 
-								<div class="panel-body" ng-class="{&#39;has-error&#39;: !tabDetailForm.field.$valid, &#39;has-success&#39;: tabDetailForm.field.$valid}">
+								<div class="panel-body" ng-class="{&#39;has-error&#39;: !vm.tabDetailForm.field.$valid, &#39;has-success&#39;: vm.tabDetailForm.field.$valid}">
 									<label id="field">field
 									</label>
 
-									<div id="field" ng-if="selectedEntity.fieldList.length&gt;0">
-										<div style="top: 100px" ui-grid="fieldGridOptions" ui-grid-pagination="" ui-grid-selection="">
+									<div id="field" ng-if="vm.selectedEntity.fieldList.length&gt;0">
+										<div style="top: 100px" ui-grid="vm.fieldGridOptions" ui-grid-pagination="" ui-grid-selection="">
 										</div>
 
 									</div>
@@ -170,7 +149,7 @@ if (angular.element('#tabTabs').scope()!=null && angular.element(('#tabTabs')).s
 											<span class="input-group-addon">enumField
 											</span>
 
-											<select class="form-control " aria-describedby="sizing-addon3" ng-model="selectedEntity.enumField" id="enumField" name="enumField" ng-options="enumField as  enumField.enumFieldId+&#39; &#39;+ enumField.name for enumField in enumFieldPreparedData.entityList track by enumField.enumFieldId" enctype="UTF-8">
+											<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.enumField" id="enumField" name="enumField" ng-options="enumField as  enumField.enumFieldId+&#39; &#39;+ enumField.name for enumField in vm.enumFieldPreparedData.entityList track by enumField.enumFieldId" enctype="UTF-8">
 											</select>
 
 											<span class="input-group-btn">
@@ -201,26 +180,47 @@ if (angular.element('#tabTabs').scope()!=null && angular.element(('#tabTabs')).s
 
 						<div class="pull-left" style="width: 100%" ng-show="true  && ($root.restrictionList.field.restrictionItemMap.enumField.canSearch==true)" ng-if="!$root.openNode.enumField">
 							<div class="panel panel-default default-panel">
-								<div class="panel-heading">enumField<button ng-click="showEnumFieldDetail()" class="btn btn-default  pull-right" style="margin-top: -7px" ng-show="($root.restrictionList.field.restrictionItemMap.enumField.canCreate==true)">Add new enumField</button>
+								<div class="panel-heading">enumField<button ng-click="vm.showEnumFieldDetail()" class="btn btn-default  pull-right" style="margin-top: -7px" ng-show="($root.restrictionList.field.restrictionItemMap.enumField.canCreate==true)">Add new enumField</button>
 <button type="button" class="btn btn-default pull-right" style="margin-top: -7px" data-toggle="modal" data-target="#tab-enumField">Link existing</button>
-<button ng-click="downloadEnumFieldList()" class="btn btn-default pull-right" style="margin-top:-7px">
+<button ng-click="vm.downloadEnumFieldList()" class="btn btn-default pull-right" style="margin-top:-7px">
 	<span class="glyphicon glyphicon-download-alt" aria-hidden="true">
 	</span>
 </button>
 
 								</div>
 
-								<div class="panel-body" ng-class="{&#39;has-error&#39;: !tabDetailForm.enumField.$valid, &#39;has-success&#39;: tabDetailForm.enumField.$valid}">
+								<div class="panel-body" ng-class="{&#39;has-error&#39;: !vm.tabDetailForm.enumField.$valid, &#39;has-success&#39;: vm.tabDetailForm.enumField.$valid}">
 									<label id="enumField">enumField
 									</label>
 
-									<div id="enumField" ng-if="selectedEntity.enumFieldList.length&gt;0">
-										<div style="top: 100px" ui-grid="enumFieldGridOptions" ui-grid-pagination="" ui-grid-selection="">
+									<div id="enumField" ng-if="vm.selectedEntity.enumFieldList.length&gt;0">
+										<div style="top: 100px" ui-grid="vm.enumFieldGridOptions" ui-grid-pagination="" ui-grid-selection="">
 										</div>
 
 									</div>
 
 								</div>
+
+							</div>
+
+						</div>
+
+						<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !tabDetailForm.entity.$valid, &#39;has-success&#39;: tabDetailForm.entity.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.entity">
+							<div class="input-group">
+								<span class="input-group-addon">entity
+								</span>
+
+								<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.entity" id="entity" name="entity" ng-options="entity as  entity.name+&#39; &#39;+ entity.entityId for entity in vm.entityPreparedData.entityList track by entity.entityId" enctype="UTF-8">
+								</select>
+
+								<span class="input-group-btn">
+									<button ng-click="vm.showEntityDetail()" class="btn btn-default " id="entity" ng-if="vm.selectedEntity.entity==null">Add new entity
+									</button>
+
+									<button ng-click="vm.showEntityDetail()" class="btn btn-default " id="entity" ng-if="vm.selectedEntity.entity!=null">Show detail
+									</button>
+
+								</span>
 
 							</div>
 
@@ -247,7 +247,7 @@ if (angular.element('#tabTabs').scope()!=null && angular.element(('#tabTabs')).s
 											<span class="input-group-addon">relationship
 											</span>
 
-											<select class="form-control " aria-describedby="sizing-addon3" ng-model="selectedEntity.relationship" id="relationship" name="relationship" ng-options="relationship as  relationship.name+&#39; &#39;+ relationship.relationshipId for relationship in relationshipPreparedData.entityList track by relationship.relationshipId" enctype="UTF-8">
+											<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.relationship" id="relationship" name="relationship" ng-options="relationship as  relationship.name+&#39; &#39;+ relationship.relationshipId for relationship in vm.relationshipPreparedData.entityList track by relationship.relationshipId" enctype="UTF-8">
 											</select>
 
 											<span class="input-group-btn">
@@ -278,21 +278,21 @@ if (angular.element('#tabTabs').scope()!=null && angular.element(('#tabTabs')).s
 
 						<div class="pull-left" style="width: 100%" ng-show="true  && ($root.restrictionList.relationship.restrictionItemMap.relationship.canSearch==true)" ng-if="!$root.openNode.relationship">
 							<div class="panel panel-default default-panel">
-								<div class="panel-heading">relationship<button ng-click="showRelationshipDetail()" class="btn btn-default  pull-right" style="margin-top: -7px" ng-show="($root.restrictionList.relationship.restrictionItemMap.relationship.canCreate==true)">Add new relationship</button>
+								<div class="panel-heading">relationship<button ng-click="vm.showRelationshipDetail()" class="btn btn-default  pull-right" style="margin-top: -7px" ng-show="($root.restrictionList.relationship.restrictionItemMap.relationship.canCreate==true)">Add new relationship</button>
 <button type="button" class="btn btn-default pull-right" style="margin-top: -7px" data-toggle="modal" data-target="#tab-relationship">Link existing</button>
-<button ng-click="downloadRelationshipList()" class="btn btn-default pull-right" style="margin-top:-7px">
+<button ng-click="vm.downloadRelationshipList()" class="btn btn-default pull-right" style="margin-top:-7px">
 	<span class="glyphicon glyphicon-download-alt" aria-hidden="true">
 	</span>
 </button>
 
 								</div>
 
-								<div class="panel-body" ng-class="{&#39;has-error&#39;: !tabDetailForm.relationship.$valid, &#39;has-success&#39;: tabDetailForm.relationship.$valid}">
+								<div class="panel-body" ng-class="{&#39;has-error&#39;: !vm.tabDetailForm.relationship.$valid, &#39;has-success&#39;: vm.tabDetailForm.relationship.$valid}">
 									<label id="relationship">relationship
 									</label>
 
-									<div id="relationship" ng-if="selectedEntity.relationshipList.length&gt;0">
-										<div style="top: 100px" ui-grid="relationshipGridOptions" ui-grid-pagination="" ui-grid-selection="">
+									<div id="relationship" ng-if="vm.selectedEntity.relationshipList.length&gt;0">
+										<div style="top: 100px" ui-grid="vm.relationshipGridOptions" ui-grid-pagination="" ui-grid-selection="">
 										</div>
 
 									</div>
@@ -314,14 +314,14 @@ if (angular.element('#tabTabs').scope()!=null && angular.element(('#tabTabs')).s
 
 			<div class="panel-body">
 				<div class="pull-left">
-					<form id="tabActionButton" ng-if="selectedEntity.show">
-						<button ng-click="insert()" class="btn btn-default " ng-if="selectedEntity.tabId==undefined" ng-show="($root.restrictionList.entity.restrictionItemMap.tab.canCreate==true)">Insert
+					<form id="tabActionButton" ng-if="vm.selectedEntity.show">
+						<button ng-click="insert()" class="btn btn-default " ng-if="vm.selectedEntity.tabId==undefined" ng-show="($root.restrictionList.entity.restrictionItemMap.tab.canCreate==true)">Insert
 						</button>
 
-						<button ng-click="update()" class="btn btn-default " ng-if="selectedEntity.tabId&gt;0" ng-show="($root.restrictionList.entity.restrictionItemMap.tab.canUpdate==true)">Update
+						<button ng-click="update()" class="btn btn-default " ng-if="vm.selectedEntity.tabId&gt;0" ng-show="($root.restrictionList.entity.restrictionItemMap.tab.canUpdate==true)">Update
 						</button>
 
-						<button ng-click="del()" class="btn btn-default " ng-if="selectedEntity.tabId&gt;0" ng-show="($root.restrictionList.entity.restrictionItemMap.tab.canDelete==true)">Delete
+						<button ng-click="del()" class="btn btn-default " ng-if="vm.selectedEntity.tabId&gt;0" ng-show="($root.restrictionList.entity.restrictionItemMap.tab.canDelete==true)">Delete
 						</button>
 
 					</form>

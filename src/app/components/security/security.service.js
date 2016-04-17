@@ -3,7 +3,7 @@
 
 angular.module("serverTestApp").service("SecurityService",SecurityService);
 /** @ngInject */
-function SecurityService($http)
+function SecurityService($http,$log)
 {
 this.restrictionList={};
 this.init= function() {
@@ -27,7 +27,7 @@ var credentials={};
 credentials.username=username;
 credentials.password=password;
 credentials=serializeObj(credentials);
-console.log(credentials);
+$log.debug(credentials);
 var promise=$http.post("http://127.0.0.1:8080/ServerTestApp/auth/authenticate/",credentials,{ headers: {'Content-Type': 'application/x-www-form-urlencoded' }});
 return promise;
 }

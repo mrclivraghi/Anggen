@@ -250,7 +250,7 @@ public class Generator {
 			jsGenerator.generateServiceFile();
 			jsGenerator.generateControllerFile();
 			jsGenerator.generateDirectiveFile();
-			jsGenerator.generateUtilityJS();
+			jsGenerator.generateUtilityService();
 			jsGenerator.generateNavbarDirective();
 			jsGenerator.generateLoginDirective();
 			jsGenerator.generateBowerFile();

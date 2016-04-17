@@ -174,7 +174,7 @@ public class JsGenerator {
 		
 		sb.append("/** @ngInject */\n");
 		
-		sb.append("function "+Utility.getFirstUpper(entityName)+"Service($http,MainService)\n")
+		sb.append("function "+Utility.getFirstUpper(entityName)+"Service($http,MainService,UtilityService)\n")
 		.append("{\n")
 		.append("this.entityList =		[];\n")
 		.append("this.preparedData={};\n")
@@ -223,7 +223,7 @@ public class JsGenerator {
 		.append("entity = {};\n")
 		.append("this.selectedEntity.show = false;\n")
 		.append("} //else\n")
-		.append("cloneObject(entity,this.selectedEntity);\n");
+		.append("UtilityService.cloneObject(entity,this.selectedEntity);\n");
 		
 		sb.append("};\n");
 		//search
@@ -284,7 +284,7 @@ public class JsGenerator {
 		
 		sb.append(generateGridOptions());
 		
-		sb.append("};\n");
+		sb.append("}\n");
 		
 		
 		
@@ -421,7 +421,7 @@ public class JsGenerator {
 
 		sb.append(".controller(\""+Utility.getFirstUpper(entityName)+"Controller\","+Utility.getFirstUpper(entityName)+"Controller);\n");
 		sb.append("/** @ngInject */\n");
-		sb.append("function "+Utility.getFirstUpper(entityName)+"Controller($scope,$http,$rootScope,$log "+getServices()+")\n");
+		sb.append("function "+Utility.getFirstUpper(entityName)+"Controller($scope,$http,$rootScope,$log,UtilityService "+getServices()+")\n");
 		sb.append("{\n");
 		//search var
 		sb.append("$scope.searchBean="+Utility.getEntityCallName(entityName)+"Service.searchBean;\n");
@@ -514,6 +514,7 @@ public class JsGenerator {
 		sb.append("{\n");
 		
 			sb.append(Utility.getEntityCallName(entityName)+"Service.insert().then(function successCallback(response) { \n");
+			sb.append("$log.debug(response);\n");
 			sb.append("$scope.search();\n");
 			sb.append("},function errorCallback(response) { \n");
 			manageRestError(sb);
@@ -551,7 +552,10 @@ public class JsGenerator {
 				sb.append("});\n");
 				//sb.append(parentEntityName+"Service.selectedEntity."+entityName+"="+entityName+"Service.selectedEntity;\n\n");
 			}
-			*/sb.append("},function errorCallback(response) { \n");
+			
+			*/
+			sb.append("$log.debug(response);\n");
+			sb.append("},function errorCallback(response) { \n");
 			manageRestError(sb);
 			sb.append("});\n");
 			//sb.append("$scope.updateParent();\n\n");
@@ -571,6 +575,7 @@ public class JsGenerator {
 		
 			changeChildrenVisibility(sb, false);
 			sb.append(Utility.getEntityCallName(entityName)+"Service.update().then(function successCallback(response) { \n");
+			sb.append("$log.debug(response);\n");
 			sb.append("$scope.search();\n");
 			sb.append("},function errorCallback(response) { \n");
 			manageRestError(sb);
@@ -656,6 +661,7 @@ public class JsGenerator {
 			sb.append("$scope.updateParent();\n");
 		
 		sb.append(Utility.getEntityCallName(entityName)+"Service.del().then(function successCallback(response) { \n");
+		sb.append("$log.debug(response);\n");
 		sb.append("if ("+Utility.getEntityCallName(entityName)+"Service.isParent()) \n");
 		sb.append("{\n");
 
@@ -690,7 +696,6 @@ public class JsGenerator {
 		sb.append(entityName+"Service.setSelectedEntity(response.data);\n");
 		sb.append("},function errorCallback(response) { \n");
 		manageRestError(sb);
-		sb.append("return; \n");
 		sb.append("});\n");
 		sb.append("}\n");
 
@@ -784,7 +789,7 @@ public class JsGenerator {
 			exportFields=exportFields.substring(0, exportFields.length()-1);
 		} else
 			exportFields="*";
-		sb.append("alasql('SELECT "+exportFields+" INTO XLSXML(\""+entityName+".xls\",?) FROM ?',[mystyle,$scope.entityList]);\n");
+		sb.append("UtilityService.alasql('SELECT "+exportFields+" INTO XLSXML(\""+entityName+".xls\",?) FROM ?',[mystyle,$scope.entityList]);\n");
 		sb.append("};\n");
 		
 		
@@ -816,12 +821,12 @@ public class JsGenerator {
 				exportFields=exportFields.substring(0, exportFields.length()-1);
 			} else
 				exportFields="*";
-			sb.append("alasql('SELECT "+exportFields+" INTO XLSXML(\""+relationship.getEntityTarget().getName()+".xls\",?) FROM ?',[mystyle,$scope.selectedEntity."+relationship.getEntityTarget().getName()+"List]);\n");
+			sb.append("UtilityService.alasql('SELECT "+exportFields+" INTO XLSXML(\""+relationship.getEntityTarget().getName()+".xls\",?) FROM ?',[mystyle,$scope.selectedEntity."+relationship.getEntityTarget().getName()+"List]);\n");
 			sb.append("};\n");
 		}
 
 		sb.append("$scope."+entityName+"GridOptions={};\n")
-		.append("cloneObject("+entityName+"Service.gridOptions,$scope."+entityName+"GridOptions);\n");
+		.append("UtilityService.cloneObject("+entityName+"Service.gridOptions,$scope."+entityName+"GridOptions);\n");
 		sb.append("$scope."+entityName+"GridOptions.data="+Utility.getEntityCallName(entityName)+"Service.entityList;\n");
 		
 		sb.append(getGridApi(null));//sb.append("}\n");	
@@ -836,7 +841,7 @@ public class JsGenerator {
 		{
 			init(relationship.getEntityTarget(), false, entityName,relationship.getRelationshipType(),mainEntityManager.isLastLevel(relationship.getEntityTarget()),MainServiceList);
 			sb.append("$scope."+entityName+"GridOptions={};\n");
-			sb.append("cloneObject("+entityName+"Service.gridOptions,$scope."+entityName+"GridOptions);\n");
+			sb.append("UtilityService.cloneObject("+entityName+"Service.gridOptions,$scope."+entityName+"GridOptions);\n");
 			sb.append("$scope."+entityName+"GridOptions.data=$scope.selectedEntity."+entityName+"List;\n");
 			sb.append(getGridApi(mainParentName));
 		}
@@ -983,12 +988,13 @@ if (entity.getEntityGroup()!=null)
 		for (Entity descendantEntity : descendantEntityList)
 			if (descendantEntity.getEntityGroup()!=null)
 		{
-			services=services+","+descendantEntity.getName()+"Service";
+			//services=services+","+descendantEntity.getName()+"Service";
 
 		}
+		if (entity.getRelationshipList()!=null)
 		for (Relationship relationship : entity.getRelationshipList())
 		{
-			//services=services+","+relationship.getEntityTarget().getName()+"ChildrenList";
+			services=services+","+relationship.getEntityTarget().getName()+"Service";
 		}
 		return services;
 	}
@@ -1390,7 +1396,7 @@ if (entity.getEntityGroup()!=null)
 		.append("    .run(runBlock);\n")
 		.append("\n")
 		.append("  /** @ngInject */\n")
-		.append("  function runBlock($log,SecurityService,$rootScope,$uibModal"+getallServices()+") { \n");
+		.append("  function runBlock($log,SecurityService,UtilityService,$rootScope,$uibModal"+getallServices()+") { \n");
 		
 		String services = serviceList;
 		if (services==null)
@@ -1545,13 +1551,21 @@ if (entity.getEntityGroup()!=null)
 	}
 	
 	
-	public void generateUtilityJS()
+	public void generateUtilityService()
 	{
 		StringBuilder sb = new StringBuilder();
-		sb.append("/**\n");
-		sb.append(" *  utility functionality\n");
-		sb.append("*/\n");
-
+		
+		sb.append("(function() { \n")
+		.append("'use strict'; \n")
+		.append("\n");
+		
+		
+		sb.append("angular.module(\""+generator.applicationName+"App\").service(\"UtilityService\", UtilityService);\n");
+		
+		sb.append("/** @ngInject */\n");
+		sb.append("function UtilityService()\n");
+		sb.append("{\n");
+		
 	/*	sb.append("function loadMenu()\n");
 		sb.append("{\n");
 		sb.append("var content = document.querySelector('link[rel=\"import\"]').import; \n");
@@ -1567,7 +1581,11 @@ if (entity.getEntityGroup()!=null)
 
 		sb.append("}\n");*/
 
-		sb.append("var AlertSuccess = (function() {\n");
+		
+		sb.append("this.alasql=alasql;\n");
+		
+		//alert success
+		sb.append("this.AlertSuccess = (function() {\n");
 		sb.append("   \"use strict\";\n");
 
 		sb.append("   var elem,\n");
@@ -1575,7 +1593,7 @@ if (entity.getEntityGroup()!=null)
 		sb.append("       that = {};\n");
 
 		sb.append("    that.init = function(options) {\n");
-		sb.append("        elem = $(options.selector);\n");
+		sb.append("        elem = angular.element(options.selector);\n");
 		sb.append("    };\n");
 
 		sb.append("    that.show = function(text) {\n");
@@ -1588,7 +1606,8 @@ if (entity.getEntityGroup()!=null)
 		sb.append("    return that;\n");
 		sb.append("}());\n");
 
-		sb.append("var AlertError = (function() {\n");
+		//Alert error
+		sb.append("this.AlertError = (function() {\n");
 		sb.append("  \"use strict\";\n");
 
 		sb.append("  var elem,\n");
@@ -1596,7 +1615,7 @@ if (entity.getEntityGroup()!=null)
 		sb.append("     that = {};\n");
 
 		sb.append("  that.init = function(options) {\n");
-		sb.append("      elem = $(options.selector);\n");
+		sb.append("      elem = angular.element(options.selector);\n");
 		sb.append("  };\n");
 
 		sb.append("that.show = function(text) {\n");
@@ -1609,14 +1628,14 @@ if (entity.getEntityGroup()!=null)
 		sb.append("  return that;\n");
 		sb.append("}());\n");
 
-
-		sb.append("function cloneObject(sourceObject,targetObject)\n");
+		//clone object
+		sb.append("this.cloneObject=function(sourceObject,targetObject)\n");
 		sb.append("{\n");
 
 		sb.append("var keyList = Object.keys(sourceObject);\n");
 		sb.append("if (keyList.length == 0)\n");
 		sb.append("	keyList = Object.keys(targetObject);\n");
-		sb.append("for (i = 0; i < keyList.length; i++) {\n");
+		sb.append("for (var i = 0; i < keyList.length; i++) {\n");
 		sb.append("var val = keyList[i];\n");
 		sb.append("if (val != undefined) {\n");
 		sb.append("if (val.toLowerCase().indexOf(\"list\") > -1\n");
@@ -1627,25 +1646,26 @@ if (entity.getEntityGroup()!=null)
 		sb.append("	while (targetObject[val].length > 0)\n");
 		sb.append("		targetObject[val].pop();\n");
 		sb.append("if (sourceObject[val] != null)\n");
-		sb.append("		for (j = 0; j < sourceObject[val].length; j++)\n");
+		sb.append("		for (var j = 0; j < sourceObject[val].length; j++)\n");
 		sb.append("				targetObject[val]\n");
 		sb.append("			.push(sourceObject[val][j]);\n");
 		sb.append("	} else \n");
-		sb.append("			emptyList(targetObject[val]);\n");
+		sb.append("			this.emptyList(targetObject[val]);\n");
 		sb.append("	} else {\n");
 		sb.append("		if (val.toLowerCase().indexOf(\"time\") > -1\n");
 		sb.append("				&& typeof val == \"string\") {\n");
-		sb.append("			var date = new Date(sourceObject[val]);\n");
+		//sb.append("			var date = new Date(sourceObject[val]);\n");
 		sb.append("			targetObject[val] = new Date(sourceObject[val]);\n");
 		sb.append("		} else {\n");
 		sb.append("			targetObject[val] = sourceObject[val];\n");
 		sb.append("		}\n");
 		sb.append("	}\n");
 		sb.append("}\n");
-		sb.append("};\n");
+		sb.append("}\n");
 
 		sb.append("}\n");
-		sb.append("function emptyList(list)\n");
+		//empty list
+		sb.append("this.emptyList=function(list)\n");
 		sb.append("{\n");
 		sb.append("	while (list.length>0)\n");
 		sb.append("		list.pop();\n");
@@ -1653,9 +1673,13 @@ if (entity.getEntityGroup()!=null)
 
 
 
+		sb.append("}\n");
+		
+		sb.append("})();\n"); // end of service
+		
 		File file = new File("");
-		String directory= file.getAbsolutePath()+generator.angularDirectory+"customLib/";
-		saveAsJsFile(directory, "utility", sb.toString());
+		String directory= file.getAbsolutePath()+generator.angularDirectory+"utility/";
+		saveAsJsFile(directory, "utility.service", sb.toString());
 	}
 	
 	
@@ -1846,9 +1870,10 @@ if (entity.getEntityGroup()!=null)
 
 	private void manageRestError(StringBuilder sb)
 	{
-		sb.append("//AlertError.init({selector: \"#alertError\"});\n");
-		sb.append("//AlertError.show(\"Si è verificato un errore\");\n");
-		sb.append("//return; \n");
+		sb.append("UtilityService.AlertError.init({selector: \"#alertError\"});\n");
+		sb.append("UtilityService.AlertError.show(\"Si è verificato un errore\");\n");
+		sb.append("$log.debug(response);\n");
+		sb.append("return; \n");
 	}
 	
 

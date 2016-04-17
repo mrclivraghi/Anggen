@@ -23,8 +23,8 @@ function login(){
 					$rootScope.$broadcast('security:loggedIn');
 				} 
 			},function errorCallback(response) { 
-				console.log("errore callback");
-				console.log(response);
+				$log.debug("errore callback");
+				$log.debug(response);
 			});
     }
 	  function checkUsername()
@@ -39,9 +39,10 @@ else
 $rootScope.$broadcast('security:loggedIn');
 	}
 },function errorCallback(response) { 
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
 });
 }
  vm.onSubmit = doLogin;

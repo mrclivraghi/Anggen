@@ -16,11 +16,11 @@
 
 					</li>
 
-					<script type="text/javascript">$('a[href="#enumValue-Detail"]').on('shown.bs.tab', function (e) {
-var target = $(e.target).attr("href"); // activated tab
-//console.log(target);
-if (angular.element($('#enumValueTabs')).scope()!=null && angular.element($('#enumValueTabs')).scope()!=undefined) 
-{ /* angular.element($('#enumValueTabs')).scope().refreshTableDetail(); */ }
+					<script type="text/javascript">angular.element('a[href="#enumValue-Detail"]').on('shown.bs.tab', function (e) {
+var target = angular.element(e.target).attr("href"); // activated tab
+//$log.debug(target);
+if (angular.element('#enumValueTabs').scope()!=null && angular.element(('#enumValueTabs')).scope()!=undefined) 
+{ /* angular.element(('#enumValueTabs')).scope().refreshTableDetail(); */ }
 });
 
 					</script>

@@ -4,7 +4,7 @@ angular
 .module("serverTestApp")
 .controller("AnnotationController",AnnotationController);
 /** @ngInject */
-function AnnotationController($scope,$http,$rootScope ,annotationService, SecurityService, MainService ,annotationAttributeService,fieldService,entityService,restrictionEntityService,roleService,restrictionFieldService,userService,restrictionEntityGroupService,entityGroupService,projectService,enumEntityService,enumValueService,tabService,enumFieldService,relationshipService)
+function AnnotationController($scope,$http,$rootScope,$log,UtilityService ,annotationService, SecurityService, MainService ,annotationAttributeService,fieldService,enumFieldService,relationshipService)
 {
 $scope.searchBean=annotationService.searchBean;
 $scope.entityList=annotationService.entityList;
@@ -50,7 +50,7 @@ delete $rootScope.openNode.enumField;
 relationshipService.selectedEntity.show=false;
 delete $rootScope.openNode.relationship;
 }
-$('#annotationTabs li:eq(0) a').tab('show');
+angular.element('#annotationTabs li:eq(0) a').tab('show');
 };
 		
 $scope.search=function()
@@ -63,9 +63,10 @@ delete annotationService.searchBean.annotationAttribute;
 annotationService.search().then(function successCallback(response) {
 annotationService.setEntityList(response.data);
 },function errorCallback(response) { 
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
 });
 };
 $scope.insert=function()
@@ -74,21 +75,25 @@ if (!$scope.annotationDetailForm.$valid) return;
 if (annotationService.isParent()) 
 {
 annotationService.insert().then(function successCallback(response) { 
+$log.debug(response);
 $scope.search();
 },function errorCallback(response) { 
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
 });
 }
 else 
 {
 annotationService.selectedEntity.show=false;
 annotationService.insert().then(function successCallBack(response) { 
+$log.debug(response);
 },function errorCallback(response) { 
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
 });
 }
 };
@@ -106,11 +111,13 @@ delete $rootScope.openNode.enumField;
 relationshipService.selectedEntity.show=false;
 delete $rootScope.openNode.relationship;
 annotationService.update().then(function successCallback(response) { 
+$log.debug(response);
 $scope.search();
 },function errorCallback(response) { 
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
 });
 }
 else 
@@ -121,9 +128,10 @@ annotationService.update().then(function successCallback(response){
 annotationService.setSelectedEntity(response.data);
 updateParentEntities();
 },function errorCallback(response) { 
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
 });
 }
 };
@@ -139,6 +147,7 @@ $scope.del=function()
 if (!annotationService.isParent()) 
 $scope.updateParent();
 annotationService.del().then(function successCallback(response) { 
+$log.debug(response);
 if (annotationService.isParent()) 
 {
 $scope.search();
@@ -146,9 +155,10 @@ $scope.search();
 annotationService.setSelectedEntity(null);
 }
 },function errorCallback(response) { 
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
 });
 };
 $scope.refreshTableDetail= function() 
@@ -167,9 +177,9 @@ $scope.loadFile = function(file,field)
 annotationService.loadFile(file,field).then(function successCallback(response) {
 annotationService.setSelectedEntity(response.data);
 },function errorCallback(response) { 
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
 return; 
 });
 }
@@ -180,14 +190,15 @@ if (index!=null)
 {
 annotationAttributeService.searchOne(annotationService.selectedEntity.annotationAttributeList[index]).then(
 function successCallback(response) {
-console.log("INDEX!=NULLLLLLLLLLLL");
-console.log(response);
+$log.debug("INDEX!=NULLLLLLLLLLLL");
+$log.debug(response);
 annotationAttributeService.setSelectedEntity(response.data[0]);
 annotationAttributeService.selectedEntity.show=true;
   }, function errorCallback(response) {
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
   }	
 );
 }
@@ -206,13 +217,14 @@ annotationAttributeService.setSelectedEntity(response.data[0]);
 annotationAttributeService.selectedEntity.show=true;
 $rootScope.openNode.annotationAttribute=true;
   }, function errorCallback(response) {
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
   }	
 );
 }
-$('#annotationAttributeTabs li:eq(0) a').tab('show');
+angular.element('#annotationAttributeTabs li:eq(0) a').tab('show');
 };
 $scope.showFieldDetail= function(index)
 {
@@ -220,14 +232,15 @@ if (index!=null)
 {
 fieldService.searchOne(annotationService.selectedEntity.fieldList[index]).then(
 function successCallback(response) {
-console.log("INDEX!=NULLLLLLLLLLLL");
-console.log(response);
+$log.debug("INDEX!=NULLLLLLLLLLLL");
+$log.debug(response);
 fieldService.setSelectedEntity(response.data[0]);
 fieldService.selectedEntity.show=true;
   }, function errorCallback(response) {
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
   }	
 );
 }
@@ -246,13 +259,14 @@ fieldService.setSelectedEntity(response.data[0]);
 fieldService.selectedEntity.show=true;
 $rootScope.openNode.field=true;
   }, function errorCallback(response) {
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
   }	
 );
 }
-$('#fieldTabs li:eq(0) a').tab('show');
+angular.element('#fieldTabs li:eq(0) a').tab('show');
 };
 $scope.showEnumFieldDetail= function(index)
 {
@@ -260,14 +274,15 @@ if (index!=null)
 {
 enumFieldService.searchOne(annotationService.selectedEntity.enumFieldList[index]).then(
 function successCallback(response) {
-console.log("INDEX!=NULLLLLLLLLLLL");
-console.log(response);
+$log.debug("INDEX!=NULLLLLLLLLLLL");
+$log.debug(response);
 enumFieldService.setSelectedEntity(response.data[0]);
 enumFieldService.selectedEntity.show=true;
   }, function errorCallback(response) {
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
   }	
 );
 }
@@ -286,13 +301,14 @@ enumFieldService.setSelectedEntity(response.data[0]);
 enumFieldService.selectedEntity.show=true;
 $rootScope.openNode.enumField=true;
   }, function errorCallback(response) {
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
   }	
 );
 }
-$('#enumFieldTabs li:eq(0) a').tab('show');
+angular.element('#enumFieldTabs li:eq(0) a').tab('show');
 };
 $scope.showRelationshipDetail= function(index)
 {
@@ -300,14 +316,15 @@ if (index!=null)
 {
 relationshipService.searchOne(annotationService.selectedEntity.relationshipList[index]).then(
 function successCallback(response) {
-console.log("INDEX!=NULLLLLLLLLLLL");
-console.log(response);
+$log.debug("INDEX!=NULLLLLLLLLLLL");
+$log.debug(response);
 relationshipService.setSelectedEntity(response.data[0]);
 relationshipService.selectedEntity.show=true;
   }, function errorCallback(response) {
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
   }	
 );
 }
@@ -326,13 +343,14 @@ relationshipService.setSelectedEntity(response.data[0]);
 relationshipService.selectedEntity.show=true;
 $rootScope.openNode.relationship=true;
   }, function errorCallback(response) {
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
   }	
 );
 }
-$('#relationshipTabs li:eq(0) a').tab('show');
+angular.element('#relationshipTabs li:eq(0) a').tab('show');
 };
 $scope.downloadEntityList=function()
 {
@@ -340,7 +358,7 @@ var mystyle = {
  headers:true, 
 column: {style:{Font:{Bold:"1"}}}
 };
-alasql('SELECT * INTO XLSXML("annotation.xls",?) FROM ?',[mystyle,$scope.entityList]);
+UtilityService.alasql('SELECT * INTO XLSXML("annotation.xls",?) FROM ?',[mystyle,$scope.entityList]);
 };
 $scope.saveLinkedAnnotationAttribute= function() {
 annotationService.selectedEntity.annotationAttributeList.push(annotationService.selectedEntity.annotationAttribute);
@@ -351,7 +369,7 @@ var mystyle = {
  headers:true, 
 column: {style:{Font:{Bold:"1"}}}
 };
-alasql('SELECT * INTO XLSXML("annotationAttribute.xls",?) FROM ?',[mystyle,$scope.selectedEntity.annotationAttributeList]);
+UtilityService.alasql('SELECT * INTO XLSXML("annotationAttribute.xls",?) FROM ?',[mystyle,$scope.selectedEntity.annotationAttributeList]);
 };
 $scope.downloadFieldList=function()
 {
@@ -359,7 +377,7 @@ var mystyle = {
  headers:true, 
 column: {style:{Font:{Bold:"1"}}}
 };
-alasql('SELECT * INTO XLSXML("field.xls",?) FROM ?',[mystyle,$scope.selectedEntity.fieldList]);
+UtilityService.alasql('SELECT * INTO XLSXML("field.xls",?) FROM ?',[mystyle,$scope.selectedEntity.fieldList]);
 };
 $scope.downloadEnumFieldList=function()
 {
@@ -367,7 +385,7 @@ var mystyle = {
  headers:true, 
 column: {style:{Font:{Bold:"1"}}}
 };
-alasql('SELECT * INTO XLSXML("enumField.xls",?) FROM ?',[mystyle,$scope.selectedEntity.enumFieldList]);
+UtilityService.alasql('SELECT * INTO XLSXML("enumField.xls",?) FROM ?',[mystyle,$scope.selectedEntity.enumFieldList]);
 };
 $scope.downloadRelationshipList=function()
 {
@@ -375,10 +393,10 @@ var mystyle = {
  headers:true, 
 column: {style:{Font:{Bold:"1"}}}
 };
-alasql('SELECT * INTO XLSXML("relationship.xls",?) FROM ?',[mystyle,$scope.selectedEntity.relationshipList]);
+UtilityService.alasql('SELECT * INTO XLSXML("relationship.xls",?) FROM ?',[mystyle,$scope.selectedEntity.relationshipList]);
 };
 $scope.annotationGridOptions={};
-cloneObject(annotationService.gridOptions,$scope.annotationGridOptions);
+UtilityService.cloneObject(annotationService.gridOptions,$scope.annotationGridOptions);
 $scope.annotationGridOptions.data=annotationService.entityList;
 $scope.initChildrenList = function () { 
 }
@@ -388,11 +406,11 @@ gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
 annotationService.searchOne(row.entity).then(function(response) { 
-console.log(response.data);
+$log.debug(response.data);
 $rootScope.openNode.annotation=true;
 annotationService.setSelectedEntity(response.data[0]);
 });
-$('#annotationTabs li:eq(0) a').tab('show');
+angular.element('#annotationTabs li:eq(0) a').tab('show');
 }
 else 
 annotationService.setSelectedEntity(null);
@@ -401,7 +419,7 @@ annotationService.selectedEntity.show = row.isSelected;
 });
   };
 $scope.annotationAttributeGridOptions={};
-cloneObject(annotationAttributeService.gridOptions,$scope.annotationAttributeGridOptions);
+UtilityService.cloneObject(annotationAttributeService.gridOptions,$scope.annotationAttributeGridOptions);
 $scope.annotationAttributeGridOptions.data=$scope.selectedEntity.annotationAttributeList;
 $scope.initChildrenList = function () { 
 }
@@ -411,11 +429,11 @@ gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
 annotationAttributeService.searchOne(row.entity).then(function(response) { 
-console.log(response.data);
+$log.debug(response.data);
 $rootScope.openNode.annotationAttribute=true;
 annotationAttributeService.setSelectedEntity(response.data[0]);
 });
-$('#annotationAttributeTabs li:eq(0) a').tab('show');
+angular.element('#annotationAttributeTabs li:eq(0) a').tab('show');
 }
 else 
 annotationAttributeService.setSelectedEntity(null);
@@ -424,7 +442,7 @@ annotationAttributeService.selectedEntity.show = row.isSelected;
 });
   };
 $scope.fieldGridOptions={};
-cloneObject(fieldService.gridOptions,$scope.fieldGridOptions);
+UtilityService.cloneObject(fieldService.gridOptions,$scope.fieldGridOptions);
 $scope.fieldGridOptions.data=$scope.selectedEntity.fieldList;
 $scope.initChildrenList = function () { 
 }
@@ -434,11 +452,11 @@ gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
 fieldService.searchOne(row.entity).then(function(response) { 
-console.log(response.data);
+$log.debug(response.data);
 $rootScope.openNode.field=true;
 fieldService.setSelectedEntity(response.data[0]);
 });
-$('#fieldTabs li:eq(0) a').tab('show');
+angular.element('#fieldTabs li:eq(0) a').tab('show');
 }
 else 
 fieldService.setSelectedEntity(null);
@@ -447,7 +465,7 @@ fieldService.selectedEntity.show = row.isSelected;
 });
   };
 $scope.enumFieldGridOptions={};
-cloneObject(enumFieldService.gridOptions,$scope.enumFieldGridOptions);
+UtilityService.cloneObject(enumFieldService.gridOptions,$scope.enumFieldGridOptions);
 $scope.enumFieldGridOptions.data=$scope.selectedEntity.enumFieldList;
 $scope.initChildrenList = function () { 
 }
@@ -457,11 +475,11 @@ gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
 enumFieldService.searchOne(row.entity).then(function(response) { 
-console.log(response.data);
+$log.debug(response.data);
 $rootScope.openNode.enumField=true;
 enumFieldService.setSelectedEntity(response.data[0]);
 });
-$('#enumFieldTabs li:eq(0) a').tab('show');
+angular.element('#enumFieldTabs li:eq(0) a').tab('show');
 }
 else 
 enumFieldService.setSelectedEntity(null);
@@ -470,7 +488,7 @@ enumFieldService.selectedEntity.show = row.isSelected;
 });
   };
 $scope.relationshipGridOptions={};
-cloneObject(relationshipService.gridOptions,$scope.relationshipGridOptions);
+UtilityService.cloneObject(relationshipService.gridOptions,$scope.relationshipGridOptions);
 $scope.relationshipGridOptions.data=$scope.selectedEntity.relationshipList;
 $scope.initChildrenList = function () { 
 }
@@ -480,11 +498,11 @@ gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
 relationshipService.searchOne(row.entity).then(function(response) { 
-console.log(response.data);
+$log.debug(response.data);
 $rootScope.openNode.relationship=true;
 relationshipService.setSelectedEntity(response.data[0]);
 });
-$('#relationshipTabs li:eq(0) a').tab('show');
+angular.element('#relationshipTabs li:eq(0) a').tab('show');
 }
 else 
 relationshipService.setSelectedEntity(null);
@@ -499,13 +517,14 @@ annotationService.preparedData.entityList=response.data;
 
 if (annotationAttributeService.selectedEntity.annotationAttributeId!=undefined) annotationAttributeService.searchOne(annotationAttributeService.selectedEntity).then(
 function successCallback(response) {
-console.log("response-ok");
-console.log(response);
+$log.debug("response-ok");
+$log.debug(response);
 annotationAttributeService.setSelectedEntity(response.data[0]);
   }, function errorCallback(response) {
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
   }	
 );
 fieldService.initAnnotationList().then(function(response) {
@@ -514,13 +533,14 @@ annotationService.preparedData.entityList=response.data;
 
 if (fieldService.selectedEntity.fieldId!=undefined) fieldService.searchOne(fieldService.selectedEntity).then(
 function successCallback(response) {
-console.log("response-ok");
-console.log(response);
+$log.debug("response-ok");
+$log.debug(response);
 fieldService.setSelectedEntity(response.data[0]);
   }, function errorCallback(response) {
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
   }	
 );
 enumFieldService.initAnnotationList().then(function(response) {
@@ -529,13 +549,14 @@ annotationService.preparedData.entityList=response.data;
 
 if (enumFieldService.selectedEntity.enumFieldId!=undefined) enumFieldService.searchOne(enumFieldService.selectedEntity).then(
 function successCallback(response) {
-console.log("response-ok");
-console.log(response);
+$log.debug("response-ok");
+$log.debug(response);
 enumFieldService.setSelectedEntity(response.data[0]);
   }, function errorCallback(response) {
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
   }	
 );
 relationshipService.initAnnotationList().then(function(response) {
@@ -544,13 +565,14 @@ annotationService.preparedData.entityList=response.data;
 
 if (relationshipService.selectedEntity.relationshipId!=undefined) relationshipService.searchOne(relationshipService.selectedEntity).then(
 function successCallback(response) {
-console.log("response-ok");
-console.log(response);
+$log.debug("response-ok");
+$log.debug(response);
 relationshipService.setSelectedEntity(response.data[0]);
   }, function errorCallback(response) {
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
   }	
 );
 }

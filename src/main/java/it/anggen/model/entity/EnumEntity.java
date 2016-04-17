@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import it.anggen.model.field.EnumField;
 import it.anggen.model.field.EnumValue;
 import it.anggen.utils.annotation.MaxDescendantLevel;
 import org.hibernate.annotations.Type;
@@ -38,6 +40,14 @@ public class EnumEntity {
     @javax.persistence.JoinColumn(name = "enum_entity_id_enum_entity")
     @it.anggen.utils.annotation.Priority(4)
     private List<EnumValue> enumValueList;
+    
+    @OneToMany(fetch = javax.persistence.FetchType.EAGER)
+    @Type(type = "it.anggen.model.field.EnumField")
+    @javax.persistence.JoinColumn(name = "enum_entity_id_enum_entity")
+    @it.anggen.utils.annotation.Priority(4)
+    private List<EnumField> enumFieldList;
+    
+    
 
     public java.lang.Long getEnumEntityId() {
         return this.enumEntityId;
@@ -70,5 +80,13 @@ public class EnumEntity {
     public void setEnumValueList(List<EnumValue> enumValueList) {
         this.enumValueList=enumValueList;
     }
+
+	public List<EnumField> getEnumFieldList() {
+		return enumFieldList;
+	}
+
+	public void setEnumFieldList(List<EnumField> enumFieldList) {
+		this.enumFieldList = enumFieldList;
+	}
 
 }

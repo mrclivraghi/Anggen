@@ -65,6 +65,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
@@ -182,9 +183,9 @@ public class WebappGenerator {
 		
 		webConfigClass._extends(WebMvcConfigurerAdapter.class);
 		
-		JMethod addCorsMapping = webConfigClass.method(JMod.PUBLIC, void.class, "addCorsMapping");
+		JMethod addCorsMapping = webConfigClass.method(JMod.PUBLIC, void.class, "addCorsMappings");
 		addCorsMapping.annotate(Override.class);
-		
+		addCorsMapping.param(CorsRegistry.class, "registry");
 		JBlock addCorsBlock = addCorsMapping.body();
 		addCorsBlock.directStatement("super.addCorsMappings(registry);\n");
 		addCorsBlock.directStatement("registry.addMapping(\"/**\")\n");

@@ -1,1 +1,143 @@
-<div><form id="fieldSearchBean"><div class="panel panel-default default-panel"><div class="panel-heading">Search form field</div><div class="panel-body"><div class="pull-left right-input" ng-show="true "><div class="input-group"><span class="input-group-addon">fieldId</span><input class="form-control " aria-describedby="sizing-addon3" type="text" id="field-fieldId" ng-model="searchBean.fieldId" ng-readonly="false" name="fieldId" placeholder="fieldId"/></div></div><div class="pull-left right-input" ng-show="true "><div class="input-group"><span class="input-group-addon">priority</span><input class="form-control " aria-describedby="sizing-addon3" type="text" id="field-priority" ng-model="searchBean.priority" ng-readonly="false" name="priority" placeholder="priority"/></div></div><div class="pull-left right-input" ng-show="true "><div class="input-group"><span class="input-group-addon">name</span><input class="form-control " aria-describedby="sizing-addon3" type="text" id="field-name" ng-model="searchBean.name" ng-readonly="false" name="name" placeholder="name"/></div></div><div class="pull-left right-input" ng-show="true "><div class="input-group"><span class="input-group-addon">fieldType</span><select class="form-control pull-left" aria-describedby="sizing-addon3" type="text" id="field-fieldType" ng-model="searchBean.fieldType" ng-readonly="false" name="fieldType" placeholder="fieldType" ng-options="fieldType as fieldType for fieldType in fieldTypePreparedData.entityList" enctype="UTF-8"></select></div></div><div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.entity.restrictionItemMap.entity.canSearch==true)"><div class="input-group"><span class="input-group-addon">entity</span><select class="form-control " aria-describedby="sizing-addon3" ng-model="searchBean.entity.entityId" id="entity" ng-options="entity.entityId as  entity.entityId+&#39; &#39;+ entity.name for entity in entityPreparedData.entityList" enctype="UTF-8"></select></div></div><div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.entity.restrictionItemMap.tab.canSearch==true)"><div class="input-group"><span class="input-group-addon">tab</span><select class="form-control " aria-describedby="sizing-addon3" ng-model="searchBean.tab.tabId" id="tab" ng-options="tab.tabId as  tab.name+&#39; &#39;+ tab.tabId for tab in tabPreparedData.entityList" enctype="UTF-8"></select></div></div><div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.field.restrictionItemMap.annotation.canSearch==true)"><div class="input-group"><span class="input-group-addon">annotation</span><select class="form-control " aria-describedby="sizing-addon3" ng-model="searchBean.annotation.annotationId" id="annotation" ng-options="annotation.annotationId as  annotation.annotationId for annotation in annotationPreparedData.entityList" enctype="UTF-8"></select></div></div><div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.security.restrictionItemMap.restrictionField.canSearch==true)"><div class="input-group"><span class="input-group-addon">restrictionField</span><select class="form-control " aria-describedby="sizing-addon3" ng-model="searchBean.restrictionField.restrictionFieldId" id="restrictionField" ng-options="restrictionField.restrictionFieldId as  restrictionField.restrictionFieldId for restrictionField in restrictionFieldPreparedData.entityList" enctype="UTF-8"></select></div></div></div><div class="panel-body"><div class="panel-body"><div class="pull-left right-input"><button ng-click="addNew()" class="btn btn-default " ng-show="($root.restrictionList.field.restrictionItemMap.field.canCreate==true)">Add new</button><button ng-click="search()" class="btn btn-default ">Find</button><button ng-click="reset()" class="btn btn-default ">Reset</button></div></div></div></div></form><form id="fieldList" ng-if="entityList.length&gt;0" enctype="UTF-8"><div class="panel panel-default default-panel"><div class="panel-heading">List field<button ng-click="downloadEntityList()" class="btn btn-default pull-right" style="margin-top:-7px"><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span></button></div><div class="panel-body"><div ui-grid="fieldGridOptions" ui-grid-pagination="" ui-grid-selection="" ui-grid-exporter=""></div></div></div></form></div>
+<div>
+	<form id="fieldSearchBean">
+		<div class="panel panel-default default-panel">
+			<div class="panel-heading">Search form field
+			</div>
+
+			<div class="panel-body">
+				<div class="pull-left right-input" ng-show="true ">
+					<div class="input-group">
+						<span class="input-group-addon">fieldId
+						</span>
+
+						<input class="form-control " aria-describedby="sizing-addon3" type="text" id="field-fieldId" ng-model="searchBean.fieldId" ng-readonly="false" name="fieldId" placeholder="fieldId"/>
+						
+					</div>
+
+				</div>
+
+				<div class="pull-left right-input" ng-show="true ">
+					<div class="input-group">
+						<span class="input-group-addon">priority
+						</span>
+
+						<input class="form-control " aria-describedby="sizing-addon3" type="text" id="field-priority" ng-model="searchBean.priority" ng-readonly="false" name="priority" placeholder="priority"/>
+						
+					</div>
+
+				</div>
+
+				<div class="pull-left right-input" ng-show="true ">
+					<div class="input-group">
+						<span class="input-group-addon">name
+						</span>
+
+						<input class="form-control " aria-describedby="sizing-addon3" type="text" id="field-name" ng-model="searchBean.name" ng-readonly="false" name="name" placeholder="name"/>
+						
+					</div>
+
+				</div>
+
+				<div class="pull-left right-input" ng-show="true ">
+					<div class="input-group">
+						<span class="input-group-addon">fieldType
+						</span>
+
+						<select class="form-control pull-left" aria-describedby="sizing-addon3" type="text" id="field-fieldType" ng-model="searchBean.fieldType" ng-readonly="false" name="fieldType" placeholder="fieldType" ng-options="fieldType as fieldType for fieldType in fieldTypePreparedData.entityList" enctype="UTF-8">
+						</select>
+
+					</div>
+
+				</div>
+
+				<div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.entity.restrictionItemMap.entity.canSearch==true)">
+					<div class="input-group">
+						<span class="input-group-addon">entity
+						</span>
+
+						<select class="form-control " aria-describedby="sizing-addon3" ng-model="searchBean.entity.entityId" id="entity" ng-options="entity.entityId as  entity.entityId+&#39; &#39;+ entity.name for entity in entityPreparedData.entityList" enctype="UTF-8">
+						</select>
+
+					</div>
+
+				</div>
+
+				<div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.entity.restrictionItemMap.tab.canSearch==true)">
+					<div class="input-group">
+						<span class="input-group-addon">tab
+						</span>
+
+						<select class="form-control " aria-describedby="sizing-addon3" ng-model="searchBean.tab.tabId" id="tab" ng-options="tab.tabId as  tab.name+&#39; &#39;+ tab.tabId for tab in tabPreparedData.entityList" enctype="UTF-8">
+						</select>
+
+					</div>
+
+				</div>
+
+				<div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.field.restrictionItemMap.annotation.canSearch==true)">
+					<div class="input-group">
+						<span class="input-group-addon">annotation
+						</span>
+
+						<select class="form-control " aria-describedby="sizing-addon3" ng-model="searchBean.annotation.annotationId" id="annotation" ng-options="annotation.annotationId as  annotation.annotationId for annotation in annotationPreparedData.entityList" enctype="UTF-8">
+						</select>
+
+					</div>
+
+				</div>
+
+				<div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.security.restrictionItemMap.restrictionField.canSearch==true)">
+					<div class="input-group">
+						<span class="input-group-addon">restrictionField
+						</span>
+
+						<select class="form-control " aria-describedby="sizing-addon3" ng-model="searchBean.restrictionField.restrictionFieldId" id="restrictionField" ng-options="restrictionField.restrictionFieldId as  restrictionField.restrictionFieldId for restrictionField in restrictionFieldPreparedData.entityList" enctype="UTF-8">
+						</select>
+
+					</div>
+
+				</div>
+
+			</div>
+
+			<div class="panel-body">
+				<div class="panel-body">
+					<div class="pull-left right-input">
+						<button ng-click="addNew()" class="btn btn-default " ng-show="($root.restrictionList.field.restrictionItemMap.field.canCreate==true)">Add new
+						</button>
+
+						<button ng-click="search()" class="btn btn-default ">Find
+						</button>
+
+						<button ng-click="reset()" class="btn btn-default ">Reset
+						</button>
+
+					</div>
+
+				</div>
+
+			</div>
+
+		</div>
+
+	</form>
+
+	<form id="fieldList" ng-if="entityList.length&gt;0" enctype="UTF-8">
+		<div class="panel panel-default default-panel">
+			<div class="panel-heading">List field<button ng-click="downloadEntityList()" class="btn btn-default pull-right" style="margin-top:-7px">
+	<span class="glyphicon glyphicon-download-alt" aria-hidden="true">
+	</span>
+</button>
+
+			</div>
+
+			<div class="panel-body">
+				<div ui-grid="fieldGridOptions" ui-grid-pagination="" ui-grid-selection="" ui-grid-exporter="">
+				</div>
+
+			</div>
+
+		</div>
+
+	</form>
+</div>

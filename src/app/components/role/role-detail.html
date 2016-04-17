@@ -1,7 +1,392 @@
-<div><form id="roleDetailForm" name="roleDetailForm" ng-show="selectedEntity.show"><div class="panel panel-default default-panel"><div class="panel-heading">Detail role {{ selectedEntity.roleId }} <button type="button" class="close" aria-label="Close" ng-click="closeEntityDetail()"><span aria-hidden="true">&times;</span></button></div><div class="panel-body"><ul class="nav nav-tabs" role="tablist" id="roleTabs"><li role="presentation"><a href="#role-Detail" aria-controls="Detail" role="tab" data-toggle="tab" ng-click="refreshTableDetail()">Detail</a></li><script type="text/javascript">$('a[href="#role-Detail"]').on('shown.bs.tab', function (e) {
+<div>
+	<form id="roleDetailForm" name="roleDetailForm" ng-show="selectedEntity.show">
+		<div class="panel panel-default default-panel">
+			<div class="panel-heading">Detail role {{ selectedEntity.roleId }} <button type="button" class="close" aria-label="Close" ng-click="closeEntityDetail()">
+	<span aria-hidden="true">&times;
+	</span>
+</button>
+
+			</div>
+
+			<div class="panel-body">
+				<ul class="nav nav-tabs" role="tablist" id="roleTabs">
+					<li role="presentation">
+						<a href="#role-Detail" aria-controls="Detail" role="tab" data-toggle="tab" ng-click="refreshTableDetail()">Detail
+						</a>
+
+					</li>
+
+					<script type="text/javascript">$('a[href="#role-Detail"]').on('shown.bs.tab', function (e) {
 var target = $(e.target).attr("href"); // activated tab
 //console.log(target);
 if (angular.element($('#roleTabs')).scope()!=null && angular.element($('#roleTabs')).scope()!=undefined) 
 { /* angular.element($('#roleTabs')).scope().refreshTableDetail(); */ }
 });
-</script></ul><div class="tab-content"><div role="tabpanel" class="tab-pane fade" id="role-Detail"><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !roleDetailForm.roleId.$valid, &#39;has-success&#39;: roleDetailForm.roleId.$valid}" style="height:59px" ng-show="true "><div class="input-group"><span class="input-group-addon">roleId</span><input class="form-control " aria-describedby="sizing-addon3" type="text" id="role-roleId" ng-model="selectedEntity.roleId" ng-readonly="true" name="roleId" placeholder="roleId"/></div></div><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !roleDetailForm.role.$valid, &#39;has-success&#39;: roleDetailForm.role.$valid}" style="height:59px" ng-show="true "><div class="input-group"><span class="input-group-addon">role</span><input class="form-control " aria-describedby="sizing-addon3" type="text" id="role-role" ng-model="selectedEntity.role" ng-readonly="restrictionList.role.restrictionFieldMap.role" name="role" placeholder="role"/></div></div><div id="role-restrictionField" class="modal fade" role="dialog" ng-if="!$root.openNode.restrictionField"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">Link existing restrictionField</h4></div><div class="modal-body"><p></p><div class="input-group"><span class="input-group-addon">restrictionField</span><select class="form-control " aria-describedby="sizing-addon3" ng-model="selectedEntity.restrictionField" id="restrictionField" name="restrictionField" ng-options="restrictionField as  restrictionField.restrictionFieldId for restrictionField in restrictionFieldPreparedData.entityList track by restrictionField.restrictionFieldId" enctype="UTF-8"></select><span class="input-group-btn"><button ng-click="saveLinkedRestrictionField()" class="btn btn-default " id="restrictionField">Save</button></span></div></div><div class="modal-footer"><button ng-click="close()" class="btn btn-default " data-dismiss="modal">close</button></div></div></div></div><br/><br/><div class="pull-left" style="width: 100%" ng-show="true  && ($root.restrictionList.security.restrictionItemMap.restrictionField.canSearch==true)" ng-if="!$root.openNode.restrictionField"><div class="panel panel-default default-panel"><div class="panel-heading">restrictionField<button ng-click="showRestrictionFieldDetail()" class="btn btn-default  pull-right" style="margin-top: -7px" ng-show="($root.restrictionList.security.restrictionItemMap.restrictionField.canCreate==true)">Add new restrictionField</button><button type="button" class="btn btn-default pull-right" style="margin-top: -7px" data-toggle="modal" data-target="#role-restrictionField">Link existing</button><button ng-click="downloadRestrictionFieldList()" class="btn btn-default pull-right" style="margin-top:-7px"><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span></button></div><div class="panel-body" ng-class="{&#39;has-error&#39;: !roleDetailForm.restrictionField.$valid, &#39;has-success&#39;: roleDetailForm.restrictionField.$valid}"><label id="restrictionField">restrictionField</label><div id="restrictionField" ng-if="selectedEntity.restrictionFieldList.length&gt;0"><div style="top: 100px" ui-grid="restrictionFieldGridOptions" ui-grid-pagination="" ui-grid-selection=""></div></div></div></div></div><div id="role-user" class="modal fade" role="dialog" ng-if="!$root.openNode.user"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">Link existing user</h4></div><div class="modal-body"><p></p><div class="input-group"><span class="input-group-addon">user</span><select class="form-control " aria-describedby="sizing-addon3" ng-model="selectedEntity.user" id="user" name="user" ng-options="user as  user.userId+&#39; &#39;+ user.username for user in userPreparedData.entityList track by user.userId" enctype="UTF-8"></select><span class="input-group-btn"><button ng-click="saveLinkedUser()" class="btn btn-default " id="user">Save</button></span></div></div><div class="modal-footer"><button ng-click="close()" class="btn btn-default " data-dismiss="modal">close</button></div></div></div></div><br/><br/><div class="pull-left" style="width: 100%" ng-show="true  && ($root.restrictionList.security.restrictionItemMap.user.canSearch==true)" ng-if="!$root.openNode.user"><div class="panel panel-default default-panel"><div class="panel-heading">user<button ng-click="showUserDetail()" class="btn btn-default  pull-right" style="margin-top: -7px" ng-show="($root.restrictionList.security.restrictionItemMap.user.canCreate==true)">Add new user</button><button type="button" class="btn btn-default pull-right" style="margin-top: -7px" data-toggle="modal" data-target="#role-user">Link existing</button><button ng-click="downloadUserList()" class="btn btn-default pull-right" style="margin-top:-7px"><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span></button></div><div class="panel-body" ng-class="{&#39;has-error&#39;: !roleDetailForm.user.$valid, &#39;has-success&#39;: roleDetailForm.user.$valid}"><label id="user">user</label><div id="user" ng-if="selectedEntity.userList.length&gt;0"><div style="top: 100px" ui-grid="userGridOptions" ui-grid-pagination="" ui-grid-selection=""></div></div></div></div></div><div id="role-restrictionEntityGroup" class="modal fade" role="dialog" ng-if="!$root.openNode.restrictionEntityGroup"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">Link existing restrictionEntityGroup</h4></div><div class="modal-body"><p></p><div class="input-group"><span class="input-group-addon">restrictionEntityGroup</span><select class="form-control " aria-describedby="sizing-addon3" ng-model="selectedEntity.restrictionEntityGroup" id="restrictionEntityGroup" name="restrictionEntityGroup" ng-options="restrictionEntityGroup as  restrictionEntityGroup.restrictionEntityGroupId for restrictionEntityGroup in restrictionEntityGroupPreparedData.entityList track by restrictionEntityGroup.restrictionEntityGroupId" enctype="UTF-8"></select><span class="input-group-btn"><button ng-click="saveLinkedRestrictionEntityGroup()" class="btn btn-default " id="restrictionEntityGroup">Save</button></span></div></div><div class="modal-footer"><button ng-click="close()" class="btn btn-default " data-dismiss="modal">close</button></div></div></div></div><br/><br/><div class="pull-left" style="width: 100%" ng-show="true  && ($root.restrictionList.security.restrictionItemMap.restrictionEntityGroup.canSearch==true)" ng-if="!$root.openNode.restrictionEntityGroup"><div class="panel panel-default default-panel"><div class="panel-heading">restrictionEntityGroup<button ng-click="showRestrictionEntityGroupDetail()" class="btn btn-default  pull-right" style="margin-top: -7px" ng-show="($root.restrictionList.security.restrictionItemMap.restrictionEntityGroup.canCreate==true)">Add new restrictionEntityGroup</button><button type="button" class="btn btn-default pull-right" style="margin-top: -7px" data-toggle="modal" data-target="#role-restrictionEntityGroup">Link existing</button><button ng-click="downloadRestrictionEntityGroupList()" class="btn btn-default pull-right" style="margin-top:-7px"><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span></button></div><div class="panel-body" ng-class="{&#39;has-error&#39;: !roleDetailForm.restrictionEntityGroup.$valid, &#39;has-success&#39;: roleDetailForm.restrictionEntityGroup.$valid}"><label id="restrictionEntityGroup">restrictionEntityGroup</label><div id="restrictionEntityGroup" ng-if="selectedEntity.restrictionEntityGroupList.length&gt;0"><div style="top: 100px" ui-grid="restrictionEntityGroupGridOptions" ui-grid-pagination="" ui-grid-selection=""></div></div></div></div></div><div id="role-restrictionEntity" class="modal fade" role="dialog" ng-if="!$root.openNode.restrictionEntity"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">Link existing restrictionEntity</h4></div><div class="modal-body"><p></p><div class="input-group"><span class="input-group-addon">restrictionEntity</span><select class="form-control " aria-describedby="sizing-addon3" ng-model="selectedEntity.restrictionEntity" id="restrictionEntity" name="restrictionEntity" ng-options="restrictionEntity as  restrictionEntity.restrictionEntityId+&#39; &#39;+ restrictionEntity.entity.EntityId for restrictionEntity in restrictionEntityPreparedData.entityList track by restrictionEntity.restrictionEntityId" enctype="UTF-8"></select><span class="input-group-btn"><button ng-click="saveLinkedRestrictionEntity()" class="btn btn-default " id="restrictionEntity">Save</button></span></div></div><div class="modal-footer"><button ng-click="close()" class="btn btn-default " data-dismiss="modal">close</button></div></div></div></div><br/><br/><div class="pull-left" style="width: 100%" ng-show="true  && ($root.restrictionList.security.restrictionItemMap.restrictionEntity.canSearch==true)" ng-if="!$root.openNode.restrictionEntity"><div class="panel panel-default default-panel"><div class="panel-heading">restrictionEntity<button ng-click="showRestrictionEntityDetail()" class="btn btn-default  pull-right" style="margin-top: -7px" ng-show="($root.restrictionList.security.restrictionItemMap.restrictionEntity.canCreate==true)">Add new restrictionEntity</button><button type="button" class="btn btn-default pull-right" style="margin-top: -7px" data-toggle="modal" data-target="#role-restrictionEntity">Link existing</button><button ng-click="downloadRestrictionEntityList()" class="btn btn-default pull-right" style="margin-top:-7px"><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span></button></div><div class="panel-body" ng-class="{&#39;has-error&#39;: !roleDetailForm.restrictionEntity.$valid, &#39;has-success&#39;: roleDetailForm.restrictionEntity.$valid}"><label id="restrictionEntity">restrictionEntity</label><div id="restrictionEntity" ng-if="selectedEntity.restrictionEntityList.length&gt;0"><div style="top: 100px" ui-grid="restrictionEntityGridOptions" ui-grid-pagination="" ui-grid-selection=""></div></div></div></div></div></div></div></div><script type="text/javascript">$('#roleTabs a:first').tab('show');</script><div class="panel-body"><div class="pull-left"><form id="roleActionButton" ng-if="selectedEntity.show"><button ng-click="insert()" class="btn btn-default " ng-if="selectedEntity.roleId==undefined" ng-show="($root.restrictionList.security.restrictionItemMap.role.canCreate==true)">Insert</button><button ng-click="update()" class="btn btn-default " ng-if="selectedEntity.roleId&gt;0" ng-show="($root.restrictionList.security.restrictionItemMap.role.canUpdate==true)">Update</button><button ng-click="del()" class="btn btn-default " ng-if="selectedEntity.roleId&gt;0" ng-show="($root.restrictionList.security.restrictionItemMap.role.canDelete==true)">Delete</button></form></div></div></div></form></div>
+
+					</script>
+
+				</ul>
+
+				<div class="tab-content">
+					<div role="tabpanel" class="tab-pane fade" id="role-Detail">
+						<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !roleDetailForm.roleId.$valid, &#39;has-success&#39;: roleDetailForm.roleId.$valid}" style="height:59px" ng-show="true ">
+							<div class="input-group">
+								<span class="input-group-addon">roleId
+								</span>
+
+								<input class="form-control " aria-describedby="sizing-addon3" type="text" id="role-roleId" ng-model="selectedEntity.roleId" ng-readonly="true" name="roleId" placeholder="roleId"/>
+								
+							</div>
+
+						</div>
+
+						<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !roleDetailForm.role.$valid, &#39;has-success&#39;: roleDetailForm.role.$valid}" style="height:59px" ng-show="true ">
+							<div class="input-group">
+								<span class="input-group-addon">role
+								</span>
+
+								<input class="form-control " aria-describedby="sizing-addon3" type="text" id="role-role" ng-model="selectedEntity.role" ng-readonly="restrictionList.role.restrictionFieldMap.role" name="role" placeholder="role"/>
+								
+							</div>
+
+						</div>
+
+						<div id="role-restrictionField" class="modal fade" role="dialog" ng-if="!$root.openNode.restrictionField">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal">&times;
+										</button>
+
+										<h4 class="modal-title">Link existing restrictionField
+										</h4>
+
+									</div>
+
+									<div class="modal-body">
+										<p>
+
+										</p>
+
+										<div class="input-group">
+											<span class="input-group-addon">restrictionField
+											</span>
+
+											<select class="form-control " aria-describedby="sizing-addon3" ng-model="selectedEntity.restrictionField" id="restrictionField" name="restrictionField" ng-options="restrictionField as  restrictionField.restrictionFieldId for restrictionField in restrictionFieldPreparedData.entityList track by restrictionField.restrictionFieldId" enctype="UTF-8">
+											</select>
+
+											<span class="input-group-btn">
+												<button ng-click="saveLinkedRestrictionField()" class="btn btn-default " id="restrictionField">Save
+												</button>
+
+											</span>
+
+										</div>
+
+									</div>
+
+									<div class="modal-footer">
+										<button ng-click="close()" class="btn btn-default " data-dismiss="modal">close
+										</button>
+
+									</div>
+
+								</div>
+
+							</div>
+
+						</div>
+
+						<br/>
+
+						<br/>
+
+						<div class="pull-left" style="width: 100%" ng-show="true  && ($root.restrictionList.security.restrictionItemMap.restrictionField.canSearch==true)" ng-if="!$root.openNode.restrictionField">
+							<div class="panel panel-default default-panel">
+								<div class="panel-heading">restrictionField<button ng-click="showRestrictionFieldDetail()" class="btn btn-default  pull-right" style="margin-top: -7px" ng-show="($root.restrictionList.security.restrictionItemMap.restrictionField.canCreate==true)">Add new restrictionField</button>
+<button type="button" class="btn btn-default pull-right" style="margin-top: -7px" data-toggle="modal" data-target="#role-restrictionField">Link existing</button>
+<button ng-click="downloadRestrictionFieldList()" class="btn btn-default pull-right" style="margin-top:-7px">
+	<span class="glyphicon glyphicon-download-alt" aria-hidden="true">
+	</span>
+</button>
+
+								</div>
+
+								<div class="panel-body" ng-class="{&#39;has-error&#39;: !roleDetailForm.restrictionField.$valid, &#39;has-success&#39;: roleDetailForm.restrictionField.$valid}">
+									<label id="restrictionField">restrictionField
+									</label>
+
+									<div id="restrictionField" ng-if="selectedEntity.restrictionFieldList.length&gt;0">
+										<div style="top: 100px" ui-grid="restrictionFieldGridOptions" ui-grid-pagination="" ui-grid-selection="">
+										</div>
+
+									</div>
+
+								</div>
+
+							</div>
+
+						</div>
+
+						<div id="role-user" class="modal fade" role="dialog" ng-if="!$root.openNode.user">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal">&times;
+										</button>
+
+										<h4 class="modal-title">Link existing user
+										</h4>
+
+									</div>
+
+									<div class="modal-body">
+										<p>
+
+										</p>
+
+										<div class="input-group">
+											<span class="input-group-addon">user
+											</span>
+
+											<select class="form-control " aria-describedby="sizing-addon3" ng-model="selectedEntity.user" id="user" name="user" ng-options="user as  user.userId+&#39; &#39;+ user.username for user in userPreparedData.entityList track by user.userId" enctype="UTF-8">
+											</select>
+
+											<span class="input-group-btn">
+												<button ng-click="saveLinkedUser()" class="btn btn-default " id="user">Save
+												</button>
+
+											</span>
+
+										</div>
+
+									</div>
+
+									<div class="modal-footer">
+										<button ng-click="close()" class="btn btn-default " data-dismiss="modal">close
+										</button>
+
+									</div>
+
+								</div>
+
+							</div>
+
+						</div>
+
+						<br/>
+
+						<br/>
+
+						<div class="pull-left" style="width: 100%" ng-show="true  && ($root.restrictionList.security.restrictionItemMap.user.canSearch==true)" ng-if="!$root.openNode.user">
+							<div class="panel panel-default default-panel">
+								<div class="panel-heading">user<button ng-click="showUserDetail()" class="btn btn-default  pull-right" style="margin-top: -7px" ng-show="($root.restrictionList.security.restrictionItemMap.user.canCreate==true)">Add new user</button>
+<button type="button" class="btn btn-default pull-right" style="margin-top: -7px" data-toggle="modal" data-target="#role-user">Link existing</button>
+<button ng-click="downloadUserList()" class="btn btn-default pull-right" style="margin-top:-7px">
+	<span class="glyphicon glyphicon-download-alt" aria-hidden="true">
+	</span>
+</button>
+
+								</div>
+
+								<div class="panel-body" ng-class="{&#39;has-error&#39;: !roleDetailForm.user.$valid, &#39;has-success&#39;: roleDetailForm.user.$valid}">
+									<label id="user">user
+									</label>
+
+									<div id="user" ng-if="selectedEntity.userList.length&gt;0">
+										<div style="top: 100px" ui-grid="userGridOptions" ui-grid-pagination="" ui-grid-selection="">
+										</div>
+
+									</div>
+
+								</div>
+
+							</div>
+
+						</div>
+
+						<div id="role-restrictionEntityGroup" class="modal fade" role="dialog" ng-if="!$root.openNode.restrictionEntityGroup">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal">&times;
+										</button>
+
+										<h4 class="modal-title">Link existing restrictionEntityGroup
+										</h4>
+
+									</div>
+
+									<div class="modal-body">
+										<p>
+
+										</p>
+
+										<div class="input-group">
+											<span class="input-group-addon">restrictionEntityGroup
+											</span>
+
+											<select class="form-control " aria-describedby="sizing-addon3" ng-model="selectedEntity.restrictionEntityGroup" id="restrictionEntityGroup" name="restrictionEntityGroup" ng-options="restrictionEntityGroup as  restrictionEntityGroup.restrictionEntityGroupId for restrictionEntityGroup in restrictionEntityGroupPreparedData.entityList track by restrictionEntityGroup.restrictionEntityGroupId" enctype="UTF-8">
+											</select>
+
+											<span class="input-group-btn">
+												<button ng-click="saveLinkedRestrictionEntityGroup()" class="btn btn-default " id="restrictionEntityGroup">Save
+												</button>
+
+											</span>
+
+										</div>
+
+									</div>
+
+									<div class="modal-footer">
+										<button ng-click="close()" class="btn btn-default " data-dismiss="modal">close
+										</button>
+
+									</div>
+
+								</div>
+
+							</div>
+
+						</div>
+
+						<br/>
+
+						<br/>
+
+						<div class="pull-left" style="width: 100%" ng-show="true  && ($root.restrictionList.security.restrictionItemMap.restrictionEntityGroup.canSearch==true)" ng-if="!$root.openNode.restrictionEntityGroup">
+							<div class="panel panel-default default-panel">
+								<div class="panel-heading">restrictionEntityGroup<button ng-click="showRestrictionEntityGroupDetail()" class="btn btn-default  pull-right" style="margin-top: -7px" ng-show="($root.restrictionList.security.restrictionItemMap.restrictionEntityGroup.canCreate==true)">Add new restrictionEntityGroup</button>
+<button type="button" class="btn btn-default pull-right" style="margin-top: -7px" data-toggle="modal" data-target="#role-restrictionEntityGroup">Link existing</button>
+<button ng-click="downloadRestrictionEntityGroupList()" class="btn btn-default pull-right" style="margin-top:-7px">
+	<span class="glyphicon glyphicon-download-alt" aria-hidden="true">
+	</span>
+</button>
+
+								</div>
+
+								<div class="panel-body" ng-class="{&#39;has-error&#39;: !roleDetailForm.restrictionEntityGroup.$valid, &#39;has-success&#39;: roleDetailForm.restrictionEntityGroup.$valid}">
+									<label id="restrictionEntityGroup">restrictionEntityGroup
+									</label>
+
+									<div id="restrictionEntityGroup" ng-if="selectedEntity.restrictionEntityGroupList.length&gt;0">
+										<div style="top: 100px" ui-grid="restrictionEntityGroupGridOptions" ui-grid-pagination="" ui-grid-selection="">
+										</div>
+
+									</div>
+
+								</div>
+
+							</div>
+
+						</div>
+
+						<div id="role-restrictionEntity" class="modal fade" role="dialog" ng-if="!$root.openNode.restrictionEntity">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal">&times;
+										</button>
+
+										<h4 class="modal-title">Link existing restrictionEntity
+										</h4>
+
+									</div>
+
+									<div class="modal-body">
+										<p>
+
+										</p>
+
+										<div class="input-group">
+											<span class="input-group-addon">restrictionEntity
+											</span>
+
+											<select class="form-control " aria-describedby="sizing-addon3" ng-model="selectedEntity.restrictionEntity" id="restrictionEntity" name="restrictionEntity" ng-options="restrictionEntity as  restrictionEntity.restrictionEntityId+&#39; &#39;+ restrictionEntity.entity.EntityId for restrictionEntity in restrictionEntityPreparedData.entityList track by restrictionEntity.restrictionEntityId" enctype="UTF-8">
+											</select>
+
+											<span class="input-group-btn">
+												<button ng-click="saveLinkedRestrictionEntity()" class="btn btn-default " id="restrictionEntity">Save
+												</button>
+
+											</span>
+
+										</div>
+
+									</div>
+
+									<div class="modal-footer">
+										<button ng-click="close()" class="btn btn-default " data-dismiss="modal">close
+										</button>
+
+									</div>
+
+								</div>
+
+							</div>
+
+						</div>
+
+						<br/>
+
+						<br/>
+
+						<div class="pull-left" style="width: 100%" ng-show="true  && ($root.restrictionList.security.restrictionItemMap.restrictionEntity.canSearch==true)" ng-if="!$root.openNode.restrictionEntity">
+							<div class="panel panel-default default-panel">
+								<div class="panel-heading">restrictionEntity<button ng-click="showRestrictionEntityDetail()" class="btn btn-default  pull-right" style="margin-top: -7px" ng-show="($root.restrictionList.security.restrictionItemMap.restrictionEntity.canCreate==true)">Add new restrictionEntity</button>
+<button type="button" class="btn btn-default pull-right" style="margin-top: -7px" data-toggle="modal" data-target="#role-restrictionEntity">Link existing</button>
+<button ng-click="downloadRestrictionEntityList()" class="btn btn-default pull-right" style="margin-top:-7px">
+	<span class="glyphicon glyphicon-download-alt" aria-hidden="true">
+	</span>
+</button>
+
+								</div>
+
+								<div class="panel-body" ng-class="{&#39;has-error&#39;: !roleDetailForm.restrictionEntity.$valid, &#39;has-success&#39;: roleDetailForm.restrictionEntity.$valid}">
+									<label id="restrictionEntity">restrictionEntity
+									</label>
+
+									<div id="restrictionEntity" ng-if="selectedEntity.restrictionEntityList.length&gt;0">
+										<div style="top: 100px" ui-grid="restrictionEntityGridOptions" ui-grid-pagination="" ui-grid-selection="">
+										</div>
+
+									</div>
+
+								</div>
+
+							</div>
+
+						</div>
+
+					</div>
+
+				</div>
+
+			</div>
+
+			<script type="text/javascript">$('#roleTabs a:first').tab('show');
+			</script>
+
+			<div class="panel-body">
+				<div class="pull-left">
+					<form id="roleActionButton" ng-if="selectedEntity.show">
+						<button ng-click="insert()" class="btn btn-default " ng-if="selectedEntity.roleId==undefined" ng-show="($root.restrictionList.security.restrictionItemMap.role.canCreate==true)">Insert
+						</button>
+
+						<button ng-click="update()" class="btn btn-default " ng-if="selectedEntity.roleId&gt;0" ng-show="($root.restrictionList.security.restrictionItemMap.role.canUpdate==true)">Update
+						</button>
+
+						<button ng-click="del()" class="btn btn-default " ng-if="selectedEntity.roleId&gt;0" ng-show="($root.restrictionList.security.restrictionItemMap.role.canDelete==true)">Delete
+						</button>
+
+					</form>
+
+				</div>
+
+			</div>
+
+		</div>
+
+	</form>
+</div>

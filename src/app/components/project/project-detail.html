@@ -1,7 +1,238 @@
-<div><form id="projectDetailForm" name="projectDetailForm" ng-show="selectedEntity.show"><div class="panel panel-default default-panel"><div class="panel-heading">Detail project {{ selectedEntity.projectId }} <button type="button" class="close" aria-label="Close" ng-click="closeEntityDetail()"><span aria-hidden="true">&times;</span></button></div><div class="panel-body"><ul class="nav nav-tabs" role="tablist" id="projectTabs"><li role="presentation"><a href="#project-Detail" aria-controls="Detail" role="tab" data-toggle="tab" ng-click="refreshTableDetail()">Detail</a></li><script type="text/javascript">$('a[href="#project-Detail"]').on('shown.bs.tab', function (e) {
+<div>
+	<form id="projectDetailForm" name="projectDetailForm" ng-show="selectedEntity.show">
+		<div class="panel panel-default default-panel">
+			<div class="panel-heading">Detail project {{ selectedEntity.projectId }} <button type="button" class="close" aria-label="Close" ng-click="closeEntityDetail()">
+	<span aria-hidden="true">&times;
+	</span>
+</button>
+
+			</div>
+
+			<div class="panel-body">
+				<ul class="nav nav-tabs" role="tablist" id="projectTabs">
+					<li role="presentation">
+						<a href="#project-Detail" aria-controls="Detail" role="tab" data-toggle="tab" ng-click="refreshTableDetail()">Detail
+						</a>
+
+					</li>
+
+					<script type="text/javascript">$('a[href="#project-Detail"]').on('shown.bs.tab', function (e) {
 var target = $(e.target).attr("href"); // activated tab
 //console.log(target);
 if (angular.element($('#projectTabs')).scope()!=null && angular.element($('#projectTabs')).scope()!=undefined) 
 { /* angular.element($('#projectTabs')).scope().refreshTableDetail(); */ }
 });
-</script></ul><div class="tab-content"><div role="tabpanel" class="tab-pane fade" id="project-Detail"><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !projectDetailForm.projectId.$valid, &#39;has-success&#39;: projectDetailForm.projectId.$valid}" style="height:59px" ng-show="true "><div class="input-group"><span class="input-group-addon">projectId</span><input class="form-control " aria-describedby="sizing-addon3" type="text" id="project-projectId" ng-model="selectedEntity.projectId" ng-readonly="true" name="projectId" placeholder="projectId"/></div></div><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !projectDetailForm.name.$valid, &#39;has-success&#39;: projectDetailForm.name.$valid}" style="height:59px" ng-show="true "><div class="input-group"><span class="input-group-addon">name</span><input class="form-control " aria-describedby="sizing-addon3" type="text" id="project-name" ng-model="selectedEntity.name" ng-readonly="restrictionList.project.restrictionFieldMap.name" name="name" placeholder="name"/></div></div><div id="project-enumEntity" class="modal fade" role="dialog" ng-if="!$root.openNode.enumEntity"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">Link existing enumEntity</h4></div><div class="modal-body"><p></p><div class="input-group"><span class="input-group-addon">enumEntity</span><select class="form-control " aria-describedby="sizing-addon3" ng-model="selectedEntity.enumEntity" id="enumEntity" name="enumEntity" ng-options="enumEntity as  enumEntity.name+&#39; &#39;+ enumEntity.enumEntityId for enumEntity in enumEntityPreparedData.entityList track by enumEntity.enumEntityId" enctype="UTF-8"></select><span class="input-group-btn"><button ng-click="saveLinkedEnumEntity()" class="btn btn-default " id="enumEntity">Save</button></span></div></div><div class="modal-footer"><button ng-click="close()" class="btn btn-default " data-dismiss="modal">close</button></div></div></div></div><br/><br/><div class="pull-left" style="width: 100%" ng-show="true  && ($root.restrictionList.entity.restrictionItemMap.enumEntity.canSearch==true)" ng-if="!$root.openNode.enumEntity"><div class="panel panel-default default-panel"><div class="panel-heading">enumEntity<button ng-click="showEnumEntityDetail()" class="btn btn-default  pull-right" style="margin-top: -7px" ng-show="($root.restrictionList.entity.restrictionItemMap.enumEntity.canCreate==true)">Add new enumEntity</button><button type="button" class="btn btn-default pull-right" style="margin-top: -7px" data-toggle="modal" data-target="#project-enumEntity">Link existing</button><button ng-click="downloadEnumEntityList()" class="btn btn-default pull-right" style="margin-top:-7px"><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span></button></div><div class="panel-body" ng-class="{&#39;has-error&#39;: !projectDetailForm.enumEntity.$valid, &#39;has-success&#39;: projectDetailForm.enumEntity.$valid}"><label id="enumEntity">enumEntity</label><div id="enumEntity" ng-if="selectedEntity.enumEntityList.length&gt;0"><div style="top: 100px" ui-grid="enumEntityGridOptions" ui-grid-pagination="" ui-grid-selection=""></div></div></div></div></div><div id="project-entityGroup" class="modal fade" role="dialog" ng-if="!$root.openNode.entityGroup"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">Link existing entityGroup</h4></div><div class="modal-body"><p></p><div class="input-group"><span class="input-group-addon">entityGroup</span><select class="form-control " aria-describedby="sizing-addon3" ng-model="selectedEntity.entityGroup" id="entityGroup" name="entityGroup" ng-options="entityGroup as  entityGroup.entityGroupId+&#39; &#39;+ entityGroup.name for entityGroup in entityGroupPreparedData.entityList track by entityGroup.entityGroupId" enctype="UTF-8"></select><span class="input-group-btn"><button ng-click="saveLinkedEntityGroup()" class="btn btn-default " id="entityGroup">Save</button></span></div></div><div class="modal-footer"><button ng-click="close()" class="btn btn-default " data-dismiss="modal">close</button></div></div></div></div><br/><br/><div class="pull-left" style="width: 100%" ng-show="true  && ($root.restrictionList.entity.restrictionItemMap.entityGroup.canSearch==true)" ng-if="!$root.openNode.entityGroup"><div class="panel panel-default default-panel"><div class="panel-heading">entityGroup<button ng-click="showEntityGroupDetail()" class="btn btn-default  pull-right" style="margin-top: -7px" ng-show="($root.restrictionList.entity.restrictionItemMap.entityGroup.canCreate==true)">Add new entityGroup</button><button type="button" class="btn btn-default pull-right" style="margin-top: -7px" data-toggle="modal" data-target="#project-entityGroup">Link existing</button><button ng-click="downloadEntityGroupList()" class="btn btn-default pull-right" style="margin-top:-7px"><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span></button></div><div class="panel-body" ng-class="{&#39;has-error&#39;: !projectDetailForm.entityGroup.$valid, &#39;has-success&#39;: projectDetailForm.entityGroup.$valid}"><label id="entityGroup">entityGroup</label><div id="entityGroup" ng-if="selectedEntity.entityGroupList.length&gt;0"><div style="top: 100px" ui-grid="entityGroupGridOptions" ui-grid-pagination="" ui-grid-selection=""></div></div></div></div></div></div></div></div><script type="text/javascript">$('#projectTabs a:first').tab('show');</script><div class="panel-body"><div class="pull-left"><form id="projectActionButton" ng-if="selectedEntity.show"><button ng-click="insert()" class="btn btn-default " ng-if="selectedEntity.projectId==undefined" ng-show="($root.restrictionList.entity.restrictionItemMap.project.canCreate==true)">Insert</button><button ng-click="update()" class="btn btn-default " ng-if="selectedEntity.projectId&gt;0" ng-show="($root.restrictionList.entity.restrictionItemMap.project.canUpdate==true)">Update</button><button ng-click="del()" class="btn btn-default " ng-if="selectedEntity.projectId&gt;0" ng-show="($root.restrictionList.entity.restrictionItemMap.project.canDelete==true)">Delete</button></form></div></div></div></form></div>
+
+					</script>
+
+				</ul>
+
+				<div class="tab-content">
+					<div role="tabpanel" class="tab-pane fade" id="project-Detail">
+						<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !projectDetailForm.projectId.$valid, &#39;has-success&#39;: projectDetailForm.projectId.$valid}" style="height:59px" ng-show="true ">
+							<div class="input-group">
+								<span class="input-group-addon">projectId
+								</span>
+
+								<input class="form-control " aria-describedby="sizing-addon3" type="text" id="project-projectId" ng-model="selectedEntity.projectId" ng-readonly="true" name="projectId" placeholder="projectId"/>
+								
+							</div>
+
+						</div>
+
+						<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !projectDetailForm.name.$valid, &#39;has-success&#39;: projectDetailForm.name.$valid}" style="height:59px" ng-show="true ">
+							<div class="input-group">
+								<span class="input-group-addon">name
+								</span>
+
+								<input class="form-control " aria-describedby="sizing-addon3" type="text" id="project-name" ng-model="selectedEntity.name" ng-readonly="restrictionList.project.restrictionFieldMap.name" name="name" placeholder="name"/>
+								
+							</div>
+
+						</div>
+
+						<div id="project-enumEntity" class="modal fade" role="dialog" ng-if="!$root.openNode.enumEntity">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal">&times;
+										</button>
+
+										<h4 class="modal-title">Link existing enumEntity
+										</h4>
+
+									</div>
+
+									<div class="modal-body">
+										<p>
+
+										</p>
+
+										<div class="input-group">
+											<span class="input-group-addon">enumEntity
+											</span>
+
+											<select class="form-control " aria-describedby="sizing-addon3" ng-model="selectedEntity.enumEntity" id="enumEntity" name="enumEntity" ng-options="enumEntity as  enumEntity.name+&#39; &#39;+ enumEntity.enumEntityId for enumEntity in enumEntityPreparedData.entityList track by enumEntity.enumEntityId" enctype="UTF-8">
+											</select>
+
+											<span class="input-group-btn">
+												<button ng-click="saveLinkedEnumEntity()" class="btn btn-default " id="enumEntity">Save
+												</button>
+
+											</span>
+
+										</div>
+
+									</div>
+
+									<div class="modal-footer">
+										<button ng-click="close()" class="btn btn-default " data-dismiss="modal">close
+										</button>
+
+									</div>
+
+								</div>
+
+							</div>
+
+						</div>
+
+						<br/>
+
+						<br/>
+
+						<div class="pull-left" style="width: 100%" ng-show="true  && ($root.restrictionList.entity.restrictionItemMap.enumEntity.canSearch==true)" ng-if="!$root.openNode.enumEntity">
+							<div class="panel panel-default default-panel">
+								<div class="panel-heading">enumEntity<button ng-click="showEnumEntityDetail()" class="btn btn-default  pull-right" style="margin-top: -7px" ng-show="($root.restrictionList.entity.restrictionItemMap.enumEntity.canCreate==true)">Add new enumEntity</button>
+<button type="button" class="btn btn-default pull-right" style="margin-top: -7px" data-toggle="modal" data-target="#project-enumEntity">Link existing</button>
+<button ng-click="downloadEnumEntityList()" class="btn btn-default pull-right" style="margin-top:-7px">
+	<span class="glyphicon glyphicon-download-alt" aria-hidden="true">
+	</span>
+</button>
+
+								</div>
+
+								<div class="panel-body" ng-class="{&#39;has-error&#39;: !projectDetailForm.enumEntity.$valid, &#39;has-success&#39;: projectDetailForm.enumEntity.$valid}">
+									<label id="enumEntity">enumEntity
+									</label>
+
+									<div id="enumEntity" ng-if="selectedEntity.enumEntityList.length&gt;0">
+										<div style="top: 100px" ui-grid="enumEntityGridOptions" ui-grid-pagination="" ui-grid-selection="">
+										</div>
+
+									</div>
+
+								</div>
+
+							</div>
+
+						</div>
+
+						<div id="project-entityGroup" class="modal fade" role="dialog" ng-if="!$root.openNode.entityGroup">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal">&times;
+										</button>
+
+										<h4 class="modal-title">Link existing entityGroup
+										</h4>
+
+									</div>
+
+									<div class="modal-body">
+										<p>
+
+										</p>
+
+										<div class="input-group">
+											<span class="input-group-addon">entityGroup
+											</span>
+
+											<select class="form-control " aria-describedby="sizing-addon3" ng-model="selectedEntity.entityGroup" id="entityGroup" name="entityGroup" ng-options="entityGroup as  entityGroup.entityGroupId+&#39; &#39;+ entityGroup.name for entityGroup in entityGroupPreparedData.entityList track by entityGroup.entityGroupId" enctype="UTF-8">
+											</select>
+
+											<span class="input-group-btn">
+												<button ng-click="saveLinkedEntityGroup()" class="btn btn-default " id="entityGroup">Save
+												</button>
+
+											</span>
+
+										</div>
+
+									</div>
+
+									<div class="modal-footer">
+										<button ng-click="close()" class="btn btn-default " data-dismiss="modal">close
+										</button>
+
+									</div>
+
+								</div>
+
+							</div>
+
+						</div>
+
+						<br/>
+
+						<br/>
+
+						<div class="pull-left" style="width: 100%" ng-show="true  && ($root.restrictionList.entity.restrictionItemMap.entityGroup.canSearch==true)" ng-if="!$root.openNode.entityGroup">
+							<div class="panel panel-default default-panel">
+								<div class="panel-heading">entityGroup<button ng-click="showEntityGroupDetail()" class="btn btn-default  pull-right" style="margin-top: -7px" ng-show="($root.restrictionList.entity.restrictionItemMap.entityGroup.canCreate==true)">Add new entityGroup</button>
+<button type="button" class="btn btn-default pull-right" style="margin-top: -7px" data-toggle="modal" data-target="#project-entityGroup">Link existing</button>
+<button ng-click="downloadEntityGroupList()" class="btn btn-default pull-right" style="margin-top:-7px">
+	<span class="glyphicon glyphicon-download-alt" aria-hidden="true">
+	</span>
+</button>
+
+								</div>
+
+								<div class="panel-body" ng-class="{&#39;has-error&#39;: !projectDetailForm.entityGroup.$valid, &#39;has-success&#39;: projectDetailForm.entityGroup.$valid}">
+									<label id="entityGroup">entityGroup
+									</label>
+
+									<div id="entityGroup" ng-if="selectedEntity.entityGroupList.length&gt;0">
+										<div style="top: 100px" ui-grid="entityGroupGridOptions" ui-grid-pagination="" ui-grid-selection="">
+										</div>
+
+									</div>
+
+								</div>
+
+							</div>
+
+						</div>
+
+					</div>
+
+				</div>
+
+			</div>
+
+			<script type="text/javascript">$('#projectTabs a:first').tab('show');
+			</script>
+
+			<div class="panel-body">
+				<div class="pull-left">
+					<form id="projectActionButton" ng-if="selectedEntity.show">
+						<button ng-click="insert()" class="btn btn-default " ng-if="selectedEntity.projectId==undefined" ng-show="($root.restrictionList.entity.restrictionItemMap.project.canCreate==true)">Insert
+						</button>
+
+						<button ng-click="update()" class="btn btn-default " ng-if="selectedEntity.projectId&gt;0" ng-show="($root.restrictionList.entity.restrictionItemMap.project.canUpdate==true)">Update
+						</button>
+
+						<button ng-click="del()" class="btn btn-default " ng-if="selectedEntity.projectId&gt;0" ng-show="($root.restrictionList.entity.restrictionItemMap.project.canDelete==true)">Delete
+						</button>
+
+					</form>
+
+				</div>
+
+			</div>
+
+		</div>
+
+	</form>
+</div>

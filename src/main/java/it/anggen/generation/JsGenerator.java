@@ -1718,6 +1718,84 @@ if (entity.getEntityGroup()!=null)
 	
 	
 	
+	public void generateLoginDirective()
+	{
+		StringBuilder sb = new StringBuilder();	
+
+		sb.append("(function() { \n")
+		.append("'use strict'; \n")
+		.append("\n");
+
+		sb.append("angular.module(\""+generator.applicationName+"App\").directive(\"login\",login);\n\n");
+
+
+		sb.append("/** @ngInject */\n");
+		sb.append("function login(){\n");
+
+
+		sb.append("  var directive = {\n");
+		sb.append("    restrict: 'EA',\n");
+		sb.append("   templateUrl:'app/components/login/login.html',\n");
+		sb.append("   controller: LoginController,\n");
+		sb.append("  controllerAs: 'vm'\n");
+		sb.append("};\n");
+
+		sb.append(" return directive;\n");
+
+		sb.append("  /** @ngInject */\n");
+		sb.append("  function LoginController($scope,SecurityService,$rootScope,$log) {\n");
+		sb.append("   var vm = this;\n");
+
+		sb.append("   function doLogin(username,password){\n");
+		sb.append("     SecurityService.login(username,password).then(function successCallback(response) {\n");
+		sb.append("				if (response.data.authenticated)\n");
+		sb.append("				{\n");
+		sb.append("					$log.debug(\"login ok, chiudo\");\n");
+		sb.append("					$rootScope.$broadcast('security:loggedIn');\n");
+		sb.append("				} \n");
+		sb.append("			},function errorCallback(response) { \n");
+		sb.append("				console.log(\"errore callback\");\n");
+		sb.append("				console.log(response);\n");
+		sb.append("			});\n");
+		sb.append("    }\n");
+
+		sb.append("	  function checkUsername()\n");
+		sb.append("	  {\n");
+
+		sb.append("	SecurityService.isLoggedIn(vm).then(function successCallback(response) {\n");
+		sb.append("	if (!response.data.authenticated)\n");
+		sb.append("	{\n");
+		sb.append("		$rootScope.$broadcast('security:loginRequired');\n");
+		sb.append("		}\n");
+		sb.append("else\n");
+		sb.append("{\n");
+		sb.append("$rootScope.$broadcast('security:loggedIn');\n");
+		sb.append("	}\n");
+
+		sb.append("},function errorCallback(response) { \n");
+		manageRestError(sb);
+		sb.append("});\n");
+
+		sb.append("}\n");
+		sb.append(" vm.onSubmit = doLogin;\n");
+		sb.append("vm.checkUsername=checkUsername;\n");
+
+		sb.append(" }\n");
+
+
+
+
+		sb.append("};\n");
+		sb.append("})();\n");
+
+		File file = new File("");
+		String directoryAngularFiles=file.getAbsolutePath()+generator.htmlDirectory+"login/";
+		saveAsJsFile(directoryAngularFiles, "login.directive", sb.toString());
+
+	}
+	
+	
+	
 	/**
 	 * Create the JS string
 	 * @return
@@ -1940,7 +2018,8 @@ MainService.parentService.childrenList.roleList=response.data;
 		sb.append("  \"angular-ui-date\": \"^1.0.0\",\n");
 		sb.append("  \"bootstrap\": \"^3.3.6\",\n");
 		sb.append("   \"utility\": \"./src/app/components/customLib/utility.js\",\n");
-		sb.append("  \"main\": \"./src/app/components/customLib/main.css\"\n");
+		sb.append("  \"main\": \"./src/app/components/customLib/main.css\",\n");
+		sb.append("\"alasql\": \"^0.2.5\"\n");
 		sb.append(" },\n");
 		sb.append("  \"devDependencies\": {\n");
 		sb.append(" \"angular-mocks\": \"~1.5.3\"\n");
@@ -1965,7 +2044,7 @@ MainService.parentService.childrenList.roleList=response.data;
 
 
 		File file= new File("");
-		File myJsp=new File(file.getAbsolutePath()+"bower.json");
+		File myJsp=new File(file.getAbsolutePath()+"/bower.json");
 		PrintWriter writer;
 		try {
 			System.out.println("Written "+myJsp.getAbsolutePath());

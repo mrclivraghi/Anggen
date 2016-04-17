@@ -1,7 +1,163 @@
-<div><form id="logEntryDetailForm" name="logEntryDetailForm" ng-show="selectedEntity.show"><div class="panel panel-default default-panel"><div class="panel-heading">Detail logEntry {{ selectedEntity.logEntryId }} <button type="button" class="close" aria-label="Close" ng-click="closeEntityDetail()"><span aria-hidden="true">&times;</span></button></div><div class="panel-body"><ul class="nav nav-tabs" role="tablist" id="logEntryTabs"><li role="presentation"><a href="#logEntry-Detail" aria-controls="Detail" role="tab" data-toggle="tab" ng-click="refreshTableDetail()">Detail</a></li><script type="text/javascript">$('a[href="#logEntry-Detail"]').on('shown.bs.tab', function (e) {
+<div>
+	<form id="logEntryDetailForm" name="logEntryDetailForm" ng-show="selectedEntity.show">
+		<div class="panel panel-default default-panel">
+			<div class="panel-heading">Detail logEntry {{ selectedEntity.logEntryId }} <button type="button" class="close" aria-label="Close" ng-click="closeEntityDetail()">
+	<span aria-hidden="true">&times;
+	</span>
+</button>
+
+			</div>
+
+			<div class="panel-body">
+				<ul class="nav nav-tabs" role="tablist" id="logEntryTabs">
+					<li role="presentation">
+						<a href="#logEntry-Detail" aria-controls="Detail" role="tab" data-toggle="tab" ng-click="refreshTableDetail()">Detail
+						</a>
+
+					</li>
+
+					<script type="text/javascript">$('a[href="#logEntry-Detail"]').on('shown.bs.tab', function (e) {
 var target = $(e.target).attr("href"); // activated tab
 //console.log(target);
 if (angular.element($('#logEntryTabs')).scope()!=null && angular.element($('#logEntryTabs')).scope()!=undefined) 
 { /* angular.element($('#logEntryTabs')).scope().refreshTableDetail(); */ }
 });
-</script></ul><div class="tab-content"><div role="tabpanel" class="tab-pane fade" id="logEntry-Detail"><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !logEntryDetailForm.logEntryId.$valid, &#39;has-success&#39;: logEntryDetailForm.logEntryId.$valid}" style="height:59px" ng-show="true "><div class="input-group"><span class="input-group-addon">logEntryId</span><input class="form-control " aria-describedby="sizing-addon3" type="text" id="logEntry-logEntryId" ng-model="selectedEntity.logEntryId" ng-readonly="true" name="logEntryId" placeholder="logEntryId"/></div></div><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !logEntryDetailForm.entityId.$valid, &#39;has-success&#39;: logEntryDetailForm.entityId.$valid}" style="height:59px" ng-show="true "><div class="input-group"><span class="input-group-addon">entityId</span><input class="form-control " aria-describedby="sizing-addon3" type="text" id="logEntry-entityId" ng-model="selectedEntity.entityId" ng-readonly="restrictionList.logEntry.restrictionFieldMap.entityId" name="entityId" placeholder="entityId"/></div></div><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !logEntryDetailForm.userId.$valid, &#39;has-success&#39;: logEntryDetailForm.userId.$valid}" style="height:59px" ng-show="true "><div class="input-group"><span class="input-group-addon">userId</span><input class="form-control " aria-describedby="sizing-addon3" type="text" id="logEntry-userId" ng-model="selectedEntity.userId" ng-readonly="restrictionList.logEntry.restrictionFieldMap.userId" name="userId" placeholder="userId"/></div></div><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !logEntryDetailForm.info.$valid, &#39;has-success&#39;: logEntryDetailForm.info.$valid}" style="height:59px" ng-show="true "><div class="input-group"><span class="input-group-addon">info</span><input class="form-control " aria-describedby="sizing-addon3" type="text" id="logEntry-info" ng-model="selectedEntity.info" ng-readonly="restrictionList.logEntry.restrictionFieldMap.info" name="info" placeholder="info"/></div></div><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !logEntryDetailForm.ipAddress.$valid, &#39;has-success&#39;: logEntryDetailForm.ipAddress.$valid}" style="height:59px" ng-show="true "><div class="input-group"><span class="input-group-addon">ipAddress</span><input class="form-control " aria-describedby="sizing-addon3" type="text" id="logEntry-ipAddress" ng-model="selectedEntity.ipAddress" ng-readonly="restrictionList.logEntry.restrictionFieldMap.ipAddress" name="ipAddress" placeholder="ipAddress"/></div></div><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !logEntryDetailForm.hostName.$valid, &#39;has-success&#39;: logEntryDetailForm.hostName.$valid}" style="height:59px" ng-show="true "><div class="input-group"><span class="input-group-addon">hostName</span><input class="form-control " aria-describedby="sizing-addon3" type="text" id="logEntry-hostName" ng-model="selectedEntity.hostName" ng-readonly="restrictionList.logEntry.restrictionFieldMap.hostName" name="hostName" placeholder="hostName"/></div></div><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !logEntryDetailForm.logDate.$valid, &#39;has-success&#39;: logEntryDetailForm.logDate.$valid}" style="height:59px" ng-show="true "><div class="input-group"><span class="input-group-addon">logDate</span><input class="form-control " aria-describedby="sizing-addon3" type="text" ui-date="{ dateFormat: &#39;dd/mm/yy&#39; }" ng-model="selectedEntity.logDate" ng-readonly="restrictionList.logEntry.restrictionFieldMap.logDate" name="logDate" placeholder="logDate"/></div></div><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !logEntryDetailForm.logType.$valid, &#39;has-success&#39;: logEntryDetailForm.logType.$valid}" style="height:59px" ng-show="true "><div class="input-group"><span class="input-group-addon">logType</span><select class="form-control pull-left" aria-describedby="sizing-addon3" type="text" id="logEntry-logType" ng-model="selectedEntity.logType" ng-readonly="restrictionList.logEntry.restrictionFieldMap.logType" name="logType" placeholder="logType" ng-options="logType as logType for logType in logTypePreparedData.entityList" enctype="UTF-8"></select></div></div><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !logEntryDetailForm.operationType.$valid, &#39;has-success&#39;: logEntryDetailForm.operationType.$valid}" style="height:59px" ng-show="true "><div class="input-group"><span class="input-group-addon">operationType</span><select class="form-control pull-left" aria-describedby="sizing-addon3" type="text" id="logEntry-operationType" ng-model="selectedEntity.operationType" ng-readonly="restrictionList.logEntry.restrictionFieldMap.operationType" name="operationType" placeholder="operationType" ng-options="operationType as operationType for operationType in operationTypePreparedData.entityList" enctype="UTF-8"></select></div></div></div></div></div><script type="text/javascript">$('#logEntryTabs a:first').tab('show');</script><div class="panel-body"><div class="pull-left"><form id="logEntryActionButton" ng-if="selectedEntity.show"><button ng-click="insert()" class="btn btn-default " ng-if="selectedEntity.logEntryId==undefined" ng-show="($root.restrictionList.log.restrictionItemMap.logEntry.canCreate==true)">Insert</button><button ng-click="update()" class="btn btn-default " ng-if="selectedEntity.logEntryId&gt;0" ng-show="($root.restrictionList.log.restrictionItemMap.logEntry.canUpdate==true)">Update</button><button ng-click="del()" class="btn btn-default " ng-if="selectedEntity.logEntryId&gt;0" ng-show="($root.restrictionList.log.restrictionItemMap.logEntry.canDelete==true)">Delete</button></form></div></div></div></form></div>
+
+					</script>
+
+				</ul>
+
+				<div class="tab-content">
+					<div role="tabpanel" class="tab-pane fade" id="logEntry-Detail">
+						<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !logEntryDetailForm.logEntryId.$valid, &#39;has-success&#39;: logEntryDetailForm.logEntryId.$valid}" style="height:59px" ng-show="true ">
+							<div class="input-group">
+								<span class="input-group-addon">logEntryId
+								</span>
+
+								<input class="form-control " aria-describedby="sizing-addon3" type="text" id="logEntry-logEntryId" ng-model="selectedEntity.logEntryId" ng-readonly="true" name="logEntryId" placeholder="logEntryId"/>
+								
+							</div>
+
+						</div>
+
+						<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !logEntryDetailForm.entityId.$valid, &#39;has-success&#39;: logEntryDetailForm.entityId.$valid}" style="height:59px" ng-show="true ">
+							<div class="input-group">
+								<span class="input-group-addon">entityId
+								</span>
+
+								<input class="form-control " aria-describedby="sizing-addon3" type="text" id="logEntry-entityId" ng-model="selectedEntity.entityId" ng-readonly="restrictionList.logEntry.restrictionFieldMap.entityId" name="entityId" placeholder="entityId"/>
+								
+							</div>
+
+						</div>
+
+						<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !logEntryDetailForm.userId.$valid, &#39;has-success&#39;: logEntryDetailForm.userId.$valid}" style="height:59px" ng-show="true ">
+							<div class="input-group">
+								<span class="input-group-addon">userId
+								</span>
+
+								<input class="form-control " aria-describedby="sizing-addon3" type="text" id="logEntry-userId" ng-model="selectedEntity.userId" ng-readonly="restrictionList.logEntry.restrictionFieldMap.userId" name="userId" placeholder="userId"/>
+								
+							</div>
+
+						</div>
+
+						<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !logEntryDetailForm.info.$valid, &#39;has-success&#39;: logEntryDetailForm.info.$valid}" style="height:59px" ng-show="true ">
+							<div class="input-group">
+								<span class="input-group-addon">info
+								</span>
+
+								<input class="form-control " aria-describedby="sizing-addon3" type="text" id="logEntry-info" ng-model="selectedEntity.info" ng-readonly="restrictionList.logEntry.restrictionFieldMap.info" name="info" placeholder="info"/>
+								
+							</div>
+
+						</div>
+
+						<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !logEntryDetailForm.ipAddress.$valid, &#39;has-success&#39;: logEntryDetailForm.ipAddress.$valid}" style="height:59px" ng-show="true ">
+							<div class="input-group">
+								<span class="input-group-addon">ipAddress
+								</span>
+
+								<input class="form-control " aria-describedby="sizing-addon3" type="text" id="logEntry-ipAddress" ng-model="selectedEntity.ipAddress" ng-readonly="restrictionList.logEntry.restrictionFieldMap.ipAddress" name="ipAddress" placeholder="ipAddress"/>
+								
+							</div>
+
+						</div>
+
+						<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !logEntryDetailForm.hostName.$valid, &#39;has-success&#39;: logEntryDetailForm.hostName.$valid}" style="height:59px" ng-show="true ">
+							<div class="input-group">
+								<span class="input-group-addon">hostName
+								</span>
+
+								<input class="form-control " aria-describedby="sizing-addon3" type="text" id="logEntry-hostName" ng-model="selectedEntity.hostName" ng-readonly="restrictionList.logEntry.restrictionFieldMap.hostName" name="hostName" placeholder="hostName"/>
+								
+							</div>
+
+						</div>
+
+						<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !logEntryDetailForm.logDate.$valid, &#39;has-success&#39;: logEntryDetailForm.logDate.$valid}" style="height:59px" ng-show="true ">
+							<div class="input-group">
+								<span class="input-group-addon">logDate
+								</span>
+
+								<input class="form-control " aria-describedby="sizing-addon3" type="text" ui-date="{ dateFormat: &#39;dd/mm/yy&#39; }" ng-model="selectedEntity.logDate" ng-readonly="restrictionList.logEntry.restrictionFieldMap.logDate" name="logDate" placeholder="logDate"/>
+								
+							</div>
+
+						</div>
+
+						<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !logEntryDetailForm.logType.$valid, &#39;has-success&#39;: logEntryDetailForm.logType.$valid}" style="height:59px" ng-show="true ">
+							<div class="input-group">
+								<span class="input-group-addon">logType
+								</span>
+
+								<select class="form-control pull-left" aria-describedby="sizing-addon3" type="text" id="logEntry-logType" ng-model="selectedEntity.logType" ng-readonly="restrictionList.logEntry.restrictionFieldMap.logType" name="logType" placeholder="logType" ng-options="logType as logType for logType in logTypePreparedData.entityList" enctype="UTF-8">
+								</select>
+
+							</div>
+
+						</div>
+
+						<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !logEntryDetailForm.operationType.$valid, &#39;has-success&#39;: logEntryDetailForm.operationType.$valid}" style="height:59px" ng-show="true ">
+							<div class="input-group">
+								<span class="input-group-addon">operationType
+								</span>
+
+								<select class="form-control pull-left" aria-describedby="sizing-addon3" type="text" id="logEntry-operationType" ng-model="selectedEntity.operationType" ng-readonly="restrictionList.logEntry.restrictionFieldMap.operationType" name="operationType" placeholder="operationType" ng-options="operationType as operationType for operationType in operationTypePreparedData.entityList" enctype="UTF-8">
+								</select>
+
+							</div>
+
+						</div>
+
+					</div>
+
+				</div>
+
+			</div>
+
+			<script type="text/javascript">$('#logEntryTabs a:first').tab('show');
+			</script>
+
+			<div class="panel-body">
+				<div class="pull-left">
+					<form id="logEntryActionButton" ng-if="selectedEntity.show">
+						<button ng-click="insert()" class="btn btn-default " ng-if="selectedEntity.logEntryId==undefined" ng-show="($root.restrictionList.log.restrictionItemMap.logEntry.canCreate==true)">Insert
+						</button>
+
+						<button ng-click="update()" class="btn btn-default " ng-if="selectedEntity.logEntryId&gt;0" ng-show="($root.restrictionList.log.restrictionItemMap.logEntry.canUpdate==true)">Update
+						</button>
+
+						<button ng-click="del()" class="btn btn-default " ng-if="selectedEntity.logEntryId&gt;0" ng-show="($root.restrictionList.log.restrictionItemMap.logEntry.canDelete==true)">Delete
+						</button>
+
+					</form>
+
+				</div>
+
+			</div>
+
+		</div>
+
+	</form>
+</div>

@@ -1,18 +1,26 @@
-<div class="side-menu">
-	<div class="header">Login<i class="icon-Profile pull-right"></i></div>
-	<div class="side-menu-inner">		
-		<p>Insert your data</p>
-		<div class="form-wrap">
-			<form ng-submit="vm.onSubmit(vm.username,vm.password)">
-				<div class="field-wrap">
-					<div class="input-wrap"><input type="text" name="tigros_card" placeholder="username"  ng-model="vm.username"></div>
-				</div>
-				<div class="field-wrap">
-					<div class="input-wrap"><input type="password" name="pwd" placeholder="Password" ng-model="vm.password"></div>
-				</div>
-				<button type="submit" class="btn btn-primary btn-block">Login</button>
-				<button type="button" class="btn btn-primary btn-block" ng-click="vm.checkUsername()">check</button>
-			</form>
-		</div>
+<form class="form-signin" ng-submit="vm.onSubmit(vm.username,vm.password)">
+	<h2 class="form-signin-heading">Please sign in
+	</h2>
+
+	<label for="inputEmail" class="sr-only">Username
+	</label>
+
+	<input type="text" id="inputEmail" class="form-control" placeholder="Username" required="" autofocus="" ng-model="vm.username"/>
+	
+	<label for="inputPassword" class="sr-only">Password
+	</label>
+
+	<input type="password" id="inputPassword" class="form-control" placeholder="Password" required="" autofocus="" ng-model="vm.password"/>
+	
+	<div class="checkbox">
+		<label>
+
+			<input type="checkbox" value="remember-me"/>
+			Rembember me
+		</label>
+
 	</div>
-</div><!-- /.side-menu-right -->
+
+	<button class="btn btn-lg btn-primary btn-block" type="submit">Sign in
+	</button>
+</form>

@@ -223,7 +223,7 @@ public class JsGenerator {
 		.append("entity = {};\n")
 		.append("this.selectedEntity.show = false;\n")
 		.append("} //else\n")
-		.append("cloneObject(entity,this.selectedEntity);\n");
+		.append("UtilityService.cloneObject(entity,this.selectedEntity);\n");
 		
 		sb.append("};\n");
 		//search
@@ -421,7 +421,7 @@ public class JsGenerator {
 
 		sb.append(".controller(\""+Utility.getFirstUpper(entityName)+"Controller\","+Utility.getFirstUpper(entityName)+"Controller);\n");
 		sb.append("/** @ngInject */\n");
-		sb.append("function "+Utility.getFirstUpper(entityName)+"Controller($scope,$http,$rootScope,$log "+getServices()+")\n");
+		sb.append("function "+Utility.getFirstUpper(entityName)+"Controller($scope,$http,$rootScope,$log,UtilityService "+getServices()+")\n");
 		sb.append("{\n");
 		//search var
 		sb.append("$scope.searchBean="+Utility.getEntityCallName(entityName)+"Service.searchBean;\n");
@@ -821,7 +821,7 @@ public class JsGenerator {
 		}
 
 		sb.append("$scope."+entityName+"GridOptions={};\n")
-		.append("cloneObject("+entityName+"Service.gridOptions,$scope."+entityName+"GridOptions);\n");
+		.append("UtilityService.cloneObject("+entityName+"Service.gridOptions,$scope."+entityName+"GridOptions);\n");
 		sb.append("$scope."+entityName+"GridOptions.data="+Utility.getEntityCallName(entityName)+"Service.entityList;\n");
 		
 		sb.append(getGridApi(null));//sb.append("}\n");	
@@ -836,7 +836,7 @@ public class JsGenerator {
 		{
 			init(relationship.getEntityTarget(), false, entityName,relationship.getRelationshipType(),mainEntityManager.isLastLevel(relationship.getEntityTarget()),MainServiceList);
 			sb.append("$scope."+entityName+"GridOptions={};\n");
-			sb.append("cloneObject("+entityName+"Service.gridOptions,$scope."+entityName+"GridOptions);\n");
+			sb.append("UtilityService.cloneObject("+entityName+"Service.gridOptions,$scope."+entityName+"GridOptions);\n");
 			sb.append("$scope."+entityName+"GridOptions.data=$scope.selectedEntity."+entityName+"List;\n");
 			sb.append(getGridApi(mainParentName));
 		}
@@ -1390,7 +1390,7 @@ if (entity.getEntityGroup()!=null)
 		.append("    .run(runBlock);\n")
 		.append("\n")
 		.append("  /** @ngInject */\n")
-		.append("  function runBlock($log,SecurityService,$rootScope,$uibModal"+getallServices()+") { \n");
+		.append("  function runBlock($log,SecurityService,UtilityService,$rootScope,$uibModal"+getallServices()+") { \n");
 		
 		String services = serviceList;
 		if (services==null)
@@ -1641,18 +1641,18 @@ if (entity.getEntityGroup()!=null)
 		sb.append("				targetObject[val]\n");
 		sb.append("			.push(sourceObject[val][j]);\n");
 		sb.append("	} else \n");
-		sb.append("			emptyList(targetObject[val]);\n");
+		sb.append("			this.emptyList(targetObject[val]);\n");
 		sb.append("	} else {\n");
 		sb.append("		if (val.toLowerCase().indexOf(\"time\") > -1\n");
 		sb.append("				&& typeof val == \"string\") {\n");
-		sb.append("			var date = new Date(sourceObject[val]);\n");
+		//sb.append("			var date = new Date(sourceObject[val]);\n");
 		sb.append("			targetObject[val] = new Date(sourceObject[val]);\n");
 		sb.append("		} else {\n");
 		sb.append("			targetObject[val] = sourceObject[val];\n");
 		sb.append("		}\n");
 		sb.append("	}\n");
 		sb.append("}\n");
-		sb.append("};\n");
+		sb.append("}\n");
 
 		sb.append("}\n");
 		//empty list
@@ -1861,9 +1861,10 @@ if (entity.getEntityGroup()!=null)
 
 	private void manageRestError(StringBuilder sb)
 	{
-		sb.append("//AlertError.init({selector: \"#alertError\"});\n");
-		sb.append("//AlertError.show(\"Si è verificato un errore\");\n");
-		sb.append("//return; \n");
+		sb.append("UtilityService.AlertError.init({selector: \"#alertError\"});\n");
+		sb.append("UtilityService.AlertError.show(\"Si è verificato un errore\");\n");
+		sb.append("$log.debug(response);\n");
+		sb.append("return; \n");
 	}
 	
 

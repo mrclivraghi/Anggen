@@ -1730,7 +1730,7 @@ if (entity.getEntityGroup()!=null)
 
 
 		sb.append("/** @ngInject */\n");
-		sb.append("function login($scope){\n");
+		sb.append("function login(){\n");
 
 
 		sb.append("  var directive = {\n");

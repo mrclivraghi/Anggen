@@ -1,1 +1,107 @@
-<nav class="navbar navbar-default"><div class="container-fluid"><div class="navbar-header"><button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand" href="home">serverTest</a></div><div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1"><ul class="nav navbar-nav"><li uib-dropdown="" on-toggle="toggled(&quot;open&quot;)"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" uib-dropdown-toggle="">restrictiondata<span class="caret"></span></a><ul uib-dropdown-menu="" aria-labelledby="simple-dropdown"></ul></li><li uib-dropdown="" on-toggle="toggled(&quot;open&quot;)"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" uib-dropdown-toggle="">security<span class="caret"></span></a><ul uib-dropdown-menu="" aria-labelledby="simple-dropdown"><li ng-if="$root.restrictionList.security.restrictionItemMap.role.canSearch"><a href="#/app/role" role="menuitem">Role</a></li><li ng-if="$root.restrictionList.security.restrictionItemMap.restrictionField.canSearch"><a href="#/app/restrictionField" role="menuitem">RestrictionField</a></li><li ng-if="$root.restrictionList.security.restrictionItemMap.user.canSearch"><a href="#/app/user" role="menuitem">User</a></li><li ng-if="$root.restrictionList.security.restrictionItemMap.restrictionEntityGroup.canSearch"><a href="#/app/restrictionEntityGroup" role="menuitem">RestrictionEntityGroup</a></li><li ng-if="$root.restrictionList.security.restrictionItemMap.restrictionEntity.canSearch"><a href="#/app/restrictionEntity" role="menuitem">RestrictionEntity</a></li></ul></li><li uib-dropdown="" on-toggle="toggled(&quot;open&quot;)"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" uib-dropdown-toggle="">log<span class="caret"></span></a><ul uib-dropdown-menu="" aria-labelledby="simple-dropdown"><li ng-if="$root.restrictionList.log.restrictionItemMap.logEntry.canSearch"><a href="#/app/logEntry" role="menuitem">LogEntry</a></li></ul></li><li uib-dropdown="" on-toggle="toggled(&quot;open&quot;)"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" uib-dropdown-toggle="">entity<span class="caret"></span></a><ul uib-dropdown-menu="" aria-labelledby="simple-dropdown"><li ng-if="$root.restrictionList.entity.restrictionItemMap.entity.canSearch"><a href="#/app/entity" role="menuitem">Entity</a></li><li ng-if="$root.restrictionList.entity.restrictionItemMap.enumEntity.canSearch"><a href="#/app/enumEntity" role="menuitem">EnumEntity</a></li><li ng-if="$root.restrictionList.entity.restrictionItemMap.entityGroup.canSearch"><a href="#/app/entityGroup" role="menuitem">EntityGroup</a></li><li ng-if="$root.restrictionList.entity.restrictionItemMap.tab.canSearch"><a href="#/app/tab" role="menuitem">Tab</a></li><li ng-if="$root.restrictionList.entity.restrictionItemMap.project.canSearch"><a href="#/app/project" role="menuitem">Project</a></li></ul></li><li uib-dropdown="" on-toggle="toggled(&quot;open&quot;)"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" uib-dropdown-toggle="">field<span class="caret"></span></a><ul uib-dropdown-menu="" aria-labelledby="simple-dropdown"><li ng-if="$root.restrictionList.field.restrictionItemMap.annotation.canSearch"><a href="#/app/annotation" role="menuitem">Annotation</a></li><li ng-if="$root.restrictionList.field.restrictionItemMap.enumValue.canSearch"><a href="#/app/enumValue" role="menuitem">EnumValue</a></li><li ng-if="$root.restrictionList.field.restrictionItemMap.annotationAttribute.canSearch"><a href="#/app/annotationAttribute" role="menuitem">AnnotationAttribute</a></li><li ng-if="$root.restrictionList.field.restrictionItemMap.field.canSearch"><a href="#/app/field" role="menuitem">Field</a></li><li ng-if="$root.restrictionList.field.restrictionItemMap.enumField.canSearch"><a href="#/app/enumField" role="menuitem">EnumField</a></li></ul></li><li uib-dropdown="" on-toggle="toggled(&quot;open&quot;)"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" uib-dropdown-toggle="">relationship<span class="caret"></span></a><ul uib-dropdown-menu="" aria-labelledby="simple-dropdown"><li ng-if="$root.restrictionList.relationship.restrictionItemMap.relationship.canSearch"><a href="#/app/relationship" role="menuitem">Relationship</a></li></ul></li><li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Administration<span class="caret"></span></a><ul class="dropdown-menu"><li><a href="#/app/metrics">Metrics</a></li></ul></li></ul></div></div></nav>
+<nav class="navbar navbar-default">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+				<span class="sr-only">Toggle navigation
+				</span>
+
+				<span class="icon-bar">
+				</span>
+
+				<span class="icon-bar">
+				</span>
+
+				<span class="icon-bar">
+				</span>
+
+			</button>
+
+			<a class="navbar-brand" href="home">serverTest
+			</a>
+
+		</div>
+
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<ul class="nav navbar-nav">
+				<li uib-dropdown="" on-toggle="toggled(&quot;open&quot;)">
+	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" uib-dropdown-toggle="">restrictiondata<span class="caret"></span>
+
+	</a>
+
+	<ul uib-dropdown-menu="" aria-labelledby="simple-dropdown">
+	</ul>
+</li>
+<li uib-dropdown="" on-toggle="toggled(&quot;open&quot;)">
+	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" uib-dropdown-toggle="">security<span class="caret"></span>
+
+	</a>
+
+	<ul uib-dropdown-menu="" aria-labelledby="simple-dropdown">
+		<li ng-if="$root.restrictionList.security.restrictionItemMap.role.canSearch"><a href="#/app/role" role="menuitem">Role</a></li><li ng-if="$root.restrictionList.security.restrictionItemMap.restrictionField.canSearch"><a href="#/app/restrictionField" role="menuitem">RestrictionField</a></li><li ng-if="$root.restrictionList.security.restrictionItemMap.user.canSearch"><a href="#/app/user" role="menuitem">User</a></li><li ng-if="$root.restrictionList.security.restrictionItemMap.restrictionEntityGroup.canSearch"><a href="#/app/restrictionEntityGroup" role="menuitem">RestrictionEntityGroup</a></li><li ng-if="$root.restrictionList.security.restrictionItemMap.restrictionEntity.canSearch"><a href="#/app/restrictionEntity" role="menuitem">RestrictionEntity</a></li>
+
+		</ul>
+
+	</li>
+<li uib-dropdown="" on-toggle="toggled(&quot;open&quot;)">
+	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" uib-dropdown-toggle="">log<span class="caret"></span>
+
+	</a>
+
+	<ul uib-dropdown-menu="" aria-labelledby="simple-dropdown">
+		<li ng-if="$root.restrictionList.log.restrictionItemMap.logEntry.canSearch"><a href="#/app/logEntry" role="menuitem">LogEntry</a></li>
+
+		</ul>
+
+	</li>
+<li uib-dropdown="" on-toggle="toggled(&quot;open&quot;)">
+	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" uib-dropdown-toggle="">entity<span class="caret"></span>
+
+	</a>
+
+	<ul uib-dropdown-menu="" aria-labelledby="simple-dropdown">
+		<li ng-if="$root.restrictionList.entity.restrictionItemMap.entity.canSearch"><a href="#/app/entity" role="menuitem">Entity</a></li><li ng-if="$root.restrictionList.entity.restrictionItemMap.enumEntity.canSearch"><a href="#/app/enumEntity" role="menuitem">EnumEntity</a></li><li ng-if="$root.restrictionList.entity.restrictionItemMap.entityGroup.canSearch"><a href="#/app/entityGroup" role="menuitem">EntityGroup</a></li><li ng-if="$root.restrictionList.entity.restrictionItemMap.tab.canSearch"><a href="#/app/tab" role="menuitem">Tab</a></li><li ng-if="$root.restrictionList.entity.restrictionItemMap.project.canSearch"><a href="#/app/project" role="menuitem">Project</a></li>
+
+		</ul>
+
+	</li>
+<li uib-dropdown="" on-toggle="toggled(&quot;open&quot;)">
+	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" uib-dropdown-toggle="">field<span class="caret"></span>
+
+	</a>
+
+	<ul uib-dropdown-menu="" aria-labelledby="simple-dropdown">
+		<li ng-if="$root.restrictionList.field.restrictionItemMap.annotation.canSearch"><a href="#/app/annotation" role="menuitem">Annotation</a></li><li ng-if="$root.restrictionList.field.restrictionItemMap.enumValue.canSearch"><a href="#/app/enumValue" role="menuitem">EnumValue</a></li><li ng-if="$root.restrictionList.field.restrictionItemMap.annotationAttribute.canSearch"><a href="#/app/annotationAttribute" role="menuitem">AnnotationAttribute</a></li><li ng-if="$root.restrictionList.field.restrictionItemMap.field.canSearch"><a href="#/app/field" role="menuitem">Field</a></li><li ng-if="$root.restrictionList.field.restrictionItemMap.enumField.canSearch"><a href="#/app/enumField" role="menuitem">EnumField</a></li>
+
+		</ul>
+
+	</li>
+<li uib-dropdown="" on-toggle="toggled(&quot;open&quot;)">
+	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" uib-dropdown-toggle="">relationship<span class="caret"></span>
+
+	</a>
+
+	<ul uib-dropdown-menu="" aria-labelledby="simple-dropdown">
+		<li ng-if="$root.restrictionList.relationship.restrictionItemMap.relationship.canSearch"><a href="#/app/relationship" role="menuitem">Relationship</a></li>
+
+		</ul>
+
+	</li>
+<li class="dropdown">
+	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Administration<span class="caret"></span>
+
+	</a>
+
+	<ul class="dropdown-menu">
+		<li><a href="#/app/metrics">Metrics</a></li>
+
+		</ul>
+
+	</li>
+
+				</ul>
+
+			</div>
+
+		</div>
+
+	</nav>

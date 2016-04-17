@@ -1,1 +1,121 @@
-<div><form id="annotationSearchBean"><div class="panel panel-default default-panel"><div class="panel-heading">Search form annotation</div><div class="panel-body"><div class="pull-left right-input" ng-show="true "><div class="input-group"><span class="input-group-addon">annotationId</span><input class="form-control " aria-describedby="sizing-addon3" type="text" id="annotation-annotationId" ng-model="searchBean.annotationId" ng-readonly="false" name="annotationId" placeholder="annotationId"/></div></div><div class="pull-left right-input" ng-show="true "><div class="input-group"><span class="input-group-addon">annotationType</span><select class="form-control pull-left" aria-describedby="sizing-addon3" type="text" id="annotation-annotationType" ng-model="searchBean.annotationType" ng-readonly="false" name="annotationType" placeholder="annotationType" ng-options="annotationType as annotationType for annotationType in annotationTypePreparedData.entityList" enctype="UTF-8"></select></div></div><div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.field.restrictionItemMap.annotationAttribute.canSearch==true)"><div class="input-group"><span class="input-group-addon">annotationAttribute</span><select class="form-control " aria-describedby="sizing-addon3" ng-model="searchBean.annotationAttribute.annotationAttributeId" id="annotationAttribute" ng-options="annotationAttribute.annotationAttributeId as  annotationAttribute.property+&#39; &#39;+ annotationAttribute.annotationAttributeId for annotationAttribute in annotationAttributePreparedData.entityList" enctype="UTF-8"></select></div></div><div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.field.restrictionItemMap.field.canSearch==true)"><div class="input-group"><span class="input-group-addon">field</span><select class="form-control " aria-describedby="sizing-addon3" ng-model="searchBean.field.fieldId" id="field" ng-options="field.fieldId as  field.fieldId+&#39; &#39;+ field.name for field in fieldPreparedData.entityList" enctype="UTF-8"></select></div></div><div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.field.restrictionItemMap.enumField.canSearch==true)"><div class="input-group"><span class="input-group-addon">enumField</span><select class="form-control " aria-describedby="sizing-addon3" ng-model="searchBean.enumField.enumFieldId" id="enumField" ng-options="enumField.enumFieldId as  enumField.enumFieldId+&#39; &#39;+ enumField.name for enumField in enumFieldPreparedData.entityList" enctype="UTF-8"></select></div></div><div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.relationship.restrictionItemMap.relationship.canSearch==true)"><div class="input-group"><span class="input-group-addon">relationship</span><select class="form-control " aria-describedby="sizing-addon3" ng-model="searchBean.relationship.relationshipId" id="relationship" ng-options="relationship.relationshipId as  relationship.name+&#39; &#39;+ relationship.relationshipId for relationship in relationshipPreparedData.entityList" enctype="UTF-8"></select></div></div></div><div class="panel-body"><div class="panel-body"><div class="pull-left right-input"><button ng-click="addNew()" class="btn btn-default " ng-show="($root.restrictionList.field.restrictionItemMap.annotation.canCreate==true)">Add new</button><button ng-click="search()" class="btn btn-default ">Find</button><button ng-click="reset()" class="btn btn-default ">Reset</button></div></div></div></div></form><form id="annotationList" ng-if="entityList.length&gt;0" enctype="UTF-8"><div class="panel panel-default default-panel"><div class="panel-heading">List annotation<button ng-click="downloadEntityList()" class="btn btn-default pull-right" style="margin-top:-7px"><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span></button></div><div class="panel-body"><div ui-grid="annotationGridOptions" ui-grid-pagination="" ui-grid-selection="" ui-grid-exporter=""></div></div></div></form></div>
+<div>
+	<form id="annotationSearchBean">
+		<div class="panel panel-default default-panel">
+			<div class="panel-heading">Search form annotation
+			</div>
+
+			<div class="panel-body">
+				<div class="pull-left right-input" ng-show="true ">
+					<div class="input-group">
+						<span class="input-group-addon">annotationId
+						</span>
+
+						<input class="form-control " aria-describedby="sizing-addon3" type="text" id="annotation-annotationId" ng-model="searchBean.annotationId" ng-readonly="false" name="annotationId" placeholder="annotationId"/>
+						
+					</div>
+
+				</div>
+
+				<div class="pull-left right-input" ng-show="true ">
+					<div class="input-group">
+						<span class="input-group-addon">annotationType
+						</span>
+
+						<select class="form-control pull-left" aria-describedby="sizing-addon3" type="text" id="annotation-annotationType" ng-model="searchBean.annotationType" ng-readonly="false" name="annotationType" placeholder="annotationType" ng-options="annotationType as annotationType for annotationType in annotationTypePreparedData.entityList" enctype="UTF-8">
+						</select>
+
+					</div>
+
+				</div>
+
+				<div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.field.restrictionItemMap.annotationAttribute.canSearch==true)">
+					<div class="input-group">
+						<span class="input-group-addon">annotationAttribute
+						</span>
+
+						<select class="form-control " aria-describedby="sizing-addon3" ng-model="searchBean.annotationAttribute.annotationAttributeId" id="annotationAttribute" ng-options="annotationAttribute.annotationAttributeId as  annotationAttribute.property+&#39; &#39;+ annotationAttribute.annotationAttributeId for annotationAttribute in annotationAttributePreparedData.entityList" enctype="UTF-8">
+						</select>
+
+					</div>
+
+				</div>
+
+				<div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.field.restrictionItemMap.field.canSearch==true)">
+					<div class="input-group">
+						<span class="input-group-addon">field
+						</span>
+
+						<select class="form-control " aria-describedby="sizing-addon3" ng-model="searchBean.field.fieldId" id="field" ng-options="field.fieldId as  field.fieldId+&#39; &#39;+ field.name for field in fieldPreparedData.entityList" enctype="UTF-8">
+						</select>
+
+					</div>
+
+				</div>
+
+				<div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.field.restrictionItemMap.enumField.canSearch==true)">
+					<div class="input-group">
+						<span class="input-group-addon">enumField
+						</span>
+
+						<select class="form-control " aria-describedby="sizing-addon3" ng-model="searchBean.enumField.enumFieldId" id="enumField" ng-options="enumField.enumFieldId as  enumField.enumFieldId+&#39; &#39;+ enumField.name for enumField in enumFieldPreparedData.entityList" enctype="UTF-8">
+						</select>
+
+					</div>
+
+				</div>
+
+				<div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.relationship.restrictionItemMap.relationship.canSearch==true)">
+					<div class="input-group">
+						<span class="input-group-addon">relationship
+						</span>
+
+						<select class="form-control " aria-describedby="sizing-addon3" ng-model="searchBean.relationship.relationshipId" id="relationship" ng-options="relationship.relationshipId as  relationship.name+&#39; &#39;+ relationship.relationshipId for relationship in relationshipPreparedData.entityList" enctype="UTF-8">
+						</select>
+
+					</div>
+
+				</div>
+
+			</div>
+
+			<div class="panel-body">
+				<div class="panel-body">
+					<div class="pull-left right-input">
+						<button ng-click="addNew()" class="btn btn-default " ng-show="($root.restrictionList.field.restrictionItemMap.annotation.canCreate==true)">Add new
+						</button>
+
+						<button ng-click="search()" class="btn btn-default ">Find
+						</button>
+
+						<button ng-click="reset()" class="btn btn-default ">Reset
+						</button>
+
+					</div>
+
+				</div>
+
+			</div>
+
+		</div>
+
+	</form>
+
+	<form id="annotationList" ng-if="entityList.length&gt;0" enctype="UTF-8">
+		<div class="panel panel-default default-panel">
+			<div class="panel-heading">List annotation<button ng-click="downloadEntityList()" class="btn btn-default pull-right" style="margin-top:-7px">
+	<span class="glyphicon glyphicon-download-alt" aria-hidden="true">
+	</span>
+</button>
+
+			</div>
+
+			<div class="panel-body">
+				<div ui-grid="annotationGridOptions" ui-grid-pagination="" ui-grid-selection="" ui-grid-exporter="">
+				</div>
+
+			</div>
+
+		</div>
+
+	</form>
+</div>

@@ -461,7 +461,7 @@ public class HtmlGenerator {
 					.add("for", "inputEmail").add("class", "sr-only")
 					).content("Username")
 			.input((new HtmlAttributes())
-					.add("type", "email")
+					.add("type", "text")
 					.add("id", "inputEmail")
 					.add("class", "form-control")
 					.add("placeholder", "Username")

@@ -4,7 +4,7 @@ angular
 .module("serverTestApp")
 .controller("LogEntryController",LogEntryController);
 /** @ngInject */
-function LogEntryController($scope,$http,$rootScope ,logEntryService, SecurityService, MainService )
+function LogEntryController($scope,$http,$rootScope,$log,UtilityService ,logEntryService, SecurityService, MainService )
 {
 $scope.searchBean=logEntryService.searchBean;
 $scope.entityList=logEntryService.entityList;
@@ -31,7 +31,7 @@ logEntryService.selectedEntity.show=true;
 if (logEntryService.isParent()) 
 {
 }
-$('#logEntryTabs li:eq(0) a').tab('show');
+angular.element('#logEntryTabs li:eq(0) a').tab('show');
 };
 		
 $scope.search=function()
@@ -41,9 +41,10 @@ delete $rootScope.openNode.logEntry;
 logEntryService.search().then(function successCallback(response) {
 logEntryService.setEntityList(response.data);
 },function errorCallback(response) { 
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
 });
 };
 $scope.insert=function()
@@ -52,21 +53,25 @@ if (!$scope.logEntryDetailForm.$valid) return;
 if (logEntryService.isParent()) 
 {
 logEntryService.insert().then(function successCallback(response) { 
+$log.debug(response);
 $scope.search();
 },function errorCallback(response) { 
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
 });
 }
 else 
 {
 logEntryService.selectedEntity.show=false;
 logEntryService.insert().then(function successCallBack(response) { 
+$log.debug(response);
 },function errorCallback(response) { 
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
 });
 }
 };
@@ -76,11 +81,13 @@ if (!$scope.logEntryDetailForm.$valid) return;
 if (logEntryService.isParent()) 
 {
 logEntryService.update().then(function successCallback(response) { 
+$log.debug(response);
 $scope.search();
 },function errorCallback(response) { 
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
 });
 }
 else 
@@ -91,9 +98,10 @@ logEntryService.update().then(function successCallback(response){
 logEntryService.setSelectedEntity(response.data);
 updateParentEntities();
 },function errorCallback(response) { 
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
 });
 }
 };
@@ -109,6 +117,7 @@ $scope.del=function()
 if (!logEntryService.isParent()) 
 $scope.updateParent();
 logEntryService.del().then(function successCallback(response) { 
+$log.debug(response);
 if (logEntryService.isParent()) 
 {
 $scope.search();
@@ -116,9 +125,10 @@ $scope.search();
 logEntryService.setSelectedEntity(null);
 }
 },function errorCallback(response) { 
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
 });
 };
 $scope.refreshTableDetail= function() 
@@ -129,9 +139,9 @@ $scope.loadFile = function(file,field)
 logEntryService.loadFile(file,field).then(function successCallback(response) {
 logEntryService.setSelectedEntity(response.data);
 },function errorCallback(response) { 
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
 return; 
 });
 }
@@ -142,10 +152,10 @@ var mystyle = {
  headers:true, 
 column: {style:{Font:{Bold:"1"}}}
 };
-alasql('SELECT * INTO XLSXML("logEntry.xls",?) FROM ?',[mystyle,$scope.entityList]);
+UtilityService.alasql('SELECT * INTO XLSXML("logEntry.xls",?) FROM ?',[mystyle,$scope.entityList]);
 };
 $scope.logEntryGridOptions={};
-cloneObject(logEntryService.gridOptions,$scope.logEntryGridOptions);
+UtilityService.cloneObject(logEntryService.gridOptions,$scope.logEntryGridOptions);
 $scope.logEntryGridOptions.data=logEntryService.entityList;
 $scope.initChildrenList = function () { 
 }
@@ -155,11 +165,11 @@ gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
 logEntryService.searchOne(row.entity).then(function(response) { 
-console.log(response.data);
+$log.debug(response.data);
 $rootScope.openNode.logEntry=true;
 logEntryService.setSelectedEntity(response.data[0]);
 });
-$('#logEntryTabs li:eq(0) a').tab('show');
+angular.element('#logEntryTabs li:eq(0) a').tab('show');
 }
 else 
 logEntryService.setSelectedEntity(null);

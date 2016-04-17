@@ -4,7 +4,7 @@ angular
 .module("serverTestApp")
 .controller("AnnotationAttributeController",AnnotationAttributeController);
 /** @ngInject */
-function AnnotationAttributeController($scope,$http,$rootScope ,annotationAttributeService, SecurityService, MainService ,annotationService,fieldService,entityService,restrictionEntityService,roleService,restrictionFieldService,userService,restrictionEntityGroupService,entityGroupService,projectService,enumEntityService,enumValueService,tabService,enumFieldService,relationshipService)
+function AnnotationAttributeController($scope,$http,$rootScope,$log,UtilityService ,annotationAttributeService, SecurityService, MainService ,annotationService)
 {
 $scope.searchBean=annotationAttributeService.searchBean;
 $scope.entityList=annotationAttributeService.entityList;
@@ -34,7 +34,7 @@ if (annotationAttributeService.isParent())
 annotationService.selectedEntity.show=false;
 delete $rootScope.openNode.annotation;
 }
-$('#annotationAttributeTabs li:eq(0) a').tab('show');
+angular.element('#annotationAttributeTabs li:eq(0) a').tab('show');
 };
 		
 $scope.search=function()
@@ -44,9 +44,10 @@ delete $rootScope.openNode.annotationAttribute;
 annotationAttributeService.search().then(function successCallback(response) {
 annotationAttributeService.setEntityList(response.data);
 },function errorCallback(response) { 
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
 });
 };
 $scope.insert=function()
@@ -55,21 +56,25 @@ if (!$scope.annotationAttributeDetailForm.$valid) return;
 if (annotationAttributeService.isParent()) 
 {
 annotationAttributeService.insert().then(function successCallback(response) { 
+$log.debug(response);
 $scope.search();
 },function errorCallback(response) { 
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
 });
 }
 else 
 {
 annotationAttributeService.selectedEntity.show=false;
 annotationAttributeService.insert().then(function successCallBack(response) { 
+$log.debug(response);
 },function errorCallback(response) { 
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
 });
 }
 };
@@ -81,11 +86,13 @@ if (annotationAttributeService.isParent())
 annotationService.selectedEntity.show=false;
 delete $rootScope.openNode.annotation;
 annotationAttributeService.update().then(function successCallback(response) { 
+$log.debug(response);
 $scope.search();
 },function errorCallback(response) { 
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
 });
 }
 else 
@@ -96,9 +103,10 @@ annotationAttributeService.update().then(function successCallback(response){
 annotationAttributeService.setSelectedEntity(response.data);
 updateParentEntities();
 },function errorCallback(response) { 
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
 });
 }
 };
@@ -114,6 +122,7 @@ $scope.del=function()
 if (!annotationAttributeService.isParent()) 
 $scope.updateParent();
 annotationAttributeService.del().then(function successCallback(response) { 
+$log.debug(response);
 if (annotationAttributeService.isParent()) 
 {
 $scope.search();
@@ -121,9 +130,10 @@ $scope.search();
 annotationAttributeService.setSelectedEntity(null);
 }
 },function errorCallback(response) { 
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
 });
 };
 $scope.refreshTableDetail= function() 
@@ -136,9 +146,9 @@ $scope.loadFile = function(file,field)
 annotationAttributeService.loadFile(file,field).then(function successCallback(response) {
 annotationAttributeService.setSelectedEntity(response.data);
 },function errorCallback(response) { 
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
 return; 
 });
 }
@@ -149,14 +159,15 @@ if (index!=null)
 {
 annotationService.searchOne(annotationAttributeService.selectedEntity.annotationList[index]).then(
 function successCallback(response) {
-console.log("INDEX!=NULLLLLLLLLLLL");
-console.log(response);
+$log.debug("INDEX!=NULLLLLLLLLLLL");
+$log.debug(response);
 annotationService.setSelectedEntity(response.data[0]);
 annotationService.selectedEntity.show=true;
   }, function errorCallback(response) {
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
   }	
 );
 }
@@ -175,13 +186,14 @@ annotationService.setSelectedEntity(response.data[0]);
 annotationService.selectedEntity.show=true;
 $rootScope.openNode.annotation=true;
   }, function errorCallback(response) {
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
   }	
 );
 }
-$('#annotationTabs li:eq(0) a').tab('show');
+angular.element('#annotationTabs li:eq(0) a').tab('show');
 };
 $scope.downloadEntityList=function()
 {
@@ -189,7 +201,7 @@ var mystyle = {
  headers:true, 
 column: {style:{Font:{Bold:"1"}}}
 };
-alasql('SELECT * INTO XLSXML("annotationAttribute.xls",?) FROM ?',[mystyle,$scope.entityList]);
+UtilityService.alasql('SELECT * INTO XLSXML("annotationAttribute.xls",?) FROM ?',[mystyle,$scope.entityList]);
 };
 $scope.downloadAnnotationList=function()
 {
@@ -197,10 +209,10 @@ var mystyle = {
  headers:true, 
 column: {style:{Font:{Bold:"1"}}}
 };
-alasql('SELECT * INTO XLSXML("annotation.xls",?) FROM ?',[mystyle,$scope.selectedEntity.annotationList]);
+UtilityService.alasql('SELECT * INTO XLSXML("annotation.xls",?) FROM ?',[mystyle,$scope.selectedEntity.annotationList]);
 };
 $scope.annotationAttributeGridOptions={};
-cloneObject(annotationAttributeService.gridOptions,$scope.annotationAttributeGridOptions);
+UtilityService.cloneObject(annotationAttributeService.gridOptions,$scope.annotationAttributeGridOptions);
 $scope.annotationAttributeGridOptions.data=annotationAttributeService.entityList;
 $scope.initChildrenList = function () { 
 }
@@ -210,11 +222,11 @@ gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
 annotationAttributeService.searchOne(row.entity).then(function(response) { 
-console.log(response.data);
+$log.debug(response.data);
 $rootScope.openNode.annotationAttribute=true;
 annotationAttributeService.setSelectedEntity(response.data[0]);
 });
-$('#annotationAttributeTabs li:eq(0) a').tab('show');
+angular.element('#annotationAttributeTabs li:eq(0) a').tab('show');
 }
 else 
 annotationAttributeService.setSelectedEntity(null);
@@ -223,7 +235,7 @@ annotationAttributeService.selectedEntity.show = row.isSelected;
 });
   };
 $scope.annotationGridOptions={};
-cloneObject(annotationService.gridOptions,$scope.annotationGridOptions);
+UtilityService.cloneObject(annotationService.gridOptions,$scope.annotationGridOptions);
 $scope.annotationGridOptions.data=$scope.selectedEntity.annotationList;
 $scope.initChildrenList = function () { 
 }
@@ -233,11 +245,11 @@ gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
 annotationService.searchOne(row.entity).then(function(response) { 
-console.log(response.data);
+$log.debug(response.data);
 $rootScope.openNode.annotation=true;
 annotationService.setSelectedEntity(response.data[0]);
 });
-$('#annotationTabs li:eq(0) a').tab('show');
+angular.element('#annotationTabs li:eq(0) a').tab('show');
 }
 else 
 annotationService.setSelectedEntity(null);
@@ -252,13 +264,14 @@ annotationAttributeService.preparedData.entityList=response.data;
 
 if (annotationService.selectedEntity.annotationId!=undefined) annotationService.searchOne(annotationService.selectedEntity).then(
 function successCallback(response) {
-console.log("response-ok");
-console.log(response);
+$log.debug("response-ok");
+$log.debug(response);
 annotationService.setSelectedEntity(response.data[0]);
   }, function errorCallback(response) {
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
   }	
 );
 }

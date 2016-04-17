@@ -4,7 +4,7 @@ angular
 .module("serverTestApp")
 .service("relationshipService", RelationshipService);
 /** @ngInject */
-function RelationshipService($http,MainService)
+function RelationshipService($http,MainService,UtilityService)
 {
 this.entityList =		[];
 this.preparedData={};
@@ -24,7 +24,7 @@ this.setEntityList= function(entityList)
 while (this.entityList.length>0)
 this.entityList.pop();
 if (entityList!=null)
-for (i=0; i<entityList.length; i++)
+for (var i=0; i<entityList.length; i++)
 this.entityList.push(entityList[i]);
 };
 this.searchBean = 		new Object();
@@ -38,7 +38,7 @@ if (entity == null) {
 entity = {};
 this.selectedEntity.show = false;
 } //else
-cloneObject(entity,this.selectedEntity);
+UtilityService.cloneObject(entity,this.selectedEntity);
 };
 this.search = function() {
 this.setSelectedEntity(null);
@@ -115,5 +115,5 @@ columnDefs: [
 { name: 'tab.tabId', displayName: 'tab'} 
 ]
  };
-};
+}
 })();

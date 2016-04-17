@@ -5,6 +5,7 @@ angular.module("serverTestApp").service("UtilityService", UtilityService);
 /** @ngInject */
 function UtilityService()
 {
+this.alasql=alasql;
 this.AlertSuccess = (function() {
    "use strict";
    var elem,
@@ -26,7 +27,7 @@ this.AlertError = (function() {
      hideHandler,
      that = {};
   that.init = function(options) {
-      elem = $(options.selector);
+      elem = angular.element(options.selector);
   };
 that.show = function(text) {
    clearTimeout(hideHandler);

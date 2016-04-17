@@ -16,11 +16,11 @@
 
 					</li>
 
-					<script type="text/javascript">$('a[href="#annotationAttribute-Detail"]').on('shown.bs.tab', function (e) {
-var target = $(e.target).attr("href"); // activated tab
-//console.log(target);
-if (angular.element($('#annotationAttributeTabs')).scope()!=null && angular.element($('#annotationAttributeTabs')).scope()!=undefined) 
-{ /* angular.element($('#annotationAttributeTabs')).scope().refreshTableDetail(); */ }
+					<script type="text/javascript">angular.element('a[href="#annotationAttribute-Detail"]').on('shown.bs.tab', function (e) {
+var target = angular.element(e.target).attr("href"); // activated tab
+//$log.debug(target);
+if (angular.element('#annotationAttributeTabs').scope()!=null && angular.element(('#annotationAttributeTabs')).scope()!=undefined) 
+{ /* angular.element(('#annotationAttributeTabs')).scope().refreshTableDetail(); */ }
 });
 
 					</script>

@@ -16,11 +16,11 @@
 
 					</li>
 
-					<script type="text/javascript">$('a[href="#tab-Detail"]').on('shown.bs.tab', function (e) {
-var target = $(e.target).attr("href"); // activated tab
-//console.log(target);
-if (angular.element($('#tabTabs')).scope()!=null && angular.element($('#tabTabs')).scope()!=undefined) 
-{ /* angular.element($('#tabTabs')).scope().refreshTableDetail(); */ }
+					<script type="text/javascript">angular.element('a[href="#tab-Detail"]').on('shown.bs.tab', function (e) {
+var target = angular.element(e.target).attr("href"); // activated tab
+//$log.debug(target);
+if (angular.element('#tabTabs').scope()!=null && angular.element(('#tabTabs')).scope()!=undefined) 
+{ /* angular.element(('#tabTabs')).scope().refreshTableDetail(); */ }
 });
 
 					</script>

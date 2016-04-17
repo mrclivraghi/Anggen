@@ -16,11 +16,11 @@
 
 					</li>
 
-					<script type="text/javascript">$('a[href="#restrictionField-Detail"]').on('shown.bs.tab', function (e) {
-var target = $(e.target).attr("href"); // activated tab
-//console.log(target);
-if (angular.element($('#restrictionFieldTabs')).scope()!=null && angular.element($('#restrictionFieldTabs')).scope()!=undefined) 
-{ /* angular.element($('#restrictionFieldTabs')).scope().refreshTableDetail(); */ }
+					<script type="text/javascript">angular.element('a[href="#restrictionField-Detail"]').on('shown.bs.tab', function (e) {
+var target = angular.element(e.target).attr("href"); // activated tab
+//$log.debug(target);
+if (angular.element('#restrictionFieldTabs').scope()!=null && angular.element(('#restrictionFieldTabs')).scope()!=undefined) 
+{ /* angular.element(('#restrictionFieldTabs')).scope().refreshTableDetail(); */ }
 });
 
 					</script>

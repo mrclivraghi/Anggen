@@ -4,7 +4,7 @@ angular
 .module("serverTestApp")
 .controller("UserController",UserController);
 /** @ngInject */
-function UserController($scope,$http,$rootScope ,userService, SecurityService, MainService ,roleService,restrictionFieldService,fieldService,entityService,restrictionEntityService,tabService,enumFieldService,enumEntityService,projectService,entityGroupService,restrictionEntityGroupService,enumValueService,annotationService,annotationAttributeService,relationshipService)
+function UserController($scope,$http,$rootScope,$log,UtilityService ,userService, SecurityService, MainService ,roleService)
 {
 $scope.searchBean=userService.searchBean;
 $scope.entityList=userService.entityList;
@@ -34,7 +34,7 @@ if (userService.isParent())
 roleService.selectedEntity.show=false;
 delete $rootScope.openNode.role;
 }
-$('#userTabs li:eq(0) a').tab('show');
+angular.element('#userTabs li:eq(0) a').tab('show');
 };
 		
 $scope.search=function()
@@ -47,9 +47,10 @@ delete userService.searchBean.role;
 userService.search().then(function successCallback(response) {
 userService.setEntityList(response.data);
 },function errorCallback(response) { 
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
 });
 };
 $scope.insert=function()
@@ -58,21 +59,25 @@ if (!$scope.userDetailForm.$valid) return;
 if (userService.isParent()) 
 {
 userService.insert().then(function successCallback(response) { 
+$log.debug(response);
 $scope.search();
 },function errorCallback(response) { 
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
 });
 }
 else 
 {
 userService.selectedEntity.show=false;
 userService.insert().then(function successCallBack(response) { 
+$log.debug(response);
 },function errorCallback(response) { 
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
 });
 }
 };
@@ -84,11 +89,13 @@ if (userService.isParent())
 roleService.selectedEntity.show=false;
 delete $rootScope.openNode.role;
 userService.update().then(function successCallback(response) { 
+$log.debug(response);
 $scope.search();
 },function errorCallback(response) { 
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
 });
 }
 else 
@@ -99,9 +106,10 @@ userService.update().then(function successCallback(response){
 userService.setSelectedEntity(response.data);
 updateParentEntities();
 },function errorCallback(response) { 
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
 });
 }
 };
@@ -117,6 +125,7 @@ $scope.del=function()
 if (!userService.isParent()) 
 $scope.updateParent();
 userService.del().then(function successCallback(response) { 
+$log.debug(response);
 if (userService.isParent()) 
 {
 $scope.search();
@@ -124,9 +133,10 @@ $scope.search();
 userService.setSelectedEntity(null);
 }
 },function errorCallback(response) { 
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
 });
 };
 $scope.refreshTableDetail= function() 
@@ -139,9 +149,9 @@ $scope.loadFile = function(file,field)
 userService.loadFile(file,field).then(function successCallback(response) {
 userService.setSelectedEntity(response.data);
 },function errorCallback(response) { 
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
 return; 
 });
 }
@@ -152,14 +162,15 @@ if (index!=null)
 {
 roleService.searchOne(userService.selectedEntity.roleList[index]).then(
 function successCallback(response) {
-console.log("INDEX!=NULLLLLLLLLLLL");
-console.log(response);
+$log.debug("INDEX!=NULLLLLLLLLLLL");
+$log.debug(response);
 roleService.setSelectedEntity(response.data[0]);
 roleService.selectedEntity.show=true;
   }, function errorCallback(response) {
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
   }	
 );
 }
@@ -178,13 +189,14 @@ roleService.setSelectedEntity(response.data[0]);
 roleService.selectedEntity.show=true;
 $rootScope.openNode.role=true;
   }, function errorCallback(response) {
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
   }	
 );
 }
-$('#roleTabs li:eq(0) a').tab('show');
+angular.element('#roleTabs li:eq(0) a').tab('show');
 };
 $scope.downloadEntityList=function()
 {
@@ -192,7 +204,7 @@ var mystyle = {
  headers:true, 
 column: {style:{Font:{Bold:"1"}}}
 };
-alasql('SELECT * INTO XLSXML("user.xls",?) FROM ?',[mystyle,$scope.entityList]);
+UtilityService.alasql('SELECT * INTO XLSXML("user.xls",?) FROM ?',[mystyle,$scope.entityList]);
 };
 $scope.saveLinkedRole= function() {
 userService.selectedEntity.roleList.push(userService.selectedEntity.role);
@@ -203,10 +215,10 @@ var mystyle = {
  headers:true, 
 column: {style:{Font:{Bold:"1"}}}
 };
-alasql('SELECT * INTO XLSXML("role.xls",?) FROM ?',[mystyle,$scope.selectedEntity.roleList]);
+UtilityService.alasql('SELECT * INTO XLSXML("role.xls",?) FROM ?',[mystyle,$scope.selectedEntity.roleList]);
 };
 $scope.userGridOptions={};
-cloneObject(userService.gridOptions,$scope.userGridOptions);
+UtilityService.cloneObject(userService.gridOptions,$scope.userGridOptions);
 $scope.userGridOptions.data=userService.entityList;
 $scope.initChildrenList = function () { 
 }
@@ -216,11 +228,11 @@ gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
 userService.searchOne(row.entity).then(function(response) { 
-console.log(response.data);
+$log.debug(response.data);
 $rootScope.openNode.user=true;
 userService.setSelectedEntity(response.data[0]);
 });
-$('#userTabs li:eq(0) a').tab('show');
+angular.element('#userTabs li:eq(0) a').tab('show');
 }
 else 
 userService.setSelectedEntity(null);
@@ -229,7 +241,7 @@ userService.selectedEntity.show = row.isSelected;
 });
   };
 $scope.roleGridOptions={};
-cloneObject(roleService.gridOptions,$scope.roleGridOptions);
+UtilityService.cloneObject(roleService.gridOptions,$scope.roleGridOptions);
 $scope.roleGridOptions.data=$scope.selectedEntity.roleList;
 $scope.initChildrenList = function () { 
 }
@@ -239,11 +251,11 @@ gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
 roleService.searchOne(row.entity).then(function(response) { 
-console.log(response.data);
+$log.debug(response.data);
 $rootScope.openNode.role=true;
 roleService.setSelectedEntity(response.data[0]);
 });
-$('#roleTabs li:eq(0) a').tab('show');
+angular.element('#roleTabs li:eq(0) a').tab('show');
 }
 else 
 roleService.setSelectedEntity(null);
@@ -258,13 +270,14 @@ userService.preparedData.entityList=response.data;
 
 if (roleService.selectedEntity.roleId!=undefined) roleService.searchOne(roleService.selectedEntity).then(
 function successCallback(response) {
-console.log("response-ok");
-console.log(response);
+$log.debug("response-ok");
+$log.debug(response);
 roleService.setSelectedEntity(response.data[0]);
   }, function errorCallback(response) {
-//AlertError.init({selector: "#alertError"});
-//AlertError.show("Si è verificato un errore");
-//return; 
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
   }	
 );
 }

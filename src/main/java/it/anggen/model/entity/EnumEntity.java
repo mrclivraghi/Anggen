@@ -14,6 +14,8 @@ import it.anggen.model.field.EnumValue;
 import it.anggen.utils.annotation.MaxDescendantLevel;
 import org.hibernate.annotations.Type;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(schema = "meta", name = "enum_entity")
 @it.anggen.utils.annotation.SecurityType(type = it.anggen.model.SecurityType.ACCESS_WITH_PERMISSION)
@@ -81,6 +83,7 @@ public class EnumEntity {
         this.enumValueList=enumValueList;
     }
 
+    @JsonIgnore
 	public List<EnumField> getEnumFieldList() {
 		return enumFieldList;
 	}

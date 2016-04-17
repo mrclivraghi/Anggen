@@ -101,6 +101,7 @@ public class JsGenerator {
 		generateSecurityService();
 		generateMainService();
 		generateMainController();
+		generateHomeController();
 		
 		generateIndexRoute();
 		generateIndexRun();
@@ -960,7 +961,7 @@ if (entity.getEntityGroup()!=null)
 				{
 					sb.append("\""+enumValue.getName()+"\",");
 				}
-				sb.setCharAt(sb.length(), ' ');
+				sb.setCharAt(sb.length()-1, ' ');
 				sb.append("];\n");
 
 			}
@@ -1033,9 +1034,8 @@ if (entity.getEntityGroup()!=null)
 		
 		
 		sb.append("/** @ngInject */\n");
-		sb.append("function MainController($scope){\n");
-		sb.append(" var vm= this; \n");
-		sb.append("};\n");
+		sb.append("function MainController(){\n");
+		sb.append("}\n");
 		sb.append("})();\n");
 		
 		File file = new File("");
@@ -1160,8 +1160,7 @@ if (entity.getEntityGroup()!=null)
 		.append("  'use strict'\n")
 		.append("\n")
 		.append("  angular\n")
-		.append("    .module('"+generator.applicationName+"App')\n")
-		.append("    .constant('moment', moment);\n")
+		.append("    .module('"+generator.applicationName+"App');\n")
 		.append("\n");
 		
 		
@@ -1259,7 +1258,7 @@ if (entity.getEntityGroup()!=null)
 			.append("views:{\n")
 			.append("'pageContent': {\n")
 			.append("templateUrl:'app/controller/"+entity.getName()+"/"+entity.getName()+"-template.html',\n")
-			.append(" controller:'homeController', \n")
+			.append(" controller:'HomeController', \n")
 			.append("controllerAs: 'vm' \n")
 			.append(" }\n")
 			.append("},\n")
@@ -1347,7 +1346,7 @@ if (entity.getEntityGroup()!=null)
 
 
 
-		.append("deregistrationsCallbacks[0] = $rootScope.$on('security:loginRequired', function(evt,args) {\n")
+		.append("deregistrationsCallbacks[0] = $rootScope.$on('security:loginRequired', function() {\n")
 		.append("showLogin();\n")
 		.append(" }); \n")
 
@@ -1377,7 +1376,7 @@ if (entity.getEntityGroup()!=null)
 		.append("}\n")
 
 		.append("//deregistration of events on $destroy\n")
-		.append("deregistrationsCallbacks[2] = $rootScope.$on('$destroy', function(evt,args) {\n")
+		.append("deregistrationsCallbacks[2] = $rootScope.$on('$destroy', function() {\n")
 		.append(" $log.debug(\"deregistering global events\");\n")
 		.append("for(var i=0;i<deregistrationsCallbacks.length;i++){\n")
 		.append("  deregistrationsCallbacks[i]();\n")
@@ -1450,7 +1449,7 @@ if (entity.getEntityGroup()!=null)
 		.append("  angular\n")
 
 		.append(" .module('"+generator.applicationName+"App')\n")
-		.append(" .controller('homeController', HomeController);\n")
+		.append(" .controller('HomeController', HomeController);\n")
 
 		.append("  /** @ngInject */\n")
 		.append(" function HomeController($element,$timeout,SecurityService,$log,$rootScope,$resource) {\n")
@@ -1458,8 +1457,8 @@ if (entity.getEntityGroup()!=null)
 
 		.append(" function checkUsername()\n")
 		.append(" {\n")
-		.append(" 	var Username= $resource(\""+generator.restUrl+"authentication/username/\");\n")
-		.append(" 	var result= Username.save({},function(data){\n")
+		.append("var Username= $resource(\""+generator.restUrl+"authentication/username/\");\n")
+		.append("Username.save({},function(data){\n")
 		.append("         $log.debug(data);\n")
 		.append("     });\n")
 		.append(" }\n")
@@ -1623,7 +1622,7 @@ if (entity.getEntityGroup()!=null)
 		.append(".directive('"+generator.applicationName+"Navbar', "+generator.applicationName+"Navbar);\n")
 
 		.append("/** @ngInject */\n")
-		.append("function "+generator.applicationName+"Navbar(SecurityService) {\n")
+		.append("function "+generator.applicationName+"Navbar() {\n")
 		.append(" var directive = {\n")
 		.append("    restrict: 'E',\n")
 		.append("    templateUrl: 'app/components/navbar/navbar.html',\n")
@@ -1638,12 +1637,13 @@ if (entity.getEntityGroup()!=null)
 		.append("   return directive;\n")
 
 		.append("  /** @ngInject */\n")
-		.append("  function NavbarController($scope,$http,$log,moment,$rootScope,SecurityService) {\n")
+		.append("  function NavbarController($scope,$http,$log) {\n")
 		.append("    var vm = this;\n")
 		.append("  function doLogout()\n")
 		.append("  {\n")
 		.append("  $http.post(\""+generator.restUrl+"auth/logout/\").then(function(response)\n")
 		.append("{\n")
+		.append("$log.debug(response);\n")
 		.append("		$log.debug(\"logout\");\n")
 		.append("  });\n")
 
@@ -1695,7 +1695,7 @@ if (entity.getEntityGroup()!=null)
 		sb.append(" return directive;\n");
 
 		sb.append("  /** @ngInject */\n");
-		sb.append("  function LoginController($scope,SecurityService,$rootScope,$log) {\n");
+		sb.append("  function LoginController($scope,SecurityService,UtilityService,$rootScope,$log) {\n");
 		sb.append("   var vm = this;\n");
 
 		sb.append("   function doLogin(username,password){\n");
@@ -1709,10 +1709,10 @@ if (entity.getEntityGroup()!=null)
 		sb.append("				$log.debug(\"errore callback\");\n");
 		sb.append("				$log.debug(response);\n");
 		sb.append("			});\n");
-		sb.append("    }\n");
+		sb.append("}\n");
 
-		sb.append("	  function checkUsername()\n");
-		sb.append("	  {\n");
+		sb.append("function checkUsername()\n");
+		sb.append("{\n");
 
 		sb.append("	SecurityService.isLoggedIn(vm).then(function successCallback(response) {\n");
 		sb.append("	if (!response.data.authenticated)\n");
@@ -1737,7 +1737,7 @@ if (entity.getEntityGroup()!=null)
 
 
 
-		sb.append("};\n");
+		sb.append("}\n");
 		sb.append("})();\n");
 
 		File file = new File("");
@@ -1970,7 +1970,6 @@ MainService.parentService.childrenList.roleList=response.data;
 		sb.append(" \"angular-ui-grid\": \"^3.1.1\",\n");
 		sb.append("  \"angular-ui-date\": \"^1.0.0\",\n");
 		sb.append("  \"bootstrap\": \"^3.3.6\",\n");
-		sb.append("   \"utility\": \"./src/app/components/customLib/utility.js\",\n");
 		sb.append("  \"main\": \"./src/app/components/customLib/main.css\",\n");
 		sb.append("\"alasql\": \"^0.2.5\"\n");
 		sb.append(" },\n");

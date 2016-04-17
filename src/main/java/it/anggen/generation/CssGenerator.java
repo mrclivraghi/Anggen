@@ -195,5 +195,63 @@ public  class CssGenerator {
 		}
 	}
 	
+	public static void generateLoginSCSS(String angularDirectory)
+	{
+		StringBuilder sb = new StringBuilder();
+		sb.append("@CHARSET \"ISO-8859-1\";\n");
+		sb.append("/* sign in */\n");
+		sb.append(".form-signin {\n");
+		sb.append("  max-width: 330px;\n");
+		sb.append("  padding: 15px;\n");
+		sb.append("  margin: 0 auto;\n");
+		sb.append("}\n");
+		sb.append(".form-signin .form-signin-heading,\n");
+		sb.append(".form-signin .checkbox {\n");
+		sb.append("  margin-bottom: 10px;\n");
+		sb.append("}\n");
+		sb.append(".form-signin .checkbox {\n");
+		sb.append("  font-weight: normal;\n");
+		sb.append("}\n");
+		sb.append(".form-signin .form-control {\n");
+		sb.append("  position: relative;\n");
+		sb.append(" height: auto;\n");
+		sb.append("  -webkit-box-sizing: border-box;\n");
+		sb.append("     -moz-box-sizing: border-box;\n");
+		sb.append("          box-sizing: border-box;\n");
+		sb.append("  padding: 10px;\n");
+		sb.append("  font-size: 16px;\n");
+		sb.append("}\n");
+		sb.append(".form-signin .form-control:focus {\n");
+		sb.append("  z-index: 2;\n");
+		sb.append("}\n");
+		sb.append(".form-signin input[type=\"text\"] {\n");
+		sb.append("  margin-bottom: -1px;\n");
+		sb.append("  border-bottom-right-radius: 0;\n");
+		sb.append("  border-bottom-left-radius: 0;\n");
+		sb.append("}\n");
+		sb.append(".form-signin input[type=\"password\"] {\n");
+		sb.append("  margin-bottom: 10px;\n");
+		sb.append("  border-top-left-radius: 0;\n");
+		sb.append("  border-top-right-radius: 0;\n");
+		sb.append("}\n");
+
+		File file = new File("");
+		String directory= file.getAbsolutePath()+angularDirectory+"login/";
+		File dir = new File(directory);
+		if (!dir.exists())
+			dir.mkdirs();
+		file = new File(directory+"login.scss");
+		PrintWriter writer;
+		try {
+			writer = new PrintWriter(file, "UTF-8");
+			writer.write(sb.toString());
+			writer.close();
+			System.out.println("written css file "+file.getAbsolutePath());
+		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	
 }

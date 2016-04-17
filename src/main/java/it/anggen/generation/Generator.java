@@ -262,6 +262,7 @@ public class Generator {
 			htmlGenerator.generateLogin();
 			
 			CssGenerator.generateMain(angularDirectory);
+			CssGenerator.generateLoginSCSS(angularDirectory);
 			for (Entity modelEntity: modelEntityList)
 			{
 				if (modelEntity.getDisableViewGeneration()) continue;

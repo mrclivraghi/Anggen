@@ -484,7 +484,7 @@ public class HtmlGenerator {
 				.label()
 					.input((new HtmlAttributes()).add("type", "checkbox").add("value", "remember-me"))
 					.content("Rembember me")
-				._label()
+				//._label()
 			._div()
 			.button((new HtmlAttributes()).add("class", "btn btn-lg btn-primary btn-block").add("type", "submit")).content("Sign in")
 			

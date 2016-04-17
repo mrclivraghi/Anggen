@@ -2044,7 +2044,7 @@ MainService.parentService.childrenList.roleList=response.data;
 
 
 		File file= new File("");
-		File myJsp=new File(file.getAbsolutePath()+"bower.json");
+		File myJsp=new File(file.getAbsolutePath()+"/bower.json");
 		PrintWriter writer;
 		try {
 			System.out.println("Written "+myJsp.getAbsolutePath());

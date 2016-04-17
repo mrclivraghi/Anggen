@@ -209,7 +209,7 @@ public class JsGenerator {
 		.append("while (this.entityList.length>0)\n")
 		.append("this.entityList.pop();\n")
 		.append("if (entityList!=null)\n")
-		.append("for (i=0; i<entityList.length; i++)\n")
+		.append("for (var i=0; i<entityList.length; i++)\n")
 		.append("this.entityList.push(entityList[i]);\n")
 		.append("};\n");
 			sb.append("this.searchBean = 		new Object();\n")
@@ -1552,7 +1552,7 @@ if (entity.getEntityGroup()!=null)
 		sb.append(" *  utility functionality\n");
 		sb.append("*/\n");
 
-		sb.append("function loadMenu()\n");
+	/*	sb.append("function loadMenu()\n");
 		sb.append("{\n");
 		sb.append("var content = document.querySelector('link[rel=\"import\"]').import; \n");
 		sb.append(" $(\"body\").prepend(content.documentElement.getElementsByTagName(\"body\")[0]);\n");
@@ -1565,7 +1565,7 @@ if (entity.getEntityGroup()!=null)
 		sb.append("		$(\"a[href='../\"+path+\"/']\").parent(\"li\").parent(\"ul\").parent(\"li\").addClass(\"active\");\n");
 
 
-		sb.append("}\n");
+		sb.append("}\n");*/
 
 		sb.append("var AlertSuccess = (function() {\n");
 		sb.append("   \"use strict\";\n");

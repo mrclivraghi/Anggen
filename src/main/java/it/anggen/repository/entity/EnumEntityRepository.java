@@ -2,6 +2,7 @@
 package it.anggen.repository.entity;
 
 import java.util.List;
+import it.anggen.model.field.EnumField;
 import it.anggen.model.field.EnumValue;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -22,8 +23,8 @@ public interface EnumEntityRepository
 
     public List<it.anggen.model.entity.EnumEntity> findByProject(it.anggen.model.entity.Project project);
 
-    @Query("select e from EnumEntity e where  (:enumEntityId is null or cast(:enumEntityId as string)=cast(e.enumEntityId as string)) and (:name is null or :name='' or cast(:name as string)=e.name) and (:project=e.project or :project is null) and (:enumValue in elements(e.enumValueList)  or :enumValue is null) ")
-    public List<it.anggen.model.entity.EnumEntity> findByEnumEntityIdAndNameAndProjectAndEnumValue(
+    @Query("select e from EnumEntity e where  (:enumEntityId is null or cast(:enumEntityId as string)=cast(e.enumEntityId as string)) and (:name is null or :name='' or cast(:name as string)=e.name) and (:project=e.project or :project is null) and (:enumValue in elements(e.enumValueList)  or :enumValue is null) and (:enumField in elements(e.enumFieldList)  or :enumField is null) ")
+    public List<it.anggen.model.entity.EnumEntity> findByEnumEntityIdAndNameAndProjectAndEnumValueAndEnumField(
         @org.springframework.data.repository.query.Param("enumEntityId")
         java.lang.Long enumEntityId,
         @org.springframework.data.repository.query.Param("name")
@@ -31,6 +32,8 @@ public interface EnumEntityRepository
         @org.springframework.data.repository.query.Param("project")
         it.anggen.model.entity.Project project,
         @org.springframework.data.repository.query.Param("enumValue")
-        EnumValue enumValue);
+        EnumValue enumValue,
+        @org.springframework.data.repository.query.Param("enumField")
+        EnumField enumField);
 
 }

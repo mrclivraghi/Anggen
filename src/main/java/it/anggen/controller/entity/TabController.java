@@ -154,10 +154,10 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         if (tab.getEntity()!=null)
         {
         tab.getEntity().setRestrictionEntityList(null);
-        tab.getEntity().setTabList(null);
-        tab.getEntity().setEntityGroup(null);
-        tab.getEntity().setEnumFieldList(null);
         tab.getEntity().setFieldList(null);
+        tab.getEntity().setEnumFieldList(null);
+        tab.getEntity().setEntityGroup(null);
+        tab.getEntity().setTabList(null);
         tab.getEntity().setRelationshipList(null);
         }
         if (tab.getFieldList()!=null)
@@ -185,10 +185,10 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         {
 
-        relationship.setEntity(null);
-        relationship.setEntityTarget(null);
-        relationship.setTab(null);
         relationship.setAnnotationList(null);
+        relationship.setEntityTarget(null);
+        relationship.setEntity(null);
+        relationship.setTab(null);
         }
     }
 

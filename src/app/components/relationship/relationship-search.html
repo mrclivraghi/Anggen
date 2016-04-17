@@ -10,18 +10,7 @@
 						<span class="input-group-addon">relationshipId
 						</span>
 
-						<input class="form-control " aria-describedby="sizing-addon3" type="text" id="relationship-relationshipId" ng-model="searchBean.relationshipId" ng-readonly="false" name="relationshipId" placeholder="relationshipId"/>
-						
-					</div>
-
-				</div>
-
-				<div class="pull-left right-input" ng-show="true ">
-					<div class="input-group">
-						<span class="input-group-addon">priority
-						</span>
-
-						<input class="form-control " aria-describedby="sizing-addon3" type="text" id="relationship-priority" ng-model="searchBean.priority" ng-readonly="false" name="priority" placeholder="priority"/>
+						<input class="form-control " aria-describedby="sizing-addon3" type="text" id="relationship-relationshipId" ng-model="vm.searchBean.relationshipId" ng-readonly="false" name="relationshipId" placeholder="relationshipId"/>
 						
 					</div>
 
@@ -32,7 +21,18 @@
 						<span class="input-group-addon">name
 						</span>
 
-						<input class="form-control " aria-describedby="sizing-addon3" type="text" id="relationship-name" ng-model="searchBean.name" ng-readonly="false" name="name" placeholder="name"/>
+						<input class="form-control " aria-describedby="sizing-addon3" type="text" id="relationship-name" ng-model="vm.searchBean.name" ng-readonly="false" name="name" placeholder="name"/>
+						
+					</div>
+
+				</div>
+
+				<div class="pull-left right-input" ng-show="true ">
+					<div class="input-group">
+						<span class="input-group-addon">priority
+						</span>
+
+						<input class="form-control " aria-describedby="sizing-addon3" type="text" id="relationship-priority" ng-model="vm.searchBean.priority" ng-readonly="false" name="priority" placeholder="priority"/>
 						
 					</div>
 
@@ -43,43 +43,7 @@
 						<span class="input-group-addon">relationshipType
 						</span>
 
-						<select class="form-control pull-left" aria-describedby="sizing-addon3" type="text" id="relationship-relationshipType" ng-model="searchBean.relationshipType" ng-readonly="false" name="relationshipType" placeholder="relationshipType" ng-options="relationshipType as relationshipType for relationshipType in relationshipTypePreparedData.entityList" enctype="UTF-8">
-						</select>
-
-					</div>
-
-				</div>
-
-				<div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.entity.restrictionItemMap.entity.canSearch==true)">
-					<div class="input-group">
-						<span class="input-group-addon">entity
-						</span>
-
-						<select class="form-control " aria-describedby="sizing-addon3" ng-model="searchBean.entity.entityId" id="entity" ng-options="entity.entityId as  entity.entityId+&#39; &#39;+ entity.name for entity in entityPreparedData.entityList" enctype="UTF-8">
-						</select>
-
-					</div>
-
-				</div>
-
-				<div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.entity.restrictionItemMap.entity.canSearch==true)">
-					<div class="input-group">
-						<span class="input-group-addon">entity
-						</span>
-
-						<select class="form-control " aria-describedby="sizing-addon3" ng-model="searchBean.entity.entityId" id="entityTarget" ng-options="entity.entityId as  entity.entityId+&#39; &#39;+ entity.name for entity in entityPreparedData.entityList" enctype="UTF-8">
-						</select>
-
-					</div>
-
-				</div>
-
-				<div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.entity.restrictionItemMap.tab.canSearch==true)">
-					<div class="input-group">
-						<span class="input-group-addon">tab
-						</span>
-
-						<select class="form-control " aria-describedby="sizing-addon3" ng-model="searchBean.tab.tabId" id="tab" ng-options="tab.tabId as  tab.name+&#39; &#39;+ tab.tabId for tab in tabPreparedData.entityList" enctype="UTF-8">
+						<select class="form-control pull-left" aria-describedby="sizing-addon3" type="text" id="relationship-relationshipType" ng-model="vm.searchBean.relationshipType" ng-readonly="false" name="relationshipType" placeholder="relationshipType" ng-options="relationshipType as relationshipType for relationshipType in vm.relationshipTypePreparedData.entityList" enctype="UTF-8">
 						</select>
 
 					</div>
@@ -91,7 +55,43 @@
 						<span class="input-group-addon">annotation
 						</span>
 
-						<select class="form-control " aria-describedby="sizing-addon3" ng-model="searchBean.annotation.annotationId" id="annotation" ng-options="annotation.annotationId as  annotation.annotationId for annotation in annotationPreparedData.entityList" enctype="UTF-8">
+						<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.annotation.annotationId" id="annotation" ng-options="annotation.annotationId as  annotation.annotationId for annotation in vm.annotationPreparedData.entityList" enctype="UTF-8">
+						</select>
+
+					</div>
+
+				</div>
+
+				<div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.entity.restrictionItemMap.entity.canSearch==true)">
+					<div class="input-group">
+						<span class="input-group-addon">entity
+						</span>
+
+						<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.entity.entityId" id="entityTarget" ng-options="entity.entityId as  entity.name+&#39; &#39;+ entity.entityId for entity in vm.entityPreparedData.entityList" enctype="UTF-8">
+						</select>
+
+					</div>
+
+				</div>
+
+				<div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.entity.restrictionItemMap.entity.canSearch==true)">
+					<div class="input-group">
+						<span class="input-group-addon">entity
+						</span>
+
+						<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.entity.entityId" id="entity" ng-options="entity.entityId as  entity.name+&#39; &#39;+ entity.entityId for entity in vm.entityPreparedData.entityList" enctype="UTF-8">
+						</select>
+
+					</div>
+
+				</div>
+
+				<div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.entity.restrictionItemMap.tab.canSearch==true)">
+					<div class="input-group">
+						<span class="input-group-addon">tab
+						</span>
+
+						<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.tab.tabId" id="tab" ng-options="tab.tabId as  tab.name+&#39; &#39;+ tab.tabId for tab in vm.tabPreparedData.entityList" enctype="UTF-8">
 						</select>
 
 					</div>
@@ -103,13 +103,13 @@
 			<div class="panel-body">
 				<div class="panel-body">
 					<div class="pull-left right-input">
-						<button ng-click="addNew()" class="btn btn-default " ng-show="($root.restrictionList.relationship.restrictionItemMap.relationship.canCreate==true)">Add new
+						<button ng-click="vm.addNew()" class="btn btn-default " ng-show="($root.restrictionList.relationship.restrictionItemMap.relationship.canCreate==true)">Add new
 						</button>
 
-						<button ng-click="search()" class="btn btn-default ">Find
+						<button ng-click="vm.search()" class="btn btn-default ">Find
 						</button>
 
-						<button ng-click="reset()" class="btn btn-default ">Reset
+						<button ng-click="vm.reset()" class="btn btn-default ">Reset
 						</button>
 
 					</div>
@@ -122,9 +122,9 @@
 
 	</form>
 
-	<form id="relationshipList" ng-if="entityList.length&gt;0" enctype="UTF-8">
+	<form id="relationshipList" ng-if="vm.entityList.length&gt;0" enctype="UTF-8">
 		<div class="panel panel-default default-panel">
-			<div class="panel-heading">List relationship<button ng-click="downloadEntityList()" class="btn btn-default pull-right" style="margin-top:-7px">
+			<div class="panel-heading">List relationship<button ng-click="vm.downloadList()" class="btn btn-default pull-right" style="margin-top:-7px">
 	<span class="glyphicon glyphicon-download-alt" aria-hidden="true">
 	</span>
 </button>
@@ -132,7 +132,7 @@
 			</div>
 
 			<div class="panel-body">
-				<div ui-grid="relationshipGridOptions" ui-grid-pagination="" ui-grid-selection="" ui-grid-exporter="">
+				<div ui-grid="vm.relationshipGridOptions" ui-grid-pagination="" ui-grid-selection="" ui-grid-exporter="">
 				</div>
 
 			</div>

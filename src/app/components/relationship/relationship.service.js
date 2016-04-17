@@ -71,6 +71,13 @@ var promise= $http.post("http://127.0.0.1:8080/ServerTestApp/relationship/"+this
 });
 return promise; 
 }
+ this.initAnnotationList= function()
+{
+var promise= $http
+.post("http://127.0.0.1:8080/ServerTestApp/annotation/search",
+{});
+return promise;
+};
  this.initEntityList= function()
 {
 var promise= $http
@@ -92,13 +99,6 @@ var promise= $http
 {});
 return promise;
 };
- this.initAnnotationList= function()
-{
-var promise= $http
-.post("http://127.0.0.1:8080/ServerTestApp/annotation/search",
-{});
-return promise;
-};
 this.gridOptions = {
 enablePaginationControls: true,
 multiSelect: false,
@@ -108,10 +108,10 @@ paginationPageSize: 10,
 enableGridMenu: true,
 columnDefs: [    
 { name: 'relationshipId'},
-{ name: 'priority'},
 { name: 'name'},
-{ name: 'entity.entityId', displayName: 'entity'},
+{ name: 'priority'},
 { name: 'entityTarget.entityTargetId', displayName: 'entityTarget'},
+{ name: 'entity.entityId', displayName: 'entity'},
 { name: 'tab.tabId', displayName: 'tab'} 
 ]
  };

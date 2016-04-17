@@ -9,7 +9,7 @@ function EnumEntityService($http,MainService,UtilityService)
 this.entityList =		[];
 this.preparedData={};
 this.selectedEntity= 	{show: false 
-,enumValueList: []};
+,enumValueList: [],enumFieldList: []};
 this.hidden= { hiddenFields: []};
 this.isParent=function()
 {
@@ -82,6 +82,13 @@ return promise;
 {
 var promise= $http
 .post("http://127.0.0.1:8080/ServerTestApp/enumValue/search",
+{});
+return promise;
+};
+ this.initEnumFieldList= function()
+{
+var promise= $http
+.post("http://127.0.0.1:8080/ServerTestApp/enumField/search",
 {});
 return promise;
 };

@@ -10,7 +10,7 @@
 						<span class="input-group-addon">roleId
 						</span>
 
-						<input class="form-control " aria-describedby="sizing-addon3" type="text" id="role-roleId" ng-model="searchBean.roleId" ng-readonly="false" name="roleId" placeholder="roleId"/>
+						<input class="form-control " aria-describedby="sizing-addon3" type="text" id="role-roleId" ng-model="vm.searchBean.roleId" ng-readonly="false" name="roleId" placeholder="roleId"/>
 						
 					</div>
 
@@ -21,8 +21,20 @@
 						<span class="input-group-addon">role
 						</span>
 
-						<input class="form-control " aria-describedby="sizing-addon3" type="text" id="role-role" ng-model="searchBean.role" ng-readonly="false" name="role" placeholder="role"/>
+						<input class="form-control " aria-describedby="sizing-addon3" type="text" id="role-role" ng-model="vm.searchBean.role" ng-readonly="false" name="role" placeholder="role"/>
 						
+					</div>
+
+				</div>
+
+				<div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.security.restrictionItemMap.restrictionEntity.canSearch==true)">
+					<div class="input-group">
+						<span class="input-group-addon">restrictionEntity
+						</span>
+
+						<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.restrictionEntity.restrictionEntityId" id="restrictionEntity" ng-options="restrictionEntity.restrictionEntityId as  restrictionEntity.restrictionEntityId+&#39; &#39;+ restrictionEntity.entity.EntityId for restrictionEntity in vm.restrictionEntityPreparedData.entityList" enctype="UTF-8">
+						</select>
+
 					</div>
 
 				</div>
@@ -32,7 +44,7 @@
 						<span class="input-group-addon">restrictionField
 						</span>
 
-						<select class="form-control " aria-describedby="sizing-addon3" ng-model="searchBean.restrictionField.restrictionFieldId" id="restrictionField" ng-options="restrictionField.restrictionFieldId as  restrictionField.restrictionFieldId for restrictionField in restrictionFieldPreparedData.entityList" enctype="UTF-8">
+						<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.restrictionField.restrictionFieldId" id="restrictionField" ng-options="restrictionField.restrictionFieldId as  restrictionField.restrictionFieldId for restrictionField in vm.restrictionFieldPreparedData.entityList" enctype="UTF-8">
 						</select>
 
 					</div>
@@ -44,7 +56,7 @@
 						<span class="input-group-addon">user
 						</span>
 
-						<select class="form-control " aria-describedby="sizing-addon3" ng-model="searchBean.user.userId" id="user" ng-options="user.userId as  user.userId+&#39; &#39;+ user.username for user in userPreparedData.entityList" enctype="UTF-8">
+						<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.user.userId" id="user" ng-options="user.userId as  user.userId+&#39; &#39;+ user.username for user in vm.userPreparedData.entityList" enctype="UTF-8">
 						</select>
 
 					</div>
@@ -56,19 +68,7 @@
 						<span class="input-group-addon">restrictionEntityGroup
 						</span>
 
-						<select class="form-control " aria-describedby="sizing-addon3" ng-model="searchBean.restrictionEntityGroup.restrictionEntityGroupId" id="restrictionEntityGroup" ng-options="restrictionEntityGroup.restrictionEntityGroupId as  restrictionEntityGroup.restrictionEntityGroupId for restrictionEntityGroup in restrictionEntityGroupPreparedData.entityList" enctype="UTF-8">
-						</select>
-
-					</div>
-
-				</div>
-
-				<div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.security.restrictionItemMap.restrictionEntity.canSearch==true)">
-					<div class="input-group">
-						<span class="input-group-addon">restrictionEntity
-						</span>
-
-						<select class="form-control " aria-describedby="sizing-addon3" ng-model="searchBean.restrictionEntity.restrictionEntityId" id="restrictionEntity" ng-options="restrictionEntity.restrictionEntityId as  restrictionEntity.restrictionEntityId+&#39; &#39;+ restrictionEntity.entity.EntityId for restrictionEntity in restrictionEntityPreparedData.entityList" enctype="UTF-8">
+						<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.restrictionEntityGroup.restrictionEntityGroupId" id="restrictionEntityGroup" ng-options="restrictionEntityGroup.restrictionEntityGroupId as  restrictionEntityGroup.restrictionEntityGroupId for restrictionEntityGroup in vm.restrictionEntityGroupPreparedData.entityList" enctype="UTF-8">
 						</select>
 
 					</div>
@@ -80,13 +80,13 @@
 			<div class="panel-body">
 				<div class="panel-body">
 					<div class="pull-left right-input">
-						<button ng-click="addNew()" class="btn btn-default " ng-show="($root.restrictionList.security.restrictionItemMap.role.canCreate==true)">Add new
+						<button ng-click="vm.addNew()" class="btn btn-default " ng-show="($root.restrictionList.security.restrictionItemMap.role.canCreate==true)">Add new
 						</button>
 
-						<button ng-click="search()" class="btn btn-default ">Find
+						<button ng-click="vm.search()" class="btn btn-default ">Find
 						</button>
 
-						<button ng-click="reset()" class="btn btn-default ">Reset
+						<button ng-click="vm.reset()" class="btn btn-default ">Reset
 						</button>
 
 					</div>
@@ -99,9 +99,9 @@
 
 	</form>
 
-	<form id="roleList" ng-if="entityList.length&gt;0" enctype="UTF-8">
+	<form id="roleList" ng-if="vm.entityList.length&gt;0" enctype="UTF-8">
 		<div class="panel panel-default default-panel">
-			<div class="panel-heading">List role<button ng-click="downloadEntityList()" class="btn btn-default pull-right" style="margin-top:-7px">
+			<div class="panel-heading">List role<button ng-click="vm.downloadList()" class="btn btn-default pull-right" style="margin-top:-7px">
 	<span class="glyphicon glyphicon-download-alt" aria-hidden="true">
 	</span>
 </button>
@@ -109,7 +109,7 @@
 			</div>
 
 			<div class="panel-body">
-				<div ui-grid="roleGridOptions" ui-grid-pagination="" ui-grid-selection="" ui-grid-exporter="">
+				<div ui-grid="vm.roleGridOptions" ui-grid-pagination="" ui-grid-selection="" ui-grid-exporter="">
 				</div>
 
 			</div>

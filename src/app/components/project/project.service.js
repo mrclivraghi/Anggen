@@ -9,7 +9,7 @@ function ProjectService($http,MainService,UtilityService)
 this.entityList =		[];
 this.preparedData={};
 this.selectedEntity= 	{show: false 
-,enumEntityList: [],entityGroupList: []};
+,entityGroupList: [],enumEntityList: []};
 this.hidden= { hiddenFields: []};
 this.isParent=function()
 {
@@ -71,17 +71,17 @@ var promise= $http.post("http://127.0.0.1:8080/ServerTestApp/project/"+this.sele
 });
 return promise; 
 }
- this.initEnumEntityList= function()
-{
-var promise= $http
-.post("http://127.0.0.1:8080/ServerTestApp/enumEntity/search",
-{});
-return promise;
-};
  this.initEntityGroupList= function()
 {
 var promise= $http
 .post("http://127.0.0.1:8080/ServerTestApp/entityGroup/search",
+{});
+return promise;
+};
+ this.initEnumEntityList= function()
+{
+var promise= $http
+.post("http://127.0.0.1:8080/ServerTestApp/enumEntity/search",
 {});
 return promise;
 };

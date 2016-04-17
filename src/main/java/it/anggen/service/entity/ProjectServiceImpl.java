@@ -19,9 +19,9 @@ public class ProjectServiceImpl
     @org.springframework.beans.factory.annotation.Autowired
     public ProjectRepository projectRepository;
     @org.springframework.beans.factory.annotation.Autowired
-    public EnumEntityRepository enumEntityRepository;
-    @org.springframework.beans.factory.annotation.Autowired
     public EntityGroupRepository entityGroupRepository;
+    @org.springframework.beans.factory.annotation.Autowired
+    public EnumEntityRepository enumEntityRepository;
     private static Integer PAGE_SIZE = (5);
 
     @Override
@@ -37,7 +37,7 @@ public class ProjectServiceImpl
 
     @Override
     public List<it.anggen.model.entity.Project> find(ProjectSearchBean project) {
-        return projectRepository.findByProjectIdAndNameAndEnumEntityAndEntityGroup(project.getProjectId(),project.getName(),project.getEnumEntityList()==null? null :project.getEnumEntityList().get(0),project.getEntityGroupList()==null? null :project.getEntityGroupList().get(0));
+        return projectRepository.findByProjectIdAndNameAndEntityGroupAndEnumEntity(project.getProjectId(),project.getName(),project.getEntityGroupList()==null? null :project.getEntityGroupList().get(0),project.getEnumEntityList()==null? null :project.getEnumEntityList().get(0));
     }
 
     @Override
@@ -54,15 +54,15 @@ public class ProjectServiceImpl
     @Override
     @Transactional
     public it.anggen.model.entity.Project update(it.anggen.model.entity.Project project) {
-        if (project.getEnumEntityList()!=null)
-        for (it.anggen.model.entity.EnumEntity enumEntity: project.getEnumEntityList())
-        {
-        enumEntity.setProject(project);
-        }
         if (project.getEntityGroupList()!=null)
         for (it.anggen.model.entity.EntityGroup entityGroup: project.getEntityGroupList())
         {
         entityGroup.setProject(project);
+        }
+        if (project.getEnumEntityList()!=null)
+        for (it.anggen.model.entity.EnumEntity enumEntity: project.getEnumEntityList())
+        {
+        enumEntity.setProject(project);
         }
         it.anggen.model.entity.Project returnedProject=projectRepository.save(project);
          return returnedProject;

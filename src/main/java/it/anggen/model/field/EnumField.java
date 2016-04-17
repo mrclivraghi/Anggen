@@ -15,14 +15,16 @@ import org.hibernate.annotations.Type;
 @Table(schema = "meta", name = "enum_field")
 @it.anggen.utils.annotation.SecurityType(type = it.anggen.model.SecurityType.ACCESS_WITH_PERMISSION)
 @MaxDescendantLevel(100)
-public class EnumField extends EntityAttribute{
+public class EnumField
+    extends EntityAttribute
+{
 
-    public final static java.lang.Long staticEntityId = 18L;
+    public final static java.lang.Long staticEntityId = 11L;
     @javax.persistence.Column(name = "enum_field_id")
-    @it.anggen.utils.annotation.Priority(1)
-    @it.anggen.utils.annotation.DescriptionField
     @Id
     @GeneratedValue
+    @it.anggen.utils.annotation.DescriptionField
+    @it.anggen.utils.annotation.Priority(1)
     private java.lang.Long enumFieldId;
     @javax.persistence.Column(name = "priority")
     @it.anggen.utils.annotation.Priority(2)

@@ -19,16 +19,16 @@ import org.hibernate.annotations.Type;
 @MaxDescendantLevel(100)
 public class Tab {
 
-    public final static java.lang.Long staticEntityId = 6L;
+    public final static java.lang.Long staticEntityId = 14L;
     @javax.persistence.Column(name = "name")
     @it.anggen.utils.annotation.DescriptionField
     @it.anggen.utils.annotation.Priority(2)
     private String name;
     @javax.persistence.Column(name = "tab_id")
-    @it.anggen.utils.annotation.Priority(1)
-    @it.anggen.utils.annotation.DescriptionField
     @Id
     @GeneratedValue
+    @it.anggen.utils.annotation.DescriptionField
+    @it.anggen.utils.annotation.Priority(1)
     private java.lang.Long tabId;
     @ManyToOne(fetch = javax.persistence.FetchType.EAGER)
     @javax.persistence.JoinColumn(name = "entity_id_entity")

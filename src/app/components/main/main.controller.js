@@ -4,7 +4,6 @@
 angular.module("serverTestApp").controller("MainController",MainController);
 
 /** @ngInject */
-function MainController($scope){
- var vm= this; 
-};
+function MainController(){
+}
 })();

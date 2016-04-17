@@ -10,7 +10,7 @@
 						<span class="input-group-addon">tabId
 						</span>
 
-						<input class="form-control " aria-describedby="sizing-addon3" type="text" id="tab-tabId" ng-model="searchBean.tabId" ng-readonly="false" name="tabId" placeholder="tabId"/>
+						<input class="form-control " aria-describedby="sizing-addon3" type="text" id="tab-tabId" ng-model="vm.searchBean.tabId" ng-readonly="false" name="tabId" placeholder="tabId"/>
 						
 					</div>
 
@@ -21,7 +21,7 @@
 						<span class="input-group-addon">name
 						</span>
 
-						<input class="form-control " aria-describedby="sizing-addon3" type="text" id="tab-name" ng-model="searchBean.name" ng-readonly="false" name="name" placeholder="name"/>
+						<input class="form-control " aria-describedby="sizing-addon3" type="text" id="tab-name" ng-model="vm.searchBean.name" ng-readonly="false" name="name" placeholder="name"/>
 						
 					</div>
 
@@ -32,7 +32,7 @@
 						<span class="input-group-addon">entity
 						</span>
 
-						<select class="form-control " aria-describedby="sizing-addon3" ng-model="searchBean.entity.entityId" id="entity" ng-options="entity.entityId as  entity.entityId+&#39; &#39;+ entity.name for entity in entityPreparedData.entityList" enctype="UTF-8">
+						<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.entity.entityId" id="entity" ng-options="entity.entityId as  entity.name+&#39; &#39;+ entity.entityId for entity in vm.entityPreparedData.entityList" enctype="UTF-8">
 						</select>
 
 					</div>
@@ -44,7 +44,7 @@
 						<span class="input-group-addon">field
 						</span>
 
-						<select class="form-control " aria-describedby="sizing-addon3" ng-model="searchBean.field.fieldId" id="field" ng-options="field.fieldId as  field.fieldId+&#39; &#39;+ field.name for field in fieldPreparedData.entityList" enctype="UTF-8">
+						<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.field.fieldId" id="field" ng-options="field.fieldId as  field.name+&#39; &#39;+ field.fieldId for field in vm.fieldPreparedData.entityList" enctype="UTF-8">
 						</select>
 
 					</div>
@@ -56,7 +56,7 @@
 						<span class="input-group-addon">enumField
 						</span>
 
-						<select class="form-control " aria-describedby="sizing-addon3" ng-model="searchBean.enumField.enumFieldId" id="enumField" ng-options="enumField.enumFieldId as  enumField.enumFieldId+&#39; &#39;+ enumField.name for enumField in enumFieldPreparedData.entityList" enctype="UTF-8">
+						<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.enumField.enumFieldId" id="enumField" ng-options="enumField.enumFieldId as  enumField.enumFieldId+&#39; &#39;+ enumField.name for enumField in vm.enumFieldPreparedData.entityList" enctype="UTF-8">
 						</select>
 
 					</div>
@@ -68,7 +68,7 @@
 						<span class="input-group-addon">relationship
 						</span>
 
-						<select class="form-control " aria-describedby="sizing-addon3" ng-model="searchBean.relationship.relationshipId" id="relationship" ng-options="relationship.relationshipId as  relationship.name+&#39; &#39;+ relationship.relationshipId for relationship in relationshipPreparedData.entityList" enctype="UTF-8">
+						<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.relationship.relationshipId" id="relationship" ng-options="relationship.relationshipId as  relationship.name+&#39; &#39;+ relationship.relationshipId for relationship in vm.relationshipPreparedData.entityList" enctype="UTF-8">
 						</select>
 
 					</div>
@@ -80,13 +80,13 @@
 			<div class="panel-body">
 				<div class="panel-body">
 					<div class="pull-left right-input">
-						<button ng-click="addNew()" class="btn btn-default " ng-show="($root.restrictionList.entity.restrictionItemMap.tab.canCreate==true)">Add new
+						<button ng-click="vm.addNew()" class="btn btn-default " ng-show="($root.restrictionList.entity.restrictionItemMap.tab.canCreate==true)">Add new
 						</button>
 
-						<button ng-click="search()" class="btn btn-default ">Find
+						<button ng-click="vm.search()" class="btn btn-default ">Find
 						</button>
 
-						<button ng-click="reset()" class="btn btn-default ">Reset
+						<button ng-click="vm.reset()" class="btn btn-default ">Reset
 						</button>
 
 					</div>
@@ -99,9 +99,9 @@
 
 	</form>
 
-	<form id="tabList" ng-if="entityList.length&gt;0" enctype="UTF-8">
+	<form id="tabList" ng-if="vm.entityList.length&gt;0" enctype="UTF-8">
 		<div class="panel panel-default default-panel">
-			<div class="panel-heading">List tab<button ng-click="downloadEntityList()" class="btn btn-default pull-right" style="margin-top:-7px">
+			<div class="panel-heading">List tab<button ng-click="vm.downloadList()" class="btn btn-default pull-right" style="margin-top:-7px">
 	<span class="glyphicon glyphicon-download-alt" aria-hidden="true">
 	</span>
 </button>
@@ -109,7 +109,7 @@
 			</div>
 
 			<div class="panel-body">
-				<div ui-grid="tabGridOptions" ui-grid-pagination="" ui-grid-selection="" ui-grid-exporter="">
+				<div ui-grid="vm.tabGridOptions" ui-grid-pagination="" ui-grid-selection="" ui-grid-exporter="">
 				</div>
 
 			</div>

@@ -17,9 +17,17 @@ import org.hibernate.annotations.Type;
 @Table(schema = "meta", name = "field")
 @it.anggen.utils.annotation.SecurityType(type = it.anggen.model.SecurityType.ACCESS_WITH_PERMISSION)
 @MaxDescendantLevel(100)
-public class Field extends EntityAttribute{
+public class Field
+    extends EntityAttribute
+{
 
-    public final static java.lang.Long staticEntityId = 17L;
+    public final static java.lang.Long staticEntityId = 5L;
+    @javax.persistence.Column(name = "field_id")
+    @Id
+    @GeneratedValue
+    @it.anggen.utils.annotation.DescriptionField
+    @it.anggen.utils.annotation.Priority(1)
+    private java.lang.Long fieldId;
     @javax.persistence.Column(name = "priority")
     @it.anggen.utils.annotation.Priority(2)
     private Integer priority;
@@ -27,12 +35,6 @@ public class Field extends EntityAttribute{
     @it.anggen.utils.annotation.DescriptionField
     @it.anggen.utils.annotation.Priority(2)
     private String name;
-    @javax.persistence.Column(name = "field_id")
-    @it.anggen.utils.annotation.Priority(1)
-    @it.anggen.utils.annotation.DescriptionField
-    @Id
-    @GeneratedValue
-    private java.lang.Long fieldId;
     @OneToMany(fetch = javax.persistence.FetchType.EAGER)
     @Type(type = "it.anggen.model.security.RestrictionField")
     @javax.persistence.JoinColumn(name = "field_id_field")
@@ -55,6 +57,14 @@ public class Field extends EntityAttribute{
     @it.anggen.utils.annotation.Priority(3)
     private FieldType fieldType;
 
+    public java.lang.Long getFieldId() {
+        return this.fieldId;
+    }
+
+    public void setFieldId(java.lang.Long fieldId) {
+        this.fieldId=fieldId;
+    }
+
     public Integer getPriority() {
         return this.priority;
     }
@@ -69,14 +79,6 @@ public class Field extends EntityAttribute{
 
     public void setName(String name) {
         this.name=name;
-    }
-
-    public java.lang.Long getFieldId() {
-        return this.fieldId;
-    }
-
-    public void setFieldId(java.lang.Long fieldId) {
-        this.fieldId=fieldId;
     }
 
     public List<RestrictionField> getRestrictionFieldList() {

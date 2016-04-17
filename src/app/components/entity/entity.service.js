@@ -9,7 +9,7 @@ function EntityService($http,MainService,UtilityService)
 this.entityList =		[];
 this.preparedData={};
 this.selectedEntity= 	{show: false 
-,restrictionEntityList: [],tabList: [],enumFieldList: [],fieldList: [],relationshipList: []};
+,restrictionEntityList: [],fieldList: [],enumFieldList: [],tabList: [],relationshipList: []};
 this.hidden= { hiddenFields: []};
 this.isParent=function()
 {
@@ -78,17 +78,10 @@ var promise= $http
 {});
 return promise;
 };
- this.initTabList= function()
+ this.initFieldList= function()
 {
 var promise= $http
-.post("http://127.0.0.1:8080/ServerTestApp/tab/search",
-{});
-return promise;
-};
- this.initEntityGroupList= function()
-{
-var promise= $http
-.post("http://127.0.0.1:8080/ServerTestApp/entityGroup/search",
+.post("http://127.0.0.1:8080/ServerTestApp/field/search",
 {});
 return promise;
 };
@@ -99,10 +92,17 @@ var promise= $http
 {});
 return promise;
 };
- this.initFieldList= function()
+ this.initEntityGroupList= function()
 {
 var promise= $http
-.post("http://127.0.0.1:8080/ServerTestApp/field/search",
+.post("http://127.0.0.1:8080/ServerTestApp/entityGroup/search",
+{});
+return promise;
+};
+ this.initTabList= function()
+{
+var promise= $http
+.post("http://127.0.0.1:8080/ServerTestApp/tab/search",
 {});
 return promise;
 };
@@ -122,12 +122,12 @@ paginationPageSize: 10,
 enableGridMenu: true,
 columnDefs: [    
 { name: 'entityId'},
-{ name: 'enableRestrictionData'},
-{ name: 'disableViewGeneration'},
-{ name: 'cache'},
-{ name: 'descendantMaxLevel'},
-{ name: 'name'},
 { name: 'generateFrontEnd'},
+{ name: 'name'},
+{ name: 'descendantMaxLevel'},
+{ name: 'cache'},
+{ name: 'disableViewGeneration'},
+{ name: 'enableRestrictionData'},
 { name: 'entityGroup.entityGroupId', displayName: 'entityGroup'} 
 ]
  };

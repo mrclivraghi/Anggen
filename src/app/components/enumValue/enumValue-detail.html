@@ -1,7 +1,7 @@
 <div>
-	<form id="enumValueDetailForm" name="enumValueDetailForm" ng-show="selectedEntity.show">
+	<form id="enumValueDetailForm" name="enumValueDetailForm" ng-show="vm.selectedEntity.show">
 		<div class="panel panel-default default-panel">
-			<div class="panel-heading">Detail enumValue {{ selectedEntity.enumValueId }} <button type="button" class="close" aria-label="Close" ng-click="closeEntityDetail()">
+			<div class="panel-heading">Detail enumValue {{ vm.selectedEntity.enumValueId }} <button type="button" class="close" aria-label="Close" ng-click="vm.closeEntityDetail()">
 	<span aria-hidden="true">&times;
 	</span>
 </button>
@@ -11,7 +11,7 @@
 			<div class="panel-body">
 				<ul class="nav nav-tabs" role="tablist" id="enumValueTabs">
 					<li role="presentation">
-						<a href="#enumValue-Detail" aria-controls="Detail" role="tab" data-toggle="tab" ng-click="refreshTableDetail()">Detail
+						<a href="#enumValue-Detail" aria-controls="Detail" role="tab" data-toggle="tab" ng-click="vm.refreshTableDetail()">Detail
 						</a>
 
 					</li>
@@ -34,18 +34,7 @@ if (angular.element('#enumValueTabs').scope()!=null && angular.element(('#enumVa
 								<span class="input-group-addon">enumValueId
 								</span>
 
-								<input class="form-control " aria-describedby="sizing-addon3" type="text" id="enumValue-enumValueId" ng-model="selectedEntity.enumValueId" ng-readonly="true" name="enumValueId" placeholder="enumValueId"/>
-								
-							</div>
-
-						</div>
-
-						<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !enumValueDetailForm.name.$valid, &#39;has-success&#39;: enumValueDetailForm.name.$valid}" style="height:59px" ng-show="true ">
-							<div class="input-group">
-								<span class="input-group-addon">name
-								</span>
-
-								<input class="form-control " aria-describedby="sizing-addon3" type="text" id="enumValue-name" ng-model="selectedEntity.name" ng-readonly="restrictionList.enumValue.restrictionFieldMap.name" name="name" placeholder="name"/>
+								<input class="form-control " aria-describedby="sizing-addon3" type="text" id="enumValue-enumValueId" ng-model="vm.selectedEntity.enumValueId" ng-readonly="true" name="enumValueId" placeholder="enumValueId"/>
 								
 							</div>
 
@@ -56,7 +45,18 @@ if (angular.element('#enumValueTabs').scope()!=null && angular.element(('#enumVa
 								<span class="input-group-addon">value
 								</span>
 
-								<input class="form-control " aria-describedby="sizing-addon3" type="text" id="enumValue-value" ng-model="selectedEntity.value" ng-readonly="restrictionList.enumValue.restrictionFieldMap.value" name="value" placeholder="value"/>
+								<input class="form-control " aria-describedby="sizing-addon3" type="text" id="enumValue-value" ng-model="vm.selectedEntity.value" ng-readonly="vm.restrictionList.enumValue.restrictionFieldMap.value" name="value" placeholder="value"/>
+								
+							</div>
+
+						</div>
+
+						<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !enumValueDetailForm.name.$valid, &#39;has-success&#39;: enumValueDetailForm.name.$valid}" style="height:59px" ng-show="true ">
+							<div class="input-group">
+								<span class="input-group-addon">name
+								</span>
+
+								<input class="form-control " aria-describedby="sizing-addon3" type="text" id="enumValue-name" ng-model="vm.selectedEntity.name" ng-readonly="vm.restrictionList.enumValue.restrictionFieldMap.name" name="name" placeholder="name"/>
 								
 							</div>
 
@@ -67,14 +67,14 @@ if (angular.element('#enumValueTabs').scope()!=null && angular.element(('#enumVa
 								<span class="input-group-addon">enumEntity
 								</span>
 
-								<select class="form-control " aria-describedby="sizing-addon3" ng-model="selectedEntity.enumEntity" id="enumEntity" name="enumEntity" ng-options="enumEntity as  enumEntity.name+&#39; &#39;+ enumEntity.enumEntityId for enumEntity in enumEntityPreparedData.entityList track by enumEntity.enumEntityId" enctype="UTF-8">
+								<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.enumEntity" id="enumEntity" name="enumEntity" ng-options="enumEntity as  enumEntity.enumEntityId+&#39; &#39;+ enumEntity.name for enumEntity in vm.enumEntityPreparedData.entityList track by enumEntity.enumEntityId" enctype="UTF-8">
 								</select>
 
 								<span class="input-group-btn">
-									<button ng-click="showEnumEntityDetail()" class="btn btn-default " id="enumEntity" ng-if="selectedEntity.enumEntity==null">Add new enumEntity
+									<button ng-click="vm.showEnumEntityDetail()" class="btn btn-default " id="enumEntity" ng-if="vm.selectedEntity.enumEntity==null">Add new enumEntity
 									</button>
 
-									<button ng-click="showEnumEntityDetail()" class="btn btn-default " id="enumEntity" ng-if="selectedEntity.enumEntity!=null">Show detail
+									<button ng-click="vm.showEnumEntityDetail()" class="btn btn-default " id="enumEntity" ng-if="vm.selectedEntity.enumEntity!=null">Show detail
 									</button>
 
 								</span>
@@ -94,14 +94,14 @@ if (angular.element('#enumValueTabs').scope()!=null && angular.element(('#enumVa
 
 			<div class="panel-body">
 				<div class="pull-left">
-					<form id="enumValueActionButton" ng-if="selectedEntity.show">
-						<button ng-click="insert()" class="btn btn-default " ng-if="selectedEntity.enumValueId==undefined" ng-show="($root.restrictionList.field.restrictionItemMap.enumValue.canCreate==true)">Insert
+					<form id="enumValueActionButton" ng-if="vm.selectedEntity.show">
+						<button ng-click="insert()" class="btn btn-default " ng-if="vm.selectedEntity.enumValueId==undefined" ng-show="($root.restrictionList.field.restrictionItemMap.enumValue.canCreate==true)">Insert
 						</button>
 
-						<button ng-click="update()" class="btn btn-default " ng-if="selectedEntity.enumValueId&gt;0" ng-show="($root.restrictionList.field.restrictionItemMap.enumValue.canUpdate==true)">Update
+						<button ng-click="update()" class="btn btn-default " ng-if="vm.selectedEntity.enumValueId&gt;0" ng-show="($root.restrictionList.field.restrictionItemMap.enumValue.canUpdate==true)">Update
 						</button>
 
-						<button ng-click="del()" class="btn btn-default " ng-if="selectedEntity.enumValueId&gt;0" ng-show="($root.restrictionList.field.restrictionItemMap.enumValue.canDelete==true)">Delete
+						<button ng-click="del()" class="btn btn-default " ng-if="vm.selectedEntity.enumValueId&gt;0" ng-show="($root.restrictionList.field.restrictionItemMap.enumValue.canDelete==true)">Delete
 						</button>
 
 					</form>

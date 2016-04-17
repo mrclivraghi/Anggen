@@ -1,7 +1,7 @@
 <div>
-	<form id="fieldDetailForm" name="fieldDetailForm" ng-show="selectedEntity.show">
+	<form id="fieldDetailForm" name="fieldDetailForm" ng-show="vm.selectedEntity.show">
 		<div class="panel panel-default default-panel">
-			<div class="panel-heading">Detail field {{ selectedEntity.fieldId }} <button type="button" class="close" aria-label="Close" ng-click="closeEntityDetail()">
+			<div class="panel-heading">Detail field {{ vm.selectedEntity.fieldId }} <button type="button" class="close" aria-label="Close" ng-click="vm.closeEntityDetail()">
 	<span aria-hidden="true">&times;
 	</span>
 </button>
@@ -11,7 +11,7 @@
 			<div class="panel-body">
 				<ul class="nav nav-tabs" role="tablist" id="fieldTabs">
 					<li role="presentation">
-						<a href="#field-Detail" aria-controls="Detail" role="tab" data-toggle="tab" ng-click="refreshTableDetail()">Detail
+						<a href="#field-Detail" aria-controls="Detail" role="tab" data-toggle="tab" ng-click="vm.refreshTableDetail()">Detail
 						</a>
 
 					</li>
@@ -34,7 +34,7 @@ if (angular.element('#fieldTabs').scope()!=null && angular.element(('#fieldTabs'
 								<span class="input-group-addon">fieldId
 								</span>
 
-								<input class="form-control " aria-describedby="sizing-addon3" type="text" id="field-fieldId" ng-model="selectedEntity.fieldId" ng-readonly="true" name="fieldId" placeholder="fieldId"/>
+								<input class="form-control " aria-describedby="sizing-addon3" type="text" id="field-fieldId" ng-model="vm.selectedEntity.fieldId" ng-readonly="true" name="fieldId" placeholder="fieldId"/>
 								
 							</div>
 
@@ -45,7 +45,7 @@ if (angular.element('#fieldTabs').scope()!=null && angular.element(('#fieldTabs'
 								<span class="input-group-addon">name
 								</span>
 
-								<input class="form-control " aria-describedby="sizing-addon3" type="text" id="field-name" ng-model="selectedEntity.name" ng-readonly="restrictionList.field.restrictionFieldMap.name" name="name" placeholder="name"/>
+								<input class="form-control " aria-describedby="sizing-addon3" type="text" id="field-name" ng-model="vm.selectedEntity.name" ng-readonly="vm.restrictionList.field.restrictionFieldMap.name" name="name" placeholder="name"/>
 								
 							</div>
 
@@ -56,7 +56,7 @@ if (angular.element('#fieldTabs').scope()!=null && angular.element(('#fieldTabs'
 								<span class="input-group-addon">priority
 								</span>
 
-								<input class="form-control " aria-describedby="sizing-addon3" type="text" id="field-priority" ng-model="selectedEntity.priority" ng-readonly="restrictionList.field.restrictionFieldMap.priority" name="priority" placeholder="priority"/>
+								<input class="form-control " aria-describedby="sizing-addon3" type="text" id="field-priority" ng-model="vm.selectedEntity.priority" ng-readonly="vm.restrictionList.field.restrictionFieldMap.priority" name="priority" placeholder="priority"/>
 								
 							</div>
 
@@ -67,127 +67,8 @@ if (angular.element('#fieldTabs').scope()!=null && angular.element(('#fieldTabs'
 								<span class="input-group-addon">fieldType
 								</span>
 
-								<select class="form-control pull-left" aria-describedby="sizing-addon3" type="text" id="field-fieldType" ng-model="selectedEntity.fieldType" ng-readonly="restrictionList.field.restrictionFieldMap.fieldType" name="fieldType" placeholder="fieldType" ng-options="fieldType as fieldType for fieldType in fieldTypePreparedData.entityList" enctype="UTF-8">
+								<select class="form-control pull-left" aria-describedby="sizing-addon3" type="text" id="field-fieldType" ng-model="vm.selectedEntity.fieldType" ng-readonly="vm.restrictionList.field.restrictionFieldMap.fieldType" name="fieldType" placeholder="fieldType" ng-options="fieldType as fieldType for fieldType in vm.fieldTypePreparedData.entityList" enctype="UTF-8">
 								</select>
-
-							</div>
-
-						</div>
-
-						<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !fieldDetailForm.entity.$valid, &#39;has-success&#39;: fieldDetailForm.entity.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.entity">
-							<div class="input-group">
-								<span class="input-group-addon">entity
-								</span>
-
-								<select class="form-control " aria-describedby="sizing-addon3" ng-model="selectedEntity.entity" id="entity" name="entity" ng-options="entity as  entity.entityId+&#39; &#39;+ entity.name for entity in entityPreparedData.entityList track by entity.entityId" enctype="UTF-8">
-								</select>
-
-								<span class="input-group-btn">
-									<button ng-click="showEntityDetail()" class="btn btn-default " id="entity" ng-if="selectedEntity.entity==null">Add new entity
-									</button>
-
-									<button ng-click="showEntityDetail()" class="btn btn-default " id="entity" ng-if="selectedEntity.entity!=null">Show detail
-									</button>
-
-								</span>
-
-							</div>
-
-						</div>
-
-						<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !fieldDetailForm.tab.$valid, &#39;has-success&#39;: fieldDetailForm.tab.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.tab">
-							<div class="input-group">
-								<span class="input-group-addon">tab
-								</span>
-
-								<select class="form-control " aria-describedby="sizing-addon3" ng-model="selectedEntity.tab" id="tab" name="tab" ng-options="tab as  tab.name+&#39; &#39;+ tab.tabId for tab in tabPreparedData.entityList track by tab.tabId" enctype="UTF-8">
-								</select>
-
-								<span class="input-group-btn">
-									<button ng-click="showTabDetail()" class="btn btn-default " id="tab" ng-if="selectedEntity.tab==null">Add new tab
-									</button>
-
-									<button ng-click="showTabDetail()" class="btn btn-default " id="tab" ng-if="selectedEntity.tab!=null">Show detail
-									</button>
-
-								</span>
-
-							</div>
-
-						</div>
-
-						<div id="field-annotation" class="modal fade" role="dialog" ng-if="!$root.openNode.annotation">
-							<div class="modal-dialog">
-								<div class="modal-content">
-									<div class="modal-header">
-										<button type="button" class="close" data-dismiss="modal">&times;
-										</button>
-
-										<h4 class="modal-title">Link existing annotation
-										</h4>
-
-									</div>
-
-									<div class="modal-body">
-										<p>
-
-										</p>
-
-										<div class="input-group">
-											<span class="input-group-addon">annotation
-											</span>
-
-											<select class="form-control " aria-describedby="sizing-addon3" ng-model="selectedEntity.annotation" id="annotation" name="annotation" ng-options="annotation as  annotation.annotationId for annotation in annotationPreparedData.entityList track by annotation.annotationId" enctype="UTF-8">
-											</select>
-
-											<span class="input-group-btn">
-												<button ng-click="saveLinkedAnnotation()" class="btn btn-default " id="annotation">Save
-												</button>
-
-											</span>
-
-										</div>
-
-									</div>
-
-									<div class="modal-footer">
-										<button ng-click="close()" class="btn btn-default " data-dismiss="modal">close
-										</button>
-
-									</div>
-
-								</div>
-
-							</div>
-
-						</div>
-
-						<br/>
-
-						<br/>
-
-						<div class="pull-left" style="width: 100%" ng-show="true  && ($root.restrictionList.field.restrictionItemMap.annotation.canSearch==true)" ng-if="!$root.openNode.annotation">
-							<div class="panel panel-default default-panel">
-								<div class="panel-heading">annotation<button ng-click="showAnnotationDetail()" class="btn btn-default  pull-right" style="margin-top: -7px" ng-show="($root.restrictionList.field.restrictionItemMap.annotation.canCreate==true)">Add new annotation</button>
-<button type="button" class="btn btn-default pull-right" style="margin-top: -7px" data-toggle="modal" data-target="#field-annotation">Link existing</button>
-<button ng-click="downloadAnnotationList()" class="btn btn-default pull-right" style="margin-top:-7px">
-	<span class="glyphicon glyphicon-download-alt" aria-hidden="true">
-	</span>
-</button>
-
-								</div>
-
-								<div class="panel-body" ng-class="{&#39;has-error&#39;: !fieldDetailForm.annotation.$valid, &#39;has-success&#39;: fieldDetailForm.annotation.$valid}">
-									<label id="annotation">annotation
-									</label>
-
-									<div id="annotation" ng-if="selectedEntity.annotationList.length&gt;0">
-										<div style="top: 100px" ui-grid="annotationGridOptions" ui-grid-pagination="" ui-grid-selection="">
-										</div>
-
-									</div>
-
-								</div>
 
 							</div>
 
@@ -214,7 +95,7 @@ if (angular.element('#fieldTabs').scope()!=null && angular.element(('#fieldTabs'
 											<span class="input-group-addon">restrictionField
 											</span>
 
-											<select class="form-control " aria-describedby="sizing-addon3" ng-model="selectedEntity.restrictionField" id="restrictionField" name="restrictionField" ng-options="restrictionField as  restrictionField.restrictionFieldId for restrictionField in restrictionFieldPreparedData.entityList track by restrictionField.restrictionFieldId" enctype="UTF-8">
+											<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.restrictionField" id="restrictionField" name="restrictionField" ng-options="restrictionField as  restrictionField.restrictionFieldId for restrictionField in vm.restrictionFieldPreparedData.entityList track by restrictionField.restrictionFieldId" enctype="UTF-8">
 											</select>
 
 											<span class="input-group-btn">
@@ -245,26 +126,145 @@ if (angular.element('#fieldTabs').scope()!=null && angular.element(('#fieldTabs'
 
 						<div class="pull-left" style="width: 100%" ng-show="true  && ($root.restrictionList.security.restrictionItemMap.restrictionField.canSearch==true)" ng-if="!$root.openNode.restrictionField">
 							<div class="panel panel-default default-panel">
-								<div class="panel-heading">restrictionField<button ng-click="showRestrictionFieldDetail()" class="btn btn-default  pull-right" style="margin-top: -7px" ng-show="($root.restrictionList.security.restrictionItemMap.restrictionField.canCreate==true)">Add new restrictionField</button>
+								<div class="panel-heading">restrictionField<button ng-click="vm.showRestrictionFieldDetail()" class="btn btn-default  pull-right" style="margin-top: -7px" ng-show="($root.restrictionList.security.restrictionItemMap.restrictionField.canCreate==true)">Add new restrictionField</button>
 <button type="button" class="btn btn-default pull-right" style="margin-top: -7px" data-toggle="modal" data-target="#field-restrictionField">Link existing</button>
-<button ng-click="downloadRestrictionFieldList()" class="btn btn-default pull-right" style="margin-top:-7px">
+<button ng-click="vm.downloadRestrictionFieldList()" class="btn btn-default pull-right" style="margin-top:-7px">
 	<span class="glyphicon glyphicon-download-alt" aria-hidden="true">
 	</span>
 </button>
 
 								</div>
 
-								<div class="panel-body" ng-class="{&#39;has-error&#39;: !fieldDetailForm.restrictionField.$valid, &#39;has-success&#39;: fieldDetailForm.restrictionField.$valid}">
+								<div class="panel-body" ng-class="{&#39;has-error&#39;: !vm.fieldDetailForm.restrictionField.$valid, &#39;has-success&#39;: vm.fieldDetailForm.restrictionField.$valid}">
 									<label id="restrictionField">restrictionField
 									</label>
 
-									<div id="restrictionField" ng-if="selectedEntity.restrictionFieldList.length&gt;0">
-										<div style="top: 100px" ui-grid="restrictionFieldGridOptions" ui-grid-pagination="" ui-grid-selection="">
+									<div id="restrictionField" ng-if="vm.selectedEntity.restrictionFieldList.length&gt;0">
+										<div style="top: 100px" ui-grid="vm.restrictionFieldGridOptions" ui-grid-pagination="" ui-grid-selection="">
 										</div>
 
 									</div>
 
 								</div>
+
+							</div>
+
+						</div>
+
+						<div id="field-annotation" class="modal fade" role="dialog" ng-if="!$root.openNode.annotation">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal">&times;
+										</button>
+
+										<h4 class="modal-title">Link existing annotation
+										</h4>
+
+									</div>
+
+									<div class="modal-body">
+										<p>
+
+										</p>
+
+										<div class="input-group">
+											<span class="input-group-addon">annotation
+											</span>
+
+											<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.annotation" id="annotation" name="annotation" ng-options="annotation as  annotation.annotationId for annotation in vm.annotationPreparedData.entityList track by annotation.annotationId" enctype="UTF-8">
+											</select>
+
+											<span class="input-group-btn">
+												<button ng-click="saveLinkedAnnotation()" class="btn btn-default " id="annotation">Save
+												</button>
+
+											</span>
+
+										</div>
+
+									</div>
+
+									<div class="modal-footer">
+										<button ng-click="close()" class="btn btn-default " data-dismiss="modal">close
+										</button>
+
+									</div>
+
+								</div>
+
+							</div>
+
+						</div>
+
+						<br/>
+
+						<br/>
+
+						<div class="pull-left" style="width: 100%" ng-show="true  && ($root.restrictionList.field.restrictionItemMap.annotation.canSearch==true)" ng-if="!$root.openNode.annotation">
+							<div class="panel panel-default default-panel">
+								<div class="panel-heading">annotation<button ng-click="vm.showAnnotationDetail()" class="btn btn-default  pull-right" style="margin-top: -7px" ng-show="($root.restrictionList.field.restrictionItemMap.annotation.canCreate==true)">Add new annotation</button>
+<button type="button" class="btn btn-default pull-right" style="margin-top: -7px" data-toggle="modal" data-target="#field-annotation">Link existing</button>
+<button ng-click="vm.downloadAnnotationList()" class="btn btn-default pull-right" style="margin-top:-7px">
+	<span class="glyphicon glyphicon-download-alt" aria-hidden="true">
+	</span>
+</button>
+
+								</div>
+
+								<div class="panel-body" ng-class="{&#39;has-error&#39;: !vm.fieldDetailForm.annotation.$valid, &#39;has-success&#39;: vm.fieldDetailForm.annotation.$valid}">
+									<label id="annotation">annotation
+									</label>
+
+									<div id="annotation" ng-if="vm.selectedEntity.annotationList.length&gt;0">
+										<div style="top: 100px" ui-grid="vm.annotationGridOptions" ui-grid-pagination="" ui-grid-selection="">
+										</div>
+
+									</div>
+
+								</div>
+
+							</div>
+
+						</div>
+
+						<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !fieldDetailForm.entity.$valid, &#39;has-success&#39;: fieldDetailForm.entity.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.entity">
+							<div class="input-group">
+								<span class="input-group-addon">entity
+								</span>
+
+								<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.entity" id="entity" name="entity" ng-options="entity as  entity.name+&#39; &#39;+ entity.entityId for entity in vm.entityPreparedData.entityList track by entity.entityId" enctype="UTF-8">
+								</select>
+
+								<span class="input-group-btn">
+									<button ng-click="vm.showEntityDetail()" class="btn btn-default " id="entity" ng-if="vm.selectedEntity.entity==null">Add new entity
+									</button>
+
+									<button ng-click="vm.showEntityDetail()" class="btn btn-default " id="entity" ng-if="vm.selectedEntity.entity!=null">Show detail
+									</button>
+
+								</span>
+
+							</div>
+
+						</div>
+
+						<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !fieldDetailForm.tab.$valid, &#39;has-success&#39;: fieldDetailForm.tab.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.tab">
+							<div class="input-group">
+								<span class="input-group-addon">tab
+								</span>
+
+								<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.tab" id="tab" name="tab" ng-options="tab as  tab.name+&#39; &#39;+ tab.tabId for tab in vm.tabPreparedData.entityList track by tab.tabId" enctype="UTF-8">
+								</select>
+
+								<span class="input-group-btn">
+									<button ng-click="vm.showTabDetail()" class="btn btn-default " id="tab" ng-if="vm.selectedEntity.tab==null">Add new tab
+									</button>
+
+									<button ng-click="vm.showTabDetail()" class="btn btn-default " id="tab" ng-if="vm.selectedEntity.tab!=null">Show detail
+									</button>
+
+								</span>
 
 							</div>
 
@@ -281,14 +281,14 @@ if (angular.element('#fieldTabs').scope()!=null && angular.element(('#fieldTabs'
 
 			<div class="panel-body">
 				<div class="pull-left">
-					<form id="fieldActionButton" ng-if="selectedEntity.show">
-						<button ng-click="insert()" class="btn btn-default " ng-if="selectedEntity.fieldId==undefined" ng-show="($root.restrictionList.field.restrictionItemMap.field.canCreate==true)">Insert
+					<form id="fieldActionButton" ng-if="vm.selectedEntity.show">
+						<button ng-click="insert()" class="btn btn-default " ng-if="vm.selectedEntity.fieldId==undefined" ng-show="($root.restrictionList.field.restrictionItemMap.field.canCreate==true)">Insert
 						</button>
 
-						<button ng-click="update()" class="btn btn-default " ng-if="selectedEntity.fieldId&gt;0" ng-show="($root.restrictionList.field.restrictionItemMap.field.canUpdate==true)">Update
+						<button ng-click="update()" class="btn btn-default " ng-if="vm.selectedEntity.fieldId&gt;0" ng-show="($root.restrictionList.field.restrictionItemMap.field.canUpdate==true)">Update
 						</button>
 
-						<button ng-click="del()" class="btn btn-default " ng-if="selectedEntity.fieldId&gt;0" ng-show="($root.restrictionList.field.restrictionItemMap.field.canDelete==true)">Delete
+						<button ng-click="del()" class="btn btn-default " ng-if="vm.selectedEntity.fieldId&gt;0" ng-show="($root.restrictionList.field.restrictionItemMap.field.canDelete==true)">Delete
 						</button>
 
 					</form>

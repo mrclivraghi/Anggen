@@ -9,8 +9,8 @@ public class ProjectSearchBean {
 
     public java.lang.Integer projectId;
     public java.lang.String name;
-    public List<EnumEntity> enumEntityList;
     public List<EntityGroup> entityGroupList;
+    public List<EnumEntity> enumEntityList;
 
     public java.lang.Integer getProjectId() {
         return this.projectId;
@@ -28,20 +28,20 @@ public class ProjectSearchBean {
         this.name=name;
     }
 
-    public List<EnumEntity> getEnumEntityList() {
-        return this.enumEntityList;
-    }
-
-    public void setEnumEntityList(List<EnumEntity> enumEntityList) {
-        this.enumEntityList=enumEntityList;
-    }
-
     public List<EntityGroup> getEntityGroupList() {
         return this.entityGroupList;
     }
 
     public void setEntityGroupList(List<EntityGroup> entityGroupList) {
         this.entityGroupList=entityGroupList;
+    }
+
+    public List<EnumEntity> getEnumEntityList() {
+        return this.enumEntityList;
+    }
+
+    public void setEnumEntityList(List<EnumEntity> enumEntityList) {
+        this.enumEntityList=enumEntityList;
     }
 
 }

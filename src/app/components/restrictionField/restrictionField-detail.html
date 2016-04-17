@@ -1,7 +1,7 @@
 <div>
-	<form id="restrictionFieldDetailForm" name="restrictionFieldDetailForm" ng-show="selectedEntity.show">
+	<form id="restrictionFieldDetailForm" name="restrictionFieldDetailForm" ng-show="vm.selectedEntity.show">
 		<div class="panel panel-default default-panel">
-			<div class="panel-heading">Detail restrictionField {{ selectedEntity.restrictionFieldId }} <button type="button" class="close" aria-label="Close" ng-click="closeEntityDetail()">
+			<div class="panel-heading">Detail restrictionField {{ vm.selectedEntity.restrictionFieldId }} <button type="button" class="close" aria-label="Close" ng-click="vm.closeEntityDetail()">
 	<span aria-hidden="true">&times;
 	</span>
 </button>
@@ -11,7 +11,7 @@
 			<div class="panel-body">
 				<ul class="nav nav-tabs" role="tablist" id="restrictionFieldTabs">
 					<li role="presentation">
-						<a href="#restrictionField-Detail" aria-controls="Detail" role="tab" data-toggle="tab" ng-click="refreshTableDetail()">Detail
+						<a href="#restrictionField-Detail" aria-controls="Detail" role="tab" data-toggle="tab" ng-click="vm.refreshTableDetail()">Detail
 						</a>
 
 					</li>
@@ -34,29 +34,8 @@ if (angular.element('#restrictionFieldTabs').scope()!=null && angular.element(('
 								<span class="input-group-addon">restrictionFieldId
 								</span>
 
-								<input class="form-control " aria-describedby="sizing-addon3" type="text" id="restrictionField-restrictionFieldId" ng-model="selectedEntity.restrictionFieldId" ng-readonly="true" name="restrictionFieldId" placeholder="restrictionFieldId"/>
+								<input class="form-control " aria-describedby="sizing-addon3" type="text" id="restrictionField-restrictionFieldId" ng-model="vm.selectedEntity.restrictionFieldId" ng-readonly="true" name="restrictionFieldId" placeholder="restrictionFieldId"/>
 								
-							</div>
-
-						</div>
-
-						<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !restrictionFieldDetailForm.field.$valid, &#39;has-success&#39;: restrictionFieldDetailForm.field.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.field">
-							<div class="input-group">
-								<span class="input-group-addon">field
-								</span>
-
-								<select class="form-control " aria-describedby="sizing-addon3" ng-model="selectedEntity.field" id="field" name="field" ng-options="field as  field.fieldId+&#39; &#39;+ field.name for field in fieldPreparedData.entityList track by field.fieldId" enctype="UTF-8">
-								</select>
-
-								<span class="input-group-btn">
-									<button ng-click="showFieldDetail()" class="btn btn-default " id="field" ng-if="selectedEntity.field==null">Add new field
-									</button>
-
-									<button ng-click="showFieldDetail()" class="btn btn-default " id="field" ng-if="selectedEntity.field!=null">Show detail
-									</button>
-
-								</span>
-
 							</div>
 
 						</div>
@@ -66,14 +45,35 @@ if (angular.element('#restrictionFieldTabs').scope()!=null && angular.element(('
 								<span class="input-group-addon">role
 								</span>
 
-								<select class="form-control " aria-describedby="sizing-addon3" ng-model="selectedEntity.role" id="role" name="role" ng-options="role as  role.roleId+&#39; &#39;+ role.role for role in rolePreparedData.entityList track by role.roleId" enctype="UTF-8">
+								<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.role" id="role" name="role" ng-options="role as  role.role+&#39; &#39;+ role.roleId for role in vm.rolePreparedData.entityList track by role.roleId" enctype="UTF-8">
 								</select>
 
 								<span class="input-group-btn">
-									<button ng-click="showRoleDetail()" class="btn btn-default " id="role" ng-if="selectedEntity.role==null">Add new role
+									<button ng-click="vm.showRoleDetail()" class="btn btn-default " id="role" ng-if="vm.selectedEntity.role==null">Add new role
 									</button>
 
-									<button ng-click="showRoleDetail()" class="btn btn-default " id="role" ng-if="selectedEntity.role!=null">Show detail
+									<button ng-click="vm.showRoleDetail()" class="btn btn-default " id="role" ng-if="vm.selectedEntity.role!=null">Show detail
+									</button>
+
+								</span>
+
+							</div>
+
+						</div>
+
+						<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !restrictionFieldDetailForm.field.$valid, &#39;has-success&#39;: restrictionFieldDetailForm.field.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.field">
+							<div class="input-group">
+								<span class="input-group-addon">field
+								</span>
+
+								<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.field" id="field" name="field" ng-options="field as  field.name+&#39; &#39;+ field.fieldId for field in vm.fieldPreparedData.entityList track by field.fieldId" enctype="UTF-8">
+								</select>
+
+								<span class="input-group-btn">
+									<button ng-click="vm.showFieldDetail()" class="btn btn-default " id="field" ng-if="vm.selectedEntity.field==null">Add new field
+									</button>
+
+									<button ng-click="vm.showFieldDetail()" class="btn btn-default " id="field" ng-if="vm.selectedEntity.field!=null">Show detail
 									</button>
 
 								</span>
@@ -93,14 +93,14 @@ if (angular.element('#restrictionFieldTabs').scope()!=null && angular.element(('
 
 			<div class="panel-body">
 				<div class="pull-left">
-					<form id="restrictionFieldActionButton" ng-if="selectedEntity.show">
-						<button ng-click="insert()" class="btn btn-default " ng-if="selectedEntity.restrictionFieldId==undefined" ng-show="($root.restrictionList.security.restrictionItemMap.restrictionField.canCreate==true)">Insert
+					<form id="restrictionFieldActionButton" ng-if="vm.selectedEntity.show">
+						<button ng-click="insert()" class="btn btn-default " ng-if="vm.selectedEntity.restrictionFieldId==undefined" ng-show="($root.restrictionList.security.restrictionItemMap.restrictionField.canCreate==true)">Insert
 						</button>
 
-						<button ng-click="update()" class="btn btn-default " ng-if="selectedEntity.restrictionFieldId&gt;0" ng-show="($root.restrictionList.security.restrictionItemMap.restrictionField.canUpdate==true)">Update
+						<button ng-click="update()" class="btn btn-default " ng-if="vm.selectedEntity.restrictionFieldId&gt;0" ng-show="($root.restrictionList.security.restrictionItemMap.restrictionField.canUpdate==true)">Update
 						</button>
 
-						<button ng-click="del()" class="btn btn-default " ng-if="selectedEntity.restrictionFieldId&gt;0" ng-show="($root.restrictionList.security.restrictionItemMap.restrictionField.canDelete==true)">Delete
+						<button ng-click="del()" class="btn btn-default " ng-if="vm.selectedEntity.restrictionFieldId&gt;0" ng-show="($root.restrictionList.security.restrictionItemMap.restrictionField.canDelete==true)">Delete
 						</button>
 
 					</form>

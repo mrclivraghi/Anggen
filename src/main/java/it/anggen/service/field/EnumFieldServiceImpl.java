@@ -64,6 +64,13 @@ public class EnumFieldServiceImpl
         enumFieldList.add(returnedEnumField);
         returnedEnumField.getEntity().setEnumFieldList(enumFieldList);
         }
+        if (enumField.getEnumEntity()!=null)
+        {
+        List<it.anggen.model.field.EnumField> enumFieldList = enumFieldRepository.findByEnumEntity( enumField.getEnumEntity());
+        if (!enumFieldList.contains(returnedEnumField))
+        enumFieldList.add(returnedEnumField);
+        returnedEnumField.getEnumEntity().setEnumFieldList(enumFieldList);
+        }
         if (enumField.getTab()!=null)
         {
         List<it.anggen.model.field.EnumField> enumFieldList = enumFieldRepository.findByTab( enumField.getTab());

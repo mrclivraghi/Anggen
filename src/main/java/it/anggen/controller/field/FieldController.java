@@ -62,8 +62,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         List<it.anggen.model.field.Field> fieldList;
         if (field.getFieldId()!=null)
-         log.info("Searching field like {}", field.getFieldId()+' '+ field.getName());
-        logEntryService.addLogEntry( "Searching entity like "+ field.getFieldId()+' '+ field.getName(),
+         log.info("Searching field like {}", field.getName()+' '+ field.getFieldId());
+        logEntryService.addLogEntry( "Searching entity like "+ field.getName()+' '+ field.getFieldId(),
         it.anggen.model.LogType.INFO, it.anggen.model.OperationType.SEARCH_ENTITY, it.anggen.model.field.Field.staticEntityId, securityService.getLoggedUser(),log);
         fieldList=fieldService.find(field);
         getSecurityMapping(fieldList);
@@ -116,7 +116,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
         if (field.getFieldId()!=null)
-        log.info("Inserting field like "+ field.getFieldId()+' '+ field.getName());
+        log.info("Inserting field like "+ field.getName()+' '+ field.getFieldId());
         it.anggen.model.field.Field insertedField=fieldService.insert(field);
         getRightMapping(insertedField);
         logEntryService.addLogEntry( "Inserted field with id "+ insertedField.getFieldId(),
@@ -162,10 +162,10 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         if (field.getEntity()!=null)
         {
         field.getEntity().setRestrictionEntityList(null);
-        field.getEntity().setTabList(null);
-        field.getEntity().setEntityGroup(null);
-        field.getEntity().setEnumFieldList(null);
         field.getEntity().setFieldList(null);
+        field.getEntity().setEnumFieldList(null);
+        field.getEntity().setEntityGroup(null);
+        field.getEntity().setTabList(null);
         field.getEntity().setRelationshipList(null);
         }
         if (field.getTab()!=null)

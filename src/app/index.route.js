@@ -35,24 +35,24 @@ controllerAs: 'vm'
  }
 }
 })
-.state('main.role',{
- url:'/role',
+.state('main.restrictionEntity',{
+ url:'/restrictionEntity',
 views:{
 'pageContent': {
-templateUrl:'app/controller/role/role-template.html',
- controller:'homeController', 
+templateUrl:'app/controller/restrictionEntity/restrictionEntity-template.html',
+ controller:'HomeController', 
 controllerAs: 'vm' 
  }
 },
 resolve: {
 }
 })
-.state('main.restrictionField',{
- url:'/restrictionField',
+.state('main.role',{
+ url:'/role',
 views:{
 'pageContent': {
-templateUrl:'app/controller/restrictionField/restrictionField-template.html',
- controller:'homeController', 
+templateUrl:'app/controller/role/role-template.html',
+ controller:'HomeController', 
 controllerAs: 'vm' 
  }
 },
@@ -64,7 +64,7 @@ resolve: {
 views:{
 'pageContent': {
 templateUrl:'app/controller/user/user-template.html',
- controller:'homeController', 
+ controller:'HomeController', 
 controllerAs: 'vm' 
  }
 },
@@ -76,103 +76,19 @@ resolve: {
 views:{
 'pageContent': {
 templateUrl:'app/controller/restrictionEntityGroup/restrictionEntityGroup-template.html',
- controller:'homeController', 
+ controller:'HomeController', 
 controllerAs: 'vm' 
  }
 },
 resolve: {
 }
 })
-.state('main.restrictionEntity',{
- url:'/restrictionEntity',
+.state('main.restrictionField',{
+ url:'/restrictionField',
 views:{
 'pageContent': {
-templateUrl:'app/controller/restrictionEntity/restrictionEntity-template.html',
- controller:'homeController', 
-controllerAs: 'vm' 
- }
-},
-resolve: {
-}
-})
-.state('main.logEntry',{
- url:'/logEntry',
-views:{
-'pageContent': {
-templateUrl:'app/controller/logEntry/logEntry-template.html',
- controller:'homeController', 
-controllerAs: 'vm' 
- }
-},
-resolve: {
-}
-})
-.state('main.entity',{
- url:'/entity',
-views:{
-'pageContent': {
-templateUrl:'app/controller/entity/entity-template.html',
- controller:'homeController', 
-controllerAs: 'vm' 
- }
-},
-resolve: {
-}
-})
-.state('main.enumEntity',{
- url:'/enumEntity',
-views:{
-'pageContent': {
-templateUrl:'app/controller/enumEntity/enumEntity-template.html',
- controller:'homeController', 
-controllerAs: 'vm' 
- }
-},
-resolve: {
-}
-})
-.state('main.entityGroup',{
- url:'/entityGroup',
-views:{
-'pageContent': {
-templateUrl:'app/controller/entityGroup/entityGroup-template.html',
- controller:'homeController', 
-controllerAs: 'vm' 
- }
-},
-resolve: {
-}
-})
-.state('main.tab',{
- url:'/tab',
-views:{
-'pageContent': {
-templateUrl:'app/controller/tab/tab-template.html',
- controller:'homeController', 
-controllerAs: 'vm' 
- }
-},
-resolve: {
-}
-})
-.state('main.project',{
- url:'/project',
-views:{
-'pageContent': {
-templateUrl:'app/controller/project/project-template.html',
- controller:'homeController', 
-controllerAs: 'vm' 
- }
-},
-resolve: {
-}
-})
-.state('main.annotation',{
- url:'/annotation',
-views:{
-'pageContent': {
-templateUrl:'app/controller/annotation/annotation-template.html',
- controller:'homeController', 
+templateUrl:'app/controller/restrictionField/restrictionField-template.html',
+ controller:'HomeController', 
 controllerAs: 'vm' 
  }
 },
@@ -184,19 +100,7 @@ resolve: {
 views:{
 'pageContent': {
 templateUrl:'app/controller/enumValue/enumValue-template.html',
- controller:'homeController', 
-controllerAs: 'vm' 
- }
-},
-resolve: {
-}
-})
-.state('main.annotationAttribute',{
- url:'/annotationAttribute',
-views:{
-'pageContent': {
-templateUrl:'app/controller/annotationAttribute/annotationAttribute-template.html',
- controller:'homeController', 
+ controller:'HomeController', 
 controllerAs: 'vm' 
  }
 },
@@ -208,7 +112,7 @@ resolve: {
 views:{
 'pageContent': {
 templateUrl:'app/controller/field/field-template.html',
- controller:'homeController', 
+ controller:'HomeController', 
 controllerAs: 'vm' 
  }
 },
@@ -220,7 +124,91 @@ resolve: {
 views:{
 'pageContent': {
 templateUrl:'app/controller/enumField/enumField-template.html',
- controller:'homeController', 
+ controller:'HomeController', 
+controllerAs: 'vm' 
+ }
+},
+resolve: {
+}
+})
+.state('main.annotationAttribute',{
+ url:'/annotationAttribute',
+views:{
+'pageContent': {
+templateUrl:'app/controller/annotationAttribute/annotationAttribute-template.html',
+ controller:'HomeController', 
+controllerAs: 'vm' 
+ }
+},
+resolve: {
+}
+})
+.state('main.annotation',{
+ url:'/annotation',
+views:{
+'pageContent': {
+templateUrl:'app/controller/annotation/annotation-template.html',
+ controller:'HomeController', 
+controllerAs: 'vm' 
+ }
+},
+resolve: {
+}
+})
+.state('main.entityGroup',{
+ url:'/entityGroup',
+views:{
+'pageContent': {
+templateUrl:'app/controller/entityGroup/entityGroup-template.html',
+ controller:'HomeController', 
+controllerAs: 'vm' 
+ }
+},
+resolve: {
+}
+})
+.state('main.entity',{
+ url:'/entity',
+views:{
+'pageContent': {
+templateUrl:'app/controller/entity/entity-template.html',
+ controller:'HomeController', 
+controllerAs: 'vm' 
+ }
+},
+resolve: {
+}
+})
+.state('main.enumEntity',{
+ url:'/enumEntity',
+views:{
+'pageContent': {
+templateUrl:'app/controller/enumEntity/enumEntity-template.html',
+ controller:'HomeController', 
+controllerAs: 'vm' 
+ }
+},
+resolve: {
+}
+})
+.state('main.tab',{
+ url:'/tab',
+views:{
+'pageContent': {
+templateUrl:'app/controller/tab/tab-template.html',
+ controller:'HomeController', 
+controllerAs: 'vm' 
+ }
+},
+resolve: {
+}
+})
+.state('main.project',{
+ url:'/project',
+views:{
+'pageContent': {
+templateUrl:'app/controller/project/project-template.html',
+ controller:'HomeController', 
 controllerAs: 'vm' 
  }
 },
@@ -232,7 +220,19 @@ resolve: {
 views:{
 'pageContent': {
 templateUrl:'app/controller/relationship/relationship-template.html',
- controller:'homeController', 
+ controller:'HomeController', 
+controllerAs: 'vm' 
+ }
+},
+resolve: {
+}
+})
+.state('main.logEntry',{
+ url:'/logEntry',
+views:{
+'pageContent': {
+templateUrl:'app/controller/logEntry/logEntry-template.html',
+ controller:'HomeController', 
 controllerAs: 'vm' 
  }
 },

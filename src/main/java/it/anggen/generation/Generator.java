@@ -175,7 +175,7 @@ public class Generator {
 		List<Project> projectList=projectRepository.findByName(applicationName);
 		if (projectList.size()==0)
 			throw new Exception();
-		this.relationshipList=relationshipRepository.findByRelationshipIdAndPriorityAndNameAndRelationshipTypeAndEntityAndEntityAndTabAndAnnotation(null, null, null, null, null, null, null, null);
+		this.relationshipList=relationshipRepository.findByRelationshipIdAndNameAndPriorityAndRelationshipTypeAndAnnotationAndEntityAndEntityAndTab(null, null, null, null, null, null, null, null);
 		this.project=projectList.get(0);
 		this.entityGroupList=project.getEntityGroupList();
 		this.enumEntityList=project.getEnumEntityList();

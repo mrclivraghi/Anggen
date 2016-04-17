@@ -9,7 +9,7 @@ function FieldService($http,MainService,UtilityService)
 this.entityList =		[];
 this.preparedData={};
 this.selectedEntity= 	{show: false 
-,annotationList: [],restrictionFieldList: []};
+,restrictionFieldList: [],annotationList: []};
 this.hidden= { hiddenFields: []};
 this.isParent=function()
 {
@@ -71,6 +71,13 @@ var promise= $http.post("http://127.0.0.1:8080/ServerTestApp/field/"+this.select
 });
 return promise; 
 }
+ this.initRestrictionFieldList= function()
+{
+var promise= $http
+.post("http://127.0.0.1:8080/ServerTestApp/restrictionField/search",
+{});
+return promise;
+};
  this.initEntityList= function()
 {
 var promise= $http
@@ -89,13 +96,6 @@ return promise;
 {
 var promise= $http
 .post("http://127.0.0.1:8080/ServerTestApp/annotation/search",
-{});
-return promise;
-};
- this.initRestrictionFieldList= function()
-{
-var promise= $http
-.post("http://127.0.0.1:8080/ServerTestApp/restrictionField/search",
 {});
 return promise;
 };

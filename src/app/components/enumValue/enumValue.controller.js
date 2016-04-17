@@ -6,15 +6,16 @@ angular
 /** @ngInject */
 function EnumValueController($scope,$http,$rootScope,$log,UtilityService ,enumValueService, SecurityService, MainService ,enumEntityService)
 {
-$scope.searchBean=enumValueService.searchBean;
-$scope.entityList=enumValueService.entityList;
-$scope.selectedEntity=enumValueService.selectedEntity;
-$scope.hidden=enumValueService.hidden;
-$scope.enumEntityPreparedData=enumEntityService.preparedData;
-$scope.reset = function()
+var vm=this;
+vm.searchBean=enumValueService.searchBean;
+vm.entityList=enumValueService.entityList;
+vm.selectedEntity=enumValueService.selectedEntity;
+vm.enumEntityPreparedData=enumEntityService.preparedData;
+function reset()
 {
 enumValueService.resetSearchBean();
-$scope.searchBean=enumValueService.searchBean;enumValueService.setSelectedEntity(null);
+vm.searchBean=enumValueService.searchBean;
+enumValueService.setSelectedEntity(null);
 enumValueService.selectedEntity.show=false;
 enumValueService.setEntityList(null); 
 if (enumValueService.isParent()) 
@@ -23,7 +24,7 @@ enumEntityService.selectedEntity.show=false;
 delete $rootScope.openNode.enumEntity;
 }
 }
-$scope.addNew= function()
+function addNew()
 {
 $rootScope.openNode.enumValue=true;
 enumValueService.setSelectedEntity(null);
@@ -35,9 +36,9 @@ enumEntityService.selectedEntity.show=false;
 delete $rootScope.openNode.enumEntity;
 }
 angular.element('#enumValueTabs li:eq(0) a').tab('show');
-};
+}
 		
-$scope.search=function()
+function search()
 {
 enumValueService.selectedEntity.show=false;
 delete $rootScope.openNode.enumValue;
@@ -49,15 +50,15 @@ UtilityService.AlertError.show("Si è verificato un errore");
 $log.debug(response);
 return; 
 });
-};
-$scope.insert=function()
+}
+function insert()
 {
 if (!$scope.enumValueDetailForm.$valid) return; 
 if (enumValueService.isParent()) 
 {
 enumValueService.insert().then(function successCallback(response) { 
 $log.debug(response);
-$scope.search();
+vm.search();
 },function errorCallback(response) { 
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
@@ -77,8 +78,8 @@ $log.debug(response);
 return; 
 });
 }
-};
-$scope.update=function()
+}
+function update()
 {
 if (!$scope.enumValueDetailForm.$valid) return; 
 if (enumValueService.isParent()) 
@@ -87,7 +88,7 @@ enumEntityService.selectedEntity.show=false;
 delete $rootScope.openNode.enumEntity;
 enumValueService.update().then(function successCallback(response) { 
 $log.debug(response);
-$scope.search();
+vm.search();
 },function errorCallback(response) { 
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
@@ -109,23 +110,20 @@ $log.debug(response);
 return; 
 });
 }
-};
-$scope.remove= function()
+}
+function remove()
 {
 enumValueService.selectedEntity.show=false;
 delete $rootScope.openNode.enumValue;
 enumValueService.setSelectedEntity(null);
-$scope.updateParent();
-};
-$scope.del=function()
+}
+function del()
 {
-if (!enumValueService.isParent()) 
-$scope.updateParent();
 enumValueService.del().then(function successCallback(response) { 
 $log.debug(response);
 if (enumValueService.isParent()) 
 {
-$scope.search();
+vm.search();
 } else { 
 enumValueService.setSelectedEntity(null);
 }
@@ -135,13 +133,14 @@ UtilityService.AlertError.show("Si è verificato un errore");
 $log.debug(response);
 return; 
 });
-};
-$scope.refreshTableDetail= function() 
+}
+function refreshTableDetail() 
 {
 if ($scope.enumEntityGridApi!=undefined && $scope.enumEntityGridApi!=null)
  $scope.enumEntityGridApi.core.handleWindowResize(); 
-};
-$scope.loadFile = function(file,field)
+}
+vm.refreshTableDetail=refreshTableDetail;
+function loadFile(file,field)
 {
 enumValueService.loadFile(file,field).then(function successCallback(response) {
 enumValueService.setSelectedEntity(response.data);
@@ -152,8 +151,8 @@ $log.debug(response);
 return; 
 });
 }
-$scope.trueFalseValues=['',true,false];
-$scope.showEnumEntityDetail= function(index)
+vm.trueFalseValues=['',true,false];
+ function showEnumEntityDetail(index)
 {
 if (index!=null)
 {
@@ -194,30 +193,32 @@ return;
 );
 }
 angular.element('#enumEntityTabs li:eq(0) a').tab('show');
-};
-$scope.downloadEntityList=function()
-{
-var mystyle = {
- headers:true, 
-column: {style:{Font:{Bold:"1"}}}
-};
-UtilityService.alasql('SELECT * INTO XLSXML("enumValue.xls",?) FROM ?',[mystyle,$scope.entityList]);
-};
-$scope.downloadEnumEntityList=function()
-{
-var mystyle = {
- headers:true, 
-column: {style:{Font:{Bold:"1"}}}
-};
-UtilityService.alasql('SELECT * INTO XLSXML("enumEntity.xls",?) FROM ?',[mystyle,$scope.selectedEntity.enumEntityList]);
-};
-$scope.enumValueGridOptions={};
-UtilityService.cloneObject(enumValueService.gridOptions,$scope.enumValueGridOptions);
-$scope.enumValueGridOptions.data=enumValueService.entityList;
-$scope.initChildrenList = function () { 
 }
-$scope.enumValueGridOptions.onRegisterApi = function(gridApi){
-$scope.enumValueGridApi = gridApi;
+vm.showEnumEntityDetail=showEnumEntityDetail;
+function downloadList()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+};
+UtilityService.alasql('SELECT * INTO XLSXML("enumValue.xls",?) FROM ?',[mystyle,vm.entityList]);
+}
+function downloadEnumEntityList()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+}
+UtilityService.alasql('SELECT * INTO XLSXML("enumEntity.xls",?) FROM ?',[mystyle,vm.selectedEntity.enumEntityList]);
+}
+vm.downloadEnumEntityList=downloadEnumEntityList;
+vm.enumValueGridOptions={};
+UtilityService.cloneObject(enumValueService.gridOptions,vm.enumValueGridOptions);
+vm.enumValueGridOptions.data=enumValueService.entityList;
+vm.initChildrenList = function () { 
+}
+vm.enumValueGridOptions.onRegisterApi = function(gridApi){
+vm.enumValueGridApi = gridApi;
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
@@ -234,13 +235,13 @@ delete $rootScope.openNode.enumValue;
 enumValueService.selectedEntity.show = row.isSelected;
 });
   };
-$scope.enumEntityGridOptions={};
-UtilityService.cloneObject(enumEntityService.gridOptions,$scope.enumEntityGridOptions);
-$scope.enumEntityGridOptions.data=$scope.selectedEntity.enumEntityList;
-$scope.initChildrenList = function () { 
+vm.enumEntityGridOptions={};
+UtilityService.cloneObject(enumEntityService.gridOptions,vm.enumEntityGridOptions);
+vm.enumEntityGridOptions.data=vm.selectedEntity.enumEntityList;
+vm.initChildrenList = function () { 
 }
-$scope.enumEntityGridOptions.onRegisterApi = function(gridApi){
-$scope.enumEntityGridApi = gridApi;
+vm.enumEntityGridOptions.onRegisterApi = function(gridApi){
+vm.enumEntityGridApi = gridApi;
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
@@ -275,10 +276,20 @@ return;
   }	
 );
 }
-$scope.closeEntityDetail = function(){ 
+function closeEntityDetail(){ 
 enumValueService.setSelectedEntity(null);
 enumValueService.selectedEntity.show=false;
 delete $rootScope.openNode.enumValue;
 }
+vm.reset=reset;
+vm.addNew=addNew;
+vm.insert=insert;
+vm.update=update;
+vm.search=search;
+vm.remove=remove;
+vm.del=del;
+vm.loadFile=loadFile;
+vm.downloadList=downloadList;
+vm.closeEntityDetail=closeEntityDetail;
 }
 })();

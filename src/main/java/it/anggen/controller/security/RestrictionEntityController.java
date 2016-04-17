@@ -161,10 +161,10 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         if (restrictionEntity.getEntity()!=null)
         {
         restrictionEntity.getEntity().setRestrictionEntityList(null);
-        restrictionEntity.getEntity().setTabList(null);
-        restrictionEntity.getEntity().setEntityGroup(null);
-        restrictionEntity.getEntity().setEnumFieldList(null);
         restrictionEntity.getEntity().setFieldList(null);
+        restrictionEntity.getEntity().setEnumFieldList(null);
+        restrictionEntity.getEntity().setEntityGroup(null);
+        restrictionEntity.getEntity().setTabList(null);
         restrictionEntity.getEntity().setRelationshipList(null);
         }
     }

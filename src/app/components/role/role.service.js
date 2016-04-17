@@ -9,7 +9,7 @@ function RoleService($http,MainService,UtilityService)
 this.entityList =		[];
 this.preparedData={};
 this.selectedEntity= 	{show: false 
-,restrictionFieldList: [],userList: [],restrictionEntityGroupList: [],restrictionEntityList: []};
+,restrictionEntityList: [],restrictionFieldList: [],userList: [],restrictionEntityGroupList: []};
 this.hidden= { hiddenFields: []};
 this.isParent=function()
 {
@@ -71,6 +71,13 @@ var promise= $http.post("http://127.0.0.1:8080/ServerTestApp/role/"+this.selecte
 });
 return promise; 
 }
+ this.initRestrictionEntityList= function()
+{
+var promise= $http
+.post("http://127.0.0.1:8080/ServerTestApp/restrictionEntity/search",
+{});
+return promise;
+};
  this.initRestrictionFieldList= function()
 {
 var promise= $http
@@ -89,13 +96,6 @@ return promise;
 {
 var promise= $http
 .post("http://127.0.0.1:8080/ServerTestApp/restrictionEntityGroup/search",
-{});
-return promise;
-};
- this.initRestrictionEntityList= function()
-{
-var promise= $http
-.post("http://127.0.0.1:8080/ServerTestApp/restrictionEntity/search",
 {});
 return promise;
 };

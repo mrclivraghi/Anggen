@@ -16,7 +16,7 @@ import it.anggen.utils.annotation.MaxDescendantLevel;
 @MaxDescendantLevel(100)
 public class EnumValue {
 
-    public final static java.lang.Long staticEntityId = 10L;
+    public final static java.lang.Long staticEntityId = 3L;
     @javax.persistence.Column(name = "name")
     @it.anggen.utils.annotation.DescriptionField
     @it.anggen.utils.annotation.Priority(2)
@@ -25,10 +25,10 @@ public class EnumValue {
     @it.anggen.utils.annotation.Priority(2)
     private Integer value;
     @javax.persistence.Column(name = "enum_value_id")
-    @it.anggen.utils.annotation.Priority(1)
-    @it.anggen.utils.annotation.DescriptionField
     @Id
     @GeneratedValue
+    @it.anggen.utils.annotation.DescriptionField
+    @it.anggen.utils.annotation.Priority(1)
     private java.lang.Long enumValueId;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "enum_entity_id_enum_entity")

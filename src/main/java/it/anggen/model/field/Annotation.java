@@ -18,12 +18,12 @@ import org.hibernate.annotations.Type;
 @MaxDescendantLevel(100)
 public class Annotation {
 
-    public final static java.lang.Long staticEntityId = 9L;
+    public final static java.lang.Long staticEntityId = 16L;
     @javax.persistence.Column(name = "annotation_id")
-    @it.anggen.utils.annotation.Priority(1)
-    @it.anggen.utils.annotation.DescriptionField
     @Id
     @GeneratedValue
+    @it.anggen.utils.annotation.DescriptionField
+    @it.anggen.utils.annotation.Priority(1)
     private java.lang.Long annotationId;
     @OneToMany(fetch = javax.persistence.FetchType.EAGER)
     @Type(type = "it.anggen.model.field.AnnotationAttribute")

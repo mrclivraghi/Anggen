@@ -2,7 +2,6 @@
   'use strict'
 
   angular
-    .module('serverTestApp')
-    .constant('moment', moment);
+    .module('serverTestApp');
 
 })();

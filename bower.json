@@ -21,7 +21,6 @@
  "angular-ui-grid": "^3.1.1",
   "angular-ui-date": "^1.0.0",
   "bootstrap": "^3.3.6",
-   "utility": "./src/app/components/customLib/utility.js",
   "main": "./src/app/components/customLib/main.css",
 "alasql": "^0.2.5"
  },

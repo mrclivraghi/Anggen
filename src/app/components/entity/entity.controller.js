@@ -4,42 +4,44 @@ angular
 .module("serverTestApp")
 .controller("EntityController",EntityController);
 /** @ngInject */
-function EntityController($scope,$http,$rootScope,$log,UtilityService ,entityService, SecurityService, MainService ,restrictionEntityService,tabService,entityGroupService,enumFieldService,fieldService,relationshipService)
+function EntityController($scope,$http,$rootScope,$log,UtilityService ,entityService, SecurityService, MainService ,restrictionEntityService,fieldService,enumFieldService,entityGroupService,tabService,relationshipService)
 {
-$scope.searchBean=entityService.searchBean;
-$scope.entityList=entityService.entityList;
-$scope.selectedEntity=entityService.selectedEntity;
-$scope.hidden=entityService.hidden;
-$scope.restrictionEntityPreparedData=restrictionEntityService.preparedData;
-$scope.tabPreparedData=tabService.preparedData;
-$scope.entityGroupPreparedData=entityGroupService.preparedData;
-$scope.enumFieldPreparedData=enumFieldService.preparedData;
-$scope.fieldPreparedData=fieldService.preparedData;
-$scope.relationshipPreparedData=relationshipService.preparedData;
-$scope.securityTypePreparedData={};$scope.securityTypePreparedData.entityList=["BLOCK_WITH_RESTRICTION","ACCESS_WITH_PERMISSION",];
-$scope.reset = function()
+var vm=this;
+vm.searchBean=entityService.searchBean;
+vm.entityList=entityService.entityList;
+vm.selectedEntity=entityService.selectedEntity;
+vm.restrictionEntityPreparedData=restrictionEntityService.preparedData;
+vm.fieldPreparedData=fieldService.preparedData;
+vm.enumFieldPreparedData=enumFieldService.preparedData;
+vm.entityGroupPreparedData=entityGroupService.preparedData;
+vm.tabPreparedData=tabService.preparedData;
+vm.relationshipPreparedData=relationshipService.preparedData;
+vm.securityTypePreparedData={};
+vm.securityTypePreparedData.entityList=["BLOCK_WITH_RESTRICTION","ACCESS_WITH_PERMISSION" ];
+function reset()
 {
 entityService.resetSearchBean();
-$scope.searchBean=entityService.searchBean;entityService.setSelectedEntity(null);
+vm.searchBean=entityService.searchBean;
+entityService.setSelectedEntity(null);
 entityService.selectedEntity.show=false;
 entityService.setEntityList(null); 
 if (entityService.isParent()) 
 {
 restrictionEntityService.selectedEntity.show=false;
 delete $rootScope.openNode.restrictionEntity;
-tabService.selectedEntity.show=false;
-delete $rootScope.openNode.tab;
-entityGroupService.selectedEntity.show=false;
-delete $rootScope.openNode.entityGroup;
-enumFieldService.selectedEntity.show=false;
-delete $rootScope.openNode.enumField;
 fieldService.selectedEntity.show=false;
 delete $rootScope.openNode.field;
+enumFieldService.selectedEntity.show=false;
+delete $rootScope.openNode.enumField;
+entityGroupService.selectedEntity.show=false;
+delete $rootScope.openNode.entityGroup;
+tabService.selectedEntity.show=false;
+delete $rootScope.openNode.tab;
 relationshipService.selectedEntity.show=false;
 delete $rootScope.openNode.relationship;
 }
 }
-$scope.addNew= function()
+function addNew()
 {
 $rootScope.openNode.entity=true;
 entityService.setSelectedEntity(null);
@@ -49,36 +51,36 @@ if (entityService.isParent())
 {
 restrictionEntityService.selectedEntity.show=false;
 delete $rootScope.openNode.restrictionEntity;
-tabService.selectedEntity.show=false;
-delete $rootScope.openNode.tab;
-entityGroupService.selectedEntity.show=false;
-delete $rootScope.openNode.entityGroup;
-enumFieldService.selectedEntity.show=false;
-delete $rootScope.openNode.enumField;
 fieldService.selectedEntity.show=false;
 delete $rootScope.openNode.field;
+enumFieldService.selectedEntity.show=false;
+delete $rootScope.openNode.enumField;
+entityGroupService.selectedEntity.show=false;
+delete $rootScope.openNode.entityGroup;
+tabService.selectedEntity.show=false;
+delete $rootScope.openNode.tab;
 relationshipService.selectedEntity.show=false;
 delete $rootScope.openNode.relationship;
 }
 angular.element('#entityTabs li:eq(0) a').tab('show');
-};
+}
 		
-$scope.search=function()
+function search()
 {
 entityService.selectedEntity.show=false;
 delete $rootScope.openNode.entity;
 entityService.searchBean.restrictionEntityList=[];
 entityService.searchBean.restrictionEntityList.push(entityService.searchBean.restrictionEntity);
 delete entityService.searchBean.restrictionEntity; 
-entityService.searchBean.tabList=[];
-entityService.searchBean.tabList.push(entityService.searchBean.tab);
-delete entityService.searchBean.tab; 
-entityService.searchBean.enumFieldList=[];
-entityService.searchBean.enumFieldList.push(entityService.searchBean.enumField);
-delete entityService.searchBean.enumField; 
 entityService.searchBean.fieldList=[];
 entityService.searchBean.fieldList.push(entityService.searchBean.field);
 delete entityService.searchBean.field; 
+entityService.searchBean.enumFieldList=[];
+entityService.searchBean.enumFieldList.push(entityService.searchBean.enumField);
+delete entityService.searchBean.enumField; 
+entityService.searchBean.tabList=[];
+entityService.searchBean.tabList.push(entityService.searchBean.tab);
+delete entityService.searchBean.tab; 
 entityService.searchBean.relationshipList=[];
 entityService.searchBean.relationshipList.push(entityService.searchBean.relationship);
 delete entityService.searchBean.relationship; 
@@ -90,15 +92,15 @@ UtilityService.AlertError.show("Si è verificato un errore");
 $log.debug(response);
 return; 
 });
-};
-$scope.insert=function()
+}
+function insert()
 {
 if (!$scope.entityDetailForm.$valid) return; 
 if (entityService.isParent()) 
 {
 entityService.insert().then(function successCallback(response) { 
 $log.debug(response);
-$scope.search();
+vm.search();
 },function errorCallback(response) { 
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
@@ -118,27 +120,27 @@ $log.debug(response);
 return; 
 });
 }
-};
-$scope.update=function()
+}
+function update()
 {
 if (!$scope.entityDetailForm.$valid) return; 
 if (entityService.isParent()) 
 {
 restrictionEntityService.selectedEntity.show=false;
 delete $rootScope.openNode.restrictionEntity;
-tabService.selectedEntity.show=false;
-delete $rootScope.openNode.tab;
-entityGroupService.selectedEntity.show=false;
-delete $rootScope.openNode.entityGroup;
-enumFieldService.selectedEntity.show=false;
-delete $rootScope.openNode.enumField;
 fieldService.selectedEntity.show=false;
 delete $rootScope.openNode.field;
+enumFieldService.selectedEntity.show=false;
+delete $rootScope.openNode.enumField;
+entityGroupService.selectedEntity.show=false;
+delete $rootScope.openNode.entityGroup;
+tabService.selectedEntity.show=false;
+delete $rootScope.openNode.tab;
 relationshipService.selectedEntity.show=false;
 delete $rootScope.openNode.relationship;
 entityService.update().then(function successCallback(response) { 
 $log.debug(response);
-$scope.search();
+vm.search();
 },function errorCallback(response) { 
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
@@ -160,23 +162,20 @@ $log.debug(response);
 return; 
 });
 }
-};
-$scope.remove= function()
+}
+function remove()
 {
 entityService.selectedEntity.show=false;
 delete $rootScope.openNode.entity;
 entityService.setSelectedEntity(null);
-$scope.updateParent();
-};
-$scope.del=function()
+}
+function del()
 {
-if (!entityService.isParent()) 
-$scope.updateParent();
 entityService.del().then(function successCallback(response) { 
 $log.debug(response);
 if (entityService.isParent()) 
 {
-$scope.search();
+vm.search();
 } else { 
 entityService.setSelectedEntity(null);
 }
@@ -186,23 +185,24 @@ UtilityService.AlertError.show("Si è verificato un errore");
 $log.debug(response);
 return; 
 });
-};
-$scope.refreshTableDetail= function() 
+}
+function refreshTableDetail() 
 {
 if ($scope.restrictionEntityGridApi!=undefined && $scope.restrictionEntityGridApi!=null)
  $scope.restrictionEntityGridApi.core.handleWindowResize(); 
-if ($scope.tabGridApi!=undefined && $scope.tabGridApi!=null)
- $scope.tabGridApi.core.handleWindowResize(); 
-if ($scope.entityGroupGridApi!=undefined && $scope.entityGroupGridApi!=null)
- $scope.entityGroupGridApi.core.handleWindowResize(); 
-if ($scope.enumFieldGridApi!=undefined && $scope.enumFieldGridApi!=null)
- $scope.enumFieldGridApi.core.handleWindowResize(); 
 if ($scope.fieldGridApi!=undefined && $scope.fieldGridApi!=null)
  $scope.fieldGridApi.core.handleWindowResize(); 
+if ($scope.enumFieldGridApi!=undefined && $scope.enumFieldGridApi!=null)
+ $scope.enumFieldGridApi.core.handleWindowResize(); 
+if ($scope.entityGroupGridApi!=undefined && $scope.entityGroupGridApi!=null)
+ $scope.entityGroupGridApi.core.handleWindowResize(); 
+if ($scope.tabGridApi!=undefined && $scope.tabGridApi!=null)
+ $scope.tabGridApi.core.handleWindowResize(); 
 if ($scope.relationshipGridApi!=undefined && $scope.relationshipGridApi!=null)
  $scope.relationshipGridApi.core.handleWindowResize(); 
-};
-$scope.loadFile = function(file,field)
+}
+vm.refreshTableDetail=refreshTableDetail;
+function loadFile(file,field)
 {
 entityService.loadFile(file,field).then(function successCallback(response) {
 entityService.setSelectedEntity(response.data);
@@ -213,8 +213,8 @@ $log.debug(response);
 return; 
 });
 }
-$scope.trueFalseValues=['',true,false];
-$scope.showRestrictionEntityDetail= function(index)
+vm.trueFalseValues=['',true,false];
+ function showRestrictionEntityDetail(index)
 {
 if (index!=null)
 {
@@ -255,134 +255,9 @@ return;
 );
 }
 angular.element('#restrictionEntityTabs li:eq(0) a').tab('show');
-};
-$scope.showTabDetail= function(index)
-{
-if (index!=null)
-{
-tabService.searchOne(entityService.selectedEntity.tabList[index]).then(
-function successCallback(response) {
-$log.debug("INDEX!=NULLLLLLLLLLLL");
-$log.debug(response);
-tabService.setSelectedEntity(response.data[0]);
-tabService.selectedEntity.show=true;
-  }, function errorCallback(response) {
-UtilityService.AlertError.init({selector: "#alertError"});
-UtilityService.AlertError.show("Si è verificato un errore");
-$log.debug(response);
-return; 
-  }	
-);
 }
-else 
-{
-if (entityService.selectedEntity.tab==null || entityService.selectedEntity.tab==undefined)
-{
-tabService.setSelectedEntity(null); 
-tabService.selectedEntity.show=true; 
-$rootScope.openNode.tab=true;
-}
-else
-tabService.searchOne(entityService.selectedEntity.tab).then(
-function successCallback(response) {
-tabService.setSelectedEntity(response.data[0]);
-tabService.selectedEntity.show=true;
-$rootScope.openNode.tab=true;
-  }, function errorCallback(response) {
-UtilityService.AlertError.init({selector: "#alertError"});
-UtilityService.AlertError.show("Si è verificato un errore");
-$log.debug(response);
-return; 
-  }	
-);
-}
-angular.element('#tabTabs li:eq(0) a').tab('show');
-};
-$scope.showEntityGroupDetail= function(index)
-{
-if (index!=null)
-{
-entityGroupService.searchOne(entityService.selectedEntity.entityGroupList[index]).then(
-function successCallback(response) {
-$log.debug("INDEX!=NULLLLLLLLLLLL");
-$log.debug(response);
-entityGroupService.setSelectedEntity(response.data[0]);
-entityGroupService.selectedEntity.show=true;
-  }, function errorCallback(response) {
-UtilityService.AlertError.init({selector: "#alertError"});
-UtilityService.AlertError.show("Si è verificato un errore");
-$log.debug(response);
-return; 
-  }	
-);
-}
-else 
-{
-if (entityService.selectedEntity.entityGroup==null || entityService.selectedEntity.entityGroup==undefined)
-{
-entityGroupService.setSelectedEntity(null); 
-entityGroupService.selectedEntity.show=true; 
-$rootScope.openNode.entityGroup=true;
-}
-else
-entityGroupService.searchOne(entityService.selectedEntity.entityGroup).then(
-function successCallback(response) {
-entityGroupService.setSelectedEntity(response.data[0]);
-entityGroupService.selectedEntity.show=true;
-$rootScope.openNode.entityGroup=true;
-  }, function errorCallback(response) {
-UtilityService.AlertError.init({selector: "#alertError"});
-UtilityService.AlertError.show("Si è verificato un errore");
-$log.debug(response);
-return; 
-  }	
-);
-}
-angular.element('#entityGroupTabs li:eq(0) a').tab('show');
-};
-$scope.showEnumFieldDetail= function(index)
-{
-if (index!=null)
-{
-enumFieldService.searchOne(entityService.selectedEntity.enumFieldList[index]).then(
-function successCallback(response) {
-$log.debug("INDEX!=NULLLLLLLLLLLL");
-$log.debug(response);
-enumFieldService.setSelectedEntity(response.data[0]);
-enumFieldService.selectedEntity.show=true;
-  }, function errorCallback(response) {
-UtilityService.AlertError.init({selector: "#alertError"});
-UtilityService.AlertError.show("Si è verificato un errore");
-$log.debug(response);
-return; 
-  }	
-);
-}
-else 
-{
-if (entityService.selectedEntity.enumField==null || entityService.selectedEntity.enumField==undefined)
-{
-enumFieldService.setSelectedEntity(null); 
-enumFieldService.selectedEntity.show=true; 
-$rootScope.openNode.enumField=true;
-}
-else
-enumFieldService.searchOne(entityService.selectedEntity.enumField).then(
-function successCallback(response) {
-enumFieldService.setSelectedEntity(response.data[0]);
-enumFieldService.selectedEntity.show=true;
-$rootScope.openNode.enumField=true;
-  }, function errorCallback(response) {
-UtilityService.AlertError.init({selector: "#alertError"});
-UtilityService.AlertError.show("Si è verificato un errore");
-$log.debug(response);
-return; 
-  }	
-);
-}
-angular.element('#enumFieldTabs li:eq(0) a').tab('show');
-};
-$scope.showFieldDetail= function(index)
+vm.showRestrictionEntityDetail=showRestrictionEntityDetail;
+ function showFieldDetail(index)
 {
 if (index!=null)
 {
@@ -423,8 +298,138 @@ return;
 );
 }
 angular.element('#fieldTabs li:eq(0) a').tab('show');
-};
-$scope.showRelationshipDetail= function(index)
+}
+vm.showFieldDetail=showFieldDetail;
+ function showEnumFieldDetail(index)
+{
+if (index!=null)
+{
+enumFieldService.searchOne(entityService.selectedEntity.enumFieldList[index]).then(
+function successCallback(response) {
+$log.debug("INDEX!=NULLLLLLLLLLLL");
+$log.debug(response);
+enumFieldService.setSelectedEntity(response.data[0]);
+enumFieldService.selectedEntity.show=true;
+  }, function errorCallback(response) {
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
+  }	
+);
+}
+else 
+{
+if (entityService.selectedEntity.enumField==null || entityService.selectedEntity.enumField==undefined)
+{
+enumFieldService.setSelectedEntity(null); 
+enumFieldService.selectedEntity.show=true; 
+$rootScope.openNode.enumField=true;
+}
+else
+enumFieldService.searchOne(entityService.selectedEntity.enumField).then(
+function successCallback(response) {
+enumFieldService.setSelectedEntity(response.data[0]);
+enumFieldService.selectedEntity.show=true;
+$rootScope.openNode.enumField=true;
+  }, function errorCallback(response) {
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
+  }	
+);
+}
+angular.element('#enumFieldTabs li:eq(0) a').tab('show');
+}
+vm.showEnumFieldDetail=showEnumFieldDetail;
+ function showEntityGroupDetail(index)
+{
+if (index!=null)
+{
+entityGroupService.searchOne(entityService.selectedEntity.entityGroupList[index]).then(
+function successCallback(response) {
+$log.debug("INDEX!=NULLLLLLLLLLLL");
+$log.debug(response);
+entityGroupService.setSelectedEntity(response.data[0]);
+entityGroupService.selectedEntity.show=true;
+  }, function errorCallback(response) {
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
+  }	
+);
+}
+else 
+{
+if (entityService.selectedEntity.entityGroup==null || entityService.selectedEntity.entityGroup==undefined)
+{
+entityGroupService.setSelectedEntity(null); 
+entityGroupService.selectedEntity.show=true; 
+$rootScope.openNode.entityGroup=true;
+}
+else
+entityGroupService.searchOne(entityService.selectedEntity.entityGroup).then(
+function successCallback(response) {
+entityGroupService.setSelectedEntity(response.data[0]);
+entityGroupService.selectedEntity.show=true;
+$rootScope.openNode.entityGroup=true;
+  }, function errorCallback(response) {
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
+  }	
+);
+}
+angular.element('#entityGroupTabs li:eq(0) a').tab('show');
+}
+vm.showEntityGroupDetail=showEntityGroupDetail;
+ function showTabDetail(index)
+{
+if (index!=null)
+{
+tabService.searchOne(entityService.selectedEntity.tabList[index]).then(
+function successCallback(response) {
+$log.debug("INDEX!=NULLLLLLLLLLLL");
+$log.debug(response);
+tabService.setSelectedEntity(response.data[0]);
+tabService.selectedEntity.show=true;
+  }, function errorCallback(response) {
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
+  }	
+);
+}
+else 
+{
+if (entityService.selectedEntity.tab==null || entityService.selectedEntity.tab==undefined)
+{
+tabService.setSelectedEntity(null); 
+tabService.selectedEntity.show=true; 
+$rootScope.openNode.tab=true;
+}
+else
+tabService.searchOne(entityService.selectedEntity.tab).then(
+function successCallback(response) {
+tabService.setSelectedEntity(response.data[0]);
+tabService.selectedEntity.show=true;
+$rootScope.openNode.tab=true;
+  }, function errorCallback(response) {
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
+  }	
+);
+}
+angular.element('#tabTabs li:eq(0) a').tab('show');
+}
+vm.showTabDetail=showTabDetail;
+ function showRelationshipDetail(index)
 {
 if (index!=null)
 {
@@ -465,85 +470,97 @@ return;
 );
 }
 angular.element('#relationshipTabs li:eq(0) a').tab('show');
-};
-$scope.downloadEntityList=function()
+}
+vm.showRelationshipDetail=showRelationshipDetail;
+function downloadList()
 {
 var mystyle = {
  headers:true, 
 column: {style:{Font:{Bold:"1"}}}
 };
-UtilityService.alasql('SELECT * INTO XLSXML("entity.xls",?) FROM ?',[mystyle,$scope.entityList]);
-};
-$scope.saveLinkedRestrictionEntity= function() {
+UtilityService.alasql('SELECT * INTO XLSXML("entity.xls",?) FROM ?',[mystyle,vm.entityList]);
+}
+function saveLinkedRestrictionEntity() {
 entityService.selectedEntity.restrictionEntityList.push(entityService.selectedEntity.restrictionEntity);
 }
-$scope.downloadRestrictionEntityList=function()
+vm.saveLinkedRestrictionEntity=saveLinkedRestrictionEntity;
+function downloadRestrictionEntityList()
 {
 var mystyle = {
  headers:true, 
 column: {style:{Font:{Bold:"1"}}}
-};
-UtilityService.alasql('SELECT * INTO XLSXML("restrictionEntity.xls",?) FROM ?',[mystyle,$scope.selectedEntity.restrictionEntityList]);
-};
-$scope.saveLinkedTab= function() {
-entityService.selectedEntity.tabList.push(entityService.selectedEntity.tab);
 }
-$scope.downloadTabList=function()
-{
-var mystyle = {
- headers:true, 
-column: {style:{Font:{Bold:"1"}}}
-};
-UtilityService.alasql('SELECT * INTO XLSXML("tab.xls",?) FROM ?',[mystyle,$scope.selectedEntity.tabList]);
-};
-$scope.downloadEntityGroupList=function()
-{
-var mystyle = {
- headers:true, 
-column: {style:{Font:{Bold:"1"}}}
-};
-UtilityService.alasql('SELECT * INTO XLSXML("entityGroup.xls",?) FROM ?',[mystyle,$scope.selectedEntity.entityGroupList]);
-};
-$scope.saveLinkedEnumField= function() {
-entityService.selectedEntity.enumFieldList.push(entityService.selectedEntity.enumField);
+UtilityService.alasql('SELECT * INTO XLSXML("restrictionEntity.xls",?) FROM ?',[mystyle,vm.selectedEntity.restrictionEntityList]);
 }
-$scope.downloadEnumFieldList=function()
-{
-var mystyle = {
- headers:true, 
-column: {style:{Font:{Bold:"1"}}}
-};
-UtilityService.alasql('SELECT * INTO XLSXML("enumField.xls",?) FROM ?',[mystyle,$scope.selectedEntity.enumFieldList]);
-};
-$scope.saveLinkedField= function() {
+vm.downloadRestrictionEntityList=downloadRestrictionEntityList;
+function saveLinkedField() {
 entityService.selectedEntity.fieldList.push(entityService.selectedEntity.field);
 }
-$scope.downloadFieldList=function()
+vm.saveLinkedField=saveLinkedField;
+function downloadFieldList()
 {
 var mystyle = {
  headers:true, 
 column: {style:{Font:{Bold:"1"}}}
-};
-UtilityService.alasql('SELECT * INTO XLSXML("field.xls",?) FROM ?',[mystyle,$scope.selectedEntity.fieldList]);
-};
-$scope.saveLinkedRelationship= function() {
+}
+UtilityService.alasql('SELECT * INTO XLSXML("field.xls",?) FROM ?',[mystyle,vm.selectedEntity.fieldList]);
+}
+vm.downloadFieldList=downloadFieldList;
+function saveLinkedEnumField() {
+entityService.selectedEntity.enumFieldList.push(entityService.selectedEntity.enumField);
+}
+vm.saveLinkedEnumField=saveLinkedEnumField;
+function downloadEnumFieldList()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+}
+UtilityService.alasql('SELECT * INTO XLSXML("enumField.xls",?) FROM ?',[mystyle,vm.selectedEntity.enumFieldList]);
+}
+vm.downloadEnumFieldList=downloadEnumFieldList;
+function downloadEntityGroupList()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+}
+UtilityService.alasql('SELECT * INTO XLSXML("entityGroup.xls",?) FROM ?',[mystyle,vm.selectedEntity.entityGroupList]);
+}
+vm.downloadEntityGroupList=downloadEntityGroupList;
+function saveLinkedTab() {
+entityService.selectedEntity.tabList.push(entityService.selectedEntity.tab);
+}
+vm.saveLinkedTab=saveLinkedTab;
+function downloadTabList()
+{
+var mystyle = {
+ headers:true, 
+column: {style:{Font:{Bold:"1"}}}
+}
+UtilityService.alasql('SELECT * INTO XLSXML("tab.xls",?) FROM ?',[mystyle,vm.selectedEntity.tabList]);
+}
+vm.downloadTabList=downloadTabList;
+function saveLinkedRelationship() {
 entityService.selectedEntity.relationshipList.push(entityService.selectedEntity.relationship);
 }
-$scope.downloadRelationshipList=function()
+vm.saveLinkedRelationship=saveLinkedRelationship;
+function downloadRelationshipList()
 {
 var mystyle = {
  headers:true, 
 column: {style:{Font:{Bold:"1"}}}
-};
-UtilityService.alasql('SELECT * INTO XLSXML("relationship.xls",?) FROM ?',[mystyle,$scope.selectedEntity.relationshipList]);
-};
-$scope.entityGridOptions={};
-UtilityService.cloneObject(entityService.gridOptions,$scope.entityGridOptions);
-$scope.entityGridOptions.data=entityService.entityList;
-$scope.initChildrenList = function () { 
 }
-$scope.entityGridOptions.onRegisterApi = function(gridApi){
-$scope.entityGridApi = gridApi;
+UtilityService.alasql('SELECT * INTO XLSXML("relationship.xls",?) FROM ?',[mystyle,vm.selectedEntity.relationshipList]);
+}
+vm.downloadRelationshipList=downloadRelationshipList;
+vm.entityGridOptions={};
+UtilityService.cloneObject(entityService.gridOptions,vm.entityGridOptions);
+vm.entityGridOptions.data=entityService.entityList;
+vm.initChildrenList = function () { 
+}
+vm.entityGridOptions.onRegisterApi = function(gridApi){
+vm.entityGridApi = gridApi;
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
@@ -560,13 +577,13 @@ delete $rootScope.openNode.entity;
 entityService.selectedEntity.show = row.isSelected;
 });
   };
-$scope.restrictionEntityGridOptions={};
-UtilityService.cloneObject(restrictionEntityService.gridOptions,$scope.restrictionEntityGridOptions);
-$scope.restrictionEntityGridOptions.data=$scope.selectedEntity.restrictionEntityList;
-$scope.initChildrenList = function () { 
+vm.restrictionEntityGridOptions={};
+UtilityService.cloneObject(restrictionEntityService.gridOptions,vm.restrictionEntityGridOptions);
+vm.restrictionEntityGridOptions.data=vm.selectedEntity.restrictionEntityList;
+vm.initChildrenList = function () { 
 }
-$scope.restrictionEntityGridOptions.onRegisterApi = function(gridApi){
-$scope.restrictionEntityGridApi = gridApi;
+vm.restrictionEntityGridOptions.onRegisterApi = function(gridApi){
+vm.restrictionEntityGridApi = gridApi;
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
@@ -583,82 +600,13 @@ delete $rootScope.openNode.restrictionEntity;
 restrictionEntityService.selectedEntity.show = row.isSelected;
 });
   };
-$scope.tabGridOptions={};
-UtilityService.cloneObject(tabService.gridOptions,$scope.tabGridOptions);
-$scope.tabGridOptions.data=$scope.selectedEntity.tabList;
-$scope.initChildrenList = function () { 
+vm.fieldGridOptions={};
+UtilityService.cloneObject(fieldService.gridOptions,vm.fieldGridOptions);
+vm.fieldGridOptions.data=vm.selectedEntity.fieldList;
+vm.initChildrenList = function () { 
 }
-$scope.tabGridOptions.onRegisterApi = function(gridApi){
-$scope.tabGridApi = gridApi;
-gridApi.selection.on.rowSelectionChanged($scope,function(row){
-if (row.isSelected)
-{
-tabService.searchOne(row.entity).then(function(response) { 
-$log.debug(response.data);
-$rootScope.openNode.tab=true;
-tabService.setSelectedEntity(response.data[0]);
-});
-angular.element('#tabTabs li:eq(0) a').tab('show');
-}
-else 
-tabService.setSelectedEntity(null);
-delete $rootScope.openNode.tab;
-tabService.selectedEntity.show = row.isSelected;
-});
-  };
-$scope.entityGroupGridOptions={};
-UtilityService.cloneObject(entityGroupService.gridOptions,$scope.entityGroupGridOptions);
-$scope.entityGroupGridOptions.data=$scope.selectedEntity.entityGroupList;
-$scope.initChildrenList = function () { 
-}
-$scope.entityGroupGridOptions.onRegisterApi = function(gridApi){
-$scope.entityGroupGridApi = gridApi;
-gridApi.selection.on.rowSelectionChanged($scope,function(row){
-if (row.isSelected)
-{
-entityGroupService.searchOne(row.entity).then(function(response) { 
-$log.debug(response.data);
-$rootScope.openNode.entityGroup=true;
-entityGroupService.setSelectedEntity(response.data[0]);
-});
-angular.element('#entityGroupTabs li:eq(0) a').tab('show');
-}
-else 
-entityGroupService.setSelectedEntity(null);
-delete $rootScope.openNode.entityGroup;
-entityGroupService.selectedEntity.show = row.isSelected;
-});
-  };
-$scope.enumFieldGridOptions={};
-UtilityService.cloneObject(enumFieldService.gridOptions,$scope.enumFieldGridOptions);
-$scope.enumFieldGridOptions.data=$scope.selectedEntity.enumFieldList;
-$scope.initChildrenList = function () { 
-}
-$scope.enumFieldGridOptions.onRegisterApi = function(gridApi){
-$scope.enumFieldGridApi = gridApi;
-gridApi.selection.on.rowSelectionChanged($scope,function(row){
-if (row.isSelected)
-{
-enumFieldService.searchOne(row.entity).then(function(response) { 
-$log.debug(response.data);
-$rootScope.openNode.enumField=true;
-enumFieldService.setSelectedEntity(response.data[0]);
-});
-angular.element('#enumFieldTabs li:eq(0) a').tab('show');
-}
-else 
-enumFieldService.setSelectedEntity(null);
-delete $rootScope.openNode.enumField;
-enumFieldService.selectedEntity.show = row.isSelected;
-});
-  };
-$scope.fieldGridOptions={};
-UtilityService.cloneObject(fieldService.gridOptions,$scope.fieldGridOptions);
-$scope.fieldGridOptions.data=$scope.selectedEntity.fieldList;
-$scope.initChildrenList = function () { 
-}
-$scope.fieldGridOptions.onRegisterApi = function(gridApi){
-$scope.fieldGridApi = gridApi;
+vm.fieldGridOptions.onRegisterApi = function(gridApi){
+vm.fieldGridApi = gridApi;
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
@@ -675,13 +623,82 @@ delete $rootScope.openNode.field;
 fieldService.selectedEntity.show = row.isSelected;
 });
   };
-$scope.relationshipGridOptions={};
-UtilityService.cloneObject(relationshipService.gridOptions,$scope.relationshipGridOptions);
-$scope.relationshipGridOptions.data=$scope.selectedEntity.relationshipList;
-$scope.initChildrenList = function () { 
+vm.enumFieldGridOptions={};
+UtilityService.cloneObject(enumFieldService.gridOptions,vm.enumFieldGridOptions);
+vm.enumFieldGridOptions.data=vm.selectedEntity.enumFieldList;
+vm.initChildrenList = function () { 
 }
-$scope.relationshipGridOptions.onRegisterApi = function(gridApi){
-$scope.relationshipGridApi = gridApi;
+vm.enumFieldGridOptions.onRegisterApi = function(gridApi){
+vm.enumFieldGridApi = gridApi;
+gridApi.selection.on.rowSelectionChanged($scope,function(row){
+if (row.isSelected)
+{
+enumFieldService.searchOne(row.entity).then(function(response) { 
+$log.debug(response.data);
+$rootScope.openNode.enumField=true;
+enumFieldService.setSelectedEntity(response.data[0]);
+});
+angular.element('#enumFieldTabs li:eq(0) a').tab('show');
+}
+else 
+enumFieldService.setSelectedEntity(null);
+delete $rootScope.openNode.enumField;
+enumFieldService.selectedEntity.show = row.isSelected;
+});
+  };
+vm.entityGroupGridOptions={};
+UtilityService.cloneObject(entityGroupService.gridOptions,vm.entityGroupGridOptions);
+vm.entityGroupGridOptions.data=vm.selectedEntity.entityGroupList;
+vm.initChildrenList = function () { 
+}
+vm.entityGroupGridOptions.onRegisterApi = function(gridApi){
+vm.entityGroupGridApi = gridApi;
+gridApi.selection.on.rowSelectionChanged($scope,function(row){
+if (row.isSelected)
+{
+entityGroupService.searchOne(row.entity).then(function(response) { 
+$log.debug(response.data);
+$rootScope.openNode.entityGroup=true;
+entityGroupService.setSelectedEntity(response.data[0]);
+});
+angular.element('#entityGroupTabs li:eq(0) a').tab('show');
+}
+else 
+entityGroupService.setSelectedEntity(null);
+delete $rootScope.openNode.entityGroup;
+entityGroupService.selectedEntity.show = row.isSelected;
+});
+  };
+vm.tabGridOptions={};
+UtilityService.cloneObject(tabService.gridOptions,vm.tabGridOptions);
+vm.tabGridOptions.data=vm.selectedEntity.tabList;
+vm.initChildrenList = function () { 
+}
+vm.tabGridOptions.onRegisterApi = function(gridApi){
+vm.tabGridApi = gridApi;
+gridApi.selection.on.rowSelectionChanged($scope,function(row){
+if (row.isSelected)
+{
+tabService.searchOne(row.entity).then(function(response) { 
+$log.debug(response.data);
+$rootScope.openNode.tab=true;
+tabService.setSelectedEntity(response.data[0]);
+});
+angular.element('#tabTabs li:eq(0) a').tab('show');
+}
+else 
+tabService.setSelectedEntity(null);
+delete $rootScope.openNode.tab;
+tabService.selectedEntity.show = row.isSelected;
+});
+  };
+vm.relationshipGridOptions={};
+UtilityService.cloneObject(relationshipService.gridOptions,vm.relationshipGridOptions);
+vm.relationshipGridOptions.data=vm.selectedEntity.relationshipList;
+vm.initChildrenList = function () { 
+}
+vm.relationshipGridOptions.onRegisterApi = function(gridApi){
+vm.relationshipGridApi = gridApi;
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
@@ -708,38 +725,6 @@ function successCallback(response) {
 $log.debug("response-ok");
 $log.debug(response);
 restrictionEntityService.setSelectedEntity(response.data[0]);
-  }, function errorCallback(response) {
-UtilityService.AlertError.init({selector: "#alertError"});
-UtilityService.AlertError.show("Si è verificato un errore");
-$log.debug(response);
-return; 
-  }	
-);
-entityGroupService.initEntityList().then(function(response) {
-entityService.preparedData.entityList=response.data;
-});
-
-if (entityGroupService.selectedEntity.entityGroupId!=undefined) entityGroupService.searchOne(entityGroupService.selectedEntity).then(
-function successCallback(response) {
-$log.debug("response-ok");
-$log.debug(response);
-entityGroupService.setSelectedEntity(response.data[0]);
-  }, function errorCallback(response) {
-UtilityService.AlertError.init({selector: "#alertError"});
-UtilityService.AlertError.show("Si è verificato un errore");
-$log.debug(response);
-return; 
-  }	
-);
-tabService.initEntityList().then(function(response) {
-entityService.preparedData.entityList=response.data;
-});
-
-if (tabService.selectedEntity.tabId!=undefined) tabService.searchOne(tabService.selectedEntity).then(
-function successCallback(response) {
-$log.debug("response-ok");
-$log.debug(response);
-tabService.setSelectedEntity(response.data[0]);
   }, function errorCallback(response) {
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
@@ -779,6 +764,38 @@ $log.debug(response);
 return; 
   }	
 );
+entityGroupService.initEntityList().then(function(response) {
+entityService.preparedData.entityList=response.data;
+});
+
+if (entityGroupService.selectedEntity.entityGroupId!=undefined) entityGroupService.searchOne(entityGroupService.selectedEntity).then(
+function successCallback(response) {
+$log.debug("response-ok");
+$log.debug(response);
+entityGroupService.setSelectedEntity(response.data[0]);
+  }, function errorCallback(response) {
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
+  }	
+);
+tabService.initEntityList().then(function(response) {
+entityService.preparedData.entityList=response.data;
+});
+
+if (tabService.selectedEntity.tabId!=undefined) tabService.searchOne(tabService.selectedEntity).then(
+function successCallback(response) {
+$log.debug("response-ok");
+$log.debug(response);
+tabService.setSelectedEntity(response.data[0]);
+  }, function errorCallback(response) {
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
+  }	
+);
 relationshipService.initEntityList().then(function(response) {
 entityService.preparedData.entityList=response.data;
 });
@@ -812,10 +829,20 @@ return;
   }	
 );
 }
-$scope.closeEntityDetail = function(){ 
+function closeEntityDetail(){ 
 entityService.setSelectedEntity(null);
 entityService.selectedEntity.show=false;
 delete $rootScope.openNode.entity;
 }
+vm.reset=reset;
+vm.addNew=addNew;
+vm.insert=insert;
+vm.update=update;
+vm.search=search;
+vm.remove=remove;
+vm.del=del;
+vm.loadFile=loadFile;
+vm.downloadList=downloadList;
+vm.closeEntityDetail=closeEntityDetail;
 }
 })();

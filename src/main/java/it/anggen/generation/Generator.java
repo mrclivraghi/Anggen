@@ -252,11 +252,14 @@ public class Generator {
 			jsGenerator.generateDirectiveFile();
 			jsGenerator.generateUtilityJS();
 			jsGenerator.generateNavbarDirective();
+			jsGenerator.generateLoginDirective();
 			jsGenerator.generateBowerFile();
+			
 			htmlGenerator.setDirectory();
 			//htmlGenerator.generateTemplate();
 			htmlGenerator.generateHomePage();
 			htmlGenerator.generateMain();
+			htmlGenerator.generateLogin();
 			
 			CssGenerator.generateMain(angularDirectory);
 			for (Entity modelEntity: modelEntityList)

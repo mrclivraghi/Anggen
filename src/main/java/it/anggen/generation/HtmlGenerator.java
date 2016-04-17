@@ -450,25 +450,54 @@ public class HtmlGenerator {
 		}
 	}
 	
-
-	/*public void generateIndex()
-	{
-		HtmlCanvas html = new HtmlCanvas();
+	
+	
+	public void generateLogin(){
+		HtmlCanvas html = new HtmlCanvas(new PrettyWriter());
 		try {
-			StringBuilder sbHead = new StringBuilder();
-			sbHead.append("")
-			html.render(docType)
-			.html((new HtmlAttributes()).add("ng-app", generator.applicationName+"App"))
-			.head()
-			.content("",false)
-			.body()
-			.content("",false)
-			._html();
+			html.form((new HtmlAttributes()).add("class", "form-signin").add("ng-submit", "vm.onSubmit(vm.username,vm.password)"))
+			.h2((new HtmlAttributes()).add("class", "form-signin-heading")).content("Please sign in")
+			.label((new HtmlAttributes())
+					.add("for", "inputEmail").add("class", "sr-only")
+					).content("Username")
+			.input((new HtmlAttributes())
+					.add("type", "email")
+					.add("id", "inputEmail")
+					.add("class", "form-control")
+					.add("placeholder", "Username")
+					.add("required", "")
+					.add("autofocus", "")
+					.add("ng-model", "vm.username")
+					)
+			.label((new HtmlAttributes()).add("for", "inputPassword").add("class", "sr-only"))
+				.content("Password")
+			.input((new HtmlAttributes())
+					.add("type", "password")
+					.add("id", "inputPassword")
+					.add("class", "form-control")
+					.add("placeholder", "Password")
+					.add("required", "")
+					.add("autofocus", "")
+					.add("ng-model", "vm.password")
+					)
+			.div((new HtmlAttributes()).add("class", "checkbox"))
+				.label()
+					.input((new HtmlAttributes()).add("type", "checkbox").add("value", "remember-me"))
+					.content("Rembember me")
+				._label()
+			._div()
+			.button((new HtmlAttributes()).add("class", "btn btn-lg btn-primary btn-block").add("type", "submit")).content("Sign in")
+			
+			._form();
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		File myFile=new File(generator.angularDirectory+"index.html");
+		File dir = new File(directoryViewPages+"login/");
+		if (!dir.exists())
+			dir.mkdirs();
+		
+		File myFile=new File(directoryViewPages+"login/login.html");
 		PrintWriter writer;
 		try {
 			System.out.println("Written "+myFile.getAbsolutePath());
@@ -478,6 +507,24 @@ public class HtmlGenerator {
 		} catch (FileNotFoundException | UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-	}*/
+		generateLoginModal();
+	}
+	
+	private void generateLoginModal()
+	{
+		File myFile=new File(directoryViewPages+"login/login-modal.html");
+		PrintWriter writer;
+		try {
+			System.out.println("Written "+myFile.getAbsolutePath());
+			writer = new PrintWriter(myFile, "UTF-8");
+			writer.write("<login>\n</login>");
+			writer.close();
+		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+	}
+	
+
+
 	
 }

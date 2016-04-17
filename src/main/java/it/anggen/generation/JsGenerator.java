@@ -421,7 +421,7 @@ public class JsGenerator {
 
 		sb.append(".controller(\""+Utility.getFirstUpper(entityName)+"Controller\","+Utility.getFirstUpper(entityName)+"Controller);\n");
 		sb.append("/** @ngInject */\n");
-		sb.append("function "+Utility.getFirstUpper(entityName)+"Controller($scope,$http,$rootScope "+getServices()+")\n");
+		sb.append("function "+Utility.getFirstUpper(entityName)+"Controller($scope,$http,$rootScope,$log "+getServices()+")\n");
 		sb.append("{\n");
 		//search var
 		sb.append("$scope.searchBean="+Utility.getEntityCallName(entityName)+"Service.searchBean;\n");
@@ -479,7 +479,7 @@ public class JsGenerator {
 		sb.append("{\n");
 			changeChildrenVisibility(sb, false);
 		sb.append("}\n");
-		sb.append("$('#"+entityName+"Tabs li:eq(0) a').tab('show');\n");
+		sb.append("angular.element('#"+entityName+"Tabs li:eq(0) a').tab('show');\n");
 		sb.append("};\n");
 		sb.append("		\n");			
 		//search function
@@ -710,8 +710,8 @@ public class JsGenerator {
 				sb.append("{\n");
 				sb.append(relationship.getEntityTarget().getName()+"Service.searchOne("+entityName+"Service.selectedEntity."+relationship.getEntityTarget().getName()+"List[index]).then(\n");
 				sb.append("function successCallback(response) {\n");
-				sb.append("console.log(\"INDEX!=NULLLLLLLLLLLL\");\n");
-				sb.append("console.log(response);\n");
+				sb.append("$log.debug(\"INDEX!=NULLLLLLLLLLLL\");\n");
+				sb.append("$log.debug(response);\n");
 				//initChildrenList(sb, relationship.getEntityTarget());
 				sb.append(Utility.getEntityCallName(relationship.getEntityTarget().getName())+"Service.setSelectedEntity(response.data[0]);\n");
 				sb.append(Utility.getEntityCallName(relationship.getEntityTarget().getName())+"Service.selectedEntity.show=true;\n");
@@ -755,7 +755,7 @@ public class JsGenerator {
 
 
 				sb.append("}\n");
-				sb.append("$('#"+relationship.getEntityTarget().getName()+"Tabs li:eq(0) a').tab('show');\n");
+				sb.append("angular.element('#"+relationship.getEntityTarget().getName()+"Tabs li:eq(0) a').tab('show');\n");
 				sb.append("};\n");
 
 			}
@@ -951,14 +951,14 @@ public class JsGenerator {
 if (entity.getEntityGroup()!=null)
 {
 			sb.append(Utility.getEntityCallName(entityName)+"Service.searchOne(row.entity).then(function(response) { \n");
-			sb.append("console.log(response.data);\n");
+			sb.append("$log.debug(response.data);\n");
 			sb.append("$rootScope.openNode."+entityName+"=true;\n");
 			
 			sb.append(Utility.getEntityCallName(entityName)+"Service.setSelectedEntity(response.data[0]);\n");
 			sb.append("});\n");
 }
 			//}
-			sb.append("$('#"+entityName+"Tabs li:eq(0) a').tab('show');\n");
+			sb.append("angular.element('#"+entityName+"Tabs li:eq(0) a').tab('show');\n");
 			sb.append("}\n");
 			sb.append("else \n");
 			sb.append(Utility.getEntityCallName(entityName)+"Service.setSelectedEntity(null);\n");
@@ -1124,7 +1124,7 @@ if (entity.getEntityGroup()!=null)
 		sb.append("angular.module(\""+generator.applicationName+"App\").service(\"SecurityService\",SecurityService);\n");
 
 		sb.append("/** @ngInject */\n");
-		sb.append("function SecurityService($http)\n");
+		sb.append("function SecurityService($http,$log)\n");
 		sb.append("{\n");
 		sb.append("this.restrictionList={};\n");
 
@@ -1157,7 +1157,7 @@ if (entity.getEntityGroup()!=null)
 		.append("credentials.username=username;\n")
 		.append("credentials.password=password;\n")
 		.append("credentials=serializeObj(credentials);\n")
-		.append("console.log(credentials);\n")
+		.append("$log.debug(credentials);\n")
 		.append("var promise=$http.post(\""+generator.restUrl+"auth/authenticate/\",credentials,{ headers: {'Content-Type': 'application/x-www-form-urlencoded' }});\n")
 		.append("return promise;\n")
 		.append("}\n");
@@ -1754,8 +1754,8 @@ if (entity.getEntityGroup()!=null)
 		sb.append("					$rootScope.$broadcast('security:loggedIn');\n");
 		sb.append("				} \n");
 		sb.append("			},function errorCallback(response) { \n");
-		sb.append("				console.log(\"errore callback\");\n");
-		sb.append("				console.log(response);\n");
+		sb.append("				$log.debug(\"errore callback\");\n");
+		sb.append("				$log.debug(response);\n");
 		sb.append("			});\n");
 		sb.append("    }\n");
 
@@ -1935,8 +1935,8 @@ MainService.parentService.childrenList.roleList=response.data;
 			sb.append("if ("+entitySource+"Service.selectedEntity."+entitySource+"Id!=undefined) ");
 			sb.append(entitySource+"Service.searchOne("+entitySource+"Service.selectedEntity).then(\n");
 			sb.append("function successCallback(response) {\n");
-			sb.append("console.log(\"response-ok\");\n");
-			sb.append("console.log(response);\n");
+			sb.append("$log.debug(\"response-ok\");\n");
+			sb.append("$log.debug(response);\n");
 			//initChildrenList(sb, relationship.getEntityTarget());
 			sb.append(entitySource+"Service.setSelectedEntity(response.data[0]);\n");
 			//sb.append(Utility.getEntityCallName(relationship.getEntityTarget().getName())+"Service.selectedEntity.show=true;\n");
@@ -1980,12 +1980,12 @@ MainService.parentService.childrenList.roleList=response.data;
 	{
 		StringBuilder sb= new StringBuilder();
 
-		sb.append("$('a[href=\"#"+entityName+"-"+tabName+"\"]').on('shown.bs.tab', function (e) {\n");
-		sb.append("var target = $(e.target).attr(\"href\"); // activated tab\n");
-		sb.append("//console.log(target);\n");
-		sb.append("if (angular.element($('#"+entityName+"Tabs')).scope()!=null && angular.element($('#"+entityName+"Tabs')).scope()!=undefined) \n");
+		sb.append("angular.element('a[href=\"#"+entityName+"-"+tabName+"\"]').on('shown.bs.tab', function (e) {\n");
+		sb.append("var target = angular.element(e.target).attr(\"href\"); // activated tab\n");
+		sb.append("//$log.debug(target);\n");
+		sb.append("if (angular.element('#"+entityName+"Tabs').scope()!=null && angular.element(('#"+entityName+"Tabs')).scope()!=undefined) \n");
 		//TODO FIX
-		sb.append("{ /* angular.element($('#"+entityName+"Tabs')).scope().refreshTable"+Utility.getFirstUpper(tabName.replaceAll(" ",""))+"(); */ }\n");
+		sb.append("{ /* angular.element(('#"+entityName+"Tabs')).scope().refreshTable"+Utility.getFirstUpper(tabName.replaceAll(" ",""))+"(); */ }\n");
 		sb.append("});\n");
 
 		return sb.toString();

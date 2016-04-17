@@ -437,7 +437,7 @@ public class JsGenerator {
 		sb.append("function reset()\n");
 		sb.append("{\n");
 		sb.append(""+Utility.getEntityCallName(entityName)+"Service.resetSearchBean();\n");
-		sb.append("$scope.searchBean="+entityName+"Service.searchBean;");
+		sb.append("vm.searchBean="+entityName+"Service.searchBean;\n");
 		sb.append(""+Utility.getEntityCallName(entityName)+"Service.setSelectedEntity(null);\n");
 		sb.append(""+Utility.getEntityCallName(entityName)+"Service.selectedEntity.show=false;\n");
 		sb.append(""+Utility.getEntityCallName(entityName)+"Service.setEntityList(null); \n");
@@ -498,7 +498,7 @@ public class JsGenerator {
 
 		sb.append(Utility.getEntityCallName(entityName)+"Service.insert().then(function successCallback(response) { \n");
 		sb.append("$log.debug(response);\n");
-		sb.append("$scope.search();\n");
+		sb.append("vm.search();\n");
 		sb.append("},function errorCallback(response) { \n");
 		manageRestError(sb);
 		sb.append("});\n");
@@ -528,7 +528,7 @@ public class JsGenerator {
 		changeChildrenVisibility(sb, false);
 		sb.append(Utility.getEntityCallName(entityName)+"Service.update().then(function successCallback(response) { \n");
 		sb.append("$log.debug(response);\n");
-		sb.append("$scope.search();\n");
+		sb.append("vm.search();\n");
 		sb.append("},function errorCallback(response) { \n");
 		manageRestError(sb);
 		sb.append("});\n");
@@ -554,7 +554,6 @@ public class JsGenerator {
 		sb.append("delete $rootScope.openNode."+entityName+";\n");
 
 		sb.append(Utility.getEntityCallName(entityName)+"Service.setSelectedEntity(null);\n");
-		sb.append("$scope.updateParent();\n");
 
 		sb.append("}\n");
 
@@ -562,15 +561,15 @@ public class JsGenerator {
 		//DELETE
 		sb.append("function del()\n");
 		sb.append("{\n");
-		sb.append("if (!"+Utility.getEntityCallName(entityName)+"Service.isParent()) \n");
-		sb.append("$scope.updateParent();\n");
+		//sb.append("if (!"+Utility.getEntityCallName(entityName)+"Service.isParent()) \n");
+		//sb.append("$scope.updateParent();\n");
 
 		sb.append(Utility.getEntityCallName(entityName)+"Service.del().then(function successCallback(response) { \n");
 		sb.append("$log.debug(response);\n");
 		sb.append("if ("+Utility.getEntityCallName(entityName)+"Service.isParent()) \n");
 		sb.append("{\n");
 
-		sb.append("$scope.search();\n");
+		sb.append("vm.search();\n");
 		sb.append("} else { \n");
 
 		sb.append(Utility.getEntityCallName(entityName)+"Service.setSelectedEntity(null);\n");
@@ -584,10 +583,12 @@ public class JsGenerator {
 		
 		for (Tab tab: entityManager.getTabList())
 		{
-			sb.append("$scope.refreshTable"+Utility.getFirstUpper(tab.getName().replaceAll(" ", ""))+"= function() \n");
+			sb.append("function refreshTable"+Utility.getFirstUpper(tab.getName().replaceAll(" ", ""))+"() \n");
 			sb.append("{\n");
 			sb.append(resetTableTab(tab.getName(),entity));
-			sb.append("};\n");
+			sb.append("}\n");
+			
+			sb.append("vm.refreshTable"+Utility.getFirstUpper(tab.getName().replaceAll(" ", ""))+"=refreshTable"+Utility.getFirstUpper(tab.getName().replaceAll(" ", ""))+";\n");
 		}
 
 
@@ -680,7 +681,7 @@ public class JsGenerator {
 		sb.append("var mystyle = {\n");
 		sb.append(" headers:true, \n");
 		sb.append("column: {style:{Font:{Bold:\"1\"}}}\n");
-		sb.append("}\n");
+		sb.append("};\n");
 
 		String exportFields="";
 		for (Field field: fieldList)
@@ -694,8 +695,8 @@ public class JsGenerator {
 			exportFields=exportFields.substring(0, exportFields.length()-1);
 		} else
 			exportFields="*";
-		sb.append("UtilityService.alasql('SELECT "+exportFields+" INTO XLSXML(\""+entityName+".xls\",?) FROM ?',[mystyle,$scope.entityList]);\n");
-		sb.append("};\n");
+		sb.append("UtilityService.alasql('SELECT "+exportFields+" INTO XLSXML(\""+entityName+".xls\",?) FROM ?',[mystyle,vm.entityList]);\n");
+		sb.append("}\n");
 
 
 		//TODO MAKE THEM PUBLIC
@@ -730,7 +731,7 @@ public class JsGenerator {
 				exportFields=exportFields.substring(0, exportFields.length()-1);
 			} else
 				exportFields="*";
-			sb.append("UtilityService.alasql('SELECT "+exportFields+" INTO XLSXML(\""+relationship.getEntityTarget().getName()+".xls\",?) FROM ?',[mystyle,$scope.selectedEntity."+relationship.getEntityTarget().getName()+"List]);\n");
+			sb.append("UtilityService.alasql('SELECT "+exportFields+" INTO XLSXML(\""+relationship.getEntityTarget().getName()+".xls\",?) FROM ?',[mystyle,vm.selectedEntity."+relationship.getEntityTarget().getName()+"List]);\n");
 			sb.append("}\n");
 			
 			sb.append("vm.download"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List=download"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List;\n");
@@ -738,7 +739,7 @@ public class JsGenerator {
 
 		//grid options
 		sb.append("vm."+entityName+"GridOptions={};\n")
-		.append("UtilityService.cloneObject("+entityName+"Service.gridOptions,$scope."+entityName+"GridOptions);\n");
+		.append("UtilityService.cloneObject("+entityName+"Service.gridOptions,vm."+entityName+"GridOptions);\n");
 		sb.append("vm."+entityName+"GridOptions.data="+Utility.getEntityCallName(entityName)+"Service.entityList;\n");
 
 		sb.append(getGridApi(null));//sb.append("}\n");	
@@ -755,8 +756,8 @@ public class JsGenerator {
 				
 				//children grid options
 				sb.append("vm."+entityName+"GridOptions={};\n");
-				sb.append("UtilityService.cloneObject("+entityName+"Service.gridOptions,$scope."+entityName+"GridOptions);\n");
-				sb.append("vm."+entityName+"GridOptions.data=$scope.selectedEntity."+entityName+"List;\n");
+				sb.append("UtilityService.cloneObject("+entityName+"Service.gridOptions,vm."+entityName+"GridOptions);\n");
+				sb.append("vm."+entityName+"GridOptions.data=vm.selectedEntity."+entityName+"List;\n");
 				sb.append(getGridApi(mainParentName));
 			}
 		init(mainEntity,mainIsParent,mainParentName,relationshipType,entityManager.isLastLevel(mainEntity),serviceList);
@@ -859,12 +860,12 @@ public class JsGenerator {
 		//System.out.println("**GENERO** "+entityName+" - parent "+parentEntityName+" - lastLevel"+lastLevel+"- isParent "+isParent);
 		//on row selection
 		
-		sb.append("$scope.initChildrenList = function () { \n");
+		sb.append("vm.initChildrenList = function () { \n");
 		//initChildrenList(sb, entity);
 		sb.append("}\n");
 		
-		sb.append("$scope."+entityName+"GridOptions.onRegisterApi = function(gridApi){\n");
-		sb.append("$scope."+entityName+"GridApi = gridApi;\n");
+		sb.append("vm."+entityName+"GridOptions.onRegisterApi = function(gridApi){\n");
+		sb.append("vm."+entityName+"GridApi = gridApi;\n");
 		sb.append("gridApi.selection.on.rowSelectionChanged($scope,function(row){\n");
 		//if (isParent)
 		//	changeChildrenVisibility(sb, false);
@@ -947,18 +948,19 @@ if (entity.getEntityGroup()!=null)
 		if (entity.getRelationshipList()!=null)
 			for (Relationship relationship: entity.getRelationshipList())
 			{
-				sb.append("$scope."+relationship.getEntityTarget().getName()+"PreparedData="+relationship.getEntityTarget().getName()+"Service.preparedData;\n");
+				sb.append("vm."+relationship.getEntityTarget().getName()+"PreparedData="+relationship.getEntityTarget().getName()+"Service.preparedData;\n");
 			}
 		
 		if (entity.getEnumFieldList()!=null)
 			for (EnumField enumField: entity.getEnumFieldList())
 			{
-				sb.append("$scope."+enumField.getName()+"PreparedData={};");
-				sb.append("$scope."+enumField.getName()+"PreparedData.entityList=[");
+				sb.append("vm."+enumField.getName()+"PreparedData={};\n");
+				sb.append("vm."+enumField.getName()+"PreparedData.entityList=[");
 				for (EnumValue enumValue: enumField.getEnumEntity().getEnumValueList())
 				{
 					sb.append("\""+enumValue.getName()+"\",");
 				}
+				sb.setCharAt(sb.length(), ' ');
 				sb.append("];\n");
 
 			}

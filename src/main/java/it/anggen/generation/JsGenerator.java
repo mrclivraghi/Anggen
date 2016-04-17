@@ -424,6 +424,8 @@ public class JsGenerator {
 		sb.append("function "+Utility.getFirstUpper(entityName)+"Controller($scope,$http,$rootScope,$log,UtilityService "+getServices()+")\n");
 		sb.append("{\n");
 		//search var
+		sb.append("var vm=this;\n");
+		
 		sb.append("$scope.searchBean="+Utility.getEntityCallName(entityName)+"Service.searchBean;\n");
 		sb.append("$scope.entityList="+Utility.getEntityCallName(entityName)+"Service.entityList;\n");
 		sb.append("$scope.selectedEntity="+Utility.getEntityCallName(entityName)+"Service.selectedEntity;\n");

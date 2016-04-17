@@ -174,7 +174,7 @@ public class JsGenerator {
 		
 		sb.append("/** @ngInject */\n");
 		
-		sb.append("function "+Utility.getFirstUpper(entityName)+"Service($http,MainService)\n")
+		sb.append("function "+Utility.getFirstUpper(entityName)+"Service($http,MainService,UtilityService)\n")
 		.append("{\n")
 		.append("this.entityList =		[];\n")
 		.append("this.preparedData={};\n")
@@ -284,7 +284,7 @@ public class JsGenerator {
 		
 		sb.append(generateGridOptions());
 		
-		sb.append("};\n");
+		sb.append("}\n");
 		
 		
 		
@@ -696,7 +696,6 @@ public class JsGenerator {
 		sb.append(entityName+"Service.setSelectedEntity(response.data);\n");
 		sb.append("},function errorCallback(response) { \n");
 		manageRestError(sb);
-		sb.append("return; \n");
 		sb.append("});\n");
 		sb.append("}\n");
 
@@ -790,7 +789,7 @@ public class JsGenerator {
 			exportFields=exportFields.substring(0, exportFields.length()-1);
 		} else
 			exportFields="*";
-		sb.append("alasql('SELECT "+exportFields+" INTO XLSXML(\""+entityName+".xls\",?) FROM ?',[mystyle,$scope.entityList]);\n");
+		sb.append("UtilityService.alasql('SELECT "+exportFields+" INTO XLSXML(\""+entityName+".xls\",?) FROM ?',[mystyle,$scope.entityList]);\n");
 		sb.append("};\n");
 		
 		
@@ -822,7 +821,7 @@ public class JsGenerator {
 				exportFields=exportFields.substring(0, exportFields.length()-1);
 			} else
 				exportFields="*";
-			sb.append("alasql('SELECT "+exportFields+" INTO XLSXML(\""+relationship.getEntityTarget().getName()+".xls\",?) FROM ?',[mystyle,$scope.selectedEntity."+relationship.getEntityTarget().getName()+"List]);\n");
+			sb.append("UtilityService.alasql('SELECT "+exportFields+" INTO XLSXML(\""+relationship.getEntityTarget().getName()+".xls\",?) FROM ?',[mystyle,$scope.selectedEntity."+relationship.getEntityTarget().getName()+"List]);\n");
 			sb.append("};\n");
 		}
 
@@ -1581,6 +1580,9 @@ if (entity.getEntityGroup()!=null)
 
 		sb.append("}\n");*/
 
+		
+		sb.append("this.alasql=alasql;\n");
+		
 		//alert success
 		sb.append("this.AlertSuccess = (function() {\n");
 		sb.append("   \"use strict\";\n");
@@ -1612,7 +1614,7 @@ if (entity.getEntityGroup()!=null)
 		sb.append("     that = {};\n");
 
 		sb.append("  that.init = function(options) {\n");
-		sb.append("      elem = $(options.selector);\n");
+		sb.append("      elem = angular.elemnt(options.selector);\n");
 		sb.append("  };\n");
 
 		sb.append("that.show = function(text) {\n");

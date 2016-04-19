@@ -6,6 +6,7 @@ import com.codahale.metrics.annotation.Timed;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import it.anggen.model.entity.Entity;
 import it.anggen.searchbean.entity.EntitySearchBean;
 import it.anggen.security.SecurityService;
 import it.anggen.service.entity.EntityService;
@@ -47,7 +48,7 @@ return "forbidden";
     @Timed
     @RequestMapping(value = "/pages/{pageNumber}", method = RequestMethod.GET)
     @ResponseBody
-    @ApiOperation(value="returns entity page")
+    @ApiOperation(value="returns entity page",notes="return a page of entities",response=Entity.class,responseContainer="List",produces="application/json")
     public ResponseEntity findPage(
         @PathVariable
         Integer pageNumber) {

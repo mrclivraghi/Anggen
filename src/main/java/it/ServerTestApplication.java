@@ -28,7 +28,7 @@ public class ServerTestApplication {
     @Bean
     public Docket newsApi() {
         return new Docket(DocumentationType.SWAGGER_2)
-                .groupName("greetings")
+                //.groupName("greetings")
                 .apiInfo(apiInfo())
                 .select()
                // .paths(regex("/greeting.*"))
@@ -37,10 +37,10 @@ public class ServerTestApplication {
      
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("Spring REST Sample with Swagger")
-                .description("Spring REST Sample with Swagger")
+                .title("Swagger documentation")
+                .description("Swagger documentation")
                 .termsOfServiceUrl("http://www-03.ibm.com/software/sla/sladb.nsf/sla/bm?Open")
-                .contact("Niklas Heidloff")
+                .contact("Marco Livraghi")
                 .license("Apache License Version 2.0")
                 .licenseUrl("https://github.com/IBM-Bluemix/news-aggregator/blob/master/LICENSE")
                 .version("2.0")

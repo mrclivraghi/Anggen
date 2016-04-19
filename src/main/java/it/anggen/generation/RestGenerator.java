@@ -76,6 +76,8 @@ import com.sun.codemodel.JType;
 import com.sun.codemodel.JTypeVar;
 import com.sun.codemodel.JVar;
 
+import io.swagger.annotations.ApiOperation;
+
 /**
  * Generates the REST classes to manage the entity
  * @author Marco
@@ -677,7 +679,7 @@ public class RestGenerator {
 			JAnnotationUse valueSecurityEnable= securityEnable.annotate(Value.class);
 			valueSecurityEnable.param("value", "${application.security}");
 			
-			if (!entity.getDisableViewGeneration())
+			/*if (!entity.getDisableViewGeneration())
 			{
 
 				//manage
@@ -713,7 +715,7 @@ public class RestGenerator {
 				}
 				
 
-			}
+			}*/
 			
 			//getpage
 
@@ -1056,6 +1058,17 @@ public class RestGenerator {
 				block.directStatement(""+lowerClass+".set"+Utility.getFirstUpper(relationship.getName())+"(null);\n");
 			 }
 		}
+	}
+	
+	
+	private void annotateAsSwaggerOperation(JMethod method,String value, String note,Class theClass, String responseContainer)
+	{
+		JAnnotationUse annotation = method.annotate(ApiOperation.class);
+		annotation.param("value", value);
+		annotation.param("notes", note);
+		annotation.param("response",theClass);
+		annotation.param("responseContainer", responseContainer);
+		
 	}
 	
 	/**

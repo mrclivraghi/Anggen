@@ -817,7 +817,7 @@ public class RestGenerator {
 			
 			//Insert
 			JMethod insert = myClass.method(JMod.PUBLIC, ResponseEntity.class, "insert"+className+"");
-			annotateAsSwaggerOperation(delete, "Insert the "+entity.getName()+" given", "Insert the "+entity.getName()+" given ", ReflectionManager.getJDefinedClass(entity), "");
+			annotateAsSwaggerOperation(insert, "Insert the "+entity.getName()+" given", "Insert the "+entity.getName()+" given ", ReflectionManager.getJDefinedClass(entity), "");
 			insert.annotate(Timed.class);
 			
 			insert.annotate(ResponseBody.class);
@@ -839,7 +839,7 @@ public class RestGenerator {
 			insertBlock.directStatement("return "+response+".body(inserted"+className+");");
 			//Update
 			JMethod update = myClass.method(JMod.PUBLIC, ResponseEntity.class, "update"+className+"");
-			annotateAsSwaggerOperation(delete, "Update the "+entity.getName()+" given", "Update the "+entity.getName()+" given ", ReflectionManager.getJDefinedClass(entity), "");
+			annotateAsSwaggerOperation(update, "Update the "+entity.getName()+" given", "Update the "+entity.getName()+" given ", ReflectionManager.getJDefinedClass(entity), "");
 			
 			update.annotate(Timed.class);
 			
@@ -1076,8 +1076,10 @@ public class RestGenerator {
 		JAnnotationUse annotation = method.annotate(ApiOperation.class);
 		annotation.param("value", value);
 		annotation.param("notes", note);
-		annotation.param("response",theClass);
-		annotation.param("responseContainer", responseContainer);
+		if (theClass!=null)
+			annotation.param("response",theClass);
+		if (!responseContainer.isEmpty())
+			annotation.param("responseContainer", responseContainer);
 		
 	}
 	

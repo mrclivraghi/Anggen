@@ -54,6 +54,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.codahale.metrics.annotation.Timed;
@@ -648,7 +649,7 @@ public class RestGenerator {
 			myClass = codeModel._class(""+fullClassName.replace(".model.", ".controller.")+"Controller", ClassType.CLASS);
 			JClass listClass = codeModel.ref(List.class).narrow(ReflectionManager.getJDefinedClass(entity));
 			String lowerClass= className.replaceFirst(className.substring(0, 1), className.substring(0, 1).toLowerCase());
-			myClass.annotate(Controller.class);
+			myClass.annotate(RestController.class);
 			JAnnotationUse requestMappingClass = myClass.annotate(RequestMapping.class);
 			requestMappingClass.param("value", "/"+lowerClass);
 			//declare service
@@ -720,6 +721,7 @@ public class RestGenerator {
 			//getpage
 
 			JMethod getPage = myClass.method(JMod.PUBLIC, ResponseEntity.class, "findPage");
+			annotateAsSwaggerOperation(getPage, "Return a page of "+entity.getName(), "Return a single page of "+entity.getName(), ReflectionManager.getJDefinedClass(entity), "List");
 			getPage.annotate(Timed.class);
 			JAnnotationUse reqMapping = getPage.annotate(RequestMapping.class);
 			reqMapping.param("value", "/pages/{pageNumber}");
@@ -737,6 +739,8 @@ public class RestGenerator {
 			
 			//search
 			JMethod search = myClass.method(JMod.PUBLIC, ResponseEntity.class, "search");
+			annotateAsSwaggerOperation(search, "Return a list of "+entity.getName(), "Return a list of "+entity.getName()+" based on the search bean requested", ReflectionManager.getJDefinedClass(entity), "List");
+			
 			search.annotate(Timed.class);
 			
 			search.annotate(ResponseBody.class);
@@ -764,6 +768,7 @@ public class RestGenerator {
 			searchBlock.directStatement("return "+response+".body("+lowerClass+"List);");
 			//getById  
 			JMethod getById=myClass.method(JMod.PUBLIC, ResponseEntity.class, "get"+className+"ById");
+			annotateAsSwaggerOperation(getById, "Return a the "+entity.getName()+" identified by the given id", "Return a the "+entity.getName()+" identified by the given id", ReflectionManager.getJDefinedClass(entity), "List");
 			getById.annotate(Timed.class);
 			
 			getById.annotate(ResponseBody.class);
@@ -788,6 +793,8 @@ public class RestGenerator {
 			getByIdBlock.directStatement("return "+response+".body("+lowerClass+"List);");
 			//deleteById
 			JMethod delete = myClass.method(JMod.PUBLIC, ResponseEntity.class, "delete"+className+"ById");
+			annotateAsSwaggerOperation(delete, "Delete the "+entity.getName()+" identified by the given id", "Delete the "+entity.getName()+" identified by the given id", null, "");
+			
 			delete.annotate(Timed.class);
 			
 			delete.annotate(ResponseBody.class);
@@ -810,6 +817,7 @@ public class RestGenerator {
 			
 			//Insert
 			JMethod insert = myClass.method(JMod.PUBLIC, ResponseEntity.class, "insert"+className+"");
+			annotateAsSwaggerOperation(delete, "Insert the "+entity.getName()+" given", "Insert the "+entity.getName()+" given ", ReflectionManager.getJDefinedClass(entity), "");
 			insert.annotate(Timed.class);
 			
 			insert.annotate(ResponseBody.class);
@@ -829,8 +837,10 @@ public class RestGenerator {
 			insertBlock.directStatement(LogType.class.getName()+".INFO, "+OperationType.class.getName()+".CREATE_ENTITY, "+ReflectionManager.getJDefinedClass(entity).fullName()+".staticEntityId, securityService.getLoggedUser(),log);");
        
 			insertBlock.directStatement("return "+response+".body(inserted"+className+");");
-			//UpdateOrder
+			//Update
 			JMethod update = myClass.method(JMod.PUBLIC, ResponseEntity.class, "update"+className+"");
+			annotateAsSwaggerOperation(delete, "Update the "+entity.getName()+" given", "Update the "+entity.getName()+" given ", ReflectionManager.getJDefinedClass(entity), "");
+			
 			update.annotate(Timed.class);
 			
 			update.annotate(ResponseBody.class);
@@ -1061,7 +1071,7 @@ public class RestGenerator {
 	}
 	
 	
-	private void annotateAsSwaggerOperation(JMethod method,String value, String note,Class theClass, String responseContainer)
+	private void annotateAsSwaggerOperation(JMethod method,String value, String note,JClass theClass, String responseContainer)
 	{
 		JAnnotationUse annotation = method.annotate(ApiOperation.class);
 		annotation.param("value", value);

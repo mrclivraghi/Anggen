@@ -1,7 +1,7 @@
 package it.anggen.test;
 
 import it.anggen.generation.Generator;
-import it.ServerTestApplication;
+import it.Application;
 import it.anggen.repository.entity.ProjectRepository;
 import it.anggen.repository.field.EnumFieldRepository;
 
@@ -13,7 +13,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes=ServerTestApplication.class)
+@SpringApplicationConfiguration(classes=Application.class)
 public class JsDbGenerationTest {
 
 	@Autowired

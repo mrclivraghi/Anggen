@@ -15,15 +15,20 @@ import it.anggen.model.security.RestrictionEntity;
 import it.anggen.utils.annotation.MaxDescendantLevel;
 import org.hibernate.annotations.Type;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 @javax.persistence.Entity
 @Table(schema = "meta", name = "entity")
 @it.anggen.utils.annotation.SecurityType(type = it.anggen.model.SecurityType.ACCESS_WITH_PERMISSION)
 @MaxDescendantLevel(100)
+//@ApiModel
 public class Entity {
 
     public final static java.lang.Long staticEntityId = 9L;
     @javax.persistence.Column(name = "generate_front_end")
     @it.anggen.utils.annotation.Priority(2)
+    @ApiModelProperty(value = "var boolean gen frontend wow", allowableValues = "true,false")
     private java.lang.Boolean generateFrontEnd;
     @javax.persistence.Column(name = "name")
     @it.anggen.utils.annotation.DescriptionField

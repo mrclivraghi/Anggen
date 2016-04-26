@@ -25,6 +25,20 @@ controllerAs: 'vm'
  }
 }
 })
+
+
+.state('main.swagger',{
+ url:'/swagger',
+views:{
+'pageContent': {
+templateUrl:'app/components/swagger/swagger.html',
+ controller:'SwaggerController', 
+controllerAs: 'vm' 
+ }
+}
+})
+
+
 .state('main.metrics',{
  url:'/metrics',
 views:{

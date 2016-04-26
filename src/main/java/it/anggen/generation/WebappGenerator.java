@@ -2,6 +2,10 @@ package it.anggen.generation;
 
 import it.anggen.utils.ReflectionManager;
 import it.anggen.utils.Utility;
+import springfox.documentation.builders.ApiInfoBuilder;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
 import it.anggen.model.RestrictionType;
 import it.anggen.model.SecurityType;
 import it.anggen.repository.security.UserRepository;
@@ -216,6 +220,30 @@ public class WebappGenerator {
 		mainMethod.param(String[].class, "args");
 		JBlock mainBlock = mainMethod.body();
 		mainBlock.directStatement(SpringApplication.class.getName()+".run("+Utility.getFirstUpper(applicationName)+"Application.class, args);");
+		
+		JMethod newsApi = genApp.method(JMod.PUBLIC, Docket.class, "newsApi");
+		newsApi.annotate(Bean.class);
+		JBlock newsApiBlock=newsApi.body();
+		newsApiBlock.directStatement("return new Docket("+DocumentationType.class.getName()+".SWAGGER_2) \n"+
+				".apiInfo(apiInfo()) \n"+
+				".select() \n"+
+				".build(); \n");
+
+
+		JMethod apiInfo = genApp.method(JMod.PRIVATE, ApiInfo.class, "apiInfo");
+		JBlock apiInfoBlock=apiInfo.body();
+		
+		apiInfoBlock.directStatement("return new "+ApiInfoBuilder.class.getName()+"() \n"+
+				".title(\"Swagger documentation\") \n"+
+				".description(\"Swagger documentation\") \n"+
+				".termsOfServiceUrl(\"http://www-03.ibm.com/software/sla/sladb.nsf/sla/bm?Open\") \n"+
+				".contact(\"Marco Livraghi\") \n"+
+				".license(\"Apache License Version 2.0\") \n"+
+				".licenseUrl(\"https://github.com/IBM-Bluemix/news-aggregator/blob/master/LICENSE\") \n"+
+				".version(\"2.0\") \n"+
+				".build(); \n");
+
+		
 		saveFile(codeModel);
 		
 	}

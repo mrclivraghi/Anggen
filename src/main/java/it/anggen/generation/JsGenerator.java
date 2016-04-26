@@ -330,6 +330,7 @@ public class JsGenerator {
 				{
 					stringBuilder.append(relationship.getEntityTarget().getName()+"Service.selectedEntity.show="+show.toString()+";\n");
 					stringBuilder.append("delete $rootScope.openNode."+relationship.getEntityTarget().getName()+";\n");
+					stringBuilder.append("UtilityService.removeObjectFromList($rootScope.parentServices,"+relationship.getEntityTarget().getName()+"Service);\n");
 				}
 
 		}
@@ -471,6 +472,7 @@ public class JsGenerator {
 		sb.append("{\n");
 		sb.append(""+Utility.getEntityCallName(entityName)+"Service.selectedEntity.show=false;\n");
 		sb.append("delete $rootScope.openNode."+entityName+";\n");
+		sb.append("UtilityService.removeObjectFromList($rootScope.parentServices,"+entityName+"Service);\n");
 		if (relationshipList!=null)
 			for (Relationship relationship: relationshipList)
 			{
@@ -553,7 +555,9 @@ public class JsGenerator {
 		sb.append("{\n");
 		sb.append(Utility.getEntityCallName(entityName)+"Service.selectedEntity.show=false;\n");
 		sb.append("delete $rootScope.openNode."+entityName+";\n");
-
+		
+		
+		sb.append("UtilityService.removeObjectFromList($rootScope.parentServices,"+entityName+"Service);\n");
 		sb.append(Utility.getEntityCallName(entityName)+"Service.setSelectedEntity(null);\n");
 
 		sb.append("}\n");
@@ -658,7 +662,7 @@ public class JsGenerator {
 					sb.append(Utility.getEntityCallName(relationship.getEntityTarget().getName())+"Service.setSelectedEntity(response.data[0]);\n");
 					sb.append(Utility.getEntityCallName(relationship.getEntityTarget().getName())+"Service.selectedEntity.show=true;\n");
 					sb.append("$rootScope.openNode."+Utility.getEntityCallName(relationship.getEntityTarget().getName())+"=true;\n");
-
+					sb.append("$rootScope.parentServices.push("+Utility.getEntityCallName(relationship.getEntityTarget().getName())+"Service);\n");
 					sb.append("  }, function errorCallback(response) {\n");
 					manageRestError(sb);
 					sb.append("  }	\n");
@@ -700,7 +704,6 @@ public class JsGenerator {
 		sb.append("}\n");
 
 
-		//TODO MAKE THEM PUBLIC
 		for (Relationship relationship: relationshipList)
 		{
 			if (EntityAttributeManager.getInstance(relationship).isList())
@@ -771,6 +774,7 @@ public class JsGenerator {
 		.append(""+Utility.getEntityCallName(entityName)+"Service.setSelectedEntity(null);\n")
 		.append(""+Utility.getEntityCallName(entityName)+"Service.selectedEntity.show=false;\n")
 		.append("delete $rootScope.openNode."+entityName+";\n")
+		.append("UtilityService.removeObjectFromList($rootScope.parentServices,"+entityName+"Service);\n")
 		.append("}\n");
 
 		
@@ -886,7 +890,7 @@ if (entity.getEntityGroup()!=null)
 			sb.append(Utility.getEntityCallName(entityName)+"Service.searchOne(row.entity).then(function(response) { \n");
 			sb.append("$log.debug(response.data);\n");
 			sb.append("$rootScope.openNode."+entityName+"=true;\n");
-			
+			sb.append("$rootScope.parentServices.push("+Utility.getEntityCallName(entityName)+"Service);\n");
 			sb.append(Utility.getEntityCallName(entityName)+"Service.setSelectedEntity(response.data[0]);\n");
 			sb.append("});\n");
 }
@@ -896,6 +900,7 @@ if (entity.getEntityGroup()!=null)
 			sb.append("else \n");
 			sb.append(Utility.getEntityCallName(entityName)+"Service.setSelectedEntity(null);\n");
 			sb.append("delete $rootScope.openNode."+entityName+";\n");
+			sb.append("UtilityService.removeObjectFromList($rootScope.parentServices,"+entityName+"Service);\n");
 			sb.append(Utility.getEntityCallName(entityName)+"Service.selectedEntity.show = row.isSelected;\n");
 			sb.append("});\n");
 		sb.append("  };\n");
@@ -1409,6 +1414,7 @@ if (entity.getEntityGroup()!=null)
 		
 
 		sb.append("$rootScope.openNode= {};\n");
+		sb.append("$rootScope.parentServices=[];\n");
 
 		
 		/*  init all the list - heavy? */
@@ -1596,6 +1602,16 @@ if (entity.getEntityGroup()!=null)
 		sb.append("{\n");
 		sb.append("	while (list.length>0)\n");
 		sb.append("		list.pop();\n");
+		sb.append("}\n");
+
+		//remove object from list
+		sb.append("this.removeObjectFromList=function(list,obj)\n");
+		sb.append("{\n");
+		sb.append("	for (var i=0; i<list.length; i++)\n");
+		sb.append("	{\n");
+		sb.append("	if (list[i]==obj) \n");
+		sb.append("	list.splice(i,i+1); \n");
+		sb.append("	}\n");
 		sb.append("}\n");
 
 

@@ -8,7 +8,7 @@ The client application is based on AngularJS, using Bower and Gulp.
 ##How to
 
 ###First step: Java model to meta info.
-Create a JUnit test class based on ServerTestApplication autowiring BeanToDBConverter and call the method convert.
+Create a JUnit test class based on it.anggen.Application autowiring BeanToDBConverter and call the method convert.
 
 ###Second step: Generate the code
 In a Junit test class autowire the Generator class and run the generate method.

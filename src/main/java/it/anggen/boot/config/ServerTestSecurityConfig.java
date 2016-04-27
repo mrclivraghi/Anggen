@@ -16,7 +16,7 @@ import org.springframework.security.web.csrf.CsrfTokenRepository;
 
 @Configuration
 @EnableWebSecurity
-@Order(99)
+@Order(100)
 public class ServerTestSecurityConfig
     extends WebSecurityConfigurerAdapter
 {

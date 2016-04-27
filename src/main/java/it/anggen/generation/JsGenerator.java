@@ -476,7 +476,7 @@ public class JsGenerator {
 		if (relationshipList!=null)
 			for (Relationship relationship: relationshipList)
 			{
-				if (EntityAttributeManager.getInstance(relationship).isList())
+				if (EntityAttributeManager.getInstance(relationship).isList() &&relationship.getEntityTarget().getEntityGroup()!=null)
 				{
 					sb.append(""+Utility.getEntityCallName(entityName)+"Service.searchBean."+relationship.getEntityTarget().getName()+"List=[];\n");
 					sb.append(""+Utility.getEntityCallName(entityName)+"Service.searchBean."+relationship.getEntityTarget().getName()+"List.push("+entityName+"Service.searchBean."+relationship.getEntityTarget().getName()+");\n");
@@ -512,6 +512,13 @@ public class JsGenerator {
 
 		sb.append(Utility.getEntityCallName(entityName)+"Service.insert().then(function successCallBack(response) { \n");
 		sb.append("$log.debug(response);\n");
+		
+		sb.append("$rootScope.parentServices.pop();\n");
+		sb.append("var parentService=$rootScope.parentServices.pop();\n");
+		sb.append("parentService.remove"+Utility.getEntityCallName(entityName)+"("+entityName+"Service.selectedEntity);\n");
+		
+		
+		
 		sb.append("},function errorCallback(response) { \n");
 		manageRestError(sb);
 		sb.append("});\n");
@@ -555,6 +562,11 @@ public class JsGenerator {
 		sb.append("{\n");
 		sb.append(Utility.getEntityCallName(entityName)+"Service.selectedEntity.show=false;\n");
 		sb.append("delete $rootScope.openNode."+entityName+";\n");
+
+		
+		sb.append("$rootScope.parentServices.pop();\n");
+		sb.append("var parentService=$rootScope.parentServices.pop();\n");
+		sb.append("parentService.remove"+Utility.getEntityCallName(entityName)+"("+entityName+"Service.selectedEntity);\n");
 		
 		
 		sb.append("UtilityService.removeObjectFromList($rootScope.parentServices,"+entityName+"Service);\n");
@@ -926,6 +938,7 @@ if (entity.getEntityGroup()!=null)
 		}
 		if (entity.getRelationshipList()!=null)
 		for (Relationship relationship : entity.getRelationshipList())
+			if (relationship.getEntityTarget().getEntityGroup()!=null)
 		{
 			services=services+","+relationship.getEntityTarget().getName()+"Service";
 		}
@@ -953,6 +966,7 @@ if (entity.getEntityGroup()!=null)
 	{
 		if (entity.getRelationshipList()!=null)
 			for (Relationship relationship: entity.getRelationshipList())
+			if (relationship.getEntityTarget().getEntityGroup()!=null)
 			{
 				sb.append("vm."+relationship.getEntityTarget().getName()+"PreparedData="+relationship.getEntityTarget().getName()+"Service.preparedData;\n");
 			}

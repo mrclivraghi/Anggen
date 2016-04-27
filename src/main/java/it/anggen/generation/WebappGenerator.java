@@ -362,7 +362,7 @@ public class WebappGenerator {
 			configureBlock.directStatement(".and()");
 			configureBlock.directStatement(".authorizeRequests().anyRequest().fullyAuthenticated().and()");
 			configureBlock.directStatement(".formLogin().and().csrf()");
-			if (!generator.security)
+			if (!generator.security || 1==1)
 				configureBlock.directStatement(".disable();");
 			else
 			{

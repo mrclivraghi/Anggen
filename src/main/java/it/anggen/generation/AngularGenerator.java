@@ -453,14 +453,14 @@ public class AngularGenerator {
 		{
 			html.div((new HtmlAttributes()).add("class", "pull-left"))
 			.form((new HtmlAttributes()).add("id", entityName+"ActionButton").add("ng-if", "vm.selectedEntity.show"))
-			.button(CssGenerator.getButton("insert").add("ng-if", "vm.selectedEntity."+entityName+"Id==undefined").add("ng-show",checkSecurity(entity, "create")))
+			.button(CssGenerator.getButton("vm.insert").add("ng-if", "vm.selectedEntity."+entityName+"Id==undefined").add("ng-show",checkSecurity(entity, "create")))
 			.content("Insert")
-			.button(CssGenerator.getButton("update").add("ng-if", "vm.selectedEntity."+entityName+"Id>0").add("ng-show",checkSecurity(entity, "update")))
+			.button(CssGenerator.getButton("vm.update").add("ng-if", "vm.selectedEntity."+entityName+"Id>0").add("ng-show",checkSecurity(entity, "update")))
 			.content("Update")
-			.button(CssGenerator.getButton("del").add("ng-if", "vm.selectedEntity."+entityName+"Id>0").add("ng-show",checkSecurity(entity, "delete")))
+			.button(CssGenerator.getButton("vm.del").add("ng-if", "vm.selectedEntity."+entityName+"Id>0").add("ng-show",checkSecurity(entity, "delete")))
 			.content("Delete");
 			if (!isParent)
-				html.button(CssGenerator.getButton("remove").add("ng-if", "vm.selectedEntity."+entityName+"Id>0").add("ng-show",checkSecurity(entity, "delete")))
+				html.button(CssGenerator.getButton("vm.remove").add("ng-if", "vm.selectedEntity."+entityName+"Id>0").add("ng-show",checkSecurity(entity, "delete")))
 				.content("Remove");
 			html._form()._div();
 		} else

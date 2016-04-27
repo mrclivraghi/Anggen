@@ -533,7 +533,11 @@ public class JsGenerator {
 		sb.append("function update()\n");
 		sb.append("{\n");
 		sb.append("if (!$scope."+entityName+"DetailForm.$valid) return; \n");
-		sb.append("if ("+Utility.getEntityCallName(entityName)+"Service.isParent()) \n");
+		
+		sb.append("$rootScope.parentServices.pop();\n");
+		sb.append("var parentService=$rootScope.parentServices.pop();\n");
+		
+		sb.append("if ($rootScope.parentServices.length==0) \n");
 		sb.append("{\n");
 		changeChildrenVisibility(sb, false);
 		sb.append(Utility.getEntityCallName(entityName)+"Service.update().then(function successCallback(response) { \n");
@@ -566,7 +570,7 @@ public class JsGenerator {
 		
 		sb.append("$rootScope.parentServices.pop();\n");
 		sb.append("var parentService=$rootScope.parentServices.pop();\n");
-		sb.append("parentService.remove"+Utility.getEntityCallName(entityName)+"("+entityName+"Service.selectedEntity);\n");
+		sb.append("parentService.remove"+Utility.getFirstUpper(Utility.getEntityCallName(entityName))+"("+entityName+"Service.selectedEntity);\n");
 		
 		
 		sb.append("UtilityService.removeObjectFromList($rootScope.parentServices,"+entityName+"Service);\n");

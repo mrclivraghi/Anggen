@@ -712,7 +712,7 @@ public class AngularGenerator {
 					._select();
 			renderValidator(html,entityAttribute);
 			html.span((new HtmlAttributes()).add("class", "input-group-btn"))
-			.button(CssGenerator.getButton("saveLinked"+Utility.getFirstUpper(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName())+"").add("id",EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()))
+			.button(CssGenerator.getButton("vm.saveLinked"+Utility.getFirstUpper(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName())+"").add("id",EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()))
 			.content("Save")
 			._span();
 			html._div();

@@ -19,5 +19,29 @@ application.package.main -> start package where you generate
 application.rest.url -> endpoint of your rest api
 application.cors.origin -> cors origin
 
+##Annotation available
+Entity
+@Cache -> the entity will be cached
+@DisableViewGeneration 
+@EnableRestrictionData 
+@MaxDescendantLevel -> max level for children in a tree
+@SecurityType -> access_with_permission or block_with_restriction
+
+@GenerateFrontEnd -> beta
+
+Field
+@Between -> you will be able to search through this field between two values
+@DescriptionField -> field used as a description label
+@embedded -> the field will be of type embedded
+@ExcelExport -> field included in the excel export
+@Filter -> this field will be used in the search form of the parent entities
+@IgnoreSearch
+@IgnoreTableList
+@IgnoreUpdate
+@Password -> the field will be a password and so stored using BCrypt
+@Priority -> to define the order in the search/detail forms
+@Tab -> field will be part of the mentioned tab
+
+
 
 

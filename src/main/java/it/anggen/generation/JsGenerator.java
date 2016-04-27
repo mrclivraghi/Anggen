@@ -427,7 +427,7 @@ public class JsGenerator {
 		sb.append("{\n");
 		//search var
 		sb.append("var vm=this;\n");
-
+		sb.append("vm.activeTab=1;\n");
 		sb.append("vm.searchBean="+Utility.getEntityCallName(entityName)+"Service.searchBean;\n");
 		sb.append("vm.entityList="+Utility.getEntityCallName(entityName)+"Service.entityList;\n");
 		sb.append("vm.selectedEntity="+Utility.getEntityCallName(entityName)+"Service.selectedEntity;\n");

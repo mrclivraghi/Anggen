@@ -379,7 +379,11 @@ public class AngularGenerator {
 			}
 		}
 		
-		if (!search)
+		
+		
+		
+		
+		/*if (!search)
 		{
 			html.ul((new HtmlAttributes()).add("class", "nav nav-tabs").add("role", "tablist").add("id", entityName+"Tabs"));
 			for (Tab tab: tabList)
@@ -392,15 +396,27 @@ public class AngularGenerator {
 			}
 			html._ul();
 			html.div((new HtmlAttributes()).add("class", "tab-content"));
+		} */
+		StringBuilder sb = new StringBuilder();
+		if (!search)
+		{
+			sb.append("<uib-tabset active=\"vm.activeTab\">");
 		}
 		
 		
-		for (Tab tab: tabList)
+		for (int i=0; i<tabList.size(); i++)
 		{
-			 //<div role="tabpanel" class="tab-pane fade in active" id="home">
-			if (!search)
-				html.div((new HtmlAttributes()).add("role", "tabpanel").add("class", "tab-pane fade").add("id", entityName+"-"+tab.getName().replace(' ','-' )));
+			Tab tab = tabList.get(i);
+			HtmlCanvas htmlTab = new HtmlCanvas();
 			
+			if (!search)
+			{
+				sb.append(" <uib-tab index=\""+(i+1)+"\" heading=\""+tab.getName()+"\" ng-click=\"vm.active="+(i+1)+"\">");
+			}
+			 //<div role="tabpanel" class="tab-pane fade in active" id="home">
+			/*if (!search)
+				htmlTab.div((new HtmlAttributes()).add("role", "tabpanel").add("class", "tab-pane fade").add("id", entityName+"-"+tab.getName().replace(' ','-' )));
+			*/
 			String style="";
 			if (entityName.toLowerCase().equals("place"))
 				System.out.println("");
@@ -413,11 +429,11 @@ public class AngularGenerator {
 				if (EntityAttributeManager.getInstance(entityAttribute).getBetweenFilter() && (search))
 				{
 					entityAttribute.setName(entityAttribute.getName()+"From");
-					renderField(html, entityAttribute, search, style, baseEntity);
+					renderField(htmlTab, entityAttribute, search, style, baseEntity);
 					entityAttribute.setName(entityAttribute.getName().replace("From","To"));
-					renderField(html, entityAttribute, search, style, baseEntity);
+					renderField(htmlTab, entityAttribute, search, style, baseEntity);
 				}else
-					renderField(html, entityAttribute, search, style, baseEntity);
+					renderField(htmlTab, entityAttribute, search, style, baseEntity);
 				
 				if (search)
 				{
@@ -427,7 +443,7 @@ public class AngularGenerator {
 							String oldfieldName=filterField.getName();
 							String filterFieldName=EntityAttributeManager.getInstance(filterField).getParent().getName()+Utility.getFirstUpper(filterField.getName());
 							filterField.setName(filterFieldName);
-							renderField(html, filterField, search, style, baseEntity);
+							renderField(htmlTab, filterField, search, style, baseEntity);
 							filterField.setName(oldfieldName);
 						}
 				}
@@ -435,14 +451,26 @@ public class AngularGenerator {
 			}
 			
 			
+			/*if (!search)
+				htmlTab._div();*/
+			sb.append(htmlTab.toHtml());
 			if (!search)
-				html._div();
+			{
+				sb.append(" </uib-tab>");
+			}
 		}
-		if (!search)
-			html._div(); //close tab content
 		
+		
+		if (!search)
+		{
+			sb.append("</uib-tabset>");
+		}
+		
+		/*if (!search)
+			html._div(); //close tab content
+		*/
 
-		html._div();
+		html.content(sb.toString(),false);
 		
 		if (!search)
 		{

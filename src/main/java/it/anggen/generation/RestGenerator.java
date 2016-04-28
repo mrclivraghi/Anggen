@@ -830,6 +830,13 @@ public class RestGenerator {
 			
 			insertBlock.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(lowerClass)+"Id()!=null)");
 			insertBlock.directStatement("log.info(\"Inserting "+lowerClass+" like \"+"+entityManager.getDescription(true)+");");
+			
+			for (it.anggen.model.field.Field field : entityManager.getPasswordField())
+			{
+				insertBlock.directStatement(lowerClass+".set"+Utility.getFirstUpper(field.getName())+"(Utility.encodePassword("+lowerClass+".get"+Utility.getFirstUpper(field.getName())+"()));");
+		        
+			}
+			
 			insertBlock.directStatement(ReflectionManager.getJDefinedClass(entity).fullName()+" inserted"+className+"="+lowerClass+"Service.insert("+lowerClass+");");
 			insertBlock.directStatement("getRightMapping(inserted"+className+");");
 			
@@ -854,6 +861,12 @@ public class RestGenerator {
 			updateBlock.directStatement("logEntryService.addLogEntry( \"Updating "+lowerClass+" with id \"+"+lowerClass+".get"+Utility.getFirstUpper(lowerClass)+"Id(),");
 			updateBlock.directStatement(LogType.class.getName()+".INFO, "+OperationType.class.getName()+".UPDATE_ENTITY, "+ReflectionManager.getJDefinedClass(entity).fullName()+".staticEntityId, securityService.getLoggedUser(),log);");
        
+			for (it.anggen.model.field.Field field : entityManager.getPasswordField())
+			{
+				updateBlock.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(field.getName())+"().length()<59)");
+				updateBlock.directStatement(lowerClass+".set"+Utility.getFirstUpper(field.getName())+"(Utility.encodePassword("+lowerClass+".get"+Utility.getFirstUpper(field.getName())+"()));");
+		        
+			}
 			
 			updateBlock.directStatement("rebuildSecurityMapping("+lowerClass+");");
 			updateBlock.directStatement(ReflectionManager.getJDefinedClass(entity).fullName()+" updated"+className+"="+lowerClass+"Service.update("+lowerClass+");");

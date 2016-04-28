@@ -371,6 +371,19 @@ public class EntityManagerImpl implements EntityManager{
 		return getParentEntities(ancestorEntity, childEntity, new ArrayList<Entity>());
 	}
 
+	@Override
+	public List<Field> getPasswordField() {
+		List<Field> fieldList = getFieldList();
+		List<Field> passwordField = new ArrayList<Field>();
+		for (Field field: fieldList)
+		{
+			if (EntityAttributeManager.getInstance(field).getPassword())
+				passwordField.add(field);
+		}
+		return passwordField;
+		
+	}
+
 	
 	
 	

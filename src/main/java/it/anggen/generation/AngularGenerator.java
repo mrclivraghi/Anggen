@@ -407,7 +407,7 @@ public class AngularGenerator {
 		for (int i=0; i<tabList.size(); i++)
 		{
 			Tab tab = tabList.get(i);
-			HtmlCanvas htmlTab = new HtmlCanvas();
+			HtmlCanvas htmlTab = new HtmlCanvas(new PrettyWriter());
 			
 			if (!search)
 			{

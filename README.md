@@ -45,7 +45,7 @@ application.cors.origin -> cors origin
 ###Validation supported
 @Size
 @NotNull
-@Not Blank
+@NotBlank
 
 
 

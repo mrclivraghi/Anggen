@@ -20,7 +20,7 @@ application.rest.url -> endpoint of your rest api
 application.cors.origin -> cors origin
 
 ##Annotation available
-Entity
+###Entity
 @Cache -> the entity will be cached
 @DisableViewGeneration 
 @EnableRestrictionData 
@@ -29,7 +29,7 @@ Entity
 
 @GenerateFrontEnd -> beta
 
-Field
+###Field
 @Between -> you will be able to search through this field between two values
 @DescriptionField -> field used as a description label
 @embedded -> the field will be of type embedded
@@ -42,6 +42,10 @@ Field
 @Priority -> to define the order in the search/detail forms
 @Tab -> field will be part of the mentioned tab
 
+###Validation supported
+@Size
+@NotNull
+@Not Blank
 
 
 

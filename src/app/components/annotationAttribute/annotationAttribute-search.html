@@ -1,0 +1,95 @@
+<div>
+	<form id="annotationAttributeSearchBean">
+		<div class="panel panel-default default-panel">
+			<div class="panel-heading">Search form annotationAttribute
+			</div>
+
+			<div class="panel-body">
+				<div class="pull-left right-input" ng-show="true ">
+					<div class="input-group">
+						<span class="input-group-addon">annotationAttributeId
+						</span>
+
+						<input class="form-control " aria-describedby="sizing-addon3" type="text" id="annotationAttribute-annotationAttributeId" ng-model="vm.searchBean.annotationAttributeId" ng-readonly="false" name="annotationAttributeId" placeholder="annotationAttributeId"/>
+						
+					</div>
+
+				</div>
+
+				<div class="pull-left right-input" ng-show="true ">
+					<div class="input-group">
+						<span class="input-group-addon">value
+						</span>
+
+						<input class="form-control " aria-describedby="sizing-addon3" type="text" id="annotationAttribute-value" ng-model="vm.searchBean.value" ng-readonly="false" name="value" placeholder="value"/>
+						
+					</div>
+
+				</div>
+
+				<div class="pull-left right-input" ng-show="true ">
+					<div class="input-group">
+						<span class="input-group-addon">property
+						</span>
+
+						<input class="form-control " aria-describedby="sizing-addon3" type="text" id="annotationAttribute-property" ng-model="vm.searchBean.property" ng-readonly="false" name="property" placeholder="property"/>
+						
+					</div>
+
+				</div>
+
+				<div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.field.restrictionItemMap.annotation.canSearch==true)">
+					<div class="input-group">
+						<span class="input-group-addon">annotation
+						</span>
+
+						<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.annotation.annotationId" id="annotation" ng-options="annotation.annotationId as  annotation.annotationId for annotation in vm.annotationPreparedData.entityList" enctype="UTF-8">
+						</select>
+
+					</div>
+
+				</div>
+
+			</div>
+
+			<div class="panel-body">
+				<div class="panel-body">
+					<div class="pull-left right-input">
+						<button ng-click="vm.addNew()" class="btn btn-default " ng-show="($root.restrictionList.field.restrictionItemMap.annotationAttribute.canCreate==true)">Add new
+						</button>
+
+						<button ng-click="vm.search()" class="btn btn-default ">Find
+						</button>
+
+						<button ng-click="vm.reset()" class="btn btn-default ">Reset
+						</button>
+
+					</div>
+
+				</div>
+
+			</div>
+
+		</div>
+
+	</form>
+
+	<form id="annotationAttributeList" ng-if="vm.entityList.length&gt;0" enctype="UTF-8">
+		<div class="panel panel-default default-panel">
+			<div class="panel-heading">List annotationAttribute<button ng-click="vm.downloadList()" class="btn btn-default pull-right" style="margin-top:-7px">
+	<span class="glyphicon glyphicon-download-alt" aria-hidden="true">
+	</span>
+</button>
+
+			</div>
+
+			<div class="panel-body">
+				<div ui-grid="vm.annotationAttributeGridOptions" ui-grid-pagination="" ui-grid-selection="" ui-grid-exporter="">
+				</div>
+
+			</div>
+
+		</div>
+
+	</form>
+</div>

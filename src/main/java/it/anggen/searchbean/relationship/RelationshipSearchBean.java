@@ -7,8 +7,8 @@ import it.anggen.model.field.Annotation;
 public class RelationshipSearchBean {
 
     public java.lang.Long relationshipId;
-    public java.lang.Integer priority;
     public java.lang.String name;
+    public java.lang.Integer priority;
     public it.anggen.model.RelationshipType relationshipType;
     public List<Annotation> annotationList;
     public it.anggen.model.entity.Entity entityTarget;
@@ -23,20 +23,20 @@ public class RelationshipSearchBean {
         this.relationshipId=relationshipId;
     }
 
-    public java.lang.Integer getPriority() {
-        return this.priority;
-    }
-
-    public void setPriority(java.lang.Integer priority) {
-        this.priority=priority;
-    }
-
     public java.lang.String getName() {
         return this.name;
     }
 
     public void setName(java.lang.String name) {
         this.name=name;
+    }
+
+    public java.lang.Integer getPriority() {
+        return this.priority;
+    }
+
+    public void setPriority(java.lang.Integer priority) {
+        this.priority=priority;
     }
 
     public it.anggen.model.RelationshipType getRelationshipType() {

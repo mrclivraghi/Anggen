@@ -10,6 +10,9 @@ import it.anggen.model.entity.EnumEntity;
 import it.anggen.model.entity.Project;
 import it.anggen.model.field.EnumField;
 import it.anggen.model.relationship.Relationship;
+import it.anggen.reflection.EntityAttributeManager;
+import it.anggen.reflection.EntityManager;
+import it.anggen.reflection.EntityManagerImpl;
 import it.anggen.repository.entity.EnumEntityRepository;
 import it.anggen.repository.entity.ProjectRepository;
 import it.anggen.repository.field.EnumFieldRepository;
@@ -104,6 +107,12 @@ public class Generator {
 	@Value("${generate.view}")
 	private Boolean generateView;
 	
+	@Value("${application.rest.url}")
+	public String restUrl;
+	
+	@Value("${application.cors.origin}")
+	public String corsOrigin;
+	
 	private Project project;
 	
 	private List<Entity> modelEntityList;
@@ -166,7 +175,7 @@ public class Generator {
 		List<Project> projectList=projectRepository.findByName(applicationName);
 		if (projectList.size()==0)
 			throw new Exception();
-		this.relationshipList=relationshipRepository.findByRelationshipIdAndPriorityAndNameAndRelationshipTypeAndAnnotationAndEntityAndEntityAndTab(null, null, null, null, null, null, null, null);
+		this.relationshipList=relationshipRepository.findByRelationshipIdAndNameAndPriorityAndRelationshipTypeAndAnnotationAndEntityAndEntityAndTab(null, null, null, null, null, null, null, null);
 		this.project=projectList.get(0);
 		this.entityGroupList=project.getEntityGroupList();
 		this.enumEntityList=project.getEnumEntityList();
@@ -176,31 +185,32 @@ public class Generator {
 		{
 			this.modelEntityList.addAll(entityGroup.getEntityList());
 		}
+		checkModel();
 	}
 
 	
 	private void checkModel() throws Exception
 	{
-		/*for (Class myClass: allClasses)
+		
+		for (Entity entity: modelEntityList)
 		{
-			if (myClass.getName().contains("Example"))
-				System.out.println("");
-			
-			ReflectionManager reflectionManager = new ReflectionManager(myClass);
-			if (reflectionManager.getKeyClass()== null)
-				throw new Exception(myClass.getName()+": there is no primary key");
-			
-			for (Field field: reflectionManager.getFieldList())
-			{
-				if (ReflectionManager.hasId(field) && !field.getName().equals(reflectionManager.parseName()+"Id"))
-					throw new Exception(myClass.getName()+": primary key name is wrong. it's "+field.getName()+" instead of "+reflectionManager.parseName()+"Id");
-				if (ReflectionManager.isListField(field) && !(field.getName().equals(reflectionManager.parseName(field.getFieldClass().getName())+"")))
-						throw new Exception(""+myClass.getName()+": list field name is wrong. It's "+field.getName()+"List instead of "+reflectionManager.parseName(field.getFieldClass().getName())+"List");
-				if (ReflectionManager.hasBetween(field) && !reflectionManager.isKnownClass(field.getFieldClass()))
-					throw new Exception(myClass.getName()+": Between annotation is invalid for type "+field.getFieldClass().getName());
+			EntityManager entityManager = new EntityManagerImpl(entity);
+			if (entityManager.getKeyClass()==null)
+					throw new Exception(entity.getName()+": there is no primary key");
 				
-			}
-		}*/
+			for (it.anggen.model.field.Field field: entity.getFieldList())
+			{
+				EntityAttributeManager entityAttributeManager = new EntityAttributeManager(field);
+				
+				if (entityAttributeManager.getPrimaryKey() && !field.getName().equals(Utility.getFirstLower(entity.getName())+"Id") )
+					throw new Exception(entity.getName()+": primary key name is wrong. it's "+field.getName()+" instead of "+Utility.getFirstLower(entity.getName())+"Id");
+				
+				if (entityAttributeManager.getBetweenFilter() && !entityAttributeManager.getFieldTypeName().equals(null))
+					throw new Exception(entity.getName()+": Between annotation is invalid for type "+entityAttributeManager.getFieldTypeName());
+			
+			}	
+		}
+		
 	}
 	
 	
@@ -236,14 +246,31 @@ public class Generator {
 		}
 		if (generateView)
 		{
+			jsGenerator.generateMainApp();
 			jsGenerator.generateServiceFile();
 			jsGenerator.generateControllerFile();
+			jsGenerator.generateDirectiveFile();
+			jsGenerator.generateUtilityService();
+			jsGenerator.generateNavbarDirective();
+			jsGenerator.generateLoginDirective();
+			jsGenerator.generateBowerFile();
+			
+			htmlGenerator.setDirectory();
+			//htmlGenerator.generateTemplate();
+			htmlGenerator.generateHomePage();
+			htmlGenerator.generateMain();
+			htmlGenerator.generateLogin();
+			
+			CssGenerator.generateMain(angularDirectory);
+			CssGenerator.generateLoginSCSS(angularDirectory);
 			for (Entity modelEntity: modelEntityList)
 			{
 				if (modelEntity.getDisableViewGeneration()) continue;
 				htmlGenerator.init(modelEntity);
 				try {
-					htmlGenerator.generateJSP();
+					htmlGenerator.generateSearchView();
+					htmlGenerator.generateDetailView();
+					htmlGenerator.generatePageContent();
 				} catch (IllegalAccessException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -272,17 +299,18 @@ public class Generator {
 
 	private Boolean isAngGenSecurity(Entity entity)
 	{
-		if (appName.equals("anggen"))
+		if (appName.equals("serverTest"))
 			return false;
 		if (entity.getEntityGroup()==null)
 			return true;
-		if (!entity.getEntityGroup().getName().equals("security"))
+		if (!entity.getEntityGroup().getName().equals("security") && !entity.getEntityGroup().getName().equals("log"))
 			return false;
 		if (entity.getName().equals("restrictionField") || 
 				entity.getName().equals("restrictionEntityGroup") || 
 				entity.getName().equals("restrictionEntity") || 
 				entity.getName().equals("user") || 
-				entity.getName().equals("role") )
+				entity.getName().equals("role") ||
+				entity.getName().equals("logEntry"))
 			return true;
 		return false;
 	}

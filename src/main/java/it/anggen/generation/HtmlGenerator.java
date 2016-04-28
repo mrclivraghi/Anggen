@@ -23,6 +23,7 @@ import java.util.Set;
 import org.rendersnake.DocType;
 import org.rendersnake.HtmlAttributes;
 import org.rendersnake.HtmlCanvas;
+import org.rendersnake.tools.PrettyWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -101,10 +102,13 @@ public class HtmlGenerator {
 			.macros().javascript("js/pdfmake.js")
 			.macros().javascript("js/vfs_fonts.js")
 			.macros().javascript("js/angular-route.js")
-			.macros().javascript("js/ui-grid.js");
+			.macros().javascript("js/ui-grid.js")
+			.macros().javascript("js/ui-bootstrap-tpls-1.2.5.min.js");
 			if (includeEntityFile)
 			{
 				html.macros().javascript("js/angular/"+generator.applicationName+"/main-app.js");
+				html.macros().javascript("js/metrics/metrics.controller.js");
+				html.macros().javascript("js/metrics/metrics.service.js");
 				//html.macros().javascript("js/angular/"+generator.applicationName+"/"+generator.applicationName+"-service.js");
 				//html.macros().javascript("js/angular/"+generator.applicationName+"/"+generator.applicationName+"-controller.js");
 				for (Entity entity: generator.getEntityList())
@@ -154,12 +158,12 @@ public class HtmlGenerator {
 	 * Generate the main template of the page
 	 * @throws IllegalAccessException
 	 */
-	public void generateJSP() throws IllegalAccessException
+	public void generateSearchView() throws IllegalAccessException
 	{
-		HtmlCanvas html = new HtmlCanvas();
+		HtmlCanvas html = new HtmlCanvas(new PrettyWriter());
 		angularGenerator.init(entity, true,new ArrayList<Entity>(),entityManager.isLastLevel(entity));
 		try {
-			angularGenerator.generateEntityView(html);
+			angularGenerator.generateSearchView(html);
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -168,7 +172,40 @@ public class HtmlGenerator {
 		if (!dir.exists())
 			dir.mkdirs();
 		
-		File myJsp=new File(directoryViewPages+entityName+".jsp");
+		File myJsp=new File(directoryViewPages+entityName+"/"+entityName+"-search.html");
+		PrintWriter writer;
+		try {
+			System.out.println("Written "+myJsp.getAbsolutePath());
+			writer = new PrintWriter(myJsp, "UTF-8");
+			//PrettyWriter w = new PrettyWriter(writer);
+			writer.write(html.toHtml());
+			writer.close();
+		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
+	
+	public void generateDetailView() throws IllegalAccessException
+	{
+		HtmlCanvas html = new HtmlCanvas(new PrettyWriter());
+		angularGenerator.init(entity, true,new ArrayList<Entity>(),entityManager.isLastLevel(entity));
+		try {
+			angularGenerator.generateDetailHtml(html);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		File dir = new File(directoryViewPages);
+		if (!dir.exists())
+			dir.mkdirs();
+		
+		File myJsp=new File(directoryViewPages+entityName+"/"+entityName+"-detail.html");
 		PrintWriter writer;
 		try {
 			System.out.println("Written "+myJsp.getAbsolutePath());
@@ -181,9 +218,83 @@ public class HtmlGenerator {
 		
 	}
 	
+	
+	public void generatePageContent() throws IllegalAccessException
+	{
+		HtmlCanvas html = new HtmlCanvas(new PrettyWriter());
+		angularGenerator.init(entity, true,new ArrayList<Entity>(),entityManager.isLastLevel(entity));
+		try {
+			angularGenerator.generateTemplate(html);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		File dir = new File(directoryViewPages+"../controller/"+entityName+"/");
+		if (!dir.exists())
+			dir.mkdirs();
+		
+		File myJsp=new File(directoryViewPages+"../controller/"+entityName+"/"+entityName+"-template.html");
+		PrintWriter writer;
+		try {
+			System.out.println("Written "+myJsp.getAbsolutePath());
+			writer = new PrintWriter(myJsp, "UTF-8");
+			writer.write(html.toHtml());
+			writer.close();
+		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
+	public void generateMain()
+	{
+		HtmlCanvas html = new HtmlCanvas(new PrettyWriter());
+		try {
+
+			html.div((new HtmlAttributes()).add("id", "canvas"))
+			.div().content("<"+Utility.camelCaseToMinus(generator.applicationName)+"-navbar></"+Utility.camelCaseToMinus(generator.applicationName)+"-navbar> ",false)
+			.div((new HtmlAttributes()).add("id", "alertInfo").add("class","alert alert-success custom-alert").add("style","display: none")).span().content("")._div()
+			.div((new HtmlAttributes()).add("id", "alertError").add("class","alert alert-danger custom-alert").add("style","display: none")).span().content("")._div()
+			
+			.div((new HtmlAttributes()).add("style", ""))
+			.div((new HtmlAttributes()).add("ui-view", "pageContent"))
+			._div()
+			._div();
+			
+			
+			
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		File f = new File("");
+		
+		File dir = new File(f.getAbsolutePath()+generator.angularDirectory+"../main/");
+		if (!dir.exists())
+			dir.mkdirs();
+		
+		File myJsp=new File(f.getAbsolutePath()+generator.angularDirectory+"../main/main.html");
+		PrintWriter writer;
+		try {
+			System.out.println("Written "+myJsp.getAbsolutePath());
+			writer = new PrintWriter(myJsp, "UTF-8");
+			writer.write(html.toHtml());
+			writer.close();
+		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		
+	
+		
+	}
+	
+	
+	
 	public void GenerateEasyTreeMenu(List<EntityGroup> entityGroupList)
 	{
-		HtmlCanvas html= new HtmlCanvas();
+		HtmlCanvas html = new HtmlCanvas(new PrettyWriter());
 		try {
 			html.div((new HtmlAttributes()).add("id", "menu").add("style", "width: 250px;"))
 			.ul();
@@ -191,7 +302,7 @@ public class HtmlGenerator {
 			for (EntityGroup entityGroup: entityGroupList)
 			{
 				html.li((new HtmlAttributes()).add("class", "isFolder"));
-				HtmlCanvas folderHtml = new HtmlCanvas();
+				HtmlCanvas folderHtml = new HtmlCanvas(new PrettyWriter());
 				folderHtml.ul();
 				for (Entity entity: entityGroup.getEntityList())
 				{
@@ -227,7 +338,7 @@ public class HtmlGenerator {
 	 */
 	public void GenerateMenu(List<EntityGroup> entityGroupList)
 	{
-		HtmlCanvas html = new HtmlCanvas();
+		HtmlCanvas html = new HtmlCanvas(new PrettyWriter());
 		try {
 			
 			html.nav(CssGenerator.getNav())
@@ -248,26 +359,48 @@ public class HtmlGenerator {
 			StringBuilder sb = new StringBuilder();
 			for (EntityGroup entityGroup: entityGroupList)
 			{
-				HtmlCanvas ulHtml= new HtmlCanvas();
-				ulHtml.li((new HtmlAttributes()).add("class", "dropdown"))
-				.a((new HtmlAttributes()).add("href", "#").add("class", "dropdown-toggle").add("data-toggle", "dropdown").add("role", "button").add("aria-haspopup", "true").add("aria-expanded", "false"));
-				HtmlCanvas caretHtml = new HtmlCanvas();
+				HtmlCanvas ulHtml= new HtmlCanvas(new PrettyWriter());
+				ulHtml.li((new HtmlAttributes()).add("uib-dropdown", "").add("on-toggle", "toggled(\"open\")"))
+				.a((new HtmlAttributes()).add("href", "#").add("class", "dropdown-toggle").add("data-toggle", "dropdown").add("role", "button").add("aria-haspopup", "true").add("aria-expanded", "false").add("uib-dropdown-toggle", ""));
+				HtmlCanvas caretHtml = new HtmlCanvas(new PrettyWriter());
 				
 				caretHtml.span((new HtmlAttributes()).add("class", "caret"))
 				._span();
 				ulHtml.content(entityGroup.getName()+caretHtml.toHtml(),false);
-				ulHtml.ul((new HtmlAttributes()).add("class", "dropdown-menu"));
+				ulHtml.ul((new HtmlAttributes()).add("uib-dropdown-menu", "").add("aria-labelledby", "simple-dropdown"));
 				
 				String ulContent="";
 				for (Entity entity: entityGroup.getEntityList())
 				{
-					ulContent=ulContent+"<li ng-if=\"restrictionList."+entity.getName()+".canSearch || restrictionList."+entity.getName()+"==undefined\"><a href=\""+Utility.getFirstUpper(entity.getName())+"\">"+Utility.getFirstUpper(entity.getName())+"</a></li>";
+					ulContent=ulContent+"<li ng-if=\"$root.restrictionList."+entityGroup.getName()+".restrictionItemMap."+entity.getName()+".canSearch\"><a href=\"#/app/"+Utility.getFirstLower(entity.getName())+"\" role=\"menuitem\">"+Utility.getFirstUpper(entity.getName())+"</a></li>";
 				}
+				
+				
 				
 				ulHtml.content(ulContent,false);
 				ulHtml._li();
 				sb.append(ulHtml.toHtml());
 			}
+			
+			//administration menù
+			HtmlCanvas ulHtml= new HtmlCanvas(new PrettyWriter());
+			ulHtml.li((new HtmlAttributes()).add("class", "dropdown"))
+			.a((new HtmlAttributes()).add("href", "#").add("class", "dropdown-toggle").add("data-toggle", "dropdown").add("role", "button").add("aria-haspopup", "true").add("aria-expanded", "false"));
+			HtmlCanvas caretHtml = new HtmlCanvas(new PrettyWriter());
+			
+			caretHtml.span((new HtmlAttributes()).add("class", "caret"))
+			._span();
+			ulHtml.content("Administration"+caretHtml.toHtml(),false);
+			ulHtml.ul((new HtmlAttributes()).add("class", "dropdown-menu"));
+			
+			String ulContent="";
+			{
+				ulContent=ulContent+"<li><a href=\"#/app/metrics\">Metrics</a></li>";
+			}
+			
+			ulHtml.content(ulContent,false);
+			ulHtml._li();
+			sb.append(ulHtml.toHtml());
 			html.content(sb.toString(),false);
 			html._div() //end real nav menu
 			._div()
@@ -279,12 +412,11 @@ public class HtmlGenerator {
 		
 		File file = new File(""); 
 		String directoryViewPages = file.getAbsolutePath()+generator.menuDirectory;
-		File menuFile=new File(directoryViewPages+generator.applicationName+generator.menuName);
+		File menuFile=new File(directoryViewPages+generator.menuName);
 		PrintWriter writer;
 		try {
 			System.out.println("Written "+menuFile.getAbsolutePath());
 			writer = new PrintWriter(menuFile, "UTF-8");
-			writer.write("<%@ taglib prefix=\"c\" uri=\"http://java.sun.com/jsp/jstl/core\" %>");
 			writer.write(html.toHtml());
 			writer.close();
 		} catch (FileNotFoundException | UnsupportedEncodingException e) {
@@ -295,18 +427,22 @@ public class HtmlGenerator {
 	}
 	
 	public void generateHomePage(){
-		HtmlCanvas html = new HtmlCanvas();
+		HtmlCanvas html = new HtmlCanvas(new PrettyWriter());
 		try {
 			html.h1().center().content("HOME PAGE")._h1();
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		File myJsp=new File(directoryViewPages+"home.jsp");
+		File dir = new File(directoryViewPages+"home/");
+		if (!dir.exists())
+			dir.mkdirs();
+		
+		File myFile=new File(directoryViewPages+"home/home.html");
 		PrintWriter writer;
 		try {
-			System.out.println("Written "+myJsp.getAbsolutePath());
-			writer = new PrintWriter(myJsp, "UTF-8");
+			System.out.println("Written "+myFile.getAbsolutePath());
+			writer = new PrintWriter(myFile, "UTF-8");
 			writer.write(html.toHtml());
 			writer.close();
 		} catch (FileNotFoundException | UnsupportedEncodingException e) {
@@ -314,56 +450,81 @@ public class HtmlGenerator {
 		}
 	}
 	
-
-	public void generateTemplate() {
-		HtmlCanvas html = new HtmlCanvas();
-		HtmlAttributes htmlAttributes= new HtmlAttributes();
+	
+	
+	public void generateLogin(){
+		HtmlCanvas html = new HtmlCanvas(new PrettyWriter());
 		try {
-			html.render(docType);
-			html.
-			html()
-			.head()
-			.title().content(generator.applicationName);
-			includeJavascriptScripts(html,true);
-			incluseCssFiles(html);
-			html._head()
-			.body(htmlAttributes.add("ng-app", generator.applicationName+"App").add("ng-controller", "MainController"));
-			html.div((new HtmlAttributes()).add("id", "alertInfo").add("class","alert alert-success custom-alert").add("style","display: none")).span().content("")._div();
-			html.div((new HtmlAttributes()).add("id", "alertError").add("class","alert alert-danger custom-alert").add("style","display: none")).span().content("")._div();
-			//TODO switch
-			html.div((new HtmlAttributes()).add("ng-view", ""))
-			._div();
+			html.form((new HtmlAttributes()).add("class", "form-signin").add("ng-submit", "vm.onSubmit(vm.username,vm.password)"))
+			.h2((new HtmlAttributes()).add("class", "form-signin-heading")).content("Please sign in")
+			.label((new HtmlAttributes())
+					.add("for", "inputEmail").add("class", "sr-only")
+					).content("Username")
+			.input((new HtmlAttributes())
+					.add("type", "text")
+					.add("id", "inputEmail")
+					.add("class", "form-control")
+					.add("placeholder", "Username")
+					.add("required", "")
+					.add("autofocus", "")
+					.add("ng-model", "vm.username")
+					)
+			.label((new HtmlAttributes()).add("for", "inputPassword").add("class", "sr-only"))
+				.content("Password")
+			.input((new HtmlAttributes())
+					.add("type", "password")
+					.add("id", "inputPassword")
+					.add("class", "form-control")
+					.add("placeholder", "Password")
+					.add("required", "")
+					.add("autofocus", "")
+					.add("ng-model", "vm.password")
+					)
+			.div((new HtmlAttributes()).add("class", "checkbox"))
+				.label()
+					.input((new HtmlAttributes()).add("type", "checkbox").add("value", "remember-me"))
+					.content("Rembember me")
+				//._label()
+			._div()
+			.button((new HtmlAttributes()).add("class", "btn btn-lg btn-primary btn-block").add("type", "submit")).content("Sign in")
 			
-			
-			String loadMenuScript="loadMenu(); ";
-			/*if (Generator.bootstrapMenu)
-				loadMenuScript=loadMenuScript+" activeMenu(\""+entityName+"\");";
-			else
-				loadMenuScript=loadMenuScript+" $('#menu').easytree(easyTreeOption);";
-			*/
-			html.script((new HtmlAttributes()).add("type", "text/javascript")).content(loadMenuScript,false);
-			if (generator.easyTreeMenu)
-				html.script().content("function stateChanged(nodes, nodesJson) {var t = nodes[0].text; $.cookie('menu', nodesJson); };  var easyTree = $('#menu').easytree({data: ($.cookie('menu')!=null? $.cookie('menu') : null), stateChanged: stateChanged});",false);
-			html._body()._html();
-		} catch (IOException e) {
-			e.printStackTrace();
+			._form();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
-		
-		File dir = new File(directoryViewPages);
+		File dir = new File(directoryViewPages+"login/");
 		if (!dir.exists())
 			dir.mkdirs();
 		
-		File myJsp=new File(directoryViewPages+"template.jsp");
+		File myFile=new File(directoryViewPages+"login/login.html");
 		PrintWriter writer;
 		try {
-			System.out.println("Written "+myJsp.getAbsolutePath());
-			writer = new PrintWriter(myJsp, "UTF-8");
+			System.out.println("Written "+myFile.getAbsolutePath());
+			writer = new PrintWriter(myFile, "UTF-8");
 			writer.write(html.toHtml());
 			writer.close();
 		} catch (FileNotFoundException | UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		
+		generateLoginModal();
 	}
+	
+	private void generateLoginModal()
+	{
+		File myFile=new File(directoryViewPages+"login/login-modal.html");
+		PrintWriter writer;
+		try {
+			System.out.println("Written "+myFile.getAbsolutePath());
+			writer = new PrintWriter(myFile, "UTF-8");
+			writer.write("<login>\n</login>");
+			writer.close();
+		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+	}
+	
+
+
 	
 }

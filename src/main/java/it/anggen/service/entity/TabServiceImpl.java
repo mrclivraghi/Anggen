@@ -40,7 +40,7 @@ public class TabServiceImpl
 
     @Override
     public List<it.anggen.model.entity.Tab> find(TabSearchBean tab) {
-        return tabRepository.findByTabIdAndNameAndFieldAndEnumFieldAndEntityAndRelationship(tab.getTabId(),tab.getName(),tab.getFieldList()==null? null :tab.getFieldList().get(0),tab.getEnumFieldList()==null? null :tab.getEnumFieldList().get(0),tab.getEntity(),tab.getRelationshipList()==null? null :tab.getRelationshipList().get(0));
+        return tabRepository.findByTabIdAndNameAndEntityAndFieldAndEnumFieldAndRelationship(tab.getTabId(),tab.getName(),tab.getEntity(),tab.getFieldList()==null? null :tab.getFieldList().get(0),tab.getEnumFieldList()==null? null :tab.getEnumFieldList().get(0),tab.getRelationshipList()==null? null :tab.getRelationshipList().get(0));
     }
 
     @Override

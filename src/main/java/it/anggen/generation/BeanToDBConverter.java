@@ -24,6 +24,7 @@ import it.anggen.utils.EntityAttribute;
 import it.anggen.utils.ReflectionManager;
 import it.anggen.utils.Utility;
 import it.anggen.utils.annotation.Between;
+import it.anggen.utils.annotation.Cache;
 import it.anggen.utils.annotation.DescriptionField;
 import it.anggen.utils.annotation.DisableViewGeneration;
 import it.anggen.utils.annotation.Embedded;
@@ -185,7 +186,7 @@ public class BeanToDBConverter {
 		Map<String,EnumEntity> enumEntityMap = new HashMap<String,EnumEntity>();
 		Set<Class<?>> mainPackageClassSet = ReflectionManager.getClassInPackage(modelPackage);
 		Set<Class<?>> securityPackageClassSet= null;
-		if (!projectName.equals("anggen") && !packageList.contains("it.anggen.model.security"))
+		if (!projectName.equals("serverTest") && !packageList.contains("it.anggen.model.security"))
 		{
 			List<String> securityPackageList = ReflectionManager.getSubPackages("it.anggen.model.security");
 			packageList.addAll(securityPackageList);
@@ -590,6 +591,11 @@ public class BeanToDBConverter {
 				entity.setGenerateFrontEnd(true);
 			} 
 			
+			if (annotationArray[i].annotationType()==Cache.class || annotationArray[i].annotationType()==org.hibernate.annotations.Cache.class)
+			{
+				entity.setCache(true);
+			} 
+			
 			if (annotationArray[i].annotationType()==MaxDescendantLevel.class)
 				for (Method method : annotationArray[i].annotationType().getDeclaredMethods()) {
 					if (method.getName().equals("value"))
@@ -812,7 +818,7 @@ public class BeanToDBConverter {
 	
 	private Boolean isAngGenSecurity(Entity entity)
 	{
-		if (projectName.equals("anggen"))
+		if (projectName.equals("serverTest"))
 			return false;
 		if (entity.getName().equals("restrictionField") || 
 				entity.getName().equals("restrictionEntityGroup") || 

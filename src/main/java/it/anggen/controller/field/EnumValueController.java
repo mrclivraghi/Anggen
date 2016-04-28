@@ -2,9 +2,11 @@
 package it.anggen.controller.field;
 
 import java.util.List;
+import com.codahale.metrics.annotation.Timed;
 import it.anggen.searchbean.field.EnumValueSearchBean;
 import it.anggen.security.SecurityService;
 import it.anggen.service.field.EnumValueService;
+import it.anggen.service.log.LogEntryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,10 +25,13 @@ public class EnumValueController {
     private EnumValueService enumValueService;
     @org.springframework.beans.factory.annotation.Autowired
     private SecurityService securityService;
+    @org.springframework.beans.factory.annotation.Autowired
+    private LogEntryService logEntryService;
     private final static Logger log = LoggerFactory.getLogger(it.anggen.model.field.EnumValue.class);
     @Value("${application.security}")
     private Boolean securityEnabled;
 
+    @Timed
     @RequestMapping(method = RequestMethod.GET)
     public String manage() {
         if (securityEnabled && !securityService.hasPermission(it.anggen.model.field.EnumValue.staticEntityId, it.anggen.model.RestrictionType.SEARCH)) 
@@ -35,6 +40,7 @@ return "forbidden";
         return "enumValue";
     }
 
+    @Timed
     @RequestMapping(value = "/pages/{pageNumber}", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity findPage(
@@ -45,6 +51,7 @@ return "forbidden";
         return ResponseEntity.ok().body(page);
     }
 
+    @Timed
     @ResponseBody
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public ResponseEntity search(
@@ -55,7 +62,9 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         List<it.anggen.model.field.EnumValue> enumValueList;
         if (enumValue.getEnumValueId()!=null)
-         log.info("Searching enumValue like {}", enumValue.getEnumValueId()+' '+ enumValue.getName());
+         log.info("Searching enumValue like {}", enumValue.getName()+' '+ enumValue.getEnumValueId());
+        logEntryService.addLogEntry( "Searching entity like "+ enumValue.getName()+' '+ enumValue.getEnumValueId(),
+        it.anggen.model.LogType.INFO, it.anggen.model.OperationType.SEARCH_ENTITY, it.anggen.model.field.EnumValue.staticEntityId, securityService.getLoggedUser(),log);
         enumValueList=enumValueService.find(enumValue);
         getSecurityMapping(enumValueList);
         getRightMapping(enumValueList);
@@ -63,6 +72,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         return ResponseEntity.ok().body(enumValueList);
     }
 
+    @Timed
     @ResponseBody
     @RequestMapping(value = "/{enumValueId}", method = RequestMethod.GET)
     public ResponseEntity getEnumValueById(
@@ -71,7 +81,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         if (securityEnabled && !securityService.hasPermission(it.anggen.model.field.EnumValue.staticEntityId, it.anggen.model.RestrictionType.SEARCH)) 
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
-        log.info("Searching enumValue with id {}",enumValueId);
+        logEntryService.addLogEntry( "Searching enumValue with id "+enumValueId,
+        it.anggen.model.LogType.INFO, it.anggen.model.OperationType.SEARCH_ENTITY, it.anggen.model.field.EnumValue.staticEntityId, securityService.getLoggedUser(),log);
         List<it.anggen.model.field.EnumValue> enumValueList=enumValueService.findById(Long.valueOf(enumValueId));
         getSecurityMapping(enumValueList);
         getRightMapping(enumValueList);
@@ -79,6 +90,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         return ResponseEntity.ok().body(enumValueList);
     }
 
+    @Timed
     @ResponseBody
     @RequestMapping(value = "/{enumValueId}", method = RequestMethod.DELETE)
     public ResponseEntity deleteEnumValueById(
@@ -87,11 +99,14 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         if (securityEnabled && !securityService.hasPermission(it.anggen.model.field.EnumValue.staticEntityId, it.anggen.model.RestrictionType.DELETE)) 
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
-        log.info("Deleting enumValue with id {}",enumValueId);
+        log.info("Deleting enumValue with id "+enumValueId);
+        logEntryService.addLogEntry( "Deleting enumValue with id {}"+enumValueId,
+        it.anggen.model.LogType.INFO, it.anggen.model.OperationType.DELETE_ENTITY, it.anggen.model.field.EnumValue.staticEntityId, securityService.getLoggedUser(),log);
         enumValueService.deleteById(Long.valueOf(enumValueId));
         return ResponseEntity.ok().build();
     }
 
+    @Timed
     @ResponseBody
     @RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity insertEnumValue(
@@ -101,13 +116,15 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
         if (enumValue.getEnumValueId()!=null)
-        log.info("Inserting enumValue like {}", enumValue.getEnumValueId()+' '+ enumValue.getName());
+        log.info("Inserting enumValue like "+ enumValue.getName()+' '+ enumValue.getEnumValueId());
         it.anggen.model.field.EnumValue insertedEnumValue=enumValueService.insert(enumValue);
         getRightMapping(insertedEnumValue);
-        log.info("Inserted enumValue with id {}",insertedEnumValue.getEnumValueId());
+        logEntryService.addLogEntry( "Inserted enumValue with id "+ insertedEnumValue.getEnumValueId(),
+        it.anggen.model.LogType.INFO, it.anggen.model.OperationType.CREATE_ENTITY, it.anggen.model.field.EnumValue.staticEntityId, securityService.getLoggedUser(),log);
         return ResponseEntity.ok().body(insertedEnumValue);
     }
 
+    @Timed
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity updateEnumValue(
@@ -116,7 +133,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         if (securityEnabled && !securityService.hasPermission(it.anggen.model.field.EnumValue.staticEntityId, it.anggen.model.RestrictionType.UPDATE)) 
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
-        log.info("Updating enumValue with id {}",enumValue.getEnumValueId());
+        logEntryService.addLogEntry( "Updating enumValue with id "+enumValue.getEnumValueId(),
+        it.anggen.model.LogType.INFO, it.anggen.model.OperationType.UPDATE_ENTITY, it.anggen.model.field.EnumValue.staticEntityId, securityService.getLoggedUser(),log);
         rebuildSecurityMapping(enumValue);
         it.anggen.model.field.EnumValue updatedEnumValue=enumValueService.update(enumValue);
         getSecurityMapping(updatedEnumValue);
@@ -137,6 +155,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         {
         enumValue.getEnumEntity().setProject(null);
         enumValue.getEnumEntity().setEnumValueList(null);
+        enumValue.getEnumEntity().setEnumFieldList(null);
         }
     }
 

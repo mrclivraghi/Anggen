@@ -11,17 +11,18 @@ import it.anggen.model.security.RestrictionEntity;
 public class EntitySearchBean {
 
     public java.lang.Long entityId;
-    public java.lang.String name;
-    public java.lang.Boolean enableRestrictionData;
-    public java.lang.Integer descendantMaxLevel;
-    public java.lang.Boolean disableViewGeneration;
     public java.lang.Boolean generateFrontEnd;
+    public java.lang.String name;
+    public java.lang.Integer descendantMaxLevel;
+    public java.lang.Boolean cache;
+    public java.lang.Boolean disableViewGeneration;
+    public java.lang.Boolean enableRestrictionData;
     public it.anggen.model.SecurityType securityType;
     public List<RestrictionEntity> restrictionEntityList;
-    public List<EnumField> enumFieldList;
     public List<Field> fieldList;
-    public List<Tab> tabList;
+    public List<EnumField> enumFieldList;
     public it.anggen.model.entity.EntityGroup entityGroup;
+    public List<Tab> tabList;
     public List<Relationship> relationshipList;
 
     public java.lang.Long getEntityId() {
@@ -32,20 +33,20 @@ public class EntitySearchBean {
         this.entityId=entityId;
     }
 
+    public java.lang.Boolean getGenerateFrontEnd() {
+        return this.generateFrontEnd;
+    }
+
+    public void setGenerateFrontEnd(java.lang.Boolean generateFrontEnd) {
+        this.generateFrontEnd=generateFrontEnd;
+    }
+
     public java.lang.String getName() {
         return this.name;
     }
 
     public void setName(java.lang.String name) {
         this.name=name;
-    }
-
-    public java.lang.Boolean getEnableRestrictionData() {
-        return this.enableRestrictionData;
-    }
-
-    public void setEnableRestrictionData(java.lang.Boolean enableRestrictionData) {
-        this.enableRestrictionData=enableRestrictionData;
     }
 
     public java.lang.Integer getDescendantMaxLevel() {
@@ -56,6 +57,14 @@ public class EntitySearchBean {
         this.descendantMaxLevel=descendantMaxLevel;
     }
 
+    public java.lang.Boolean getCache() {
+        return this.cache;
+    }
+
+    public void setCache(java.lang.Boolean cache) {
+        this.cache=cache;
+    }
+
     public java.lang.Boolean getDisableViewGeneration() {
         return this.disableViewGeneration;
     }
@@ -64,12 +73,12 @@ public class EntitySearchBean {
         this.disableViewGeneration=disableViewGeneration;
     }
 
-    public java.lang.Boolean getGenerateFrontEnd() {
-        return this.generateFrontEnd;
+    public java.lang.Boolean getEnableRestrictionData() {
+        return this.enableRestrictionData;
     }
 
-    public void setGenerateFrontEnd(java.lang.Boolean generateFrontEnd) {
-        this.generateFrontEnd=generateFrontEnd;
+    public void setEnableRestrictionData(java.lang.Boolean enableRestrictionData) {
+        this.enableRestrictionData=enableRestrictionData;
     }
 
     public it.anggen.model.SecurityType getSecurityType() {
@@ -88,14 +97,6 @@ public class EntitySearchBean {
         this.restrictionEntityList=restrictionEntityList;
     }
 
-    public List<EnumField> getEnumFieldList() {
-        return this.enumFieldList;
-    }
-
-    public void setEnumFieldList(List<EnumField> enumFieldList) {
-        this.enumFieldList=enumFieldList;
-    }
-
     public List<Field> getFieldList() {
         return this.fieldList;
     }
@@ -104,12 +105,12 @@ public class EntitySearchBean {
         this.fieldList=fieldList;
     }
 
-    public List<Tab> getTabList() {
-        return this.tabList;
+    public List<EnumField> getEnumFieldList() {
+        return this.enumFieldList;
     }
 
-    public void setTabList(List<Tab> tabList) {
-        this.tabList=tabList;
+    public void setEnumFieldList(List<EnumField> enumFieldList) {
+        this.enumFieldList=enumFieldList;
     }
 
     public it.anggen.model.entity.EntityGroup getEntityGroup() {
@@ -118,6 +119,14 @@ public class EntitySearchBean {
 
     public void setEntityGroup(it.anggen.model.entity.EntityGroup entityGroup) {
         this.entityGroup=entityGroup;
+    }
+
+    public List<Tab> getTabList() {
+        return this.tabList;
+    }
+
+    public void setTabList(List<Tab> tabList) {
+        this.tabList=tabList;
     }
 
     public List<Relationship> getRelationshipList() {

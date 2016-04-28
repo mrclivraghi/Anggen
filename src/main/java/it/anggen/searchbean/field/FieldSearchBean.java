@@ -11,10 +11,10 @@ public class FieldSearchBean {
     public java.lang.Integer priority;
     public java.lang.String name;
     public it.anggen.model.FieldType fieldType;
-    public it.anggen.model.entity.Tab tab;
-    public it.anggen.model.entity.Entity entity;
-    public List<Annotation> annotationList;
     public List<RestrictionField> restrictionFieldList;
+    public it.anggen.model.entity.Entity entity;
+    public it.anggen.model.entity.Tab tab;
+    public List<Annotation> annotationList;
 
     public java.lang.Long getFieldId() {
         return this.fieldId;
@@ -48,12 +48,12 @@ public class FieldSearchBean {
         this.fieldType=fieldType;
     }
 
-    public it.anggen.model.entity.Tab getTab() {
-        return this.tab;
+    public List<RestrictionField> getRestrictionFieldList() {
+        return this.restrictionFieldList;
     }
 
-    public void setTab(it.anggen.model.entity.Tab tab) {
-        this.tab=tab;
+    public void setRestrictionFieldList(List<RestrictionField> restrictionFieldList) {
+        this.restrictionFieldList=restrictionFieldList;
     }
 
     public it.anggen.model.entity.Entity getEntity() {
@@ -64,20 +64,20 @@ public class FieldSearchBean {
         this.entity=entity;
     }
 
+    public it.anggen.model.entity.Tab getTab() {
+        return this.tab;
+    }
+
+    public void setTab(it.anggen.model.entity.Tab tab) {
+        this.tab=tab;
+    }
+
     public List<Annotation> getAnnotationList() {
         return this.annotationList;
     }
 
     public void setAnnotationList(List<Annotation> annotationList) {
         this.annotationList=annotationList;
-    }
-
-    public List<RestrictionField> getRestrictionFieldList() {
-        return this.restrictionFieldList;
-    }
-
-    public void setRestrictionFieldList(List<RestrictionField> restrictionFieldList) {
-        this.restrictionFieldList=restrictionFieldList;
     }
 
 }

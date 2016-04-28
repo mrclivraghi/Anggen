@@ -9,9 +9,9 @@ public class EnumFieldSearchBean {
     public java.lang.Long enumFieldId;
     public java.lang.Integer priority;
     public java.lang.String name;
-    public it.anggen.model.entity.Tab tab;
-    public it.anggen.model.entity.EnumEntity enumEntity;
     public it.anggen.model.entity.Entity entity;
+    public it.anggen.model.entity.EnumEntity enumEntity;
+    public it.anggen.model.entity.Tab tab;
     public List<Annotation> annotationList;
 
     public java.lang.Long getEnumFieldId() {
@@ -38,12 +38,12 @@ public class EnumFieldSearchBean {
         this.name=name;
     }
 
-    public it.anggen.model.entity.Tab getTab() {
-        return this.tab;
+    public it.anggen.model.entity.Entity getEntity() {
+        return this.entity;
     }
 
-    public void setTab(it.anggen.model.entity.Tab tab) {
-        this.tab=tab;
+    public void setEntity(it.anggen.model.entity.Entity entity) {
+        this.entity=entity;
     }
 
     public it.anggen.model.entity.EnumEntity getEnumEntity() {
@@ -54,12 +54,12 @@ public class EnumFieldSearchBean {
         this.enumEntity=enumEntity;
     }
 
-    public it.anggen.model.entity.Entity getEntity() {
-        return this.entity;
+    public it.anggen.model.entity.Tab getTab() {
+        return this.tab;
     }
 
-    public void setEntity(it.anggen.model.entity.Entity entity) {
-        this.entity=entity;
+    public void setTab(it.anggen.model.entity.Tab tab) {
+        this.tab=tab;
     }
 
     public List<Annotation> getAnnotationList() {

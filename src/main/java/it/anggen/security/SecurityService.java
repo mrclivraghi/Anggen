@@ -81,6 +81,7 @@ public class SecurityService{
 		if (!hasPermission) return false;
 		hasPermission=false;
 		for (RestrictionEntity restrictionEntity: userManager.getRestrictionEntityList())
+			if (restrictionEntity.getEntity()!=null)
 		{
 			if (restrictionEntity.getEntity().getEntityId().equals(entityId) && isAllowed(restrictionEntity,restrictionType))
 					hasPermission=true;

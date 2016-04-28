@@ -2,6 +2,10 @@ package it.anggen.generation;
 
 import it.anggen.utils.ReflectionManager;
 import it.anggen.utils.Utility;
+import springfox.documentation.builders.ApiInfoBuilder;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
 import it.anggen.model.RestrictionType;
 import it.anggen.model.SecurityType;
 import it.anggen.repository.security.UserRepository;
@@ -35,6 +39,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -64,6 +69,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
@@ -108,10 +116,10 @@ public class WebappGenerator {
 	public void init() {
 		applicationName=generator.applicationName;
 		
-		packageName=generator.mainPackage+applicationName.toLowerCase()+".";
+		packageName=generator.mainPackage+applicationName.replace("serverTest","anggen").toLowerCase()+".";
 		File file = new File(""); 
 		this.directory = file.getAbsolutePath()+"\\src\\main\\java";
-		this.modelPackage=generator.mainPackage+generator.applicationName+".model.";
+		this.modelPackage=generator.mainPackage+generator.applicationName.replace("serverTest","anggen")+".model.";
 		
 		
 	}
@@ -126,12 +134,11 @@ public class WebappGenerator {
 		generateSecurityConfig();
 		generateSecurityWebappInitializer();
 		generateSpringBootApplication();
-		generateForbiddenJsp();
+		//generateForbiddenJsp();
 		generateMainAppController();
-		htmlGenerator.setDirectory();
-		htmlGenerator.generateTemplate();
-		htmlGenerator.generateHomePage();
-		jsGenerator.generateMainApp();
+		generateWebConfig();
+		
+		
 	}
 	
 	private void generateMainAppController() {
@@ -165,6 +172,34 @@ public class WebappGenerator {
 		saveFile(codeModel);
 		
 	}
+	
+	private void generateWebConfig() {
+		JCodeModel codeModel = new JCodeModel();
+		JDefinedClass webConfigClass=null;
+		try {
+			webConfigClass = codeModel._class(JMod.PUBLIC, packageName+"boot.config."+Utility.getFirstUpper(applicationName)+"WebConfig", ClassType.CLASS);
+			} catch (JClassAlreadyExistsException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		webConfigClass.annotate(Configuration.class);
+		//webConfigClass.annotate(EnableWebMvc.class);
+		
+		webConfigClass._extends(WebMvcConfigurerAdapter.class);
+		
+		JMethod addCorsMapping = webConfigClass.method(JMod.PUBLIC, void.class, "addCorsMappings");
+		addCorsMapping.annotate(Override.class);
+		addCorsMapping.param(CorsRegistry.class, "registry");
+		JBlock addCorsBlock = addCorsMapping.body();
+		addCorsBlock.directStatement("super.addCorsMappings(registry);\n");
+		addCorsBlock.directStatement("registry.addMapping(\"/**\")\n");
+		addCorsBlock.directStatement(".allowedOrigins(\""+generator.corsOrigin+"\");\n");
+		
+		saveFile(codeModel);
+		
+	}
+	
+	
 
 	private void generateSpringBootApplication()
 	{
@@ -179,11 +214,36 @@ public class WebappGenerator {
 		genApp.annotate(Configuration.class);
 		genApp.annotate(EnableAutoConfiguration.class);
 		genApp.annotate(SpringBootApplication.class);
+		genApp.annotate(EnableCaching.class);
 		
 		JMethod mainMethod = genApp.method(JMod.PUBLIC+JMod.STATIC, void.class, "main");
 		mainMethod.param(String[].class, "args");
 		JBlock mainBlock = mainMethod.body();
 		mainBlock.directStatement(SpringApplication.class.getName()+".run("+Utility.getFirstUpper(applicationName)+"Application.class, args);");
+		
+		JMethod newsApi = genApp.method(JMod.PUBLIC, Docket.class, "newsApi");
+		newsApi.annotate(Bean.class);
+		JBlock newsApiBlock=newsApi.body();
+		newsApiBlock.directStatement("return new Docket("+DocumentationType.class.getName()+".SWAGGER_2) \n"+
+				".apiInfo(apiInfo()) \n"+
+				".select() \n"+
+				".build(); \n");
+
+
+		JMethod apiInfo = genApp.method(JMod.PRIVATE, ApiInfo.class, "apiInfo");
+		JBlock apiInfoBlock=apiInfo.body();
+		
+		apiInfoBlock.directStatement("return new "+ApiInfoBuilder.class.getName()+"() \n"+
+				".title(\"Swagger documentation\") \n"+
+				".description(\"Swagger documentation\") \n"+
+				".termsOfServiceUrl(\"http://www-03.ibm.com/software/sla/sladb.nsf/sla/bm?Open\") \n"+
+				".contact(\"Marco Livraghi\") \n"+
+				".license(\"Apache License Version 2.0\") \n"+
+				".licenseUrl(\"https://github.com/IBM-Bluemix/news-aggregator/blob/master/LICENSE\") \n"+
+				".version(\"2.0\") \n"+
+				".build(); \n");
+
+		
 		saveFile(codeModel);
 		
 	}
@@ -192,7 +252,7 @@ public class WebappGenerator {
 		JCodeModel codeModel = new JCodeModel();
 		JDefinedClass appConfig=null;
 		try {
-			appConfig = codeModel._class(JMod.PUBLIC, packageName+"boot.config.AppConfig", ClassType.CLASS);
+			appConfig = codeModel._class(JMod.PUBLIC, packageName+"boot.config."+Utility.getFirstUpper(applicationName)+"Config", ClassType.CLASS);
 		} catch (JClassAlreadyExistsException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -204,6 +264,8 @@ public class WebappGenerator {
 		member.param(packageName+"*");
 		declareVar(appConfig,"formatSql",String.class,"hibernate.format_sql");
 		declareVar(appConfig,"showSql",String.class,"hibernate.show_sql");
+		declareVar(appConfig,"cacheRegion",String.class,"hibernate.cache.region.factory_class");
+	       
 		//declareVar(appConfig,"dialect",String.class,"hibernate.dialect");
 		//declareVar(appConfig,"mode",String.class,"hibernate.hbm2ddl.auto");
 		//declareVar(appConfig,"namingStrategy",String.class,"hibernate.naming-strategy");
@@ -228,6 +290,7 @@ public class WebappGenerator {
 		hibPropertiesBlock.directStatement(Properties.class.getName()+"  prop = new "+Properties.class.getName()+"();");
 		hibPropertiesBlock.directStatement(" prop.put(\"hibernate.format_sql\", formatSql);");
 		hibPropertiesBlock.directStatement(" prop.put(\"hibernate.show_sql\", showSql);");
+		hibPropertiesBlock.directStatement(" prop.put(\"hibernate.cache.region.factory_class\", cacheRegion);");
 		//hibPropertiesBlock.directStatement(" prop.put(\"hibernate.dialect\", dialect);");
 		//hibPropertiesBlock.directStatement("prop.put(\"hibernate.hbm2ddl.auto\", mode);");
 		//hibPropertiesBlock.directStatement(" prop.put(\"hibernate.naming-strategy\",namingStrategy);");
@@ -269,7 +332,7 @@ public class WebappGenerator {
 			JCodeModel codeModel = new JCodeModel();
 			JDefinedClass securityConfig=null;
 			try {
-				securityConfig = codeModel._class(JMod.PUBLIC, packageName+"boot.config.SecurityConfig", ClassType.CLASS);
+				securityConfig = codeModel._class(JMod.PUBLIC, packageName+"boot.config."+Utility.getFirstUpper(applicationName)+"SecurityConfig", ClassType.CLASS);
 				securityConfig._extends(WebSecurityConfigurerAdapter.class);
 			} catch (JClassAlreadyExistsException e) {
 				// TODO Auto-generated catch block
@@ -295,13 +358,17 @@ public class WebappGenerator {
 			String enableAll="";
 			if (!generator.security)
 				enableAll=",\"/**\"";
-			configureBlock.directStatement(".antMatchers(\"/css/**\",\"/img/**\",\"/js/**\",\"/auth/**\",\"/login/**\""+enableAll+").permitAll()");
+			configureBlock.directStatement(".antMatchers(\"/css/**\",\"/img/**\",\"/js/**\",\"/auth/**\",\"/login/**\",\"/authentication/**\""+enableAll+").permitAll()");
 			configureBlock.directStatement(".and()");
 			configureBlock.directStatement(".authorizeRequests().anyRequest().fullyAuthenticated().and()");
 			configureBlock.directStatement(".formLogin().and().csrf()");
-			configureBlock.directStatement(".csrfTokenRepository(csrfTokenRepository()).and()");
-			configureBlock.directStatement(".addFilterAfter(new "+ReflectionManager.getJDefinedCustomClass(packageName+"boot.CsrfHeaderFilter").fullName()+"(), "+CsrfFilter.class.getName()+".class);");
-			
+			if (!generator.security || 1==1)
+				configureBlock.directStatement(".disable();");
+			else
+			{
+				configureBlock.directStatement(".csrfTokenRepository(csrfTokenRepository()).and()");
+				configureBlock.directStatement(".addFilterAfter(new "+ReflectionManager.getJDefinedCustomClass(packageName+"boot.CsrfHeaderFilter").fullName()+"(), "+CsrfFilter.class.getName()+".class);");
+			}
 			JMethod tokenRepository = securityConfig.method(JMod.PRIVATE, CsrfTokenRepository.class, "csrfTokenRepository");
 			JBlock tokenRepositoryBody=tokenRepository.body();
 			tokenRepositoryBody.directStatement(HttpSessionCsrfTokenRepository.class.getName()+" repository = new "+HttpSessionCsrfTokenRepository.class.getName()+"();");
@@ -387,7 +454,7 @@ public class WebappGenerator {
 		JMethod getRootConfig = waInit.method(JMod.PROTECTED, Class[].class, "getRootConfigClasses");
 		getRootConfig.annotate(Override.class);
 		JBlock rootConfigBlock = getRootConfig.body();
-		rootConfigBlock.directStatement("return new Class[] {"+packageName+"boot.config.SecurityConfig.class};");
+		rootConfigBlock.directStatement("return new Class[] {"+packageName+"boot.config."+Utility.getFirstUpper(applicationName)+"SecurityConfig.class};");
 	
 		
 		
@@ -472,7 +539,13 @@ public class WebappGenerator {
 		saveFile(codeModel);
 	}
 	
-	private void generateForbiddenJsp()
+	
+	
+	
+	
+	
+	
+	private void generateForbiddenJsp_old()
 	{
 		HtmlCanvas html = new HtmlCanvas();
 		try {

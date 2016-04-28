@@ -240,12 +240,24 @@ public class EntityManagerImpl implements EntityManager{
 		
 		for (EntityAttribute entityAttribute: entityAttributeList)
 		{
+			
 				if (EntityAttributeManager.getInstance(entityAttribute).getDescriptionField())
 				{
 					if (withGetter)
-						descriptionFields=descriptionFields+" "+entityName+".get"+Utility.getFirstUpper(entityAttribute.getName())+"()+' '+";
+					{
+						if (EntityAttributeManager.getInstance(entityAttribute).isRelationship())
+							descriptionFields=descriptionFields+" ("+entityName+".get"+Utility.getFirstUpper(entityAttribute.getName())+"()!=null ? "+entityName+".get"+Utility.getFirstUpper(entityAttribute.getName())+"().get"+Utility.getFirstUpper(entityAttribute.getName())+"Id().toString() : \"\") +' '+";
+						else
+							descriptionFields=descriptionFields+" "+entityName+".get"+Utility.getFirstUpper(entityAttribute.getName())+"()+' '+";
+						
+					}
 					else
-						descriptionFields=descriptionFields+" "+entityName+"."+entityAttribute.getName()+"+' '+";
+					{
+						if (EntityAttributeManager.getInstance(entityAttribute).isRelationship())
+							descriptionFields=descriptionFields+" "+entityName+"."+entityAttribute.getName()+"."+Utility.getFirstUpper(entityAttribute.getName())+"Id+' '+";
+						else	
+							descriptionFields=descriptionFields+" "+entityName+"."+entityAttribute.getName()+"+' '+";
+					}
 
 				}
 		}
@@ -323,6 +335,57 @@ public class EntityManagerImpl implements EntityManager{
 				
 		}
 	}
+	
+	
+	private  List<Entity> getParentEntities(Entity ancestorEntity, Entity childEntity,List<Entity> analytzedEntity)
+	{
+		analytzedEntity.add(ancestorEntity);
+		
+		List<Entity> theRoad = new ArrayList<>();
+		
+		if (ancestorEntity.getEntityId()==childEntity.getEntityId())
+		{
+			theRoad.add(ancestorEntity);
+			
+			 return theRoad;
+		}
+		for (Relationship relationship : ancestorEntity.getRelationshipList())
+		{
+			List<Entity> childRoad = new ArrayList<>();
+			if (!(analytzedEntity.contains(relationship.getEntityTarget())))
+				 childRoad = getParentEntities(relationship.getEntityTarget(), childEntity,analytzedEntity);
+			if (childRoad.size()>0)
+			{
+				theRoad.add(ancestorEntity);
+				theRoad.addAll(childRoad);
+				return theRoad;
+			}
+		}
+		return theRoad;
+	}
+	
+	
+	@Override
+	public List<Entity> getParentEntities(Entity ancestorEntity, Entity childEntity)
+	{
+		return getParentEntities(ancestorEntity, childEntity, new ArrayList<Entity>());
+	}
+
+	@Override
+	public List<Field> getPasswordField() {
+		List<Field> fieldList = getFieldList();
+		List<Field> passwordField = new ArrayList<Field>();
+		for (Field field: fieldList)
+		{
+			if (EntityAttributeManager.getInstance(field).getPassword())
+				passwordField.add(field);
+		}
+		return passwordField;
+		
+	}
+
+	
+	
 	
 
 

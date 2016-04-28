@@ -2,8 +2,8 @@ package it.anggen.controller;
 
 import it.anggen.reflection.EntityManager;
 import it.anggen.reflection.EntityManagerImpl;
-import it.anggen.security.RestrictionItem;
 import it.anggen.security.UserManager;
+import it.anggen.security.view.RestrictionItem;
 import it.anggen.model.entity.Entity;
 import it.anggen.model.field.Annotation;
 import it.anggen.model.field.Field;
@@ -27,6 +27,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.codahale.metrics.annotation.Timed;
+
 @Controller
 @RequestMapping("/home")
 public class HomeController {
@@ -36,6 +38,7 @@ public class HomeController {
 	
 	
 	@RequestMapping(method=RequestMethod.GET)
+	@Timed
 	public String getHome(){
 		return "home";
 	}

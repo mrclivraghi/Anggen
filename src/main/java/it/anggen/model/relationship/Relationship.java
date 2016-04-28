@@ -16,22 +16,24 @@ import it.anggen.utils.annotation.MaxDescendantLevel;
 @Table(schema = "meta", name = "relationship")
 @it.anggen.utils.annotation.SecurityType(type = it.anggen.model.SecurityType.ACCESS_WITH_PERMISSION)
 @MaxDescendantLevel(100)
-public class Relationship extends EntityAttribute{
+public class Relationship
+    extends EntityAttribute
+{
 
-    public final static java.lang.Long staticEntityId = 11L;
+    public final static java.lang.Long staticEntityId = 8L;
     @javax.persistence.Column(name = "priority")
     @it.anggen.utils.annotation.Priority(2)
     private Integer priority;
+    @javax.persistence.Column(name = "name")
+    @it.anggen.utils.annotation.Priority(2)
+    @it.anggen.utils.annotation.DescriptionField
+    private String name;
     @javax.persistence.Column(name = "relationship_id")
     @it.anggen.utils.annotation.Priority(1)
     @it.anggen.utils.annotation.DescriptionField
     @Id
     @GeneratedValue
     private java.lang.Long relationshipId;
-    @javax.persistence.Column(name = "name")
-    @it.anggen.utils.annotation.DescriptionField
-    @it.anggen.utils.annotation.Priority(2)
-    private String name;
     @OneToMany(fetch = javax.persistence.FetchType.EAGER)
     @org.hibernate.annotations.Type(type = "it.anggen.model.field.Annotation")
     @javax.persistence.JoinColumn(name = "relationship_id_relationship")
@@ -63,20 +65,20 @@ public class Relationship extends EntityAttribute{
         this.priority=priority;
     }
 
-    public java.lang.Long getRelationshipId() {
-        return this.relationshipId;
-    }
-
-    public void setRelationshipId(java.lang.Long relationshipId) {
-        this.relationshipId=relationshipId;
-    }
-
     public String getName() {
         return this.name;
     }
 
     public void setName(String name) {
         this.name=name;
+    }
+
+    public java.lang.Long getRelationshipId() {
+        return this.relationshipId;
+    }
+
+    public void setRelationshipId(java.lang.Long relationshipId) {
+        this.relationshipId=relationshipId;
     }
 
     public List<Annotation> getAnnotationList() {

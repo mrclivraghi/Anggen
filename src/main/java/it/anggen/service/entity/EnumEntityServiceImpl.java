@@ -3,6 +3,7 @@ package it.anggen.service.entity;
 
 import java.util.List;
 import it.anggen.repository.entity.EnumEntityRepository;
+import it.anggen.repository.field.EnumFieldRepository;
 import it.anggen.repository.field.EnumValueRepository;
 import it.anggen.searchbean.entity.EnumEntitySearchBean;
 import it.anggen.service.entity.EnumEntityService;
@@ -19,6 +20,8 @@ public class EnumEntityServiceImpl
     public EnumEntityRepository enumEntityRepository;
     @org.springframework.beans.factory.annotation.Autowired
     public EnumValueRepository enumValueRepository;
+    @org.springframework.beans.factory.annotation.Autowired
+    public EnumFieldRepository enumFieldRepository;
     private static Integer PAGE_SIZE = (5);
 
     @Override
@@ -34,7 +37,7 @@ public class EnumEntityServiceImpl
 
     @Override
     public List<it.anggen.model.entity.EnumEntity> find(EnumEntitySearchBean enumEntity) {
-        return enumEntityRepository.findByEnumEntityIdAndNameAndProjectAndEnumValue(enumEntity.getEnumEntityId(),enumEntity.getName(),enumEntity.getProject(),enumEntity.getEnumValueList()==null? null :enumEntity.getEnumValueList().get(0));
+        return enumEntityRepository.findByEnumEntityIdAndNameAndProjectAndEnumValueAndEnumField(enumEntity.getEnumEntityId(),enumEntity.getName(),enumEntity.getProject(),enumEntity.getEnumValueList()==null? null :enumEntity.getEnumValueList().get(0),enumEntity.getEnumFieldList()==null? null :enumEntity.getEnumFieldList().get(0));
     }
 
     @Override
@@ -55,6 +58,11 @@ public class EnumEntityServiceImpl
         for (it.anggen.model.field.EnumValue enumValue: enumEntity.getEnumValueList())
         {
         enumValue.setEnumEntity(enumEntity);
+        }
+        if (enumEntity.getEnumFieldList()!=null)
+        for (it.anggen.model.field.EnumField enumField: enumEntity.getEnumFieldList())
+        {
+        enumField.setEnumEntity(enumEntity);
         }
         it.anggen.model.entity.EnumEntity returnedEnumEntity=enumEntityRepository.save(enumEntity);
         if (enumEntity.getProject()!=null)

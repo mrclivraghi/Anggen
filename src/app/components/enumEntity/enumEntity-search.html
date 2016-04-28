@@ -1,0 +1,108 @@
+<div>
+	<form id="enumEntitySearchBean">
+		<div class="panel panel-default default-panel">
+			<div class="panel-heading">Search form enumEntity
+			</div>
+
+			<div class="panel-body">
+				<div class="pull-left right-input" ng-show="true ">
+					<div class="input-group">
+						<span class="input-group-addon">enumEntityId
+						</span>
+
+						<input class="form-control " aria-describedby="sizing-addon3" type="text" id="enumEntity-enumEntityId" ng-model="vm.searchBean.enumEntityId" ng-readonly="false" name="enumEntityId" placeholder="enumEntityId"/>
+						
+					</div>
+
+				</div>
+
+				<div class="pull-left right-input" ng-show="true ">
+					<div class="input-group">
+						<span class="input-group-addon">name
+						</span>
+
+						<input class="form-control " aria-describedby="sizing-addon3" type="text" id="enumEntity-name" ng-model="vm.searchBean.name" ng-readonly="false" name="name" placeholder="name"/>
+						
+					</div>
+
+				</div>
+
+				<div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.entity.restrictionItemMap.project.canSearch==true)">
+					<div class="input-group">
+						<span class="input-group-addon">project
+						</span>
+
+						<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.project.projectId" id="project" ng-options="project.projectId as  project.name+&#39; &#39;+ project.projectId for project in vm.projectPreparedData.entityList" enctype="UTF-8">
+						</select>
+
+					</div>
+
+				</div>
+
+				<div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.field.restrictionItemMap.enumValue.canSearch==true)">
+					<div class="input-group">
+						<span class="input-group-addon">enumValue
+						</span>
+
+						<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.enumValue.enumValueId" id="enumValue" ng-options="enumValue.enumValueId as  enumValue.name+&#39; &#39;+ enumValue.enumValueId for enumValue in vm.enumValuePreparedData.entityList" enctype="UTF-8">
+						</select>
+
+					</div>
+
+				</div>
+
+				<div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.field.restrictionItemMap.enumField.canSearch==true)">
+					<div class="input-group">
+						<span class="input-group-addon">enumField
+						</span>
+
+						<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.enumField.enumFieldId" id="enumField" ng-options="enumField.enumFieldId as  enumField.enumFieldId+&#39; &#39;+ enumField.name for enumField in vm.enumFieldPreparedData.entityList" enctype="UTF-8">
+						</select>
+
+					</div>
+
+				</div>
+
+			</div>
+
+			<div class="panel-body">
+				<div class="panel-body">
+					<div class="pull-left right-input">
+						<button ng-click="vm.addNew()" class="btn btn-default " ng-show="($root.restrictionList.entity.restrictionItemMap.enumEntity.canCreate==true)">Add new
+						</button>
+
+						<button ng-click="vm.search()" class="btn btn-default ">Find
+						</button>
+
+						<button ng-click="vm.reset()" class="btn btn-default ">Reset
+						</button>
+
+					</div>
+
+				</div>
+
+			</div>
+
+		</div>
+
+	</form>
+
+	<form id="enumEntityList" ng-if="vm.entityList.length&gt;0" enctype="UTF-8">
+		<div class="panel panel-default default-panel">
+			<div class="panel-heading">List enumEntity<button ng-click="vm.downloadList()" class="btn btn-default pull-right" style="margin-top:-7px">
+	<span class="glyphicon glyphicon-download-alt" aria-hidden="true">
+	</span>
+</button>
+
+			</div>
+
+			<div class="panel-body">
+				<div ui-grid="vm.enumEntityGridOptions" ui-grid-pagination="" ui-grid-selection="" ui-grid-exporter="">
+				</div>
+
+			</div>
+
+		</div>
+
+	</form>
+</div>

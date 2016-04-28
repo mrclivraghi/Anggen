@@ -92,6 +92,22 @@ public class Utility {
 	}
 	
 	
+	public static String camelCaseToMinus(String str)
+	{
+		String temp= str.substring(0, 1);
+		for (int i=1; i<str.length(); i++)
+		{
+			if (Character.isUpperCase(str.charAt(i)))
+			{
+				temp=temp+"-"+Character.toLowerCase(str.charAt(i));
+			} else
+				temp=temp+str.charAt(i);
+		}
+		
+		return temp;
+	}
+	
+	
 	public static void main (String[] args)
 	{
 		Date myDate= new Date();

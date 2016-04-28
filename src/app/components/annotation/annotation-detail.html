@@ -1,0 +1,225 @@
+<div>
+	<form id="annotationDetailForm" name="annotationDetailForm" ng-show="vm.selectedEntity.show">
+		<div class="panel panel-default default-panel">
+			<div class="panel-heading">Detail annotation {{ vm.selectedEntity.annotationId }} <button type="button" class="close" aria-label="Close" ng-click="vm.closeEntityDetail()">
+	<span aria-hidden="true">&times;
+	</span>
+</button>
+
+			</div>
+
+			<div class="panel-body">
+				<ul class="nav nav-tabs" role="tablist" id="annotationTabs">
+					<li role="presentation">
+						<a href="#annotation-Detail" aria-controls="Detail" role="tab" data-toggle="tab" ng-click="vm.refreshTableDetail()">Detail
+						</a>
+
+					</li>
+
+					<script type="text/javascript">angular.element('a[href="#annotation-Detail"]').on('shown.bs.tab', function (e) {
+var target = angular.element(e.target).attr("href"); // activated tab
+//$log.debug(target);
+if (angular.element('#annotationTabs').scope()!=null && angular.element(('#annotationTabs')).scope()!=undefined) 
+{ /* angular.element(('#annotationTabs')).scope().refreshTableDetail(); */ }
+});
+
+					</script>
+
+				</ul>
+
+				<div class="tab-content">
+					<div role="tabpanel" class="tab-pane fade" id="annotation-Detail">
+						<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !annotationDetailForm.annotationId.$valid, &#39;has-success&#39;: annotationDetailForm.annotationId.$valid}" style="height:59px" ng-show="true ">
+							<div class="input-group">
+								<span class="input-group-addon">annotationId
+								</span>
+
+								<input class="form-control " aria-describedby="sizing-addon3" type="text" id="annotation-annotationId" ng-model="vm.selectedEntity.annotationId" ng-readonly="true" name="annotationId" placeholder="annotationId"/>
+								
+							</div>
+
+						</div>
+
+						<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !annotationDetailForm.annotationType.$valid, &#39;has-success&#39;: annotationDetailForm.annotationType.$valid}" style="height:59px" ng-show="true ">
+							<div class="input-group">
+								<span class="input-group-addon">annotationType
+								</span>
+
+								<select class="form-control pull-left" aria-describedby="sizing-addon3" type="text" id="annotation-annotationType" ng-model="vm.selectedEntity.annotationType" ng-readonly="vm.restrictionList.annotation.restrictionFieldMap.annotationType" name="annotationType" placeholder="annotationType" ng-options="annotationType as annotationType for annotationType in vm.annotationTypePreparedData.entityList" enctype="UTF-8">
+								</select>
+
+							</div>
+
+						</div>
+
+						<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !annotationDetailForm.field.$valid, &#39;has-success&#39;: annotationDetailForm.field.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.field">
+							<div class="input-group">
+								<span class="input-group-addon">field
+								</span>
+
+								<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.field" id="field" name="field" ng-options="field as  field.name+&#39; &#39;+ field.fieldId for field in vm.fieldPreparedData.entityList track by field.fieldId" enctype="UTF-8">
+								</select>
+
+								<span class="input-group-btn">
+									<button ng-click="vm.showFieldDetail()" class="btn btn-default " id="field" ng-if="vm.selectedEntity.field==null">Add new field
+									</button>
+
+									<button ng-click="vm.showFieldDetail()" class="btn btn-default " id="field" ng-if="vm.selectedEntity.field!=null">Show detail
+									</button>
+
+								</span>
+
+							</div>
+
+						</div>
+
+						<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !annotationDetailForm.enumField.$valid, &#39;has-success&#39;: annotationDetailForm.enumField.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.enumField">
+							<div class="input-group">
+								<span class="input-group-addon">enumField
+								</span>
+
+								<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.enumField" id="enumField" name="enumField" ng-options="enumField as  enumField.enumFieldId+&#39; &#39;+ enumField.name for enumField in vm.enumFieldPreparedData.entityList track by enumField.enumFieldId" enctype="UTF-8">
+								</select>
+
+								<span class="input-group-btn">
+									<button ng-click="vm.showEnumFieldDetail()" class="btn btn-default " id="enumField" ng-if="vm.selectedEntity.enumField==null">Add new enumField
+									</button>
+
+									<button ng-click="vm.showEnumFieldDetail()" class="btn btn-default " id="enumField" ng-if="vm.selectedEntity.enumField!=null">Show detail
+									</button>
+
+								</span>
+
+							</div>
+
+						</div>
+
+						<div id="annotation-annotationAttribute" class="modal fade" role="dialog" ng-if="!$root.openNode.annotationAttribute">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal">&times;
+										</button>
+
+										<h4 class="modal-title">Link existing annotationAttribute
+										</h4>
+
+									</div>
+
+									<div class="modal-body">
+										<p>
+
+										</p>
+
+										<div class="input-group">
+											<span class="input-group-addon">annotationAttribute
+											</span>
+
+											<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.annotationAttribute" id="annotationAttribute" name="annotationAttribute" ng-options="annotationAttribute as  annotationAttribute.property+&#39; &#39;+ annotationAttribute.annotationAttributeId for annotationAttribute in vm.annotationAttributePreparedData.entityList track by annotationAttribute.annotationAttributeId" enctype="UTF-8">
+											</select>
+
+											<span class="input-group-btn">
+												<button ng-click="saveLinkedAnnotationAttribute()" class="btn btn-default " id="annotationAttribute">Save
+												</button>
+
+											</span>
+
+										</div>
+
+									</div>
+
+									<div class="modal-footer">
+										<button ng-click="close()" class="btn btn-default " data-dismiss="modal">close
+										</button>
+
+									</div>
+
+								</div>
+
+							</div>
+
+						</div>
+
+						<br/>
+
+						<br/>
+
+						<div class="pull-left" style="width: 100%" ng-show="true  && ($root.restrictionList.field.restrictionItemMap.annotationAttribute.canSearch==true)" ng-if="!$root.openNode.annotationAttribute">
+							<div class="panel panel-default default-panel">
+								<div class="panel-heading">annotationAttribute<button ng-click="vm.showAnnotationAttributeDetail()" class="btn btn-default  pull-right" style="margin-top: -7px" ng-show="($root.restrictionList.field.restrictionItemMap.annotationAttribute.canCreate==true)">Add new annotationAttribute</button>
+<button type="button" class="btn btn-default pull-right" style="margin-top: -7px" data-toggle="modal" data-target="#annotation-annotationAttribute">Link existing</button>
+<button ng-click="vm.downloadAnnotationAttributeList()" class="btn btn-default pull-right" style="margin-top:-7px">
+	<span class="glyphicon glyphicon-download-alt" aria-hidden="true">
+	</span>
+</button>
+
+								</div>
+
+								<div class="panel-body" ng-class="{&#39;has-error&#39;: !vm.annotationDetailForm.annotationAttribute.$valid, &#39;has-success&#39;: vm.annotationDetailForm.annotationAttribute.$valid}">
+									<label id="annotationAttribute">annotationAttribute
+									</label>
+
+									<div id="annotationAttribute" ng-if="vm.selectedEntity.annotationAttributeList.length&gt;0">
+										<div style="top: 100px" ui-grid="vm.annotationAttributeGridOptions" ui-grid-pagination="" ui-grid-selection="">
+										</div>
+
+									</div>
+
+								</div>
+
+							</div>
+
+						</div>
+
+						<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !annotationDetailForm.relationship.$valid, &#39;has-success&#39;: annotationDetailForm.relationship.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.relationship">
+							<div class="input-group">
+								<span class="input-group-addon">relationship
+								</span>
+
+								<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.relationship" id="relationship" name="relationship" ng-options="relationship as  relationship.name+&#39; &#39;+ relationship.relationshipId for relationship in vm.relationshipPreparedData.entityList track by relationship.relationshipId" enctype="UTF-8">
+								</select>
+
+								<span class="input-group-btn">
+									<button ng-click="vm.showRelationshipDetail()" class="btn btn-default " id="relationship" ng-if="vm.selectedEntity.relationship==null">Add new relationship
+									</button>
+
+									<button ng-click="vm.showRelationshipDetail()" class="btn btn-default " id="relationship" ng-if="vm.selectedEntity.relationship!=null">Show detail
+									</button>
+
+								</span>
+
+							</div>
+
+						</div>
+
+					</div>
+
+				</div>
+
+			</div>
+
+			<script type="text/javascript">$('#annotationTabs a:first').tab('show');
+			</script>
+
+			<div class="panel-body">
+				<div class="pull-left">
+					<form id="annotationActionButton" ng-if="vm.selectedEntity.show">
+						<button ng-click="insert()" class="btn btn-default " ng-if="vm.selectedEntity.annotationId==undefined" ng-show="($root.restrictionList.field.restrictionItemMap.annotation.canCreate==true)">Insert
+						</button>
+
+						<button ng-click="update()" class="btn btn-default " ng-if="vm.selectedEntity.annotationId&gt;0" ng-show="($root.restrictionList.field.restrictionItemMap.annotation.canUpdate==true)">Update
+						</button>
+
+						<button ng-click="del()" class="btn btn-default " ng-if="vm.selectedEntity.annotationId&gt;0" ng-show="($root.restrictionList.field.restrictionItemMap.annotation.canDelete==true)">Delete
+						</button>
+
+					</form>
+
+				</div>
+
+			</div>
+
+		</div>
+
+	</form>
+</div>

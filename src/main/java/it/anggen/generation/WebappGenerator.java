@@ -118,12 +118,12 @@ public class WebappGenerator {
 	}
 	
 	public void init() {
-		applicationName=generator.applicationName;
+		applicationName=Generator.appName;
 		
-		packageName=generator.mainPackage+applicationName.replace("serverTest","anggen").toLowerCase()+".";
+		packageName=Generator.generatedPackage+applicationName.replace("serverTest","anggen").toLowerCase()+".";
 		File file = new File(""); 
 		this.directory = file.getAbsolutePath()+"\\src\\main\\java";
-		this.modelPackage=generator.mainPackage+generator.applicationName.replace("serverTest","anggen")+".model.";
+		this.modelPackage=packageName+"model.";
 		
 		
 	}
@@ -380,13 +380,13 @@ public class WebappGenerator {
 			configureBlock.directStatement("http");
 			configureBlock.directStatement(".authorizeRequests()");
 			String enableAll="";
-			if (!generator.security)
+			if (!Generator.enableSecurity)
 				enableAll=",\"/**\"";
 			configureBlock.directStatement(".antMatchers(\"/css/**\",\"/img/**\",\"/js/**\",\"/auth/**\",\"/login/**\",\"/authentication/**\""+enableAll+").permitAll()");
 			configureBlock.directStatement(".and()");
 			configureBlock.directStatement(".authorizeRequests().anyRequest().fullyAuthenticated().and()");
 			configureBlock.directStatement(".formLogin().and().csrf()");
-			if (!generator.security || 1==1)
+			if (!Generator.enableSecurity || 1==1)
 				configureBlock.directStatement(".disable();");
 			else
 			{
@@ -427,7 +427,7 @@ public class WebappGenerator {
 				e.printStackTrace();
 			}
 			JAnnotationUse configAnnotation =csrfFilter.annotate(Configuration.class);
-			configAnnotation.param("value", generator.applicationName+"CsrfFilter");
+			configAnnotation.param("value", Generator.appName+"CsrfFilter");
 			JAnnotationUse orderAnnotation=csrfFilter.annotate(Order.class);
 			orderAnnotation.param("value", SecurityProperties.ACCESS_OVERRIDE_ORDER);//(, );
 			JMethod doFilter = csrfFilter.method(JMod.PROTECTED, void.class, "doFilterInternal");

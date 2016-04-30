@@ -79,8 +79,8 @@ public class HtmlGenerator {
 	public void setDirectory()
 	{
 		File file = new File(""); 
-		directoryViewPages = file.getAbsolutePath()+generator.htmlDirectory+"/";
-		directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+generator.applicationName+"/";
+		directoryViewPages = file.getAbsolutePath()+Generator.htmlDirectoryProperty+"/";
+		directoryAngularFiles=file.getAbsolutePath()+Generator.generateAngularDirectory+Generator.appName+"/";
 	}
 	
 	/**
@@ -106,15 +106,15 @@ public class HtmlGenerator {
 			.macros().javascript("js/ui-bootstrap-tpls-1.2.5.min.js");
 			if (includeEntityFile)
 			{
-				html.macros().javascript("js/angular/"+generator.applicationName+"/main-app.js");
+				html.macros().javascript("js/angular/"+Generator.appName+"/main-app.js");
 				html.macros().javascript("js/metrics/metrics.controller.js");
 				html.macros().javascript("js/metrics/metrics.service.js");
-				//html.macros().javascript("js/angular/"+generator.applicationName+"/"+generator.applicationName+"-service.js");
-				//html.macros().javascript("js/angular/"+generator.applicationName+"/"+generator.applicationName+"-controller.js");
+				//html.macros().javascript("js/angular/"+Generator.appName+"/"+Generator.appName+"-service.js");
+				//html.macros().javascript("js/angular/"+Generator.appName+"/"+Generator.appName+"-controller.js");
 				for (Entity entity: generator.getEntityList())
 				{
-					html.macros().javascript("js/angular/"+generator.applicationName+"/"+entity.getName()+".service.js");
-					html.macros().javascript("js/angular/"+generator.applicationName+"/"+entity.getName()+".controller.js");
+					html.macros().javascript("js/angular/"+Generator.appName+"/"+entity.getName()+".service.js");
+					html.macros().javascript("js/angular/"+Generator.appName+"/"+entity.getName()+".controller.js");
 					
 				}
 			}
@@ -146,7 +146,7 @@ public class HtmlGenerator {
 			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "css/main.css"))
 			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "css/jquery-ui.css"))
 			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "css/easytree/skin-win8/ui.easytree.css"))
-			.link((new HtmlAttributes()).add("rel","import").add("href", ""+generator.applicationName+generator.menuName));
+			.link((new HtmlAttributes()).add("rel","import").add("href", ""+Generator.appName+generator.menuName));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -253,7 +253,7 @@ public class HtmlGenerator {
 		try {
 
 			html.div((new HtmlAttributes()).add("id", "canvas"))
-			.div().content("<"+Utility.camelCaseToMinus(generator.applicationName)+"-navbar></"+Utility.camelCaseToMinus(generator.applicationName)+"-navbar> ",false)
+			.div().content("<"+Utility.camelCaseToMinus(Generator.appName)+"-navbar></"+Utility.camelCaseToMinus(Generator.appName)+"-navbar> ",false)
 			.div((new HtmlAttributes()).add("id", "alertInfo").add("class","alert alert-success custom-alert").add("style","display: none")).span().content("")._div()
 			.div((new HtmlAttributes()).add("id", "alertError").add("class","alert alert-danger custom-alert").add("style","display: none")).span().content("")._div()
 			
@@ -271,11 +271,11 @@ public class HtmlGenerator {
 		
 		File f = new File("");
 		
-		File dir = new File(f.getAbsolutePath()+generator.angularDirectory+"../main/");
+		File dir = new File(f.getAbsolutePath()+Generator.generateAngularDirectory+"../main/");
 		if (!dir.exists())
 			dir.mkdirs();
 		
-		File myJsp=new File(f.getAbsolutePath()+generator.angularDirectory+"../main/main.html");
+		File myJsp=new File(f.getAbsolutePath()+Generator.generateAngularDirectory+"../main/main.html");
 		PrintWriter writer;
 		try {
 			System.out.println("Written "+myJsp.getAbsolutePath());
@@ -352,7 +352,7 @@ public class HtmlGenerator {
 			.span((new HtmlAttributes()).add("class", "icon-bar"))._span()
 			._button()
 			.a((new HtmlAttributes()).add("class", "navbar-brand").add("href", "home"))
-			.content(generator.applicationName)
+			.content(Generator.appName)
 			._div()//end header
 			.div((new HtmlAttributes()).add("class", "collapse navbar-collapse").add("id", "bs-example-navbar-collapse-1")) //start real nav menu
 			.ul((new HtmlAttributes()).add("class", "nav navbar-nav"));

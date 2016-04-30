@@ -121,13 +121,13 @@ public class JsGenerator {
 			//.append("'use strict'; \n")
 			.append("\n");
 			
-			sb.append("angular\n.module(\""+generator.applicationName+"\")\n");
+			sb.append("angular\n.module(\""+Generator.appName+"\")\n");
 			init(entity, null, null, null, null, null);
 			sb.append(generateController());
 			
 			sb.append("})();\n");
 		File file = new File("");
-		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+entity.getName()+"/";
+		String directoryAngularFiles=file.getAbsolutePath()+Generator.generateAngularDirectory+entity.getName()+"/";
 		saveAsJsFile(directoryAngularFiles, entity.getName()+".controller", sb.toString());
 		}
 	}
@@ -141,13 +141,13 @@ public class JsGenerator {
 			//.append("'use strict'; \n")
 			.append("\n");
 			
-			sb.append("angular\n.module(\""+generator.applicationName+"\")\n");
+			sb.append("angular\n.module(\""+Generator.appName+"\")\n");
 			init(entity, null, null, null, null, null);
 			sb.append(generateService ());
 			
 			sb.append("})();\n");
 		File file = new File("");
-		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+entity.getName()+"/";
+		String directoryAngularFiles=file.getAbsolutePath()+Generator.generateAngularDirectory+entity.getName()+"/";
 		saveAsJsFile(directoryAngularFiles, entity.getName()+".service", sb.toString());
 		}
 	}
@@ -343,7 +343,7 @@ public class JsGenerator {
 		.append("'use strict';\n")
 
 		.append(" angular\n")
-		.append(" .module('"+generator.applicationName+"')\n")
+		.append(" .module('"+Generator.appName+"')\n")
 		.append(" .directive('"+entityName+"Search', "+entityName+"Search);\n")
 
 		.append("/** @ngInject */\n")
@@ -369,7 +369,7 @@ public class JsGenerator {
 
 		.append("})();\n");
 		File file = new File("");
-		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+entity.getName()+"/";
+		String directoryAngularFiles=file.getAbsolutePath()+Generator.generateAngularDirectory+entity.getName()+"/";
 		saveAsJsFile(directoryAngularFiles, entity.getName()+"Search.directive", sb.toString());
 
 	}
@@ -381,7 +381,7 @@ public class JsGenerator {
 		.append("'use strict';\n")
 
 		.append(" angular\n")
-		.append(" .module('"+generator.applicationName+"')\n")
+		.append(" .module('"+Generator.appName+"')\n")
 		.append(" .directive('"+entityName+"Detail', "+entityName+"Detail);\n")
 
 		.append("/** @ngInject */\n")
@@ -407,7 +407,7 @@ public class JsGenerator {
 
 		.append("})();\n");
 		File file = new File("");
-		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+entity.getName()+"/";
+		String directoryAngularFiles=file.getAbsolutePath()+Generator.generateAngularDirectory+entity.getName()+"/";
 		saveAsJsFile(directoryAngularFiles, entity.getName()+"Detail.directive", sb.toString());
 
 	}
@@ -1028,7 +1028,7 @@ if (entity.getEntityGroup()!=null)
 		.append("\n");
 		
 		
-		sb.append("angular.module(\""+generator.applicationName+"\").service(\"MainService\", MainService);\n");
+		sb.append("angular.module(\""+Generator.appName+"\").service(\"MainService\", MainService);\n");
 		
 		sb.append("/** @ngInject */\n");
 		sb.append("function MainService()\n");
@@ -1040,7 +1040,7 @@ if (entity.getEntityGroup()!=null)
 		sb.append("})();\n");
 		
 		File file = new File("");
-		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+"main/";
+		String directoryAngularFiles=file.getAbsolutePath()+Generator.generateAngularDirectory+"main/";
 		saveAsJsFile(directoryAngularFiles, "main.service", sb.toString());
 
 	
@@ -1054,7 +1054,7 @@ if (entity.getEntityGroup()!=null)
 		.append("'use strict'; \n")
 		.append("\n");
 		
-		sb.append("angular.module(\""+generator.applicationName+"\").controller(\"MainController\",MainController);\n\n");
+		sb.append("angular.module(\""+Generator.appName+"\").controller(\"MainController\",MainController);\n\n");
 		
 		
 		sb.append("/** @ngInject */\n");
@@ -1063,7 +1063,7 @@ if (entity.getEntityGroup()!=null)
 		sb.append("})();\n");
 		
 		File file = new File("");
-		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+"main/";
+		String directoryAngularFiles=file.getAbsolutePath()+Generator.generateAngularDirectory+"main/";
 		saveAsJsFile(directoryAngularFiles, "main.controller", sb.toString());
 
 	}
@@ -1079,14 +1079,14 @@ if (entity.getEntityGroup()!=null)
 		.append("\n");
 
 
-		sb.append("angular.module(\""+generator.applicationName+"\").service(\"SecurityService\",SecurityService);\n");
+		sb.append("angular.module(\""+Generator.appName+"\").service(\"SecurityService\",SecurityService);\n");
 
 		sb.append("/** @ngInject */\n");
 		sb.append("function SecurityService($http,$log)\n");
 		sb.append("{\n");
 		sb.append("this.restrictionList={};\n");
 
-		if (generator.security)
+		if (Generator.enableSecurity)
 		{
 			sb.append("this.init= function() {\n");
 			sb.append("var promise= $http.get(\""+generator.restUrl+"authentication/\");\n");
@@ -1130,7 +1130,7 @@ if (entity.getEntityGroup()!=null)
 
 
 		File file = new File("");
-		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+"security/";
+		String directoryAngularFiles=file.getAbsolutePath()+Generator.generateAngularDirectory+"security/";
 		saveAsJsFile(directoryAngularFiles, "security.service", sb.toString());
 	}
 	
@@ -1143,7 +1143,7 @@ if (entity.getEntityGroup()!=null)
 		.append("  'use strict'\n")
 		.append("\n")
 		.append("  angular\n")
-		.append("    .module('"+generator.applicationName+"')\n")
+		.append("    .module('"+Generator.appName+"')\n")
 		.append("    .config(config)\n")
 		.append("    .config(setHttpProvider);\n")
 		.append("\n")
@@ -1169,7 +1169,7 @@ if (entity.getEntityGroup()!=null)
 		sb.append("})();\n");
 		
 		File file = new File("");
-		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+"../";
+		String directoryAngularFiles=file.getAbsolutePath()+Generator.generateAngularDirectory+"../";
 		saveAsJsFile(directoryAngularFiles, "index.config", sb.toString());
 		
 	
@@ -1184,14 +1184,14 @@ if (entity.getEntityGroup()!=null)
 		.append("  'use strict'\n")
 		.append("\n")
 		.append("  angular\n")
-		.append("    .module('"+generator.applicationName+"');\n")
+		.append("    .module('"+Generator.appName+"');\n")
 		.append("\n");
 		
 		
 		sb.append("})();\n");
 		
 		File file = new File("");
-		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+"../";
+		String directoryAngularFiles=file.getAbsolutePath()+Generator.generateAngularDirectory+"../";
 		saveAsJsFile(directoryAngularFiles, "index.constants", sb.toString());
 		
 	
@@ -1206,7 +1206,7 @@ if (entity.getEntityGroup()!=null)
 		.append("  'use strict'\n")
 		.append("\n")
 		.append("  angular\n")
-		.append("    .module('"+generator.applicationName+"',['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize',"
+		.append("    .module('"+Generator.appName+"',['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize',"
 				+ " 'ngMessages', 'ngAria', 'ngResource',/*'ngRoute',*/ 'ui.router',"
 				+ "'ui.bootstrap', 'toastr','ui.grid', 'ui.grid.pagination','ui.grid.selection',"
 				+ "'ui.date', 'ui.grid.exporter','ngFileUpload']);\n")
@@ -1215,7 +1215,7 @@ if (entity.getEntityGroup()!=null)
 		sb.append("})();\n");
 		
 		File file = new File("");
-		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+"../";
+		String directoryAngularFiles=file.getAbsolutePath()+Generator.generateAngularDirectory+"../";
 		saveAsJsFile(directoryAngularFiles, "index.module", sb.toString());
 		
 	
@@ -1230,7 +1230,7 @@ if (entity.getEntityGroup()!=null)
 		.append("\n");
 		
 		
-		sb.append("angular\n.module(\""+generator.applicationName+"\").config(routerConfig);\n");
+		sb.append("angular\n.module(\""+Generator.appName+"\").config(routerConfig);\n");
 		
 		sb.append("/** @ngInject */\n");
 		sb.append("function routerConfig($stateProvider,$urlRouterProvider)\n");
@@ -1331,7 +1331,7 @@ if (entity.getEntityGroup()!=null)
 		
 		
 		File file = new File("");
-		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+"../";
+		String directoryAngularFiles=file.getAbsolutePath()+Generator.generateAngularDirectory+"../";
 		saveAsJsFile(directoryAngularFiles, "index.route", sb.toString());
 	}
 	
@@ -1343,7 +1343,7 @@ if (entity.getEntityGroup()!=null)
 		.append("  'use strict'\n")
 		.append("\n")
 		.append("  angular\n")
-		.append("    .module('"+generator.applicationName+"')\n")
+		.append("    .module('"+Generator.appName+"')\n")
 		.append("    .run(runBlock);\n")
 		.append("\n")
 		.append("  /** @ngInject */\n")
@@ -1354,7 +1354,7 @@ if (entity.getEntityGroup()!=null)
 			services="";
 		//sb.append(".run(function($rootScope,SecurityService"+services+"){\n");
 
-		if (generator.security)
+		if (Generator.enableSecurity)
 		{
 			
 			//sb.append("$rootScope.restrictionList=response.data;\n");
@@ -1458,7 +1458,7 @@ if (entity.getEntityGroup()!=null)
 		sb.append("})();\n");
 		
 		File file = new File("");
-		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+"../";
+		String directoryAngularFiles=file.getAbsolutePath()+Generator.generateAngularDirectory+"../";
 		saveAsJsFile(directoryAngularFiles, "index.run", sb.toString());
 		
 	}
@@ -1473,7 +1473,7 @@ if (entity.getEntityGroup()!=null)
 		.append("\n")
 		.append("  angular\n")
 
-		.append(" .module('"+generator.applicationName+"')\n")
+		.append(" .module('"+Generator.appName+"')\n")
 		.append(" .controller('HomeController', HomeController);\n")
 
 		.append("  /** @ngInject */\n")
@@ -1496,7 +1496,7 @@ if (entity.getEntityGroup()!=null)
 		sb.append("})();\n");
 
 		File file = new File("");
-		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+"home/";
+		String directoryAngularFiles=file.getAbsolutePath()+Generator.generateAngularDirectory+"home/";
 		saveAsJsFile(directoryAngularFiles, "home.controller", sb.toString());
 
 
@@ -1512,7 +1512,7 @@ if (entity.getEntityGroup()!=null)
 		.append("\n");
 		
 		
-		sb.append("angular.module(\""+generator.applicationName+"\").service(\"UtilityService\", UtilityService);\n");
+		sb.append("angular.module(\""+Generator.appName+"\").service(\"UtilityService\", UtilityService);\n");
 		
 		sb.append("/** @ngInject */\n");
 		sb.append("function UtilityService()\n");
@@ -1640,7 +1640,7 @@ if (entity.getEntityGroup()!=null)
 		sb.append("})();\n"); // end of service
 		
 		File file = new File("");
-		String directory= file.getAbsolutePath()+generator.angularDirectory+"utility/";
+		String directory= file.getAbsolutePath()+Generator.generateAngularDirectory+"utility/";
 		saveAsJsFile(directory, "utility.service", sb.toString());
 	}
 	
@@ -1653,11 +1653,11 @@ if (entity.getEntityGroup()!=null)
 		.append("  'use strict'\n")
 		.append("\n")
 		.append("  angular\n")
-		.append(".module('"+generator.applicationName+"')\n")
-		.append(".directive('"+generator.applicationName+"Navbar', "+generator.applicationName+"Navbar);\n")
+		.append(".module('"+Generator.appName+"')\n")
+		.append(".directive('"+Generator.appName+"Navbar', "+Generator.appName+"Navbar);\n")
 
 		.append("/** @ngInject */\n")
-		.append("function "+generator.applicationName+"Navbar() {\n")
+		.append("function "+Generator.appName+"Navbar() {\n")
 		.append(" var directive = {\n")
 		.append("    restrict: 'E',\n")
 		.append("    templateUrl: 'app/components/navbar/navbar.html',\n")
@@ -1697,7 +1697,7 @@ if (entity.getEntityGroup()!=null)
 
 
 		File file = new File("");
-		String directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+"navbar/";
+		String directoryAngularFiles=file.getAbsolutePath()+Generator.generateAngularDirectory+"navbar/";
 		saveAsJsFile(directoryAngularFiles, "navbar.directive", sb.toString());
 
 
@@ -1713,7 +1713,7 @@ if (entity.getEntityGroup()!=null)
 		.append("'use strict'; \n")
 		.append("\n");
 
-		sb.append("angular.module(\""+generator.applicationName+"\").directive(\"login\",login);\n\n");
+		sb.append("angular.module(\""+Generator.appName+"\").directive(\"login\",login);\n\n");
 
 
 		sb.append("/** @ngInject */\n");
@@ -1983,7 +1983,7 @@ MainService.parentService.childrenList.roleList=response.data;
 	{
 		StringBuilder sb = new StringBuilder();
 		sb.append("{\n");
-		sb.append(" \"name\": \""+generator.applicationName+"\",\n");
+		sb.append(" \"name\": \""+Generator.appName+"\",\n");
 		sb.append("\"version\": \"0.0.0\",\n");
 		sb.append("\"dependencies\": {\n");
 		sb.append("\"angular-animate\": \"~1.5.3\",\n");

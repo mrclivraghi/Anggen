@@ -124,7 +124,7 @@ public class RestGenerator {
 	public void init(Entity entity)
 	{
 		this.entity=entity;
-		this.fullClassName=generator.mainPackage+generator.applicationName.replace("serverTest","anggen")+".model."+entity.getEntityGroup().getName().toLowerCase()+"."+Utility.getFirstUpper(entity.getName());
+		this.fullClassName=Generator.generatedPackage+Generator.appName.replace("serverTest","anggen")+".model."+entity.getEntityGroup().getName().toLowerCase()+"."+Utility.getFirstUpper(entity.getName());
 		File file = new File(""); 
 		this.directory = file.getAbsolutePath()+"\\src\\main\\java";
 		entityManager= new EntityManagerImpl(entity);

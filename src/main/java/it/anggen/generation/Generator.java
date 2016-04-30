@@ -45,6 +45,7 @@ import org.rendersnake.HtmlCanvas;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sun.codemodel.ClassType;
 import com.sun.codemodel.JBlock;
@@ -66,13 +67,13 @@ public class Generator {
 	
 	
 	@Value("${application.package.main}")
-	public String mainPackage;
+	private String mainPackage;
 	
 	@Value("${application.menu.bootstrap.enable}")
-	public Boolean bootstrapMenu=true;
+	public  Boolean bootstrapMenu=true;
 	
 	@Value("${application.menu.easytree.enable}")
-	public Boolean easyTreeMenu;
+	public  Boolean easyTreeMenu;
 	
 	@Value("${application.schema}")
 	public String schema;
@@ -93,7 +94,7 @@ public class Generator {
 	public String uploadDirectory;
 	
 	@Value("${application.name}")
-	public String applicationName;
+	private String applicationName;
 
 	@Value("${application.security}")
 	public Boolean security;
@@ -111,7 +112,7 @@ public class Generator {
 	public String restUrl;
 	
 	@Value("${application.cors.origin}")
-	public String corsOrigin;
+	public static String corsOrigin;
 	
 	private Project project;
 	
@@ -157,6 +158,20 @@ public class Generator {
 	
 	public static String generatedPackage;
 	
+	public static String targetSchema;
+	
+	public static Boolean enableSecurity;
+	
+	public static String generateAngularDirectory;
+	
+	public static Boolean easyTreeMenuProperty;
+	
+	public static Boolean bootstrapMenuProperty;
+	
+	public static String corsOriginProperty;
+	
+	public static String htmlDirectoryProperty;
+	
 	public Generator()
 	{
 		
@@ -168,10 +183,19 @@ public class Generator {
 		
 	}
 	
+	//@Transactional
 	private void init() throws Exception
 	{
 		Generator.appName=applicationName;
 		Generator.generatedPackage=mainPackage;
+		Generator.targetSchema=schema;
+		Generator.enableSecurity=security;
+		Generator.generateAngularDirectory=angularDirectory;
+		Generator.easyTreeMenuProperty=easyTreeMenu;
+		Generator.bootstrapMenuProperty=bootstrapMenu;
+		Generator.corsOriginProperty=corsOrigin;
+		Generator.htmlDirectoryProperty=htmlDirectory;
+		
 		List<Project> projectList=projectRepository.findByName(applicationName);
 		if (projectList.size()==0)
 			throw new Exception();
@@ -188,7 +212,7 @@ public class Generator {
 		checkModel();
 	}
 
-	
+	//@Transactional
 	private void checkModel() throws Exception
 	{
 		
@@ -214,7 +238,7 @@ public class Generator {
 	}
 	
 	
-	
+	@Transactional
 	public void generate() throws Exception
 	{
 		init();

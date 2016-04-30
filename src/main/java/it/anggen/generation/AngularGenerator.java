@@ -89,7 +89,7 @@ public class AngularGenerator {
 		if (!isParent)
 			mainControllerAttributes.add("ng-controller", Utility.getFirstUpper(entityName)+"Controller");
 		
-		if (generator.easyTreeMenu)
+		if (Generator.easyTreeMenuProperty)
 		{
 			mainControllerAttributes.add("style", "position: absolute; left: 250px; width:80%; top: 30px;");
 		}

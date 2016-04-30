@@ -76,7 +76,7 @@ public class FrontHtmlGenerator {
 		this.childrenEntity=entityManager.getChildrenEntities();
 		File file = new File(""); 
 		directoryViewPages = file.getAbsolutePath()+generator.htmlDirectory+"/";
-		directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+generator.applicationName+"/";
+		directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+Generator.appName+"/";
 	}
 	
 	
@@ -102,7 +102,7 @@ public class FrontHtmlGenerator {
 			.macros().javascript("../../js/sanitize.js")
 			.macros().javascript("../../js/ui-grid.js");
 			if (includeEntityFile)
-				html.macros().javascript("../../js/angular/"+generator.applicationName+"/"+entityName+"-front.js");
+				html.macros().javascript("../../js/angular/"+Generator.appName+"/"+entityName+"-front.js");
 			html.macros().javascript("../../js/date.js")
 			.macros().javascript("../../js/utility.js")
 			.macros().javascript("../../js/bootstrap.min.js");
@@ -119,7 +119,7 @@ public class FrontHtmlGenerator {
 			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../../css/main.css"))
 			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../../css/jquery-ui.css"))
 			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../../css/easytree/skin-win8/ui.easytree.css"))
-			.link((new HtmlAttributes()).add("rel","import").add("href", "../../"+generator.applicationName+generator.menuName));
+			.link((new HtmlAttributes()).add("rel","import").add("href", "../../"+Generator.appName+generator.menuName));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

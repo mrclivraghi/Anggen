@@ -138,18 +138,18 @@ public class EntityGenerator {
 		String lowerClassName = Utility.getFirstLower(className);
 		JDefinedClass myClass= null;
 		try {
-			myClass = codeModel._class(generator.mainPackage+generator.applicationName.replace("serverTest","anggen")+".model."+entity.getEntityGroup().getName()+"."+className, ClassType.CLASS);
+			myClass = codeModel._class(Generator.generatedPackage+Generator.appName.replace("serverTest","anggen")+".model."+entity.getEntityGroup().getName()+"."+className, ClassType.CLASS);
 		} catch (JClassAlreadyExistsException e) {
 			e.printStackTrace();
 		}
 		
-		if ((generator.applicationName.equals("anggen") || generator.applicationName.equals("serverTest") ) && (className.equals("Field") || className.equals("EnumField") || className.equals("Relationship")))
+		if ((Generator.appName.equals("anggen") || Generator.appName.equals("serverTest") ) && (className.equals("Field") || className.equals("EnumField") || className.equals("Relationship")))
 			myClass._extends(EntityAttribute.class);
 		
 		myClass.annotate(javax.persistence.Entity.class);
 		JAnnotationUse annotationTable= myClass.annotate(Table.class);
 		//from properties
-		String schema=generator.schema;
+		String schema=Generator.targetSchema;
 		
 		if (entity.getEntityGroup().getName().equals("security"))
 			schema="sso";

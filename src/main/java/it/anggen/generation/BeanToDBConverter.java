@@ -260,6 +260,8 @@ public class BeanToDBConverter {
 				//List<Entity> entityList = new ArrayList<Entity>();
 				for (Class myClass: packageClassSet)
 				{
+					if (myClass.isEnum()) continue;
+					
 					ReflectionManager reflectionManager = new ReflectionManager(myClass);
 					
 					Entity entity = entityMap.get(reflectionManager.parseName());

@@ -5,6 +5,7 @@ import it.anggen.utils.annotation.Between;
 import it.anggen.utils.annotation.DescriptionField;
 import it.anggen.utils.annotation.ExcelExport;
 import it.anggen.utils.annotation.Filter;
+import it.anggen.utils.annotation.GenerateEntity;
 import it.anggen.utils.annotation.IgnoreSearch;
 import it.anggen.utils.annotation.IgnoreTableList;
 import it.anggen.utils.annotation.IgnoreUpdate;
@@ -105,8 +106,9 @@ public class ReflectionManager {
 			name=name.substring(name.indexOf(".")+1,name.length());
 		if (name.indexOf("List")==name.length()-4 && name.length()>3)
 			name=name.substring(0,name.length()-4);
-		if (name.endsWith(">"))
+		if (name.endsWith(">") || name.endsWith("s"))
 			name=name.substring(0, name.length()-1);
+		
 		return Utility.getFirstLower(name);
 		
 	}
@@ -615,7 +617,7 @@ public class ReflectionManager {
 	public static Set<Class<?>> getClassInPackage(String thePackage)
 	{
 		Reflections reflections = new Reflections(thePackage);
-		Set<Class<?>> allClasses = reflections.getTypesAnnotatedWith(Entity.class);
+		Set<Class<?>> allClasses = reflections.getTypesAnnotatedWith(GenerateEntity.class);
 		return allClasses;
 	}
 	

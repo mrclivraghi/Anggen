@@ -34,22 +34,22 @@ public class Relationship
     @Id
     @GeneratedValue
     private java.lang.Long relationshipId;
-    @OneToMany(fetch = javax.persistence.FetchType.EAGER)
+    @OneToMany(fetch = javax.persistence.FetchType.LAZY)
     @org.hibernate.annotations.Type(type = "it.anggen.model.field.Annotation")
     @javax.persistence.JoinColumn(name = "relationship_id_relationship")
     @it.anggen.utils.annotation.Priority(4)
     private List<Annotation> annotationList;
-    @javax.persistence.OneToOne(fetch = javax.persistence.FetchType.EAGER)
+    @javax.persistence.OneToOne(fetch = javax.persistence.FetchType.LAZY)
     @org.hibernate.annotations.Type(type = "it.anggen.model.entity.Entity")
     @javax.persistence.JoinColumn(name = "entity_id_entity_target")
     @it.anggen.utils.annotation.Priority(4)
     private it.anggen.model.entity.Entity entityTarget;
-    @javax.persistence.OneToOne(fetch = javax.persistence.FetchType.EAGER)
+    @javax.persistence.OneToOne(fetch = javax.persistence.FetchType.LAZY)
     @org.hibernate.annotations.Type(type = "it.anggen.model.entity.Entity")
     @javax.persistence.JoinColumn(name = "entity_id_entity")
     @it.anggen.utils.annotation.Priority(4)
     private it.anggen.model.entity.Entity entity;
-    @ManyToOne(fetch = javax.persistence.FetchType.EAGER)
+    @ManyToOne(fetch = javax.persistence.FetchType.LAZY)
     @javax.persistence.JoinColumn(name = "tab_id_tab")
     @it.anggen.utils.annotation.Priority(4)
     private it.anggen.model.entity.Tab tab;

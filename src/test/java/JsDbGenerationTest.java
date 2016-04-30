@@ -1,4 +1,4 @@
-package it.anggen.test;
+
 
 import it.anggen.generation.Generator;
 import it.Application;

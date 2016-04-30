@@ -30,7 +30,7 @@ public class AnnotationAttribute {
     @it.anggen.utils.annotation.DescriptionField
     @it.anggen.utils.annotation.Priority(1)
     private java.lang.Long annotationAttributeId;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "annotation_id_annotation")
     @it.anggen.utils.annotation.Priority(4)
     private it.anggen.model.field.Annotation annotation;

@@ -30,7 +30,7 @@ public class EnumValue {
     @it.anggen.utils.annotation.DescriptionField
     @it.anggen.utils.annotation.Priority(1)
     private java.lang.Long enumValueId;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "enum_entity_id_enum_entity")
     @it.anggen.utils.annotation.Priority(4)
     private it.anggen.model.entity.EnumEntity enumEntity;

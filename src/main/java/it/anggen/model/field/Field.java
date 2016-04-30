@@ -35,20 +35,20 @@ public class Field
     @it.anggen.utils.annotation.DescriptionField
     @it.anggen.utils.annotation.Priority(2)
     private String name;
-    @OneToMany(fetch = javax.persistence.FetchType.EAGER)
+    @OneToMany(fetch = javax.persistence.FetchType.LAZY)
     @Type(type = "it.anggen.model.security.RestrictionField")
     @javax.persistence.JoinColumn(name = "field_id_field")
     @it.anggen.utils.annotation.Priority(4)
     private List<RestrictionField> restrictionFieldList;
-    @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.EAGER)
+    @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.LAZY)
     @javax.persistence.JoinColumn(name = "entity_id_entity")
     @it.anggen.utils.annotation.Priority(4)
     private it.anggen.model.entity.Entity entity;
-    @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.EAGER)
+    @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.LAZY)
     @javax.persistence.JoinColumn(name = "tab_id_tab")
     @it.anggen.utils.annotation.Priority(4)
     private it.anggen.model.entity.Tab tab;
-    @OneToMany(fetch = javax.persistence.FetchType.EAGER)
+    @OneToMany(fetch = javax.persistence.FetchType.LAZY)
     @Type(type = "it.anggen.model.field.Annotation")
     @javax.persistence.JoinColumn(name = "field_id_field")
     @it.anggen.utils.annotation.Priority(4)

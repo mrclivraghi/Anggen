@@ -30,16 +30,16 @@ public class EnumEntity {
     @it.anggen.utils.annotation.DescriptionField
     @it.anggen.utils.annotation.Priority(1)
     private java.lang.Long enumEntityId;
-    @ManyToOne(fetch = javax.persistence.FetchType.EAGER)
+    @ManyToOne(fetch = javax.persistence.FetchType.LAZY)
     @javax.persistence.JoinColumn(name = "project_id_project")
     @it.anggen.utils.annotation.Priority(4)
     private it.anggen.model.entity.Project project;
-    @OneToMany(fetch = javax.persistence.FetchType.EAGER)
+    @OneToMany(fetch = javax.persistence.FetchType.LAZY)
     @Type(type = "it.anggen.model.field.EnumValue")
     @javax.persistence.JoinColumn(name = "enum_entity_id_enum_entity")
     @it.anggen.utils.annotation.Priority(4)
     private List<EnumValue> enumValueList;
-    @OneToMany(fetch = javax.persistence.FetchType.EAGER)
+    @OneToMany(fetch = javax.persistence.FetchType.LAZY)
     @Type(type = "it.anggen.model.field.EnumField")
     @javax.persistence.JoinColumn(name = "enum_entity_id_enum_entity")
     @it.anggen.utils.annotation.Priority(4)

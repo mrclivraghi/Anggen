@@ -34,20 +34,20 @@ public class Role {
     @it.anggen.utils.annotation.DescriptionField
     @it.anggen.utils.annotation.Priority(2)
     private String role;
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.LAZY)
     @Type(type = "it.anggen.model.security.RestrictionEntity")
     @JoinColumn(name = "role_id_role")
     @it.anggen.utils.annotation.Priority(4)
     private List<RestrictionEntity> restrictionEntityList;
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.LAZY)
     @Type(type = "it.anggen.model.security.RestrictionField")
     @JoinColumn(name = "role_id_role")
     @it.anggen.utils.annotation.Priority(4)
     private List<RestrictionField> restrictionFieldList;
-    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "roleList")
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "roleList")
     @it.anggen.utils.annotation.Priority(4)
     private List<User> userList;
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.LAZY)
     @Type(type = "it.anggen.model.security.RestrictionEntityGroup")
     @JoinColumn(name = "role_id_role")
     @it.anggen.utils.annotation.Priority(4)

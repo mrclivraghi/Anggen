@@ -169,7 +169,7 @@ public class ReflectionManager {
 				} else
 				{
 					jClass=codeModel.ref(field.getType());
-					if (field.getType()==List.class)
+					if (field.getType()==List.class || field.getType()==Set.class)
 					{//entityList
 						Type type=field.getGenericType();
 						if (type instanceof ParameterizedType)

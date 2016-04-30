@@ -308,8 +308,8 @@ public class RestGenerator {
 						if (EntityAttributeManager.getInstance(entityAttribute).asRelationship()!=null && EntityAttributeManager.getInstance(entityAttribute).isList())
 						{
 							JClass listClass = codeModel.ref(List.class).narrow(EntityAttributeManager.getInstance(entityAttribute).getFieldClass());
-							JVar fieldVar = myClass.field(JMod.PUBLIC, listClass, EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()+"List");
-							generateGetterAndSetter(myClass, EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()+"List", listClass);
+							JVar fieldVar = myClass.field(JMod.PUBLIC, listClass, EntityAttributeManager.getInstance(entityAttribute).asRelationship().getName()+"List");
+							generateGetterAndSetter(myClass, EntityAttributeManager.getInstance(entityAttribute).asRelationship().getName()+"List", listClass);
 
 
 
@@ -482,7 +482,7 @@ public class RestGenerator {
 		String searchMethod="findBy";
 		for (EntityAttribute entityAttribute: entityAttributeList)
 		{
-			String entityAttributeName= EntityAttributeManager.getInstance(entityAttribute).asField()!=null ? entityAttribute.getName() : (EntityAttributeManager.getInstance(entityAttribute).isRelationship()? EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName(): EntityAttributeManager.getInstance(entityAttribute).asEnumField().getName());
+			String entityAttributeName= EntityAttributeManager.getInstance(entityAttribute).asField()!=null ? entityAttribute.getName() : (EntityAttributeManager.getInstance(entityAttribute).isRelationship()? EntityAttributeManager.getInstance(entityAttribute).asRelationship().getName(): EntityAttributeManager.getInstance(entityAttribute).asEnumField().getName());
 			if (EntityAttributeManager.getInstance(entityAttribute).getBetweenFilter())
 			{
 				searchMethod=searchMethod+"GreaterThan"+Utility.getFirstUpper(entityAttributeName)+"FromAndLessThan"+Utility.getFirstUpper(entityAttributeName)+"ToAnd";
@@ -581,8 +581,8 @@ public class RestGenerator {
 				if (EntityAttributeManager.getInstance(entityAttribute).isList())
 				{
 					EntityManager entityManager = new EntityManagerImpl(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget());
-					updateBlock.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName())+"List()!=null)");
-					updateBlock.directStatement("for ("+ReflectionManager.getJDefinedClass(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget()).fullName()+" "+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()+": "+lowerClass+".get"+Utility.getFirstUpper(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName())+"List())");
+					updateBlock.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getName())+"List()!=null)");
+					updateBlock.directStatement("for ("+ReflectionManager.getJDefinedClass(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget()).fullName()+" "+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()+": "+lowerClass+".get"+Utility.getFirstUpper(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getName())+"List())");
 					updateBlock.directStatement("{");
 					if (entityManager.hasManyToMany())
 					{
@@ -614,12 +614,12 @@ public class RestGenerator {
 					EntityManager fieldEntityManager = new EntityManagerImpl(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget());
 					if (!EntityAttributeManager.getInstance(entityAttribute).isList() && fieldEntityManager.containFieldOfEntity(entity))			
 					{
-						updateBlock.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName())+"()!=null)");
+						updateBlock.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getName())+"()!=null)");
 						updateBlock.directStatement("{");
-						updateBlock.directStatement("List<"+ReflectionManager.getJDefinedClass(entity).fullName()+"> "+entity.getName()+"List = "+lowerClass+"Repository.findBy"+Utility.getFirstUpper(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName())+"( "+lowerClass+".get"+Utility.getFirstUpper(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName())+"());");
+						updateBlock.directStatement("List<"+ReflectionManager.getJDefinedClass(entity).fullName()+"> "+entity.getName()+"List = "+lowerClass+"Repository.findBy"+Utility.getFirstUpper(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getName())+"( "+lowerClass+".get"+Utility.getFirstUpper(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getName())+"());");
 						updateBlock.directStatement("if (!"+lowerClass+"List.contains(returned"+Utility.getFirstUpper(className)+"))");
 						updateBlock.directStatement(""+lowerClass+"List.add(returned"+Utility.getFirstUpper(className)+");");
-						updateBlock.directStatement("returned"+Utility.getFirstUpper(className)+".get"+Utility.getFirstUpper(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName())+"().set"+Utility.getFirstUpper(className)+"List("+lowerClass+"List);");
+						updateBlock.directStatement("returned"+Utility.getFirstUpper(className)+".get"+Utility.getFirstUpper(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getName())+"().set"+Utility.getFirstUpper(className)+"List("+lowerClass+"List);");
 						updateBlock.directStatement("}");
 					}
 				}

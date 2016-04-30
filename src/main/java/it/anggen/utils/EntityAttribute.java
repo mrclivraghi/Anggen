@@ -20,6 +20,21 @@ public class EntityAttribute {
 				EntityAttributeManager.getInstance(this).asEnumField().setName(name);
 		}
 	}
+	
+	
+	public void setAnnotationList(List<Annotation> annotationList)
+	{
+		if (EntityAttributeManager.getInstance(this).isField())
+			EntityAttributeManager.getInstance(this).asField().setAnnotationList(annotationList);
+		else
+		{
+			if (EntityAttributeManager.getInstance(this).isRelationship())
+				EntityAttributeManager.getInstance(this).asRelationship().setAnnotationList(annotationList);
+			else
+				EntityAttributeManager.getInstance(this).asEnumField().setAnnotationList(annotationList);
+		}
+	}
+	
 	public String getName()
 	{
 		if (EntityAttributeManager.getInstance(this).isField())
@@ -56,5 +71,7 @@ public class EntityAttribute {
 			EntityAttributeManager.getInstance(this).asRelationship().setPriority(priority);
 		 EntityAttributeManager.getInstance(this).asEnumField().setPriority(priority);
 	}
+
+
 
 }

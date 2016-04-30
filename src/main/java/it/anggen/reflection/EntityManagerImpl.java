@@ -106,7 +106,7 @@ public class EntityManagerImpl implements EntityManager{
 		for (EntityAttribute entityAttribute: entityAttributeList)
 		{
 			
-			String entityAttributeName= EntityAttributeManager.getInstance(entityAttribute).asField()!=null ? entityAttribute.getName() : (EntityAttributeManager.getInstance(entityAttribute).isRelationship()? EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName(): EntityAttributeManager.getInstance(entityAttribute).asEnumField().getName());
+			String entityAttributeName= EntityAttributeManager.getInstance(entityAttribute).asField()!=null ? entityAttribute.getName() : (EntityAttributeManager.getInstance(entityAttribute).isRelationship()? EntityAttributeManager.getInstance(entityAttribute).asRelationship().getName(): EntityAttributeManager.getInstance(entityAttribute).asEnumField().getName());
 			
 			if (EntityAttributeManager.getInstance(entityAttribute).getBetweenFilter())
 			{

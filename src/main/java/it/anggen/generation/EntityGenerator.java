@@ -198,7 +198,7 @@ public class EntityGenerator {
 			if (EntityAttributeManager.getInstance(relationship).isList())
 			{
 				JClass listClass = codeModel.ref(List.class).narrow(ReflectionManager.getJDefinedClass(relationship.getEntityTarget()));
-				listField = myClass.field(JMod.PRIVATE, listClass, relationship.getEntityTarget().getName()+"List");
+				listField = myClass.field(JMod.PRIVATE, listClass, relationship.getName()+"List");
 				generateGetterAndSetter(myClass, relationship.getName()+"List", listClass);
 				if (relationship.getRelationshipType()==RelationshipType.ONE_TO_MANY)
 				{

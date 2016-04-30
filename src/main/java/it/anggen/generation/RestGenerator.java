@@ -4,6 +4,7 @@ import it.anggen.model.RestrictionType;
 import it.anggen.reflection.EntityAttributeManager;
 import it.anggen.reflection.EntityManager;
 import it.anggen.reflection.EntityManagerImpl;
+import it.anggen.repository.relationship.RelationshipRepository;
 import it.anggen.security.SecurityService;
 import it.anggen.service.log.LogEntryService;
 import it.anggen.utils.EntityAttribute;
@@ -89,6 +90,9 @@ public class RestGenerator {
 	
 	@Autowired
 	private Generator generator;
+	
+	@Autowired
+	private RelationshipRepository relationshipRepository;
 	
 	private String directory;
 
@@ -619,7 +623,15 @@ public class RestGenerator {
 						updateBlock.directStatement("List<"+ReflectionManager.getJDefinedClass(entity).fullName()+"> "+entity.getName()+"List = "+lowerClass+"Repository.findBy"+Utility.getFirstUpper(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getName())+"( "+lowerClass+".get"+Utility.getFirstUpper(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getName())+"());");
 						updateBlock.directStatement("if (!"+lowerClass+"List.contains(returned"+Utility.getFirstUpper(className)+"))");
 						updateBlock.directStatement(""+lowerClass+"List.add(returned"+Utility.getFirstUpper(className)+");");
-						updateBlock.directStatement("returned"+Utility.getFirstUpper(className)+".get"+Utility.getFirstUpper(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getName())+"().set"+Utility.getFirstUpper(className)+"List("+lowerClass+"List);");
+						
+						List<Relationship> inverseRelationship=relationshipRepository.findByRelationshipIdAndNameAndPriorityAndRelationshipTypeAndAnnotationAndEntityAndEntityAndTab(null, null, null, null, null, entity, EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget(), null);
+						String inverseName=Utility.getFirstUpper(className);
+						if (inverseRelationship.size()>0)
+						{
+							inverseName=Utility.getFirstUpper(inverseRelationship.get(0).getName());
+						}
+						
+						updateBlock.directStatement("returned"+Utility.getFirstUpper(className)+".get"+Utility.getFirstUpper(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getName())+"().set"+inverseName+"List("+lowerClass+"List);");
 						updateBlock.directStatement("}");
 					}
 				}

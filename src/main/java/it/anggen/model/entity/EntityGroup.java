@@ -28,17 +28,17 @@ public class EntityGroup {
     @it.anggen.utils.annotation.DescriptionField
     @it.anggen.utils.annotation.Priority(2)
     private String name;
-    @OneToMany(fetch = javax.persistence.FetchType.EAGER)
+    @OneToMany(fetch = javax.persistence.FetchType.LAZY)
     @Type(type = "it.anggen.model.security.RestrictionEntityGroup")
     @javax.persistence.JoinColumn(name = "entity_group_id_entity_group")
     @it.anggen.utils.annotation.Priority(4)
     private List<RestrictionEntityGroup> restrictionEntityGroupList;
-    @OneToMany(fetch = javax.persistence.FetchType.EAGER)
+    @OneToMany(fetch = javax.persistence.FetchType.LAZY)
     @Type(type = "it.anggen.model.entity.Entity")
     @javax.persistence.JoinColumn(name = "entity_group_id_entity_group")
     @it.anggen.utils.annotation.Priority(4)
     private List<it.anggen.model.entity.Entity> entityList;
-    @ManyToOne(fetch = javax.persistence.FetchType.EAGER)
+    @ManyToOne(fetch = javax.persistence.FetchType.LAZY)
     @javax.persistence.JoinColumn(name = "project_id_project")
     @it.anggen.utils.annotation.Priority(4)
     private it.anggen.model.entity.Project project;

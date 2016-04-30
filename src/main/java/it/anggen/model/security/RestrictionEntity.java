@@ -31,11 +31,11 @@ public class RestrictionEntity {
     @javax.persistence.Column(name = "can_create")
     @it.anggen.utils.annotation.Priority(2)
     private java.lang.Boolean canCreate;
-    @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.EAGER)
+    @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.LAZY)
     @javax.persistence.JoinColumn(name = "role_id_role")
     @it.anggen.utils.annotation.Priority(4)
     private it.anggen.model.security.Role role;
-    @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.EAGER)
+    @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.LAZY)
     @javax.persistence.JoinColumn(name = "entity_id_entity")
     @it.anggen.utils.annotation.Priority(4)
     @it.anggen.utils.annotation.DescriptionField

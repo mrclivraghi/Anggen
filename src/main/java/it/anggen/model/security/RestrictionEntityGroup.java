@@ -33,11 +33,11 @@ public class RestrictionEntityGroup {
     @javax.persistence.Column(name = "can_search")
     @it.anggen.utils.annotation.Priority(2)
     private java.lang.Boolean canSearch;
-    @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.EAGER)
+    @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.LAZY)
     @javax.persistence.JoinColumn(name = "role_id_role")
     @it.anggen.utils.annotation.Priority(4)
     private it.anggen.model.security.Role role;
-    @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.EAGER)
+    @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.LAZY)
     @javax.persistence.JoinColumn(name = "entity_group_id_entity_group")
     @it.anggen.utils.annotation.Priority(4)
     private it.anggen.model.entity.EntityGroup entityGroup;

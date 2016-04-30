@@ -33,19 +33,19 @@ public class EnumField
     @it.anggen.utils.annotation.DescriptionField
     @it.anggen.utils.annotation.Priority(2)
     private String name;
-    @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.EAGER)
+    @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.LAZY)
     @javax.persistence.JoinColumn(name = "entity_id_entity")
     @it.anggen.utils.annotation.Priority(4)
     private it.anggen.model.entity.Entity entity;
-    @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.EAGER)
+    @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.LAZY)
     @javax.persistence.JoinColumn(name = "enum_entity_id_enum_entity")
     @it.anggen.utils.annotation.Priority(4)
     private it.anggen.model.entity.EnumEntity enumEntity;
-    @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.EAGER)
+    @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.LAZY)
     @javax.persistence.JoinColumn(name = "tab_id_tab")
     @it.anggen.utils.annotation.Priority(4)
     private it.anggen.model.entity.Tab tab;
-    @OneToMany(fetch = javax.persistence.FetchType.EAGER)
+    @OneToMany(fetch = javax.persistence.FetchType.LAZY)
     @Type(type = "it.anggen.model.field.Annotation")
     @javax.persistence.JoinColumn(name = "enum_field_id_enum_field")
     @it.anggen.utils.annotation.Priority(4)

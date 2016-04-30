@@ -30,21 +30,21 @@ public class Tab {
     @it.anggen.utils.annotation.DescriptionField
     @it.anggen.utils.annotation.Priority(1)
     private java.lang.Long tabId;
-    @ManyToOne(fetch = javax.persistence.FetchType.EAGER)
+    @ManyToOne(fetch = javax.persistence.FetchType.LAZY)
     @javax.persistence.JoinColumn(name = "entity_id_entity")
     @it.anggen.utils.annotation.Priority(4)
     private it.anggen.model.entity.Entity entity;
-    @OneToMany(fetch = javax.persistence.FetchType.EAGER)
+    @OneToMany(fetch = javax.persistence.FetchType.LAZY)
     @Type(type = "it.anggen.model.field.Field")
     @javax.persistence.JoinColumn(name = "tab_id_tab")
     @it.anggen.utils.annotation.Priority(4)
     private List<Field> fieldList;
-    @OneToMany(fetch = javax.persistence.FetchType.EAGER)
+    @OneToMany(fetch = javax.persistence.FetchType.LAZY)
     @Type(type = "it.anggen.model.field.EnumField")
     @javax.persistence.JoinColumn(name = "tab_id_tab")
     @it.anggen.utils.annotation.Priority(4)
     private List<EnumField> enumFieldList;
-    @OneToMany(fetch = javax.persistence.FetchType.EAGER)
+    @OneToMany(fetch = javax.persistence.FetchType.LAZY)
     @Type(type = "it.anggen.model.relationship.Relationship")
     @javax.persistence.JoinColumn(name = "tab_id_tab")
     @it.anggen.utils.annotation.Priority(4)

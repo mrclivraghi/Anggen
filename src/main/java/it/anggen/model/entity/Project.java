@@ -31,12 +31,12 @@ public class Project {
     @it.anggen.utils.annotation.Priority(2)
     @it.anggen.utils.annotation.DescriptionField
     private String name;
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.LAZY)
     @Type(type = "it.anggen.model.entity.EntityGroup")
     @JoinColumn(name = "project_id_project")
     @it.anggen.utils.annotation.Priority(4)
     private List<EntityGroup> entityGroupList;
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.LAZY)
     @Type(type = "it.anggen.model.entity.EnumEntity")
     @JoinColumn(name = "project_id_project")
     @it.anggen.utils.annotation.Priority(4)

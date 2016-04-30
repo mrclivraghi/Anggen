@@ -39,7 +39,7 @@ public class User {
     @javax.persistence.Column(name = "enabled")
     @it.anggen.utils.annotation.Priority(2)
     private Boolean enabled;
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @Type(type = "it.anggen.model.security.Role")
     @JoinTable(name = "user_role", schema = "sso", joinColumns = {
         @JoinColumn(name = "user_id")

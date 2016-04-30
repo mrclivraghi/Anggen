@@ -203,7 +203,7 @@ public class EntityGenerator {
 				if (relationship.getRelationshipType()==RelationshipType.ONE_TO_MANY)
 				{
 					JAnnotationUse oneToMany = listField.annotate(OneToMany.class);
-					oneToMany.param("fetch", FetchType.EAGER);
+					oneToMany.param("fetch", FetchType.LAZY);
 					JAnnotationUse type = listField.annotate(Type.class);
 					type.param("type", ReflectionManager.getJDefinedClass(relationship.getEntityTarget()).fullName());
 					JAnnotationUse joinColumn = listField.annotate(JoinColumn.class);
@@ -213,7 +213,7 @@ public class EntityGenerator {
 				if (relationship.getRelationshipType()==RelationshipType.MANY_TO_MANY)
 				{
 					JAnnotationUse manyToMany = listField.annotate(ManyToMany.class);
-					manyToMany.param("fetch", FetchType.EAGER);
+					manyToMany.param("fetch", FetchType.LAZY);
 					JAnnotationUse type = listField.annotate(Type.class);
 					type.param("type", ReflectionManager.getJDefinedClass(relationship.getEntityTarget()).fullName());
 					JAnnotationUse joinTable = listField.annotate(JoinTable.class);
@@ -231,7 +231,7 @@ public class EntityGenerator {
 				if (relationship.getRelationshipType()==RelationshipType.MANY_TO_MANY_BACK)
 				{
 					JAnnotationUse manyToMany = listField.annotate(ManyToMany.class);
-					manyToMany.param("fetch", FetchType.EAGER);
+					manyToMany.param("fetch", FetchType.LAZY);
 					manyToMany.param("mappedBy", entity.getName()+"List");
 				}
 
@@ -244,7 +244,7 @@ public class EntityGenerator {
 				if (relationship.getRelationshipType()==RelationshipType.MANY_TO_ONE)
 				{
 					JAnnotationUse manyToOne = listField.annotate(ManyToOne.class);
-					manyToOne.param("fetch", FetchType.EAGER);
+					manyToOne.param("fetch", FetchType.LAZY);
 					JAnnotationUse joinColumn = listField.annotate(JoinColumn.class);
 					joinColumn.param("name", namingStrategy.classToTableName(relationship.getEntityTarget().getName())+"_id_"+namingStrategy.classToTableName(relationship.getName()));
 				
@@ -252,7 +252,7 @@ public class EntityGenerator {
 				if (relationship.getRelationshipType()==RelationshipType.ONE_TO_ONE)
 				{
 					JAnnotationUse oneToOne = listField.annotate(OneToOne.class);
-					oneToOne.param("fetch", FetchType.EAGER);
+					oneToOne.param("fetch", FetchType.LAZY);
 					JAnnotationUse type = listField.annotate(Type.class);
 					type.param("type", ReflectionManager.getJDefinedClass(relationship.getEntityTarget()).fullName());
 					JAnnotationUse joinColumn = listField.annotate(JoinColumn.class);

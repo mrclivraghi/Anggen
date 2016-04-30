@@ -1,5 +1,6 @@
 package it.anggen.generation;
 
+import it.anggen.utils.HibernateAwareObjectMapper;
 import it.anggen.utils.ReflectionManager;
 import it.anggen.utils.Utility;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -14,6 +15,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -44,6 +46,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBuilder;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -194,6 +198,26 @@ public class WebappGenerator {
 		addCorsBlock.directStatement("super.addCorsMappings(registry);\n");
 		addCorsBlock.directStatement("registry.addMapping(\"/**\")\n");
 		addCorsBlock.directStatement(".allowedOrigins(\""+generator.corsOrigin+"\");\n");
+		
+		JMethod customJackson = webConfigClass.method(JMod.PUBLIC, MappingJackson2HttpMessageConverter.class, "customJackson2HttpMessageConverter");
+		customJackson.annotate(Bean.class);
+		JBlock customJacksonBlock = customJackson.body();
+		
+		customJacksonBlock.directStatement("MappingJackson2HttpMessageConverter jsonConverter = new MappingJackson2HttpMessageConverter();");
+		customJacksonBlock.directStatement("HibernateAwareObjectMapper hibernateAwareObjectMapper = new HibernateAwareObjectMapper();");
+		customJacksonBlock.directStatement("jsonConverter.setObjectMapper(hibernateAwareObjectMapper);");
+		customJacksonBlock.directStatement("return jsonConverter;");
+
+		JMethod configureMessage = webConfigClass.method(JMod.PUBLIC, void.class, "configureMessageConverters");
+		configureMessage.annotate(Override.class);
+		
+		JClass convertersClass = codeModel.ref(List.class).narrow(codeModel.ref(HttpMessageConverter.class).narrow(codeModel.ref(Serializable.class).wildcard()));
+		
+		configureMessage.param(convertersClass, "converters");
+		
+		JBlock configureMessageBlock = configureMessage.body();
+		
+		configureMessageBlock.directStatement(" converters.add(customJackson2HttpMessageConverter());");
 		
 		saveFile(codeModel);
 		

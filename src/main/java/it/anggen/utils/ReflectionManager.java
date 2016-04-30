@@ -106,7 +106,7 @@ public class ReflectionManager {
 			name=name.substring(name.indexOf(".")+1,name.length());
 		if (name.indexOf("List")==name.length()-4 && name.length()>3)
 			name=name.substring(0,name.length()-4);
-		if (name.endsWith(">") || name.endsWith("s"))
+		if (name.endsWith(">") )
 			name=name.substring(0, name.length()-1);
 		
 		return Utility.getFirstLower(name);
@@ -577,7 +577,8 @@ public class ReflectionManager {
 	{
 		List<String> packageList= new ArrayList<String>();
 		Reflections reflections = new Reflections(mainPackage);
-		Set<Class<?>> allClasses = reflections.getTypesAnnotatedWith(Entity.class);
+		Set<Class<?>> allClasses = reflections.getTypesAnnotatedWith(GenerateEntity.class);
+		allClasses.addAll(reflections.getTypesAnnotatedWith(Entity.class));
 		for (Class theClass: allClasses)
 		{
 			if (!packageList.contains(theClass.getPackage().getName()) && !theClass.getPackage().getName().equals(mainPackage))
@@ -618,6 +619,7 @@ public class ReflectionManager {
 	{
 		Reflections reflections = new Reflections(thePackage);
 		Set<Class<?>> allClasses = reflections.getTypesAnnotatedWith(GenerateEntity.class);
+		allClasses.addAll(reflections.getTypesAnnotatedWith(Entity.class));
 		return allClasses;
 	}
 	

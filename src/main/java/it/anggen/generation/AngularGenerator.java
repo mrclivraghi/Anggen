@@ -313,7 +313,7 @@ public class AngularGenerator {
 		//EntityManager mainEntityManager = new EntityManagerImpl(entity);
 		
 		for (Entity descendantEntity: descendantEntityList)
-		if (descendantEntity.getEntityGroup()!=null)
+		if (descendantEntity.getEntityGroup()!=null && (!descendantEntity.getDisableViewGeneration()))
 		{
 			//init(descendantEntity, false, parentEntity,mainEntityManager.isLastLevel(descendantEntity));
 			sb.append("<"+Utility.camelCaseToMinus(Utility.getFirstLower(descendantEntity.getName()))+
@@ -607,6 +607,9 @@ public class AngularGenerator {
 				if ( !(parentEntity.contains(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget())))
 				{ // entity or list!
 
+					if (EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getDisableViewGeneration())
+						return;
+					
 					EntityManager entityAttributeManager = new EntityManagerImpl(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget());
 					if (search)
 					{

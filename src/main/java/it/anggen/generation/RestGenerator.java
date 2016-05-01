@@ -205,7 +205,11 @@ public class RestGenerator {
 		String query="";
 		if (EntityAttributeManager.getInstance(entityAttribute).asField()!=null && EntityAttributeManager.getInstance(entityAttribute).asField().getFieldType()==FieldType.TIME)
 		{
-			query= query + " (:"+fieldName+" is null or cast(:"+fieldName+" as string)"+comparator+"cast(date_trunc('seconds',"+hibernateField+") as string)) and";
+			if (Generator.databaseProperty.equals("mysql"))
+				//date_format(o.cutoffTime,'%H:%i:%S')
+				query= query + " (:"+fieldName+" is null or cast(:"+fieldName+" as string)"+comparator+"cast(date_format("+hibernateField+",'%H:%i:%S') as string)) and";
+			else
+				query= query + " (:"+fieldName+" is null or cast(:"+fieldName+" as string)"+comparator+"cast(date_trunc('seconds',"+hibernateField+") as string)) and";
 		}
 		else
 		{

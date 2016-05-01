@@ -160,7 +160,8 @@ public class EntityGenerator {
 		else
 			if (entity.getEntityGroup().getName().equals("log"))
 				schema="log";
-		annotationTable.param("schema", schema);
+		if (!Generator.databaseProperty.equals("mysql"))
+			annotationTable.param("schema", schema);
 		
 		JAnnotationUse securityType= myClass.annotate(SecurityType.class);
 		it.anggen.model.SecurityType secType = entity.getSecurityType();

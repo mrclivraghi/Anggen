@@ -116,6 +116,9 @@ public class Generator {
 	@Value("${application.cors.origin}")
 	private String corsOrigin;
 	
+	@Value("${application.db}")
+	private String database;
+	
 	private Project project;
 	
 	private List<Entity> modelEntityList;
@@ -182,6 +185,8 @@ public class Generator {
 	
 	public static String uploadDirectoryProperty;
 	
+	public static String databaseProperty;
+	
 	public Generator()
 	{
 		
@@ -209,7 +214,7 @@ public class Generator {
 		Generator.menuDirectoryProperty=menuDirectory;
 		Generator.restUrlProperty=restUrl;
 		Generator.uploadDirectoryProperty=uploadDirectory;
-		
+		Generator.databaseProperty=database;
 		
 		List<Project> projectList=projectRepository.findByName(applicationName);
 		if (projectList.size()==0)

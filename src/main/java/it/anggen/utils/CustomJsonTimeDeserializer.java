@@ -5,6 +5,7 @@ import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -29,11 +30,11 @@ public class CustomJsonTimeDeserializer extends JsonDeserializer<Time>
         } catch (ParseException e) {
         	
 					try {
-						SimpleDateFormat format2= new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+						SimpleDateFormat format2= new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss",Locale.ITALY);
 						Date date;
 						date = format2.parse(time);
 						Time returnedTime = new Time(date.getTime());
-						returnedTime.setHours(returnedTime.getHours()+1);
+						returnedTime.setHours(returnedTime.getHours());
 						return returnedTime;
 					} catch (ParseException e1) {
 						// TODO Auto-generated catch block

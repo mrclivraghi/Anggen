@@ -57,6 +57,8 @@ import com.sun.codemodel.JMethod;
 import com.sun.codemodel.JMod;
 import com.sun.codemodel.JType;
 import com.sun.codemodel.JVar;
+
+import io.swagger.models.properties.UUIDProperty;
 /**
  * Main class that runs the generation of the files
  * @author Marco
@@ -70,37 +72,37 @@ public class Generator {
 	private String mainPackage;
 	
 	@Value("${application.menu.bootstrap.enable}")
-	public  Boolean bootstrapMenu=true;
+	private  Boolean bootstrapMenu=true;
 	
 	@Value("${application.menu.easytree.enable}")
-	public  Boolean easyTreeMenu;
+	private  Boolean easyTreeMenu;
 	
 	@Value("${application.schema}")
-	public String schema;
+	private String schema;
 	
 	@Value("${application.menu.name}")
-	public String menuName;
+	private String menuName;
 	
 	@Value("${application.menu.directory}")
-	public  String menuDirectory;
+	private  String menuDirectory;
 	
 	@Value("${application.angular.directory}")
-	public String angularDirectory;
+	private String angularDirectory;
 	
 	@Value("${application.html.directory}")
-	public String htmlDirectory;
+	private String htmlDirectory;
 	
 	@Value("${application.upload.directory}")
-	public String uploadDirectory;
+	private String uploadDirectory;
 	
 	@Value("${application.name}")
 	private String applicationName;
 
 	@Value("${application.security}")
-	public Boolean security;
+	private Boolean security;
 	
 	@Value("application.name")
-	public String test;
+	private String test;
 	
 	@Value("${generate.rest}")
 	private Boolean generateRest;
@@ -109,10 +111,10 @@ public class Generator {
 	private Boolean generateView;
 	
 	@Value("${application.rest.url}")
-	public String restUrl;
+	private String restUrl;
 	
 	@Value("${application.cors.origin}")
-	public static String corsOrigin;
+	private String corsOrigin;
 	
 	private Project project;
 	
@@ -172,6 +174,14 @@ public class Generator {
 	
 	public static String htmlDirectoryProperty;
 	
+	public static String menuNameProperty;
+	
+	public static String menuDirectoryProperty;
+	
+	public static String restUrlProperty;
+	
+	public static String uploadDirectoryProperty;
+	
 	public Generator()
 	{
 		
@@ -195,6 +205,11 @@ public class Generator {
 		Generator.bootstrapMenuProperty=bootstrapMenu;
 		Generator.corsOriginProperty=corsOrigin;
 		Generator.htmlDirectoryProperty=htmlDirectory;
+		Generator.menuNameProperty=menuName;
+		Generator.menuDirectoryProperty=menuDirectory;
+		Generator.restUrlProperty=restUrl;
+		Generator.uploadDirectoryProperty=uploadDirectory;
+		
 		
 		List<Project> projectList=projectRepository.findByName(applicationName);
 		if (projectList.size()==0)

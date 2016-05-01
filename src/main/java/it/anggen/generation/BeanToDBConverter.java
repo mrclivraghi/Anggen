@@ -6,6 +6,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -239,7 +240,7 @@ public class BeanToDBConverter {
 		}
 		
 		List<EntityGroup> entityGroupList = new ArrayList<EntityGroup>();
-		
+		List<EnumEntity> enumEntityList= new ArrayList<EnumEntity>();
 		for (String myPackage: packageList)
 		{
 				EntityGroup entityGroup= new EntityGroup();
@@ -255,7 +256,7 @@ public class BeanToDBConverter {
 				restrictionEntityGroup.setRole(adminRole);
 				restrictionEntityGroupRepository.save(restrictionEntityGroup);
 				List<RestrictionEntityGroup> restrictionEntityGroupList = new ArrayList<RestrictionEntityGroup>();
-				List<EnumEntity> enumEntityList= new ArrayList<EnumEntity>();
+				
 				restrictionEntityGroupList.add(restrictionEntityGroup);
 				entityGroup.setRestrictionEntityGroupList(restrictionEntityGroupList);
 				
@@ -368,7 +369,7 @@ public class BeanToDBConverter {
 									fieldType=FieldType.INTEGER;
 								if (field.getFieldClass()==String.class) 
 									fieldType=FieldType.STRING;
-								if (field.getFieldClass()==Date.class || field.getFieldClass()==java.sql.Date.class)
+								if (field.getFieldClass()==Date.class || field.getFieldClass()==java.sql.Date.class || field.getFieldClass()==Timestamp.class)
 									fieldType=FieldType.DATE;
 								if (field.getFieldClass()==Double.class) 
 									fieldType=FieldType.DOUBLE;
@@ -424,7 +425,7 @@ public class BeanToDBConverter {
 										metaEnumValue.setName(enumValueList.get(i));
 										metaEnumValue.setEnumEntity(enumEntity);
 										metaEnumValue.setValue(i);
-										//enumValueRepository.save(metaEnumValue);
+										enumValueRepository.save(metaEnumValue);
 										metaEnumValueList.add(metaEnumValue);
 									}
 									enumEntity.setEnumValueList( metaEnumValueList);
@@ -575,7 +576,7 @@ public class BeanToDBConverter {
 				System.out.println("finito entityGroup"+entityGroup.getName());
 		}
 		project.setEntityGroupList(entityGroupList);
-		//project.setEnumEntityList(enumEntityList);
+		project.setEnumEntityList(enumEntityList);
 		projectRepository.save(project);
 		System.out.println("ok");
 		

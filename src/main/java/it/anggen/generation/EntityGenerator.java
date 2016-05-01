@@ -1,6 +1,7 @@
 package it.anggen.generation;
 
 import it.anggen.reflection.EntityAttributeManager;
+import it.anggen.repository.relationship.RelationshipRepository;
 import it.anggen.utils.EntityAttribute;
 import it.anggen.utils.OracleNamingStrategy;
 import it.anggen.utils.ReflectionManager;
@@ -77,6 +78,9 @@ public class EntityGenerator {
 	
 	@Autowired
 	private Generator generator;
+	
+	@Autowired
+	private RelationshipRepository relationshipRepository;
 	
 	private Entity entity;
 	
@@ -232,7 +236,12 @@ public class EntityGenerator {
 				{
 					JAnnotationUse manyToMany = listField.annotate(ManyToMany.class);
 					manyToMany.param("fetch", FetchType.LAZY);
-					manyToMany.param("mappedBy", entity.getName()+"List");
+					
+					List<Relationship> relationshipList = relationshipRepository.findByRelationshipIdAndNameAndPriorityAndRelationshipTypeAndAnnotationAndEntityAndEntityAndTab(null, null, null, RelationshipType.MANY_TO_MANY.getValue(), null, entity,relationship.getEntityTarget(),  null);
+					String rightName=entity.getName();
+					if (relationshipList.size()>0)
+						rightName=relationshipList.get(0).getName();
+					manyToMany.param("mappedBy", rightName+"List");
 				}
 
 				

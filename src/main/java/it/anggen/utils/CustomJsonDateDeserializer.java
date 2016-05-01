@@ -28,10 +28,10 @@ public class CustomJsonDateDeserializer extends JsonDeserializer<Date>
             System.out.println(returnedDate.toString());
             return returnedDate;
         } catch (ParseException e) {
-        	format = new SimpleDateFormat("yyyy-MM-dd");
+        	format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
             try {
             	  Date returnedDate=format.parse(date);
-                  returnedDate.setDate(returnedDate.getDate()+1);
+                  returnedDate.setDate(returnedDate.getDate());
                   return returnedDate;
             } catch (ParseException e2)
             {

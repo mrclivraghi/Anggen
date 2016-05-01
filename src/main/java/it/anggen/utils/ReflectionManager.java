@@ -78,6 +78,7 @@ public class ReflectionManager {
 		if (myClass==String.class) return true;
 		if (myClass==Date.class) return true;
 		if (myClass==java.sql.Date.class) return true;
+		if (myClass==Timestamp.class) return true;
 		if (myClass==Integer.class) return true;
 		if (myClass==int.class) return true;
 		if (myClass==double.class) return true;
@@ -411,7 +412,7 @@ public class ReflectionManager {
 			if (annotationList[i].annotationType()==Temporal.class)
 				return true;
 		}
-		if (field.getFieldClass()==Date.class || field.getFieldClass()==java.sql.Date.class || field.getFieldClass()==Time.class)
+		if (field.getFieldClass()==Date.class || field.getFieldClass()==java.sql.Date.class || field.getFieldClass()==Time.class || field.getFieldClass()==Timestamp.class)
 			return true;
 		return false;
 	}

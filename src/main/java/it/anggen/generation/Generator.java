@@ -186,7 +186,7 @@ public class Generator {
 	//@Transactional
 	private void init() throws Exception
 	{
-		Generator.appName=applicationName;
+		Generator.appName=applicationName.toLowerCase();
 		Generator.generatedPackage=mainPackage;
 		Generator.targetSchema=schema;
 		Generator.enableSecurity=security;

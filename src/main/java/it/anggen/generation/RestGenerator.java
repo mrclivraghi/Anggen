@@ -14,6 +14,7 @@ import it.anggen.utils.Utility;
 import it.anggen.model.FieldType;
 import it.anggen.model.LogType;
 import it.anggen.model.OperationType;
+import it.anggen.model.RelationshipType;
 import it.anggen.model.SecurityType;
 import it.anggen.model.entity.Entity;
 import it.anggen.model.relationship.Relationship;
@@ -586,11 +587,16 @@ public class RestGenerator {
 				{
 					EntityManager entityManager = new EntityManagerImpl(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget());
 					updateBlock.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getName())+"List()!=null)");
-					updateBlock.directStatement("for ("+ReflectionManager.getJDefinedClass(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget()).fullName()+" "+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()+": "+lowerClass+".get"+Utility.getFirstUpper(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getName())+"List())");
+					
+					String childrenEntityName=EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName();
+					if (childrenEntityName.equals(entity.getName()))
+						childrenEntityName=childrenEntityName+"1";
+					
+					updateBlock.directStatement("for ("+ReflectionManager.getJDefinedClass(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget()).fullName()+" "+childrenEntityName+": "+lowerClass+".get"+Utility.getFirstUpper(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getName())+"List())");
 					updateBlock.directStatement("{");
 					if (entityManager.hasManyToMany())
 					{
-						updateBlock.directStatement(ReflectionManager.getJDefinedClass(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget()).fullName()+" saved"+Utility.getFirstUpper(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName())+" = "+entityAttribute.getName()+"Repository.findOne("+entityAttribute.getName()+".get"+Utility.getFirstUpper(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName())+"Id());");
+						updateBlock.directStatement(ReflectionManager.getJDefinedClass(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget()).fullName()+" saved"+Utility.getFirstUpper(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName())+" = "+entityAttribute.getName()+"Repository.findOne("+childrenEntityName+".get"+Utility.getFirstUpper(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName())+"Id());");
 						updateBlock.directStatement("Boolean found=false; ");
 						updateBlock.directStatement("for ("+ReflectionManager.getJDefinedClass(entity).fullName()+" temp"+Utility.getFirstUpper(className)+" : saved"+Utility.getFirstUpper(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName())+".get"+Utility.getFirstUpper(className)+"List())");
 						updateBlock.directStatement("{");
@@ -605,7 +611,16 @@ public class RestGenerator {
 						
 					} else
 					{
-						updateBlock.directStatement(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()+".set"+Utility.getFirstUpper(className)+"("+lowerClass+");");
+						
+						List<Relationship> inverseRelationship=relationshipRepository.findByRelationshipIdAndNameAndPriorityAndRelationshipTypeAndAnnotationAndEntityAndEntityAndTab(null, null, null, RelationshipType.MANY_TO_ONE.getValue(), null, entity, EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget(), null);
+						String inverseName=Utility.getFirstUpper(className);
+						if (inverseRelationship.size()>0)
+						{
+							inverseName=Utility.getFirstUpper(inverseRelationship.get(0).getName());
+						}
+						
+						
+						updateBlock.directStatement(childrenEntityName+".set"+inverseName+"("+lowerClass+");");
 					}
 					updateBlock.directStatement("}");
 				} 
@@ -624,7 +639,7 @@ public class RestGenerator {
 						updateBlock.directStatement("if (!"+lowerClass+"List.contains(returned"+Utility.getFirstUpper(className)+"))");
 						updateBlock.directStatement(""+lowerClass+"List.add(returned"+Utility.getFirstUpper(className)+");");
 						
-						List<Relationship> inverseRelationship=relationshipRepository.findByRelationshipIdAndNameAndPriorityAndRelationshipTypeAndAnnotationAndEntityAndEntityAndTab(null, null, null, null, null, entity, EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget(), null);
+						List<Relationship> inverseRelationship=relationshipRepository.findByRelationshipIdAndNameAndPriorityAndRelationshipTypeAndAnnotationAndEntityAndEntityAndTab(null, null, null, RelationshipType.ONE_TO_MANY.getValue(), null, entity, EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget(), null);
 						String inverseName=Utility.getFirstUpper(className);
 						if (inverseRelationship.size()>0)
 						{

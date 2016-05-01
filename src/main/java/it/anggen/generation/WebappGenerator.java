@@ -204,14 +204,14 @@ public class WebappGenerator {
 		JBlock customJacksonBlock = customJackson.body();
 		
 		customJacksonBlock.directStatement("MappingJackson2HttpMessageConverter jsonConverter = new MappingJackson2HttpMessageConverter();");
-		customJacksonBlock.directStatement("HibernateAwareObjectMapper hibernateAwareObjectMapper = new HibernateAwareObjectMapper();");
+		customJacksonBlock.directStatement(HibernateAwareObjectMapper.class.getName()+" hibernateAwareObjectMapper = new "+HibernateAwareObjectMapper.class.getName()+"();");
 		customJacksonBlock.directStatement("jsonConverter.setObjectMapper(hibernateAwareObjectMapper);");
 		customJacksonBlock.directStatement("return jsonConverter;");
 
 		JMethod configureMessage = webConfigClass.method(JMod.PUBLIC, void.class, "configureMessageConverters");
 		configureMessage.annotate(Override.class);
 		
-		JClass convertersClass = codeModel.ref(List.class).narrow(codeModel.ref(HttpMessageConverter.class).narrow(codeModel.ref(Serializable.class).wildcard()));
+		JClass convertersClass = codeModel.ref(List.class).narrow(codeModel.ref(HttpMessageConverter.class).narrow(codeModel.wildcard()));
 		
 		configureMessage.param(convertersClass, "converters");
 		

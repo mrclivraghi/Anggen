@@ -161,7 +161,7 @@ public class EntityAttributeManager {
 		JCodeModel codeModel= new JCodeModel();
 		if (isEnumField())
 			return codeModel.ref(Integer.class);
-		if (this.asField()!=null && this.asField().getFieldType()==FieldType.DATE)
+		if (this.asField()!=null && (this.asField().getFieldType()==FieldType.DATE || this.asField().getFieldType()==FieldType.TIME))
 			return codeModel.ref(String.class);
 		
 		return getFieldClass();

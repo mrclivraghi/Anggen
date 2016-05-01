@@ -75,8 +75,8 @@ public class FrontHtmlGenerator {
 		this.attributeList=entityManager.getAttributeList();
 		this.childrenEntity=entityManager.getChildrenEntities();
 		File file = new File(""); 
-		directoryViewPages = file.getAbsolutePath()+generator.htmlDirectory+"/";
-		directoryAngularFiles=file.getAbsolutePath()+generator.angularDirectory+Generator.appName+"/";
+		directoryViewPages = file.getAbsolutePath()+Generator.htmlDirectoryProperty+"/";
+		directoryAngularFiles=file.getAbsolutePath()+Generator.generateAngularDirectory+Generator.appName+"/";
 	}
 	
 	
@@ -119,7 +119,7 @@ public class FrontHtmlGenerator {
 			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../../css/main.css"))
 			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../../css/jquery-ui.css"))
 			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "../../css/easytree/skin-win8/ui.easytree.css"))
-			.link((new HtmlAttributes()).add("rel","import").add("href", "../../"+Generator.appName+generator.menuName));
+			.link((new HtmlAttributes()).add("rel","import").add("href", "../../"+Generator.appName+Generator.menuNameProperty));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -156,7 +156,7 @@ public class FrontHtmlGenerator {
 			//TODO switch
 			String loadMenuScript="loadMenu(); ";
 			html.script((new HtmlAttributes()).add("type", "text/javascript")).content(loadMenuScript,false);
-			if (generator.easyTreeMenu)
+			if (Generator.easyTreeMenuProperty)
 				html.script().content("function stateChanged(nodes, nodesJson) {var t = nodes[0].text; $.cookie('menu', nodesJson); };  var easyTree = $('#menu').easytree({data: ($.cookie('menu')!=null? $.cookie('menu') : null), stateChanged: stateChanged});",false);
 			html._body()._html();
 		} catch (IOException e) {

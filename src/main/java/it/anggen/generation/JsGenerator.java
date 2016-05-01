@@ -230,31 +230,31 @@ public class JsGenerator {
 		//search
 		sb.append("this.search = function() {\n");
 		sb.append("this.setSelectedEntity(null);\n");
-		sb.append("var promise= $http.post(\""+generator.restUrl+entityName+"/search\",this.searchBean);\n");
+		sb.append("var promise= $http.post(\""+Generator.restUrlProperty+entityName+"/search\",this.searchBean);\n");
 		sb.append("return promise; \n");
 		sb.append("};\n");
 		//searchOne
 
 		sb.append("this.searchOne=function(entity) {\n");
 		//sb.append("this.setSelectedEntity(null);\n");
-		sb.append("var promise= $http.get(\""+generator.restUrl+entityName+"/\"+entity."+entityName+"Id);\n");
+		sb.append("var promise= $http.get(\""+Generator.restUrlProperty+entityName+"/\"+entity."+entityName+"Id);\n");
 		sb.append("return promise; \n");
 		sb.append("};\n");
 
 
 		//insert
 		sb.append("this.insert = function() {\n");
-		sb.append("var promise= $http.put(\""+generator.restUrl+entityName+"/\",this.selectedEntity);\n");
+		sb.append("var promise= $http.put(\""+Generator.restUrlProperty+entityName+"/\",this.selectedEntity);\n");
 		sb.append("return promise; \n");
 		sb.append("};\n");
 		//update
 		sb.append("this.update = function() {\n");
-		sb.append("var promise= $http.post(\""+generator.restUrl+entityName+"/\",this.selectedEntity);\n");
+		sb.append("var promise= $http.post(\""+Generator.restUrlProperty+entityName+"/\",this.selectedEntity);\n");
 		sb.append("return promise; \n");
 		sb.append("}\n");
 		//delete
 		sb.append("this.del = function() {\n");
-		sb.append("var url=\""+generator.restUrl+entityName+"/\"+this.selectedEntity."+entityName+"Id;\n");
+		sb.append("var url=\""+Generator.restUrlProperty+entityName+"/\"+this.selectedEntity."+entityName+"Id;\n");
 		sb.append("var promise= $http[\"delete\"](url);\n");
 		sb.append("return promise; \n");
 		sb.append("}\n");
@@ -264,7 +264,7 @@ public class JsGenerator {
 		sb.append("var formData = new FormData();\n");
 		sb.append("if (file!=null)\n");
 		sb.append("formData.append('file',file);\n");
-		sb.append("var promise= $http.post(\""+generator.restUrl+entityName+"/\"+this.selectedEntity."+entityName+"Id+\"/load\"+field+\"/\",formData,{\n");
+		sb.append("var promise= $http.post(\""+Generator.restUrlProperty+entityName+"/\"+this.selectedEntity."+entityName+"Id+\"/load\"+field+\"/\",formData,{\n");
 		sb.append(" headers: {'Content-Type': undefined}\n");
 		sb.append("});\n");
 		sb.append("return promise; \n");
@@ -277,7 +277,7 @@ public class JsGenerator {
 				sb.append(" this.init"+Utility.getFirstUpper(relationship.getEntityTarget().getName())+"List= function()\n");
 				sb.append("{\n");
 				sb.append("var promise= $http\n");
-				sb.append(".post(\""+generator.restUrl+Utility.getEntityCallName(relationship.getEntityTarget().getName())+"/search\",\n");
+				sb.append(".post(\""+Generator.restUrlProperty+Utility.getEntityCallName(relationship.getEntityTarget().getName())+"/search\",\n");
 				sb.append("{});\n");
 				sb.append("return promise;\n");
 				sb.append("};\n");
@@ -1089,14 +1089,14 @@ if (entity.getEntityGroup()!=null)
 		if (Generator.enableSecurity)
 		{
 			sb.append("this.init= function() {\n");
-			sb.append("var promise= $http.get(\""+generator.restUrl+"authentication/\");\n");
+			sb.append("var promise= $http.get(\""+Generator.restUrlProperty+"authentication/\");\n");
 			sb.append("return promise; \n");
 			sb.append("};\n");
 		}
 
 		sb.append("this.isLoggedIn = function()\n")
 		.append("{\n")
-		.append("var promise= $http.post(\""+generator.restUrl+"authentication/username/\");\n")
+		.append("var promise= $http.post(\""+Generator.restUrlProperty+"authentication/username/\");\n")
 		.append("return promise;\n")
 		.append("}\n")
 
@@ -1116,7 +1116,7 @@ if (entity.getEntityGroup()!=null)
 		.append("credentials.password=password;\n")
 		.append("credentials=serializeObj(credentials);\n")
 		.append("$log.debug(credentials);\n")
-		.append("var promise=$http.post(\""+generator.restUrl+"auth/authenticate/\",credentials,{ headers: {'Content-Type': 'application/x-www-form-urlencoded' }});\n")
+		.append("var promise=$http.post(\""+Generator.restUrlProperty+"auth/authenticate/\",credentials,{ headers: {'Content-Type': 'application/x-www-form-urlencoded' }});\n")
 		.append("return promise;\n")
 		.append("}\n");
 
@@ -1482,7 +1482,7 @@ if (entity.getEntityGroup()!=null)
 
 		.append(" function checkUsername()\n")
 		.append(" {\n")
-		.append("var Username= $resource(\""+generator.restUrl+"authentication/username/\");\n")
+		.append("var Username= $resource(\""+Generator.restUrlProperty+"authentication/username/\");\n")
 		.append("Username.save({},function(data){\n")
 		.append("         $log.debug(data);\n")
 		.append("     });\n")
@@ -1676,7 +1676,7 @@ if (entity.getEntityGroup()!=null)
 		.append("    var vm = this;\n")
 		.append("  function doLogout()\n")
 		.append("  {\n")
-		.append("  $http.post(\""+generator.restUrl+"auth/logout/\").then(function(response)\n")
+		.append("  $http.post(\""+Generator.restUrlProperty+"auth/logout/\").then(function(response)\n")
 		.append("{\n")
 		.append("$log.debug(response);\n")
 		.append("		$log.debug(\"logout\");\n")
@@ -1776,7 +1776,7 @@ if (entity.getEntityGroup()!=null)
 		sb.append("})();\n");
 
 		File file = new File("");
-		String directoryAngularFiles=file.getAbsolutePath()+generator.htmlDirectory+"login/";
+		String directoryAngularFiles=file.getAbsolutePath()+Generator.htmlDirectoryProperty+"login/";
 		saveAsJsFile(directoryAngularFiles, "login.directive", sb.toString());
 
 	}

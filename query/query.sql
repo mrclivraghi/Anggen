@@ -37,11 +37,11 @@ delete from meta.relationship  where entity_id_entity=121
 delete from meta.tab where entity_id_entity=121 
 delete from sso.restriction_entity  where entity_id_entity=121 
 
-update meta.field set name='orderHeadId' where field_id=10525
+update meta.field set name='orderHeadId' where field_id=13682
 
 10152where name like '%media%' order by entity_id_entity
 select * from meta.entity where name like '%orderHead%'
-select * from meta.field where name='giftCode' and entity_id_entity=48
+select * from meta.field where name='orderId' and entity_id_entity=48
 select * from meta.annotation where field_id_field=4390
 select * from meta.tab where entity_id_entity=128
 insert into meta.field(field_id,field_type,name,priority,entity_id_entity,tab_id_tab)

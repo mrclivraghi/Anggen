@@ -139,7 +139,7 @@ public class WebappGenerator {
 		generateSecurityWebappInitializer();
 		generateSpringBootApplication();
 		//generateForbiddenJsp();
-		generateMainAppController();
+		//generateMainAppController();
 		generateWebConfig();
 		
 		
@@ -197,7 +197,7 @@ public class WebappGenerator {
 		JBlock addCorsBlock = addCorsMapping.body();
 		addCorsBlock.directStatement("super.addCorsMappings(registry);\n");
 		addCorsBlock.directStatement("registry.addMapping(\"/**\")\n");
-		addCorsBlock.directStatement(".allowedOrigins(\""+generator.corsOrigin+"\");\n");
+		addCorsBlock.directStatement(".allowedOrigins(\""+Generator.corsOriginProperty+"\");\n");
 		
 		JMethod customJackson = webConfigClass.method(JMod.PUBLIC, MappingJackson2HttpMessageConverter.class, "customJackson2HttpMessageConverter");
 		customJackson.annotate(Bean.class);
@@ -586,7 +586,7 @@ public class WebappGenerator {
 			._html();
 
 			File file= new File("");
-			String directoryViewPages = file.getAbsolutePath()+generator.htmlDirectory+"/";
+			String directoryViewPages = file.getAbsolutePath()+Generator.htmlDirectoryProperty+"/";
 			
 			File dir = new File(directoryViewPages);
 			if (!dir.exists())

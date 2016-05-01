@@ -122,7 +122,7 @@ public class HtmlGenerator {
 			html.macros().javascript("js/date.js")
 			.macros().javascript("js/utility.js");
 			
-			if (generator.easyTreeMenu)
+			if (Generator.easyTreeMenuProperty)
 				html.macros().javascript("js/jquery.easytree.js");
 			
 			html.macros().javascript("js/jquery.cookie.js")
@@ -146,7 +146,7 @@ public class HtmlGenerator {
 			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "css/main.css"))
 			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "css/jquery-ui.css"))
 			.link((new HtmlAttributes()).add("rel","stylesheet").add("href", "css/easytree/skin-win8/ui.easytree.css"))
-			.link((new HtmlAttributes()).add("rel","import").add("href", ""+Generator.appName+generator.menuName));
+			.link((new HtmlAttributes()).add("rel","import").add("href", ""+Generator.appName+Generator.menuNameProperty));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -319,8 +319,8 @@ public class HtmlGenerator {
 		}
 		
 		File file = new File(""); 
-		String directoryViewPages = file.getAbsolutePath()+generator.menuDirectory;
-		File menuFile=new File(directoryViewPages+generator.menuName);
+		String directoryViewPages = file.getAbsolutePath()+Generator.menuDirectoryProperty;
+		File menuFile=new File(directoryViewPages+Generator.menuNameProperty);
 		PrintWriter writer;
 		try {
 			System.out.println("Written "+menuFile.getAbsolutePath());
@@ -411,8 +411,8 @@ public class HtmlGenerator {
 		}
 		
 		File file = new File(""); 
-		String directoryViewPages = file.getAbsolutePath()+generator.menuDirectory;
-		File menuFile=new File(directoryViewPages+generator.menuName);
+		String directoryViewPages = file.getAbsolutePath()+Generator.menuDirectoryProperty;
+		File menuFile=new File(directoryViewPages+Generator.menuNameProperty);
 		PrintWriter writer;
 		try {
 			System.out.println("Written "+menuFile.getAbsolutePath());

@@ -592,13 +592,29 @@ public class RestGenerator {
 					if (childrenEntityName.equals(entity.getName()))
 						childrenEntityName=childrenEntityName+"1";
 					
-					updateBlock.directStatement("for ("+ReflectionManager.getJDefinedClass(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget()).fullName()+" "+childrenEntityName+": "+lowerClass+".get"+Utility.getFirstUpper(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getName())+"List())");
+					List<Relationship> directRelationshipList=relationshipRepository.findByRelationshipIdAndNameAndPriorityAndRelationshipTypeAndAnnotationAndEntityAndEntityAndTab(null, null, null, null, null, EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget(), entity, null);
+					String directName=Utility.getFirstUpper(className);
+					if (directRelationshipList.size()>0)
+					{
+						directName=Utility.getFirstUpper(directRelationshipList.get(0).getName());
+					}
+					
+					
+					List<Relationship> inverseRelationshipList=relationshipRepository.findByRelationshipIdAndNameAndPriorityAndRelationshipTypeAndAnnotationAndEntityAndEntityAndTab(null, null, null, null, null, entity, EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget(), null);
+					String inverseName=Utility.getFirstUpper(className);
+					if (inverseRelationshipList.size()>0)
+					{
+						inverseName=Utility.getFirstUpper(inverseRelationshipList.get(0).getName());
+					}
+					
+					
+					updateBlock.directStatement("for ("+ReflectionManager.getJDefinedClass(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget()).fullName()+" "+childrenEntityName+": "+lowerClass+".get"+directName+"List())");
 					updateBlock.directStatement("{");
-					if (entityManager.hasManyToMany())
+					if (EntityAttributeManager.getInstance(entityAttribute).asRelationship().getRelationshipType()!=RelationshipType.ONE_TO_ONE && EntityAttributeManager.getInstance(entityAttribute).asRelationship().getRelationshipType()!=RelationshipType.ONE_TO_MANY)
 					{
 						updateBlock.directStatement(ReflectionManager.getJDefinedClass(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget()).fullName()+" saved"+Utility.getFirstUpper(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName())+" = "+entityAttribute.getName()+"Repository.findOne("+childrenEntityName+".get"+Utility.getFirstUpper(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName())+"Id());");
 						updateBlock.directStatement("Boolean found=false; ");
-						updateBlock.directStatement("for ("+ReflectionManager.getJDefinedClass(entity).fullName()+" temp"+Utility.getFirstUpper(className)+" : saved"+Utility.getFirstUpper(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName())+".get"+Utility.getFirstUpper(className)+"List())");
+						updateBlock.directStatement("for ("+ReflectionManager.getJDefinedClass(entity).fullName()+" temp"+Utility.getFirstUpper(className)+" : saved"+Utility.getFirstUpper(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName())+".get"+inverseName+"List())");
 						updateBlock.directStatement("{");
 						updateBlock.directStatement("if (temp"+Utility.getFirstUpper(className)+".get"+Utility.getFirstUpper(className)+"Id().equals("+lowerClass+".get"+Utility.getFirstUpper(className)+"Id()))");
 						updateBlock.directStatement("{");
@@ -607,17 +623,11 @@ public class RestGenerator {
 						updateBlock.directStatement("}");
 						updateBlock.directStatement("}");
 						updateBlock.directStatement("if (!found)");
-						updateBlock.directStatement("saved"+Utility.getFirstUpper(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName())+".get"+Utility.getFirstUpper(className)+"List().add("+lowerClass+");");
+						updateBlock.directStatement("saved"+Utility.getFirstUpper(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName())+".get"+inverseName+"List().add("+lowerClass+");");
 						
 					} else
 					{
 						
-						List<Relationship> inverseRelationship=relationshipRepository.findByRelationshipIdAndNameAndPriorityAndRelationshipTypeAndAnnotationAndEntityAndEntityAndTab(null, null, null, RelationshipType.MANY_TO_ONE.getValue(), null, entity, EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget(), null);
-						String inverseName=Utility.getFirstUpper(className);
-						if (inverseRelationship.size()>0)
-						{
-							inverseName=Utility.getFirstUpper(inverseRelationship.get(0).getName());
-						}
 						
 						
 						updateBlock.directStatement(childrenEntityName+".set"+inverseName+"("+lowerClass+");");
@@ -996,7 +1006,7 @@ public class RestGenerator {
 					JBlock loadFileBlock =loadFileMethod.body();
 					loadFileBlock.directStatement(ReflectionManager.getJDefinedClass(entity).fullName()+" "+lowerClass+" = "+lowerClass+"Service.findById("+EntityAttributeManager.getInstance(null).getFieldTypeClass(keyClass).getName()+".valueOf("+lowerClass+"Id)).get(0);");
 					loadFileBlock.directStatement(ReflectionManager.getJDefinedClass(entity).fullName()+" updated"+Utility.getFirstUpper(lowerClass)+"=null;");
-					loadFileBlock.directStatement("String destination=\""+generator.uploadDirectory+lowerClass+"/\"+"+lowerClass+"Id+\"/\";");
+					loadFileBlock.directStatement("String destination=\""+Generator.uploadDirectoryProperty+lowerClass+"/\"+"+lowerClass+"Id+\"/\";");
 					loadFileBlock.directStatement("String filePath = "+Utility.class.getName()+".saveMultipartFile(file, destination);");
 					loadFileBlock.directStatement(""+lowerClass+".set"+Utility.getFirstUpper(field.getName())+"(filePath);");
 					loadFileBlock.directStatement("updated"+Utility.getFirstUpper(lowerClass)+"="+lowerClass+"Service.update("+lowerClass+");");

@@ -138,7 +138,7 @@ public class JGit {
 			}
 		
 			
-			//System.out.println(createBranch1.getNewObjectId().getName()+"FIRST COMMIT");
+			String firstCommit=createBranch1.getNewObjectId().getName();
 			
 
 			File newTest = new File("test.txt");
@@ -152,19 +152,20 @@ public class JGit {
 			//git.getRepository().updateRef(createBranch1.getNewObjectId().getName());
 			System.out.println("2----"+git.getRepository().getBranch());
 			
-			/*try {
+			try {
 				//add file
-				//git.add().addFilepattern("test.txt").call();
+				git.add().addFilepattern("test.txt").call();
 				
-				//RevCommit lastCommit = git.commit().setMessage("new test txt").call();
+				RevCommit lastCommit = git.commit().setMessage("new test txt").call();
 				
-				//System.out.println(lastCommit.getId()+"LAST");
+
+				DiffEntry diffEntry=diffFile(repo, firstCommit, lastCommit.getId().getName(), "test.txt");
 				
 				
 			} catch (GitAPIException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}*/
+			}
 			
 			// Delete a branch
 			//RefUpdate deleteBranch1 = repo.updateRef("refs/heads/feature/testJGit");

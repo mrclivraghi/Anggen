@@ -1,11 +1,15 @@
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.util.Date;
 import java.util.List;
 
 import java.io.IOException;
 import java.util.List;
 
+import org.eclipse.jgit.api.CreateBranchCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.diff.DiffConfig;
@@ -96,34 +100,76 @@ public class JGit {
 	public void createDbEntities()
 	{
 		try {
+			
+			File test = new File("");
+			
 			Repository repo = new FileRepositoryBuilder()
-					.setGitDir(new File(".git"))
+					.setGitDir(new File(test.getAbsolutePath()+"/.git"))
 					.build();
 
+			
 			// Get a reference
 			Ref develop = repo.getRef("develop");
 
 			// Get the object the reference points to
-			ObjectId masterTip = develop.getObjectId();
+			ObjectId developTip = develop.getObjectId();
 
 			// Rev-parse
-			ObjectId obj = repo.resolve("HEAD^{tree}");
+			//ObjectId obj = repo.resolve("HEAD^{tree}");
 
 			// Load raw object contents
-			ObjectLoader loader = repo.open(masterTip);
-			loader.copyTo(System.out);
+			//ObjectLoader loader = repo.open(masterTip);
+			//loader.copyTo(System.out);
 
 			// Create a branch
 			RefUpdate createBranch1 = repo.updateRef("refs/heads/feature/testJGit");
-			createBranch1.setNewObjectId(masterTip);
+			createBranch1.setNewObjectId(developTip);
 			createBranch1.update();
+			Git git = new Git(repo);
+			
 
 			
 			
+			try {
+				git.checkout().setName(createBranch1.getName()).call();
+			} catch (GitAPIException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+			
+			//System.out.println(createBranch1.getNewObjectId().getName()+"FIRST COMMIT");
+			
+
+			File newTest = new File("test.txt");
+			PrintWriter writer = new PrintWriter(newTest);
+			writer.println("CIAO");
+			writer.println("HELLA");
+			writer.println("BONJOUR");
+			writer.close();
+			//repo.updateRef(createBranch1.getNewObjectId()).update();
+			System.out.println("1----"+git.getRepository().getBranch());
+			//git.getRepository().updateRef(createBranch1.getNewObjectId().getName());
+			System.out.println("2----"+git.getRepository().getBranch());
+			
+			/*try {
+				//add file
+				//git.add().addFilepattern("test.txt").call();
+				
+				//RevCommit lastCommit = git.commit().setMessage("new test txt").call();
+				
+				//System.out.println(lastCommit.getId()+"LAST");
+				
+				
+			} catch (GitAPIException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}*/
+			
 			// Delete a branch
-			RefUpdate deleteBranch1 = repo.updateRef("refs/heads/feature/testJGit");
-			deleteBranch1.setForceUpdate(true);
-			deleteBranch1.delete();
+			//RefUpdate deleteBranch1 = repo.updateRef("refs/heads/feature/testJGit");
+			//deleteBranch1.setForceUpdate(true);
+			//deleteBranch1.delete();
 
 			// Config
 			//Config cfg = repo.getConfig();

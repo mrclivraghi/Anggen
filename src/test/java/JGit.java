@@ -165,7 +165,7 @@ public class JGit {
 				
 				RevCommit lastCommit = git.commit().setMessage("new test txt").call();
 				
-				git.checkout().setName("JGit").call();
+				git.checkout().setName("refs/heads/feature/JGit").call();
 				git.merge().setCommit(false).include(lastCommit).call();
 				
 

@@ -3,6 +3,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -122,7 +123,8 @@ public class JGit {
 			//loader.copyTo(System.out);
 
 			// Create a branch
-			String generationBranchName="refs/heads/feature/generation_"+new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
+			String generationBranchName="refs/heads/feature/generation_"+sdf.format(new Date());
 			Ref testBranch= repo.getRef(generationBranchName);
 			if (testBranch==null)
 			{

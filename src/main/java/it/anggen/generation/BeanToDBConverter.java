@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -757,6 +758,45 @@ public class BeanToDBConverter {
 				
 				metaAnnotation.setAnnotationAttributeList(annotationAttributeList);
 			}
+			
+			if (annotationArray[i].annotationType()==Column.class)
+			{
+				annotationType=AnnotationType.MAPPED_AS;
+				List<AnnotationAttribute> annotationAttributeList = new ArrayList<AnnotationAttribute>();
+				for (Method method : annotationArray[i].annotationType().getDeclaredMethods()) {
+					if (method.getName().equals("value"))
+					{
+						Object value= null;
+						try {
+							value=  method.invoke(annotationArray[i], (Object[])null);
+							AnnotationAttribute annotationAttribute = new AnnotationAttribute();
+							annotationAttribute.setProperty(method.getName());
+							annotationAttribute.setValue(value.toString());
+							//annotationAttribute.setAnnotation(metaAnnotation);
+							metaAnnotation.setAnnotationType(annotationType);
+							/*if (EntityAttributeManager.getInstance(metaEntityAttribute).isField())
+								metaAnnotation.setField(EntityAttributeManager.getInstance(metaEntityAttribute).asField());
+							if (EntityAttributeManager.getInstance(metaEntityAttribute).isEnumField())
+								metaAnnotation.setEnumField(EntityAttributeManager.getInstance(metaEntityAttribute).asEnumField());
+							if (EntityAttributeManager.getInstance(metaEntityAttribute).isRelationship())
+								metaAnnotation.setRelationship(EntityAttributeManager.getInstance(metaEntityAttribute).asRelationship());
+							annotationRepository.save(metaAnnotation);
+							*/
+							annotationAttributeRepository.save(annotationAttribute);
+							annotationAttributeList.add(annotationAttribute);
+						} catch (IllegalAccessException
+								| IllegalArgumentException
+								| InvocationTargetException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+				
+				metaAnnotation.setAnnotationAttributeList(annotationAttributeList);
+			}
+			
+			
 			if (annotationArray[i].annotationType()==Id.class)
 			{
 				annotationType=AnnotationType.PRIMARY_KEY;

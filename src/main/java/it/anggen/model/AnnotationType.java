@@ -18,8 +18,7 @@ public enum AnnotationType {
     PASSWORD(11),
     PRIORITY(12),
     EMBEDDED(13),
-    CACHE(14),
-    MAPPED_AS(15);
+    CACHE(14);
     private final int value;
 
     private AnnotationType(int value) {

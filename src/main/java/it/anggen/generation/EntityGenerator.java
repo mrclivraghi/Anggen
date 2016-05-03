@@ -18,7 +18,6 @@ import it.anggen.utils.annotation.MaxDescendantLevel;
 import it.anggen.utils.annotation.Password;
 import it.anggen.utils.annotation.Priority;
 import it.anggen.utils.annotation.SecurityType;
-import it.anggen.model.AnnotationType;
 import it.anggen.model.RelationshipType;
 import it.anggen.model.entity.Entity;
 import it.anggen.model.field.Annotation;
@@ -193,11 +192,7 @@ public class EntityGenerator {
 			String fieldName= field.getName();
 			JVar classField = myClass.field(JMod.PRIVATE, fieldClass, field.getName());
 			JAnnotationUse columnAnnotation = classField.annotate(Column.class);
-			Annotation mappedAs=EntityAttributeManager.getInstance(field).getAnnotation(AnnotationType.MAPPED_AS);
-			if (mappedAs!=null && mappedAs.getAnnotationAttributeList().size()>0)
-				columnAnnotation.param("name", mappedAs.getAnnotationAttributeList().get(0).getValue());
-			else
-				columnAnnotation.param("name", namingStrategy.classToTableName(field.getName()));
+			columnAnnotation.param("name", namingStrategy.classToTableName(field.getName()));
 			generateGetterAndSetter(myClass, field.getName(), fieldClass);
 			addValidationAnnotation(field,classField);
 		}

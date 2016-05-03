@@ -1,7 +1,6 @@
 
 package it.anggen.model.field;
 
-import java.util.Date;
 import java.util.List;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -52,9 +51,6 @@ public class EnumField
     @it.anggen.utils.annotation.Priority(4)
     private List<Annotation> annotationList;
 
-    private Date addDate;
-    private Date modDate;
-    
     public java.lang.Long getEnumFieldId() {
         return this.enumFieldId;
     }
@@ -110,13 +106,5 @@ public class EnumField
     public void setAnnotationList(List<Annotation> annotationList) {
         this.annotationList=annotationList;
     }
-
-	public Date getModDate() {
-		return modDate;
-	}
-
-	public void setModDate(Date modDate) {
-		this.modDate = modDate;
-	}
 
 }

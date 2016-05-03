@@ -1,7 +1,6 @@
 
 package it.anggen.model.entity;
 
-import java.util.Date;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -43,9 +42,6 @@ public class Project {
     @it.anggen.utils.annotation.Priority(4)
     private List<EnumEntity> enumEntityList;
 
-    private Date addDate;
-    private Date modDate;
-    
     public Integer getProjectId() {
         return this.projectId;
     }
@@ -77,13 +73,5 @@ public class Project {
     public void setEnumEntityList(List<EnumEntity> enumEntityList) {
         this.enumEntityList=enumEntityList;
     }
-
-	public Date getModDate() {
-		return modDate;
-	}
-
-	public void setModDate(Date modDate) {
-		this.modDate = modDate;
-	}
 
 }

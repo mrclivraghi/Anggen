@@ -1,7 +1,6 @@
 
 package it.anggen.model.field;
 
-import java.util.Date;
 import java.util.List;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -58,9 +57,6 @@ public class Field
     @it.anggen.utils.annotation.Priority(3)
     private FieldType fieldType;
 
-    private Date addDate;
-    private Date modDate;
-    
     public java.lang.Long getFieldId() {
         return this.fieldId;
     }
@@ -124,13 +120,5 @@ public class Field
     public void setFieldType(FieldType fieldType) {
         this.fieldType=fieldType;
     }
-
-	public Date getModDate() {
-		return modDate;
-	}
-
-	public void setModDate(Date modDate) {
-		this.modDate = modDate;
-	}
 
 }

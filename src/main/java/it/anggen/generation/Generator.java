@@ -17,6 +17,7 @@ import it.anggen.reflection.EntityManagerImpl;
 import it.anggen.repository.entity.EnumEntityRepository;
 import it.anggen.repository.entity.ProjectRepository;
 import it.anggen.repository.field.EnumFieldRepository;
+import it.anggen.repository.generation.GenerationRunRepository;
 import it.anggen.repository.relationship.RelationshipRepository;
 import it.anggen.service.relationship.RelationshipServiceImpl;
 
@@ -143,6 +144,9 @@ public class Generator {
 	private List<EntityGroup> entityGroupList;
 	
 	private List<Relationship> relationshipList;
+	
+	@Autowired
+	GenerationRunRepository generationRunRepository;
 	
 	@Autowired
 	ProjectRepository projectRepository;
@@ -375,9 +379,16 @@ public class Generator {
 	@Transactional
 	public void generate() throws Exception
 	{
-		
+		GenerationRun generationRun = new GenerationRun();
+		generationRun.setStartDate(new Date());
+		generationRun.setStatus(0);
+		generationRunRepository.save(generationRun);
+		List<GenerationRun> generationRunList = new ArrayList<GenerationRun>();
+		generationRunList.add(generationRun);
 		initBranch();
 		init();
+		project.setGenerationRunList(generationRunList);
+		projectRepository.save(project);
 		if (generateRest)
 		{
 			for (EnumEntity enumEntity: enumEntityList)
@@ -456,6 +467,13 @@ public class Generator {
 		}
 		
 		closeBranch();
+		
+		generationRun.setEndDate(new Date());
+		generationRun.setStatus(1);
+		generationRunRepository.save(generationRun);
+		project.setGenerationRunList(generationRunList);
+		projectRepository.save(project);
+		
 	}
 
 	private Boolean isAngGenSecurity(Entity entity)

@@ -1,4 +1,5 @@
 select * from meta.project;
+select * from meta.generation_run;
 
 truncate table meta.project cascade;
 truncate table sso.role cascade;
@@ -12,6 +13,7 @@ select * from meta.field where entity_id_entity=121
 select * from meta.tab where tab_id=731
 select * from meta.enum_entity 
 select * from meta.enum_field 
+
 
 select * from log.log_entry order by log_date desc
 

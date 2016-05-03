@@ -874,7 +874,7 @@ public class RestGenerator {
 			
 			for (it.anggen.model.field.Field field : entityManager.getPasswordField())
 			{
-				insertBlock.directStatement(lowerClass+".set"+Utility.getFirstUpper(field.getName())+"(Utility.encodePassword("+lowerClass+".get"+Utility.getFirstUpper(field.getName())+"()));");
+				insertBlock.directStatement(lowerClass+".set"+Utility.getFirstUpper(field.getName())+"("+Utility.class.getName()+".encodePassword("+lowerClass+".get"+Utility.getFirstUpper(field.getName())+"()));");
 		        
 			}
 			

@@ -206,6 +206,7 @@ public class Generator {
 	
 	private Git git;
 	private String generationBranchName;
+	private String currentBranchName;
 	private Repository repo;
 	
 	public Generator()
@@ -300,8 +301,9 @@ public class Generator {
 
 			git = new Git(repo);
 			
+			currentBranchName = git.getRepository().getBranch();
 			// Get a reference
-			Ref develop = repo.getRef(git.getRepository().getBranch());
+			Ref develop = repo.getRef(currentBranchName);
 
 			// Get the object the reference points to
 			ObjectId developTip = develop.getObjectId();
@@ -349,7 +351,7 @@ public class Generator {
 			
 			RevCommit lastCommit = git.commit().setMessage("new test txt").call();
 
-			git.checkout().setName("refs/heads/feature/JGit").call();
+			git.checkout().setName(currentBranchName).call();
 			git.merge().setCommit(false).include(lastCommit).call();
 
 

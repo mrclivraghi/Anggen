@@ -18,21 +18,21 @@ import it.anggen.utils.annotation.MaxDescendantLevel;
 public class LogEntry {
 
     public final static java.lang.Long staticEntityId = 2L;
-    @javax.persistence.Column(name = "entity_id")
-    private java.lang.Long entityId;
     @javax.persistence.Column(name = "ip_address")
     private java.lang.String ipAddress;
-    @javax.persistence.Column(name = "host_name")
-    private java.lang.String hostName;
-    @javax.persistence.Column(name = "user_id")
-    private java.lang.Long userId;
     @javax.persistence.Column(name = "log_date")
     private Date logDate;
+    @javax.persistence.Column(name = "host_name")
+    private java.lang.String hostName;
     @javax.persistence.Column(name = "log_entry_id")
     @Id
     @GeneratedValue
     @DescriptionField
     private java.lang.Long logEntryId;
+    @javax.persistence.Column(name = "entity_id")
+    private java.lang.Long entityId;
+    @javax.persistence.Column(name = "user_id")
+    private java.lang.Long userId;
     @javax.persistence.Column(name = "info")
     private java.lang.String info;
     @javax.persistence.Column(name = "log_type")
@@ -40,36 +40,12 @@ public class LogEntry {
     @javax.persistence.Column(name = "operation_type")
     private OperationType operationType;
 
-    public java.lang.Long getEntityId() {
-        return this.entityId;
-    }
-
-    public void setEntityId(java.lang.Long entityId) {
-        this.entityId=entityId;
-    }
-
     public java.lang.String getIpAddress() {
         return this.ipAddress;
     }
 
     public void setIpAddress(java.lang.String ipAddress) {
         this.ipAddress=ipAddress;
-    }
-
-    public java.lang.String getHostName() {
-        return this.hostName;
-    }
-
-    public void setHostName(java.lang.String hostName) {
-        this.hostName=hostName;
-    }
-
-    public java.lang.Long getUserId() {
-        return this.userId;
-    }
-
-    public void setUserId(java.lang.Long userId) {
-        this.userId=userId;
     }
 
     public Date getLogDate() {
@@ -80,12 +56,36 @@ public class LogEntry {
         this.logDate=logDate;
     }
 
+    public java.lang.String getHostName() {
+        return this.hostName;
+    }
+
+    public void setHostName(java.lang.String hostName) {
+        this.hostName=hostName;
+    }
+
     public java.lang.Long getLogEntryId() {
         return this.logEntryId;
     }
 
     public void setLogEntryId(java.lang.Long logEntryId) {
         this.logEntryId=logEntryId;
+    }
+
+    public java.lang.Long getEntityId() {
+        return this.entityId;
+    }
+
+    public void setEntityId(java.lang.Long entityId) {
+        this.entityId=entityId;
+    }
+
+    public java.lang.Long getUserId() {
+        return this.userId;
+    }
+
+    public void setUserId(java.lang.Long userId) {
+        this.userId=userId;
     }
 
     public java.lang.String getInfo() {

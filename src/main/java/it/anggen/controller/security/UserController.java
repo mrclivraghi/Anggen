@@ -8,8 +8,6 @@ import it.anggen.searchbean.security.UserSearchBean;
 import it.anggen.security.SecurityService;
 import it.anggen.service.log.LogEntryService;
 import it.anggen.service.security.UserService;
-import it.anggen.utils.Utility;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -116,7 +114,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         if (user.getUserId()!=null)
         log.info("Inserting user like "+ user.getUserId()+' '+ user.getUsername());
-        user.setPassword(Utility.encodePassword(user.getPassword()));
+        user.setPassword(it.anggen.utils.Utility.encodePassword(user.getPassword()));
         it.anggen.model.security.User insertedUser=userService.insert(user);
         getRightMapping(insertedUser);
         logEntryService.addLogEntry( "Inserted user with id "+ insertedUser.getUserId(),

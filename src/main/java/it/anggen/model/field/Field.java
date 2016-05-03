@@ -27,11 +27,11 @@ public class Field
     @GeneratedValue
     @it.anggen.utils.annotation.DescriptionField
     private java.lang.Long fieldId;
+    @javax.persistence.Column(name = "priority")
+    private Integer priority;
     @javax.persistence.Column(name = "name")
     @it.anggen.utils.annotation.DescriptionField
     private String name;
-    @javax.persistence.Column(name = "priority")
-    private Integer priority;
     @OneToMany(fetch = javax.persistence.FetchType.LAZY)
     @Type(type = "it.anggen.model.security.RestrictionField")
     @javax.persistence.JoinColumn(name = "field_id_field")
@@ -57,20 +57,20 @@ public class Field
         this.fieldId=fieldId;
     }
 
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(String name) {
-        this.name=name;
-    }
-
     public Integer getPriority() {
         return this.priority;
     }
 
     public void setPriority(Integer priority) {
         this.priority=priority;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name=name;
     }
 
     public List<RestrictionField> getRestrictionFieldList() {

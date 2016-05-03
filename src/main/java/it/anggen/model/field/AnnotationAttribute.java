@@ -17,13 +17,13 @@ import it.anggen.utils.annotation.MaxDescendantLevel;
 public class AnnotationAttribute {
 
     public final static java.lang.Long staticEntityId = 14L;
-    @javax.persistence.Column(name = "value")
-    private java.lang.String value;
     @javax.persistence.Column(name = "annotation_attribute_id")
     @Id
     @GeneratedValue
     @it.anggen.utils.annotation.DescriptionField
     private java.lang.Long annotationAttributeId;
+    @javax.persistence.Column(name = "value")
+    private java.lang.String value;
     @javax.persistence.Column(name = "property")
     @it.anggen.utils.annotation.DescriptionField
     private java.lang.String property;
@@ -31,20 +31,20 @@ public class AnnotationAttribute {
     @JoinColumn(name = "annotation_id_annotation")
     private it.anggen.model.field.Annotation annotation;
 
-    public java.lang.String getValue() {
-        return this.value;
-    }
-
-    public void setValue(java.lang.String value) {
-        this.value=value;
-    }
-
     public java.lang.Long getAnnotationAttributeId() {
         return this.annotationAttributeId;
     }
 
     public void setAnnotationAttributeId(java.lang.Long annotationAttributeId) {
         this.annotationAttributeId=annotationAttributeId;
+    }
+
+    public java.lang.String getValue() {
+        return this.value;
+    }
+
+    public void setValue(java.lang.String value) {
+        this.value=value;
     }
 
     public java.lang.String getProperty() {

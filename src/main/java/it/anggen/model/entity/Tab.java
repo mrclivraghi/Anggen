@@ -20,14 +20,14 @@ import org.hibernate.annotations.Type;
 public class Tab {
 
     public final static java.lang.Long staticEntityId = 15L;
-    @javax.persistence.Column(name = "name")
-    @it.anggen.utils.annotation.DescriptionField
-    private String name;
     @javax.persistence.Column(name = "tab_id")
     @Id
     @GeneratedValue
     @it.anggen.utils.annotation.DescriptionField
     private java.lang.Long tabId;
+    @javax.persistence.Column(name = "name")
+    @it.anggen.utils.annotation.DescriptionField
+    private String name;
     @ManyToOne(fetch = javax.persistence.FetchType.LAZY)
     @javax.persistence.JoinColumn(name = "entity_id_entity")
     private it.anggen.model.entity.Entity entity;
@@ -44,20 +44,20 @@ public class Tab {
     @javax.persistence.JoinColumn(name = "tab_id_tab")
     private List<Relationship> relationshipList;
 
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(String name) {
-        this.name=name;
-    }
-
     public java.lang.Long getTabId() {
         return this.tabId;
     }
 
     public void setTabId(java.lang.Long tabId) {
         this.tabId=tabId;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name=name;
     }
 
     public it.anggen.model.entity.Entity getEntity() {

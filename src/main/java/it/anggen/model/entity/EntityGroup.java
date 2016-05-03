@@ -18,14 +18,14 @@ import org.hibernate.annotations.Type;
 public class EntityGroup {
 
     public final static java.lang.Long staticEntityId = 19L;
-    @javax.persistence.Column(name = "name")
-    @it.anggen.utils.annotation.DescriptionField
-    private String name;
     @javax.persistence.Column(name = "entity_group_id")
     @Id
     @GeneratedValue
     @it.anggen.utils.annotation.DescriptionField
     private java.lang.Long entityGroupId;
+    @javax.persistence.Column(name = "name")
+    @it.anggen.utils.annotation.DescriptionField
+    private String name;
     @ManyToOne(fetch = javax.persistence.FetchType.LAZY)
     @javax.persistence.JoinColumn(name = "project_id_project")
     private it.anggen.model.entity.Project project;
@@ -40,20 +40,20 @@ public class EntityGroup {
     @javax.persistence.Column(name = "security_type")
     private it.anggen.model.SecurityType securityType;
 
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(String name) {
-        this.name=name;
-    }
-
     public java.lang.Long getEntityGroupId() {
         return this.entityGroupId;
     }
 
     public void setEntityGroupId(java.lang.Long entityGroupId) {
         this.entityGroupId=entityGroupId;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name=name;
     }
 
     public it.anggen.model.entity.Project getProject() {

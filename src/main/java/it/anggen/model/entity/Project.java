@@ -22,14 +22,14 @@ import org.hibernate.annotations.Type;
 public class Project {
 
     public final static Long staticEntityId = 11L;
-    @javax.persistence.Column(name = "name")
-    @it.anggen.utils.annotation.DescriptionField
-    private String name;
     @javax.persistence.Column(name = "project_id")
     @it.anggen.utils.annotation.DescriptionField
     @Id
     @GeneratedValue
     private Integer projectId;
+    @javax.persistence.Column(name = "name")
+    @it.anggen.utils.annotation.DescriptionField
+    private String name;
     @OneToMany(fetch = FetchType.LAZY)
     @Type(type = "it.anggen.model.entity.EntityGroup")
     @JoinColumn(name = "project_id_project")
@@ -43,20 +43,20 @@ public class Project {
     @JoinColumn(name = "project_id_project")
     private List<GenerationRun> generationRunList;
 
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(String name) {
-        this.name=name;
-    }
-
     public Integer getProjectId() {
         return this.projectId;
     }
 
     public void setProjectId(Integer projectId) {
         this.projectId=projectId;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name=name;
     }
 
     public List<EntityGroup> getEntityGroupList() {

@@ -13,12 +13,12 @@ import it.anggen.utils.annotation.MaxDescendantLevel;
 public class RestrictionEntity {
 
     public final static java.lang.Long staticEntityId = 9L;
-    @javax.persistence.Column(name = "can_update")
-    private java.lang.Boolean canUpdate;
     @javax.persistence.Column(name = "can_delete")
     private java.lang.Boolean canDelete;
     @javax.persistence.Column(name = "can_search")
     private java.lang.Boolean canSearch;
+    @javax.persistence.Column(name = "can_update")
+    private java.lang.Boolean canUpdate;
     @javax.persistence.Column(name = "can_create")
     private java.lang.Boolean canCreate;
     @javax.persistence.Column(name = "restriction_entity_id")
@@ -34,14 +34,6 @@ public class RestrictionEntity {
     @it.anggen.utils.annotation.DescriptionField
     private it.anggen.model.entity.Entity entity;
 
-    public java.lang.Boolean getCanUpdate() {
-        return this.canUpdate;
-    }
-
-    public void setCanUpdate(java.lang.Boolean canUpdate) {
-        this.canUpdate=canUpdate;
-    }
-
     public java.lang.Boolean getCanDelete() {
         return this.canDelete;
     }
@@ -56,6 +48,14 @@ public class RestrictionEntity {
 
     public void setCanSearch(java.lang.Boolean canSearch) {
         this.canSearch=canSearch;
+    }
+
+    public java.lang.Boolean getCanUpdate() {
+        return this.canUpdate;
+    }
+
+    public void setCanUpdate(java.lang.Boolean canUpdate) {
+        this.canUpdate=canUpdate;
     }
 
     public java.lang.Boolean getCanCreate() {

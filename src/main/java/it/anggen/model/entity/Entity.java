@@ -84,6 +84,9 @@ public class Entity {
     @javax.persistence.Column(name = "security_type")
     @it.anggen.utils.annotation.Priority(3)
     private it.anggen.model.SecurityType securityType;
+    
+    @javax.persistence.Column(name = "ignore_menu")
+    private Boolean ignoreMenu;
 
     public java.lang.Boolean getGenerateFrontEnd() {
         return this.generateFrontEnd;
@@ -196,5 +199,13 @@ public class Entity {
     public void setSecurityType(it.anggen.model.SecurityType securityType) {
         this.securityType=securityType;
     }
+
+	public Boolean getIgnoreMenu() {
+		return ignoreMenu;
+	}
+
+	public void setIgnoreMenu(Boolean ignoreMenu) {
+		this.ignoreMenu = ignoreMenu;
+	}
 
 }

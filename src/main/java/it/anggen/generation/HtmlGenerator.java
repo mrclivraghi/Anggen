@@ -371,7 +371,7 @@ public class HtmlGenerator {
 				
 				String ulContent="";
 				for (Entity entity: entityGroup.getEntityList())
-				if (!entity.getDisableViewGeneration())
+				if (!entity.getDisableViewGeneration() && !entity.getIgnoreMenu())
 				{
 					ulContent=ulContent+"<li ng-if=\"$root.restrictionList."+entityGroup.getName()+".restrictionItemMap."+entity.getName()+".canSearch\"><a href=\"#/app/"+Utility.getFirstLower(entity.getName())+"\" role=\"menuitem\">"+Utility.getFirstUpper(entity.getName())+"</a></li>";
 				}

@@ -34,6 +34,7 @@ import it.anggen.utils.annotation.EnableRestrictionData;
 import it.anggen.utils.annotation.ExcelExport;
 import it.anggen.utils.annotation.Filter;
 import it.anggen.utils.annotation.GenerateFrontEnd;
+import it.anggen.utils.annotation.IgnoreMenu;
 import it.anggen.utils.annotation.IgnoreSearch;
 import it.anggen.utils.annotation.IgnoreTableList;
 import it.anggen.utils.annotation.IgnoreUpdate;
@@ -592,6 +593,7 @@ public class BeanToDBConverter {
 		entity.setEnableRestrictionData(false);
 		entity.setDisableViewGeneration(false);
 		entity.setGenerateFrontEnd(false);
+		entity.setIgnoreMenu(false);
 		Annotation[] annotationArray=myClass.getAnnotations();
 		Boolean securityTypeFound=false;
 		Boolean maxDescendantLevelFound=false;
@@ -623,6 +625,11 @@ public class BeanToDBConverter {
 			{
 				entity.setDisableViewGeneration(true);
 			} 
+			
+			if (annotationArray[i].annotationType()==IgnoreMenu.class)
+			{
+				entity.setIgnoreMenu(true);
+			}
 			
 			if (annotationArray[i].annotationType()==GenerateFrontEnd.class)
 			{

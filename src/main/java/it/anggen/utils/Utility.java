@@ -1,7 +1,7 @@
 package it.anggen.utils;
 
-import it.anggen.model.GenerationRun;
 import it.anggen.model.entity.Entity;
+import it.anggen.model.generation.GenerationRun;
 
 import java.io.File;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package it.anggen.model;
+package it.anggen.model.generation;
 
 import java.util.Date;
 

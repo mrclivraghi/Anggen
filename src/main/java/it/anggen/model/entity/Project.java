@@ -10,9 +10,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import it.anggen.model.GenerationRun;
 import it.anggen.model.entity.EntityGroup;
 import it.anggen.model.entity.EnumEntity;
+import it.anggen.model.generation.GenerationRun;
 import it.anggen.utils.annotation.MaxDescendantLevel;
 import org.hibernate.annotations.Type;
 

@@ -122,15 +122,15 @@ public class JGit {
 			//loader.copyTo(System.out);
 
 			// Create a branch
-			
-			Ref testBranch= repo.getRef("refs/heads/feature/testGit");
+			String generationBranchName="refs/heads/feature/generation_"+new Date();
+			Ref testBranch= repo.getRef(generationBranchName);
 			if (testBranch==null)
 			{
 
-				RefUpdate createBranch1 = repo.updateRef("refs/heads/feature/testJGit");
+				RefUpdate createBranch1 = repo.updateRef(generationBranchName);
 				createBranch1.setNewObjectId(developTip);
 				createBranch1.update();
-				testBranch= repo.getRef("refs/heads/feature/testGit");
+				testBranch= repo.getRef(generationBranchName);
 			}
 			Git git = new Git(repo);
 			
@@ -178,7 +178,7 @@ public class JGit {
 			}
 			
 			// Delete a branch
-			RefUpdate deleteBranch1 = repo.updateRef("refs/heads/feature/testGit");
+			RefUpdate deleteBranch1 = repo.updateRef(generationBranchName);
 			deleteBranch1.setForceUpdate(true);
 			deleteBranch1.delete();
 

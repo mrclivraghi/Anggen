@@ -223,7 +223,7 @@ public class Generator {
 	//@Transactional
 	private void init() throws Exception
 	{
-		Generator.appName=applicationName.toLowerCase();
+		Generator.appName=applicationName;
 		Generator.generatedPackage=mainPackage;
 		Generator.targetSchema=schema;
 		Generator.enableSecurity=security;

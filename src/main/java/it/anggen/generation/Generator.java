@@ -31,7 +31,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +41,18 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.apache.commons.dbcp.BasicDataSource;
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.errors.CheckoutConflictException;
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.api.errors.InvalidRefNameException;
+import org.eclipse.jgit.api.errors.RefAlreadyExistsException;
+import org.eclipse.jgit.api.errors.RefNotFoundException;
+import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.lib.Ref;
+import org.eclipse.jgit.lib.RefUpdate;
+import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.reflections.Reflections;
 import org.rendersnake.HtmlAttributes;
 import org.rendersnake.HtmlCanvas;
@@ -187,6 +201,10 @@ public class Generator {
 	
 	public static String databaseProperty;
 	
+	private Git git;
+	private String generationBranchName;
+	private Repository repo;
+	
 	public Generator()
 	{
 		
@@ -257,10 +275,94 @@ public class Generator {
 		
 	}
 	
+	private void initBranch()
+	{
+			
+			File test = new File("");
+			
+			repo = null;
+			try {
+				repo = new FileRepositoryBuilder()
+						.setGitDir(new File(test.getAbsolutePath()+"/.git"))
+						.build();
+
+			git = new Git(repo);
+			
+			// Get a reference
+			Ref develop = repo.getRef(git.getRepository().getBranch());
+
+			// Get the object the reference points to
+			ObjectId developTip = develop.getObjectId();
+
+			// Create a branch
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
+			generationBranchName="refs/heads/generation/gen_"+sdf.format(new Date());
+			Ref testBranch= repo.getRef(generationBranchName);
+			if (testBranch==null)
+			{
+
+				RefUpdate createBranch1 = repo.updateRef(generationBranchName);
+				createBranch1.setNewObjectId(developTip);
+				createBranch1.update();
+				testBranch= repo.getRef(generationBranchName);
+			}
+			
+				
+				git.checkout().setName(testBranch.getName()).call();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (RefAlreadyExistsException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (RefNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvalidRefNameException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (CheckoutConflictException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (GitAPIException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	}
+	
+	private void closeBranch()
+	{
+		try {
+			git.add().addFilepattern("test.txt").call();
+			
+			RevCommit lastCommit = git.commit().setMessage("new test txt").call();
+
+			git.checkout().setName("refs/heads/feature/JGit").call();
+			git.merge().setCommit(false).include(lastCommit).call();
+
+
+
+			// Delete a branch
+			RefUpdate deleteBranch1 = repo.updateRef(generationBranchName);
+			deleteBranch1.setForceUpdate(true);
+			deleteBranch1.delete();
+			
+		} catch (GitAPIException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	
+	}
 	
 	@Transactional
 	public void generate() throws Exception
 	{
+		
+		initBranch();
 		init();
 		if (generateRest)
 		{
@@ -339,6 +441,7 @@ public class Generator {
 			}
 		}
 		
+		closeBranch();
 	}
 
 	private Boolean isAngGenSecurity(Entity entity)

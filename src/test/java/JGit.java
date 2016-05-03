@@ -122,30 +122,37 @@ public class JGit {
 			//loader.copyTo(System.out);
 
 			// Create a branch
-			RefUpdate createBranch1 = repo.updateRef("refs/heads/feature/testJGit");
-			createBranch1.setNewObjectId(developTip);
-			createBranch1.update();
+			
+			Ref testBranch= repo.getRef("refs/heads/feature/testGit");
+			if (testBranch==null)
+			{
+
+				RefUpdate createBranch1 = repo.updateRef("refs/heads/feature/testJGit");
+				createBranch1.setNewObjectId(developTip);
+				createBranch1.update();
+				testBranch= repo.getRef("refs/heads/feature/testGit");
+			}
 			Git git = new Git(repo);
 			
 
 			
 			
 			try {
-				git.checkout().setName(createBranch1.getName()).call();
+				git.checkout().setName(testBranch.getName()).call();
 			} catch (GitAPIException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		
 			
-			String firstCommit=createBranch1.getNewObjectId().getName();
+			String firstCommit=testBranch.getObjectId().getName();
 			
 
 			File newTest = new File("test.txt");
 			PrintWriter writer = new PrintWriter(newTest);
 			writer.println("CIAO");
 			writer.println("HELLA");
-			writer.println("BONJOUR");
+			writer.println("BONJOUR"+new Date());
 			writer.close();
 			//repo.updateRef(createBranch1.getNewObjectId()).update();
 			System.out.println("1----"+git.getRepository().getBranch());
@@ -158,8 +165,11 @@ public class JGit {
 				
 				RevCommit lastCommit = git.commit().setMessage("new test txt").call();
 				
+				git.checkout().setName("JGit").call();
+				git.merge().setCommit(false).include(lastCommit).call();
+				
 
-				DiffEntry diffEntry=diffFile(repo, firstCommit, lastCommit.getId().getName(), "test.txt");
+				//DiffEntry diffEntry=diffFile(repo, firstCommit, lastCommit.getId().getName(), "test.txt");
 				
 				
 			} catch (GitAPIException e) {

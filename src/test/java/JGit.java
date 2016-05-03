@@ -116,16 +116,9 @@ public class JGit {
 			// Get the object the reference points to
 			ObjectId developTip = develop.getObjectId();
 
-			// Rev-parse
-			//ObjectId obj = repo.resolve("HEAD^{tree}");
-
-			// Load raw object contents
-			//ObjectLoader loader = repo.open(masterTip);
-			//loader.copyTo(System.out);
-
 			// Create a branch
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
-			String generationBranchName="refs/heads/feature/generation_"+sdf.format(new Date());
+			String generationBranchName="refs/heads/generation/gen_"+sdf.format(new Date());
 			Ref testBranch= repo.getRef(generationBranchName);
 			if (testBranch==null)
 			{
@@ -136,32 +129,9 @@ public class JGit {
 				testBranch= repo.getRef(generationBranchName);
 			}
 			
-
-			
-			
 			try {
+				
 				git.checkout().setName(testBranch.getName()).call();
-			} catch (GitAPIException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		
-			
-			String firstCommit=testBranch.getObjectId().getName();
-			
-
-			File newTest = new File("test.txt");
-			PrintWriter writer = new PrintWriter(newTest);
-			writer.println("CIAO");
-			writer.println("HELLA");
-			writer.println("BONJOUR"+new Date());
-			writer.close();
-			//repo.updateRef(createBranch1.getNewObjectId()).update();
-			System.out.println("1----"+git.getRepository().getBranch());
-			//git.getRepository().updateRef(createBranch1.getNewObjectId().getName());
-			System.out.println("2----"+git.getRepository().getBranch());
-			
-			try {
 				//add file
 				git.add().addFilepattern("test.txt").call();
 				
@@ -169,10 +139,7 @@ public class JGit {
 				
 				git.checkout().setName("refs/heads/feature/JGit").call();
 				git.merge().setCommit(false).include(lastCommit).call();
-				
 
-				//DiffEntry diffEntry=diffFile(repo, firstCommit, lastCommit.getId().getName(), "test.txt");
-				
 				
 			} catch (GitAPIException e) {
 				// TODO Auto-generated catch block
@@ -183,11 +150,6 @@ public class JGit {
 			RefUpdate deleteBranch1 = repo.updateRef(generationBranchName);
 			deleteBranch1.setForceUpdate(true);
 			deleteBranch1.delete();
-
-			// Config
-			//Config cfg = repo.getConfig();
-			//String name = cfg.getString("user", null, "name");
-
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

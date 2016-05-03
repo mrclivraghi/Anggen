@@ -3,6 +3,7 @@ package it.anggen.model;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 import it.anggen.model.entity.Project;
@@ -10,6 +11,7 @@ import it.anggen.model.entity.Project;
 @Entity
 public class GenerationRun {
 
+	@Id
 	private Integer generationRunId;
 	
 	@ManyToOne

@@ -108,9 +108,10 @@ public class JGit {
 					.setGitDir(new File(test.getAbsolutePath()+"/.git"))
 					.build();
 
+			Git git = new Git(repo);
 			
 			// Get a reference
-			Ref develop = repo.getRef("develop");
+			Ref develop = repo.getRef(git.getRepository().getBranch());
 
 			// Get the object the reference points to
 			ObjectId developTip = develop.getObjectId();
@@ -134,7 +135,6 @@ public class JGit {
 				createBranch1.update();
 				testBranch= repo.getRef(generationBranchName);
 			}
-			Git git = new Git(repo);
 			
 
 			

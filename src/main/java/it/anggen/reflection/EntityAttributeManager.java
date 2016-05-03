@@ -82,6 +82,10 @@ public class EntityAttributeManager {
 		return hasAnnotation(AnnotationType.EMBEDDED);
 	}
 	
+	public Boolean getMappedAs()
+	{
+		return hasAnnotation(AnnotationType.MAPPED_AS);
+	}
 	
 	/*  check */
 	
@@ -183,6 +187,16 @@ public class EntityAttributeManager {
 				return true;
 		}
 		return false;
+	}
+	
+	public Annotation getAnnotation(AnnotationType annotationType)
+	{
+		for (Annotation annotation: getAnnotationList())
+		{
+			if (annotation.getAnnotationType()==annotationType)
+				return annotation;
+		}
+		return null;
 	}
 	
 	public Entity getParent() {

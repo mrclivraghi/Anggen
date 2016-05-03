@@ -347,9 +347,9 @@ public class Generator {
 	private void closeBranch()
 	{
 		try {
-			git.add().addFilepattern("test.txt").call();
+			git.add().addFilepattern("./").call();
 			
-			RevCommit lastCommit = git.commit().setMessage("new test txt").call();
+			RevCommit lastCommit = git.commit().setMessage(generationBranchName).call();
 
 			git.checkout().setName(currentBranchName).call();
 			git.merge().setCommit(false).include(lastCommit).call();

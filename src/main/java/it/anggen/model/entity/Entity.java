@@ -1,6 +1,7 @@
 
 package it.anggen.model.entity;
 
+import java.util.Date;
 import java.util.List;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -88,6 +89,9 @@ public class Entity {
     @javax.persistence.Column(name = "ignore_menu")
     private Boolean ignoreMenu;
 
+    private Date addDate;
+    private Date modDate;
+    
     public java.lang.Boolean getGenerateFrontEnd() {
         return this.generateFrontEnd;
     }
@@ -206,6 +210,14 @@ public class Entity {
 
 	public void setIgnoreMenu(Boolean ignoreMenu) {
 		this.ignoreMenu = ignoreMenu;
+	}
+
+	public Date getModDate() {
+		return modDate;
+	}
+
+	public void setModDate(Date modDate) {
+		this.modDate = modDate;
 	}
 
 }

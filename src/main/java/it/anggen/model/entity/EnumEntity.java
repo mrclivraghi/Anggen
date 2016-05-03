@@ -1,6 +1,7 @@
 
 package it.anggen.model.entity;
 
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -45,6 +46,9 @@ public class EnumEntity {
     @it.anggen.utils.annotation.Priority(4)
     private List<EnumField> enumFieldList;
 
+    private Date addDate;
+    private Date modDate;
+    
     public String getName() {
         return this.name;
     }
@@ -84,5 +88,13 @@ public class EnumEntity {
     public void setEnumFieldList(List<EnumField> enumFieldList) {
         this.enumFieldList=enumFieldList;
     }
+
+	public Date getModDate() {
+		return modDate;
+	}
+
+	public void setModDate(Date modDate) {
+		this.modDate = modDate;
+	}
 
 }

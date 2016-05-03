@@ -1,6 +1,7 @@
 
 package it.anggen.model.relationship;
 
+import java.util.Date;
 import java.util.List;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -57,6 +58,9 @@ public class Relationship
     @it.anggen.utils.annotation.Priority(3)
     private RelationshipType relationshipType;
 
+    private Date addDate;
+    private Date modDate;
+    
     public Integer getPriority() {
         return this.priority;
     }
@@ -120,5 +124,13 @@ public class Relationship
     public void setRelationshipType(RelationshipType relationshipType) {
         this.relationshipType=relationshipType;
     }
+
+	public Date getModDate() {
+		return modDate;
+	}
+
+	public void setModDate(Date modDate) {
+		this.modDate = modDate;
+	}
 
 }

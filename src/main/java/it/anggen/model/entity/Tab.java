@@ -1,6 +1,7 @@
 
 package it.anggen.model.entity;
 
+import java.util.Date;
 import java.util.List;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -50,6 +51,9 @@ public class Tab {
     @it.anggen.utils.annotation.Priority(4)
     private List<Relationship> relationshipList;
 
+    private Date addDate;
+    private Date modDate;
+    
     public String getName() {
         return this.name;
     }
@@ -97,5 +101,13 @@ public class Tab {
     public void setRelationshipList(List<Relationship> relationshipList) {
         this.relationshipList=relationshipList;
     }
+
+	public Date getModDate() {
+		return modDate;
+	}
+
+	public void setModDate(Date modDate) {
+		this.modDate = modDate;
+	}
 
 }

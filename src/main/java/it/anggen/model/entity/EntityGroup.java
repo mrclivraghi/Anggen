@@ -1,6 +1,7 @@
 
 package it.anggen.model.entity;
 
+import java.util.Date;
 import java.util.List;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -45,6 +46,10 @@ public class EntityGroup {
     @javax.persistence.Column(name = "security_type")
     private it.anggen.model.SecurityType securityType;
 
+    private Date addDate;
+    private Date modDate;
+    
+    
     public java.lang.Long getEntityGroupId() {
         return this.entityGroupId;
     }
@@ -92,5 +97,13 @@ public class EntityGroup {
     public void setSecurityType(it.anggen.model.SecurityType securityType) {
         this.securityType=securityType;
     }
+
+	public Date getModDate() {
+		return modDate;
+	}
+
+	public void setModDate(Date modDate) {
+		this.modDate = modDate;
+	}
 
 }

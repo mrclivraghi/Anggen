@@ -764,7 +764,7 @@ public class BeanToDBConverter {
 				annotationType=AnnotationType.MAPPED_AS;
 				List<AnnotationAttribute> annotationAttributeList = new ArrayList<AnnotationAttribute>();
 				for (Method method : annotationArray[i].annotationType().getDeclaredMethods()) {
-					if (method.getName().equals("value"))
+					if (method.getName().equals("name"))
 					{
 						Object value= null;
 						try {

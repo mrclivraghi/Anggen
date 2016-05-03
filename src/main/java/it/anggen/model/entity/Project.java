@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import it.anggen.model.GenerationRun;
 import it.anggen.model.entity.EntityGroup;
 import it.anggen.model.entity.EnumEntity;
 import it.anggen.utils.annotation.MaxDescendantLevel;
@@ -42,6 +44,12 @@ public class Project {
     @it.anggen.utils.annotation.Priority(4)
     private List<EnumEntity> enumEntityList;
 
+    @OneToMany(fetch = FetchType.LAZY)
+    @Type(type = "it.anggen.model.GenerationRun")
+    @JoinColumn(name = "project_id_project")
+    @it.anggen.utils.annotation.Priority(4)
+    private List<GenerationRun> generationRunList;
+    
     public Integer getProjectId() {
         return this.projectId;
     }
@@ -73,5 +81,13 @@ public class Project {
     public void setEnumEntityList(List<EnumEntity> enumEntityList) {
         this.enumEntityList=enumEntityList;
     }
+
+	public List<GenerationRun> getGenerationRunList() {
+		return generationRunList;
+	}
+
+	public void setGenerationRunList(List<GenerationRun> generationRunList) {
+		this.generationRunList = generationRunList;
+	}
 
 }

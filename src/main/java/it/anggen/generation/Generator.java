@@ -4,6 +4,7 @@ import it.anggen.utils.Field;
 import it.anggen.utils.ReflectionManager;
 import it.anggen.utils.Utility;
 import it.anggen.generation.frontend.FrontHtmlGenerator;
+import it.anggen.model.GenerationRun;
 import it.anggen.model.entity.Entity;
 import it.anggen.model.entity.EntityGroup;
 import it.anggen.model.entity.EnumEntity;
@@ -201,6 +202,8 @@ public class Generator {
 	
 	public static String databaseProperty;
 	
+	public static Date lastGenerationDate;
+	
 	private Git git;
 	private String generationBranchName;
 	private Repository repo;
@@ -242,6 +245,15 @@ public class Generator {
 		this.entityGroupList=project.getEntityGroupList();
 		this.enumEntityList=project.getEnumEntityList();
 		this.modelEntityList=new ArrayList<Entity>();
+		
+		List<GenerationRun> generationRunList = this.project.getGenerationRunList();
+		if (generationRunList.size()==0)
+			Generator.lastGenerationDate=null;
+		else
+		{
+			Utility.orderByStartDate(generationRunList);
+			Generator.lastGenerationDate=generationRunList.get(generationRunList.size()-1).getStartDate();
+		}
 		if (entityGroupList!=null)
 		for (EntityGroup entityGroup: entityGroupList)
 		{

@@ -1,5 +1,6 @@
 package it.anggen.utils;
 
+import it.anggen.model.GenerationRun;
 import it.anggen.model.entity.Entity;
 
 import java.io.File;
@@ -120,6 +121,10 @@ public class Utility {
 	public static void orderByPriority(List<EntityAttribute> entityAttributeList) {
 		Collections.sort(entityAttributeList, Comparator.comparing(EntityAttribute::getPriority));
 		}
+	public static void orderByStartDate(List<GenerationRun> generationRunList) {
+		Collections.sort(generationRunList, Comparator.comparing(GenerationRun::getStartDate));
+		}
+	
 	public static void orderById(List<Entity> entityList){
 		Collections.sort(entityList, Comparator.comparing(Entity::getEntityId));
 	}

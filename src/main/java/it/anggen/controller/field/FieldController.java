@@ -3,6 +3,7 @@ package it.anggen.controller.field;
 
 import java.util.List;
 import com.codahale.metrics.annotation.Timed;
+import io.swagger.annotations.ApiOperation;
 import it.anggen.searchbean.field.FieldSearchBean;
 import it.anggen.security.SecurityService;
 import it.anggen.service.field.FieldService;
@@ -11,13 +12,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 @RequestMapping("/field")
 public class FieldController {
 
@@ -31,15 +32,7 @@ public class FieldController {
     @Value("${application.security}")
     private Boolean securityEnabled;
 
-    @Timed
-    @RequestMapping(method = RequestMethod.GET)
-    public String manage() {
-        if (securityEnabled && !securityService.hasPermission(it.anggen.model.field.Field.staticEntityId, it.anggen.model.RestrictionType.SEARCH)) 
-return "forbidden"; 
-
-        return "field";
-    }
-
+    @ApiOperation(value = "Return a page of field", notes = "Return a single page of field", response = it.anggen.model.field.Field.class, responseContainer = "List")
     @Timed
     @RequestMapping(value = "/pages/{pageNumber}", method = RequestMethod.GET)
     @ResponseBody
@@ -51,6 +44,7 @@ return "forbidden";
         return ResponseEntity.ok().body(page);
     }
 
+    @ApiOperation(value = "Return a list of field", notes = "Return a list of field based on the search bean requested", response = it.anggen.model.field.Field.class, responseContainer = "List")
     @Timed
     @ResponseBody
     @RequestMapping(value = "/search", method = RequestMethod.POST)
@@ -62,8 +56,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         List<it.anggen.model.field.Field> fieldList;
         if (field.getFieldId()!=null)
-         log.info("Searching field like {}", field.getName()+' '+ field.getFieldId());
-        logEntryService.addLogEntry( "Searching entity like "+ field.getName()+' '+ field.getFieldId(),
+         log.info("Searching field like {}", field.getFieldId()+' '+ field.getName());
+        logEntryService.addLogEntry( "Searching entity like "+ field.getFieldId()+' '+ field.getName(),
         it.anggen.model.LogType.INFO, it.anggen.model.OperationType.SEARCH_ENTITY, it.anggen.model.field.Field.staticEntityId, securityService.getLoggedUser(),log);
         fieldList=fieldService.find(field);
         getSecurityMapping(fieldList);
@@ -72,6 +66,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         return ResponseEntity.ok().body(fieldList);
     }
 
+    @ApiOperation(value = "Return a the field identified by the given id", notes = "Return a the field identified by the given id", response = it.anggen.model.field.Field.class, responseContainer = "List")
     @Timed
     @ResponseBody
     @RequestMapping(value = "/{fieldId}", method = RequestMethod.GET)
@@ -90,6 +85,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         return ResponseEntity.ok().body(fieldList);
     }
 
+    @ApiOperation(value = "Delete the field identified by the given id", notes = "Delete the field identified by the given id")
     @Timed
     @ResponseBody
     @RequestMapping(value = "/{fieldId}", method = RequestMethod.DELETE)
@@ -106,6 +102,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         return ResponseEntity.ok().build();
     }
 
+    @ApiOperation(value = "Insert the field given", notes = "Insert the field given ", response = it.anggen.model.field.Field.class)
     @Timed
     @ResponseBody
     @RequestMapping(method = RequestMethod.PUT)
@@ -116,7 +113,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
         if (field.getFieldId()!=null)
-        log.info("Inserting field like "+ field.getName()+' '+ field.getFieldId());
+        log.info("Inserting field like "+ field.getFieldId()+' '+ field.getName());
         it.anggen.model.field.Field insertedField=fieldService.insert(field);
         getRightMapping(insertedField);
         logEntryService.addLogEntry( "Inserted field with id "+ insertedField.getFieldId(),
@@ -124,6 +121,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         return ResponseEntity.ok().body(insertedField);
     }
 
+    @ApiOperation(value = "Update the field given", notes = "Update the field given ", response = it.anggen.model.field.Field.class)
     @Timed
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST)

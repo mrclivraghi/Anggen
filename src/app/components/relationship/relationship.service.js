@@ -1,7 +1,7 @@
 (function() { 
 
 angular
-.module("serverTestApp")
+.module("serverTest")
 .service("relationshipService", RelationshipService);
 /** @ngInject */
 function RelationshipService($http,MainService,UtilityService)
@@ -108,8 +108,8 @@ paginationPageSize: 10,
 enableGridMenu: true,
 columnDefs: [    
 { name: 'relationshipId'},
-{ name: 'name'},
 { name: 'priority'},
+{ name: 'name'},
 { name: 'entityTarget.entityTargetId', displayName: 'entityTarget'},
 { name: 'entity.entityId', displayName: 'entity'},
 { name: 'tab.tabId', displayName: 'tab'} 

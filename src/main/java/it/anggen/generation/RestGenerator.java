@@ -596,7 +596,7 @@ public class RestGenerator {
 					if (childrenEntityName.equals(entity.getName()))
 						childrenEntityName=childrenEntityName+"1";
 					
-					List<Relationship> directRelationshipList=relationshipRepository.findByRelationshipIdAndNameAndPriorityAndRelationshipTypeAndAnnotationAndEntityAndEntityAndTab(null, null, null, null, null, EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget(), entity, null);
+					List<Relationship> directRelationshipList=relationshipRepository.findByRelationshipIdAndPriorityAndNameAndRelationshipTypeAndAnnotationAndEntityTargetAndEntityAndTab(null, null, null, null, null, EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget(), entity, null);
 					String directName=Utility.getFirstUpper(className);
 					if (directRelationshipList.size()>0)
 					{
@@ -604,7 +604,7 @@ public class RestGenerator {
 					}
 					
 					
-					List<Relationship> inverseRelationshipList=relationshipRepository.findByRelationshipIdAndNameAndPriorityAndRelationshipTypeAndAnnotationAndEntityAndEntityAndTab(null, null, null, null, null, entity, EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget(), null);
+					List<Relationship> inverseRelationshipList=relationshipRepository.findByRelationshipIdAndPriorityAndNameAndRelationshipTypeAndAnnotationAndEntityTargetAndEntityAndTab(null, null, null, null, null, entity, EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget(), null);
 					String inverseName=Utility.getFirstUpper(className);
 					if (inverseRelationshipList.size()>0)
 					{
@@ -653,7 +653,7 @@ public class RestGenerator {
 						updateBlock.directStatement("if (!"+lowerClass+"List.contains(returned"+Utility.getFirstUpper(className)+"))");
 						updateBlock.directStatement(""+lowerClass+"List.add(returned"+Utility.getFirstUpper(className)+");");
 						
-						List<Relationship> inverseRelationship=relationshipRepository.findByRelationshipIdAndNameAndPriorityAndRelationshipTypeAndAnnotationAndEntityAndEntityAndTab(null, null, null, RelationshipType.ONE_TO_MANY.getValue(), null, entity, EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget(), null);
+						List<Relationship> inverseRelationship=relationshipRepository.findByRelationshipIdAndPriorityAndNameAndRelationshipTypeAndAnnotationAndEntityTargetAndEntityAndTab(null, null, null, RelationshipType.ONE_TO_MANY.getValue(), null, entity, EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget(), null);
 						String inverseName=Utility.getFirstUpper(className);
 						if (inverseRelationship.size()>0)
 						{

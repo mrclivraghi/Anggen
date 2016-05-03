@@ -13,9 +13,9 @@ public class EntitySearchBean {
     public java.lang.Long entityId;
     public java.lang.Boolean generateFrontEnd;
     public java.lang.String name;
-    public java.lang.Integer descendantMaxLevel;
     public java.lang.Boolean cache;
     public java.lang.Boolean disableViewGeneration;
+    public java.lang.Integer descendantMaxLevel;
     public java.lang.Boolean enableRestrictionData;
     public it.anggen.model.SecurityType securityType;
     public List<RestrictionEntity> restrictionEntityList;
@@ -49,14 +49,6 @@ public class EntitySearchBean {
         this.name=name;
     }
 
-    public java.lang.Integer getDescendantMaxLevel() {
-        return this.descendantMaxLevel;
-    }
-
-    public void setDescendantMaxLevel(java.lang.Integer descendantMaxLevel) {
-        this.descendantMaxLevel=descendantMaxLevel;
-    }
-
     public java.lang.Boolean getCache() {
         return this.cache;
     }
@@ -71,6 +63,14 @@ public class EntitySearchBean {
 
     public void setDisableViewGeneration(java.lang.Boolean disableViewGeneration) {
         this.disableViewGeneration=disableViewGeneration;
+    }
+
+    public java.lang.Integer getDescendantMaxLevel() {
+        return this.descendantMaxLevel;
+    }
+
+    public void setDescendantMaxLevel(java.lang.Integer descendantMaxLevel) {
+        this.descendantMaxLevel=descendantMaxLevel;
     }
 
     public java.lang.Boolean getEnableRestrictionData() {

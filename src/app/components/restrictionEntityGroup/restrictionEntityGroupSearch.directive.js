@@ -1,7 +1,7 @@
 (function() {
 'use strict';
  angular
- .module('serverTestApp')
+ .module('serverTest')
  .directive('restrictionEntityGroupSearch', restrictionEntityGroupSearch);
 /** @ngInject */
   function restrictionEntityGroupSearch(restrictionEntityGroupService) {

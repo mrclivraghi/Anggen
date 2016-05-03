@@ -46,7 +46,7 @@ public class EntityServiceImpl
 
     @Override
     public List<it.anggen.model.entity.Entity> find(EntitySearchBean entity) {
-        return entityRepository.findByEntityIdAndGenerateFrontEndAndNameAndDescendantMaxLevelAndCacheAndDisableViewGenerationAndEnableRestrictionDataAndSecurityTypeAndRestrictionEntityAndFieldAndEnumFieldAndEntityGroupAndTabAndRelationship(entity.getEntityId(),entity.getGenerateFrontEnd(),entity.getName(),entity.getDescendantMaxLevel(),entity.getCache(),entity.getDisableViewGeneration(),entity.getEnableRestrictionData(), (entity.getSecurityType()==null)? null : entity.getSecurityType().getValue(),entity.getRestrictionEntityList()==null? null :entity.getRestrictionEntityList().get(0),entity.getFieldList()==null? null :entity.getFieldList().get(0),entity.getEnumFieldList()==null? null :entity.getEnumFieldList().get(0),entity.getEntityGroup(),entity.getTabList()==null? null :entity.getTabList().get(0),entity.getRelationshipList()==null? null :entity.getRelationshipList().get(0));
+        return entityRepository.findByEntityIdAndGenerateFrontEndAndNameAndCacheAndDisableViewGenerationAndDescendantMaxLevelAndEnableRestrictionDataAndSecurityTypeAndRestrictionEntityAndFieldAndEnumFieldAndEntityGroupAndTabAndRelationship(entity.getEntityId(),entity.getGenerateFrontEnd(),entity.getName(),entity.getCache(),entity.getDisableViewGeneration(),entity.getDescendantMaxLevel(),entity.getEnableRestrictionData(), (entity.getSecurityType()==null)? null : entity.getSecurityType().getValue(),entity.getRestrictionEntityList()==null? null :entity.getRestrictionEntityList().get(0),entity.getFieldList()==null? null :entity.getFieldList().get(0),entity.getEnumFieldList()==null? null :entity.getEnumFieldList().get(0),entity.getEntityGroup(),entity.getTabList()==null? null :entity.getTabList().get(0),entity.getRelationshipList()==null? null :entity.getRelationshipList().get(0));
     }
 
     @Override
@@ -86,7 +86,7 @@ public class EntityServiceImpl
         if (entity.getRelationshipList()!=null)
         for (it.anggen.model.relationship.Relationship relationship: entity.getRelationshipList())
         {
-        relationship.setEntity(entity);
+        relationship.setEntityTarget(entity);
         }
         it.anggen.model.entity.Entity returnedEntity=entityRepository.save(entity);
         if (entity.getEntityGroup()!=null)

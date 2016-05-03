@@ -1,12 +1,13 @@
 (function() { 
 
 angular
-.module("serverTestApp")
+.module("serverTest")
 .controller("RestrictionFieldController",RestrictionFieldController);
 /** @ngInject */
 function RestrictionFieldController($scope,$http,$rootScope,$log,UtilityService ,restrictionFieldService, SecurityService, MainService ,roleService,fieldService)
 {
 var vm=this;
+vm.activeTab=1;
 vm.searchBean=restrictionFieldService.searchBean;
 vm.entityList=restrictionFieldService.entityList;
 vm.selectedEntity=restrictionFieldService.selectedEntity;
@@ -23,8 +24,10 @@ if (restrictionFieldService.isParent())
 {
 roleService.selectedEntity.show=false;
 delete $rootScope.openNode.role;
+UtilityService.removeObjectFromList($rootScope.parentServices,roleService);
 fieldService.selectedEntity.show=false;
 delete $rootScope.openNode.field;
+UtilityService.removeObjectFromList($rootScope.parentServices,fieldService);
 }
 }
 function addNew()
@@ -37,8 +40,10 @@ if (restrictionFieldService.isParent())
 {
 roleService.selectedEntity.show=false;
 delete $rootScope.openNode.role;
+UtilityService.removeObjectFromList($rootScope.parentServices,roleService);
 fieldService.selectedEntity.show=false;
 delete $rootScope.openNode.field;
+UtilityService.removeObjectFromList($rootScope.parentServices,fieldService);
 }
 angular.element('#restrictionFieldTabs li:eq(0) a').tab('show');
 }
@@ -47,6 +52,7 @@ function search()
 {
 restrictionFieldService.selectedEntity.show=false;
 delete $rootScope.openNode.restrictionField;
+UtilityService.removeObjectFromList($rootScope.parentServices,restrictionFieldService);
 restrictionFieldService.search().then(function successCallback(response) {
 restrictionFieldService.setEntityList(response.data);
 },function errorCallback(response) { 
@@ -59,7 +65,8 @@ return;
 function insert()
 {
 if (!$scope.restrictionFieldDetailForm.$valid) return; 
-if (restrictionFieldService.isParent()) 
+$rootScope.parentServices.pop();
+if ($rootScope.parentServices.length==0) 
 {
 restrictionFieldService.insert().then(function successCallback(response) { 
 $log.debug(response);
@@ -76,6 +83,9 @@ else
 restrictionFieldService.selectedEntity.show=false;
 restrictionFieldService.insert().then(function successCallBack(response) { 
 $log.debug(response);
+$rootScope.parentServices.pop();
+var parentService=$rootScope.parentServices.pop();
+parentService.removerestrictionField(restrictionFieldService.selectedEntity);
 },function errorCallback(response) { 
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
@@ -87,12 +97,15 @@ return;
 function update()
 {
 if (!$scope.restrictionFieldDetailForm.$valid) return; 
-if (restrictionFieldService.isParent()) 
+$rootScope.parentServices.pop();
+if ($rootScope.parentServices.length==0) 
 {
 roleService.selectedEntity.show=false;
 delete $rootScope.openNode.role;
+UtilityService.removeObjectFromList($rootScope.parentServices,roleService);
 fieldService.selectedEntity.show=false;
 delete $rootScope.openNode.field;
+UtilityService.removeObjectFromList($rootScope.parentServices,fieldService);
 restrictionFieldService.update().then(function successCallback(response) { 
 $log.debug(response);
 vm.search();
@@ -122,17 +135,22 @@ function remove()
 {
 restrictionFieldService.selectedEntity.show=false;
 delete $rootScope.openNode.restrictionField;
+$rootScope.parentServices.pop();
+var parentService=$rootScope.parentServices.pop();
+parentService.removeRestrictionField(restrictionFieldService.selectedEntity);
+UtilityService.removeObjectFromList($rootScope.parentServices,restrictionFieldService);
 restrictionFieldService.setSelectedEntity(null);
 }
 function del()
 {
+$rootScope.parentServices.pop();
 restrictionFieldService.del().then(function successCallback(response) { 
 $log.debug(response);
-if (restrictionFieldService.isParent()) 
+restrictionFieldService.setSelectedEntity(null);
+if ($rootScope.parentServices.length==0) 
 {
 vm.search();
 } else { 
-restrictionFieldService.setSelectedEntity(null);
 }
 },function errorCallback(response) { 
 UtilityService.AlertError.init({selector: "#alertError"});
@@ -193,6 +211,7 @@ function successCallback(response) {
 roleService.setSelectedEntity(response.data[0]);
 roleService.selectedEntity.show=true;
 $rootScope.openNode.role=true;
+$rootScope.parentServices.push(roleService);
   }, function errorCallback(response) {
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
@@ -236,6 +255,7 @@ function successCallback(response) {
 fieldService.setSelectedEntity(response.data[0]);
 fieldService.selectedEntity.show=true;
 $rootScope.openNode.field=true;
+$rootScope.parentServices.push(fieldService);
   }, function errorCallback(response) {
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
@@ -286,6 +306,7 @@ if (row.isSelected)
 restrictionFieldService.searchOne(row.entity).then(function(response) { 
 $log.debug(response.data);
 $rootScope.openNode.restrictionField=true;
+$rootScope.parentServices.push(restrictionFieldService);
 restrictionFieldService.setSelectedEntity(response.data[0]);
 });
 angular.element('#restrictionFieldTabs li:eq(0) a').tab('show');
@@ -293,6 +314,7 @@ angular.element('#restrictionFieldTabs li:eq(0) a').tab('show');
 else 
 restrictionFieldService.setSelectedEntity(null);
 delete $rootScope.openNode.restrictionField;
+UtilityService.removeObjectFromList($rootScope.parentServices,restrictionFieldService);
 restrictionFieldService.selectedEntity.show = row.isSelected;
 });
   };
@@ -309,6 +331,7 @@ if (row.isSelected)
 roleService.searchOne(row.entity).then(function(response) { 
 $log.debug(response.data);
 $rootScope.openNode.role=true;
+$rootScope.parentServices.push(roleService);
 roleService.setSelectedEntity(response.data[0]);
 });
 angular.element('#roleTabs li:eq(0) a').tab('show');
@@ -316,6 +339,7 @@ angular.element('#roleTabs li:eq(0) a').tab('show');
 else 
 roleService.setSelectedEntity(null);
 delete $rootScope.openNode.role;
+UtilityService.removeObjectFromList($rootScope.parentServices,roleService);
 roleService.selectedEntity.show = row.isSelected;
 });
   };
@@ -332,6 +356,7 @@ if (row.isSelected)
 fieldService.searchOne(row.entity).then(function(response) { 
 $log.debug(response.data);
 $rootScope.openNode.field=true;
+$rootScope.parentServices.push(fieldService);
 fieldService.setSelectedEntity(response.data[0]);
 });
 angular.element('#fieldTabs li:eq(0) a').tab('show');
@@ -339,6 +364,7 @@ angular.element('#fieldTabs li:eq(0) a').tab('show');
 else 
 fieldService.setSelectedEntity(null);
 delete $rootScope.openNode.field;
+UtilityService.removeObjectFromList($rootScope.parentServices,fieldService);
 fieldService.selectedEntity.show = row.isSelected;
 });
   };
@@ -380,6 +406,7 @@ function closeEntityDetail(){
 restrictionFieldService.setSelectedEntity(null);
 restrictionFieldService.selectedEntity.show=false;
 delete $rootScope.openNode.restrictionField;
+UtilityService.removeObjectFromList($rootScope.parentServices,restrictionFieldService);
 }
 vm.reset=reset;
 vm.addNew=addNew;

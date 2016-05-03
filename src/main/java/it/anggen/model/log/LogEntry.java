@@ -17,9 +17,11 @@ import it.anggen.utils.annotation.MaxDescendantLevel;
 @MaxDescendantLevel(1)
 public class LogEntry {
 
-    public final static java.lang.Long staticEntityId = 18L;
-    @javax.persistence.Column(name = "info")
-    private java.lang.String info;
+    public final static java.lang.Long staticEntityId = 2L;
+    @javax.persistence.Column(name = "entity_id")
+    private java.lang.Long entityId;
+    @javax.persistence.Column(name = "ip_address")
+    private java.lang.String ipAddress;
     @javax.persistence.Column(name = "host_name")
     private java.lang.String hostName;
     @javax.persistence.Column(name = "user_id")
@@ -31,21 +33,27 @@ public class LogEntry {
     @GeneratedValue
     @DescriptionField
     private java.lang.Long logEntryId;
-    @javax.persistence.Column(name = "entity_id")
-    private java.lang.Long entityId;
-    @javax.persistence.Column(name = "ip_address")
-    private java.lang.String ipAddress;
+    @javax.persistence.Column(name = "info")
+    private java.lang.String info;
     @javax.persistence.Column(name = "log_type")
     private LogType logType;
     @javax.persistence.Column(name = "operation_type")
     private OperationType operationType;
 
-    public java.lang.String getInfo() {
-        return this.info;
+    public java.lang.Long getEntityId() {
+        return this.entityId;
     }
 
-    public void setInfo(java.lang.String info) {
-        this.info=info;
+    public void setEntityId(java.lang.Long entityId) {
+        this.entityId=entityId;
+    }
+
+    public java.lang.String getIpAddress() {
+        return this.ipAddress;
+    }
+
+    public void setIpAddress(java.lang.String ipAddress) {
+        this.ipAddress=ipAddress;
     }
 
     public java.lang.String getHostName() {
@@ -80,20 +88,12 @@ public class LogEntry {
         this.logEntryId=logEntryId;
     }
 
-    public java.lang.Long getEntityId() {
-        return this.entityId;
+    public java.lang.String getInfo() {
+        return this.info;
     }
 
-    public void setEntityId(java.lang.Long entityId) {
-        this.entityId=entityId;
-    }
-
-    public java.lang.String getIpAddress() {
-        return this.ipAddress;
-    }
-
-    public void setIpAddress(java.lang.String ipAddress) {
-        this.ipAddress=ipAddress;
+    public void setInfo(java.lang.String info) {
+        this.info=info;
     }
 
     public LogType getLogType() {

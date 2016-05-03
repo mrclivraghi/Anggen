@@ -1,7 +1,7 @@
 (function() { 
 
 angular
-.module("serverTestApp")
+.module("serverTest")
 .service("restrictionFieldService", RestrictionFieldService);
 /** @ngInject */
 function RestrictionFieldService($http,MainService,UtilityService)

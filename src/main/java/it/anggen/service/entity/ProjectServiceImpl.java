@@ -5,6 +5,7 @@ import java.util.List;
 import it.anggen.repository.entity.EntityGroupRepository;
 import it.anggen.repository.entity.EnumEntityRepository;
 import it.anggen.repository.entity.ProjectRepository;
+import it.anggen.repository.generation.GenerationRunRepository;
 import it.anggen.searchbean.entity.ProjectSearchBean;
 import it.anggen.service.entity.ProjectService;
 import org.springframework.data.domain.Page;
@@ -22,6 +23,8 @@ public class ProjectServiceImpl
     public EntityGroupRepository entityGroupRepository;
     @org.springframework.beans.factory.annotation.Autowired
     public EnumEntityRepository enumEntityRepository;
+    @org.springframework.beans.factory.annotation.Autowired
+    public GenerationRunRepository generationRunRepository;
     private static Integer PAGE_SIZE = (5);
 
     @Override
@@ -37,7 +40,7 @@ public class ProjectServiceImpl
 
     @Override
     public List<it.anggen.model.entity.Project> find(ProjectSearchBean project) {
-        return projectRepository.findByProjectIdAndNameAndEntityGroupAndEnumEntity(project.getProjectId(),project.getName(),project.getEntityGroupList()==null? null :project.getEntityGroupList().get(0),project.getEnumEntityList()==null? null :project.getEnumEntityList().get(0));
+        return projectRepository.findByProjectIdAndNameAndEntityGroupAndEnumEntityAndGenerationRun(project.getProjectId(),project.getName(),project.getEntityGroupList()==null? null :project.getEntityGroupList().get(0),project.getEnumEntityList()==null? null :project.getEnumEntityList().get(0),project.getGenerationRunList()==null? null :project.getGenerationRunList().get(0));
     }
 
     @Override
@@ -63,6 +66,11 @@ public class ProjectServiceImpl
         for (it.anggen.model.entity.EnumEntity enumEntity: project.getEnumEntityList())
         {
         enumEntity.setProject(project);
+        }
+        if (project.getGenerationRunList()!=null)
+        for (it.anggen.model.generation.GenerationRun generationRun: project.getGenerationRunList())
+        {
+        generationRun.setProject(project);
         }
         it.anggen.model.entity.Project returnedProject=projectRepository.save(project);
          return returnedProject;

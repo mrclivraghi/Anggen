@@ -1,7 +1,7 @@
 (function() { 
 
 angular
-.module("serverTestApp")
+.module("serverTest")
 .service("restrictionEntityGroupService", RestrictionEntityGroupService);
 /** @ngInject */
 function RestrictionEntityGroupService($http,MainService,UtilityService)
@@ -94,10 +94,10 @@ paginationPageSize: 10,
 enableGridMenu: true,
 columnDefs: [    
 { name: 'restrictionEntityGroupId'},
-{ name: 'canCreate'},
-{ name: 'canSearch'},
-{ name: 'canDelete'},
 { name: 'canUpdate'},
+{ name: 'canCreate'},
+{ name: 'canDelete'},
+{ name: 'canSearch'},
 { name: 'role.roleId', displayName: 'role'},
 { name: 'entityGroup.entityGroupId', displayName: 'entityGroup'} 
 ]

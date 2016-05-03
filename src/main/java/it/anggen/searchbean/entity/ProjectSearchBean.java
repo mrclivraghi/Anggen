@@ -4,6 +4,7 @@ package it.anggen.searchbean.entity;
 import java.util.List;
 import it.anggen.model.entity.EntityGroup;
 import it.anggen.model.entity.EnumEntity;
+import it.anggen.model.generation.GenerationRun;
 
 public class ProjectSearchBean {
 
@@ -11,6 +12,7 @@ public class ProjectSearchBean {
     public java.lang.String name;
     public List<EntityGroup> entityGroupList;
     public List<EnumEntity> enumEntityList;
+    public List<GenerationRun> generationRunList;
 
     public java.lang.Integer getProjectId() {
         return this.projectId;
@@ -42,6 +44,14 @@ public class ProjectSearchBean {
 
     public void setEnumEntityList(List<EnumEntity> enumEntityList) {
         this.enumEntityList=enumEntityList;
+    }
+
+    public List<GenerationRun> getGenerationRunList() {
+        return this.generationRunList;
+    }
+
+    public void setGenerationRunList(List<GenerationRun> generationRunList) {
+        this.generationRunList=generationRunList;
     }
 
 }

@@ -1,7 +1,7 @@
 (function() { 
 
 angular
-.module("serverTestApp")
+.module("serverTest")
 .service("fieldService", FieldService);
 /** @ngInject */
 function FieldService($http,MainService,UtilityService)

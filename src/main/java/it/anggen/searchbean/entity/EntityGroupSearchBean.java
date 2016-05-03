@@ -10,9 +10,9 @@ public class EntityGroupSearchBean {
     public java.lang.Long entityGroupId;
     public java.lang.String name;
     public it.anggen.model.SecurityType securityType;
+    public it.anggen.model.entity.Project project;
     public List<RestrictionEntityGroup> restrictionEntityGroupList;
     public List<Entity> entityList;
-    public it.anggen.model.entity.Project project;
 
     public java.lang.Long getEntityGroupId() {
         return this.entityGroupId;
@@ -38,6 +38,14 @@ public class EntityGroupSearchBean {
         this.securityType=securityType;
     }
 
+    public it.anggen.model.entity.Project getProject() {
+        return this.project;
+    }
+
+    public void setProject(it.anggen.model.entity.Project project) {
+        this.project=project;
+    }
+
     public List<RestrictionEntityGroup> getRestrictionEntityGroupList() {
         return this.restrictionEntityGroupList;
     }
@@ -52,14 +60,6 @@ public class EntityGroupSearchBean {
 
     public void setEntityList(List<Entity> entityList) {
         this.entityList=entityList;
-    }
-
-    public it.anggen.model.entity.Project getProject() {
-        return this.project;
-    }
-
-    public void setProject(it.anggen.model.entity.Project project) {
-        this.project=project;
     }
 
 }

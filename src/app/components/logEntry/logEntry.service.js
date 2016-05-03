@@ -1,7 +1,7 @@
 (function() { 
 
 angular
-.module("serverTestApp")
+.module("serverTest")
 .service("logEntryService", LogEntryService);
 /** @ngInject */
 function LogEntryService($http,MainService,UtilityService)
@@ -80,12 +80,12 @@ paginationPageSize: 10,
 enableGridMenu: true,
 columnDefs: [    
 { name: 'logEntryId'},
-{ name: 'entityId'},
-{ name: 'ipAddress'},
-{ name: 'userId'},
-{ name: 'hostName'},
 { name: 'info'},
-{ name: 'logDate', cellFilter: "date:'dd-MM-yyyy'"} 
+{ name: 'hostName'},
+{ name: 'userId'},
+{ name: 'logDate', cellFilter: "date:'dd-MM-yyyy'"},
+{ name: 'entityId'},
+{ name: 'ipAddress'} 
 ]
  };
 }

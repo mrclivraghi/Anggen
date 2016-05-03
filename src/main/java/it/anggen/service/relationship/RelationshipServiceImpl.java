@@ -34,7 +34,7 @@ public class RelationshipServiceImpl
 
     @Override
     public List<it.anggen.model.relationship.Relationship> find(RelationshipSearchBean relationship) {
-        return relationshipRepository.findByRelationshipIdAndNameAndPriorityAndRelationshipTypeAndAnnotationAndEntityAndEntityAndTab(relationship.getRelationshipId(),relationship.getName(),relationship.getPriority(), (relationship.getRelationshipType()==null)? null : relationship.getRelationshipType().getValue(),relationship.getAnnotationList()==null? null :relationship.getAnnotationList().get(0),relationship.getEntity(),relationship.getEntity(),relationship.getTab());
+        return relationshipRepository.findByRelationshipIdAndPriorityAndNameAndRelationshipTypeAndAnnotationAndEntityTargetAndEntityAndTab(relationship.getRelationshipId(),relationship.getPriority(),relationship.getName(), (relationship.getRelationshipType()==null)? null : relationship.getRelationshipType().getValue(),relationship.getAnnotationList()==null? null :relationship.getAnnotationList().get(0),relationship.getEntityTarget(),relationship.getEntity(),relationship.getTab());
     }
 
     @Override
@@ -57,12 +57,12 @@ public class RelationshipServiceImpl
         annotation.setRelationship(relationship);
         }
         it.anggen.model.relationship.Relationship returnedRelationship=relationshipRepository.save(relationship);
-        if (relationship.getEntity()!=null)
+        if (relationship.getEntityTarget()!=null)
         {
-        List<it.anggen.model.relationship.Relationship> relationshipList = relationshipRepository.findByEntity( relationship.getEntity());
+        List<it.anggen.model.relationship.Relationship> relationshipList = relationshipRepository.findByEntityTarget( relationship.getEntityTarget());
         if (!relationshipList.contains(returnedRelationship))
         relationshipList.add(returnedRelationship);
-        returnedRelationship.getEntity().setRelationshipList(relationshipList);
+        returnedRelationship.getEntityTarget().setRelationshipList(relationshipList);
         }
         if (relationship.getEntity()!=null)
         {

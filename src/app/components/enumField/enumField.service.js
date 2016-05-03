@@ -1,7 +1,7 @@
 (function() { 
 
 angular
-.module("serverTestApp")
+.module("serverTest")
 .service("enumFieldService", EnumFieldService);
 /** @ngInject */
 function EnumFieldService($http,MainService,UtilityService)

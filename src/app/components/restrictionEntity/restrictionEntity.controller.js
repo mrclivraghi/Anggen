@@ -1,12 +1,13 @@
 (function() { 
 
 angular
-.module("serverTestApp")
+.module("serverTest")
 .controller("RestrictionEntityController",RestrictionEntityController);
 /** @ngInject */
 function RestrictionEntityController($scope,$http,$rootScope,$log,UtilityService ,restrictionEntityService, SecurityService, MainService ,roleService,entityService)
 {
 var vm=this;
+vm.activeTab=1;
 vm.searchBean=restrictionEntityService.searchBean;
 vm.entityList=restrictionEntityService.entityList;
 vm.selectedEntity=restrictionEntityService.selectedEntity;
@@ -23,8 +24,10 @@ if (restrictionEntityService.isParent())
 {
 roleService.selectedEntity.show=false;
 delete $rootScope.openNode.role;
+UtilityService.removeObjectFromList($rootScope.parentServices,roleService);
 entityService.selectedEntity.show=false;
 delete $rootScope.openNode.entity;
+UtilityService.removeObjectFromList($rootScope.parentServices,entityService);
 }
 }
 function addNew()
@@ -37,8 +40,10 @@ if (restrictionEntityService.isParent())
 {
 roleService.selectedEntity.show=false;
 delete $rootScope.openNode.role;
+UtilityService.removeObjectFromList($rootScope.parentServices,roleService);
 entityService.selectedEntity.show=false;
 delete $rootScope.openNode.entity;
+UtilityService.removeObjectFromList($rootScope.parentServices,entityService);
 }
 angular.element('#restrictionEntityTabs li:eq(0) a').tab('show');
 }
@@ -47,6 +52,7 @@ function search()
 {
 restrictionEntityService.selectedEntity.show=false;
 delete $rootScope.openNode.restrictionEntity;
+UtilityService.removeObjectFromList($rootScope.parentServices,restrictionEntityService);
 restrictionEntityService.search().then(function successCallback(response) {
 restrictionEntityService.setEntityList(response.data);
 },function errorCallback(response) { 
@@ -59,7 +65,8 @@ return;
 function insert()
 {
 if (!$scope.restrictionEntityDetailForm.$valid) return; 
-if (restrictionEntityService.isParent()) 
+$rootScope.parentServices.pop();
+if ($rootScope.parentServices.length==0) 
 {
 restrictionEntityService.insert().then(function successCallback(response) { 
 $log.debug(response);
@@ -76,6 +83,9 @@ else
 restrictionEntityService.selectedEntity.show=false;
 restrictionEntityService.insert().then(function successCallBack(response) { 
 $log.debug(response);
+$rootScope.parentServices.pop();
+var parentService=$rootScope.parentServices.pop();
+parentService.removerestrictionEntity(restrictionEntityService.selectedEntity);
 },function errorCallback(response) { 
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
@@ -87,12 +97,15 @@ return;
 function update()
 {
 if (!$scope.restrictionEntityDetailForm.$valid) return; 
-if (restrictionEntityService.isParent()) 
+$rootScope.parentServices.pop();
+if ($rootScope.parentServices.length==0) 
 {
 roleService.selectedEntity.show=false;
 delete $rootScope.openNode.role;
+UtilityService.removeObjectFromList($rootScope.parentServices,roleService);
 entityService.selectedEntity.show=false;
 delete $rootScope.openNode.entity;
+UtilityService.removeObjectFromList($rootScope.parentServices,entityService);
 restrictionEntityService.update().then(function successCallback(response) { 
 $log.debug(response);
 vm.search();
@@ -122,17 +135,22 @@ function remove()
 {
 restrictionEntityService.selectedEntity.show=false;
 delete $rootScope.openNode.restrictionEntity;
+$rootScope.parentServices.pop();
+var parentService=$rootScope.parentServices.pop();
+parentService.removeRestrictionEntity(restrictionEntityService.selectedEntity);
+UtilityService.removeObjectFromList($rootScope.parentServices,restrictionEntityService);
 restrictionEntityService.setSelectedEntity(null);
 }
 function del()
 {
+$rootScope.parentServices.pop();
 restrictionEntityService.del().then(function successCallback(response) { 
 $log.debug(response);
-if (restrictionEntityService.isParent()) 
+restrictionEntityService.setSelectedEntity(null);
+if ($rootScope.parentServices.length==0) 
 {
 vm.search();
 } else { 
-restrictionEntityService.setSelectedEntity(null);
 }
 },function errorCallback(response) { 
 UtilityService.AlertError.init({selector: "#alertError"});
@@ -193,6 +211,7 @@ function successCallback(response) {
 roleService.setSelectedEntity(response.data[0]);
 roleService.selectedEntity.show=true;
 $rootScope.openNode.role=true;
+$rootScope.parentServices.push(roleService);
   }, function errorCallback(response) {
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
@@ -236,6 +255,7 @@ function successCallback(response) {
 entityService.setSelectedEntity(response.data[0]);
 entityService.selectedEntity.show=true;
 $rootScope.openNode.entity=true;
+$rootScope.parentServices.push(entityService);
   }, function errorCallback(response) {
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
@@ -286,6 +306,7 @@ if (row.isSelected)
 restrictionEntityService.searchOne(row.entity).then(function(response) { 
 $log.debug(response.data);
 $rootScope.openNode.restrictionEntity=true;
+$rootScope.parentServices.push(restrictionEntityService);
 restrictionEntityService.setSelectedEntity(response.data[0]);
 });
 angular.element('#restrictionEntityTabs li:eq(0) a').tab('show');
@@ -293,6 +314,7 @@ angular.element('#restrictionEntityTabs li:eq(0) a').tab('show');
 else 
 restrictionEntityService.setSelectedEntity(null);
 delete $rootScope.openNode.restrictionEntity;
+UtilityService.removeObjectFromList($rootScope.parentServices,restrictionEntityService);
 restrictionEntityService.selectedEntity.show = row.isSelected;
 });
   };
@@ -309,6 +331,7 @@ if (row.isSelected)
 roleService.searchOne(row.entity).then(function(response) { 
 $log.debug(response.data);
 $rootScope.openNode.role=true;
+$rootScope.parentServices.push(roleService);
 roleService.setSelectedEntity(response.data[0]);
 });
 angular.element('#roleTabs li:eq(0) a').tab('show');
@@ -316,6 +339,7 @@ angular.element('#roleTabs li:eq(0) a').tab('show');
 else 
 roleService.setSelectedEntity(null);
 delete $rootScope.openNode.role;
+UtilityService.removeObjectFromList($rootScope.parentServices,roleService);
 roleService.selectedEntity.show = row.isSelected;
 });
   };
@@ -332,6 +356,7 @@ if (row.isSelected)
 entityService.searchOne(row.entity).then(function(response) { 
 $log.debug(response.data);
 $rootScope.openNode.entity=true;
+$rootScope.parentServices.push(entityService);
 entityService.setSelectedEntity(response.data[0]);
 });
 angular.element('#entityTabs li:eq(0) a').tab('show');
@@ -339,6 +364,7 @@ angular.element('#entityTabs li:eq(0) a').tab('show');
 else 
 entityService.setSelectedEntity(null);
 delete $rootScope.openNode.entity;
+UtilityService.removeObjectFromList($rootScope.parentServices,entityService);
 entityService.selectedEntity.show = row.isSelected;
 });
   };
@@ -380,6 +406,7 @@ function closeEntityDetail(){
 restrictionEntityService.setSelectedEntity(null);
 restrictionEntityService.selectedEntity.show=false;
 delete $rootScope.openNode.restrictionEntity;
+UtilityService.removeObjectFromList($rootScope.parentServices,restrictionEntityService);
 }
 vm.reset=reset;
 vm.addNew=addNew;

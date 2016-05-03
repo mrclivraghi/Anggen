@@ -1,12 +1,13 @@
 (function() { 
 
 angular
-.module("serverTestApp")
+.module("serverTest")
 .controller("FieldController",FieldController);
 /** @ngInject */
 function FieldController($scope,$http,$rootScope,$log,UtilityService ,fieldService, SecurityService, MainService ,restrictionFieldService,entityService,tabService,annotationService)
 {
 var vm=this;
+vm.activeTab=1;
 vm.searchBean=fieldService.searchBean;
 vm.entityList=fieldService.entityList;
 vm.selectedEntity=fieldService.selectedEntity;
@@ -27,12 +28,16 @@ if (fieldService.isParent())
 {
 restrictionFieldService.selectedEntity.show=false;
 delete $rootScope.openNode.restrictionField;
+UtilityService.removeObjectFromList($rootScope.parentServices,restrictionFieldService);
 entityService.selectedEntity.show=false;
 delete $rootScope.openNode.entity;
+UtilityService.removeObjectFromList($rootScope.parentServices,entityService);
 tabService.selectedEntity.show=false;
 delete $rootScope.openNode.tab;
+UtilityService.removeObjectFromList($rootScope.parentServices,tabService);
 annotationService.selectedEntity.show=false;
 delete $rootScope.openNode.annotation;
+UtilityService.removeObjectFromList($rootScope.parentServices,annotationService);
 }
 }
 function addNew()
@@ -45,12 +50,16 @@ if (fieldService.isParent())
 {
 restrictionFieldService.selectedEntity.show=false;
 delete $rootScope.openNode.restrictionField;
+UtilityService.removeObjectFromList($rootScope.parentServices,restrictionFieldService);
 entityService.selectedEntity.show=false;
 delete $rootScope.openNode.entity;
+UtilityService.removeObjectFromList($rootScope.parentServices,entityService);
 tabService.selectedEntity.show=false;
 delete $rootScope.openNode.tab;
+UtilityService.removeObjectFromList($rootScope.parentServices,tabService);
 annotationService.selectedEntity.show=false;
 delete $rootScope.openNode.annotation;
+UtilityService.removeObjectFromList($rootScope.parentServices,annotationService);
 }
 angular.element('#fieldTabs li:eq(0) a').tab('show');
 }
@@ -59,6 +68,7 @@ function search()
 {
 fieldService.selectedEntity.show=false;
 delete $rootScope.openNode.field;
+UtilityService.removeObjectFromList($rootScope.parentServices,fieldService);
 fieldService.searchBean.restrictionFieldList=[];
 fieldService.searchBean.restrictionFieldList.push(fieldService.searchBean.restrictionField);
 delete fieldService.searchBean.restrictionField; 
@@ -77,7 +87,8 @@ return;
 function insert()
 {
 if (!$scope.fieldDetailForm.$valid) return; 
-if (fieldService.isParent()) 
+$rootScope.parentServices.pop();
+if ($rootScope.parentServices.length==0) 
 {
 fieldService.insert().then(function successCallback(response) { 
 $log.debug(response);
@@ -94,6 +105,9 @@ else
 fieldService.selectedEntity.show=false;
 fieldService.insert().then(function successCallBack(response) { 
 $log.debug(response);
+$rootScope.parentServices.pop();
+var parentService=$rootScope.parentServices.pop();
+parentService.removefield(fieldService.selectedEntity);
 },function errorCallback(response) { 
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
@@ -105,16 +119,21 @@ return;
 function update()
 {
 if (!$scope.fieldDetailForm.$valid) return; 
-if (fieldService.isParent()) 
+$rootScope.parentServices.pop();
+if ($rootScope.parentServices.length==0) 
 {
 restrictionFieldService.selectedEntity.show=false;
 delete $rootScope.openNode.restrictionField;
+UtilityService.removeObjectFromList($rootScope.parentServices,restrictionFieldService);
 entityService.selectedEntity.show=false;
 delete $rootScope.openNode.entity;
+UtilityService.removeObjectFromList($rootScope.parentServices,entityService);
 tabService.selectedEntity.show=false;
 delete $rootScope.openNode.tab;
+UtilityService.removeObjectFromList($rootScope.parentServices,tabService);
 annotationService.selectedEntity.show=false;
 delete $rootScope.openNode.annotation;
+UtilityService.removeObjectFromList($rootScope.parentServices,annotationService);
 fieldService.update().then(function successCallback(response) { 
 $log.debug(response);
 vm.search();
@@ -144,17 +163,22 @@ function remove()
 {
 fieldService.selectedEntity.show=false;
 delete $rootScope.openNode.field;
+$rootScope.parentServices.pop();
+var parentService=$rootScope.parentServices.pop();
+parentService.removeField(fieldService.selectedEntity);
+UtilityService.removeObjectFromList($rootScope.parentServices,fieldService);
 fieldService.setSelectedEntity(null);
 }
 function del()
 {
+$rootScope.parentServices.pop();
 fieldService.del().then(function successCallback(response) { 
 $log.debug(response);
-if (fieldService.isParent()) 
+fieldService.setSelectedEntity(null);
+if ($rootScope.parentServices.length==0) 
 {
 vm.search();
 } else { 
-fieldService.setSelectedEntity(null);
 }
 },function errorCallback(response) { 
 UtilityService.AlertError.init({selector: "#alertError"});
@@ -219,6 +243,7 @@ function successCallback(response) {
 restrictionFieldService.setSelectedEntity(response.data[0]);
 restrictionFieldService.selectedEntity.show=true;
 $rootScope.openNode.restrictionField=true;
+$rootScope.parentServices.push(restrictionFieldService);
   }, function errorCallback(response) {
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
@@ -262,6 +287,7 @@ function successCallback(response) {
 entityService.setSelectedEntity(response.data[0]);
 entityService.selectedEntity.show=true;
 $rootScope.openNode.entity=true;
+$rootScope.parentServices.push(entityService);
   }, function errorCallback(response) {
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
@@ -305,6 +331,7 @@ function successCallback(response) {
 tabService.setSelectedEntity(response.data[0]);
 tabService.selectedEntity.show=true;
 $rootScope.openNode.tab=true;
+$rootScope.parentServices.push(tabService);
   }, function errorCallback(response) {
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
@@ -348,6 +375,7 @@ function successCallback(response) {
 annotationService.setSelectedEntity(response.data[0]);
 annotationService.selectedEntity.show=true;
 $rootScope.openNode.annotation=true;
+$rootScope.parentServices.push(annotationService);
   }, function errorCallback(response) {
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
@@ -424,6 +452,7 @@ if (row.isSelected)
 fieldService.searchOne(row.entity).then(function(response) { 
 $log.debug(response.data);
 $rootScope.openNode.field=true;
+$rootScope.parentServices.push(fieldService);
 fieldService.setSelectedEntity(response.data[0]);
 });
 angular.element('#fieldTabs li:eq(0) a').tab('show');
@@ -431,6 +460,7 @@ angular.element('#fieldTabs li:eq(0) a').tab('show');
 else 
 fieldService.setSelectedEntity(null);
 delete $rootScope.openNode.field;
+UtilityService.removeObjectFromList($rootScope.parentServices,fieldService);
 fieldService.selectedEntity.show = row.isSelected;
 });
   };
@@ -447,6 +477,7 @@ if (row.isSelected)
 restrictionFieldService.searchOne(row.entity).then(function(response) { 
 $log.debug(response.data);
 $rootScope.openNode.restrictionField=true;
+$rootScope.parentServices.push(restrictionFieldService);
 restrictionFieldService.setSelectedEntity(response.data[0]);
 });
 angular.element('#restrictionFieldTabs li:eq(0) a').tab('show');
@@ -454,6 +485,7 @@ angular.element('#restrictionFieldTabs li:eq(0) a').tab('show');
 else 
 restrictionFieldService.setSelectedEntity(null);
 delete $rootScope.openNode.restrictionField;
+UtilityService.removeObjectFromList($rootScope.parentServices,restrictionFieldService);
 restrictionFieldService.selectedEntity.show = row.isSelected;
 });
   };
@@ -470,6 +502,7 @@ if (row.isSelected)
 entityService.searchOne(row.entity).then(function(response) { 
 $log.debug(response.data);
 $rootScope.openNode.entity=true;
+$rootScope.parentServices.push(entityService);
 entityService.setSelectedEntity(response.data[0]);
 });
 angular.element('#entityTabs li:eq(0) a').tab('show');
@@ -477,6 +510,7 @@ angular.element('#entityTabs li:eq(0) a').tab('show');
 else 
 entityService.setSelectedEntity(null);
 delete $rootScope.openNode.entity;
+UtilityService.removeObjectFromList($rootScope.parentServices,entityService);
 entityService.selectedEntity.show = row.isSelected;
 });
   };
@@ -493,6 +527,7 @@ if (row.isSelected)
 tabService.searchOne(row.entity).then(function(response) { 
 $log.debug(response.data);
 $rootScope.openNode.tab=true;
+$rootScope.parentServices.push(tabService);
 tabService.setSelectedEntity(response.data[0]);
 });
 angular.element('#tabTabs li:eq(0) a').tab('show');
@@ -500,6 +535,7 @@ angular.element('#tabTabs li:eq(0) a').tab('show');
 else 
 tabService.setSelectedEntity(null);
 delete $rootScope.openNode.tab;
+UtilityService.removeObjectFromList($rootScope.parentServices,tabService);
 tabService.selectedEntity.show = row.isSelected;
 });
   };
@@ -516,6 +552,7 @@ if (row.isSelected)
 annotationService.searchOne(row.entity).then(function(response) { 
 $log.debug(response.data);
 $rootScope.openNode.annotation=true;
+$rootScope.parentServices.push(annotationService);
 annotationService.setSelectedEntity(response.data[0]);
 });
 angular.element('#annotationTabs li:eq(0) a').tab('show');
@@ -523,10 +560,27 @@ angular.element('#annotationTabs li:eq(0) a').tab('show');
 else 
 annotationService.setSelectedEntity(null);
 delete $rootScope.openNode.annotation;
+UtilityService.removeObjectFromList($rootScope.parentServices,annotationService);
 annotationService.selectedEntity.show = row.isSelected;
 });
   };
 function updateParentEntities() { 
+tabService.initFieldList().then(function(response) {
+fieldService.preparedData.entityList=response.data;
+});
+
+if (tabService.selectedEntity.tabId!=undefined) tabService.searchOne(tabService.selectedEntity).then(
+function successCallback(response) {
+$log.debug("response-ok");
+$log.debug(response);
+tabService.setSelectedEntity(response.data[0]);
+  }, function errorCallback(response) {
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
+  }	
+);
 restrictionFieldService.initFieldList().then(function(response) {
 fieldService.preparedData.entityList=response.data;
 });
@@ -536,22 +590,6 @@ function successCallback(response) {
 $log.debug("response-ok");
 $log.debug(response);
 restrictionFieldService.setSelectedEntity(response.data[0]);
-  }, function errorCallback(response) {
-UtilityService.AlertError.init({selector: "#alertError"});
-UtilityService.AlertError.show("Si è verificato un errore");
-$log.debug(response);
-return; 
-  }	
-);
-annotationService.initFieldList().then(function(response) {
-fieldService.preparedData.entityList=response.data;
-});
-
-if (annotationService.selectedEntity.annotationId!=undefined) annotationService.searchOne(annotationService.selectedEntity).then(
-function successCallback(response) {
-$log.debug("response-ok");
-$log.debug(response);
-annotationService.setSelectedEntity(response.data[0]);
   }, function errorCallback(response) {
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
@@ -575,15 +613,15 @@ $log.debug(response);
 return; 
   }	
 );
-tabService.initFieldList().then(function(response) {
+annotationService.initFieldList().then(function(response) {
 fieldService.preparedData.entityList=response.data;
 });
 
-if (tabService.selectedEntity.tabId!=undefined) tabService.searchOne(tabService.selectedEntity).then(
+if (annotationService.selectedEntity.annotationId!=undefined) annotationService.searchOne(annotationService.selectedEntity).then(
 function successCallback(response) {
 $log.debug("response-ok");
 $log.debug(response);
-tabService.setSelectedEntity(response.data[0]);
+annotationService.setSelectedEntity(response.data[0]);
   }, function errorCallback(response) {
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
@@ -596,6 +634,7 @@ function closeEntityDetail(){
 fieldService.setSelectedEntity(null);
 fieldService.selectedEntity.show=false;
 delete $rootScope.openNode.field;
+UtilityService.removeObjectFromList($rootScope.parentServices,fieldService);
 }
 vm.reset=reset;
 vm.addNew=addNew;

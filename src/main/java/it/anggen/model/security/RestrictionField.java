@@ -20,15 +20,12 @@ public class RestrictionField {
     @Id
     @GeneratedValue
     @DescriptionField
-    @it.anggen.utils.annotation.Priority(1)
     private java.lang.Long restrictionFieldId;
     @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.LAZY)
     @javax.persistence.JoinColumn(name = "role_id_role")
-    @it.anggen.utils.annotation.Priority(4)
     private it.anggen.model.security.Role role;
     @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.LAZY)
     @javax.persistence.JoinColumn(name = "field_id_field")
-    @it.anggen.utils.annotation.Priority(4)
     private it.anggen.model.field.Field field;
 
     public java.lang.Long getRestrictionFieldId() {

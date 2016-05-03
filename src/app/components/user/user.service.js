@@ -1,7 +1,7 @@
 (function() { 
 
 angular
-.module("serverTestApp")
+.module("serverTest")
 .service("userService", UserService);
 /** @ngInject */
 function UserService($http,MainService,UtilityService)
@@ -87,8 +87,8 @@ paginationPageSize: 10,
 enableGridMenu: true,
 columnDefs: [    
 { name: 'userId'},
-{ name: 'enabled'},
-{ name: 'username'} 
+{ name: 'username'},
+{ name: 'enabled'} 
 ]
  };
 }

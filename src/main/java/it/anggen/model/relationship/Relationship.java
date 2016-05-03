@@ -20,16 +20,13 @@ public class Relationship
     extends EntityAttribute
 {
 
-    public final static java.lang.Long staticEntityId = 8L;
-    @javax.persistence.Column(name = "priority")
-    @it.anggen.utils.annotation.Priority(2)
-    private Integer priority;
+    public final static java.lang.Long staticEntityId = 17L;
     @javax.persistence.Column(name = "name")
-    @it.anggen.utils.annotation.Priority(2)
     @it.anggen.utils.annotation.DescriptionField
     private String name;
+    @javax.persistence.Column(name = "priority")
+    private Integer priority;
     @javax.persistence.Column(name = "relationship_id")
-    @it.anggen.utils.annotation.Priority(1)
     @it.anggen.utils.annotation.DescriptionField
     @Id
     @GeneratedValue
@@ -37,33 +34,20 @@ public class Relationship
     @OneToMany(fetch = javax.persistence.FetchType.LAZY)
     @org.hibernate.annotations.Type(type = "it.anggen.model.field.Annotation")
     @javax.persistence.JoinColumn(name = "relationship_id_relationship")
-    @it.anggen.utils.annotation.Priority(4)
     private List<Annotation> annotationList;
     @javax.persistence.OneToOne(fetch = javax.persistence.FetchType.LAZY)
     @org.hibernate.annotations.Type(type = "it.anggen.model.entity.Entity")
     @javax.persistence.JoinColumn(name = "entity_id_entity_target")
-    @it.anggen.utils.annotation.Priority(4)
     private it.anggen.model.entity.Entity entityTarget;
     @javax.persistence.OneToOne(fetch = javax.persistence.FetchType.LAZY)
     @org.hibernate.annotations.Type(type = "it.anggen.model.entity.Entity")
     @javax.persistence.JoinColumn(name = "entity_id_entity")
-    @it.anggen.utils.annotation.Priority(4)
     private it.anggen.model.entity.Entity entity;
     @ManyToOne(fetch = javax.persistence.FetchType.LAZY)
     @javax.persistence.JoinColumn(name = "tab_id_tab")
-    @it.anggen.utils.annotation.Priority(4)
     private it.anggen.model.entity.Tab tab;
     @javax.persistence.Column(name = "relationship_type")
-    @it.anggen.utils.annotation.Priority(3)
     private RelationshipType relationshipType;
-
-    public Integer getPriority() {
-        return this.priority;
-    }
-
-    public void setPriority(Integer priority) {
-        this.priority=priority;
-    }
 
     public String getName() {
         return this.name;
@@ -71,6 +55,14 @@ public class Relationship
 
     public void setName(String name) {
         this.name=name;
+    }
+
+    public Integer getPriority() {
+        return this.priority;
+    }
+
+    public void setPriority(Integer priority) {
+        this.priority=priority;
     }
 
     public java.lang.Long getRelationshipId() {

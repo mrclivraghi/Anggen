@@ -1,0 +1,96 @@
+<div>
+	<form id="generationRunDetailForm" name="generationRunDetailForm" ng-show="vm.selectedEntity.show">
+		<div class="panel panel-default default-panel">
+			<div class="panel-heading">Detail generationRun {{ vm.selectedEntity.generationRunId }} <button type="button" class="close" aria-label="Close" ng-click="vm.closeEntityDetail()">
+	<span aria-hidden="true">&times;
+	</span>
+</button>
+
+			</div>
+
+			<div class="panel-body">
+				<uib-tabset active="vm.activeTab"> <uib-tab index="1" heading="Detail" ng-click="vm.active=1"><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !generationRunDetailForm.generationRunId.$valid, &#39;has-success&#39;: generationRunDetailForm.generationRunId.$valid}" style="height:59px" ng-show="true ">
+	<div class="input-group">
+		<span class="input-group-addon">generationRunId
+		</span>
+
+		<input class="form-control " aria-describedby="sizing-addon3" type="text" id="generationRun-generationRunId" ng-model="vm.selectedEntity.generationRunId" ng-readonly="true" name="generationRunId" placeholder="generationRunId"/>
+		
+	</div>
+</div>
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !generationRunDetailForm.startDate.$valid, &#39;has-success&#39;: generationRunDetailForm.startDate.$valid}" style="height:59px" ng-show="true ">
+	<div class="input-group">
+		<span class="input-group-addon">startDate
+		</span>
+
+		<input class="form-control " aria-describedby="sizing-addon3" type="text" ui-date="{ dateFormat: &#39;dd/mm/yy&#39; }" ng-model="vm.selectedEntity.startDate" ng-readonly="vm.restrictionList.generationRun.restrictionFieldMap.startDate" name="startDate" placeholder="startDate"/>
+		
+	</div>
+</div>
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !generationRunDetailForm.endDate.$valid, &#39;has-success&#39;: generationRunDetailForm.endDate.$valid}" style="height:59px" ng-show="true ">
+	<div class="input-group">
+		<span class="input-group-addon">endDate
+		</span>
+
+		<input class="form-control " aria-describedby="sizing-addon3" type="text" ui-date="{ dateFormat: &#39;dd/mm/yy&#39; }" ng-model="vm.selectedEntity.endDate" ng-readonly="vm.restrictionList.generationRun.restrictionFieldMap.endDate" name="endDate" placeholder="endDate"/>
+		
+	</div>
+</div>
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !generationRunDetailForm.status.$valid, &#39;has-success&#39;: generationRunDetailForm.status.$valid}" style="height:59px" ng-show="true ">
+	<div class="input-group">
+		<span class="input-group-addon">status
+		</span>
+
+		<input class="form-control " aria-describedby="sizing-addon3" type="text" id="generationRun-status" ng-model="vm.selectedEntity.status" ng-readonly="vm.restrictionList.generationRun.restrictionFieldMap.status" name="status" placeholder="status"/>
+		
+	</div>
+</div>
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !generationRunDetailForm.project.$valid, &#39;has-success&#39;: generationRunDetailForm.project.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.project">
+	<div class="input-group">
+		<span class="input-group-addon">project
+		</span>
+
+		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.project" id="project" name="project" ng-options="project as  project.projectId+&#39; &#39;+ project.name for project in vm.projectPreparedData.entityList track by project.projectId" enctype="UTF-8">
+		</select>
+
+		<span class="input-group-btn">
+			<button ng-click="vm.showProjectDetail()" class="btn btn-default " id="project" ng-if="vm.selectedEntity.project==null">Add new project
+			</button>
+
+			<button ng-click="vm.showProjectDetail()" class="btn btn-default " id="project" ng-if="vm.selectedEntity.project!=null">Show detail
+			</button>
+
+		</span>
+
+	</div>
+</div>
+ </uib-tab></uib-tabset>
+
+				</div>
+
+				<script type="text/javascript">$('#generationRunTabs a:first').tab('show');
+				</script>
+
+				<div class="panel-body">
+					<div class="pull-left">
+						<form id="generationRunActionButton" ng-if="vm.selectedEntity.show">
+							<button ng-click="vm.insert()" class="btn btn-default " ng-if="vm.selectedEntity.generationRunId==undefined" ng-show="($root.restrictionList.generation.restrictionItemMap.generationRun.canCreate==true)">Insert
+							</button>
+
+							<button ng-click="vm.update()" class="btn btn-default " ng-if="vm.selectedEntity.generationRunId&gt;0" ng-show="($root.restrictionList.generation.restrictionItemMap.generationRun.canUpdate==true)">Update
+							</button>
+
+							<button ng-click="vm.del()" class="btn btn-default " ng-if="vm.selectedEntity.generationRunId&gt;0" ng-show="($root.restrictionList.generation.restrictionItemMap.generationRun.canDelete==true)">Delete
+							</button>
+
+						</form>
+
+					</div>
+
+				</div>
+
+			</div>
+
+		</form>
+
+	</div>

@@ -1,0 +1,98 @@
+<div>
+	<form id="generationRunSearchBean">
+		<div class="panel panel-default default-panel">
+			<div class="panel-heading">Search form generationRun
+			</div>
+
+			<div class="panel-body">
+				<div class="pull-left right-input" ng-show="true ">
+	<div class="input-group">
+		<span class="input-group-addon">generationRunId
+		</span>
+
+		<input class="form-control " aria-describedby="sizing-addon3" type="text" id="generationRun-generationRunId" ng-model="vm.searchBean.generationRunId" ng-readonly="false" name="generationRunId" placeholder="generationRunId"/>
+		
+	</div>
+</div>
+<div class="pull-left right-input" ng-show="true ">
+	<div class="input-group">
+		<span class="input-group-addon">startDate
+		</span>
+
+		<input class="form-control " aria-describedby="sizing-addon3" type="text" ui-date="{ dateFormat: &#39;dd/mm/yy&#39; }" ng-model="vm.searchBean.startDate" ng-readonly="false" name="startDate" placeholder="startDate"/>
+		
+	</div>
+</div>
+<div class="pull-left right-input" ng-show="true ">
+	<div class="input-group">
+		<span class="input-group-addon">endDate
+		</span>
+
+		<input class="form-control " aria-describedby="sizing-addon3" type="text" ui-date="{ dateFormat: &#39;dd/mm/yy&#39; }" ng-model="vm.searchBean.endDate" ng-readonly="false" name="endDate" placeholder="endDate"/>
+		
+	</div>
+</div>
+<div class="pull-left right-input" ng-show="true ">
+	<div class="input-group">
+		<span class="input-group-addon">status
+		</span>
+
+		<input class="form-control " aria-describedby="sizing-addon3" type="text" id="generationRun-status" ng-model="vm.searchBean.status" ng-readonly="false" name="status" placeholder="status"/>
+		
+	</div>
+</div>
+<div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.entity.restrictionItemMap.project.canSearch==true)">
+	<div class="input-group">
+		<span class="input-group-addon">project
+		</span>
+
+		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.project.projectId" id="project" ng-options="project.projectId as  project.projectId+&#39; &#39;+ project.name for project in vm.projectPreparedData.entityList" enctype="UTF-8">
+		</select>
+
+	</div>
+</div>
+
+				</div>
+
+				<div class="panel-body">
+					<div class="panel-body">
+						<div class="pull-left right-input">
+							<button ng-click="vm.addNew()" class="btn btn-default " ng-show="($root.restrictionList.generation.restrictionItemMap.generationRun.canCreate==true)">Add new
+							</button>
+
+							<button ng-click="vm.search()" class="btn btn-default ">Find
+							</button>
+
+							<button ng-click="vm.reset()" class="btn btn-default ">Reset
+							</button>
+
+						</div>
+
+					</div>
+
+				</div>
+
+			</div>
+
+		</form>
+
+		<form id="generationRunList" ng-if="vm.entityList.length&gt;0" enctype="UTF-8">
+			<div class="panel panel-default default-panel">
+				<div class="panel-heading">List generationRun<button ng-click="vm.downloadList()" class="btn btn-default pull-right" style="margin-top:-7px">
+	<span class="glyphicon glyphicon-download-alt" aria-hidden="true">
+	</span>
+</button>
+
+				</div>
+
+				<div class="panel-body">
+					<div ui-grid="vm.generationRunGridOptions" ui-grid-pagination="" ui-grid-selection="" ui-grid-exporter="">
+					</div>
+
+				</div>
+
+			</div>
+
+		</form>
+
+	</div>

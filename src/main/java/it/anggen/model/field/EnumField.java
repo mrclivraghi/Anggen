@@ -19,45 +19,30 @@ public class EnumField
     extends EntityAttribute
 {
 
-    public final static java.lang.Long staticEntityId = 11L;
+    public final static java.lang.Long staticEntityId = 16L;
+    @javax.persistence.Column(name = "priority")
+    private Integer priority;
     @javax.persistence.Column(name = "enum_field_id")
     @Id
     @GeneratedValue
     @it.anggen.utils.annotation.DescriptionField
-    @it.anggen.utils.annotation.Priority(1)
     private java.lang.Long enumFieldId;
-    @javax.persistence.Column(name = "priority")
-    @it.anggen.utils.annotation.Priority(2)
-    private Integer priority;
     @javax.persistence.Column(name = "name")
     @it.anggen.utils.annotation.DescriptionField
-    @it.anggen.utils.annotation.Priority(2)
     private String name;
     @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.LAZY)
     @javax.persistence.JoinColumn(name = "entity_id_entity")
-    @it.anggen.utils.annotation.Priority(4)
     private it.anggen.model.entity.Entity entity;
     @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.LAZY)
     @javax.persistence.JoinColumn(name = "enum_entity_id_enum_entity")
-    @it.anggen.utils.annotation.Priority(4)
     private it.anggen.model.entity.EnumEntity enumEntity;
     @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.LAZY)
     @javax.persistence.JoinColumn(name = "tab_id_tab")
-    @it.anggen.utils.annotation.Priority(4)
     private it.anggen.model.entity.Tab tab;
     @OneToMany(fetch = javax.persistence.FetchType.LAZY)
     @Type(type = "it.anggen.model.field.Annotation")
     @javax.persistence.JoinColumn(name = "enum_field_id_enum_field")
-    @it.anggen.utils.annotation.Priority(4)
     private List<Annotation> annotationList;
-
-    public java.lang.Long getEnumFieldId() {
-        return this.enumFieldId;
-    }
-
-    public void setEnumFieldId(java.lang.Long enumFieldId) {
-        this.enumFieldId=enumFieldId;
-    }
 
     public Integer getPriority() {
         return this.priority;
@@ -65,6 +50,14 @@ public class EnumField
 
     public void setPriority(Integer priority) {
         this.priority=priority;
+    }
+
+    public java.lang.Long getEnumFieldId() {
+        return this.enumFieldId;
+    }
+
+    public void setEnumFieldId(java.lang.Long enumFieldId) {
+        this.enumFieldId=enumFieldId;
     }
 
     public String getName() {

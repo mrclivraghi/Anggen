@@ -1,7 +1,7 @@
 (function() {
 'use strict';
  angular
- .module('serverTestApp')
+ .module('serverTest')
  .directive('entitySearch', entitySearch);
 /** @ngInject */
   function entitySearch(entityService) {

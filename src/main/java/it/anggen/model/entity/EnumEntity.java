@@ -19,30 +19,25 @@ import org.hibernate.annotations.Type;
 @MaxDescendantLevel(1)
 public class EnumEntity {
 
-    public final static java.lang.Long staticEntityId = 15L;
+    public final static java.lang.Long staticEntityId = 6L;
     @javax.persistence.Column(name = "name")
     @it.anggen.utils.annotation.DescriptionField
-    @it.anggen.utils.annotation.Priority(2)
     private String name;
     @javax.persistence.Column(name = "enum_entity_id")
     @Id
     @GeneratedValue
     @it.anggen.utils.annotation.DescriptionField
-    @it.anggen.utils.annotation.Priority(1)
     private java.lang.Long enumEntityId;
     @ManyToOne(fetch = javax.persistence.FetchType.LAZY)
     @javax.persistence.JoinColumn(name = "project_id_project")
-    @it.anggen.utils.annotation.Priority(4)
     private it.anggen.model.entity.Project project;
     @OneToMany(fetch = javax.persistence.FetchType.LAZY)
     @Type(type = "it.anggen.model.field.EnumValue")
     @javax.persistence.JoinColumn(name = "enum_entity_id_enum_entity")
-    @it.anggen.utils.annotation.Priority(4)
     private List<EnumValue> enumValueList;
     @OneToMany(fetch = javax.persistence.FetchType.LAZY)
     @Type(type = "it.anggen.model.field.EnumField")
     @javax.persistence.JoinColumn(name = "enum_entity_id_enum_entity")
-    @it.anggen.utils.annotation.Priority(4)
     private List<EnumField> enumFieldList;
 
     public String getName() {

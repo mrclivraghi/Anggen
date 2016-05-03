@@ -1,7 +1,7 @@
 (function() { 
 
 angular
-.module("serverTestApp")
+.module("serverTest")
 .service("roleService", RoleService);
 /** @ngInject */
 function RoleService($http,MainService,UtilityService)

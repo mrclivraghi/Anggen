@@ -16,7 +16,7 @@ import org.springframework.security.web.csrf.CsrfTokenRepository;
 
 @Configuration
 @EnableWebSecurity
-@Order(100)
+@Order(99)
 public class ServerTestSecurityConfig
     extends WebSecurityConfigurerAdapter
 {
@@ -34,9 +34,8 @@ public class ServerTestSecurityConfig
         .antMatchers("/css/**","/img/**","/js/**","/auth/**","/login/**","/authentication/**","/**").permitAll()
         .and()
         .authorizeRequests().anyRequest().fullyAuthenticated().and()
-        .formLogin().and().csrf().disable();
-        //.csrfTokenRepository(csrfTokenRepository()).and()
-        //.addFilterAfter(new it.anggen.boot.CsrfHeaderFilter(), org.springframework.security.web.csrf.CsrfFilter.class);
+        .formLogin().and().csrf()
+        .disable();
     }
 
     private CsrfTokenRepository csrfTokenRepository() {

@@ -21,40 +21,32 @@ public class Field
     extends EntityAttribute
 {
 
-    public final static java.lang.Long staticEntityId = 5L;
+    public final static java.lang.Long staticEntityId = 12L;
     @javax.persistence.Column(name = "field_id")
     @Id
     @GeneratedValue
     @it.anggen.utils.annotation.DescriptionField
-    @it.anggen.utils.annotation.Priority(1)
     private java.lang.Long fieldId;
-    @javax.persistence.Column(name = "priority")
-    @it.anggen.utils.annotation.Priority(2)
-    private Integer priority;
     @javax.persistence.Column(name = "name")
     @it.anggen.utils.annotation.DescriptionField
-    @it.anggen.utils.annotation.Priority(2)
     private String name;
+    @javax.persistence.Column(name = "priority")
+    private Integer priority;
     @OneToMany(fetch = javax.persistence.FetchType.LAZY)
     @Type(type = "it.anggen.model.security.RestrictionField")
     @javax.persistence.JoinColumn(name = "field_id_field")
-    @it.anggen.utils.annotation.Priority(4)
     private List<RestrictionField> restrictionFieldList;
     @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.LAZY)
     @javax.persistence.JoinColumn(name = "entity_id_entity")
-    @it.anggen.utils.annotation.Priority(4)
     private it.anggen.model.entity.Entity entity;
     @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.LAZY)
     @javax.persistence.JoinColumn(name = "tab_id_tab")
-    @it.anggen.utils.annotation.Priority(4)
     private it.anggen.model.entity.Tab tab;
     @OneToMany(fetch = javax.persistence.FetchType.LAZY)
     @Type(type = "it.anggen.model.field.Annotation")
     @javax.persistence.JoinColumn(name = "field_id_field")
-    @it.anggen.utils.annotation.Priority(4)
     private List<Annotation> annotationList;
     @javax.persistence.Column(name = "field_type")
-    @it.anggen.utils.annotation.Priority(3)
     private FieldType fieldType;
 
     public java.lang.Long getFieldId() {
@@ -65,20 +57,20 @@ public class Field
         this.fieldId=fieldId;
     }
 
-    public Integer getPriority() {
-        return this.priority;
-    }
-
-    public void setPriority(Integer priority) {
-        this.priority=priority;
-    }
-
     public String getName() {
         return this.name;
     }
 
     public void setName(String name) {
         this.name=name;
+    }
+
+    public Integer getPriority() {
+        return this.priority;
+    }
+
+    public void setPriority(Integer priority) {
+        this.priority=priority;
     }
 
     public List<RestrictionField> getRestrictionFieldList() {

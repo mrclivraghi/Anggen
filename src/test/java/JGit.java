@@ -178,9 +178,9 @@ public class JGit {
 			}
 			
 			// Delete a branch
-			//RefUpdate deleteBranch1 = repo.updateRef("refs/heads/feature/testJGit");
-			//deleteBranch1.setForceUpdate(true);
-			//deleteBranch1.delete();
+			RefUpdate deleteBranch1 = repo.updateRef("refs/heads/feature/testGit");
+			deleteBranch1.setForceUpdate(true);
+			deleteBranch1.delete();
 
 			// Config
 			//Config cfg = repo.getConfig();

@@ -1,6 +1,7 @@
 
 package it.anggen.model.entity;
 
+import java.util.Date;
 import java.util.List;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -15,65 +16,82 @@ import it.anggen.model.security.RestrictionEntity;
 import it.anggen.utils.annotation.MaxDescendantLevel;
 import org.hibernate.annotations.Type;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 @javax.persistence.Entity
 @Table(schema = "meta", name = "entity")
 @it.anggen.utils.annotation.SecurityType(type = it.anggen.model.SecurityType.ACCESS_WITH_PERMISSION)
 @MaxDescendantLevel(100)
+//@ApiModel
 public class Entity {
 
-    public final static java.lang.Long staticEntityId = 18L;
-    @javax.persistence.Column(name = "enable_restriction_data")
-    private java.lang.Boolean enableRestrictionData;
+    public final static java.lang.Long staticEntityId = 9L;
     @javax.persistence.Column(name = "generate_front_end")
+    @it.anggen.utils.annotation.Priority(2)
+    @ApiModelProperty(value = "var boolean gen frontend wow", allowableValues = "true,false")
     private java.lang.Boolean generateFrontEnd;
     @javax.persistence.Column(name = "name")
     @it.anggen.utils.annotation.DescriptionField
+    @it.anggen.utils.annotation.Priority(2)
     private String name;
     @javax.persistence.Column(name = "entity_id")
     @it.anggen.utils.annotation.DescriptionField
     @Id
-    @GeneratedValue
+    //@GeneratedValue
+    @it.anggen.utils.annotation.Priority(1)
     private java.lang.Long entityId;
-    @javax.persistence.Column(name = "descendant_max_level")
-    private Integer descendantMaxLevel;
-    @javax.persistence.Column(name = "disable_view_generation")
-    private java.lang.Boolean disableViewGeneration;
     @javax.persistence.Column(name = "cache")
+    @it.anggen.utils.annotation.Priority(2)
     private java.lang.Boolean cache;
+    @javax.persistence.Column(name = "disable_view_generation")
+    @it.anggen.utils.annotation.Priority(2)
+    private java.lang.Boolean disableViewGeneration;
+    @javax.persistence.Column(name = "descendant_max_level")
+    @it.anggen.utils.annotation.Priority(2)
+    private Integer descendantMaxLevel;
+    @javax.persistence.Column(name = "enable_restriction_data")
+    @it.anggen.utils.annotation.Priority(2)
+    private java.lang.Boolean enableRestrictionData;
     @OneToMany(fetch = javax.persistence.FetchType.LAZY)
     @Type(type = "it.anggen.model.security.RestrictionEntity")
     @javax.persistence.JoinColumn(name = "entity_id_entity")
+    @it.anggen.utils.annotation.Priority(4)
     private List<RestrictionEntity> restrictionEntityList;
     @OneToMany(fetch = javax.persistence.FetchType.LAZY)
     @Type(type = "it.anggen.model.field.Field")
     @javax.persistence.JoinColumn(name = "entity_id_entity")
+    @it.anggen.utils.annotation.Priority(4)
     private List<Field> fieldList;
     @OneToMany(fetch = javax.persistence.FetchType.LAZY)
     @Type(type = "it.anggen.model.field.EnumField")
     @javax.persistence.JoinColumn(name = "entity_id_entity")
+    @it.anggen.utils.annotation.Priority(4)
     private List<EnumField> enumFieldList;
     @ManyToOne(fetch = javax.persistence.FetchType.LAZY)
     @javax.persistence.JoinColumn(name = "entity_group_id_entity_group")
+    @it.anggen.utils.annotation.Priority(4)
     private it.anggen.model.entity.EntityGroup entityGroup;
     @OneToMany(fetch = javax.persistence.FetchType.LAZY)
     @Type(type = "it.anggen.model.entity.Tab")
     @javax.persistence.JoinColumn(name = "entity_id_entity")
+    @it.anggen.utils.annotation.Priority(4)
     private List<Tab> tabList;
     @OneToMany(fetch = javax.persistence.FetchType.LAZY)
     @Type(type = "it.anggen.model.relationship.Relationship")
     @javax.persistence.JoinColumn(name = "entity_id_entity")
+    @it.anggen.utils.annotation.Priority(4)
     private List<Relationship> relationshipList;
     @javax.persistence.Column(name = "security_type")
+    @it.anggen.utils.annotation.Priority(3)
     private it.anggen.model.SecurityType securityType;
+    
+    @javax.persistence.Column(name = "ignore_menu")
+    private Boolean ignoreMenu;
 
-    public java.lang.Boolean getEnableRestrictionData() {
-        return this.enableRestrictionData;
-    }
-
-    public void setEnableRestrictionData(java.lang.Boolean enableRestrictionData) {
-        this.enableRestrictionData=enableRestrictionData;
-    }
-
+    private Date addDate;
+    private Date modDate;
+    
     public java.lang.Boolean getGenerateFrontEnd() {
         return this.generateFrontEnd;
     }
@@ -98,12 +116,12 @@ public class Entity {
         this.entityId=entityId;
     }
 
-    public Integer getDescendantMaxLevel() {
-        return this.descendantMaxLevel;
+    public java.lang.Boolean getCache() {
+        return this.cache;
     }
 
-    public void setDescendantMaxLevel(Integer descendantMaxLevel) {
-        this.descendantMaxLevel=descendantMaxLevel;
+    public void setCache(java.lang.Boolean cache) {
+        this.cache=cache;
     }
 
     public java.lang.Boolean getDisableViewGeneration() {
@@ -114,12 +132,20 @@ public class Entity {
         this.disableViewGeneration=disableViewGeneration;
     }
 
-    public java.lang.Boolean getCache() {
-        return this.cache;
+    public Integer getDescendantMaxLevel() {
+        return this.descendantMaxLevel;
     }
 
-    public void setCache(java.lang.Boolean cache) {
-        this.cache=cache;
+    public void setDescendantMaxLevel(Integer descendantMaxLevel) {
+        this.descendantMaxLevel=descendantMaxLevel;
+    }
+
+    public java.lang.Boolean getEnableRestrictionData() {
+        return this.enableRestrictionData;
+    }
+
+    public void setEnableRestrictionData(java.lang.Boolean enableRestrictionData) {
+        this.enableRestrictionData=enableRestrictionData;
     }
 
     public List<RestrictionEntity> getRestrictionEntityList() {
@@ -177,5 +203,21 @@ public class Entity {
     public void setSecurityType(it.anggen.model.SecurityType securityType) {
         this.securityType=securityType;
     }
+
+	public Boolean getIgnoreMenu() {
+		return ignoreMenu;
+	}
+
+	public void setIgnoreMenu(Boolean ignoreMenu) {
+		this.ignoreMenu = ignoreMenu;
+	}
+
+	public Date getModDate() {
+		return modDate;
+	}
+
+	public void setModDate(Date modDate) {
+		this.modDate = modDate;
+	}
 
 }

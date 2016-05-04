@@ -1,6 +1,7 @@
 
 package it.anggen.model.field;
 
+import java.util.Date;
 import java.util.List;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -21,34 +22,45 @@ public class Field
     extends EntityAttribute
 {
 
-    public final static java.lang.Long staticEntityId = 12L;
+    public final static java.lang.Long staticEntityId = 5L;
     @javax.persistence.Column(name = "field_id")
     @Id
     @GeneratedValue
     @it.anggen.utils.annotation.DescriptionField
+    @it.anggen.utils.annotation.Priority(1)
     private java.lang.Long fieldId;
     @javax.persistence.Column(name = "priority")
+    @it.anggen.utils.annotation.Priority(2)
     private Integer priority;
     @javax.persistence.Column(name = "name")
     @it.anggen.utils.annotation.DescriptionField
+    @it.anggen.utils.annotation.Priority(2)
     private String name;
     @OneToMany(fetch = javax.persistence.FetchType.LAZY)
     @Type(type = "it.anggen.model.security.RestrictionField")
     @javax.persistence.JoinColumn(name = "field_id_field")
+    @it.anggen.utils.annotation.Priority(4)
     private List<RestrictionField> restrictionFieldList;
     @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.LAZY)
     @javax.persistence.JoinColumn(name = "entity_id_entity")
+    @it.anggen.utils.annotation.Priority(4)
     private it.anggen.model.entity.Entity entity;
     @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.LAZY)
     @javax.persistence.JoinColumn(name = "tab_id_tab")
+    @it.anggen.utils.annotation.Priority(4)
     private it.anggen.model.entity.Tab tab;
     @OneToMany(fetch = javax.persistence.FetchType.LAZY)
     @Type(type = "it.anggen.model.field.Annotation")
     @javax.persistence.JoinColumn(name = "field_id_field")
+    @it.anggen.utils.annotation.Priority(4)
     private List<Annotation> annotationList;
     @javax.persistence.Column(name = "field_type")
+    @it.anggen.utils.annotation.Priority(3)
     private FieldType fieldType;
 
+    private Date addDate;
+    private Date modDate;
+    
     public java.lang.Long getFieldId() {
         return this.fieldId;
     }
@@ -112,5 +124,13 @@ public class Field
     public void setFieldType(FieldType fieldType) {
         this.fieldType=fieldType;
     }
+
+	public Date getModDate() {
+		return modDate;
+	}
+
+	public void setModDate(Date modDate) {
+		this.modDate = modDate;
+	}
 
 }

@@ -8,6 +8,8 @@ import it.anggen.searchbean.security.UserSearchBean;
 import it.anggen.security.SecurityService;
 import it.anggen.service.log.LogEntryService;
 import it.anggen.service.security.UserService;
+import it.anggen.utils.Utility;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;

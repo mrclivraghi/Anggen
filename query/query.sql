@@ -9,8 +9,9 @@ truncate table log.log_entry cascade;
 select * from meta.project
 select * from meta.entity_group where project_id_project=710
 select * from meta.entity where entity_group_id_entity_group is null
-select * from meta.field where entity_id_entity=121
-select * from meta.tab where tab_id=731
+select * from meta.field where field_id in (7187,7188,7190)
+update meta.field set entity_id_entity=2 where field_id in (7187,7188,7190)
+select * from meta.tab where entity_id_entity=2
 select * from meta.enum_entity 
 select * from meta.enum_field 
 

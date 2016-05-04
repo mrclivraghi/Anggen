@@ -17,6 +17,9 @@ public class EntitySearchBean {
     public java.lang.Boolean disableViewGeneration;
     public java.lang.Integer descendantMaxLevel;
     public java.lang.Boolean enableRestrictionData;
+    public java.lang.Boolean ignoreMenu;
+    public java.util.Date addDate;
+    public java.util.Date modDate;
     public it.anggen.model.SecurityType securityType;
     public List<RestrictionEntity> restrictionEntityList;
     public List<Field> fieldList;
@@ -79,6 +82,30 @@ public class EntitySearchBean {
 
     public void setEnableRestrictionData(java.lang.Boolean enableRestrictionData) {
         this.enableRestrictionData=enableRestrictionData;
+    }
+
+    public java.lang.Boolean getIgnoreMenu() {
+        return this.ignoreMenu;
+    }
+
+    public void setIgnoreMenu(java.lang.Boolean ignoreMenu) {
+        this.ignoreMenu=ignoreMenu;
+    }
+
+    public java.util.Date getAddDate() {
+        return this.addDate;
+    }
+
+    public void setAddDate(java.util.Date addDate) {
+        this.addDate=addDate;
+    }
+
+    public java.util.Date getModDate() {
+        return this.modDate;
+    }
+
+    public void setModDate(java.util.Date modDate) {
+        this.modDate=modDate;
     }
 
     public it.anggen.model.SecurityType getSecurityType() {

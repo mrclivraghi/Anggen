@@ -9,6 +9,8 @@ public class RelationshipSearchBean {
     public java.lang.Long relationshipId;
     public java.lang.Integer priority;
     public java.lang.String name;
+    public java.util.Date addDate;
+    public java.util.Date modDate;
     public it.anggen.model.RelationshipType relationshipType;
     public List<Annotation> annotationList;
     public it.anggen.model.entity.Entity entityTarget;
@@ -37,6 +39,22 @@ public class RelationshipSearchBean {
 
     public void setName(java.lang.String name) {
         this.name=name;
+    }
+
+    public java.util.Date getAddDate() {
+        return this.addDate;
+    }
+
+    public void setAddDate(java.util.Date addDate) {
+        this.addDate=addDate;
+    }
+
+    public java.util.Date getModDate() {
+        return this.modDate;
+    }
+
+    public void setModDate(java.util.Date modDate) {
+        this.modDate=modDate;
     }
 
     public it.anggen.model.RelationshipType getRelationshipType() {

@@ -21,20 +21,20 @@ import org.hibernate.annotations.Type;
 @MaxDescendantLevel(100)
 public class User {
 
-    public final static java.lang.Long staticEntityId = 4L;
+    public final static java.lang.Long staticEntityId = 3L;
+    @javax.persistence.Column(name = "enabled")
+    private Boolean enabled;
     @javax.persistence.Column(name = "user_id")
     @it.anggen.utils.annotation.DescriptionField
     @Id
     @GeneratedValue
     private java.lang.Long userId;
-    @javax.persistence.Column(name = "username")
-    @it.anggen.utils.annotation.DescriptionField
-    private java.lang.String username;
-    @javax.persistence.Column(name = "enabled")
-    private Boolean enabled;
     @javax.persistence.Column(name = "password")
     @Password
     private java.lang.String password;
+    @javax.persistence.Column(name = "username")
+    @it.anggen.utils.annotation.DescriptionField
+    private java.lang.String username;
     @ManyToMany(fetch = FetchType.LAZY)
     @Type(type = "it.anggen.model.security.Role")
     @JoinTable(name = "user_role", schema = "sso", joinColumns = {
@@ -44,22 +44,6 @@ public class User {
     })
     private List<Role> roleList;
 
-    public java.lang.Long getUserId() {
-        return this.userId;
-    }
-
-    public void setUserId(java.lang.Long userId) {
-        this.userId=userId;
-    }
-
-    public java.lang.String getUsername() {
-        return this.username;
-    }
-
-    public void setUsername(java.lang.String username) {
-        this.username=username;
-    }
-
     public Boolean getEnabled() {
         return this.enabled;
     }
@@ -68,12 +52,28 @@ public class User {
         this.enabled=enabled;
     }
 
+    public java.lang.Long getUserId() {
+        return this.userId;
+    }
+
+    public void setUserId(java.lang.Long userId) {
+        this.userId=userId;
+    }
+
     public java.lang.String getPassword() {
         return this.password;
     }
 
     public void setPassword(java.lang.String password) {
         this.password=password;
+    }
+
+    public java.lang.String getUsername() {
+        return this.username;
+    }
+
+    public void setUsername(java.lang.String username) {
+        this.username=username;
     }
 
     public List<Role> getRoleList() {

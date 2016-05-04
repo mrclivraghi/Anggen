@@ -40,7 +40,7 @@ public class ProjectServiceImpl
 
     @Override
     public List<it.anggen.model.entity.Project> find(ProjectSearchBean project) {
-        return projectRepository.findByProjectIdAndNameAndEntityGroupAndEnumEntityAndGenerationRun(project.getProjectId(),project.getName(),project.getEntityGroupList()==null? null :project.getEntityGroupList().get(0),project.getEnumEntityList()==null? null :project.getEnumEntityList().get(0),project.getGenerationRunList()==null? null :project.getGenerationRunList().get(0));
+        return projectRepository.findByProjectIdAndNameAndAddDateAndModDateAndEntityGroupAndEnumEntityAndGenerationRun(project.getProjectId(),project.getName(),it.anggen.utils.Utility.formatDate(project.getAddDate()),it.anggen.utils.Utility.formatDate(project.getModDate()),project.getEntityGroupList()==null? null :project.getEntityGroupList().get(0),project.getEnumEntityList()==null? null :project.getEnumEntityList().get(0),project.getGenerationRunList()==null? null :project.getGenerationRunList().get(0));
     }
 
     @Override

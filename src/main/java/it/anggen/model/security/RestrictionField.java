@@ -15,7 +15,7 @@ import it.anggen.utils.annotation.MaxDescendantLevel;
 @MaxDescendantLevel(100)
 public class RestrictionField {
 
-    public final static java.lang.Long staticEntityId = 10L;
+    public final static java.lang.Long staticEntityId = 6L;
     @Column(name = "restriction_field_id")
     @Id
     @GeneratedValue

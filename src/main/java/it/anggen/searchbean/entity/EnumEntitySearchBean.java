@@ -9,6 +9,8 @@ public class EnumEntitySearchBean {
 
     public java.lang.Long enumEntityId;
     public java.lang.String name;
+    public java.util.Date addDate;
+    public java.util.Date modDate;
     public it.anggen.model.entity.Project project;
     public List<EnumValue> enumValueList;
     public List<EnumField> enumFieldList;
@@ -27,6 +29,22 @@ public class EnumEntitySearchBean {
 
     public void setName(java.lang.String name) {
         this.name=name;
+    }
+
+    public java.util.Date getAddDate() {
+        return this.addDate;
+    }
+
+    public void setAddDate(java.util.Date addDate) {
+        this.addDate=addDate;
+    }
+
+    public java.util.Date getModDate() {
+        return this.modDate;
+    }
+
+    public void setModDate(java.util.Date modDate) {
+        this.modDate=modDate;
     }
 
     public it.anggen.model.entity.Project getProject() {

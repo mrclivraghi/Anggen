@@ -21,14 +21,22 @@ public interface EnumEntityRepository
 
     public List<it.anggen.model.entity.EnumEntity> findByName(java.lang.String name);
 
+    public List<it.anggen.model.entity.EnumEntity> findByAddDate(java.lang.String addDate);
+
+    public List<it.anggen.model.entity.EnumEntity> findByModDate(java.lang.String modDate);
+
     public List<it.anggen.model.entity.EnumEntity> findByProject(it.anggen.model.entity.Project project);
 
-    @Query("select e from EnumEntity e where  (:enumEntityId is null or cast(:enumEntityId as string)=cast(e.enumEntityId as string)) and (:name is null or :name='' or cast(:name as string)=e.name) and (:project=e.project or :project is null) and (:enumValue in elements(e.enumValueList)  or :enumValue is null) and (:enumField in elements(e.enumFieldList)  or :enumField is null) ")
-    public List<it.anggen.model.entity.EnumEntity> findByEnumEntityIdAndNameAndProjectAndEnumValueAndEnumField(
+    @Query("select e from EnumEntity e where  (:enumEntityId is null or cast(:enumEntityId as string)=cast(e.enumEntityId as string)) and (:name is null or :name='' or cast(:name as string)=e.name) and (:addDate is null or cast(:addDate as string)=cast(date(e.addDate) as string)) and (:modDate is null or cast(:modDate as string)=cast(date(e.modDate) as string)) and (:project=e.project or :project is null) and (:enumValue in elements(e.enumValueList)  or :enumValue is null) and (:enumField in elements(e.enumFieldList)  or :enumField is null) ")
+    public List<it.anggen.model.entity.EnumEntity> findByEnumEntityIdAndNameAndAddDateAndModDateAndProjectAndEnumValueAndEnumField(
         @org.springframework.data.repository.query.Param("enumEntityId")
         java.lang.Long enumEntityId,
         @org.springframework.data.repository.query.Param("name")
         java.lang.String name,
+        @org.springframework.data.repository.query.Param("addDate")
+        java.lang.String addDate,
+        @org.springframework.data.repository.query.Param("modDate")
+        java.lang.String modDate,
         @org.springframework.data.repository.query.Param("project")
         it.anggen.model.entity.Project project,
         @org.springframework.data.repository.query.Param("enumValue")

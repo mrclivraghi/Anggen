@@ -244,7 +244,7 @@ public class EntityGenerator {
 					JAnnotationUse manyToMany = listField.annotate(ManyToMany.class);
 					manyToMany.param("fetch", FetchType.LAZY);
 					
-					List<Relationship> relationshipList = relationshipRepository.findByRelationshipIdAndPriorityAndNameAndRelationshipTypeAndAnnotationAndEntityTargetAndEntityAndTab(null, null, null, RelationshipType.MANY_TO_MANY.getValue(), null, entity,relationship.getEntityTarget(),  null);
+					List<Relationship> relationshipList = relationshipRepository.findByRelationshipIdAndPriorityAndNameAndAddDateAndModDateAndRelationshipTypeAndAnnotationAndEntityTargetAndEntityAndTab(null, null, null, null, null, RelationshipType.MANY_TO_MANY.getValue(), null, entity, relationship.getEntityTarget(), null);
 					String rightName=entity.getName();
 					if (relationshipList.size()>0)
 						rightName=relationshipList.get(0).getName();

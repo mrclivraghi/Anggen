@@ -5,9 +5,9 @@ package it.anggen.searchbean.generation;
 public class GenerationRunSearchBean {
 
     public java.lang.Integer generationRunId;
+    public java.lang.Integer status;
     public java.util.Date startDate;
     public java.util.Date endDate;
-    public java.lang.Integer status;
     public it.anggen.model.entity.Project project;
 
     public java.lang.Integer getGenerationRunId() {
@@ -16,6 +16,14 @@ public class GenerationRunSearchBean {
 
     public void setGenerationRunId(java.lang.Integer generationRunId) {
         this.generationRunId=generationRunId;
+    }
+
+    public java.lang.Integer getStatus() {
+        return this.status;
+    }
+
+    public void setStatus(java.lang.Integer status) {
+        this.status=status;
     }
 
     public java.util.Date getStartDate() {
@@ -32,14 +40,6 @@ public class GenerationRunSearchBean {
 
     public void setEndDate(java.util.Date endDate) {
         this.endDate=endDate;
-    }
-
-    public java.lang.Integer getStatus() {
-        return this.status;
-    }
-
-    public void setStatus(java.lang.Integer status) {
-        this.status=status;
     }
 
     public it.anggen.model.entity.Project getProject() {

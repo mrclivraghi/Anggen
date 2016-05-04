@@ -9,10 +9,12 @@ public class EntityGroupSearchBean {
 
     public java.lang.Long entityGroupId;
     public java.lang.String name;
+    public java.util.Date addDate;
+    public java.util.Date modDate;
     public it.anggen.model.SecurityType securityType;
-    public it.anggen.model.entity.Project project;
     public List<RestrictionEntityGroup> restrictionEntityGroupList;
     public List<Entity> entityList;
+    public it.anggen.model.entity.Project project;
 
     public java.lang.Long getEntityGroupId() {
         return this.entityGroupId;
@@ -30,20 +32,28 @@ public class EntityGroupSearchBean {
         this.name=name;
     }
 
+    public java.util.Date getAddDate() {
+        return this.addDate;
+    }
+
+    public void setAddDate(java.util.Date addDate) {
+        this.addDate=addDate;
+    }
+
+    public java.util.Date getModDate() {
+        return this.modDate;
+    }
+
+    public void setModDate(java.util.Date modDate) {
+        this.modDate=modDate;
+    }
+
     public it.anggen.model.SecurityType getSecurityType() {
         return this.securityType;
     }
 
     public void setSecurityType(it.anggen.model.SecurityType securityType) {
         this.securityType=securityType;
-    }
-
-    public it.anggen.model.entity.Project getProject() {
-        return this.project;
-    }
-
-    public void setProject(it.anggen.model.entity.Project project) {
-        this.project=project;
     }
 
     public List<RestrictionEntityGroup> getRestrictionEntityGroupList() {
@@ -60,6 +70,14 @@ public class EntityGroupSearchBean {
 
     public void setEntityList(List<Entity> entityList) {
         this.entityList=entityList;
+    }
+
+    public it.anggen.model.entity.Project getProject() {
+        return this.project;
+    }
+
+    public void setProject(it.anggen.model.entity.Project project) {
+        this.project=project;
     }
 
 }

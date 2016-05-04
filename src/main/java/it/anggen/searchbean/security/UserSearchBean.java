@@ -7,9 +7,9 @@ import it.anggen.model.security.Role;
 public class UserSearchBean {
 
     public java.lang.Long userId;
-    public java.lang.String password;
     public java.lang.String username;
     public java.lang.Boolean enabled;
+    public java.lang.String password;
     public List<Role> roleList;
 
     public java.lang.Long getUserId() {
@@ -18,14 +18,6 @@ public class UserSearchBean {
 
     public void setUserId(java.lang.Long userId) {
         this.userId=userId;
-    }
-
-    public java.lang.String getPassword() {
-        return this.password;
-    }
-
-    public void setPassword(java.lang.String password) {
-        this.password=password;
     }
 
     public java.lang.String getUsername() {
@@ -42,6 +34,14 @@ public class UserSearchBean {
 
     public void setEnabled(java.lang.Boolean enabled) {
         this.enabled=enabled;
+    }
+
+    public java.lang.String getPassword() {
+        return this.password;
+    }
+
+    public void setPassword(java.lang.String password) {
+        this.password=password;
     }
 
     public List<Role> getRoleList() {

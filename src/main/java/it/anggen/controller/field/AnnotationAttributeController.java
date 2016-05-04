@@ -56,8 +56,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         List<it.anggen.model.field.AnnotationAttribute> annotationAttributeList;
         if (annotationAttribute.getAnnotationAttributeId()!=null)
-         log.info("Searching annotationAttribute like {}", annotationAttribute.getProperty()+' '+ annotationAttribute.getAnnotationAttributeId());
-        logEntryService.addLogEntry( "Searching entity like "+ annotationAttribute.getProperty()+' '+ annotationAttribute.getAnnotationAttributeId(),
+         log.info("Searching annotationAttribute like {}", annotationAttribute.getAnnotationAttributeId()+' '+ annotationAttribute.getProperty());
+        logEntryService.addLogEntry( "Searching entity like "+ annotationAttribute.getAnnotationAttributeId()+' '+ annotationAttribute.getProperty(),
         it.anggen.model.LogType.INFO, it.anggen.model.OperationType.SEARCH_ENTITY, it.anggen.model.field.AnnotationAttribute.staticEntityId, securityService.getLoggedUser(),log);
         annotationAttributeList=annotationAttributeService.find(annotationAttribute);
         getSecurityMapping(annotationAttributeList);
@@ -113,7 +113,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
         if (annotationAttribute.getAnnotationAttributeId()!=null)
-        log.info("Inserting annotationAttribute like "+ annotationAttribute.getProperty()+' '+ annotationAttribute.getAnnotationAttributeId());
+        log.info("Inserting annotationAttribute like "+ annotationAttribute.getAnnotationAttributeId()+' '+ annotationAttribute.getProperty());
         it.anggen.model.field.AnnotationAttribute insertedAnnotationAttribute=annotationAttributeService.insert(annotationAttribute);
         getRightMapping(insertedAnnotationAttribute);
         logEntryService.addLogEntry( "Inserted annotationAttribute with id "+ insertedAnnotationAttribute.getAnnotationAttributeId(),

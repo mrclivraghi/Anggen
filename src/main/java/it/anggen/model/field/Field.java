@@ -1,7 +1,6 @@
 
 package it.anggen.model.field;
 
-import java.util.Date;
 import java.util.List;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -12,7 +11,9 @@ import it.anggen.model.field.Annotation;
 import it.anggen.model.security.RestrictionField;
 import it.anggen.utils.EntityAttribute;
 import it.anggen.utils.annotation.MaxDescendantLevel;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @javax.persistence.Entity
 @Table(schema = "meta", name = "field")
@@ -22,51 +23,62 @@ public class Field
     extends EntityAttribute
 {
 
-    public final static java.lang.Long staticEntityId = 5L;
+    public final static java.lang.Long staticEntityId = 4L;
     @javax.persistence.Column(name = "field_id")
     @Id
     @GeneratedValue
     @it.anggen.utils.annotation.DescriptionField
-    @it.anggen.utils.annotation.Priority(1)
     private java.lang.Long fieldId;
-    @javax.persistence.Column(name = "priority")
-    @it.anggen.utils.annotation.Priority(2)
-    private Integer priority;
     @javax.persistence.Column(name = "name")
     @it.anggen.utils.annotation.DescriptionField
-    @it.anggen.utils.annotation.Priority(2)
     private String name;
+    @javax.persistence.Column(name = "add_date")
+    @CreationTimestamp
+    private java.util.Date addDate;
+    @javax.persistence.Column(name = "priority")
+    private Integer priority;
+    @javax.persistence.Column(name = "mod_date")
+    @UpdateTimestamp
+    private java.util.Date modDate;
     @OneToMany(fetch = javax.persistence.FetchType.LAZY)
     @Type(type = "it.anggen.model.security.RestrictionField")
     @javax.persistence.JoinColumn(name = "field_id_field")
-    @it.anggen.utils.annotation.Priority(4)
     private List<RestrictionField> restrictionFieldList;
     @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.LAZY)
     @javax.persistence.JoinColumn(name = "entity_id_entity")
-    @it.anggen.utils.annotation.Priority(4)
     private it.anggen.model.entity.Entity entity;
     @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.LAZY)
     @javax.persistence.JoinColumn(name = "tab_id_tab")
-    @it.anggen.utils.annotation.Priority(4)
     private it.anggen.model.entity.Tab tab;
     @OneToMany(fetch = javax.persistence.FetchType.LAZY)
     @Type(type = "it.anggen.model.field.Annotation")
     @javax.persistence.JoinColumn(name = "field_id_field")
-    @it.anggen.utils.annotation.Priority(4)
     private List<Annotation> annotationList;
     @javax.persistence.Column(name = "field_type")
-    @it.anggen.utils.annotation.Priority(3)
     private FieldType fieldType;
 
-    private Date addDate;
-    private Date modDate;
-    
     public java.lang.Long getFieldId() {
         return this.fieldId;
     }
 
     public void setFieldId(java.lang.Long fieldId) {
         this.fieldId=fieldId;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name=name;
+    }
+
+    public java.util.Date getAddDate() {
+        return this.addDate;
+    }
+
+    public void setAddDate(java.util.Date addDate) {
+        this.addDate=addDate;
     }
 
     public Integer getPriority() {
@@ -77,12 +89,12 @@ public class Field
         this.priority=priority;
     }
 
-    public String getName() {
-        return this.name;
+    public java.util.Date getModDate() {
+        return this.modDate;
     }
 
-    public void setName(String name) {
-        this.name=name;
+    public void setModDate(java.util.Date modDate) {
+        this.modDate=modDate;
     }
 
     public List<RestrictionField> getRestrictionFieldList() {
@@ -124,13 +136,5 @@ public class Field
     public void setFieldType(FieldType fieldType) {
         this.fieldType=fieldType;
     }
-
-	public Date getModDate() {
-		return modDate;
-	}
-
-	public void setModDate(Date modDate) {
-		this.modDate = modDate;
-	}
 
 }

@@ -37,7 +37,7 @@ public class FieldServiceImpl
 
     @Override
     public List<it.anggen.model.field.Field> find(FieldSearchBean field) {
-        return fieldRepository.findByFieldIdAndPriorityAndNameAndFieldTypeAndRestrictionFieldAndEntityAndTabAndAnnotation(field.getFieldId(),field.getPriority(),field.getName(), (field.getFieldType()==null)? null : field.getFieldType().getValue(),field.getRestrictionFieldList()==null? null :field.getRestrictionFieldList().get(0),field.getEntity(),field.getTab(),field.getAnnotationList()==null? null :field.getAnnotationList().get(0));
+        return fieldRepository.findByFieldIdAndPriorityAndNameAndAddDateAndModDateAndFieldTypeAndRestrictionFieldAndEntityAndTabAndAnnotation(field.getFieldId(),field.getPriority(),field.getName(),it.anggen.utils.Utility.formatDate(field.getAddDate()),it.anggen.utils.Utility.formatDate(field.getModDate()), (field.getFieldType()==null)? null : field.getFieldType().getValue(),field.getRestrictionFieldList()==null? null :field.getRestrictionFieldList().get(0),field.getEntity(),field.getTab(),field.getAnnotationList()==null? null :field.getAnnotationList().get(0));
     }
 
     @Override

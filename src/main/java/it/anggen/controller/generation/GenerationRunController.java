@@ -56,8 +56,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         List<it.anggen.model.generation.GenerationRun> generationRunList;
         if (generationRun.getGenerationRunId()!=null)
-         log.info("Searching generationRun like {}",generationRun.toString());
-        logEntryService.addLogEntry( "Searching entity like "+generationRun.toString(),
+         log.info("Searching generationRun like {}", generationRun.getGenerationRunId());
+        logEntryService.addLogEntry( "Searching entity like "+ generationRun.getGenerationRunId(),
         it.anggen.model.LogType.INFO, it.anggen.model.OperationType.SEARCH_ENTITY, it.anggen.model.generation.GenerationRun.staticEntityId, securityService.getLoggedUser(),log);
         generationRunList=generationRunService.find(generationRun);
         getSecurityMapping(generationRunList);
@@ -113,7 +113,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
         if (generationRun.getGenerationRunId()!=null)
-        log.info("Inserting generationRun like "+generationRun.toString());
+        log.info("Inserting generationRun like "+ generationRun.getGenerationRunId());
         it.anggen.model.generation.GenerationRun insertedGenerationRun=generationRunService.insert(generationRun);
         getRightMapping(insertedGenerationRun);
         logEntryService.addLogEntry( "Inserted generationRun with id "+ insertedGenerationRun.getGenerationRunId(),

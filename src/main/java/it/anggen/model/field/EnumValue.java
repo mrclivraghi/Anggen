@@ -16,7 +16,10 @@ import it.anggen.utils.annotation.MaxDescendantLevel;
 @MaxDescendantLevel(100)
 public class EnumValue {
 
-    public final static java.lang.Long staticEntityId = 7L;
+    public final static java.lang.Long staticEntityId = 19L;
+    @javax.persistence.Column(name = "name")
+    @it.anggen.utils.annotation.DescriptionField
+    private String name;
     @javax.persistence.Column(name = "value")
     private Integer value;
     @javax.persistence.Column(name = "enum_value_id")
@@ -24,12 +27,17 @@ public class EnumValue {
     @GeneratedValue
     @it.anggen.utils.annotation.DescriptionField
     private java.lang.Long enumValueId;
-    @javax.persistence.Column(name = "name")
-    @it.anggen.utils.annotation.DescriptionField
-    private String name;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "enum_entity_id_enum_entity")
     private it.anggen.model.entity.EnumEntity enumEntity;
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name=name;
+    }
 
     public Integer getValue() {
         return this.value;
@@ -45,14 +53,6 @@ public class EnumValue {
 
     public void setEnumValueId(java.lang.Long enumValueId) {
         this.enumValueId=enumValueId;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(String name) {
-        this.name=name;
     }
 
     public it.anggen.model.entity.EnumEntity getEnumEntity() {

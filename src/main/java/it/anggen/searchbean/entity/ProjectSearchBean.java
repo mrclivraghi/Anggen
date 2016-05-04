@@ -10,6 +10,8 @@ public class ProjectSearchBean {
 
     public java.lang.Integer projectId;
     public java.lang.String name;
+    public java.util.Date addDate;
+    public java.util.Date modDate;
     public List<EntityGroup> entityGroupList;
     public List<EnumEntity> enumEntityList;
     public List<GenerationRun> generationRunList;
@@ -28,6 +30,22 @@ public class ProjectSearchBean {
 
     public void setName(java.lang.String name) {
         this.name=name;
+    }
+
+    public java.util.Date getAddDate() {
+        return this.addDate;
+    }
+
+    public void setAddDate(java.util.Date addDate) {
+        this.addDate=addDate;
+    }
+
+    public java.util.Date getModDate() {
+        return this.modDate;
+    }
+
+    public void setModDate(java.util.Date modDate) {
+        this.modDate=modDate;
     }
 
     public List<EntityGroup> getEntityGroupList() {

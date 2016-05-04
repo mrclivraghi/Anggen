@@ -37,7 +37,7 @@ public class EnumEntityServiceImpl
 
     @Override
     public List<it.anggen.model.entity.EnumEntity> find(EnumEntitySearchBean enumEntity) {
-        return enumEntityRepository.findByEnumEntityIdAndNameAndProjectAndEnumValueAndEnumField(enumEntity.getEnumEntityId(),enumEntity.getName(),enumEntity.getProject(),enumEntity.getEnumValueList()==null? null :enumEntity.getEnumValueList().get(0),enumEntity.getEnumFieldList()==null? null :enumEntity.getEnumFieldList().get(0));
+        return enumEntityRepository.findByEnumEntityIdAndNameAndAddDateAndModDateAndProjectAndEnumValueAndEnumField(enumEntity.getEnumEntityId(),enumEntity.getName(),it.anggen.utils.Utility.formatDate(enumEntity.getAddDate()),it.anggen.utils.Utility.formatDate(enumEntity.getModDate()),enumEntity.getProject(),enumEntity.getEnumValueList()==null? null :enumEntity.getEnumValueList().get(0),enumEntity.getEnumFieldList()==null? null :enumEntity.getEnumFieldList().get(0));
     }
 
     @Override

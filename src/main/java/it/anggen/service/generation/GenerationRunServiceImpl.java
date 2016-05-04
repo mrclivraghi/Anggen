@@ -32,7 +32,7 @@ public class GenerationRunServiceImpl
 
     @Override
     public List<it.anggen.model.generation.GenerationRun> find(GenerationRunSearchBean generationRun) {
-        return generationRunRepository.findByGenerationRunIdAndStartDateAndEndDateAndStatusAndProject(generationRun.getGenerationRunId(),it.anggen.utils.Utility.formatDate(generationRun.getStartDate()),it.anggen.utils.Utility.formatDate(generationRun.getEndDate()),generationRun.getStatus(),generationRun.getProject());
+        return generationRunRepository.findByGenerationRunIdAndStatusAndStartDateAndEndDateAndProject(generationRun.getGenerationRunId(),generationRun.getStatus(),it.anggen.utils.Utility.formatDate(generationRun.getStartDate()),it.anggen.utils.Utility.formatDate(generationRun.getEndDate()),generationRun.getProject());
     }
 
     @Override

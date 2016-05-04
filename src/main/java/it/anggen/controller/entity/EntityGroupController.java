@@ -149,12 +149,6 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     }
 
     private void getRightMapping(it.anggen.model.entity.EntityGroup entityGroup) {
-        if (entityGroup.getProject()!=null)
-        {
-        entityGroup.getProject().setEntityGroupList(null);
-        entityGroup.getProject().setEnumEntityList(null);
-        entityGroup.getProject().setGenerationRunList(null);
-        }
         if (entityGroup.getRestrictionEntityGroupList()!=null)
         for (it.anggen.model.security.RestrictionEntityGroup restrictionEntityGroup :entityGroup.getRestrictionEntityGroupList())
 
@@ -175,15 +169,21 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         entity.setTabList(null);
         entity.setRelationshipList(null);
         }
+        if (entityGroup.getProject()!=null)
+        {
+        entityGroup.getProject().setEntityGroupList(null);
+        entityGroup.getProject().setEnumEntityList(null);
+        entityGroup.getProject().setGenerationRunList(null);
+        }
     }
 
     private void rebuildSecurityMapping(it.anggen.model.entity.EntityGroup entityGroup) {
-        if (securityEnabled && !securityService.hasPermission(it.anggen.model.entity.Project.staticEntityId, it.anggen.model.RestrictionType.SEARCH))
-        entityGroup.setProject(entityGroupService.findById(entityGroup.getEntityGroupId()).get(0).getProject());
         if (securityEnabled && !securityService.hasPermission(it.anggen.model.security.RestrictionEntityGroup.staticEntityId, it.anggen.model.RestrictionType.SEARCH))
         entityGroup.setRestrictionEntityGroupList(entityGroupService.findById(entityGroup.getEntityGroupId()).get(0).getRestrictionEntityGroupList());
         if (securityEnabled && !securityService.hasPermission(it.anggen.model.entity.Entity.staticEntityId, it.anggen.model.RestrictionType.SEARCH))
         entityGroup.setEntityList(entityGroupService.findById(entityGroup.getEntityGroupId()).get(0).getEntityList());
+        if (securityEnabled && !securityService.hasPermission(it.anggen.model.entity.Project.staticEntityId, it.anggen.model.RestrictionType.SEARCH))
+        entityGroup.setProject(entityGroupService.findById(entityGroup.getEntityGroupId()).get(0).getProject());
     }
 
     private List<it.anggen.model.entity.EntityGroup> getSecurityMapping(List<it.anggen.model.entity.EntityGroup> entityGroupList) {
@@ -195,14 +195,14 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     }
 
     private void getSecurityMapping(it.anggen.model.entity.EntityGroup entityGroup) {
-        if (securityEnabled && entityGroup.getProject()!=null  && !securityService.hasPermission(it.anggen.model.entity.Project.staticEntityId, it.anggen.model.RestrictionType.SEARCH) )
-        entityGroup.setProject(null);
-
         if (securityEnabled && entityGroup.getRestrictionEntityGroupList()!=null && !securityService.hasPermission(it.anggen.model.security.RestrictionEntityGroup.staticEntityId, it.anggen.model.RestrictionType.SEARCH) )
         entityGroup.setRestrictionEntityGroupList(null);
 
         if (securityEnabled && entityGroup.getEntityList()!=null && !securityService.hasPermission(it.anggen.model.entity.Entity.staticEntityId, it.anggen.model.RestrictionType.SEARCH) )
         entityGroup.setEntityList(null);
+
+        if (securityEnabled && entityGroup.getProject()!=null  && !securityService.hasPermission(it.anggen.model.entity.Project.staticEntityId, it.anggen.model.RestrictionType.SEARCH) )
+        entityGroup.setProject(null);
 
     }
 

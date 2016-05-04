@@ -16,28 +16,20 @@ import it.anggen.utils.annotation.MaxDescendantLevel;
 @MaxDescendantLevel(100)
 public class AnnotationAttribute {
 
-    public final static java.lang.Long staticEntityId = 14L;
-    @javax.persistence.Column(name = "annotation_attribute_id")
-    @Id
-    @GeneratedValue
-    @it.anggen.utils.annotation.DescriptionField
-    private java.lang.Long annotationAttributeId;
+    public final static java.lang.Long staticEntityId = 2L;
     @javax.persistence.Column(name = "value")
     private java.lang.String value;
     @javax.persistence.Column(name = "property")
     @it.anggen.utils.annotation.DescriptionField
     private java.lang.String property;
+    @javax.persistence.Column(name = "annotation_attribute_id")
+    @Id
+    @GeneratedValue
+    @it.anggen.utils.annotation.DescriptionField
+    private java.lang.Long annotationAttributeId;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "annotation_id_annotation")
     private it.anggen.model.field.Annotation annotation;
-
-    public java.lang.Long getAnnotationAttributeId() {
-        return this.annotationAttributeId;
-    }
-
-    public void setAnnotationAttributeId(java.lang.Long annotationAttributeId) {
-        this.annotationAttributeId=annotationAttributeId;
-    }
 
     public java.lang.String getValue() {
         return this.value;
@@ -53,6 +45,14 @@ public class AnnotationAttribute {
 
     public void setProperty(java.lang.String property) {
         this.property=property;
+    }
+
+    public java.lang.Long getAnnotationAttributeId() {
+        return this.annotationAttributeId;
+    }
+
+    public void setAnnotationAttributeId(java.lang.Long annotationAttributeId) {
+        this.annotationAttributeId=annotationAttributeId;
     }
 
     public it.anggen.model.field.Annotation getAnnotation() {

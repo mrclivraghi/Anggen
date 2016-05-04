@@ -179,9 +179,9 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         }
         if (entity.getEntityGroup()!=null)
         {
-        entity.getEntityGroup().setProject(null);
         entity.getEntityGroup().setRestrictionEntityGroupList(null);
         entity.getEntityGroup().setEntityList(null);
+        entity.getEntityGroup().setProject(null);
         }
         if (entity.getTabList()!=null)
         for (it.anggen.model.entity.Tab tab :entity.getTabList())

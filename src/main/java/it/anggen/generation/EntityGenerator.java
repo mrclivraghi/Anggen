@@ -54,7 +54,9 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -193,6 +195,10 @@ public class EntityGenerator {
 			JVar classField = myClass.field(JMod.PRIVATE, fieldClass, field.getName());
 			JAnnotationUse columnAnnotation = classField.annotate(Column.class);
 			columnAnnotation.param("name", namingStrategy.classToTableName(field.getName()));
+			 if (field.getName().equals("addDate"))
+				 classField.annotate(CreationTimestamp.class);
+			 if (field.getName().equals("modDate"))
+				 classField.annotate(UpdateTimestamp.class);
 			generateGetterAndSetter(myClass, field.getName(), fieldClass);
 			addValidationAnnotation(field,classField);
 		}

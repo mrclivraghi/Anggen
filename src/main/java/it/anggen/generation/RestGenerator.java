@@ -905,7 +905,7 @@ public class RestGenerator {
 			for (it.anggen.model.field.Field field : entityManager.getPasswordField())
 			{
 				updateBlock.directStatement("if ("+lowerClass+".get"+Utility.getFirstUpper(field.getName())+"().length()<59)");
-				updateBlock.directStatement(lowerClass+".set"+Utility.getFirstUpper(field.getName())+"(Utility.encodePassword("+lowerClass+".get"+Utility.getFirstUpper(field.getName())+"()));");
+				updateBlock.directStatement(lowerClass+".set"+Utility.getFirstUpper(field.getName())+"("+Utility.class.getName()+".encodePassword("+lowerClass+".get"+Utility.getFirstUpper(field.getName())+"()));");
 		        
 			}
 			

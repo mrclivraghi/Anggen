@@ -254,7 +254,7 @@ public class Generator {
 		
 		List<GenerationRun> generationRunList = generationRunRepository.findByGenerationRunIdAndStatusAndStartDateAndEndDateAndProject(null, 1, null, null, project);
 		if (generationRunList.size()==0)
-			Generator.lastGenerationDate=new Date(1980, 1, 1);
+			Generator.lastGenerationDate=new Date(0, 1, 1);
 		else
 		{
 			Utility.orderByStartDate(generationRunList);

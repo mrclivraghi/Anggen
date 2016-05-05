@@ -4,11 +4,13 @@ import it.anggen.utils.EntityAttribute;
 import it.anggen.utils.ReflectionManager;
 import it.anggen.utils.Utility;
 import it.anggen.utils.annotation.DescriptionField;
+import it.anggen.generation.Generator;
 import it.anggen.model.AnnotationType;
 import it.anggen.model.FieldType;
 import it.anggen.model.RelationshipType;
 import it.anggen.model.entity.Entity;
 import it.anggen.model.entity.Tab;
+import it.anggen.model.field.EnumField;
 import it.anggen.model.field.Field;
 import it.anggen.model.relationship.Relationship;
 
@@ -382,6 +384,31 @@ public class EntityManagerImpl implements EntityManager{
 		}
 		return passwordField;
 		
+	}
+
+	@Override
+	public Boolean needToGenerate() {
+		return needToGenerate(entity);
+	}
+	
+	public Boolean needToGenerate(Entity entity)
+	{
+		if (entity.getModDate().after(Generator.lastGenerationDate))
+			return true; //check entity
+		if (entity.getEntityGroup()!=null && entity.getEntityGroup().getModDate().after(Generator.lastGenerationDate))
+			return true; // check entityGroup
+		if (entity.getEntityGroup()!=null &&  entity.getEntityGroup().getProject().getModDate().after(Generator.lastGenerationDate))
+			return true; // check Project
+		for (Field field: entity.getFieldList())
+			if (field.getModDate().after(Generator.lastGenerationDate))
+				return true;
+		for (Relationship relationship: entity.getRelationshipList())
+			if (relationship.getModDate().after(Generator.lastGenerationDate))
+				return true;
+		for (EnumField enumField : entity.getEnumFieldList())
+			if (enumField.getModDate().after(Generator.lastGenerationDate))
+				return true;
+		return false;
 	}
 
 	

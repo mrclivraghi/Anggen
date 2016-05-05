@@ -151,6 +151,7 @@ public class Generator {
 	@Autowired
 	ProjectRepository projectRepository;
 	
+	
 	@Autowired
 	EnumEntityRepository enumEntityRepository;
 	
@@ -251,7 +252,7 @@ public class Generator {
 		this.enumEntityList=project.getEnumEntityList();
 		this.modelEntityList=new ArrayList<Entity>();
 		
-		List<GenerationRun> generationRunList = this.project.getGenerationRunList();
+		List<GenerationRun> generationRunList = generationRunRepository.findByGenerationRunIdAndStatusAndStartDateAndEndDateAndProject(null, 1, null, null, project);
 		if (generationRunList.size()==0)
 			Generator.lastGenerationDate=null;
 		else
@@ -423,14 +424,17 @@ public class Generator {
 		init();
 		project.setGenerationRunList(generationRunList);
 		projectRepository.save(project);
+		EntityManager entityManager = new EntityManagerImpl(null);
 		if (generateRest)
 		{
 			for (EnumEntity enumEntity: enumEntityList)
+			if (enumEntity.getModDate().after(Generator.lastGenerationDate) || project.getModDate().after(Generator.lastGenerationDate))
 			{
 				enumClassGenerator.init(enumEntity);
 				enumClassGenerator.getModelClass();
 			}
 			for (Entity modelEntity: modelEntityList)
+			if (entityManager.needToGenerate(modelEntity))
 			{
 				if (!isAngGenSecurity(modelEntity))
 				{
@@ -440,6 +444,7 @@ public class Generator {
 			}
 
 			for (Entity modelEntity: modelEntityList)
+			if (entityManager.needToGenerate(modelEntity))
 			{
 				if (!isAngGenSecurity(modelEntity))
 				{
@@ -469,6 +474,7 @@ public class Generator {
 			CssGenerator.generateMain(angularDirectory);
 			CssGenerator.generateLoginSCSS(angularDirectory);
 			for (Entity modelEntity: modelEntityList)
+			if (entityManager.needToGenerate(modelEntity))
 			{
 				if (modelEntity.getDisableViewGeneration()) continue;
 				htmlGenerator.init(modelEntity);
@@ -489,14 +495,18 @@ public class Generator {
 				
 				
 			}
-			if (bootstrapMenu)
-				htmlGenerator.GenerateMenu(entityGroupList);
-			else
+			
+			if (project.getModDate().after(Generator.lastGenerationDate))
 			{
-				if (easyTreeMenu)
-					htmlGenerator.GenerateEasyTreeMenu(entityGroupList);
-				else //DEFAULTS
+				if (bootstrapMenu)
 					htmlGenerator.GenerateMenu(entityGroupList);
+				else
+				{
+					if (easyTreeMenu)
+						htmlGenerator.GenerateEasyTreeMenu(entityGroupList);
+					else //DEFAULTS
+						htmlGenerator.GenerateMenu(entityGroupList);
+				}
 			}
 		}
 		

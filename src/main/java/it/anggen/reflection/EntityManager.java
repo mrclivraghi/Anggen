@@ -32,4 +32,6 @@ public interface EntityManager {
 	public List<Relationship> getDescendantRelationship();
 	public List<Entity> getParentEntities(Entity ancestorEntity, Entity childEntity);
 	public List<Field> getPasswordField();
+	public Boolean needToGenerate();
+	public Boolean needToGenerate(Entity entity);
 }

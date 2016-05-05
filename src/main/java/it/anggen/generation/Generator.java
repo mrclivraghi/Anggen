@@ -400,7 +400,7 @@ public class Generator {
 	private void closeBranch()
 	{
 		try {
-			git.add().addFilepattern("./").call();
+			git.add().addFilepattern(".").call();
 			
 			RevCommit lastCommit = git.commit().setMessage(generationBranchName).call();
 

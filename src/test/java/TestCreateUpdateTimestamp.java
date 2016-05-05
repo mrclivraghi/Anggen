@@ -47,5 +47,13 @@ public class TestCreateUpdateTimestamp {
 		test.setName("test");
 		entityService.insert(test);
 	}
+	
+	@Test
+	public void testAfter()
+	{
+		Date now = new Date();
+		if (now.after(null))
+			System.out.println("after");
+	}
 }
 

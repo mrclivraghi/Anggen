@@ -22,19 +22,19 @@ public class EnumField
 {
 
     public final static java.lang.Long staticEntityId = 16L;
+    @javax.persistence.Column(name = "priority")
+    private Integer priority;
     @javax.persistence.Column(name = "add_date")
     @CreationTimestamp
     private java.util.Date addDate;
-    @javax.persistence.Column(name = "mod_date")
-    @UpdateTimestamp
-    private java.util.Date modDate;
-    @javax.persistence.Column(name = "priority")
-    private Integer priority;
     @javax.persistence.Column(name = "enum_field_id")
     @Id
     @GeneratedValue
     @it.anggen.utils.annotation.DescriptionField
     private java.lang.Long enumFieldId;
+    @javax.persistence.Column(name = "mod_date")
+    @UpdateTimestamp
+    private java.util.Date modDate;
     @javax.persistence.Column(name = "name")
     @it.anggen.utils.annotation.DescriptionField
     private String name;
@@ -52,22 +52,6 @@ public class EnumField
     @javax.persistence.JoinColumn(name = "enum_field_id_enum_field")
     private List<Annotation> annotationList;
 
-    public java.util.Date getAddDate() {
-        return this.addDate;
-    }
-
-    public void setAddDate(java.util.Date addDate) {
-        this.addDate=addDate;
-    }
-
-    public java.util.Date getModDate() {
-        return this.modDate;
-    }
-
-    public void setModDate(java.util.Date modDate) {
-        this.modDate=modDate;
-    }
-
     public Integer getPriority() {
         return this.priority;
     }
@@ -76,12 +60,28 @@ public class EnumField
         this.priority=priority;
     }
 
+    public java.util.Date getAddDate() {
+        return this.addDate;
+    }
+
+    public void setAddDate(java.util.Date addDate) {
+        this.addDate=addDate;
+    }
+
     public java.lang.Long getEnumFieldId() {
         return this.enumFieldId;
     }
 
     public void setEnumFieldId(java.lang.Long enumFieldId) {
         this.enumFieldId=enumFieldId;
+    }
+
+    public java.util.Date getModDate() {
+        return this.modDate;
+    }
+
+    public void setModDate(java.util.Date modDate) {
+        this.modDate=modDate;
     }
 
     public String getName() {

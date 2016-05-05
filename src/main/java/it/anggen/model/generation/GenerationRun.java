@@ -18,10 +18,10 @@ import it.anggen.utils.annotation.MaxDescendantLevel;
 public class GenerationRun {
 
     public final static Long staticEntityId = 17L;
-    @javax.persistence.Column(name = "status")
-    private java.lang.Integer status;
     @javax.persistence.Column(name = "end_date")
     private java.util.Date endDate;
+    @javax.persistence.Column(name = "status")
+    private java.lang.Integer status;
     @javax.persistence.Column(name = "generation_run_id")
     @Id
     @GeneratedValue
@@ -33,20 +33,20 @@ public class GenerationRun {
     @JoinColumn(name = "project_id_project")
     private it.anggen.model.entity.Project project;
 
-    public java.lang.Integer getStatus() {
-        return this.status;
-    }
-
-    public void setStatus(java.lang.Integer status) {
-        this.status=status;
-    }
-
     public java.util.Date getEndDate() {
         return this.endDate;
     }
 
     public void setEndDate(java.util.Date endDate) {
         this.endDate=endDate;
+    }
+
+    public java.lang.Integer getStatus() {
+        return this.status;
+    }
+
+    public void setStatus(java.lang.Integer status) {
+        this.status=status;
     }
 
     public java.lang.Integer getGenerationRunId() {

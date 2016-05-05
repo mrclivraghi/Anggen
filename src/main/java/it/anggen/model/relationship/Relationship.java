@@ -23,22 +23,22 @@ public class Relationship
 {
 
     public final static java.lang.Long staticEntityId = 7L;
-    @javax.persistence.Column(name = "add_date")
-    @CreationTimestamp
-    private java.util.Date addDate;
     @javax.persistence.Column(name = "name")
     @it.anggen.utils.annotation.DescriptionField
     private String name;
-    @javax.persistence.Column(name = "mod_date")
-    @UpdateTimestamp
-    private java.util.Date modDate;
-    @javax.persistence.Column(name = "priority")
-    private Integer priority;
     @javax.persistence.Column(name = "relationship_id")
     @it.anggen.utils.annotation.DescriptionField
     @Id
     @GeneratedValue
     private java.lang.Long relationshipId;
+    @javax.persistence.Column(name = "add_date")
+    @CreationTimestamp
+    private java.util.Date addDate;
+    @javax.persistence.Column(name = "priority")
+    private Integer priority;
+    @javax.persistence.Column(name = "mod_date")
+    @UpdateTimestamp
+    private java.util.Date modDate;
     @OneToMany(fetch = javax.persistence.FetchType.LAZY)
     @org.hibernate.annotations.Type(type = "it.anggen.model.field.Annotation")
     @javax.persistence.JoinColumn(name = "relationship_id_relationship")
@@ -57,14 +57,6 @@ public class Relationship
     @javax.persistence.Column(name = "relationship_type")
     private RelationshipType relationshipType;
 
-    public java.util.Date getAddDate() {
-        return this.addDate;
-    }
-
-    public void setAddDate(java.util.Date addDate) {
-        this.addDate=addDate;
-    }
-
     public String getName() {
         return this.name;
     }
@@ -73,12 +65,20 @@ public class Relationship
         this.name=name;
     }
 
-    public java.util.Date getModDate() {
-        return this.modDate;
+    public java.lang.Long getRelationshipId() {
+        return this.relationshipId;
     }
 
-    public void setModDate(java.util.Date modDate) {
-        this.modDate=modDate;
+    public void setRelationshipId(java.lang.Long relationshipId) {
+        this.relationshipId=relationshipId;
+    }
+
+    public java.util.Date getAddDate() {
+        return this.addDate;
+    }
+
+    public void setAddDate(java.util.Date addDate) {
+        this.addDate=addDate;
     }
 
     public Integer getPriority() {
@@ -89,12 +89,12 @@ public class Relationship
         this.priority=priority;
     }
 
-    public java.lang.Long getRelationshipId() {
-        return this.relationshipId;
+    public java.util.Date getModDate() {
+        return this.modDate;
     }
 
-    public void setRelationshipId(java.lang.Long relationshipId) {
-        this.relationshipId=relationshipId;
+    public void setModDate(java.util.Date modDate) {
+        this.modDate=modDate;
     }
 
     public List<Annotation> getAnnotationList() {

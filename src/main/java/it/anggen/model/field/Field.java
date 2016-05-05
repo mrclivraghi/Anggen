@@ -24,6 +24,14 @@ public class Field
 {
 
     public final static java.lang.Long staticEntityId = 4L;
+    @javax.persistence.Column(name = "mod_date")
+    @UpdateTimestamp
+    private java.util.Date modDate;
+    @javax.persistence.Column(name = "add_date")
+    @CreationTimestamp
+    private java.util.Date addDate;
+    @javax.persistence.Column(name = "priority")
+    private Integer priority;
     @javax.persistence.Column(name = "field_id")
     @Id
     @GeneratedValue
@@ -32,14 +40,6 @@ public class Field
     @javax.persistence.Column(name = "name")
     @it.anggen.utils.annotation.DescriptionField
     private String name;
-    @javax.persistence.Column(name = "add_date")
-    @CreationTimestamp
-    private java.util.Date addDate;
-    @javax.persistence.Column(name = "priority")
-    private Integer priority;
-    @javax.persistence.Column(name = "mod_date")
-    @UpdateTimestamp
-    private java.util.Date modDate;
     @OneToMany(fetch = javax.persistence.FetchType.LAZY)
     @Type(type = "it.anggen.model.security.RestrictionField")
     @javax.persistence.JoinColumn(name = "field_id_field")
@@ -57,20 +57,12 @@ public class Field
     @javax.persistence.Column(name = "field_type")
     private FieldType fieldType;
 
-    public java.lang.Long getFieldId() {
-        return this.fieldId;
+    public java.util.Date getModDate() {
+        return this.modDate;
     }
 
-    public void setFieldId(java.lang.Long fieldId) {
-        this.fieldId=fieldId;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(String name) {
-        this.name=name;
+    public void setModDate(java.util.Date modDate) {
+        this.modDate=modDate;
     }
 
     public java.util.Date getAddDate() {
@@ -89,12 +81,20 @@ public class Field
         this.priority=priority;
     }
 
-    public java.util.Date getModDate() {
-        return this.modDate;
+    public java.lang.Long getFieldId() {
+        return this.fieldId;
     }
 
-    public void setModDate(java.util.Date modDate) {
-        this.modDate=modDate;
+    public void setFieldId(java.lang.Long fieldId) {
+        this.fieldId=fieldId;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name=name;
     }
 
     public List<RestrictionField> getRestrictionFieldList() {

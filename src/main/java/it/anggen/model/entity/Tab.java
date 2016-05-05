@@ -22,9 +22,9 @@ import org.hibernate.annotations.UpdateTimestamp;
 public class Tab {
 
     public final static java.lang.Long staticEntityId = 8L;
-    @javax.persistence.Column(name = "mod_date")
-    @UpdateTimestamp
-    private java.util.Date modDate;
+    @javax.persistence.Column(name = "name")
+    @it.anggen.utils.annotation.DescriptionField
+    private String name;
     @javax.persistence.Column(name = "tab_id")
     @Id
     @GeneratedValue
@@ -33,9 +33,9 @@ public class Tab {
     @javax.persistence.Column(name = "add_date")
     @CreationTimestamp
     private java.util.Date addDate;
-    @javax.persistence.Column(name = "name")
-    @it.anggen.utils.annotation.DescriptionField
-    private String name;
+    @javax.persistence.Column(name = "mod_date")
+    @UpdateTimestamp
+    private java.util.Date modDate;
     @ManyToOne(fetch = javax.persistence.FetchType.LAZY)
     @javax.persistence.JoinColumn(name = "entity_id_entity")
     private it.anggen.model.entity.Entity entity;
@@ -52,12 +52,12 @@ public class Tab {
     @javax.persistence.JoinColumn(name = "tab_id_tab")
     private List<Relationship> relationshipList;
 
-    public java.util.Date getModDate() {
-        return this.modDate;
+    public String getName() {
+        return this.name;
     }
 
-    public void setModDate(java.util.Date modDate) {
-        this.modDate=modDate;
+    public void setName(String name) {
+        this.name=name;
     }
 
     public java.lang.Long getTabId() {
@@ -76,12 +76,12 @@ public class Tab {
         this.addDate=addDate;
     }
 
-    public String getName() {
-        return this.name;
+    public java.util.Date getModDate() {
+        return this.modDate;
     }
 
-    public void setName(String name) {
-        this.name=name;
+    public void setModDate(java.util.Date modDate) {
+        this.modDate=modDate;
     }
 
     public it.anggen.model.entity.Entity getEntity() {

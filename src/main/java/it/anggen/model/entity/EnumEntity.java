@@ -22,20 +22,20 @@ import org.hibernate.annotations.UpdateTimestamp;
 public class EnumEntity {
 
     public final static java.lang.Long staticEntityId = 13L;
+    @javax.persistence.Column(name = "name")
+    @it.anggen.utils.annotation.DescriptionField
+    private String name;
     @javax.persistence.Column(name = "enum_entity_id")
     @Id
     @GeneratedValue
     @it.anggen.utils.annotation.DescriptionField
     private java.lang.Long enumEntityId;
-    @javax.persistence.Column(name = "mod_date")
-    @UpdateTimestamp
-    private java.util.Date modDate;
-    @javax.persistence.Column(name = "name")
-    @it.anggen.utils.annotation.DescriptionField
-    private String name;
     @javax.persistence.Column(name = "add_date")
     @CreationTimestamp
     private java.util.Date addDate;
+    @javax.persistence.Column(name = "mod_date")
+    @UpdateTimestamp
+    private java.util.Date modDate;
     @ManyToOne(fetch = javax.persistence.FetchType.LAZY)
     @javax.persistence.JoinColumn(name = "project_id_project")
     private it.anggen.model.entity.Project project;
@@ -48,22 +48,6 @@ public class EnumEntity {
     @javax.persistence.JoinColumn(name = "enum_entity_id_enum_entity")
     private List<EnumField> enumFieldList;
 
-    public java.lang.Long getEnumEntityId() {
-        return this.enumEntityId;
-    }
-
-    public void setEnumEntityId(java.lang.Long enumEntityId) {
-        this.enumEntityId=enumEntityId;
-    }
-
-    public java.util.Date getModDate() {
-        return this.modDate;
-    }
-
-    public void setModDate(java.util.Date modDate) {
-        this.modDate=modDate;
-    }
-
     public String getName() {
         return this.name;
     }
@@ -72,12 +56,28 @@ public class EnumEntity {
         this.name=name;
     }
 
+    public java.lang.Long getEnumEntityId() {
+        return this.enumEntityId;
+    }
+
+    public void setEnumEntityId(java.lang.Long enumEntityId) {
+        this.enumEntityId=enumEntityId;
+    }
+
     public java.util.Date getAddDate() {
         return this.addDate;
     }
 
     public void setAddDate(java.util.Date addDate) {
         this.addDate=addDate;
+    }
+
+    public java.util.Date getModDate() {
+        return this.modDate;
+    }
+
+    public void setModDate(java.util.Date modDate) {
+        this.modDate=modDate;
     }
 
     public it.anggen.model.entity.Project getProject() {

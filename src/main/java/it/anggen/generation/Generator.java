@@ -214,10 +214,6 @@ public class Generator {
 	private String currentBranchName;
 	private Repository repo;
 	
-	
-	private GenerationRun generationRun;
-	private List<GenerationRun> generationRunList;
-	
 	public Generator()
 	{
 		
@@ -256,17 +252,7 @@ public class Generator {
 		this.enumEntityList=project.getEnumEntityList();
 		this.modelEntityList=new ArrayList<Entity>();
 		
-		generationRun = new GenerationRun();
-		generationRun.setStartDate(new Date());
-		generationRun.setStatus(0);
-		generationRunRepository.save(generationRun);
-		generationRunList = new ArrayList<GenerationRun>();
-		generationRunList.add(generationRun);
-		project.setGenerationRunList(generationRunList);
-		projectRepository.save(project);
-		
-		
-		generationRunList = generationRunRepository.findByGenerationRunIdAndStatusAndStartDateAndEndDateAndProject(null, 1, null, null, project);
+		List<GenerationRun> generationRunList = generationRunRepository.findByGenerationRunIdAndStatusAndStartDateAndEndDateAndProject(null, 1, null, null, project);
 		if (generationRunList.size()==0)
 			Generator.lastGenerationDate=new Date(0, 1, 1);
 		else
@@ -400,7 +386,7 @@ public class Generator {
 	private void closeBranch()
 	{
 		try {
-			git.add().addFilepattern(".").call();
+			git.add().addFilepattern("./").call();
 			
 			RevCommit lastCommit = git.commit().setMessage(generationBranchName).call();
 
@@ -410,14 +396,17 @@ public class Generator {
 
 
 			// Delete a branch
-			/*RefUpdate deleteBranch1 = repo.updateRef(generationBranchName);
+			RefUpdate deleteBranch1 = repo.updateRef(generationBranchName);
 			deleteBranch1.setForceUpdate(true);
-			deleteBranch1.delete();*/
+			deleteBranch1.delete();
 			
 		} catch (GitAPIException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} 
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	
 	}
@@ -425,7 +414,15 @@ public class Generator {
 	@Transactional
 	public void generate() throws Exception
 	{
+		GenerationRun generationRun = new GenerationRun();
+		generationRun.setStartDate(new Date());
+		generationRun.setStatus(0);
+		generationRunRepository.save(generationRun);
+		List<GenerationRun> generationRunList = new ArrayList<GenerationRun>();
+		generationRunList.add(generationRun);
 		init();
+		project.setGenerationRunList(generationRunList);
+		projectRepository.save(project);
 		initBranch();
 		EntityManager entityManager = new EntityManagerImpl(null);
 		if (generateRest)

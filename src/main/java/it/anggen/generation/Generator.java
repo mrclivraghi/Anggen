@@ -420,10 +420,10 @@ public class Generator {
 		generationRunRepository.save(generationRun);
 		List<GenerationRun> generationRunList = new ArrayList<GenerationRun>();
 		generationRunList.add(generationRun);
-		initBranch();
-		init();
 		project.setGenerationRunList(generationRunList);
 		projectRepository.save(project);
+		init();
+		initBranch();
 		EntityManager entityManager = new EntityManagerImpl(null);
 		if (generateRest)
 		{

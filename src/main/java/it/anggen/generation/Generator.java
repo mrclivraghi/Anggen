@@ -308,7 +308,10 @@ public class Generator {
 			{
 				if (relationship.getModDate().after(Generator.lastGenerationDate))
 					needToUpdate=true;
+				if (relationship.getEntityTarget()==null)
+					throw new Exception("Relationship "+relationship.getRelationshipId()+"-"+relationship.getName()+" has target null");
 			}
+			
 			
 		}
 		for (EnumEntity enumEntity : enumEntityList)

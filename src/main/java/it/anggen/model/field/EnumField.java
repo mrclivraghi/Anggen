@@ -22,22 +22,22 @@ public class EnumField
 {
 
     public final static java.lang.Long staticEntityId = 16L;
-    @javax.persistence.Column(name = "priority")
-    private Integer priority;
-    @javax.persistence.Column(name = "add_date")
-    @CreationTimestamp
-    private java.util.Date addDate;
+    @javax.persistence.Column(name = "mod_date")
+    @UpdateTimestamp
+    private java.util.Date modDate;
     @javax.persistence.Column(name = "enum_field_id")
     @Id
     @GeneratedValue
     @it.anggen.utils.annotation.DescriptionField
     private java.lang.Long enumFieldId;
-    @javax.persistence.Column(name = "mod_date")
-    @UpdateTimestamp
-    private java.util.Date modDate;
+    @javax.persistence.Column(name = "add_date")
+    @CreationTimestamp
+    private java.util.Date addDate;
     @javax.persistence.Column(name = "name")
     @it.anggen.utils.annotation.DescriptionField
     private String name;
+    @javax.persistence.Column(name = "priority")
+    private Integer priority;
     @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.LAZY)
     @javax.persistence.JoinColumn(name = "entity_id_entity")
     private it.anggen.model.entity.Entity entity;
@@ -52,20 +52,12 @@ public class EnumField
     @javax.persistence.JoinColumn(name = "enum_field_id_enum_field")
     private List<Annotation> annotationList;
 
-    public Integer getPriority() {
-        return this.priority;
+    public java.util.Date getModDate() {
+        return this.modDate;
     }
 
-    public void setPriority(Integer priority) {
-        this.priority=priority;
-    }
-
-    public java.util.Date getAddDate() {
-        return this.addDate;
-    }
-
-    public void setAddDate(java.util.Date addDate) {
-        this.addDate=addDate;
+    public void setModDate(java.util.Date modDate) {
+        this.modDate=modDate;
     }
 
     public java.lang.Long getEnumFieldId() {
@@ -76,12 +68,12 @@ public class EnumField
         this.enumFieldId=enumFieldId;
     }
 
-    public java.util.Date getModDate() {
-        return this.modDate;
+    public java.util.Date getAddDate() {
+        return this.addDate;
     }
 
-    public void setModDate(java.util.Date modDate) {
-        this.modDate=modDate;
+    public void setAddDate(java.util.Date addDate) {
+        this.addDate=addDate;
     }
 
     public String getName() {
@@ -90,6 +82,14 @@ public class EnumField
 
     public void setName(String name) {
         this.name=name;
+    }
+
+    public Integer getPriority() {
+        return this.priority;
+    }
+
+    public void setPriority(Integer priority) {
+        this.priority=priority;
     }
 
     public it.anggen.model.entity.Entity getEntity() {

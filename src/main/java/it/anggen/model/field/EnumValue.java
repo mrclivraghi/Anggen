@@ -17,19 +17,27 @@ import it.anggen.utils.annotation.MaxDescendantLevel;
 public class EnumValue {
 
     public final static java.lang.Long staticEntityId = 19L;
-    @javax.persistence.Column(name = "name")
-    @it.anggen.utils.annotation.DescriptionField
-    private String name;
-    @javax.persistence.Column(name = "value")
-    private Integer value;
     @javax.persistence.Column(name = "enum_value_id")
     @Id
     @GeneratedValue
     @it.anggen.utils.annotation.DescriptionField
     private java.lang.Long enumValueId;
+    @javax.persistence.Column(name = "name")
+    @it.anggen.utils.annotation.DescriptionField
+    private String name;
+    @javax.persistence.Column(name = "value")
+    private Integer value;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "enum_entity_id_enum_entity")
     private it.anggen.model.entity.EnumEntity enumEntity;
+
+    public java.lang.Long getEnumValueId() {
+        return this.enumValueId;
+    }
+
+    public void setEnumValueId(java.lang.Long enumValueId) {
+        this.enumValueId=enumValueId;
+    }
 
     public String getName() {
         return this.name;
@@ -45,14 +53,6 @@ public class EnumValue {
 
     public void setValue(Integer value) {
         this.value=value;
-    }
-
-    public java.lang.Long getEnumValueId() {
-        return this.enumValueId;
-    }
-
-    public void setEnumValueId(java.lang.Long enumValueId) {
-        this.enumValueId=enumValueId;
     }
 
     public it.anggen.model.entity.EnumEntity getEnumEntity() {

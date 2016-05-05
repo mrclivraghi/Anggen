@@ -29,15 +29,15 @@ public class Project {
     @Id
     @GeneratedValue
     private Integer projectId;
-    @javax.persistence.Column(name = "name")
-    @it.anggen.utils.annotation.DescriptionField
-    private String name;
-    @javax.persistence.Column(name = "add_date")
-    @CreationTimestamp
-    private java.util.Date addDate;
     @javax.persistence.Column(name = "mod_date")
     @UpdateTimestamp
     private java.util.Date modDate;
+    @javax.persistence.Column(name = "add_date")
+    @CreationTimestamp
+    private java.util.Date addDate;
+    @javax.persistence.Column(name = "name")
+    @it.anggen.utils.annotation.DescriptionField
+    private String name;
     @OneToMany(fetch = FetchType.LAZY)
     @Type(type = "it.anggen.model.entity.EntityGroup")
     @JoinColumn(name = "project_id_project")
@@ -59,12 +59,12 @@ public class Project {
         this.projectId=projectId;
     }
 
-    public String getName() {
-        return this.name;
+    public java.util.Date getModDate() {
+        return this.modDate;
     }
 
-    public void setName(String name) {
-        this.name=name;
+    public void setModDate(java.util.Date modDate) {
+        this.modDate=modDate;
     }
 
     public java.util.Date getAddDate() {
@@ -75,12 +75,12 @@ public class Project {
         this.addDate=addDate;
     }
 
-    public java.util.Date getModDate() {
-        return this.modDate;
+    public String getName() {
+        return this.name;
     }
 
-    public void setModDate(java.util.Date modDate) {
-        this.modDate=modDate;
+    public void setName(String name) {
+        this.name=name;
     }
 
     public List<EntityGroup> getEntityGroupList() {

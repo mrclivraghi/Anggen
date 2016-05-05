@@ -20,17 +20,17 @@ import org.hibernate.annotations.UpdateTimestamp;
 public class EntityGroup {
 
     public final static java.lang.Long staticEntityId = 14L;
+    @javax.persistence.Column(name = "mod_date")
+    @UpdateTimestamp
+    private java.util.Date modDate;
+    @javax.persistence.Column(name = "add_date")
+    @CreationTimestamp
+    private java.util.Date addDate;
     @javax.persistence.Column(name = "entity_group_id")
     @Id
     @GeneratedValue
     @it.anggen.utils.annotation.DescriptionField
     private java.lang.Long entityGroupId;
-    @javax.persistence.Column(name = "add_date")
-    @CreationTimestamp
-    private java.util.Date addDate;
-    @javax.persistence.Column(name = "mod_date")
-    @UpdateTimestamp
-    private java.util.Date modDate;
     @javax.persistence.Column(name = "name")
     @it.anggen.utils.annotation.DescriptionField
     private String name;
@@ -48,12 +48,12 @@ public class EntityGroup {
     @javax.persistence.Column(name = "security_type")
     private it.anggen.model.SecurityType securityType;
 
-    public java.lang.Long getEntityGroupId() {
-        return this.entityGroupId;
+    public java.util.Date getModDate() {
+        return this.modDate;
     }
 
-    public void setEntityGroupId(java.lang.Long entityGroupId) {
-        this.entityGroupId=entityGroupId;
+    public void setModDate(java.util.Date modDate) {
+        this.modDate=modDate;
     }
 
     public java.util.Date getAddDate() {
@@ -64,12 +64,12 @@ public class EntityGroup {
         this.addDate=addDate;
     }
 
-    public java.util.Date getModDate() {
-        return this.modDate;
+    public java.lang.Long getEntityGroupId() {
+        return this.entityGroupId;
     }
 
-    public void setModDate(java.util.Date modDate) {
-        this.modDate=modDate;
+    public void setEntityGroupId(java.lang.Long entityGroupId) {
+        this.entityGroupId=entityGroupId;
     }
 
     public String getName() {

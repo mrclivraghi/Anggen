@@ -15,19 +15,19 @@ import it.anggen.utils.annotation.MaxDescendantLevel;
 public class RestrictionEntityGroup {
 
     public final static java.lang.Long staticEntityId = 12L;
-    @javax.persistence.Column(name = "can_update")
-    private java.lang.Boolean canUpdate;
-    @javax.persistence.Column(name = "can_delete")
-    private java.lang.Boolean canDelete;
+    @javax.persistence.Column(name = "can_search")
+    private java.lang.Boolean canSearch;
     @javax.persistence.Column(name = "restriction_entity_group_id")
     @Id
     @GeneratedValue
     @DescriptionField
     private java.lang.Long restrictionEntityGroupId;
-    @javax.persistence.Column(name = "can_search")
-    private java.lang.Boolean canSearch;
     @javax.persistence.Column(name = "can_create")
     private java.lang.Boolean canCreate;
+    @javax.persistence.Column(name = "can_delete")
+    private java.lang.Boolean canDelete;
+    @javax.persistence.Column(name = "can_update")
+    private java.lang.Boolean canUpdate;
     @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.LAZY)
     @javax.persistence.JoinColumn(name = "role_id_role")
     private it.anggen.model.security.Role role;
@@ -35,20 +35,12 @@ public class RestrictionEntityGroup {
     @javax.persistence.JoinColumn(name = "entity_group_id_entity_group")
     private it.anggen.model.entity.EntityGroup entityGroup;
 
-    public java.lang.Boolean getCanUpdate() {
-        return this.canUpdate;
+    public java.lang.Boolean getCanSearch() {
+        return this.canSearch;
     }
 
-    public void setCanUpdate(java.lang.Boolean canUpdate) {
-        this.canUpdate=canUpdate;
-    }
-
-    public java.lang.Boolean getCanDelete() {
-        return this.canDelete;
-    }
-
-    public void setCanDelete(java.lang.Boolean canDelete) {
-        this.canDelete=canDelete;
+    public void setCanSearch(java.lang.Boolean canSearch) {
+        this.canSearch=canSearch;
     }
 
     public java.lang.Long getRestrictionEntityGroupId() {
@@ -59,20 +51,28 @@ public class RestrictionEntityGroup {
         this.restrictionEntityGroupId=restrictionEntityGroupId;
     }
 
-    public java.lang.Boolean getCanSearch() {
-        return this.canSearch;
-    }
-
-    public void setCanSearch(java.lang.Boolean canSearch) {
-        this.canSearch=canSearch;
-    }
-
     public java.lang.Boolean getCanCreate() {
         return this.canCreate;
     }
 
     public void setCanCreate(java.lang.Boolean canCreate) {
         this.canCreate=canCreate;
+    }
+
+    public java.lang.Boolean getCanDelete() {
+        return this.canDelete;
+    }
+
+    public void setCanDelete(java.lang.Boolean canDelete) {
+        this.canDelete=canDelete;
+    }
+
+    public java.lang.Boolean getCanUpdate() {
+        return this.canUpdate;
+    }
+
+    public void setCanUpdate(java.lang.Boolean canUpdate) {
+        this.canUpdate=canUpdate;
     }
 
     public it.anggen.model.security.Role getRole() {

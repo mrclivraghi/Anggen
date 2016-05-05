@@ -25,6 +25,9 @@ public class Tab {
     @javax.persistence.Column(name = "name")
     @it.anggen.utils.annotation.DescriptionField
     private String name;
+    @javax.persistence.Column(name = "mod_date")
+    @UpdateTimestamp
+    private java.util.Date modDate;
     @javax.persistence.Column(name = "tab_id")
     @Id
     @GeneratedValue
@@ -33,9 +36,6 @@ public class Tab {
     @javax.persistence.Column(name = "add_date")
     @CreationTimestamp
     private java.util.Date addDate;
-    @javax.persistence.Column(name = "mod_date")
-    @UpdateTimestamp
-    private java.util.Date modDate;
     @ManyToOne(fetch = javax.persistence.FetchType.LAZY)
     @javax.persistence.JoinColumn(name = "entity_id_entity")
     private it.anggen.model.entity.Entity entity;
@@ -60,6 +60,14 @@ public class Tab {
         this.name=name;
     }
 
+    public java.util.Date getModDate() {
+        return this.modDate;
+    }
+
+    public void setModDate(java.util.Date modDate) {
+        this.modDate=modDate;
+    }
+
     public java.lang.Long getTabId() {
         return this.tabId;
     }
@@ -74,14 +82,6 @@ public class Tab {
 
     public void setAddDate(java.util.Date addDate) {
         this.addDate=addDate;
-    }
-
-    public java.util.Date getModDate() {
-        return this.modDate;
-    }
-
-    public void setModDate(java.util.Date modDate) {
-        this.modDate=modDate;
     }
 
     public it.anggen.model.entity.Entity getEntity() {

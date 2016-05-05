@@ -410,17 +410,14 @@ public class Generator {
 
 
 			// Delete a branch
-			RefUpdate deleteBranch1 = repo.updateRef(generationBranchName);
+			/*RefUpdate deleteBranch1 = repo.updateRef(generationBranchName);
 			deleteBranch1.setForceUpdate(true);
-			deleteBranch1.delete();
+			deleteBranch1.delete();*/
 			
 		} catch (GitAPIException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} 
 
 	
 	}

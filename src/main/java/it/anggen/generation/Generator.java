@@ -214,6 +214,10 @@ public class Generator {
 	private String currentBranchName;
 	private Repository repo;
 	
+	
+	private GenerationRun generationRun;
+	private List<GenerationRun> generationRunList;
+	
 	public Generator()
 	{
 		
@@ -252,7 +256,17 @@ public class Generator {
 		this.enumEntityList=project.getEnumEntityList();
 		this.modelEntityList=new ArrayList<Entity>();
 		
-		List<GenerationRun> generationRunList = generationRunRepository.findByGenerationRunIdAndStatusAndStartDateAndEndDateAndProject(null, 1, null, null, project);
+		generationRun = new GenerationRun();
+		generationRun.setStartDate(new Date());
+		generationRun.setStatus(0);
+		generationRunRepository.save(generationRun);
+		generationRunList = new ArrayList<GenerationRun>();
+		generationRunList.add(generationRun);
+		project.setGenerationRunList(generationRunList);
+		projectRepository.save(project);
+		
+		
+		generationRunList = generationRunRepository.findByGenerationRunIdAndStatusAndStartDateAndEndDateAndProject(null, 1, null, null, project);
 		if (generationRunList.size()==0)
 			Generator.lastGenerationDate=new Date(0, 1, 1);
 		else
@@ -414,14 +428,6 @@ public class Generator {
 	@Transactional
 	public void generate() throws Exception
 	{
-		GenerationRun generationRun = new GenerationRun();
-		generationRun.setStartDate(new Date());
-		generationRun.setStatus(0);
-		generationRunRepository.save(generationRun);
-		List<GenerationRun> generationRunList = new ArrayList<GenerationRun>();
-		generationRunList.add(generationRun);
-		project.setGenerationRunList(generationRunList);
-		projectRepository.save(project);
 		init();
 		initBranch();
 		EntityManager entityManager = new EntityManagerImpl(null);

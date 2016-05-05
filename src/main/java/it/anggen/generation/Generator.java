@@ -270,15 +270,26 @@ public class Generator {
 	//@Transactional
 	private void checkModel() throws Exception
 	{
+		Boolean needToUpdate=false;
+		if (project.getModDate().after(lastGenerationDate))
+			needToUpdate=true;
 		
 		for (Entity entity: modelEntityList)
 		{
+			if (entity.getModDate().after(Generator.lastGenerationDate))
+				needToUpdate=true;
+			if (entity.getEntityGroup()!=null && entity.getEntityGroup().getModDate().after(Generator.lastGenerationDate))
+				needToUpdate=true;
+			
 			EntityManager entityManager = new EntityManagerImpl(entity);
 			if (entityManager.getKeyClass()==null)
 					throw new Exception(entity.getName()+": there is no primary key");
 				
 			for (it.anggen.model.field.Field field: entity.getFieldList())
 			{
+				if (field.getModDate().after(Generator.lastGenerationDate))
+					needToUpdate=true;
+				
 				EntityAttributeManager entityAttributeManager = new EntityAttributeManager(field);
 				
 				if (entityAttributeManager.getPrimaryKey() && !field.getName().equals(Utility.getFirstLower(entity.getName())+"Id") )
@@ -288,6 +299,26 @@ public class Generator {
 					throw new Exception(entity.getName()+": Between annotation is invalid for type "+entityAttributeManager.getFieldTypeName());
 			
 			}	
+			for (EnumField enumField: entity.getEnumFieldList())
+			{
+				if (enumField.getModDate().after(Generator.lastGenerationDate))
+					needToUpdate=true;
+			}
+			for (Relationship relationship: entity.getRelationshipList())
+			{
+				if (relationship.getModDate().after(Generator.lastGenerationDate))
+					needToUpdate=true;
+			}
+			
+		}
+		for (EnumEntity enumEntity : enumEntityList)
+		{
+			if (enumEntity.getModDate().after(Generator.lastGenerationDate))
+				needToUpdate=true;
+		}
+		if (!needToUpdate)
+		{
+			throw new Exception("No need to update, last generation was "+Generator.lastGenerationDate);
 		}
 		
 	}

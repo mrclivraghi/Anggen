@@ -29,6 +29,7 @@ import it.anggen.model.relationship.Relationship;
 import java.io.File;
 import java.net.PasswordAuthentication;
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -188,8 +189,13 @@ public class EntityGenerator {
 		//remove duplicate: TODO fix
 		Set<Field> fieldSet = new HashSet<Field>();
 		fieldSet.addAll(entity.getFieldList());
-		for (Field field : fieldSet)
+		List<EntityAttribute> fieldList= new ArrayList<EntityAttribute>();
+		fieldList.addAll(fieldSet);
+		Utility.orderByPriority(fieldList);
+		
+		for (EntityAttribute entityAttribute : fieldList)
 		{
+			Field field=EntityAttributeManager.getInstance(entityAttribute).asField();
 			JClass fieldClass = EntityAttributeManager.getInstance(field).getFieldClass();
 			String fieldName= field.getName();
 			JVar classField = myClass.field(JMod.PRIVATE, fieldClass, field.getName());

@@ -1,7 +1,9 @@
 package it.anggen.utils;
 
 import it.anggen.model.entity.Entity;
+import it.anggen.model.field.Field;
 import it.anggen.model.generation.GenerationRun;
+import it.anggen.reflection.EntityAttributeManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -118,8 +120,34 @@ public class Utility {
 		
 	}
 
+	
+	public static class EntityAttributeComparator implements Comparator<EntityAttribute>{
+
+		@Override
+		public int compare(EntityAttribute o1, EntityAttribute o2) {
+			if (o1.getPriority()<o2.getPriority())
+				return -1;
+			if (o1.getPriority()>o2.getPriority())
+				return 1;
+			if (EntityAttributeManager.getInstance(o1).isField())
+				if (EntityAttributeManager.getInstance(o1).asField().getFieldId()<EntityAttributeManager.getInstance(o2).asField().getFieldId())
+					return -1;
+			if (EntityAttributeManager.getInstance(o1).isRelationship())
+				if (EntityAttributeManager.getInstance(o1).asRelationship().getRelationshipId()<EntityAttributeManager.getInstance(o2).asRelationship().getRelationshipId())
+					return -1;
+			if (EntityAttributeManager.getInstance(o1).isEnumField())
+				if (EntityAttributeManager.getInstance(o1).asEnumField().getEnumFieldId()<EntityAttributeManager.getInstance(o2).asEnumField().getEnumFieldId())
+					return -1;
+			
+			return 1;
+		}
+		
+	}
+	
+	
 	public static void orderByPriority(List<EntityAttribute> entityAttributeList) {
-		Collections.sort(entityAttributeList, Comparator.comparing(EntityAttribute::getPriority));
+		Comparator<EntityAttribute> comparator = new EntityAttributeComparator();
+		Collections.sort(entityAttributeList,comparator);
 		}
 	public static void orderByStartDate(List<GenerationRun> generationRunList) {
 		Collections.sort(generationRunList, Comparator.comparing(GenerationRun::getStartDate));

@@ -171,9 +171,9 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         }
         if (entityGroup.getProject()!=null)
         {
+        entityGroup.getProject().setGenerationRunList(null);
         entityGroup.getProject().setEntityGroupList(null);
         entityGroup.getProject().setEnumEntityList(null);
-        entityGroup.getProject().setGenerationRunList(null);
         }
     }
 

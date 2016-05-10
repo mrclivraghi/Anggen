@@ -19,7 +19,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 @MaxDescendantLevel(100)
 public class EntityGroup {
 
-    public final static java.lang.Long staticEntityId = 14L;
+    public final static java.lang.Long staticEntityId = 10L;
     @javax.persistence.Column(name = "entity_group_id")
     @Id
     @GeneratedValue

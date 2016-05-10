@@ -151,9 +151,9 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
     private void getRightMapping(it.anggen.model.generation.GenerationRun generationRun) {
         if (generationRun.getProject()!=null)
         {
+        generationRun.getProject().setGenerationRunList(null);
         generationRun.getProject().setEntityGroupList(null);
         generationRun.getProject().setEnumEntityList(null);
-        generationRun.getProject().setGenerationRunList(null);
         }
     }
 

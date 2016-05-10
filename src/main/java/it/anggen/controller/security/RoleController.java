@@ -56,8 +56,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         List<it.anggen.model.security.Role> roleList;
         if (role.getRoleId()!=null)
-         log.info("Searching role like {}", role.getRole()+' '+ role.getRoleId());
-        logEntryService.addLogEntry( "Searching entity like "+ role.getRole()+' '+ role.getRoleId(),
+         log.info("Searching role like {}", role.getRoleId()+' '+ role.getRole());
+        logEntryService.addLogEntry( "Searching entity like "+ role.getRoleId()+' '+ role.getRole(),
         it.anggen.model.LogType.INFO, it.anggen.model.OperationType.SEARCH_ENTITY, it.anggen.model.security.Role.staticEntityId, securityService.getLoggedUser(),log);
         roleList=roleService.find(role);
         getSecurityMapping(roleList);
@@ -113,7 +113,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
         if (role.getRoleId()!=null)
-        log.info("Inserting role like "+ role.getRole()+' '+ role.getRoleId());
+        log.info("Inserting role like "+ role.getRoleId()+' '+ role.getRole());
         it.anggen.model.security.Role insertedRole=roleService.insert(role);
         getRightMapping(insertedRole);
         logEntryService.addLogEntry( "Inserted role with id "+ insertedRole.getRoleId(),

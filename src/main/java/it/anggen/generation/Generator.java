@@ -137,7 +137,7 @@ public class Generator {
 	private String database;
 	
 	@Value("${application.generation_type}")
-	private GenerationType generationType;
+	private Integer generationType;
 	
 	
 	private Project project;
@@ -253,7 +253,7 @@ public class Generator {
 		Generator.restUrlProperty=restUrl;
 		Generator.uploadDirectoryProperty=uploadDirectory;
 		Generator.databaseProperty=database;
-		Generator.generationTypeProperty=generationType;
+		Generator.generationTypeProperty=generationType==GenerationType.SHOW_INCLUDE.getValue() ? GenerationType.SHOW_INCLUDE:GenerationType.HIDE_IGNORE;
 		
 		List<Project> projectList=projectRepository.findByName(applicationName);
 		if (projectList.size()==0)

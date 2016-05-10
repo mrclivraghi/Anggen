@@ -21,7 +21,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 @MaxDescendantLevel(1)
 public class EnumEntity {
 
-    public final static java.lang.Long staticEntityId = 13L;
+    public final static java.lang.Long staticEntityId = 9L;
     @javax.persistence.Column(name = "enum_entity_id")
     @Id
     @GeneratedValue

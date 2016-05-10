@@ -16,7 +16,7 @@ import it.anggen.utils.annotation.MaxDescendantLevel;
 @MaxDescendantLevel(100)
 public class EnumValue {
 
-    public final static java.lang.Long staticEntityId = 19L;
+    public final static java.lang.Long staticEntityId = 5L;
     @javax.persistence.Column(name = "enum_value_id")
     @Id
     @GeneratedValue

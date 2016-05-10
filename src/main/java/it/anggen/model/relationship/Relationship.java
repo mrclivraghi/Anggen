@@ -22,7 +22,7 @@ public class Relationship
     extends EntityAttribute
 {
 
-    public final static java.lang.Long staticEntityId = 7L;
+    public final static java.lang.Long staticEntityId = 19L;
     @javax.persistence.Column(name = "relationship_id")
     @it.anggen.utils.annotation.DescriptionField
     @Id

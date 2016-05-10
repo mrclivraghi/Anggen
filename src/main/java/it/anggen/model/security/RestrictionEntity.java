@@ -12,7 +12,7 @@ import it.anggen.utils.annotation.MaxDescendantLevel;
 @MaxDescendantLevel(100)
 public class RestrictionEntity {
 
-    public final static java.lang.Long staticEntityId = 10L;
+    public final static java.lang.Long staticEntityId = 6L;
     @javax.persistence.Column(name = "restriction_entity_id")
     @Id
     @GeneratedValue

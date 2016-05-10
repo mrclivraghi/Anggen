@@ -7,7 +7,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
 import it.anggen.model.GenerationType;
 import it.anggen.model.entity.Tab;
 import it.anggen.model.field.EnumField;
@@ -25,7 +24,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 @MaxDescendantLevel(100)
 public class Entity {
 
-    public final static java.lang.Long staticEntityId = 9L;
+    public final static java.lang.Long staticEntityId = 3L;
     @javax.persistence.Column(name = "entity_id")
     @it.anggen.utils.annotation.DescriptionField
     @Id
@@ -52,11 +51,6 @@ public class Entity {
     @javax.persistence.Column(name = "mod_date")
     @UpdateTimestamp
     private java.util.Date modDate;
-    
-    
-    
-    
-    
     @OneToMany(fetch = javax.persistence.FetchType.LAZY)
     @Type(type = "it.anggen.model.security.RestrictionEntity")
     @javax.persistence.JoinColumn(name = "entity_id_entity")
@@ -82,7 +76,6 @@ public class Entity {
     private List<Relationship> relationshipList;
     @javax.persistence.Column(name = "security_type")
     private it.anggen.model.SecurityType securityType;
-    
     @javax.persistence.Column(name = "generation_type")
     private GenerationType generationType;
 
@@ -222,12 +215,12 @@ public class Entity {
         this.securityType=securityType;
     }
 
-	public GenerationType getGenerationType() {
-		return generationType;
-	}
+    public GenerationType getGenerationType() {
+        return this.generationType;
+    }
 
-	public void setGenerationType(GenerationType generationType) {
-		this.generationType = generationType;
-	}
+    public void setGenerationType(GenerationType generationType) {
+        this.generationType=generationType;
+    }
 
 }

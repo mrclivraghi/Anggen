@@ -21,7 +21,7 @@ import org.hibernate.annotations.Type;
 @MaxDescendantLevel(100)
 public class User {
 
-    public final static java.lang.Long staticEntityId = 3L;
+    public final static java.lang.Long staticEntityId = 12L;
     @javax.persistence.Column(name = "user_id")
     @it.anggen.utils.annotation.DescriptionField
     @Id

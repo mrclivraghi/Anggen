@@ -56,8 +56,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         List<it.anggen.model.relationship.Relationship> relationshipList;
         if (relationship.getRelationshipId()!=null)
-         log.info("Searching relationship like {}", relationship.getName()+' '+ relationship.getRelationshipId());
-        logEntryService.addLogEntry( "Searching entity like "+ relationship.getName()+' '+ relationship.getRelationshipId(),
+         log.info("Searching relationship like {}", relationship.getRelationshipId()+' '+ relationship.getName());
+        logEntryService.addLogEntry( "Searching entity like "+ relationship.getRelationshipId()+' '+ relationship.getName(),
         it.anggen.model.LogType.INFO, it.anggen.model.OperationType.SEARCH_ENTITY, it.anggen.model.relationship.Relationship.staticEntityId, securityService.getLoggedUser(),log);
         relationshipList=relationshipService.find(relationship);
         getSecurityMapping(relationshipList);
@@ -113,7 +113,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
         if (relationship.getRelationshipId()!=null)
-        log.info("Inserting relationship like "+ relationship.getName()+' '+ relationship.getRelationshipId());
+        log.info("Inserting relationship like "+ relationship.getRelationshipId()+' '+ relationship.getName());
         it.anggen.model.relationship.Relationship insertedRelationship=relationshipService.insert(relationship);
         getRightMapping(insertedRelationship);
         logEntryService.addLogEntry( "Inserted relationship with id "+ insertedRelationship.getRelationshipId(),

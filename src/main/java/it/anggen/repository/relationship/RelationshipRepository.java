@@ -41,8 +41,6 @@ public interface RelationshipRepository
     
     public List<it.anggen.model.relationship.Relationship> findByEntityTargetAndEntityAndRelationshipType(Entity entityTarget,Entity entity, RelationshipType relationshipType);
 
-    public List<it.anggen.model.relationship.Relationship> findByTest();
-    
     
     @Query("select r from Relationship r where  (:relationshipId is null or cast(:relationshipId as string)=cast(r.relationshipId as string)) and (:priority is null or cast(:priority as string)=cast(r.priority as string)) and (:name is null or :name='' or cast(:name as string)=r.name) and (:addDate is null or cast(:addDate as string)=cast(date(r.addDate) as string)) and (:modDate is null or cast(:modDate as string)=cast(date(r.modDate) as string)) and (:relationshipType is null or cast(:relationshipType as string)=cast(r.relationshipType as string)) and (:annotation in elements(r.annotationList)  or :annotation is null) and (:entityTarget=r.entityTarget or :entityTarget is null) and (:entity=r.entity or :entity is null) and (:tab=r.tab or :tab is null) ")
     public List<it.anggen.model.relationship.Relationship> findByRelationshipIdAndPriorityAndNameAndAddDateAndModDateAndRelationshipTypeAndAnnotationAndEntityTargetAndEntityAndTab(

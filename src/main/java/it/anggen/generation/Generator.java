@@ -349,7 +349,7 @@ public class Generator {
 
 			// Create a branch
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
-			generationBranchName="refs/heads/feature/generation/gen_"+sdf.format(new Date());
+			generationBranchName="refs/heads/generation/gen_"+sdf.format(new Date());
 			Ref testBranch= repo.getRef(generationBranchName);
 			if (testBranch==null)
 			{

@@ -1,7 +1,7 @@
 (function() { 
 
 angular
-.module("serverTestApp")
+.module("serverTest")
 .service("entityGroupService", EntityGroupService);
 /** @ngInject */
 function EntityGroupService($http,MainService,UtilityService)
@@ -71,6 +71,13 @@ var promise= $http.post("http://127.0.0.1:8080/ServerTestApp/entityGroup/"+this.
 });
 return promise; 
 }
+ this.initProjectList= function()
+{
+var promise= $http
+.post("http://127.0.0.1:8080/ServerTestApp/project/search",
+{});
+return promise;
+};
  this.initRestrictionEntityGroupList= function()
 {
 var promise= $http
@@ -82,13 +89,6 @@ return promise;
 {
 var promise= $http
 .post("http://127.0.0.1:8080/ServerTestApp/entity/search",
-{});
-return promise;
-};
- this.initProjectList= function()
-{
-var promise= $http
-.post("http://127.0.0.1:8080/ServerTestApp/project/search",
 {});
 return promise;
 };

@@ -1,7 +1,7 @@
 (function() {
 'use strict';
  angular
- .module('serverTestApp')
+ .module('serverTest')
  .directive('enumEntitySearch', enumEntitySearch);
 /** @ngInject */
   function enumEntitySearch(enumEntityService) {

@@ -1,4 +1,5 @@
 select * from meta.project;
+select * from meta.generation_run;
 
 truncate table meta.project cascade;
 truncate table sso.role cascade;
@@ -8,10 +9,12 @@ truncate table log.log_entry cascade;
 select * from meta.project
 select * from meta.entity_group where project_id_project=710
 select * from meta.entity where entity_group_id_entity_group is null
-select * from meta.field where entity_id_entity=121
-select * from meta.tab where tab_id=731
+select * from meta.field where field_id in (7187,7188,7190)
+update meta.field set entity_id_entity=2 where field_id in (7187,7188,7190)
+select * from meta.tab where entity_id_entity=2
 select * from meta.enum_entity 
 select * from meta.enum_field 
+
 
 select * from log.log_entry order by log_date desc
 
@@ -44,6 +47,10 @@ select * from meta.entity where name like '%orderHead%'
 select * from meta.field where name='orderId' and entity_id_entity=48
 select * from meta.annotation where field_id_field=4390
 select * from meta.tab where entity_id_entity=128
+select * from meta.relationship where entity_id_entity=2
+
+update meta.relationship set entity_id_entity_target=18 where entity_id_entity=2
+
 insert into meta.field(field_id,field_type,name,priority,entity_id_entity,tab_id_tab)
 values (346,1,'productInfoPropertyId',1,128,4405)
 
@@ -54,8 +61,13 @@ update meta.field set name='code' where field_id=10105
 update meta.entity set name='order' where name='orderHead'
 
 
-
-select relationsh0_.relationship_id as relation1_10_, relationsh0_.entity_id_entity as entity_i5_10_, 
-relationsh0_.entity_id_entity_target as entity_i6_10_, relationsh0_.name as name2_10_, relationsh0_.priority as priority3_10_,
- relationsh0_.relationship_type as relation4_10_, 
-relationsh0_.tab_id_tab as tab_id_t7_10_ from meta.relationship relationsh0_ where relationsh0_.relationship_id=10152
+select * from meta.project
+select * from meta.generation_run 
+update meta.generation_run set status=0
+update meta.project set mod_date=current_timestamp,add_date=current_timestamp;
+update meta.entity_group set mod_date=current_timestamp,add_date=current_timestamp;
+update meta.entity set mod_date=current_timestamp,add_date=current_timestamp;
+update meta.field set mod_date=current_timestamp,add_date=current_timestamp;
+update meta.relationship set mod_date=current_timestamp,add_date=current_timestamp;
+update meta.enum_field set mod_date=current_timestamp,add_date=current_timestamp;
+update meta.enum_entity set mod_date=current_timestamp,add_date=current_timestamp;

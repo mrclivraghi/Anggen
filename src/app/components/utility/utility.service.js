@@ -1,7 +1,7 @@
 (function() { 
 'use strict'; 
 
-angular.module("serverTestApp").service("UtilityService", UtilityService);
+angular.module("serverTest").service("UtilityService", UtilityService);
 /** @ngInject */
 function UtilityService()
 {
@@ -72,6 +72,14 @@ this.emptyList=function(list)
 {
 	while (list.length>0)
 		list.pop();
+}
+this.removeObjectFromList=function(list,obj)
+{
+	for (var i=0; i<list.length; i++)
+	{
+	if (list[i]==obj) 
+	list.splice(i,i+1); 
+	}
 }
 }
 })();

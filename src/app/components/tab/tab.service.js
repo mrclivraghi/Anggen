@@ -1,7 +1,7 @@
 (function() { 
 
 angular
-.module("serverTestApp")
+.module("serverTest")
 .service("tabService", TabService);
 /** @ngInject */
 function TabService($http,MainService,UtilityService)

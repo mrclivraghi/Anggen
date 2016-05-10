@@ -1,7 +1,7 @@
 (function() { 
 'use strict'; 
 
-angular.module("serverTestApp").directive("login",login);
+angular.module("serverTest").directive("login",login);
 
 /** @ngInject */
 function login(){

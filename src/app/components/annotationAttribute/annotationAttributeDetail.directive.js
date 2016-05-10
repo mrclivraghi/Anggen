@@ -1,7 +1,7 @@
 (function() {
 'use strict';
  angular
- .module('serverTestApp')
+ .module('serverTest')
  .directive('annotationAttributeDetail', annotationAttributeDetail);
 /** @ngInject */
   function annotationAttributeDetail(annotationAttributeService) {

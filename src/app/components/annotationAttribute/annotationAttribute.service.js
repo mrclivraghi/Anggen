@@ -1,7 +1,7 @@
 (function() { 
 
 angular
-.module("serverTestApp")
+.module("serverTest")
 .service("annotationAttributeService", AnnotationAttributeService);
 /** @ngInject */
 function AnnotationAttributeService($http,MainService,UtilityService)
@@ -87,8 +87,8 @@ paginationPageSize: 10,
 enableGridMenu: true,
 columnDefs: [    
 { name: 'annotationAttributeId'},
-{ name: 'value'},
 { name: 'property'},
+{ name: 'value'},
 { name: 'annotation.annotationId', displayName: 'annotation'} 
 ]
  };

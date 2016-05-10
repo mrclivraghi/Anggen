@@ -22,20 +22,28 @@ public interface EnumFieldRepository
 
     public List<it.anggen.model.field.EnumField> findByName(java.lang.String name);
 
+    public List<it.anggen.model.field.EnumField> findByAddDate(java.lang.String addDate);
+
+    public List<it.anggen.model.field.EnumField> findByModDate(java.lang.String modDate);
+
     public List<it.anggen.model.field.EnumField> findByEntity(it.anggen.model.entity.Entity entity);
 
     public List<it.anggen.model.field.EnumField> findByEnumEntity(it.anggen.model.entity.EnumEntity enumEntity);
 
     public List<it.anggen.model.field.EnumField> findByTab(it.anggen.model.entity.Tab tab);
 
-    @Query("select e from EnumField e where  (:enumFieldId is null or cast(:enumFieldId as string)=cast(e.enumFieldId as string)) and (:priority is null or cast(:priority as string)=cast(e.priority as string)) and (:name is null or :name='' or cast(:name as string)=e.name) and (:entity=e.entity or :entity is null) and (:enumEntity=e.enumEntity or :enumEntity is null) and (:tab=e.tab or :tab is null) and (:annotation in elements(e.annotationList)  or :annotation is null) ")
-    public List<it.anggen.model.field.EnumField> findByEnumFieldIdAndPriorityAndNameAndEntityAndEnumEntityAndTabAndAnnotation(
+    @Query("select e from EnumField e where  (:enumFieldId is null or cast(:enumFieldId as string)=cast(e.enumFieldId as string)) and (:priority is null or cast(:priority as string)=cast(e.priority as string)) and (:name is null or :name='' or cast(:name as string)=e.name) and (:addDate is null or cast(:addDate as string)=cast(date(e.addDate) as string)) and (:modDate is null or cast(:modDate as string)=cast(date(e.modDate) as string)) and (:entity=e.entity or :entity is null) and (:enumEntity=e.enumEntity or :enumEntity is null) and (:tab=e.tab or :tab is null) and (:annotation in elements(e.annotationList)  or :annotation is null) ")
+    public List<it.anggen.model.field.EnumField> findByEnumFieldIdAndPriorityAndNameAndAddDateAndModDateAndEntityAndEnumEntityAndTabAndAnnotation(
         @org.springframework.data.repository.query.Param("enumFieldId")
         java.lang.Long enumFieldId,
         @org.springframework.data.repository.query.Param("priority")
         java.lang.Integer priority,
         @org.springframework.data.repository.query.Param("name")
         java.lang.String name,
+        @org.springframework.data.repository.query.Param("addDate")
+        java.lang.String addDate,
+        @org.springframework.data.repository.query.Param("modDate")
+        java.lang.String modDate,
         @org.springframework.data.repository.query.Param("entity")
         it.anggen.model.entity.Entity entity,
         @org.springframework.data.repository.query.Param("enumEntity")

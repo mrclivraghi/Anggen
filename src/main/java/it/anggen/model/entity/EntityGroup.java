@@ -9,7 +9,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import it.anggen.model.security.RestrictionEntityGroup;
 import it.anggen.utils.annotation.MaxDescendantLevel;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @javax.persistence.Entity
 @Table(schema = "meta", name = "entity_group")
@@ -17,30 +19,31 @@ import org.hibernate.annotations.Type;
 @MaxDescendantLevel(100)
 public class EntityGroup {
 
-    public final static java.lang.Long staticEntityId = 4L;
+    public final static java.lang.Long staticEntityId = 14L;
     @javax.persistence.Column(name = "entity_group_id")
     @Id
     @GeneratedValue
     @it.anggen.utils.annotation.DescriptionField
-    @it.anggen.utils.annotation.Priority(1)
     private java.lang.Long entityGroupId;
     @javax.persistence.Column(name = "name")
     @it.anggen.utils.annotation.DescriptionField
-    @it.anggen.utils.annotation.Priority(2)
     private String name;
+    @javax.persistence.Column(name = "add_date")
+    @CreationTimestamp
+    private java.util.Date addDate;
+    @javax.persistence.Column(name = "mod_date")
+    @UpdateTimestamp
+    private java.util.Date modDate;
     @OneToMany(fetch = javax.persistence.FetchType.LAZY)
     @Type(type = "it.anggen.model.security.RestrictionEntityGroup")
     @javax.persistence.JoinColumn(name = "entity_group_id_entity_group")
-    @it.anggen.utils.annotation.Priority(4)
     private List<RestrictionEntityGroup> restrictionEntityGroupList;
     @OneToMany(fetch = javax.persistence.FetchType.LAZY)
     @Type(type = "it.anggen.model.entity.Entity")
     @javax.persistence.JoinColumn(name = "entity_group_id_entity_group")
-    @it.anggen.utils.annotation.Priority(4)
     private List<it.anggen.model.entity.Entity> entityList;
     @ManyToOne(fetch = javax.persistence.FetchType.LAZY)
     @javax.persistence.JoinColumn(name = "project_id_project")
-    @it.anggen.utils.annotation.Priority(4)
     private it.anggen.model.entity.Project project;
     @javax.persistence.Column(name = "security_type")
     private it.anggen.model.SecurityType securityType;
@@ -59,6 +62,22 @@ public class EntityGroup {
 
     public void setName(String name) {
         this.name=name;
+    }
+
+    public java.util.Date getAddDate() {
+        return this.addDate;
+    }
+
+    public void setAddDate(java.util.Date addDate) {
+        this.addDate=addDate;
+    }
+
+    public java.util.Date getModDate() {
+        return this.modDate;
+    }
+
+    public void setModDate(java.util.Date modDate) {
+        this.modDate=modDate;
     }
 
     public List<RestrictionEntityGroup> getRestrictionEntityGroupList() {

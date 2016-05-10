@@ -3,6 +3,7 @@ package it.anggen.controller.field;
 
 import java.util.List;
 import com.codahale.metrics.annotation.Timed;
+import io.swagger.annotations.ApiOperation;
 import it.anggen.searchbean.field.EnumValueSearchBean;
 import it.anggen.security.SecurityService;
 import it.anggen.service.field.EnumValueService;
@@ -11,13 +12,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 @RequestMapping("/enumValue")
 public class EnumValueController {
 
@@ -31,15 +32,7 @@ public class EnumValueController {
     @Value("${application.security}")
     private Boolean securityEnabled;
 
-    @Timed
-    @RequestMapping(method = RequestMethod.GET)
-    public String manage() {
-        if (securityEnabled && !securityService.hasPermission(it.anggen.model.field.EnumValue.staticEntityId, it.anggen.model.RestrictionType.SEARCH)) 
-return "forbidden"; 
-
-        return "enumValue";
-    }
-
+    @ApiOperation(value = "Return a page of enumValue", notes = "Return a single page of enumValue", response = it.anggen.model.field.EnumValue.class, responseContainer = "List")
     @Timed
     @RequestMapping(value = "/pages/{pageNumber}", method = RequestMethod.GET)
     @ResponseBody
@@ -51,6 +44,7 @@ return "forbidden";
         return ResponseEntity.ok().body(page);
     }
 
+    @ApiOperation(value = "Return a list of enumValue", notes = "Return a list of enumValue based on the search bean requested", response = it.anggen.model.field.EnumValue.class, responseContainer = "List")
     @Timed
     @ResponseBody
     @RequestMapping(value = "/search", method = RequestMethod.POST)
@@ -62,8 +56,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         List<it.anggen.model.field.EnumValue> enumValueList;
         if (enumValue.getEnumValueId()!=null)
-         log.info("Searching enumValue like {}", enumValue.getName()+' '+ enumValue.getEnumValueId());
-        logEntryService.addLogEntry( "Searching entity like "+ enumValue.getName()+' '+ enumValue.getEnumValueId(),
+         log.info("Searching enumValue like {}", enumValue.getEnumValueId()+' '+ enumValue.getName());
+        logEntryService.addLogEntry( "Searching entity like "+ enumValue.getEnumValueId()+' '+ enumValue.getName(),
         it.anggen.model.LogType.INFO, it.anggen.model.OperationType.SEARCH_ENTITY, it.anggen.model.field.EnumValue.staticEntityId, securityService.getLoggedUser(),log);
         enumValueList=enumValueService.find(enumValue);
         getSecurityMapping(enumValueList);
@@ -72,6 +66,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         return ResponseEntity.ok().body(enumValueList);
     }
 
+    @ApiOperation(value = "Return a the enumValue identified by the given id", notes = "Return a the enumValue identified by the given id", response = it.anggen.model.field.EnumValue.class, responseContainer = "List")
     @Timed
     @ResponseBody
     @RequestMapping(value = "/{enumValueId}", method = RequestMethod.GET)
@@ -90,6 +85,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         return ResponseEntity.ok().body(enumValueList);
     }
 
+    @ApiOperation(value = "Delete the enumValue identified by the given id", notes = "Delete the enumValue identified by the given id")
     @Timed
     @ResponseBody
     @RequestMapping(value = "/{enumValueId}", method = RequestMethod.DELETE)
@@ -106,6 +102,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         return ResponseEntity.ok().build();
     }
 
+    @ApiOperation(value = "Insert the enumValue given", notes = "Insert the enumValue given ", response = it.anggen.model.field.EnumValue.class)
     @Timed
     @ResponseBody
     @RequestMapping(method = RequestMethod.PUT)
@@ -116,7 +113,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
         if (enumValue.getEnumValueId()!=null)
-        log.info("Inserting enumValue like "+ enumValue.getName()+' '+ enumValue.getEnumValueId());
+        log.info("Inserting enumValue like "+ enumValue.getEnumValueId()+' '+ enumValue.getName());
         it.anggen.model.field.EnumValue insertedEnumValue=enumValueService.insert(enumValue);
         getRightMapping(insertedEnumValue);
         logEntryService.addLogEntry( "Inserted enumValue with id "+ insertedEnumValue.getEnumValueId(),
@@ -124,6 +121,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         return ResponseEntity.ok().body(insertedEnumValue);
     }
 
+    @ApiOperation(value = "Update the enumValue given", notes = "Update the enumValue given ", response = it.anggen.model.field.EnumValue.class)
     @Timed
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST)

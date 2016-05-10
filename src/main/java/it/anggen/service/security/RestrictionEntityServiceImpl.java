@@ -32,7 +32,7 @@ public class RestrictionEntityServiceImpl
 
     @Override
     public List<it.anggen.model.security.RestrictionEntity> find(RestrictionEntitySearchBean restrictionEntity) {
-        return restrictionEntityRepository.findByRestrictionEntityIdAndCanCreateAndCanUpdateAndCanSearchAndCanDeleteAndRoleAndEntity(restrictionEntity.getRestrictionEntityId(),restrictionEntity.getCanCreate(),restrictionEntity.getCanUpdate(),restrictionEntity.getCanSearch(),restrictionEntity.getCanDelete(),restrictionEntity.getRole(),restrictionEntity.getEntity());
+        return restrictionEntityRepository.findByRestrictionEntityIdAndCanDeleteAndCanSearchAndCanUpdateAndCanCreateAndRoleAndEntity(restrictionEntity.getRestrictionEntityId(),restrictionEntity.getCanDelete(),restrictionEntity.getCanSearch(),restrictionEntity.getCanUpdate(),restrictionEntity.getCanCreate(),restrictionEntity.getRole(),restrictionEntity.getEntity());
     }
 
     @Override

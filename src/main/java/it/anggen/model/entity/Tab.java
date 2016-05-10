@@ -11,7 +11,9 @@ import it.anggen.model.field.EnumField;
 import it.anggen.model.field.Field;
 import it.anggen.model.relationship.Relationship;
 import it.anggen.utils.annotation.MaxDescendantLevel;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @javax.persistence.Entity
 @Table(schema = "meta", name = "tab")
@@ -19,36 +21,44 @@ import org.hibernate.annotations.Type;
 @MaxDescendantLevel(100)
 public class Tab {
 
-    public final static java.lang.Long staticEntityId = 14L;
-    @javax.persistence.Column(name = "name")
-    @it.anggen.utils.annotation.DescriptionField
-    @it.anggen.utils.annotation.Priority(2)
-    private String name;
+    public final static java.lang.Long staticEntityId = 8L;
     @javax.persistence.Column(name = "tab_id")
     @Id
     @GeneratedValue
     @it.anggen.utils.annotation.DescriptionField
-    @it.anggen.utils.annotation.Priority(1)
     private java.lang.Long tabId;
+    @javax.persistence.Column(name = "name")
+    @it.anggen.utils.annotation.DescriptionField
+    private String name;
+    @javax.persistence.Column(name = "add_date")
+    @CreationTimestamp
+    private java.util.Date addDate;
+    @javax.persistence.Column(name = "mod_date")
+    @UpdateTimestamp
+    private java.util.Date modDate;
     @ManyToOne(fetch = javax.persistence.FetchType.LAZY)
     @javax.persistence.JoinColumn(name = "entity_id_entity")
-    @it.anggen.utils.annotation.Priority(4)
     private it.anggen.model.entity.Entity entity;
     @OneToMany(fetch = javax.persistence.FetchType.LAZY)
     @Type(type = "it.anggen.model.field.Field")
     @javax.persistence.JoinColumn(name = "tab_id_tab")
-    @it.anggen.utils.annotation.Priority(4)
     private List<Field> fieldList;
     @OneToMany(fetch = javax.persistence.FetchType.LAZY)
     @Type(type = "it.anggen.model.field.EnumField")
     @javax.persistence.JoinColumn(name = "tab_id_tab")
-    @it.anggen.utils.annotation.Priority(4)
     private List<EnumField> enumFieldList;
     @OneToMany(fetch = javax.persistence.FetchType.LAZY)
     @Type(type = "it.anggen.model.relationship.Relationship")
     @javax.persistence.JoinColumn(name = "tab_id_tab")
-    @it.anggen.utils.annotation.Priority(4)
     private List<Relationship> relationshipList;
+
+    public java.lang.Long getTabId() {
+        return this.tabId;
+    }
+
+    public void setTabId(java.lang.Long tabId) {
+        this.tabId=tabId;
+    }
 
     public String getName() {
         return this.name;
@@ -58,12 +68,20 @@ public class Tab {
         this.name=name;
     }
 
-    public java.lang.Long getTabId() {
-        return this.tabId;
+    public java.util.Date getAddDate() {
+        return this.addDate;
     }
 
-    public void setTabId(java.lang.Long tabId) {
-        this.tabId=tabId;
+    public void setAddDate(java.util.Date addDate) {
+        this.addDate=addDate;
+    }
+
+    public java.util.Date getModDate() {
+        return this.modDate;
+    }
+
+    public void setModDate(java.util.Date modDate) {
+        this.modDate=modDate;
     }
 
     public it.anggen.model.entity.Entity getEntity() {

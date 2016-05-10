@@ -1,12 +1,13 @@
 (function() { 
 
 angular
-.module("serverTestApp")
+.module("serverTest")
 .controller("LogEntryController",LogEntryController);
 /** @ngInject */
 function LogEntryController($scope,$http,$rootScope,$log,UtilityService ,logEntryService, SecurityService, MainService )
 {
 var vm=this;
+vm.activeTab=1;
 vm.searchBean=logEntryService.searchBean;
 vm.entityList=logEntryService.entityList;
 vm.selectedEntity=logEntryService.selectedEntity;
@@ -41,6 +42,7 @@ function search()
 {
 logEntryService.selectedEntity.show=false;
 delete $rootScope.openNode.logEntry;
+UtilityService.removeObjectFromList($rootScope.parentServices,logEntryService);
 logEntryService.search().then(function successCallback(response) {
 logEntryService.setEntityList(response.data);
 },function errorCallback(response) { 
@@ -53,7 +55,8 @@ return;
 function insert()
 {
 if (!$scope.logEntryDetailForm.$valid) return; 
-if (logEntryService.isParent()) 
+$rootScope.parentServices.pop();
+if ($rootScope.parentServices.length==0) 
 {
 logEntryService.insert().then(function successCallback(response) { 
 $log.debug(response);
@@ -70,6 +73,9 @@ else
 logEntryService.selectedEntity.show=false;
 logEntryService.insert().then(function successCallBack(response) { 
 $log.debug(response);
+$rootScope.parentServices.pop();
+var parentService=$rootScope.parentServices.pop();
+parentService.removelogEntry(logEntryService.selectedEntity);
 },function errorCallback(response) { 
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
@@ -81,7 +87,8 @@ return;
 function update()
 {
 if (!$scope.logEntryDetailForm.$valid) return; 
-if (logEntryService.isParent()) 
+$rootScope.parentServices.pop();
+if ($rootScope.parentServices.length==0) 
 {
 logEntryService.update().then(function successCallback(response) { 
 $log.debug(response);
@@ -112,17 +119,22 @@ function remove()
 {
 logEntryService.selectedEntity.show=false;
 delete $rootScope.openNode.logEntry;
+$rootScope.parentServices.pop();
+var parentService=$rootScope.parentServices.pop();
+parentService.removeLogEntry(logEntryService.selectedEntity);
+UtilityService.removeObjectFromList($rootScope.parentServices,logEntryService);
 logEntryService.setSelectedEntity(null);
 }
 function del()
 {
+$rootScope.parentServices.pop();
 logEntryService.del().then(function successCallback(response) { 
 $log.debug(response);
-if (logEntryService.isParent()) 
+logEntryService.setSelectedEntity(null);
+if ($rootScope.parentServices.length==0) 
 {
 vm.search();
 } else { 
-logEntryService.setSelectedEntity(null);
 }
 },function errorCallback(response) { 
 UtilityService.AlertError.init({selector: "#alertError"});
@@ -168,6 +180,7 @@ if (row.isSelected)
 logEntryService.searchOne(row.entity).then(function(response) { 
 $log.debug(response.data);
 $rootScope.openNode.logEntry=true;
+$rootScope.parentServices.push(logEntryService);
 logEntryService.setSelectedEntity(response.data[0]);
 });
 angular.element('#logEntryTabs li:eq(0) a').tab('show');
@@ -175,6 +188,7 @@ angular.element('#logEntryTabs li:eq(0) a').tab('show');
 else 
 logEntryService.setSelectedEntity(null);
 delete $rootScope.openNode.logEntry;
+UtilityService.removeObjectFromList($rootScope.parentServices,logEntryService);
 logEntryService.selectedEntity.show = row.isSelected;
 });
   };
@@ -184,6 +198,7 @@ function closeEntityDetail(){
 logEntryService.setSelectedEntity(null);
 logEntryService.selectedEntity.show=false;
 delete $rootScope.openNode.logEntry;
+UtilityService.removeObjectFromList($rootScope.parentServices,logEntryService);
 }
 vm.reset=reset;
 vm.addNew=addNew;

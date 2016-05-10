@@ -3,6 +3,7 @@ package it.anggen.controller.entity;
 
 import java.util.List;
 import com.codahale.metrics.annotation.Timed;
+import io.swagger.annotations.ApiOperation;
 import it.anggen.searchbean.entity.ProjectSearchBean;
 import it.anggen.security.SecurityService;
 import it.anggen.service.entity.ProjectService;
@@ -11,13 +12,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 @RequestMapping("/project")
 public class ProjectController {
 
@@ -31,15 +32,7 @@ public class ProjectController {
     @Value("${application.security}")
     private Boolean securityEnabled;
 
-    @Timed
-    @RequestMapping(method = RequestMethod.GET)
-    public String manage() {
-        if (securityEnabled && !securityService.hasPermission(it.anggen.model.entity.Project.staticEntityId, it.anggen.model.RestrictionType.SEARCH)) 
-return "forbidden"; 
-
-        return "project";
-    }
-
+    @ApiOperation(value = "Return a page of project", notes = "Return a single page of project", response = it.anggen.model.entity.Project.class, responseContainer = "List")
     @Timed
     @RequestMapping(value = "/pages/{pageNumber}", method = RequestMethod.GET)
     @ResponseBody
@@ -51,6 +44,7 @@ return "forbidden";
         return ResponseEntity.ok().body(page);
     }
 
+    @ApiOperation(value = "Return a list of project", notes = "Return a list of project based on the search bean requested", response = it.anggen.model.entity.Project.class, responseContainer = "List")
     @Timed
     @ResponseBody
     @RequestMapping(value = "/search", method = RequestMethod.POST)
@@ -62,8 +56,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         List<it.anggen.model.entity.Project> projectList;
         if (project.getProjectId()!=null)
-         log.info("Searching project like {}", project.getName()+' '+ project.getProjectId());
-        logEntryService.addLogEntry( "Searching entity like "+ project.getName()+' '+ project.getProjectId(),
+         log.info("Searching project like {}", project.getProjectId()+' '+ project.getName());
+        logEntryService.addLogEntry( "Searching entity like "+ project.getProjectId()+' '+ project.getName(),
         it.anggen.model.LogType.INFO, it.anggen.model.OperationType.SEARCH_ENTITY, it.anggen.model.entity.Project.staticEntityId, securityService.getLoggedUser(),log);
         projectList=projectService.find(project);
         getSecurityMapping(projectList);
@@ -72,6 +66,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         return ResponseEntity.ok().body(projectList);
     }
 
+    @ApiOperation(value = "Return a the project identified by the given id", notes = "Return a the project identified by the given id", response = it.anggen.model.entity.Project.class, responseContainer = "List")
     @Timed
     @ResponseBody
     @RequestMapping(value = "/{projectId}", method = RequestMethod.GET)
@@ -90,6 +85,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         return ResponseEntity.ok().body(projectList);
     }
 
+    @ApiOperation(value = "Delete the project identified by the given id", notes = "Delete the project identified by the given id")
     @Timed
     @ResponseBody
     @RequestMapping(value = "/{projectId}", method = RequestMethod.DELETE)
@@ -106,6 +102,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         return ResponseEntity.ok().build();
     }
 
+    @ApiOperation(value = "Insert the project given", notes = "Insert the project given ", response = it.anggen.model.entity.Project.class)
     @Timed
     @ResponseBody
     @RequestMapping(method = RequestMethod.PUT)
@@ -116,7 +113,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
         if (project.getProjectId()!=null)
-        log.info("Inserting project like "+ project.getName()+' '+ project.getProjectId());
+        log.info("Inserting project like "+ project.getProjectId()+' '+ project.getName());
         it.anggen.model.entity.Project insertedProject=projectService.insert(project);
         getRightMapping(insertedProject);
         logEntryService.addLogEntry( "Inserted project with id "+ insertedProject.getProjectId(),
@@ -124,6 +121,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         return ResponseEntity.ok().body(insertedProject);
     }
 
+    @ApiOperation(value = "Update the project given", notes = "Update the project given ", response = it.anggen.model.entity.Project.class)
     @Timed
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST)
@@ -169,6 +167,13 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         enumEntity.setEnumValueList(null);
         enumEntity.setEnumFieldList(null);
         }
+        if (project.getGenerationRunList()!=null)
+        for (it.anggen.model.generation.GenerationRun generationRun :project.getGenerationRunList())
+
+        {
+
+        generationRun.setProject(null);
+        }
     }
 
     private void rebuildSecurityMapping(it.anggen.model.entity.Project project) {
@@ -176,6 +181,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         project.setEntityGroupList(projectService.findById(project.getProjectId()).get(0).getEntityGroupList());
         if (securityEnabled && !securityService.hasPermission(it.anggen.model.entity.EnumEntity.staticEntityId, it.anggen.model.RestrictionType.SEARCH))
         project.setEnumEntityList(projectService.findById(project.getProjectId()).get(0).getEnumEntityList());
+        if (securityEnabled && !securityService.hasPermission(it.anggen.model.generation.GenerationRun.staticEntityId, it.anggen.model.RestrictionType.SEARCH))
+        project.setGenerationRunList(projectService.findById(project.getProjectId()).get(0).getGenerationRunList());
     }
 
     private List<it.anggen.model.entity.Project> getSecurityMapping(List<it.anggen.model.entity.Project> projectList) {
@@ -192,6 +199,9 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         if (securityEnabled && project.getEnumEntityList()!=null && !securityService.hasPermission(it.anggen.model.entity.EnumEntity.staticEntityId, it.anggen.model.RestrictionType.SEARCH) )
         project.setEnumEntityList(null);
+
+        if (securityEnabled && project.getGenerationRunList()!=null && !securityService.hasPermission(it.anggen.model.generation.GenerationRun.staticEntityId, it.anggen.model.RestrictionType.SEARCH) )
+        project.setGenerationRunList(null);
 
     }
 

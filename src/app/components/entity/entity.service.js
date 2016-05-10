@@ -1,7 +1,7 @@
 (function() { 
 
 angular
-.module("serverTestApp")
+.module("serverTest")
 .service("entityService", EntityService);
 /** @ngInject */
 function EntityService($http,MainService,UtilityService)
@@ -124,9 +124,9 @@ columnDefs: [
 { name: 'entityId'},
 { name: 'generateFrontEnd'},
 { name: 'name'},
-{ name: 'descendantMaxLevel'},
 { name: 'cache'},
 { name: 'disableViewGeneration'},
+{ name: 'descendantMaxLevel'},
 { name: 'enableRestrictionData'},
 { name: 'entityGroup.entityGroupId', displayName: 'entityGroup'} 
 ]

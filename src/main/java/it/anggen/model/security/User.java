@@ -21,24 +21,20 @@ import org.hibernate.annotations.Type;
 @MaxDescendantLevel(100)
 public class User {
 
-    public final static java.lang.Long staticEntityId = 12L;
+    public final static java.lang.Long staticEntityId = 3L;
     @javax.persistence.Column(name = "user_id")
-    @it.anggen.utils.annotation.Priority(1)
     @it.anggen.utils.annotation.DescriptionField
     @Id
     @GeneratedValue
     private java.lang.Long userId;
-    @javax.persistence.Column(name = "password")
-    @it.anggen.utils.annotation.Priority(2)
-    @Password
-    private java.lang.String password;
     @javax.persistence.Column(name = "username")
     @it.anggen.utils.annotation.DescriptionField
-    @it.anggen.utils.annotation.Priority(2)
     private java.lang.String username;
     @javax.persistence.Column(name = "enabled")
-    @it.anggen.utils.annotation.Priority(2)
     private Boolean enabled;
+    @javax.persistence.Column(name = "password")
+    @Password
+    private java.lang.String password;
     @ManyToMany(fetch = FetchType.LAZY)
     @Type(type = "it.anggen.model.security.Role")
     @JoinTable(name = "user_role", schema = "sso", joinColumns = {
@@ -46,7 +42,6 @@ public class User {
     }, inverseJoinColumns = {
         @JoinColumn(name = "role_id")
     })
-    @it.anggen.utils.annotation.Priority(4)
     private List<Role> roleList;
 
     public java.lang.Long getUserId() {
@@ -55,14 +50,6 @@ public class User {
 
     public void setUserId(java.lang.Long userId) {
         this.userId=userId;
-    }
-
-    public java.lang.String getPassword() {
-        return this.password;
-    }
-
-    public void setPassword(java.lang.String password) {
-        this.password=password;
     }
 
     public java.lang.String getUsername() {
@@ -79,6 +66,14 @@ public class User {
 
     public void setEnabled(Boolean enabled) {
         this.enabled=enabled;
+    }
+
+    public java.lang.String getPassword() {
+        return this.password;
+    }
+
+    public void setPassword(java.lang.String password) {
+        this.password=password;
     }
 
     public List<Role> getRoleList() {

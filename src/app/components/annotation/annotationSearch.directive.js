@@ -1,7 +1,7 @@
 (function() {
 'use strict';
  angular
- .module('serverTestApp')
+ .module('serverTest')
  .directive('annotationSearch', annotationSearch);
 /** @ngInject */
   function annotationSearch(annotationService) {

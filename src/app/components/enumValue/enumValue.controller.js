@@ -1,12 +1,13 @@
 (function() { 
 
 angular
-.module("serverTestApp")
+.module("serverTest")
 .controller("EnumValueController",EnumValueController);
 /** @ngInject */
 function EnumValueController($scope,$http,$rootScope,$log,UtilityService ,enumValueService, SecurityService, MainService ,enumEntityService)
 {
 var vm=this;
+vm.activeTab=1;
 vm.searchBean=enumValueService.searchBean;
 vm.entityList=enumValueService.entityList;
 vm.selectedEntity=enumValueService.selectedEntity;
@@ -22,6 +23,7 @@ if (enumValueService.isParent())
 {
 enumEntityService.selectedEntity.show=false;
 delete $rootScope.openNode.enumEntity;
+UtilityService.removeObjectFromList($rootScope.parentServices,enumEntityService);
 }
 }
 function addNew()
@@ -34,6 +36,7 @@ if (enumValueService.isParent())
 {
 enumEntityService.selectedEntity.show=false;
 delete $rootScope.openNode.enumEntity;
+UtilityService.removeObjectFromList($rootScope.parentServices,enumEntityService);
 }
 angular.element('#enumValueTabs li:eq(0) a').tab('show');
 }
@@ -42,6 +45,7 @@ function search()
 {
 enumValueService.selectedEntity.show=false;
 delete $rootScope.openNode.enumValue;
+UtilityService.removeObjectFromList($rootScope.parentServices,enumValueService);
 enumValueService.search().then(function successCallback(response) {
 enumValueService.setEntityList(response.data);
 },function errorCallback(response) { 
@@ -54,7 +58,8 @@ return;
 function insert()
 {
 if (!$scope.enumValueDetailForm.$valid) return; 
-if (enumValueService.isParent()) 
+$rootScope.parentServices.pop();
+if ($rootScope.parentServices.length==0) 
 {
 enumValueService.insert().then(function successCallback(response) { 
 $log.debug(response);
@@ -71,6 +76,9 @@ else
 enumValueService.selectedEntity.show=false;
 enumValueService.insert().then(function successCallBack(response) { 
 $log.debug(response);
+$rootScope.parentServices.pop();
+var parentService=$rootScope.parentServices.pop();
+parentService.removeenumValue(enumValueService.selectedEntity);
 },function errorCallback(response) { 
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
@@ -82,10 +90,12 @@ return;
 function update()
 {
 if (!$scope.enumValueDetailForm.$valid) return; 
-if (enumValueService.isParent()) 
+$rootScope.parentServices.pop();
+if ($rootScope.parentServices.length==0) 
 {
 enumEntityService.selectedEntity.show=false;
 delete $rootScope.openNode.enumEntity;
+UtilityService.removeObjectFromList($rootScope.parentServices,enumEntityService);
 enumValueService.update().then(function successCallback(response) { 
 $log.debug(response);
 vm.search();
@@ -115,17 +125,22 @@ function remove()
 {
 enumValueService.selectedEntity.show=false;
 delete $rootScope.openNode.enumValue;
+$rootScope.parentServices.pop();
+var parentService=$rootScope.parentServices.pop();
+parentService.removeEnumValue(enumValueService.selectedEntity);
+UtilityService.removeObjectFromList($rootScope.parentServices,enumValueService);
 enumValueService.setSelectedEntity(null);
 }
 function del()
 {
+$rootScope.parentServices.pop();
 enumValueService.del().then(function successCallback(response) { 
 $log.debug(response);
-if (enumValueService.isParent()) 
+enumValueService.setSelectedEntity(null);
+if ($rootScope.parentServices.length==0) 
 {
 vm.search();
 } else { 
-enumValueService.setSelectedEntity(null);
 }
 },function errorCallback(response) { 
 UtilityService.AlertError.init({selector: "#alertError"});
@@ -184,6 +199,7 @@ function successCallback(response) {
 enumEntityService.setSelectedEntity(response.data[0]);
 enumEntityService.selectedEntity.show=true;
 $rootScope.openNode.enumEntity=true;
+$rootScope.parentServices.push(enumEntityService);
   }, function errorCallback(response) {
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
@@ -225,6 +241,7 @@ if (row.isSelected)
 enumValueService.searchOne(row.entity).then(function(response) { 
 $log.debug(response.data);
 $rootScope.openNode.enumValue=true;
+$rootScope.parentServices.push(enumValueService);
 enumValueService.setSelectedEntity(response.data[0]);
 });
 angular.element('#enumValueTabs li:eq(0) a').tab('show');
@@ -232,6 +249,7 @@ angular.element('#enumValueTabs li:eq(0) a').tab('show');
 else 
 enumValueService.setSelectedEntity(null);
 delete $rootScope.openNode.enumValue;
+UtilityService.removeObjectFromList($rootScope.parentServices,enumValueService);
 enumValueService.selectedEntity.show = row.isSelected;
 });
   };
@@ -248,6 +266,7 @@ if (row.isSelected)
 enumEntityService.searchOne(row.entity).then(function(response) { 
 $log.debug(response.data);
 $rootScope.openNode.enumEntity=true;
+$rootScope.parentServices.push(enumEntityService);
 enumEntityService.setSelectedEntity(response.data[0]);
 });
 angular.element('#enumEntityTabs li:eq(0) a').tab('show');
@@ -255,6 +274,7 @@ angular.element('#enumEntityTabs li:eq(0) a').tab('show');
 else 
 enumEntityService.setSelectedEntity(null);
 delete $rootScope.openNode.enumEntity;
+UtilityService.removeObjectFromList($rootScope.parentServices,enumEntityService);
 enumEntityService.selectedEntity.show = row.isSelected;
 });
   };
@@ -280,6 +300,7 @@ function closeEntityDetail(){
 enumValueService.setSelectedEntity(null);
 enumValueService.selectedEntity.show=false;
 delete $rootScope.openNode.enumValue;
+UtilityService.removeObjectFromList($rootScope.parentServices,enumValueService);
 }
 vm.reset=reset;
 vm.addNew=addNew;

@@ -2,7 +2,7 @@
 'use strict'; 
 
 angular
-.module("serverTestApp").config(routerConfig);
+.module("serverTest").config(routerConfig);
 /** @ngInject */
 function routerConfig($stateProvider,$urlRouterProvider)
 {
@@ -25,20 +25,6 @@ controllerAs: 'vm'
  }
 }
 })
-
-
-.state('main.swagger',{
- url:'/swagger',
-views:{
-'pageContent': {
-templateUrl:'app/components/swagger/swagger.html',
- controller:'SwaggerController', 
-controllerAs: 'vm' 
- }
-}
-})
-
-
 .state('main.metrics',{
  url:'/metrics',
 views:{
@@ -49,35 +35,11 @@ controllerAs: 'vm'
  }
 }
 })
-.state('main.restrictionEntity',{
- url:'/restrictionEntity',
+.state('main.logEntry',{
+ url:'/logEntry',
 views:{
 'pageContent': {
-templateUrl:'app/controller/restrictionEntity/restrictionEntity-template.html',
- controller:'HomeController', 
-controllerAs: 'vm' 
- }
-},
-resolve: {
-}
-})
-.state('main.role',{
- url:'/role',
-views:{
-'pageContent': {
-templateUrl:'app/controller/role/role-template.html',
- controller:'HomeController', 
-controllerAs: 'vm' 
- }
-},
-resolve: {
-}
-})
-.state('main.user',{
- url:'/user',
-views:{
-'pageContent': {
-templateUrl:'app/controller/user/user-template.html',
+templateUrl:'app/controller/logEntry/logEntry-template.html',
  controller:'HomeController', 
 controllerAs: 'vm' 
  }
@@ -97,47 +59,47 @@ controllerAs: 'vm'
 resolve: {
 }
 })
+.state('main.user',{
+ url:'/user',
+views:{
+'pageContent': {
+templateUrl:'app/controller/user/user-template.html',
+ controller:'HomeController', 
+controllerAs: 'vm' 
+ }
+},
+resolve: {
+}
+})
+.state('main.role',{
+ url:'/role',
+views:{
+'pageContent': {
+templateUrl:'app/controller/role/role-template.html',
+ controller:'HomeController', 
+controllerAs: 'vm' 
+ }
+},
+resolve: {
+}
+})
+.state('main.restrictionEntity',{
+ url:'/restrictionEntity',
+views:{
+'pageContent': {
+templateUrl:'app/controller/restrictionEntity/restrictionEntity-template.html',
+ controller:'HomeController', 
+controllerAs: 'vm' 
+ }
+},
+resolve: {
+}
+})
 .state('main.restrictionField',{
  url:'/restrictionField',
 views:{
 'pageContent': {
 templateUrl:'app/controller/restrictionField/restrictionField-template.html',
- controller:'HomeController', 
-controllerAs: 'vm' 
- }
-},
-resolve: {
-}
-})
-.state('main.enumValue',{
- url:'/enumValue',
-views:{
-'pageContent': {
-templateUrl:'app/controller/enumValue/enumValue-template.html',
- controller:'HomeController', 
-controllerAs: 'vm' 
- }
-},
-resolve: {
-}
-})
-.state('main.field',{
- url:'/field',
-views:{
-'pageContent': {
-templateUrl:'app/controller/field/field-template.html',
- controller:'HomeController', 
-controllerAs: 'vm' 
- }
-},
-resolve: {
-}
-})
-.state('main.enumField',{
- url:'/enumField',
-views:{
-'pageContent': {
-templateUrl:'app/controller/enumField/enumField-template.html',
  controller:'HomeController', 
 controllerAs: 'vm' 
  }
@@ -169,11 +131,47 @@ controllerAs: 'vm'
 resolve: {
 }
 })
-.state('main.entityGroup',{
- url:'/entityGroup',
+.state('main.enumField',{
+ url:'/enumField',
 views:{
 'pageContent': {
-templateUrl:'app/controller/entityGroup/entityGroup-template.html',
+templateUrl:'app/controller/enumField/enumField-template.html',
+ controller:'HomeController', 
+controllerAs: 'vm' 
+ }
+},
+resolve: {
+}
+})
+.state('main.enumValue',{
+ url:'/enumValue',
+views:{
+'pageContent': {
+templateUrl:'app/controller/enumValue/enumValue-template.html',
+ controller:'HomeController', 
+controllerAs: 'vm' 
+ }
+},
+resolve: {
+}
+})
+.state('main.field',{
+ url:'/field',
+views:{
+'pageContent': {
+templateUrl:'app/controller/field/field-template.html',
+ controller:'HomeController', 
+controllerAs: 'vm' 
+ }
+},
+resolve: {
+}
+})
+.state('main.tab',{
+ url:'/tab',
+views:{
+'pageContent': {
+templateUrl:'app/controller/tab/tab-template.html',
  controller:'HomeController', 
 controllerAs: 'vm' 
  }
@@ -205,18 +203,6 @@ controllerAs: 'vm'
 resolve: {
 }
 })
-.state('main.tab',{
- url:'/tab',
-views:{
-'pageContent': {
-templateUrl:'app/controller/tab/tab-template.html',
- controller:'HomeController', 
-controllerAs: 'vm' 
- }
-},
-resolve: {
-}
-})
 .state('main.project',{
  url:'/project',
 views:{
@@ -229,11 +215,11 @@ controllerAs: 'vm'
 resolve: {
 }
 })
-.state('main.relationship',{
- url:'/relationship',
+.state('main.entityGroup',{
+ url:'/entityGroup',
 views:{
 'pageContent': {
-templateUrl:'app/controller/relationship/relationship-template.html',
+templateUrl:'app/controller/entityGroup/entityGroup-template.html',
  controller:'HomeController', 
 controllerAs: 'vm' 
  }
@@ -241,11 +227,23 @@ controllerAs: 'vm'
 resolve: {
 }
 })
-.state('main.logEntry',{
- url:'/logEntry',
+.state('main.generationRun',{
+ url:'/generationRun',
 views:{
 'pageContent': {
-templateUrl:'app/controller/logEntry/logEntry-template.html',
+templateUrl:'app/controller/generationRun/generationRun-template.html',
+ controller:'HomeController', 
+controllerAs: 'vm' 
+ }
+},
+resolve: {
+}
+})
+.state('main.relationship',{
+ url:'/relationship',
+views:{
+'pageContent': {
+templateUrl:'app/controller/relationship/relationship-template.html',
  controller:'HomeController', 
 controllerAs: 'vm' 
  }

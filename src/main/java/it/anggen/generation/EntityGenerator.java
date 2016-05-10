@@ -29,6 +29,7 @@ import it.anggen.model.relationship.Relationship;
 import java.io.File;
 import java.net.PasswordAuthentication;
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -54,7 +55,9 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -186,13 +189,22 @@ public class EntityGenerator {
 		//remove duplicate: TODO fix
 		Set<Field> fieldSet = new HashSet<Field>();
 		fieldSet.addAll(entity.getFieldList());
-		for (Field field : fieldSet)
+		List<EntityAttribute> fieldList= new ArrayList<EntityAttribute>();
+		fieldList.addAll(fieldSet);
+		Utility.orderByPriority(fieldList);
+		
+		for (EntityAttribute entityAttribute : fieldList)
 		{
+			Field field=EntityAttributeManager.getInstance(entityAttribute).asField();
 			JClass fieldClass = EntityAttributeManager.getInstance(field).getFieldClass();
 			String fieldName= field.getName();
 			JVar classField = myClass.field(JMod.PRIVATE, fieldClass, field.getName());
 			JAnnotationUse columnAnnotation = classField.annotate(Column.class);
 			columnAnnotation.param("name", namingStrategy.classToTableName(field.getName()));
+			 if (field.getName().equals("addDate"))
+				 classField.annotate(CreationTimestamp.class);
+			 if (field.getName().equals("modDate"))
+				 classField.annotate(UpdateTimestamp.class);
 			generateGetterAndSetter(myClass, field.getName(), fieldClass);
 			addValidationAnnotation(field,classField);
 		}
@@ -238,7 +250,7 @@ public class EntityGenerator {
 					JAnnotationUse manyToMany = listField.annotate(ManyToMany.class);
 					manyToMany.param("fetch", FetchType.LAZY);
 					
-					List<Relationship> relationshipList = relationshipRepository.findByRelationshipIdAndNameAndPriorityAndRelationshipTypeAndAnnotationAndEntityAndEntityAndTab(null, null, null, RelationshipType.MANY_TO_MANY.getValue(), null, entity,relationship.getEntityTarget(),  null);
+					List<Relationship> relationshipList = relationshipRepository.findByRelationshipIdAndPriorityAndNameAndAddDateAndModDateAndRelationshipTypeAndAnnotationAndEntityTargetAndEntityAndTab(null, null, null, null, null, RelationshipType.MANY_TO_MANY.getValue(), null, entity, relationship.getEntityTarget(), null);
 					String rightName=entity.getName();
 					if (relationshipList.size()>0)
 						rightName=relationshipList.get(0).getName();

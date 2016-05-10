@@ -1,7 +1,7 @@
 (function() {
 'use strict';
  angular
- .module('serverTestApp')
+ .module('serverTest')
  .directive('entityGroupDetail', entityGroupDetail);
 /** @ngInject */
   function entityGroupDetail(entityGroupService) {

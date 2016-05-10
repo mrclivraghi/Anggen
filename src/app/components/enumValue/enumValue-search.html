@@ -6,63 +6,58 @@
 
 			<div class="panel-body">
 				<div class="pull-left right-input" ng-show="true ">
-					<div class="input-group">
-						<span class="input-group-addon">enumValueId
-						</span>
+	<div class="input-group">
+		<span class="input-group-addon">enumValueId
+		</span>
 
-						<input class="form-control " aria-describedby="sizing-addon3" type="text" id="enumValue-enumValueId" ng-model="vm.searchBean.enumValueId" ng-readonly="false" name="enumValueId" placeholder="enumValueId"/>
-						
-					</div>
+		<input class="form-control " aria-describedby="sizing-addon3" type="text" id="enumValue-enumValueId" ng-model="vm.searchBean.enumValueId" ng-readonly="false" name="enumValueId" placeholder="enumValueId"/>
+		
+	</div>
+</div>
+<div class="pull-left right-input" ng-show="true ">
+	<div class="input-group">
+		<span class="input-group-addon">name
+		</span>
 
-				</div>
+		<input class="form-control " aria-describedby="sizing-addon3" type="text" id="enumValue-name" ng-model="vm.searchBean.name" ng-readonly="false" name="name" placeholder="name"/>
+		
+	</div>
+</div>
+<div class="pull-left right-input" ng-show="true ">
+	<div class="input-group">
+		<span class="input-group-addon">value
+		</span>
 
-				<div class="pull-left right-input" ng-show="true ">
-					<div class="input-group">
-						<span class="input-group-addon">name
-						</span>
+		<input class="form-control " aria-describedby="sizing-addon3" type="text" id="enumValue-value" ng-model="vm.searchBean.value" ng-readonly="false" name="value" placeholder="value"/>
+		
+	</div>
+</div>
+<div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.entity.restrictionItemMap.enumEntity.canSearch==true)">
+	<div class="input-group">
+		<span class="input-group-addon">enumEntity
+		</span>
 
-						<input class="form-control " aria-describedby="sizing-addon3" type="text" id="enumValue-name" ng-model="vm.searchBean.name" ng-readonly="false" name="name" placeholder="name"/>
-						
-					</div>
+		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.enumEntity.enumEntityId" id="enumEntity" ng-options="enumEntity.enumEntityId as  enumEntity.name+&#39; &#39;+ enumEntity.enumEntityId for enumEntity in vm.enumEntityPreparedData.entityList" enctype="UTF-8">
+		</select>
 
-				</div>
-
-				<div class="pull-left right-input" ng-show="true ">
-					<div class="input-group">
-						<span class="input-group-addon">value
-						</span>
-
-						<input class="form-control " aria-describedby="sizing-addon3" type="text" id="enumValue-value" ng-model="vm.searchBean.value" ng-readonly="false" name="value" placeholder="value"/>
-						
-					</div>
-
-				</div>
-
-				<div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.entity.restrictionItemMap.enumEntity.canSearch==true)">
-					<div class="input-group">
-						<span class="input-group-addon">enumEntity
-						</span>
-
-						<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.enumEntity.enumEntityId" id="enumEntity" ng-options="enumEntity.enumEntityId as  enumEntity.enumEntityId+&#39; &#39;+ enumEntity.name for enumEntity in vm.enumEntityPreparedData.entityList" enctype="UTF-8">
-						</select>
-
-					</div>
+	</div>
+</div>
 
 				</div>
 
-			</div>
-
-			<div class="panel-body">
 				<div class="panel-body">
-					<div class="pull-left right-input">
-						<button ng-click="vm.addNew()" class="btn btn-default " ng-show="($root.restrictionList.field.restrictionItemMap.enumValue.canCreate==true)">Add new
-						</button>
+					<div class="panel-body">
+						<div class="pull-left right-input">
+							<button ng-click="vm.addNew()" class="btn btn-default " ng-show="($root.restrictionList.field.restrictionItemMap.enumValue.canCreate==true)">Add new
+							</button>
 
-						<button ng-click="vm.search()" class="btn btn-default ">Find
-						</button>
+							<button ng-click="vm.search()" class="btn btn-default ">Find
+							</button>
 
-						<button ng-click="vm.reset()" class="btn btn-default ">Reset
-						</button>
+							<button ng-click="vm.reset()" class="btn btn-default ">Reset
+							</button>
+
+						</div>
 
 					</div>
 
@@ -70,26 +65,25 @@
 
 			</div>
 
-		</div>
+		</form>
 
-	</form>
-
-	<form id="enumValueList" ng-if="vm.entityList.length&gt;0" enctype="UTF-8">
-		<div class="panel panel-default default-panel">
-			<div class="panel-heading">List enumValue<button ng-click="vm.downloadList()" class="btn btn-default pull-right" style="margin-top:-7px">
+		<form id="enumValueList" ng-if="vm.entityList.length&gt;0" enctype="UTF-8">
+			<div class="panel panel-default default-panel">
+				<div class="panel-heading">List enumValue<button ng-click="vm.downloadList()" class="btn btn-default pull-right" style="margin-top:-7px">
 	<span class="glyphicon glyphicon-download-alt" aria-hidden="true">
 	</span>
 </button>
 
-			</div>
+				</div>
 
-			<div class="panel-body">
-				<div ui-grid="vm.enumValueGridOptions" ui-grid-pagination="" ui-grid-selection="" ui-grid-exporter="">
+				<div class="panel-body">
+					<div ui-grid="vm.enumValueGridOptions" ui-grid-pagination="" ui-grid-selection="" ui-grid-exporter="">
+					</div>
+
 				</div>
 
 			</div>
 
-		</div>
+		</form>
 
-	</form>
-</div>
+	</div>

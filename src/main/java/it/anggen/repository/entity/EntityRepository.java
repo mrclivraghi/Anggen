@@ -26,34 +26,46 @@ public interface EntityRepository
 
     public List<it.anggen.model.entity.Entity> findByName(java.lang.String name);
 
-    public List<it.anggen.model.entity.Entity> findByDescendantMaxLevel(java.lang.Integer descendantMaxLevel);
-
     public List<it.anggen.model.entity.Entity> findByCache(java.lang.Boolean cache);
 
     public List<it.anggen.model.entity.Entity> findByDisableViewGeneration(java.lang.Boolean disableViewGeneration);
 
+    public List<it.anggen.model.entity.Entity> findByDescendantMaxLevel(java.lang.Integer descendantMaxLevel);
+
     public List<it.anggen.model.entity.Entity> findByEnableRestrictionData(java.lang.Boolean enableRestrictionData);
+
+    public List<it.anggen.model.entity.Entity> findByIgnoreMenu(java.lang.Boolean ignoreMenu);
+
+    public List<it.anggen.model.entity.Entity> findByAddDate(java.lang.String addDate);
+
+    public List<it.anggen.model.entity.Entity> findByModDate(java.lang.String modDate);
 
     public List<it.anggen.model.entity.Entity> findBySecurityType(java.lang.Integer securityType);
 
     public List<it.anggen.model.entity.Entity> findByEntityGroup(it.anggen.model.entity.EntityGroup entityGroup);
 
-    @Query("select e from Entity e where  (:entityId is null or cast(:entityId as string)=cast(e.entityId as string)) and (:generateFrontEnd is null or cast(:generateFrontEnd as string)=cast(e.generateFrontEnd as string)) and (:name is null or :name='' or cast(:name as string)=e.name) and (:descendantMaxLevel is null or cast(:descendantMaxLevel as string)=cast(e.descendantMaxLevel as string)) and (:cache is null or cast(:cache as string)=cast(e.cache as string)) and (:disableViewGeneration is null or cast(:disableViewGeneration as string)=cast(e.disableViewGeneration as string)) and (:enableRestrictionData is null or cast(:enableRestrictionData as string)=cast(e.enableRestrictionData as string)) and (:securityType is null or cast(:securityType as string)=cast(e.securityType as string)) and (:restrictionEntity in elements(e.restrictionEntityList)  or :restrictionEntity is null) and (:field in elements(e.fieldList)  or :field is null) and (:enumField in elements(e.enumFieldList)  or :enumField is null) and (:entityGroup=e.entityGroup or :entityGroup is null) and (:tab in elements(e.tabList)  or :tab is null) and (:relationship in elements(e.relationshipList)  or :relationship is null) ")
-    public List<it.anggen.model.entity.Entity> findByEntityIdAndGenerateFrontEndAndNameAndDescendantMaxLevelAndCacheAndDisableViewGenerationAndEnableRestrictionDataAndSecurityTypeAndRestrictionEntityAndFieldAndEnumFieldAndEntityGroupAndTabAndRelationship(
+    @Query("select e from Entity e where  (:entityId is null or cast(:entityId as string)=cast(e.entityId as string)) and (:generateFrontEnd is null or cast(:generateFrontEnd as string)=cast(e.generateFrontEnd as string)) and (:name is null or :name='' or cast(:name as string)=e.name) and (:cache is null or cast(:cache as string)=cast(e.cache as string)) and (:disableViewGeneration is null or cast(:disableViewGeneration as string)=cast(e.disableViewGeneration as string)) and (:descendantMaxLevel is null or cast(:descendantMaxLevel as string)=cast(e.descendantMaxLevel as string)) and (:enableRestrictionData is null or cast(:enableRestrictionData as string)=cast(e.enableRestrictionData as string)) and (:ignoreMenu is null or cast(:ignoreMenu as string)=cast(e.ignoreMenu as string)) and (:addDate is null or cast(:addDate as string)=cast(date(e.addDate) as string)) and (:modDate is null or cast(:modDate as string)=cast(date(e.modDate) as string)) and (:securityType is null or cast(:securityType as string)=cast(e.securityType as string)) and (:restrictionEntity in elements(e.restrictionEntityList)  or :restrictionEntity is null) and (:field in elements(e.fieldList)  or :field is null) and (:enumField in elements(e.enumFieldList)  or :enumField is null) and (:entityGroup=e.entityGroup or :entityGroup is null) and (:tab in elements(e.tabList)  or :tab is null) and (:relationship in elements(e.relationshipList)  or :relationship is null) ")
+    public List<it.anggen.model.entity.Entity> findByEntityIdAndGenerateFrontEndAndNameAndCacheAndDisableViewGenerationAndDescendantMaxLevelAndEnableRestrictionDataAndIgnoreMenuAndAddDateAndModDateAndSecurityTypeAndRestrictionEntityAndFieldAndEnumFieldAndEntityGroupAndTabAndRelationship(
         @org.springframework.data.repository.query.Param("entityId")
         java.lang.Long entityId,
         @org.springframework.data.repository.query.Param("generateFrontEnd")
         java.lang.Boolean generateFrontEnd,
         @org.springframework.data.repository.query.Param("name")
         java.lang.String name,
-        @org.springframework.data.repository.query.Param("descendantMaxLevel")
-        java.lang.Integer descendantMaxLevel,
         @org.springframework.data.repository.query.Param("cache")
         java.lang.Boolean cache,
         @org.springframework.data.repository.query.Param("disableViewGeneration")
         java.lang.Boolean disableViewGeneration,
+        @org.springframework.data.repository.query.Param("descendantMaxLevel")
+        java.lang.Integer descendantMaxLevel,
         @org.springframework.data.repository.query.Param("enableRestrictionData")
         java.lang.Boolean enableRestrictionData,
+        @org.springframework.data.repository.query.Param("ignoreMenu")
+        java.lang.Boolean ignoreMenu,
+        @org.springframework.data.repository.query.Param("addDate")
+        java.lang.String addDate,
+        @org.springframework.data.repository.query.Param("modDate")
+        java.lang.String modDate,
         @org.springframework.data.repository.query.Param("securityType")
         java.lang.Integer securityType,
         @org.springframework.data.repository.query.Param("restrictionEntity")

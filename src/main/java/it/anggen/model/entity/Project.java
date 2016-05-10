@@ -11,8 +11,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import it.anggen.model.entity.EntityGroup;
 import it.anggen.model.entity.EnumEntity;
+import it.anggen.model.generation.GenerationRun;
 import it.anggen.utils.annotation.MaxDescendantLevel;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(schema = "meta", name = "project")
@@ -20,27 +23,33 @@ import org.hibernate.annotations.Type;
 @MaxDescendantLevel(100)
 public class Project {
 
-    public final static Long staticEntityId = 17L;
+    public final static Long staticEntityId = 5L;
     @javax.persistence.Column(name = "project_id")
     @it.anggen.utils.annotation.DescriptionField
     @Id
     @GeneratedValue
-    @it.anggen.utils.annotation.Priority(1)
     private Integer projectId;
     @javax.persistence.Column(name = "name")
-    @it.anggen.utils.annotation.Priority(2)
     @it.anggen.utils.annotation.DescriptionField
     private String name;
+    @javax.persistence.Column(name = "add_date")
+    @CreationTimestamp
+    private java.util.Date addDate;
+    @javax.persistence.Column(name = "mod_date")
+    @UpdateTimestamp
+    private java.util.Date modDate;
     @OneToMany(fetch = FetchType.LAZY)
     @Type(type = "it.anggen.model.entity.EntityGroup")
     @JoinColumn(name = "project_id_project")
-    @it.anggen.utils.annotation.Priority(4)
     private List<EntityGroup> entityGroupList;
     @OneToMany(fetch = FetchType.LAZY)
     @Type(type = "it.anggen.model.entity.EnumEntity")
     @JoinColumn(name = "project_id_project")
-    @it.anggen.utils.annotation.Priority(4)
     private List<EnumEntity> enumEntityList;
+    @OneToMany(fetch = FetchType.LAZY)
+    @Type(type = "it.anggen.model.generation.GenerationRun")
+    @JoinColumn(name = "project_id_project")
+    private List<GenerationRun> generationRunList;
 
     public Integer getProjectId() {
         return this.projectId;
@@ -58,6 +67,22 @@ public class Project {
         this.name=name;
     }
 
+    public java.util.Date getAddDate() {
+        return this.addDate;
+    }
+
+    public void setAddDate(java.util.Date addDate) {
+        this.addDate=addDate;
+    }
+
+    public java.util.Date getModDate() {
+        return this.modDate;
+    }
+
+    public void setModDate(java.util.Date modDate) {
+        this.modDate=modDate;
+    }
+
     public List<EntityGroup> getEntityGroupList() {
         return this.entityGroupList;
     }
@@ -72,6 +97,14 @@ public class Project {
 
     public void setEnumEntityList(List<EnumEntity> enumEntityList) {
         this.enumEntityList=enumEntityList;
+    }
+
+    public List<GenerationRun> getGenerationRunList() {
+        return this.generationRunList;
+    }
+
+    public void setGenerationRunList(List<GenerationRun> generationRunList) {
+        this.generationRunList=generationRunList;
     }
 
 }

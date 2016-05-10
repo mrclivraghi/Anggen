@@ -3,6 +3,7 @@ package it.anggen.controller.field;
 
 import java.util.List;
 import com.codahale.metrics.annotation.Timed;
+import io.swagger.annotations.ApiOperation;
 import it.anggen.searchbean.field.AnnotationSearchBean;
 import it.anggen.security.SecurityService;
 import it.anggen.service.field.AnnotationService;
@@ -11,13 +12,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 @RequestMapping("/annotation")
 public class AnnotationController {
 
@@ -31,15 +32,7 @@ public class AnnotationController {
     @Value("${application.security}")
     private Boolean securityEnabled;
 
-    @Timed
-    @RequestMapping(method = RequestMethod.GET)
-    public String manage() {
-        if (securityEnabled && !securityService.hasPermission(it.anggen.model.field.Annotation.staticEntityId, it.anggen.model.RestrictionType.SEARCH)) 
-return "forbidden"; 
-
-        return "annotation";
-    }
-
+    @ApiOperation(value = "Return a page of annotation", notes = "Return a single page of annotation", response = it.anggen.model.field.Annotation.class, responseContainer = "List")
     @Timed
     @RequestMapping(value = "/pages/{pageNumber}", method = RequestMethod.GET)
     @ResponseBody
@@ -51,6 +44,7 @@ return "forbidden";
         return ResponseEntity.ok().body(page);
     }
 
+    @ApiOperation(value = "Return a list of annotation", notes = "Return a list of annotation based on the search bean requested", response = it.anggen.model.field.Annotation.class, responseContainer = "List")
     @Timed
     @ResponseBody
     @RequestMapping(value = "/search", method = RequestMethod.POST)
@@ -72,6 +66,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         return ResponseEntity.ok().body(annotationList);
     }
 
+    @ApiOperation(value = "Return a the annotation identified by the given id", notes = "Return a the annotation identified by the given id", response = it.anggen.model.field.Annotation.class, responseContainer = "List")
     @Timed
     @ResponseBody
     @RequestMapping(value = "/{annotationId}", method = RequestMethod.GET)
@@ -90,6 +85,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         return ResponseEntity.ok().body(annotationList);
     }
 
+    @ApiOperation(value = "Delete the annotation identified by the given id", notes = "Delete the annotation identified by the given id")
     @Timed
     @ResponseBody
     @RequestMapping(value = "/{annotationId}", method = RequestMethod.DELETE)
@@ -106,6 +102,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         return ResponseEntity.ok().build();
     }
 
+    @ApiOperation(value = "Insert the annotation given", notes = "Insert the annotation given ", response = it.anggen.model.field.Annotation.class)
     @Timed
     @ResponseBody
     @RequestMapping(method = RequestMethod.PUT)
@@ -124,6 +121,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         return ResponseEntity.ok().body(insertedAnnotation);
     }
 
+    @ApiOperation(value = "Update the annotation given", notes = "Update the annotation given ", response = it.anggen.model.field.Annotation.class)
     @Timed
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST)

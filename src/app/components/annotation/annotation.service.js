@@ -1,7 +1,7 @@
 (function() { 
 
 angular
-.module("serverTestApp")
+.module("serverTest")
 .service("annotationService", AnnotationService);
 /** @ngInject */
 function AnnotationService($http,MainService,UtilityService)

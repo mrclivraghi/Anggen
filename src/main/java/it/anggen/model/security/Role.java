@@ -23,34 +23,28 @@ import org.hibernate.annotations.Type;
 @MaxDescendantLevel(100)
 public class Role {
 
-    public final static Long staticEntityId = 6L;
+    public final static Long staticEntityId = 15L;
     @javax.persistence.Column(name = "role_id")
-    @it.anggen.utils.annotation.Priority(1)
     @it.anggen.utils.annotation.DescriptionField
     @Id
     @GeneratedValue
     private Integer roleId;
     @javax.persistence.Column(name = "role")
     @it.anggen.utils.annotation.DescriptionField
-    @it.anggen.utils.annotation.Priority(2)
     private String role;
     @OneToMany(fetch = FetchType.LAZY)
     @Type(type = "it.anggen.model.security.RestrictionEntity")
     @JoinColumn(name = "role_id_role")
-    @it.anggen.utils.annotation.Priority(4)
     private List<RestrictionEntity> restrictionEntityList;
     @OneToMany(fetch = FetchType.LAZY)
     @Type(type = "it.anggen.model.security.RestrictionField")
     @JoinColumn(name = "role_id_role")
-    @it.anggen.utils.annotation.Priority(4)
     private List<RestrictionField> restrictionFieldList;
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "roleList")
-    @it.anggen.utils.annotation.Priority(4)
     private List<User> userList;
     @OneToMany(fetch = FetchType.LAZY)
     @Type(type = "it.anggen.model.security.RestrictionEntityGroup")
     @JoinColumn(name = "role_id_role")
-    @it.anggen.utils.annotation.Priority(4)
     private List<RestrictionEntityGroup> restrictionEntityGroupList;
 
     public Integer getRoleId() {

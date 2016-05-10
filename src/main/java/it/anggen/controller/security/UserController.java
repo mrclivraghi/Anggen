@@ -3,23 +3,22 @@ package it.anggen.controller.security;
 
 import java.util.List;
 import com.codahale.metrics.annotation.Timed;
+import io.swagger.annotations.ApiOperation;
 import it.anggen.searchbean.security.UserSearchBean;
 import it.anggen.security.SecurityService;
 import it.anggen.service.log.LogEntryService;
 import it.anggen.service.security.UserService;
-import it.anggen.utils.Utility;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 @RequestMapping("/user")
 public class UserController {
 
@@ -33,15 +32,7 @@ public class UserController {
     @Value("${application.security}")
     private Boolean securityEnabled;
 
-    @Timed
-    @RequestMapping(method = RequestMethod.GET)
-    public String manage() {
-        if (securityEnabled && !securityService.hasPermission(it.anggen.model.security.User.staticEntityId, it.anggen.model.RestrictionType.SEARCH)) 
-return "forbidden"; 
-
-        return "user";
-    }
-
+    @ApiOperation(value = "Return a page of user", notes = "Return a single page of user", response = it.anggen.model.security.User.class, responseContainer = "List")
     @Timed
     @RequestMapping(value = "/pages/{pageNumber}", method = RequestMethod.GET)
     @ResponseBody
@@ -53,6 +44,7 @@ return "forbidden";
         return ResponseEntity.ok().body(page);
     }
 
+    @ApiOperation(value = "Return a list of user", notes = "Return a list of user based on the search bean requested", response = it.anggen.model.security.User.class, responseContainer = "List")
     @Timed
     @ResponseBody
     @RequestMapping(value = "/search", method = RequestMethod.POST)
@@ -74,6 +66,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         return ResponseEntity.ok().body(userList);
     }
 
+    @ApiOperation(value = "Return a the user identified by the given id", notes = "Return a the user identified by the given id", response = it.anggen.model.security.User.class, responseContainer = "List")
     @Timed
     @ResponseBody
     @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
@@ -92,6 +85,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         return ResponseEntity.ok().body(userList);
     }
 
+    @ApiOperation(value = "Delete the user identified by the given id", notes = "Delete the user identified by the given id")
     @Timed
     @ResponseBody
     @RequestMapping(value = "/{userId}", method = RequestMethod.DELETE)
@@ -108,6 +102,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         return ResponseEntity.ok().build();
     }
 
+    @ApiOperation(value = "Insert the user given", notes = "Insert the user given ", response = it.anggen.model.security.User.class)
     @Timed
     @ResponseBody
     @RequestMapping(method = RequestMethod.PUT)
@@ -119,10 +114,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         if (user.getUserId()!=null)
         log.info("Inserting user like "+ user.getUserId()+' '+ user.getUsername());
-        
-        user.setPassword(Utility.encodePassword(user.getPassword()));
-        
-        
+        user.setPassword(it.anggen.utils.Utility.encodePassword(user.getPassword()));
         it.anggen.model.security.User insertedUser=userService.insert(user);
         getRightMapping(insertedUser);
         logEntryService.addLogEntry( "Inserted user with id "+ insertedUser.getUserId(),
@@ -130,6 +122,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         return ResponseEntity.ok().body(insertedUser);
     }
 
+    @ApiOperation(value = "Update the user given", notes = "Update the user given ", response = it.anggen.model.security.User.class)
     @Timed
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST)
@@ -141,11 +134,9 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         logEntryService.addLogEntry( "Updating user with id "+user.getUserId(),
         it.anggen.model.LogType.INFO, it.anggen.model.OperationType.UPDATE_ENTITY, it.anggen.model.security.User.staticEntityId, securityService.getLoggedUser(),log);
-        rebuildSecurityMapping(user);
-        
         if (user.getPassword().length()<59)
-        	user.setPassword(Utility.encodePassword(user.getPassword()));
-        
+        user.setPassword(it.anggen.utils.Utility.encodePassword(user.getPassword()));
+        rebuildSecurityMapping(user);
         it.anggen.model.security.User updatedUser=userService.update(user);
         getSecurityMapping(updatedUser);
         getRightMapping(updatedUser);

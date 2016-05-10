@@ -3,6 +3,7 @@ package it.anggen.controller.security;
 
 import java.util.List;
 import com.codahale.metrics.annotation.Timed;
+import io.swagger.annotations.ApiOperation;
 import it.anggen.searchbean.security.RoleSearchBean;
 import it.anggen.security.SecurityService;
 import it.anggen.service.log.LogEntryService;
@@ -11,13 +12,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 @RequestMapping("/role")
 public class RoleController {
 
@@ -31,15 +32,7 @@ public class RoleController {
     @Value("${application.security}")
     private Boolean securityEnabled;
 
-    @Timed
-    @RequestMapping(method = RequestMethod.GET)
-    public String manage() {
-        if (securityEnabled && !securityService.hasPermission(it.anggen.model.security.Role.staticEntityId, it.anggen.model.RestrictionType.SEARCH)) 
-return "forbidden"; 
-
-        return "role";
-    }
-
+    @ApiOperation(value = "Return a page of role", notes = "Return a single page of role", response = it.anggen.model.security.Role.class, responseContainer = "List")
     @Timed
     @RequestMapping(value = "/pages/{pageNumber}", method = RequestMethod.GET)
     @ResponseBody
@@ -51,6 +44,7 @@ return "forbidden";
         return ResponseEntity.ok().body(page);
     }
 
+    @ApiOperation(value = "Return a list of role", notes = "Return a list of role based on the search bean requested", response = it.anggen.model.security.Role.class, responseContainer = "List")
     @Timed
     @ResponseBody
     @RequestMapping(value = "/search", method = RequestMethod.POST)
@@ -72,6 +66,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         return ResponseEntity.ok().body(roleList);
     }
 
+    @ApiOperation(value = "Return a the role identified by the given id", notes = "Return a the role identified by the given id", response = it.anggen.model.security.Role.class, responseContainer = "List")
     @Timed
     @ResponseBody
     @RequestMapping(value = "/{roleId}", method = RequestMethod.GET)
@@ -90,6 +85,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         return ResponseEntity.ok().body(roleList);
     }
 
+    @ApiOperation(value = "Delete the role identified by the given id", notes = "Delete the role identified by the given id")
     @Timed
     @ResponseBody
     @RequestMapping(value = "/{roleId}", method = RequestMethod.DELETE)
@@ -106,6 +102,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         return ResponseEntity.ok().build();
     }
 
+    @ApiOperation(value = "Insert the role given", notes = "Insert the role given ", response = it.anggen.model.security.Role.class)
     @Timed
     @ResponseBody
     @RequestMapping(method = RequestMethod.PUT)
@@ -124,6 +121,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
         return ResponseEntity.ok().body(insertedRole);
     }
 
+    @ApiOperation(value = "Update the role given", notes = "Update the role given ", response = it.anggen.model.security.Role.class)
     @Timed
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST)

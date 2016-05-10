@@ -1,12 +1,13 @@
 (function() { 
 
 angular
-.module("serverTestApp")
+.module("serverTest")
 .controller("AnnotationAttributeController",AnnotationAttributeController);
 /** @ngInject */
 function AnnotationAttributeController($scope,$http,$rootScope,$log,UtilityService ,annotationAttributeService, SecurityService, MainService ,annotationService)
 {
 var vm=this;
+vm.activeTab=1;
 vm.searchBean=annotationAttributeService.searchBean;
 vm.entityList=annotationAttributeService.entityList;
 vm.selectedEntity=annotationAttributeService.selectedEntity;
@@ -22,6 +23,7 @@ if (annotationAttributeService.isParent())
 {
 annotationService.selectedEntity.show=false;
 delete $rootScope.openNode.annotation;
+UtilityService.removeObjectFromList($rootScope.parentServices,annotationService);
 }
 }
 function addNew()
@@ -34,6 +36,7 @@ if (annotationAttributeService.isParent())
 {
 annotationService.selectedEntity.show=false;
 delete $rootScope.openNode.annotation;
+UtilityService.removeObjectFromList($rootScope.parentServices,annotationService);
 }
 angular.element('#annotationAttributeTabs li:eq(0) a').tab('show');
 }
@@ -42,6 +45,7 @@ function search()
 {
 annotationAttributeService.selectedEntity.show=false;
 delete $rootScope.openNode.annotationAttribute;
+UtilityService.removeObjectFromList($rootScope.parentServices,annotationAttributeService);
 annotationAttributeService.search().then(function successCallback(response) {
 annotationAttributeService.setEntityList(response.data);
 },function errorCallback(response) { 
@@ -54,7 +58,8 @@ return;
 function insert()
 {
 if (!$scope.annotationAttributeDetailForm.$valid) return; 
-if (annotationAttributeService.isParent()) 
+$rootScope.parentServices.pop();
+if ($rootScope.parentServices.length==0) 
 {
 annotationAttributeService.insert().then(function successCallback(response) { 
 $log.debug(response);
@@ -71,6 +76,9 @@ else
 annotationAttributeService.selectedEntity.show=false;
 annotationAttributeService.insert().then(function successCallBack(response) { 
 $log.debug(response);
+$rootScope.parentServices.pop();
+var parentService=$rootScope.parentServices.pop();
+parentService.removeannotationAttribute(annotationAttributeService.selectedEntity);
 },function errorCallback(response) { 
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
@@ -82,10 +90,12 @@ return;
 function update()
 {
 if (!$scope.annotationAttributeDetailForm.$valid) return; 
-if (annotationAttributeService.isParent()) 
+$rootScope.parentServices.pop();
+if ($rootScope.parentServices.length==0) 
 {
 annotationService.selectedEntity.show=false;
 delete $rootScope.openNode.annotation;
+UtilityService.removeObjectFromList($rootScope.parentServices,annotationService);
 annotationAttributeService.update().then(function successCallback(response) { 
 $log.debug(response);
 vm.search();
@@ -115,17 +125,22 @@ function remove()
 {
 annotationAttributeService.selectedEntity.show=false;
 delete $rootScope.openNode.annotationAttribute;
+$rootScope.parentServices.pop();
+var parentService=$rootScope.parentServices.pop();
+parentService.removeAnnotationAttribute(annotationAttributeService.selectedEntity);
+UtilityService.removeObjectFromList($rootScope.parentServices,annotationAttributeService);
 annotationAttributeService.setSelectedEntity(null);
 }
 function del()
 {
+$rootScope.parentServices.pop();
 annotationAttributeService.del().then(function successCallback(response) { 
 $log.debug(response);
-if (annotationAttributeService.isParent()) 
+annotationAttributeService.setSelectedEntity(null);
+if ($rootScope.parentServices.length==0) 
 {
 vm.search();
 } else { 
-annotationAttributeService.setSelectedEntity(null);
 }
 },function errorCallback(response) { 
 UtilityService.AlertError.init({selector: "#alertError"});
@@ -184,6 +199,7 @@ function successCallback(response) {
 annotationService.setSelectedEntity(response.data[0]);
 annotationService.selectedEntity.show=true;
 $rootScope.openNode.annotation=true;
+$rootScope.parentServices.push(annotationService);
   }, function errorCallback(response) {
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
@@ -225,6 +241,7 @@ if (row.isSelected)
 annotationAttributeService.searchOne(row.entity).then(function(response) { 
 $log.debug(response.data);
 $rootScope.openNode.annotationAttribute=true;
+$rootScope.parentServices.push(annotationAttributeService);
 annotationAttributeService.setSelectedEntity(response.data[0]);
 });
 angular.element('#annotationAttributeTabs li:eq(0) a').tab('show');
@@ -232,6 +249,7 @@ angular.element('#annotationAttributeTabs li:eq(0) a').tab('show');
 else 
 annotationAttributeService.setSelectedEntity(null);
 delete $rootScope.openNode.annotationAttribute;
+UtilityService.removeObjectFromList($rootScope.parentServices,annotationAttributeService);
 annotationAttributeService.selectedEntity.show = row.isSelected;
 });
   };
@@ -248,6 +266,7 @@ if (row.isSelected)
 annotationService.searchOne(row.entity).then(function(response) { 
 $log.debug(response.data);
 $rootScope.openNode.annotation=true;
+$rootScope.parentServices.push(annotationService);
 annotationService.setSelectedEntity(response.data[0]);
 });
 angular.element('#annotationTabs li:eq(0) a').tab('show');
@@ -255,6 +274,7 @@ angular.element('#annotationTabs li:eq(0) a').tab('show');
 else 
 annotationService.setSelectedEntity(null);
 delete $rootScope.openNode.annotation;
+UtilityService.removeObjectFromList($rootScope.parentServices,annotationService);
 annotationService.selectedEntity.show = row.isSelected;
 });
   };
@@ -280,6 +300,7 @@ function closeEntityDetail(){
 annotationAttributeService.setSelectedEntity(null);
 annotationAttributeService.selectedEntity.show=false;
 delete $rootScope.openNode.annotationAttribute;
+UtilityService.removeObjectFromList($rootScope.parentServices,annotationAttributeService);
 }
 vm.reset=reset;
 vm.addNew=addNew;

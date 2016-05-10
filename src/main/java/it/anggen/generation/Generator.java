@@ -9,6 +9,7 @@ import it.anggen.model.entity.EntityGroup;
 import it.anggen.model.entity.EnumEntity;
 import it.anggen.model.entity.Project;
 import it.anggen.model.field.EnumField;
+import it.anggen.model.generation.GenerationRun;
 import it.anggen.model.relationship.Relationship;
 import it.anggen.reflection.EntityAttributeManager;
 import it.anggen.reflection.EntityManager;
@@ -16,6 +17,7 @@ import it.anggen.reflection.EntityManagerImpl;
 import it.anggen.repository.entity.EnumEntityRepository;
 import it.anggen.repository.entity.ProjectRepository;
 import it.anggen.repository.field.EnumFieldRepository;
+import it.anggen.repository.generation.GenerationRunRepository;
 import it.anggen.repository.relationship.RelationshipRepository;
 import it.anggen.service.relationship.RelationshipServiceImpl;
 
@@ -31,7 +33,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +43,18 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.apache.commons.dbcp.BasicDataSource;
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.errors.CheckoutConflictException;
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.api.errors.InvalidRefNameException;
+import org.eclipse.jgit.api.errors.RefAlreadyExistsException;
+import org.eclipse.jgit.api.errors.RefNotFoundException;
+import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.lib.Ref;
+import org.eclipse.jgit.lib.RefUpdate;
+import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.reflections.Reflections;
 import org.rendersnake.HtmlAttributes;
 import org.rendersnake.HtmlCanvas;
@@ -130,7 +146,11 @@ public class Generator {
 	private List<Relationship> relationshipList;
 	
 	@Autowired
+	GenerationRunRepository generationRunRepository;
+	
+	@Autowired
 	ProjectRepository projectRepository;
+	
 	
 	@Autowired
 	EnumEntityRepository enumEntityRepository;
@@ -187,6 +207,17 @@ public class Generator {
 	
 	public static String databaseProperty;
 	
+	public static Date lastGenerationDate;
+	
+	private Git git;
+	private String generationBranchName;
+	private String oldGenerationBranchName;
+	private String currentBranchName;
+	private Repository repo;
+	
+	private List<GenerationRun> generationRunList;
+	private GenerationRun currentGenerationRun;
+	
 	public Generator()
 	{
 		
@@ -201,7 +232,7 @@ public class Generator {
 	//@Transactional
 	private void init() throws Exception
 	{
-		Generator.appName=applicationName.toLowerCase();
+		Generator.appName=applicationName;
 		Generator.generatedPackage=mainPackage;
 		Generator.targetSchema=schema;
 		Generator.enableSecurity=security;
@@ -219,11 +250,26 @@ public class Generator {
 		List<Project> projectList=projectRepository.findByName(applicationName);
 		if (projectList.size()==0)
 			throw new Exception();
-		this.relationshipList=relationshipRepository.findByRelationshipIdAndNameAndPriorityAndRelationshipTypeAndAnnotationAndEntityAndEntityAndTab(null, null, null, null, null, null, null, null);
+		this.relationshipList=relationshipRepository.findByRelationshipIdAndPriorityAndNameAndAddDateAndModDateAndRelationshipTypeAndAnnotationAndEntityTargetAndEntityAndTab(null, null, null, null, null, null, null, null,null,null);
 		this.project=projectList.get(0);
 		this.entityGroupList=project.getEntityGroupList();
 		this.enumEntityList=project.getEnumEntityList();
 		this.modelEntityList=new ArrayList<Entity>();
+		generationRunList=generationRunRepository.findByProject(project);
+		List<GenerationRun> generationRunDoneList = generationRunRepository.findByGenerationRunIdAndStatusAndStartDateAndEndDateAndProject(null, 1, null, null, project);
+		if (generationRunDoneList.size()==0)
+		{
+			Generator.lastGenerationDate=new Date(0, 1, 1);
+			oldGenerationBranchName=null;
+		}
+		else
+		{
+			Utility.orderByStartDate(generationRunDoneList);
+			
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
+			oldGenerationBranchName="refs/heads/generation/gen_"+sdf.format(generationRunDoneList.get(generationRunDoneList.size()-1).getStartDate());
+			Generator.lastGenerationDate=generationRunDoneList.get(generationRunDoneList.size()-1).getStartDate();
+		}
 		if (entityGroupList!=null)
 		for (EntityGroup entityGroup: entityGroupList)
 		{
@@ -235,15 +281,26 @@ public class Generator {
 	//@Transactional
 	private void checkModel() throws Exception
 	{
+		Boolean needToUpdate=false;
+		if (project.getModDate().after(lastGenerationDate))
+			needToUpdate=true;
 		
 		for (Entity entity: modelEntityList)
 		{
+			if (entity.getModDate().after(Generator.lastGenerationDate))
+				needToUpdate=true;
+			if (entity.getEntityGroup()!=null && entity.getEntityGroup().getModDate().after(Generator.lastGenerationDate))
+				needToUpdate=true;
+			
 			EntityManager entityManager = new EntityManagerImpl(entity);
 			if (entityManager.getKeyClass()==null)
 					throw new Exception(entity.getName()+": there is no primary key");
 				
 			for (it.anggen.model.field.Field field: entity.getFieldList())
 			{
+				if (field.getModDate().after(Generator.lastGenerationDate))
+					needToUpdate=true;
+				
 				EntityAttributeManager entityAttributeManager = new EntityAttributeManager(field);
 				
 				if (entityAttributeManager.getPrimaryKey() && !field.getName().equals(Utility.getFirstLower(entity.getName())+"Id") )
@@ -253,23 +310,145 @@ public class Generator {
 					throw new Exception(entity.getName()+": Between annotation is invalid for type "+entityAttributeManager.getFieldTypeName());
 			
 			}	
+			for (EnumField enumField: entity.getEnumFieldList())
+			{
+				if (enumField.getModDate().after(Generator.lastGenerationDate))
+					needToUpdate=true;
+			}
+			for (Relationship relationship: entity.getRelationshipList())
+			{
+				if (relationship.getModDate().after(Generator.lastGenerationDate))
+					needToUpdate=true;
+				if (relationship.getEntityTarget()==null)
+					throw new Exception("Relationship "+relationship.getRelationshipId()+"-"+relationship.getName()+" has target null");
+			}
+			
+			
+		}
+		for (EnumEntity enumEntity : enumEntityList)
+		{
+			if (enumEntity.getModDate().after(Generator.lastGenerationDate))
+				needToUpdate=true;
+		}
+		if (!needToUpdate)
+		{
+			throw new Exception("No need to update, last generation was "+Generator.lastGenerationDate);
 		}
 		
 	}
 	
+	private void initBranch()
+	{
+			
+			File test = new File("");
+			
+			repo = null;
+			try {
+				repo = new FileRepositoryBuilder()
+						.setGitDir(new File(test.getAbsolutePath()+"/.git"))
+						.build();
+
+			git = new Git(repo);
+			currentBranchName = git.getRepository().getBranch();
+			if (oldGenerationBranchName==null)
+				oldGenerationBranchName = currentBranchName;
+			// Get a reference
+			Ref develop = repo.getRef(oldGenerationBranchName);
+			
+			Map<String,Ref> allRefs=repo.getAllRefs();
+
+			// Get the object the reference points to
+			ObjectId developTip = develop.getObjectId();
+
+			// Create a branch
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
+			generationBranchName="refs/heads/generation/gen_"+sdf.format(new Date());
+			Ref testBranch= repo.getRef(generationBranchName);
+			if (testBranch==null)
+			{
+
+				RefUpdate createBranch1 = repo.updateRef(generationBranchName);
+				createBranch1.setNewObjectId(developTip);
+				createBranch1.update();
+				testBranch= repo.getRef(generationBranchName);
+			}
+			
+				
+				git.checkout().setName(testBranch.getName()).call();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (RefAlreadyExistsException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (RefNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvalidRefNameException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (CheckoutConflictException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (GitAPIException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	}
+	
+	private void closeBranch()
+	{
+		try {
+			git.add().addFilepattern(".").call();
+			
+			RevCommit lastCommit = git.commit().setMessage(generationBranchName).call();
+			Ref develop = repo.getRef(generationBranchName);
+
+			git.checkout().setName(currentBranchName).call();
+			git.merge().setCommit(false).include(develop).call();
+
+
+
+			// Delete a branch
+			//RefUpdate deleteBranch1 = repo.updateRef(generationBranchName);
+			//deleteBranch1.setForceUpdate(true);
+			//deleteBranch1.delete();
+			
+		} catch (GitAPIException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	
+	}
 	
 	@Transactional
 	public void generate() throws Exception
 	{
+		currentGenerationRun = new GenerationRun();
+		currentGenerationRun.setStartDate(new Date());
+		currentGenerationRun.setStatus(0);
+		generationRunRepository.save(currentGenerationRun);
 		init();
+		generationRunList.add(currentGenerationRun);
+		project.setGenerationRunList(generationRunList);
+		project.setGenerationRunList(generationRunList);
+		projectRepository.save(project);
+		initBranch();
+		EntityManager entityManager = new EntityManagerImpl(null);
 		if (generateRest)
 		{
 			for (EnumEntity enumEntity: enumEntityList)
+			if (enumEntity.getModDate().after(Generator.lastGenerationDate) || project.getModDate().after(Generator.lastGenerationDate))
 			{
 				enumClassGenerator.init(enumEntity);
 				enumClassGenerator.getModelClass();
 			}
 			for (Entity modelEntity: modelEntityList)
+			if (entityManager.needToGenerate(modelEntity))
 			{
 				if (!isAngGenSecurity(modelEntity))
 				{
@@ -279,6 +458,7 @@ public class Generator {
 			}
 
 			for (Entity modelEntity: modelEntityList)
+			if (entityManager.needToGenerate(modelEntity))
 			{
 				if (!isAngGenSecurity(modelEntity))
 				{
@@ -308,6 +488,7 @@ public class Generator {
 			CssGenerator.generateMain(angularDirectory);
 			CssGenerator.generateLoginSCSS(angularDirectory);
 			for (Entity modelEntity: modelEntityList)
+			if (entityManager.needToGenerate(modelEntity))
 			{
 				if (modelEntity.getDisableViewGeneration()) continue;
 				htmlGenerator.init(modelEntity);
@@ -328,16 +509,28 @@ public class Generator {
 				
 				
 			}
-			if (bootstrapMenu)
-				htmlGenerator.GenerateMenu(entityGroupList);
-			else
+			
+			if (project.getModDate().after(Generator.lastGenerationDate))
 			{
-				if (easyTreeMenu)
-					htmlGenerator.GenerateEasyTreeMenu(entityGroupList);
-				else //DEFAULTS
+				if (bootstrapMenu)
 					htmlGenerator.GenerateMenu(entityGroupList);
+				else
+				{
+					if (easyTreeMenu)
+						htmlGenerator.GenerateEasyTreeMenu(entityGroupList);
+					else //DEFAULTS
+						htmlGenerator.GenerateMenu(entityGroupList);
+				}
 			}
 		}
+		
+		closeBranch();
+		
+		currentGenerationRun.setEndDate(new Date());
+		currentGenerationRun.setStatus(1);
+		generationRunRepository.save(currentGenerationRun);
+		project.setGenerationRunList(generationRunList);
+		projectRepository.save(project);
 		
 	}
 

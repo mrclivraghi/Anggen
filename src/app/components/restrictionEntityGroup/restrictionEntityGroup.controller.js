@@ -1,12 +1,13 @@
 (function() { 
 
 angular
-.module("serverTestApp")
+.module("serverTest")
 .controller("RestrictionEntityGroupController",RestrictionEntityGroupController);
 /** @ngInject */
 function RestrictionEntityGroupController($scope,$http,$rootScope,$log,UtilityService ,restrictionEntityGroupService, SecurityService, MainService ,roleService,entityGroupService)
 {
 var vm=this;
+vm.activeTab=1;
 vm.searchBean=restrictionEntityGroupService.searchBean;
 vm.entityList=restrictionEntityGroupService.entityList;
 vm.selectedEntity=restrictionEntityGroupService.selectedEntity;
@@ -23,8 +24,10 @@ if (restrictionEntityGroupService.isParent())
 {
 roleService.selectedEntity.show=false;
 delete $rootScope.openNode.role;
+UtilityService.removeObjectFromList($rootScope.parentServices,roleService);
 entityGroupService.selectedEntity.show=false;
 delete $rootScope.openNode.entityGroup;
+UtilityService.removeObjectFromList($rootScope.parentServices,entityGroupService);
 }
 }
 function addNew()
@@ -37,8 +40,10 @@ if (restrictionEntityGroupService.isParent())
 {
 roleService.selectedEntity.show=false;
 delete $rootScope.openNode.role;
+UtilityService.removeObjectFromList($rootScope.parentServices,roleService);
 entityGroupService.selectedEntity.show=false;
 delete $rootScope.openNode.entityGroup;
+UtilityService.removeObjectFromList($rootScope.parentServices,entityGroupService);
 }
 angular.element('#restrictionEntityGroupTabs li:eq(0) a').tab('show');
 }
@@ -47,6 +52,7 @@ function search()
 {
 restrictionEntityGroupService.selectedEntity.show=false;
 delete $rootScope.openNode.restrictionEntityGroup;
+UtilityService.removeObjectFromList($rootScope.parentServices,restrictionEntityGroupService);
 restrictionEntityGroupService.search().then(function successCallback(response) {
 restrictionEntityGroupService.setEntityList(response.data);
 },function errorCallback(response) { 
@@ -59,7 +65,8 @@ return;
 function insert()
 {
 if (!$scope.restrictionEntityGroupDetailForm.$valid) return; 
-if (restrictionEntityGroupService.isParent()) 
+$rootScope.parentServices.pop();
+if ($rootScope.parentServices.length==0) 
 {
 restrictionEntityGroupService.insert().then(function successCallback(response) { 
 $log.debug(response);
@@ -76,6 +83,9 @@ else
 restrictionEntityGroupService.selectedEntity.show=false;
 restrictionEntityGroupService.insert().then(function successCallBack(response) { 
 $log.debug(response);
+$rootScope.parentServices.pop();
+var parentService=$rootScope.parentServices.pop();
+parentService.removerestrictionEntityGroup(restrictionEntityGroupService.selectedEntity);
 },function errorCallback(response) { 
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
@@ -87,12 +97,15 @@ return;
 function update()
 {
 if (!$scope.restrictionEntityGroupDetailForm.$valid) return; 
-if (restrictionEntityGroupService.isParent()) 
+$rootScope.parentServices.pop();
+if ($rootScope.parentServices.length==0) 
 {
 roleService.selectedEntity.show=false;
 delete $rootScope.openNode.role;
+UtilityService.removeObjectFromList($rootScope.parentServices,roleService);
 entityGroupService.selectedEntity.show=false;
 delete $rootScope.openNode.entityGroup;
+UtilityService.removeObjectFromList($rootScope.parentServices,entityGroupService);
 restrictionEntityGroupService.update().then(function successCallback(response) { 
 $log.debug(response);
 vm.search();
@@ -122,17 +135,22 @@ function remove()
 {
 restrictionEntityGroupService.selectedEntity.show=false;
 delete $rootScope.openNode.restrictionEntityGroup;
+$rootScope.parentServices.pop();
+var parentService=$rootScope.parentServices.pop();
+parentService.removeRestrictionEntityGroup(restrictionEntityGroupService.selectedEntity);
+UtilityService.removeObjectFromList($rootScope.parentServices,restrictionEntityGroupService);
 restrictionEntityGroupService.setSelectedEntity(null);
 }
 function del()
 {
+$rootScope.parentServices.pop();
 restrictionEntityGroupService.del().then(function successCallback(response) { 
 $log.debug(response);
-if (restrictionEntityGroupService.isParent()) 
+restrictionEntityGroupService.setSelectedEntity(null);
+if ($rootScope.parentServices.length==0) 
 {
 vm.search();
 } else { 
-restrictionEntityGroupService.setSelectedEntity(null);
 }
 },function errorCallback(response) { 
 UtilityService.AlertError.init({selector: "#alertError"});
@@ -193,6 +211,7 @@ function successCallback(response) {
 roleService.setSelectedEntity(response.data[0]);
 roleService.selectedEntity.show=true;
 $rootScope.openNode.role=true;
+$rootScope.parentServices.push(roleService);
   }, function errorCallback(response) {
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
@@ -236,6 +255,7 @@ function successCallback(response) {
 entityGroupService.setSelectedEntity(response.data[0]);
 entityGroupService.selectedEntity.show=true;
 $rootScope.openNode.entityGroup=true;
+$rootScope.parentServices.push(entityGroupService);
   }, function errorCallback(response) {
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
@@ -286,6 +306,7 @@ if (row.isSelected)
 restrictionEntityGroupService.searchOne(row.entity).then(function(response) { 
 $log.debug(response.data);
 $rootScope.openNode.restrictionEntityGroup=true;
+$rootScope.parentServices.push(restrictionEntityGroupService);
 restrictionEntityGroupService.setSelectedEntity(response.data[0]);
 });
 angular.element('#restrictionEntityGroupTabs li:eq(0) a').tab('show');
@@ -293,6 +314,7 @@ angular.element('#restrictionEntityGroupTabs li:eq(0) a').tab('show');
 else 
 restrictionEntityGroupService.setSelectedEntity(null);
 delete $rootScope.openNode.restrictionEntityGroup;
+UtilityService.removeObjectFromList($rootScope.parentServices,restrictionEntityGroupService);
 restrictionEntityGroupService.selectedEntity.show = row.isSelected;
 });
   };
@@ -309,6 +331,7 @@ if (row.isSelected)
 roleService.searchOne(row.entity).then(function(response) { 
 $log.debug(response.data);
 $rootScope.openNode.role=true;
+$rootScope.parentServices.push(roleService);
 roleService.setSelectedEntity(response.data[0]);
 });
 angular.element('#roleTabs li:eq(0) a').tab('show');
@@ -316,6 +339,7 @@ angular.element('#roleTabs li:eq(0) a').tab('show');
 else 
 roleService.setSelectedEntity(null);
 delete $rootScope.openNode.role;
+UtilityService.removeObjectFromList($rootScope.parentServices,roleService);
 roleService.selectedEntity.show = row.isSelected;
 });
   };
@@ -332,6 +356,7 @@ if (row.isSelected)
 entityGroupService.searchOne(row.entity).then(function(response) { 
 $log.debug(response.data);
 $rootScope.openNode.entityGroup=true;
+$rootScope.parentServices.push(entityGroupService);
 entityGroupService.setSelectedEntity(response.data[0]);
 });
 angular.element('#entityGroupTabs li:eq(0) a').tab('show');
@@ -339,6 +364,7 @@ angular.element('#entityGroupTabs li:eq(0) a').tab('show');
 else 
 entityGroupService.setSelectedEntity(null);
 delete $rootScope.openNode.entityGroup;
+UtilityService.removeObjectFromList($rootScope.parentServices,entityGroupService);
 entityGroupService.selectedEntity.show = row.isSelected;
 });
   };
@@ -380,6 +406,7 @@ function closeEntityDetail(){
 restrictionEntityGroupService.setSelectedEntity(null);
 restrictionEntityGroupService.selectedEntity.show=false;
 delete $rootScope.openNode.restrictionEntityGroup;
+UtilityService.removeObjectFromList($rootScope.parentServices,restrictionEntityGroupService);
 }
 vm.reset=reset;
 vm.addNew=addNew;

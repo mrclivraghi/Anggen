@@ -11,7 +11,9 @@ import javax.persistence.Table;
 import it.anggen.model.field.EnumField;
 import it.anggen.model.field.EnumValue;
 import it.anggen.utils.annotation.MaxDescendantLevel;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(schema = "meta", name = "enum_entity")
@@ -19,31 +21,40 @@ import org.hibernate.annotations.Type;
 @MaxDescendantLevel(1)
 public class EnumEntity {
 
-    public final static java.lang.Long staticEntityId = 15L;
-    @javax.persistence.Column(name = "name")
-    @it.anggen.utils.annotation.DescriptionField
-    @it.anggen.utils.annotation.Priority(2)
-    private String name;
+    public final static java.lang.Long staticEntityId = 13L;
     @javax.persistence.Column(name = "enum_entity_id")
     @Id
     @GeneratedValue
     @it.anggen.utils.annotation.DescriptionField
-    @it.anggen.utils.annotation.Priority(1)
     private java.lang.Long enumEntityId;
+    @javax.persistence.Column(name = "name")
+    @it.anggen.utils.annotation.DescriptionField
+    private String name;
+    @javax.persistence.Column(name = "add_date")
+    @CreationTimestamp
+    private java.util.Date addDate;
+    @javax.persistence.Column(name = "mod_date")
+    @UpdateTimestamp
+    private java.util.Date modDate;
     @ManyToOne(fetch = javax.persistence.FetchType.LAZY)
     @javax.persistence.JoinColumn(name = "project_id_project")
-    @it.anggen.utils.annotation.Priority(4)
     private it.anggen.model.entity.Project project;
     @OneToMany(fetch = javax.persistence.FetchType.LAZY)
     @Type(type = "it.anggen.model.field.EnumValue")
     @javax.persistence.JoinColumn(name = "enum_entity_id_enum_entity")
-    @it.anggen.utils.annotation.Priority(4)
     private List<EnumValue> enumValueList;
     @OneToMany(fetch = javax.persistence.FetchType.LAZY)
     @Type(type = "it.anggen.model.field.EnumField")
     @javax.persistence.JoinColumn(name = "enum_entity_id_enum_entity")
-    @it.anggen.utils.annotation.Priority(4)
     private List<EnumField> enumFieldList;
+
+    public java.lang.Long getEnumEntityId() {
+        return this.enumEntityId;
+    }
+
+    public void setEnumEntityId(java.lang.Long enumEntityId) {
+        this.enumEntityId=enumEntityId;
+    }
 
     public String getName() {
         return this.name;
@@ -53,12 +64,20 @@ public class EnumEntity {
         this.name=name;
     }
 
-    public java.lang.Long getEnumEntityId() {
-        return this.enumEntityId;
+    public java.util.Date getAddDate() {
+        return this.addDate;
     }
 
-    public void setEnumEntityId(java.lang.Long enumEntityId) {
-        this.enumEntityId=enumEntityId;
+    public void setAddDate(java.util.Date addDate) {
+        this.addDate=addDate;
+    }
+
+    public java.util.Date getModDate() {
+        return this.modDate;
+    }
+
+    public void setModDate(java.util.Date modDate) {
+        this.modDate=modDate;
     }
 
     public it.anggen.model.entity.Project getProject() {

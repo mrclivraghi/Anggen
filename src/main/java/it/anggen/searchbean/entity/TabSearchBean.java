@@ -10,6 +10,8 @@ public class TabSearchBean {
 
     public java.lang.Long tabId;
     public java.lang.String name;
+    public java.util.Date addDate;
+    public java.util.Date modDate;
     public it.anggen.model.entity.Entity entity;
     public List<Field> fieldList;
     public List<EnumField> enumFieldList;
@@ -29,6 +31,22 @@ public class TabSearchBean {
 
     public void setName(java.lang.String name) {
         this.name=name;
+    }
+
+    public java.util.Date getAddDate() {
+        return this.addDate;
+    }
+
+    public void setAddDate(java.util.Date addDate) {
+        this.addDate=addDate;
+    }
+
+    public java.util.Date getModDate() {
+        return this.modDate;
+    }
+
+    public void setModDate(java.util.Date modDate) {
+        this.modDate=modDate;
     }
 
     public it.anggen.model.entity.Entity getEntity() {

@@ -37,6 +37,7 @@ import it.anggen.utils.annotation.IgnoreMenu;
 import it.anggen.utils.annotation.IgnoreSearch;
 import it.anggen.utils.annotation.IgnoreTableList;
 import it.anggen.utils.annotation.IgnoreUpdate;
+import it.anggen.utils.annotation.IncludeMenu;
 import it.anggen.utils.annotation.IncludeSearch;
 import it.anggen.utils.annotation.IncludeTableList;
 import it.anggen.utils.annotation.IncludeUpdate;
@@ -599,7 +600,7 @@ public class BeanToDBConverter {
 		entity.setEnableRestrictionData(false);
 		entity.setDisableViewGeneration(false);
 		entity.setGenerateFrontEnd(false);
-		entity.setIgnoreMenu(false);
+		entity.setIgnoreMenu(generationType==GenerationType.SHOW_INCLUDE);
 		entity.setGenerationType(generationType);
 		entity.setSecurityType(it.anggen.model.SecurityType.ACCESS_WITH_PERMISSION);
 		entity.setDescendantMaxLevel(1);
@@ -650,7 +651,10 @@ public class BeanToDBConverter {
 			{
 				entity.setIgnoreMenu(true);
 			} 
-			
+			if (annotationArray[i].annotationType()==IncludeMenu.class)
+			{
+				entity.setIgnoreMenu(false);
+			} 
 			if (annotationArray[i].annotationType()==DisableViewGeneration.class)
 			{
 				entity.setDisableViewGeneration(true);

@@ -5,6 +5,7 @@ import it.anggen.reflection.EntityManagerImpl;
 import it.anggen.utils.EntityAttribute;
 import it.anggen.utils.ReflectionManager;
 import it.anggen.utils.Utility;
+import it.anggen.model.GenerationType;
 import it.anggen.model.entity.Entity;
 import it.anggen.model.entity.EntityGroup;
 import it.anggen.model.field.Field;
@@ -372,6 +373,7 @@ public class HtmlGenerator {
 				String ulContent="";
 				for (Entity entity: entityGroup.getEntityList())
 				if (!entity.getDisableViewGeneration())
+				if (!entity.getIgnoreMenu())
 				{
 					ulContent=ulContent+"<li ng-if=\"$root.restrictionList."+entityGroup.getName()+".restrictionItemMap."+entity.getName()+".canSearch\"><a href=\"#/app/"+Utility.getFirstLower(entity.getName())+"\" role=\"menuitem\">"+Utility.getFirstUpper(entity.getName())+"</a></li>";
 				}

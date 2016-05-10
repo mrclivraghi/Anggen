@@ -1,0 +1,12 @@
+package it.anggen.utils.annotation;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface GenerationType {
+	it.anggen.model.GenerationType type() default it.anggen.model.GenerationType.SHOW_INCLUDE;
+}

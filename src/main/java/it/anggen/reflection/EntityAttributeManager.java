@@ -82,6 +82,19 @@ public class EntityAttributeManager {
 		return hasAnnotation(AnnotationType.EMBEDDED);
 	}
 	
+	public Boolean getIncludeSearch() {
+		return hasAnnotation(AnnotationType.INCLUDE_SEARCH);
+	}
+	
+	public Boolean getIncludeTableList() {
+		return hasAnnotation(AnnotationType.INCLUDE_TABLE_LIST);
+	}
+	
+	public Boolean getIncludeUpdate() {
+		return hasAnnotation(AnnotationType.INCLUDE_UPDATE);
+	}
+	
+	
 	
 	/*  check */
 	

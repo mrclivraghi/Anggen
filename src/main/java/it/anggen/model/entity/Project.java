@@ -2,6 +2,8 @@
 package it.anggen.model.entity;
 
 import java.util.List;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -9,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import it.anggen.model.GenerationType;
 import it.anggen.model.entity.EntityGroup;
 import it.anggen.model.entity.EnumEntity;
 import it.anggen.model.generation.GenerationRun;
@@ -50,6 +54,10 @@ public class Project {
     @Type(type = "it.anggen.model.generation.GenerationRun")
     @JoinColumn(name = "project_id_project")
     private List<GenerationRun> generationRunList;
+    
+    @Column(name="generation_type")
+    private GenerationType generationType;
+    
 
     public Integer getProjectId() {
         return this.projectId;
@@ -106,5 +114,13 @@ public class Project {
     public void setGenerationRunList(List<GenerationRun> generationRunList) {
         this.generationRunList=generationRunList;
     }
+
+	public GenerationType getGenerationType() {
+		return generationType;
+	}
+
+	public void setGenerationType(GenerationType generationType) {
+		this.generationType = generationType;
+	}
 
 }

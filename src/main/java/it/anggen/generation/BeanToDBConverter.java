@@ -154,6 +154,9 @@ public class BeanToDBConverter {
 	@Value("${application.restriction.data.enable}")
 	private Boolean enableRestrictionData;
 	
+	@Value("${application.generation_type}")
+	private GenerationType generationType;
+	
 	private String restrictionDataGroupName="restrictiondata";
 	
 	
@@ -597,7 +600,7 @@ public class BeanToDBConverter {
 		entity.setDisableViewGeneration(false);
 		entity.setGenerateFrontEnd(false);
 		entity.setIgnoreMenu(false);
-		entity.setGenerationType(GenerationType.SHOW_INCLUDE);
+		entity.setGenerationType(generationType);
 		entity.setSecurityType(it.anggen.model.SecurityType.ACCESS_WITH_PERMISSION);
 		entity.setDescendantMaxLevel(1);
 		Annotation[] annotationArray=myClass.getAnnotations();

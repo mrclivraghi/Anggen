@@ -20,26 +20,26 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 public class AnnotationAttribute {
 
     public final static java.lang.Long staticEntityId = 2L;
-    @javax.persistence.Column(name = "property")
-    @it.anggen.utils.annotation.DescriptionField
-    private java.lang.String property;
+    @javax.persistence.Column(name = "value")
+    private java.lang.String value;
     @javax.persistence.Column(name = "annotation_attribute_id")
     @Id
     @GeneratedValue
     @it.anggen.utils.annotation.DescriptionField
     private java.lang.Long annotationAttributeId;
-    @javax.persistence.Column(name = "value")
-    private java.lang.String value;
+    @javax.persistence.Column(name = "property")
+    @it.anggen.utils.annotation.DescriptionField
+    private java.lang.String property;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "annotation_id_annotation")
     private it.anggen.model.field.Annotation annotation;
 
-    public java.lang.String getProperty() {
-        return this.property;
+    public java.lang.String getValue() {
+        return this.value;
     }
 
-    public void setProperty(java.lang.String property) {
-        this.property=property;
+    public void setValue(java.lang.String value) {
+        this.value=value;
     }
 
     public java.lang.Long getAnnotationAttributeId() {
@@ -50,12 +50,12 @@ public class AnnotationAttribute {
         this.annotationAttributeId=annotationAttributeId;
     }
 
-    public java.lang.String getValue() {
-        return this.value;
+    public java.lang.String getProperty() {
+        return this.property;
     }
 
-    public void setValue(java.lang.String value) {
-        this.value=value;
+    public void setProperty(java.lang.String property) {
+        this.property=property;
     }
 
     public it.anggen.model.field.Annotation getAnnotation() {

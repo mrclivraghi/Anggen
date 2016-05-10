@@ -22,11 +22,11 @@ public class EnumValue {
     @GeneratedValue
     @it.anggen.utils.annotation.DescriptionField
     private java.lang.Long enumValueId;
+    @javax.persistence.Column(name = "value")
+    private Integer value;
     @javax.persistence.Column(name = "name")
     @it.anggen.utils.annotation.DescriptionField
     private String name;
-    @javax.persistence.Column(name = "value")
-    private Integer value;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "enum_entity_id_enum_entity")
     private it.anggen.model.entity.EnumEntity enumEntity;
@@ -39,20 +39,20 @@ public class EnumValue {
         this.enumValueId=enumValueId;
     }
 
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(String name) {
-        this.name=name;
-    }
-
     public Integer getValue() {
         return this.value;
     }
 
     public void setValue(Integer value) {
         this.value=value;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name=name;
     }
 
     public it.anggen.model.entity.EnumEntity getEnumEntity() {

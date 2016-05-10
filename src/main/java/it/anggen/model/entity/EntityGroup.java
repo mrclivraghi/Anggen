@@ -20,20 +20,20 @@ import org.hibernate.annotations.UpdateTimestamp;
 public class EntityGroup {
 
     public final static java.lang.Long staticEntityId = 14L;
-    @javax.persistence.Column(name = "mod_date")
-    @UpdateTimestamp
-    private java.util.Date modDate;
-    @javax.persistence.Column(name = "add_date")
-    @CreationTimestamp
-    private java.util.Date addDate;
+    @javax.persistence.Column(name = "name")
+    @it.anggen.utils.annotation.DescriptionField
+    private String name;
     @javax.persistence.Column(name = "entity_group_id")
     @Id
     @GeneratedValue
     @it.anggen.utils.annotation.DescriptionField
     private java.lang.Long entityGroupId;
-    @javax.persistence.Column(name = "name")
-    @it.anggen.utils.annotation.DescriptionField
-    private String name;
+    @javax.persistence.Column(name = "add_date")
+    @CreationTimestamp
+    private java.util.Date addDate;
+    @javax.persistence.Column(name = "mod_date")
+    @UpdateTimestamp
+    private java.util.Date modDate;
     @OneToMany(fetch = javax.persistence.FetchType.LAZY)
     @Type(type = "it.anggen.model.security.RestrictionEntityGroup")
     @javax.persistence.JoinColumn(name = "entity_group_id_entity_group")
@@ -48,20 +48,12 @@ public class EntityGroup {
     @javax.persistence.Column(name = "security_type")
     private it.anggen.model.SecurityType securityType;
 
-    public java.util.Date getModDate() {
-        return this.modDate;
+    public String getName() {
+        return this.name;
     }
 
-    public void setModDate(java.util.Date modDate) {
-        this.modDate=modDate;
-    }
-
-    public java.util.Date getAddDate() {
-        return this.addDate;
-    }
-
-    public void setAddDate(java.util.Date addDate) {
-        this.addDate=addDate;
+    public void setName(String name) {
+        this.name=name;
     }
 
     public java.lang.Long getEntityGroupId() {
@@ -72,12 +64,20 @@ public class EntityGroup {
         this.entityGroupId=entityGroupId;
     }
 
-    public String getName() {
-        return this.name;
+    public java.util.Date getAddDate() {
+        return this.addDate;
     }
 
-    public void setName(String name) {
-        this.name=name;
+    public void setAddDate(java.util.Date addDate) {
+        this.addDate=addDate;
+    }
+
+    public java.util.Date getModDate() {
+        return this.modDate;
+    }
+
+    public void setModDate(java.util.Date modDate) {
+        this.modDate=modDate;
     }
 
     public List<RestrictionEntityGroup> getRestrictionEntityGroupList() {

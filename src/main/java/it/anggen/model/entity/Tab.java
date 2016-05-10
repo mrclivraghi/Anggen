@@ -25,14 +25,14 @@ public class Tab {
     @javax.persistence.Column(name = "name")
     @it.anggen.utils.annotation.DescriptionField
     private String name;
-    @javax.persistence.Column(name = "mod_date")
-    @UpdateTimestamp
-    private java.util.Date modDate;
     @javax.persistence.Column(name = "tab_id")
     @Id
     @GeneratedValue
     @it.anggen.utils.annotation.DescriptionField
     private java.lang.Long tabId;
+    @javax.persistence.Column(name = "mod_date")
+    @UpdateTimestamp
+    private java.util.Date modDate;
     @javax.persistence.Column(name = "add_date")
     @CreationTimestamp
     private java.util.Date addDate;
@@ -60,20 +60,20 @@ public class Tab {
         this.name=name;
     }
 
-    public java.util.Date getModDate() {
-        return this.modDate;
-    }
-
-    public void setModDate(java.util.Date modDate) {
-        this.modDate=modDate;
-    }
-
     public java.lang.Long getTabId() {
         return this.tabId;
     }
 
     public void setTabId(java.lang.Long tabId) {
         this.tabId=tabId;
+    }
+
+    public java.util.Date getModDate() {
+        return this.modDate;
+    }
+
+    public void setModDate(java.util.Date modDate) {
+        this.modDate=modDate;
     }
 
     public java.util.Date getAddDate() {

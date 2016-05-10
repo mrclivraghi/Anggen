@@ -23,17 +23,17 @@ public class Relationship
 {
 
     public final static java.lang.Long staticEntityId = 7L;
-    @javax.persistence.Column(name = "name")
-    @it.anggen.utils.annotation.DescriptionField
-    private String name;
     @javax.persistence.Column(name = "add_date")
     @CreationTimestamp
     private java.util.Date addDate;
+    @javax.persistence.Column(name = "priority")
+    private Integer priority;
+    @javax.persistence.Column(name = "name")
+    @it.anggen.utils.annotation.DescriptionField
+    private String name;
     @javax.persistence.Column(name = "mod_date")
     @UpdateTimestamp
     private java.util.Date modDate;
-    @javax.persistence.Column(name = "priority")
-    private Integer priority;
     @javax.persistence.Column(name = "relationship_id")
     @it.anggen.utils.annotation.DescriptionField
     @Id
@@ -57,14 +57,6 @@ public class Relationship
     @javax.persistence.Column(name = "relationship_type")
     private RelationshipType relationshipType;
 
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(String name) {
-        this.name=name;
-    }
-
     public java.util.Date getAddDate() {
         return this.addDate;
     }
@@ -73,20 +65,28 @@ public class Relationship
         this.addDate=addDate;
     }
 
-    public java.util.Date getModDate() {
-        return this.modDate;
-    }
-
-    public void setModDate(java.util.Date modDate) {
-        this.modDate=modDate;
-    }
-
     public Integer getPriority() {
         return this.priority;
     }
 
     public void setPriority(Integer priority) {
         this.priority=priority;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name=name;
+    }
+
+    public java.util.Date getModDate() {
+        return this.modDate;
+    }
+
+    public void setModDate(java.util.Date modDate) {
+        this.modDate=modDate;
     }
 
     public java.lang.Long getRelationshipId() {

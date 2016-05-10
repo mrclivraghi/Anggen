@@ -24,30 +24,30 @@ import org.hibernate.annotations.UpdateTimestamp;
 public class Entity {
 
     public final static java.lang.Long staticEntityId = 9L;
-    @javax.persistence.Column(name = "descendant_max_level")
-    private Integer descendantMaxLevel;
-    @javax.persistence.Column(name = "disable_view_generation")
-    private java.lang.Boolean disableViewGeneration;
-    @javax.persistence.Column(name = "mod_date")
-    @UpdateTimestamp
-    private java.util.Date modDate;
-    @javax.persistence.Column(name = "enable_restriction_data")
-    private java.lang.Boolean enableRestrictionData;
-    @javax.persistence.Column(name = "generate_front_end")
-    private java.lang.Boolean generateFrontEnd;
     @javax.persistence.Column(name = "name")
     @it.anggen.utils.annotation.DescriptionField
     private String name;
-    @javax.persistence.Column(name = "add_date")
-    @CreationTimestamp
-    private java.util.Date addDate;
     @javax.persistence.Column(name = "entity_id")
     @it.anggen.utils.annotation.DescriptionField
     @Id
     @GeneratedValue
     private java.lang.Long entityId;
+    @javax.persistence.Column(name = "enable_restriction_data")
+    private java.lang.Boolean enableRestrictionData;
+    @javax.persistence.Column(name = "descendant_max_level")
+    private Integer descendantMaxLevel;
+    @javax.persistence.Column(name = "add_date")
+    @CreationTimestamp
+    private java.util.Date addDate;
+    @javax.persistence.Column(name = "disable_view_generation")
+    private java.lang.Boolean disableViewGeneration;
+    @javax.persistence.Column(name = "mod_date")
+    @UpdateTimestamp
+    private java.util.Date modDate;
     @javax.persistence.Column(name = "cache")
     private java.lang.Boolean cache;
+    @javax.persistence.Column(name = "generate_front_end")
+    private java.lang.Boolean generateFrontEnd;
     @javax.persistence.Column(name = "ignore_menu")
     private java.lang.Boolean ignoreMenu;
     @OneToMany(fetch = javax.persistence.FetchType.LAZY)
@@ -76,12 +76,44 @@ public class Entity {
     @javax.persistence.Column(name = "security_type")
     private it.anggen.model.SecurityType securityType;
 
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name=name;
+    }
+
+    public java.lang.Long getEntityId() {
+        return this.entityId;
+    }
+
+    public void setEntityId(java.lang.Long entityId) {
+        this.entityId=entityId;
+    }
+
+    public java.lang.Boolean getEnableRestrictionData() {
+        return this.enableRestrictionData;
+    }
+
+    public void setEnableRestrictionData(java.lang.Boolean enableRestrictionData) {
+        this.enableRestrictionData=enableRestrictionData;
+    }
+
     public Integer getDescendantMaxLevel() {
         return this.descendantMaxLevel;
     }
 
     public void setDescendantMaxLevel(Integer descendantMaxLevel) {
         this.descendantMaxLevel=descendantMaxLevel;
+    }
+
+    public java.util.Date getAddDate() {
+        return this.addDate;
+    }
+
+    public void setAddDate(java.util.Date addDate) {
+        this.addDate=addDate;
     }
 
     public java.lang.Boolean getDisableViewGeneration() {
@@ -100,12 +132,12 @@ public class Entity {
         this.modDate=modDate;
     }
 
-    public java.lang.Boolean getEnableRestrictionData() {
-        return this.enableRestrictionData;
+    public java.lang.Boolean getCache() {
+        return this.cache;
     }
 
-    public void setEnableRestrictionData(java.lang.Boolean enableRestrictionData) {
-        this.enableRestrictionData=enableRestrictionData;
+    public void setCache(java.lang.Boolean cache) {
+        this.cache=cache;
     }
 
     public java.lang.Boolean getGenerateFrontEnd() {
@@ -114,38 +146,6 @@ public class Entity {
 
     public void setGenerateFrontEnd(java.lang.Boolean generateFrontEnd) {
         this.generateFrontEnd=generateFrontEnd;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(String name) {
-        this.name=name;
-    }
-
-    public java.util.Date getAddDate() {
-        return this.addDate;
-    }
-
-    public void setAddDate(java.util.Date addDate) {
-        this.addDate=addDate;
-    }
-
-    public java.lang.Long getEntityId() {
-        return this.entityId;
-    }
-
-    public void setEntityId(java.lang.Long entityId) {
-        this.entityId=entityId;
-    }
-
-    public java.lang.Boolean getCache() {
-        return this.cache;
-    }
-
-    public void setCache(java.lang.Boolean cache) {
-        this.cache=cache;
     }
 
     public java.lang.Boolean getIgnoreMenu() {

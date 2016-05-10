@@ -211,6 +211,7 @@ public class Generator {
 	
 	private Git git;
 	private String generationBranchName;
+	private String oldGenerationBranchName;
 	private String currentBranchName;
 	private Repository repo;
 	
@@ -254,10 +255,16 @@ public class Generator {
 		
 		List<GenerationRun> generationRunList = generationRunRepository.findByGenerationRunIdAndStatusAndStartDateAndEndDateAndProject(null, 1, null, null, project);
 		if (generationRunList.size()==0)
+		{
 			Generator.lastGenerationDate=new Date(0, 1, 1);
+			oldGenerationBranchName=null;
+		}
 		else
 		{
 			Utility.orderByStartDate(generationRunList);
+			
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
+			oldGenerationBranchName="refs/heads/generation/gen_"+sdf.format(generationRunList.get(generationRunList.size()-1).getStartDate());
 			Generator.lastGenerationDate=generationRunList.get(generationRunList.size()-1).getStartDate();
 		}
 		if (entityGroupList!=null)
@@ -339,10 +346,11 @@ public class Generator {
 						.build();
 
 			git = new Git(repo);
-			
 			currentBranchName = git.getRepository().getBranch();
+			if (oldGenerationBranchName==null)
+				oldGenerationBranchName = currentBranchName;
 			// Get a reference
-			Ref develop = repo.getRef(currentBranchName);
+			Ref develop = repo.getRef(oldGenerationBranchName);
 			
 			Map<String,Ref> allRefs=repo.getAllRefs();
 
@@ -391,17 +399,17 @@ public class Generator {
 			git.add().addFilepattern(".").call();
 			
 			RevCommit lastCommit = git.commit().setMessage(generationBranchName).call();
-			Ref develop = repo.getRef(currentBranchName);
+			Ref develop = repo.getRef(generationBranchName);
 
+			git.checkout().setName(currentBranchName).call();
 			git.merge().setCommit(false).include(develop).call();
-			//git.checkout().setName(currentBranchName).call();
 
 
 
 			// Delete a branch
-			RefUpdate deleteBranch1 = repo.updateRef(generationBranchName);
-			deleteBranch1.setForceUpdate(true);
-			deleteBranch1.delete();
+			//RefUpdate deleteBranch1 = repo.updateRef(generationBranchName);
+			//deleteBranch1.setForceUpdate(true);
+			//deleteBranch1.delete();
 			
 		} catch (GitAPIException e) {
 			// TODO Auto-generated catch block

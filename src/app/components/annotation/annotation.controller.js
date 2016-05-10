@@ -16,7 +16,7 @@ vm.fieldPreparedData=fieldService.preparedData;
 vm.enumFieldPreparedData=enumFieldService.preparedData;
 vm.relationshipPreparedData=relationshipService.preparedData;
 vm.annotationTypePreparedData={};
-vm.annotationTypePreparedData.entityList=["PRIMARY_KEY","NOT_NULL","NOT_BLANK","DESCRIPTION_FIELD","BETWEEN_FILTER","EXCEL_EXPORT","FILTER_FIELD","IGNORE_SEARCH","IGNORE_UPDATE","IGNORE_TABLE_LIST","SIZE","PASSWORD","PRIORITY","EMBEDDED","CACHE" ];
+vm.annotationTypePreparedData.entityList=["PRIMARY_KEY","NOT_NULL","NOT_BLANK","DESCRIPTION_FIELD","BETWEEN_FILTER","EXCEL_EXPORT","FILTER_FIELD","IGNORE_SEARCH","IGNORE_UPDATE","IGNORE_TABLE_LIST","SIZE","PASSWORD","PRIORITY","EMBEDDED","CACHE","INCLUDE_SEARCH","INCLUDE_TABLE_LIST","INCLUDE_UPDATE" ];
 function reset()
 {
 annotationService.resetSearchBean();
@@ -574,22 +574,6 @@ $log.debug(response);
 return; 
   }	
 );
-relationshipService.initAnnotationList().then(function(response) {
-annotationService.preparedData.entityList=response.data;
-});
-
-if (relationshipService.selectedEntity.relationshipId!=undefined) relationshipService.searchOne(relationshipService.selectedEntity).then(
-function successCallback(response) {
-$log.debug("response-ok");
-$log.debug(response);
-relationshipService.setSelectedEntity(response.data[0]);
-  }, function errorCallback(response) {
-UtilityService.AlertError.init({selector: "#alertError"});
-UtilityService.AlertError.show("Si è verificato un errore");
-$log.debug(response);
-return; 
-  }	
-);
 enumFieldService.initAnnotationList().then(function(response) {
 annotationService.preparedData.entityList=response.data;
 });
@@ -599,6 +583,22 @@ function successCallback(response) {
 $log.debug("response-ok");
 $log.debug(response);
 enumFieldService.setSelectedEntity(response.data[0]);
+  }, function errorCallback(response) {
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
+  }	
+);
+relationshipService.initAnnotationList().then(function(response) {
+annotationService.preparedData.entityList=response.data;
+});
+
+if (relationshipService.selectedEntity.relationshipId!=undefined) relationshipService.searchOne(relationshipService.selectedEntity).then(
+function successCallback(response) {
+$log.debug("response-ok");
+$log.debug(response);
+relationshipService.setSelectedEntity(response.data[0]);
   }, function errorCallback(response) {
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");

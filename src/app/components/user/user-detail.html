@@ -18,15 +18,6 @@
 		
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !userDetailForm.password.$valid, &#39;has-success&#39;: userDetailForm.password.$valid}" style="height:59px" ng-show="true ">
-	<div class="input-group">
-		<span class="input-group-addon">password
-		</span>
-
-		<input class="form-control " aria-describedby="sizing-addon3" type="password" id="user-password" ng-model="vm.selectedEntity.password" ng-readonly="vm.restrictionList.user.restrictionFieldMap.password" name="password" placeholder="password"/>
-		
-	</div>
-</div>
 <div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !userDetailForm.username.$valid, &#39;has-success&#39;: userDetailForm.username.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
 		<span class="input-group-addon">username
@@ -44,6 +35,15 @@
 		<select class="form-control " aria-describedby="sizing-addon3" type="checkbox" id="user-enabled" ng-model="vm.selectedEntity.enabled" ng-readonly="vm.restrictionList.user.restrictionFieldMap.enabled" name="enabled" placeholder="enabled" ng-options="value for value in vm.trueFalseValues">
 		</select>
 
+	</div>
+</div>
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !userDetailForm.password.$valid, &#39;has-success&#39;: userDetailForm.password.$valid}" style="height:59px" ng-show="true ">
+	<div class="input-group">
+		<span class="input-group-addon">password
+		</span>
+
+		<input class="form-control " aria-describedby="sizing-addon3" type="password" id="user-password" ng-model="vm.selectedEntity.password" ng-readonly="vm.restrictionList.user.restrictionFieldMap.password" name="password" placeholder="password"/>
+		
 	</div>
 </div>
 <div id="user-role" class="modal fade" role="dialog" ng-if="!$root.openNode.role">
@@ -120,9 +120,6 @@
  </uib-tab></uib-tabset>
 
 				</div>
-
-				<script type="text/javascript">$('#userTabs a:first').tab('show');
-				</script>
 
 				<div class="panel-body">
 					<div class="pull-left">

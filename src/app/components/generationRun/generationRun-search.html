@@ -16,6 +16,15 @@
 </div>
 <div class="pull-left right-input" ng-show="true ">
 	<div class="input-group">
+		<span class="input-group-addon">status
+		</span>
+
+		<input class="form-control " aria-describedby="sizing-addon3" type="text" id="generationRun-status" ng-model="vm.searchBean.status" ng-readonly="false" name="status" placeholder="status"/>
+		
+	</div>
+</div>
+<div class="pull-left right-input" ng-show="true ">
+	<div class="input-group">
 		<span class="input-group-addon">startDate
 		</span>
 
@@ -29,15 +38,6 @@
 		</span>
 
 		<input class="form-control " aria-describedby="sizing-addon3" type="text" ui-date="{ dateFormat: &#39;dd/mm/yy&#39; }" ng-model="vm.searchBean.endDate" ng-readonly="false" name="endDate" placeholder="endDate"/>
-		
-	</div>
-</div>
-<div class="pull-left right-input" ng-show="true ">
-	<div class="input-group">
-		<span class="input-group-addon">status
-		</span>
-
-		<input class="form-control " aria-describedby="sizing-addon3" type="text" id="generationRun-status" ng-model="vm.searchBean.status" ng-readonly="false" name="status" placeholder="status"/>
 		
 	</div>
 </div>

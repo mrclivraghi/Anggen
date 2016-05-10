@@ -80,12 +80,12 @@ paginationPageSize: 10,
 enableGridMenu: true,
 columnDefs: [    
 { name: 'logEntryId'},
-{ name: 'info'},
-{ name: 'hostName'},
-{ name: 'userId'},
+{ name: 'ipAddress'},
 { name: 'logDate', cellFilter: "date:'dd-MM-yyyy'"},
+{ name: 'hostName'},
 { name: 'entityId'},
-{ name: 'ipAddress'} 
+{ name: 'userId'},
+{ name: 'info'} 
 ]
  };
 }

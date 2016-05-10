@@ -110,6 +110,8 @@ columnDefs: [
 { name: 'enumFieldId'},
 { name: 'priority'},
 { name: 'name'},
+{ name: 'addDate', cellFilter: "date:'dd-MM-yyyy'"},
+{ name: 'modDate', cellFilter: "date:'dd-MM-yyyy'"},
 { name: 'entity.entityId', displayName: 'entity'},
 { name: 'enumEntity.enumEntityId', displayName: 'enumEntity'},
 { name: 'tab.tabId', displayName: 'tab'} 

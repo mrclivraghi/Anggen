@@ -102,6 +102,8 @@ enableGridMenu: true,
 columnDefs: [    
 { name: 'enumEntityId'},
 { name: 'name'},
+{ name: 'addDate', cellFilter: "date:'dd-MM-yyyy'"},
+{ name: 'modDate', cellFilter: "date:'dd-MM-yyyy'"},
 { name: 'project.projectId', displayName: 'project'} 
 ]
  };

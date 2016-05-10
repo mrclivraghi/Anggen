@@ -19,6 +19,8 @@ vm.tabPreparedData=tabService.preparedData;
 vm.relationshipPreparedData=relationshipService.preparedData;
 vm.securityTypePreparedData={};
 vm.securityTypePreparedData.entityList=["BLOCK_WITH_RESTRICTION","ACCESS_WITH_PERMISSION" ];
+vm.generationTypePreparedData={};
+vm.generationTypePreparedData.entityList=["SHOW_INCLUDE","HIDE_IGNORE" ];
 function reset()
 {
 entityService.resetSearchBean();
@@ -798,38 +800,6 @@ $log.debug(response);
 return; 
   }	
 );
-relationshipService.initEntityList().then(function(response) {
-entityService.preparedData.entityList=response.data;
-});
-
-if (relationshipService.selectedEntity.relationshipId!=undefined) relationshipService.searchOne(relationshipService.selectedEntity).then(
-function successCallback(response) {
-$log.debug("response-ok");
-$log.debug(response);
-relationshipService.setSelectedEntity(response.data[0]);
-  }, function errorCallback(response) {
-UtilityService.AlertError.init({selector: "#alertError"});
-UtilityService.AlertError.show("Si è verificato un errore");
-$log.debug(response);
-return; 
-  }	
-);
-relationshipService.initEntityList().then(function(response) {
-entityService.preparedData.entityList=response.data;
-});
-
-if (relationshipService.selectedEntity.relationshipId!=undefined) relationshipService.searchOne(relationshipService.selectedEntity).then(
-function successCallback(response) {
-$log.debug("response-ok");
-$log.debug(response);
-relationshipService.setSelectedEntity(response.data[0]);
-  }, function errorCallback(response) {
-UtilityService.AlertError.init({selector: "#alertError"});
-UtilityService.AlertError.show("Si è verificato un errore");
-$log.debug(response);
-return; 
-  }	
-);
 enumFieldService.initEntityList().then(function(response) {
 entityService.preparedData.entityList=response.data;
 });
@@ -846,22 +816,6 @@ $log.debug(response);
 return; 
   }	
 );
-fieldService.initEntityList().then(function(response) {
-entityService.preparedData.entityList=response.data;
-});
-
-if (fieldService.selectedEntity.fieldId!=undefined) fieldService.searchOne(fieldService.selectedEntity).then(
-function successCallback(response) {
-$log.debug("response-ok");
-$log.debug(response);
-fieldService.setSelectedEntity(response.data[0]);
-  }, function errorCallback(response) {
-UtilityService.AlertError.init({selector: "#alertError"});
-UtilityService.AlertError.show("Si è verificato un errore");
-$log.debug(response);
-return; 
-  }	
-);
 entityGroupService.initEntityList().then(function(response) {
 entityService.preparedData.entityList=response.data;
 });
@@ -871,6 +825,54 @@ function successCallback(response) {
 $log.debug("response-ok");
 $log.debug(response);
 entityGroupService.setSelectedEntity(response.data[0]);
+  }, function errorCallback(response) {
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
+  }	
+);
+relationshipService.initEntityList().then(function(response) {
+entityService.preparedData.entityList=response.data;
+});
+
+if (relationshipService.selectedEntity.relationshipId!=undefined) relationshipService.searchOne(relationshipService.selectedEntity).then(
+function successCallback(response) {
+$log.debug("response-ok");
+$log.debug(response);
+relationshipService.setSelectedEntity(response.data[0]);
+  }, function errorCallback(response) {
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
+  }	
+);
+relationshipService.initEntityList().then(function(response) {
+entityService.preparedData.entityList=response.data;
+});
+
+if (relationshipService.selectedEntity.relationshipId!=undefined) relationshipService.searchOne(relationshipService.selectedEntity).then(
+function successCallback(response) {
+$log.debug("response-ok");
+$log.debug(response);
+relationshipService.setSelectedEntity(response.data[0]);
+  }, function errorCallback(response) {
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
+  }	
+);
+fieldService.initEntityList().then(function(response) {
+entityService.preparedData.entityList=response.data;
+});
+
+if (fieldService.selectedEntity.fieldId!=undefined) fieldService.searchOne(fieldService.selectedEntity).then(
+function successCallback(response) {
+$log.debug("response-ok");
+$log.debug(response);
+fieldService.setSelectedEntity(response.data[0]);
   }, function errorCallback(response) {
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");

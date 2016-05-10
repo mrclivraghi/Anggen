@@ -18,30 +18,12 @@
 		
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !logEntryDetailForm.info.$valid, &#39;has-success&#39;: logEntryDetailForm.info.$valid}" style="height:59px" ng-show="true ">
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !logEntryDetailForm.ipAddress.$valid, &#39;has-success&#39;: logEntryDetailForm.ipAddress.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
-		<span class="input-group-addon">info
+		<span class="input-group-addon">ipAddress
 		</span>
 
-		<input class="form-control " aria-describedby="sizing-addon3" type="text" id="logEntry-info" ng-model="vm.selectedEntity.info" ng-readonly="vm.restrictionList.logEntry.restrictionFieldMap.info" name="info" placeholder="info"/>
-		
-	</div>
-</div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !logEntryDetailForm.hostName.$valid, &#39;has-success&#39;: logEntryDetailForm.hostName.$valid}" style="height:59px" ng-show="true ">
-	<div class="input-group">
-		<span class="input-group-addon">hostName
-		</span>
-
-		<input class="form-control " aria-describedby="sizing-addon3" type="text" id="logEntry-hostName" ng-model="vm.selectedEntity.hostName" ng-readonly="vm.restrictionList.logEntry.restrictionFieldMap.hostName" name="hostName" placeholder="hostName"/>
-		
-	</div>
-</div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !logEntryDetailForm.userId.$valid, &#39;has-success&#39;: logEntryDetailForm.userId.$valid}" style="height:59px" ng-show="true ">
-	<div class="input-group">
-		<span class="input-group-addon">userId
-		</span>
-
-		<input class="form-control " aria-describedby="sizing-addon3" type="text" id="logEntry-userId" ng-model="vm.selectedEntity.userId" ng-readonly="vm.restrictionList.logEntry.restrictionFieldMap.userId" name="userId" placeholder="userId"/>
+		<input class="form-control " aria-describedby="sizing-addon3" type="text" id="logEntry-ipAddress" ng-model="vm.selectedEntity.ipAddress" ng-readonly="vm.restrictionList.logEntry.restrictionFieldMap.ipAddress" name="ipAddress" placeholder="ipAddress"/>
 		
 	</div>
 </div>
@@ -54,6 +36,15 @@
 		
 	</div>
 </div>
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !logEntryDetailForm.hostName.$valid, &#39;has-success&#39;: logEntryDetailForm.hostName.$valid}" style="height:59px" ng-show="true ">
+	<div class="input-group">
+		<span class="input-group-addon">hostName
+		</span>
+
+		<input class="form-control " aria-describedby="sizing-addon3" type="text" id="logEntry-hostName" ng-model="vm.selectedEntity.hostName" ng-readonly="vm.restrictionList.logEntry.restrictionFieldMap.hostName" name="hostName" placeholder="hostName"/>
+		
+	</div>
+</div>
 <div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !logEntryDetailForm.entityId.$valid, &#39;has-success&#39;: logEntryDetailForm.entityId.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
 		<span class="input-group-addon">entityId
@@ -63,12 +54,21 @@
 		
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !logEntryDetailForm.ipAddress.$valid, &#39;has-success&#39;: logEntryDetailForm.ipAddress.$valid}" style="height:59px" ng-show="true ">
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !logEntryDetailForm.userId.$valid, &#39;has-success&#39;: logEntryDetailForm.userId.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
-		<span class="input-group-addon">ipAddress
+		<span class="input-group-addon">userId
 		</span>
 
-		<input class="form-control " aria-describedby="sizing-addon3" type="text" id="logEntry-ipAddress" ng-model="vm.selectedEntity.ipAddress" ng-readonly="vm.restrictionList.logEntry.restrictionFieldMap.ipAddress" name="ipAddress" placeholder="ipAddress"/>
+		<input class="form-control " aria-describedby="sizing-addon3" type="text" id="logEntry-userId" ng-model="vm.selectedEntity.userId" ng-readonly="vm.restrictionList.logEntry.restrictionFieldMap.userId" name="userId" placeholder="userId"/>
+		
+	</div>
+</div>
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !logEntryDetailForm.info.$valid, &#39;has-success&#39;: logEntryDetailForm.info.$valid}" style="height:59px" ng-show="true ">
+	<div class="input-group">
+		<span class="input-group-addon">info
+		</span>
+
+		<input class="form-control " aria-describedby="sizing-addon3" type="text" id="logEntry-info" ng-model="vm.selectedEntity.info" ng-readonly="vm.restrictionList.logEntry.restrictionFieldMap.info" name="info" placeholder="info"/>
 		
 	</div>
 </div>
@@ -95,9 +95,6 @@
  </uib-tab></uib-tabset>
 
 				</div>
-
-				<script type="text/javascript">$('#logEntryTabs a:first').tab('show');
-				</script>
 
 				<div class="panel-body">
 					<div class="pull-left">

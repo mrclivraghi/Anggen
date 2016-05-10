@@ -16,19 +16,19 @@
 </div>
 <div class="pull-left right-input" ng-show="true ">
 	<div class="input-group">
-		<span class="input-group-addon">name
+		<span class="input-group-addon">value
 		</span>
 
-		<input class="form-control " aria-describedby="sizing-addon3" type="text" id="enumValue-name" ng-model="vm.searchBean.name" ng-readonly="false" name="name" placeholder="name"/>
+		<input class="form-control " aria-describedby="sizing-addon3" type="text" id="enumValue-value" ng-model="vm.searchBean.value" ng-readonly="false" name="value" placeholder="value"/>
 		
 	</div>
 </div>
 <div class="pull-left right-input" ng-show="true ">
 	<div class="input-group">
-		<span class="input-group-addon">value
+		<span class="input-group-addon">name
 		</span>
 
-		<input class="form-control " aria-describedby="sizing-addon3" type="text" id="enumValue-value" ng-model="vm.searchBean.value" ng-readonly="false" name="value" placeholder="value"/>
+		<input class="form-control " aria-describedby="sizing-addon3" type="text" id="enumValue-name" ng-model="vm.searchBean.name" ng-readonly="false" name="name" placeholder="name"/>
 		
 	</div>
 </div>
@@ -37,7 +37,7 @@
 		<span class="input-group-addon">enumEntity
 		</span>
 
-		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.enumEntity.enumEntityId" id="enumEntity" ng-options="enumEntity.enumEntityId as  enumEntity.name+&#39; &#39;+ enumEntity.enumEntityId for enumEntity in vm.enumEntityPreparedData.entityList" enctype="UTF-8">
+		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.enumEntity.enumEntityId" id="enumEntity" ng-options="enumEntity.enumEntityId as  enumEntity.enumEntityId+&#39; &#39;+ enumEntity.name for enumEntity in vm.enumEntityPreparedData.entityList" enctype="UTF-8">
 		</select>
 
 	</div>

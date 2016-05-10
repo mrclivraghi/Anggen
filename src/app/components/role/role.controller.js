@@ -609,22 +609,6 @@ $log.debug(response);
 return; 
   }	
 );
-restrictionEntityService.initRoleList().then(function(response) {
-roleService.preparedData.entityList=response.data;
-});
-
-if (restrictionEntityService.selectedEntity.restrictionEntityId!=undefined) restrictionEntityService.searchOne(restrictionEntityService.selectedEntity).then(
-function successCallback(response) {
-$log.debug("response-ok");
-$log.debug(response);
-restrictionEntityService.setSelectedEntity(response.data[0]);
-  }, function errorCallback(response) {
-UtilityService.AlertError.init({selector: "#alertError"});
-UtilityService.AlertError.show("Si è verificato un errore");
-$log.debug(response);
-return; 
-  }	
-);
 restrictionFieldService.initRoleList().then(function(response) {
 roleService.preparedData.entityList=response.data;
 });
@@ -634,6 +618,22 @@ function successCallback(response) {
 $log.debug("response-ok");
 $log.debug(response);
 restrictionFieldService.setSelectedEntity(response.data[0]);
+  }, function errorCallback(response) {
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
+  }	
+);
+restrictionEntityService.initRoleList().then(function(response) {
+roleService.preparedData.entityList=response.data;
+});
+
+if (restrictionEntityService.selectedEntity.restrictionEntityId!=undefined) restrictionEntityService.searchOne(restrictionEntityService.selectedEntity).then(
+function successCallback(response) {
+$log.debug("response-ok");
+$log.debug(response);
+restrictionEntityService.setSelectedEntity(response.data[0]);
   }, function errorCallback(response) {
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");

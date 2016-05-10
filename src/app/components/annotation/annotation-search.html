@@ -29,7 +29,7 @@
 		<span class="input-group-addon">annotationAttribute
 		</span>
 
-		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.annotationAttribute.annotationAttributeId" id="annotationAttribute" ng-options="annotationAttribute.annotationAttributeId as  annotationAttribute.property+&#39; &#39;+ annotationAttribute.annotationAttributeId for annotationAttribute in vm.annotationAttributePreparedData.entityList" enctype="UTF-8">
+		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.annotationAttribute.annotationAttributeId" id="annotationAttribute" ng-options="annotationAttribute.annotationAttributeId as  annotationAttribute.annotationAttributeId+&#39; &#39;+ annotationAttribute.property for annotationAttribute in vm.annotationAttributePreparedData.entityList" enctype="UTF-8">
 		</select>
 
 	</div>
@@ -59,7 +59,7 @@
 		<span class="input-group-addon">relationship
 		</span>
 
-		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.relationship.relationshipId" id="relationship" ng-options="relationship.relationshipId as  relationship.name+&#39; &#39;+ relationship.relationshipId for relationship in vm.relationshipPreparedData.entityList" enctype="UTF-8">
+		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.relationship.relationshipId" id="relationship" ng-options="relationship.relationshipId as  relationship.relationshipId+&#39; &#39;+ relationship.name for relationship in vm.relationshipPreparedData.entityList" enctype="UTF-8">
 		</select>
 
 	</div>

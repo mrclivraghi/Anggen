@@ -23,12 +23,12 @@ public class GenerationRun {
     @GeneratedValue
     @DescriptionField
     private java.lang.Integer generationRunId;
-    @javax.persistence.Column(name = "end_date")
-    private java.util.Date endDate;
     @javax.persistence.Column(name = "status")
     private java.lang.Integer status;
     @javax.persistence.Column(name = "start_date")
     private java.util.Date startDate;
+    @javax.persistence.Column(name = "end_date")
+    private java.util.Date endDate;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id_project")
     private it.anggen.model.entity.Project project;
@@ -39,14 +39,6 @@ public class GenerationRun {
 
     public void setGenerationRunId(java.lang.Integer generationRunId) {
         this.generationRunId=generationRunId;
-    }
-
-    public java.util.Date getEndDate() {
-        return this.endDate;
-    }
-
-    public void setEndDate(java.util.Date endDate) {
-        this.endDate=endDate;
     }
 
     public java.lang.Integer getStatus() {
@@ -63,6 +55,14 @@ public class GenerationRun {
 
     public void setStartDate(java.util.Date startDate) {
         this.startDate=startDate;
+    }
+
+    public java.util.Date getEndDate() {
+        return this.endDate;
+    }
+
+    public void setEndDate(java.util.Date endDate) {
+        this.endDate=endDate;
     }
 
     public it.anggen.model.entity.Project getProject() {

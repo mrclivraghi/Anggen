@@ -22,15 +22,6 @@ public class EnumField
 {
 
     public final static java.lang.Long staticEntityId = 16L;
-    @javax.persistence.Column(name = "mod_date")
-    @UpdateTimestamp
-    private java.util.Date modDate;
-    @javax.persistence.Column(name = "name")
-    @it.anggen.utils.annotation.DescriptionField
-    private String name;
-    @javax.persistence.Column(name = "add_date")
-    @CreationTimestamp
-    private java.util.Date addDate;
     @javax.persistence.Column(name = "enum_field_id")
     @Id
     @GeneratedValue
@@ -38,6 +29,15 @@ public class EnumField
     private java.lang.Long enumFieldId;
     @javax.persistence.Column(name = "priority")
     private Integer priority;
+    @javax.persistence.Column(name = "name")
+    @it.anggen.utils.annotation.DescriptionField
+    private String name;
+    @javax.persistence.Column(name = "add_date")
+    @CreationTimestamp
+    private java.util.Date addDate;
+    @javax.persistence.Column(name = "mod_date")
+    @UpdateTimestamp
+    private java.util.Date modDate;
     @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.LAZY)
     @javax.persistence.JoinColumn(name = "entity_id_entity")
     private it.anggen.model.entity.Entity entity;
@@ -52,12 +52,20 @@ public class EnumField
     @javax.persistence.JoinColumn(name = "enum_field_id_enum_field")
     private List<Annotation> annotationList;
 
-    public java.util.Date getModDate() {
-        return this.modDate;
+    public java.lang.Long getEnumFieldId() {
+        return this.enumFieldId;
     }
 
-    public void setModDate(java.util.Date modDate) {
-        this.modDate=modDate;
+    public void setEnumFieldId(java.lang.Long enumFieldId) {
+        this.enumFieldId=enumFieldId;
+    }
+
+    public Integer getPriority() {
+        return this.priority;
+    }
+
+    public void setPriority(Integer priority) {
+        this.priority=priority;
     }
 
     public String getName() {
@@ -76,20 +84,12 @@ public class EnumField
         this.addDate=addDate;
     }
 
-    public java.lang.Long getEnumFieldId() {
-        return this.enumFieldId;
+    public java.util.Date getModDate() {
+        return this.modDate;
     }
 
-    public void setEnumFieldId(java.lang.Long enumFieldId) {
-        this.enumFieldId=enumFieldId;
-    }
-
-    public Integer getPriority() {
-        return this.priority;
-    }
-
-    public void setPriority(Integer priority) {
-        this.priority=priority;
+    public void setModDate(java.util.Date modDate) {
+        this.modDate=modDate;
     }
 
     public it.anggen.model.entity.Entity getEntity() {

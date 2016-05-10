@@ -20,14 +20,14 @@ public class RestrictionEntityGroup {
     @GeneratedValue
     @DescriptionField
     private java.lang.Long restrictionEntityGroupId;
-    @javax.persistence.Column(name = "can_search")
-    private java.lang.Boolean canSearch;
-    @javax.persistence.Column(name = "can_update")
-    private java.lang.Boolean canUpdate;
-    @javax.persistence.Column(name = "can_delete")
-    private java.lang.Boolean canDelete;
     @javax.persistence.Column(name = "can_create")
     private java.lang.Boolean canCreate;
+    @javax.persistence.Column(name = "can_search")
+    private java.lang.Boolean canSearch;
+    @javax.persistence.Column(name = "can_delete")
+    private java.lang.Boolean canDelete;
+    @javax.persistence.Column(name = "can_update")
+    private java.lang.Boolean canUpdate;
     @javax.persistence.ManyToOne(fetch = javax.persistence.FetchType.LAZY)
     @javax.persistence.JoinColumn(name = "role_id_role")
     private it.anggen.model.security.Role role;
@@ -43,20 +43,20 @@ public class RestrictionEntityGroup {
         this.restrictionEntityGroupId=restrictionEntityGroupId;
     }
 
+    public java.lang.Boolean getCanCreate() {
+        return this.canCreate;
+    }
+
+    public void setCanCreate(java.lang.Boolean canCreate) {
+        this.canCreate=canCreate;
+    }
+
     public java.lang.Boolean getCanSearch() {
         return this.canSearch;
     }
 
     public void setCanSearch(java.lang.Boolean canSearch) {
         this.canSearch=canSearch;
-    }
-
-    public java.lang.Boolean getCanUpdate() {
-        return this.canUpdate;
-    }
-
-    public void setCanUpdate(java.lang.Boolean canUpdate) {
-        this.canUpdate=canUpdate;
     }
 
     public java.lang.Boolean getCanDelete() {
@@ -67,12 +67,12 @@ public class RestrictionEntityGroup {
         this.canDelete=canDelete;
     }
 
-    public java.lang.Boolean getCanCreate() {
-        return this.canCreate;
+    public java.lang.Boolean getCanUpdate() {
+        return this.canUpdate;
     }
 
-    public void setCanCreate(java.lang.Boolean canCreate) {
-        this.canCreate=canCreate;
+    public void setCanUpdate(java.lang.Boolean canUpdate) {
+        this.canUpdate=canUpdate;
     }
 
     public it.anggen.model.security.Role getRole() {

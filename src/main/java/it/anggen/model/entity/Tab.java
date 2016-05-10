@@ -22,20 +22,20 @@ import org.hibernate.annotations.UpdateTimestamp;
 public class Tab {
 
     public final static java.lang.Long staticEntityId = 8L;
-    @javax.persistence.Column(name = "name")
-    @it.anggen.utils.annotation.DescriptionField
-    private String name;
-    @javax.persistence.Column(name = "mod_date")
-    @UpdateTimestamp
-    private java.util.Date modDate;
-    @javax.persistence.Column(name = "add_date")
-    @CreationTimestamp
-    private java.util.Date addDate;
     @javax.persistence.Column(name = "tab_id")
     @Id
     @GeneratedValue
     @it.anggen.utils.annotation.DescriptionField
     private java.lang.Long tabId;
+    @javax.persistence.Column(name = "name")
+    @it.anggen.utils.annotation.DescriptionField
+    private String name;
+    @javax.persistence.Column(name = "add_date")
+    @CreationTimestamp
+    private java.util.Date addDate;
+    @javax.persistence.Column(name = "mod_date")
+    @UpdateTimestamp
+    private java.util.Date modDate;
     @ManyToOne(fetch = javax.persistence.FetchType.LAZY)
     @javax.persistence.JoinColumn(name = "entity_id_entity")
     private it.anggen.model.entity.Entity entity;
@@ -52,20 +52,20 @@ public class Tab {
     @javax.persistence.JoinColumn(name = "tab_id_tab")
     private List<Relationship> relationshipList;
 
+    public java.lang.Long getTabId() {
+        return this.tabId;
+    }
+
+    public void setTabId(java.lang.Long tabId) {
+        this.tabId=tabId;
+    }
+
     public String getName() {
         return this.name;
     }
 
     public void setName(String name) {
         this.name=name;
-    }
-
-    public java.util.Date getModDate() {
-        return this.modDate;
-    }
-
-    public void setModDate(java.util.Date modDate) {
-        this.modDate=modDate;
     }
 
     public java.util.Date getAddDate() {
@@ -76,12 +76,12 @@ public class Tab {
         this.addDate=addDate;
     }
 
-    public java.lang.Long getTabId() {
-        return this.tabId;
+    public java.util.Date getModDate() {
+        return this.modDate;
     }
 
-    public void setTabId(java.lang.Long tabId) {
-        this.tabId=tabId;
+    public void setModDate(java.util.Date modDate) {
+        this.modDate=modDate;
     }
 
     public it.anggen.model.entity.Entity getEntity() {

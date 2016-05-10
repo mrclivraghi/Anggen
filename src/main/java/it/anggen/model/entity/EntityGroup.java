@@ -25,15 +25,15 @@ public class EntityGroup {
     @GeneratedValue
     @it.anggen.utils.annotation.DescriptionField
     private java.lang.Long entityGroupId;
+    @javax.persistence.Column(name = "name")
+    @it.anggen.utils.annotation.DescriptionField
+    private String name;
     @javax.persistence.Column(name = "add_date")
     @CreationTimestamp
     private java.util.Date addDate;
     @javax.persistence.Column(name = "mod_date")
     @UpdateTimestamp
     private java.util.Date modDate;
-    @javax.persistence.Column(name = "name")
-    @it.anggen.utils.annotation.DescriptionField
-    private String name;
     @OneToMany(fetch = javax.persistence.FetchType.LAZY)
     @Type(type = "it.anggen.model.security.RestrictionEntityGroup")
     @javax.persistence.JoinColumn(name = "entity_group_id_entity_group")
@@ -56,6 +56,14 @@ public class EntityGroup {
         this.entityGroupId=entityGroupId;
     }
 
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name=name;
+    }
+
     public java.util.Date getAddDate() {
         return this.addDate;
     }
@@ -70,14 +78,6 @@ public class EntityGroup {
 
     public void setModDate(java.util.Date modDate) {
         this.modDate=modDate;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(String name) {
-        this.name=name;
     }
 
     public List<RestrictionEntityGroup> getRestrictionEntityGroupList() {

@@ -14,6 +14,8 @@ import it.anggen.model.security.RestrictionEntity;
 import it.anggen.model.security.RestrictionEntityGroup;
 import it.anggen.model.security.RestrictionField;
 import it.anggen.model.security.User;
+import it.anggen.utils.annotation.GenerationType;
+import it.anggen.utils.annotation.IncludeMenu;
 import it.anggen.utils.annotation.MaxDescendantLevel;
 import org.hibernate.annotations.Type;
 
@@ -21,6 +23,8 @@ import org.hibernate.annotations.Type;
 @Table(schema = "sso", name = "role")
 @it.anggen.utils.annotation.SecurityType(type = it.anggen.model.SecurityType.ACCESS_WITH_PERMISSION)
 @MaxDescendantLevel(100)
+@IncludeMenu
+@GenerationType(type=it.anggen.model.GenerationType.HIDE_IGNORE)
 public class Role {
 
     public final static Long staticEntityId = 8L;

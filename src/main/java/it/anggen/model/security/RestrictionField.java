@@ -7,12 +7,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import it.anggen.utils.annotation.DescriptionField;
+import it.anggen.utils.annotation.GenerationType;
+import it.anggen.utils.annotation.IncludeMenu;
 import it.anggen.utils.annotation.MaxDescendantLevel;
 
 @Entity
 @Table(schema = "sso", name = "restriction_field")
 @it.anggen.utils.annotation.SecurityType(type = it.anggen.model.SecurityType.ACCESS_WITH_PERMISSION)
 @MaxDescendantLevel(100)
+@IncludeMenu
+@GenerationType(type=it.anggen.model.GenerationType.HIDE_IGNORE)
 public class RestrictionField {
 
     public final static java.lang.Long staticEntityId = 14L;

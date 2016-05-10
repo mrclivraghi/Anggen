@@ -11,6 +11,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import it.anggen.model.security.Role;
+import it.anggen.utils.annotation.GenerationType;
+import it.anggen.utils.annotation.IncludeMenu;
 import it.anggen.utils.annotation.MaxDescendantLevel;
 import it.anggen.utils.annotation.Password;
 import org.hibernate.annotations.Type;
@@ -19,6 +21,8 @@ import org.hibernate.annotations.Type;
 @Table(schema = "sso", name = "user")
 @it.anggen.utils.annotation.SecurityType(type = it.anggen.model.SecurityType.ACCESS_WITH_PERMISSION)
 @MaxDescendantLevel(100)
+@IncludeMenu
+@GenerationType(type=it.anggen.model.GenerationType.HIDE_IGNORE)
 public class User {
 
     public final static java.lang.Long staticEntityId = 12L;

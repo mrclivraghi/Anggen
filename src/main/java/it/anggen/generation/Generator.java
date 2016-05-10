@@ -255,20 +255,20 @@ public class Generator {
 		this.entityGroupList=project.getEntityGroupList();
 		this.enumEntityList=project.getEnumEntityList();
 		this.modelEntityList=new ArrayList<Entity>();
-		
-		generationRunList = generationRunRepository.findByGenerationRunIdAndStatusAndStartDateAndEndDateAndProject(null, 1, null, null, project);
-		if (generationRunList.size()==0)
+		generationRunList=generationRunRepository.findByProject(project);
+		List<GenerationRun> generationRunDoneList = generationRunRepository.findByGenerationRunIdAndStatusAndStartDateAndEndDateAndProject(null, 1, null, null, project);
+		if (generationRunDoneList.size()==0)
 		{
 			Generator.lastGenerationDate=new Date(0, 1, 1);
 			oldGenerationBranchName=null;
 		}
 		else
 		{
-			Utility.orderByStartDate(generationRunList);
+			Utility.orderByStartDate(generationRunDoneList);
 			
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
-			oldGenerationBranchName="refs/heads/generation/gen_"+sdf.format(generationRunList.get(generationRunList.size()-1).getStartDate());
-			Generator.lastGenerationDate=generationRunList.get(generationRunList.size()-1).getStartDate();
+			oldGenerationBranchName="refs/heads/generation/gen_"+sdf.format(generationRunDoneList.get(generationRunDoneList.size()-1).getStartDate());
+			Generator.lastGenerationDate=generationRunDoneList.get(generationRunDoneList.size()-1).getStartDate();
 		}
 		if (entityGroupList!=null)
 		for (EntityGroup entityGroup: entityGroupList)

@@ -343,6 +343,8 @@ public class Generator {
 			currentBranchName = git.getRepository().getBranch();
 			// Get a reference
 			Ref develop = repo.getRef(currentBranchName);
+			
+			Map<String,Ref> allRefs=repo.getAllRefs();
 
 			// Get the object the reference points to
 			ObjectId developTip = develop.getObjectId();

@@ -1625,6 +1625,7 @@ if (entity.getEntityGroup()!=null)
 		//empty list
 		sb.append("this.emptyList=function(list)\n");
 		sb.append("{\n");
+		sb.append("if (list!=undefined) \n");
 		sb.append("	while (list.length>0)\n");
 		sb.append("		list.pop();\n");
 		sb.append("}\n");

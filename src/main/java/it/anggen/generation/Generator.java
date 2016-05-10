@@ -349,7 +349,7 @@ public class Generator {
 
 			// Create a branch
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
-			generationBranchName="refs/heads/generation/gen_"+sdf.format(new Date());
+			generationBranchName="refs/heads/feature/generation/gen_"+sdf.format(new Date());
 			Ref testBranch= repo.getRef(generationBranchName);
 			if (testBranch==null)
 			{
@@ -389,9 +389,10 @@ public class Generator {
 			git.add().addFilepattern(".").call();
 			
 			RevCommit lastCommit = git.commit().setMessage(generationBranchName).call();
+			Ref develop = repo.getRef(currentBranchName);
 
-			git.checkout().setName(currentBranchName).call();
-			git.merge().setCommit(false).include(lastCommit).call();
+			git.merge().setCommit(false).include(develop).call();
+			//git.checkout().setName(currentBranchName).call();
 
 
 

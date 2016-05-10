@@ -22,11 +22,6 @@ import org.hibernate.annotations.Type;
 public class User {
 
     public final static java.lang.Long staticEntityId = 3L;
-    @javax.persistence.Column(name = "enabled")
-    private Boolean enabled;
-    @javax.persistence.Column(name = "password")
-    @Password
-    private java.lang.String password;
     @javax.persistence.Column(name = "user_id")
     @it.anggen.utils.annotation.DescriptionField
     @Id
@@ -35,6 +30,11 @@ public class User {
     @javax.persistence.Column(name = "username")
     @it.anggen.utils.annotation.DescriptionField
     private java.lang.String username;
+    @javax.persistence.Column(name = "enabled")
+    private Boolean enabled;
+    @javax.persistence.Column(name = "password")
+    @Password
+    private java.lang.String password;
     @ManyToMany(fetch = FetchType.LAZY)
     @Type(type = "it.anggen.model.security.Role")
     @JoinTable(name = "user_role", schema = "sso", joinColumns = {
@@ -43,22 +43,6 @@ public class User {
         @JoinColumn(name = "role_id")
     })
     private List<Role> roleList;
-
-    public Boolean getEnabled() {
-        return this.enabled;
-    }
-
-    public void setEnabled(Boolean enabled) {
-        this.enabled=enabled;
-    }
-
-    public java.lang.String getPassword() {
-        return this.password;
-    }
-
-    public void setPassword(java.lang.String password) {
-        this.password=password;
-    }
 
     public java.lang.Long getUserId() {
         return this.userId;
@@ -74,6 +58,22 @@ public class User {
 
     public void setUsername(java.lang.String username) {
         this.username=username;
+    }
+
+    public Boolean getEnabled() {
+        return this.enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled=enabled;
+    }
+
+    public java.lang.String getPassword() {
+        return this.password;
+    }
+
+    public void setPassword(java.lang.String password) {
+        this.password=password;
     }
 
     public List<Role> getRoleList() {

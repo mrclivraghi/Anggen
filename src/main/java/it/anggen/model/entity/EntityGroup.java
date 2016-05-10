@@ -20,9 +20,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 public class EntityGroup {
 
     public final static java.lang.Long staticEntityId = 14L;
-    @javax.persistence.Column(name = "name")
-    @it.anggen.utils.annotation.DescriptionField
-    private String name;
     @javax.persistence.Column(name = "entity_group_id")
     @Id
     @GeneratedValue
@@ -34,6 +31,9 @@ public class EntityGroup {
     @javax.persistence.Column(name = "mod_date")
     @UpdateTimestamp
     private java.util.Date modDate;
+    @javax.persistence.Column(name = "name")
+    @it.anggen.utils.annotation.DescriptionField
+    private String name;
     @OneToMany(fetch = javax.persistence.FetchType.LAZY)
     @Type(type = "it.anggen.model.security.RestrictionEntityGroup")
     @javax.persistence.JoinColumn(name = "entity_group_id_entity_group")
@@ -47,14 +47,6 @@ public class EntityGroup {
     private it.anggen.model.entity.Project project;
     @javax.persistence.Column(name = "security_type")
     private it.anggen.model.SecurityType securityType;
-
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(String name) {
-        this.name=name;
-    }
 
     public java.lang.Long getEntityGroupId() {
         return this.entityGroupId;
@@ -78,6 +70,14 @@ public class EntityGroup {
 
     public void setModDate(java.util.Date modDate) {
         this.modDate=modDate;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name=name;
     }
 
     public List<RestrictionEntityGroup> getRestrictionEntityGroupList() {

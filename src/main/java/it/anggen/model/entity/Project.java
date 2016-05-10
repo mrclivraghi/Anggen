@@ -24,20 +24,20 @@ import org.hibernate.annotations.UpdateTimestamp;
 public class Project {
 
     public final static Long staticEntityId = 5L;
-    @javax.persistence.Column(name = "name")
-    @it.anggen.utils.annotation.DescriptionField
-    private String name;
     @javax.persistence.Column(name = "mod_date")
     @UpdateTimestamp
     private java.util.Date modDate;
+    @javax.persistence.Column(name = "add_date")
+    @CreationTimestamp
+    private java.util.Date addDate;
     @javax.persistence.Column(name = "project_id")
     @it.anggen.utils.annotation.DescriptionField
     @Id
     @GeneratedValue
     private Integer projectId;
-    @javax.persistence.Column(name = "add_date")
-    @CreationTimestamp
-    private java.util.Date addDate;
+    @javax.persistence.Column(name = "name")
+    @it.anggen.utils.annotation.DescriptionField
+    private String name;
     @OneToMany(fetch = FetchType.LAZY)
     @Type(type = "it.anggen.model.entity.EntityGroup")
     @JoinColumn(name = "project_id_project")
@@ -51,20 +51,20 @@ public class Project {
     @JoinColumn(name = "project_id_project")
     private List<GenerationRun> generationRunList;
 
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(String name) {
-        this.name=name;
-    }
-
     public java.util.Date getModDate() {
         return this.modDate;
     }
 
     public void setModDate(java.util.Date modDate) {
         this.modDate=modDate;
+    }
+
+    public java.util.Date getAddDate() {
+        return this.addDate;
+    }
+
+    public void setAddDate(java.util.Date addDate) {
+        this.addDate=addDate;
     }
 
     public Integer getProjectId() {
@@ -75,12 +75,12 @@ public class Project {
         this.projectId=projectId;
     }
 
-    public java.util.Date getAddDate() {
-        return this.addDate;
+    public String getName() {
+        return this.name;
     }
 
-    public void setAddDate(java.util.Date addDate) {
-        this.addDate=addDate;
+    public void setName(String name) {
+        this.name=name;
     }
 
     public List<EntityGroup> getEntityGroupList() {

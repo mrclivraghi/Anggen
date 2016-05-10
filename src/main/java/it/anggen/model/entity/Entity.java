@@ -24,32 +24,32 @@ import org.hibernate.annotations.UpdateTimestamp;
 public class Entity {
 
     public final static java.lang.Long staticEntityId = 9L;
-    @javax.persistence.Column(name = "name")
-    @it.anggen.utils.annotation.DescriptionField
-    private String name;
+    @javax.persistence.Column(name = "descendant_max_level")
+    private Integer descendantMaxLevel;
+    @javax.persistence.Column(name = "ignore_menu")
+    private java.lang.Boolean ignoreMenu;
     @javax.persistence.Column(name = "entity_id")
     @it.anggen.utils.annotation.DescriptionField
     @Id
     @GeneratedValue
     private java.lang.Long entityId;
-    @javax.persistence.Column(name = "enable_restriction_data")
-    private java.lang.Boolean enableRestrictionData;
-    @javax.persistence.Column(name = "descendant_max_level")
-    private Integer descendantMaxLevel;
-    @javax.persistence.Column(name = "add_date")
-    @CreationTimestamp
-    private java.util.Date addDate;
-    @javax.persistence.Column(name = "disable_view_generation")
-    private java.lang.Boolean disableViewGeneration;
     @javax.persistence.Column(name = "mod_date")
     @UpdateTimestamp
     private java.util.Date modDate;
     @javax.persistence.Column(name = "cache")
     private java.lang.Boolean cache;
+    @javax.persistence.Column(name = "name")
+    @it.anggen.utils.annotation.DescriptionField
+    private String name;
     @javax.persistence.Column(name = "generate_front_end")
     private java.lang.Boolean generateFrontEnd;
-    @javax.persistence.Column(name = "ignore_menu")
-    private java.lang.Boolean ignoreMenu;
+    @javax.persistence.Column(name = "disable_view_generation")
+    private java.lang.Boolean disableViewGeneration;
+    @javax.persistence.Column(name = "enable_restriction_data")
+    private java.lang.Boolean enableRestrictionData;
+    @javax.persistence.Column(name = "add_date")
+    @CreationTimestamp
+    private java.util.Date addDate;
     @OneToMany(fetch = javax.persistence.FetchType.LAZY)
     @Type(type = "it.anggen.model.security.RestrictionEntity")
     @javax.persistence.JoinColumn(name = "entity_id_entity")
@@ -76,30 +76,6 @@ public class Entity {
     @javax.persistence.Column(name = "security_type")
     private it.anggen.model.SecurityType securityType;
 
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(String name) {
-        this.name=name;
-    }
-
-    public java.lang.Long getEntityId() {
-        return this.entityId;
-    }
-
-    public void setEntityId(java.lang.Long entityId) {
-        this.entityId=entityId;
-    }
-
-    public java.lang.Boolean getEnableRestrictionData() {
-        return this.enableRestrictionData;
-    }
-
-    public void setEnableRestrictionData(java.lang.Boolean enableRestrictionData) {
-        this.enableRestrictionData=enableRestrictionData;
-    }
-
     public Integer getDescendantMaxLevel() {
         return this.descendantMaxLevel;
     }
@@ -108,20 +84,20 @@ public class Entity {
         this.descendantMaxLevel=descendantMaxLevel;
     }
 
-    public java.util.Date getAddDate() {
-        return this.addDate;
+    public java.lang.Boolean getIgnoreMenu() {
+        return this.ignoreMenu;
     }
 
-    public void setAddDate(java.util.Date addDate) {
-        this.addDate=addDate;
+    public void setIgnoreMenu(java.lang.Boolean ignoreMenu) {
+        this.ignoreMenu=ignoreMenu;
     }
 
-    public java.lang.Boolean getDisableViewGeneration() {
-        return this.disableViewGeneration;
+    public java.lang.Long getEntityId() {
+        return this.entityId;
     }
 
-    public void setDisableViewGeneration(java.lang.Boolean disableViewGeneration) {
-        this.disableViewGeneration=disableViewGeneration;
+    public void setEntityId(java.lang.Long entityId) {
+        this.entityId=entityId;
     }
 
     public java.util.Date getModDate() {
@@ -140,6 +116,14 @@ public class Entity {
         this.cache=cache;
     }
 
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name=name;
+    }
+
     public java.lang.Boolean getGenerateFrontEnd() {
         return this.generateFrontEnd;
     }
@@ -148,12 +132,28 @@ public class Entity {
         this.generateFrontEnd=generateFrontEnd;
     }
 
-    public java.lang.Boolean getIgnoreMenu() {
-        return this.ignoreMenu;
+    public java.lang.Boolean getDisableViewGeneration() {
+        return this.disableViewGeneration;
     }
 
-    public void setIgnoreMenu(java.lang.Boolean ignoreMenu) {
-        this.ignoreMenu=ignoreMenu;
+    public void setDisableViewGeneration(java.lang.Boolean disableViewGeneration) {
+        this.disableViewGeneration=disableViewGeneration;
+    }
+
+    public java.lang.Boolean getEnableRestrictionData() {
+        return this.enableRestrictionData;
+    }
+
+    public void setEnableRestrictionData(java.lang.Boolean enableRestrictionData) {
+        this.enableRestrictionData=enableRestrictionData;
+    }
+
+    public java.util.Date getAddDate() {
+        return this.addDate;
+    }
+
+    public void setAddDate(java.util.Date addDate) {
+        this.addDate=addDate;
     }
 
     public List<RestrictionEntity> getRestrictionEntityList() {

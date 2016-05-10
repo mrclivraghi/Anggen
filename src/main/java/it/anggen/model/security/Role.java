@@ -24,14 +24,14 @@ import org.hibernate.annotations.Type;
 public class Role {
 
     public final static Long staticEntityId = 15L;
-    @javax.persistence.Column(name = "role")
-    @it.anggen.utils.annotation.DescriptionField
-    private String role;
     @javax.persistence.Column(name = "role_id")
     @it.anggen.utils.annotation.DescriptionField
     @Id
     @GeneratedValue
     private Integer roleId;
+    @javax.persistence.Column(name = "role")
+    @it.anggen.utils.annotation.DescriptionField
+    private String role;
     @OneToMany(fetch = FetchType.LAZY)
     @Type(type = "it.anggen.model.security.RestrictionEntity")
     @JoinColumn(name = "role_id_role")
@@ -47,20 +47,20 @@ public class Role {
     @JoinColumn(name = "role_id_role")
     private List<RestrictionEntityGroup> restrictionEntityGroupList;
 
-    public String getRole() {
-        return this.role;
-    }
-
-    public void setRole(String role) {
-        this.role=role;
-    }
-
     public Integer getRoleId() {
         return this.roleId;
     }
 
     public void setRoleId(Integer roleId) {
         this.roleId=roleId;
+    }
+
+    public String getRole() {
+        return this.role;
+    }
+
+    public void setRole(String role) {
+        this.role=role;
     }
 
     public List<RestrictionEntity> getRestrictionEntityList() {

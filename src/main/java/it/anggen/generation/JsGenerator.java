@@ -8,6 +8,7 @@ import it.anggen.utils.EntityAttribute;
 import it.anggen.utils.ReflectionManager;
 import it.anggen.utils.Utility;
 import it.anggen.model.FieldType;
+import it.anggen.model.GenerationType;
 import it.anggen.model.RelationshipType;
 import it.anggen.model.entity.Entity;
 import it.anggen.model.entity.Tab;
@@ -831,7 +832,12 @@ public class JsGenerator {
 		Utility.orderByPriority(entityAttributeList);
 		for (EntityAttribute entityAttribute: entityAttributeList)
 		{
-			if ((EntityAttributeManager.getInstance(entityAttribute).asRelationship()!=null && EntityAttributeManager.getInstance(entityAttribute).getIgnoreTableList()) || (EntityAttributeManager.getInstance(entityAttribute).asField()!=null && EntityAttributeManager.getInstance(entityAttribute).getIgnoreTableList())) continue;
+			if ((EntityAttributeManager.getInstance(entityAttribute).getParent().getGenerationType()==GenerationType.HIDE_IGNORE && EntityAttributeManager.getInstance(entityAttribute).getIgnoreTableList()) ) 
+				continue;
+			
+			if ((EntityAttributeManager.getInstance(entityAttribute).getParent().getGenerationType()==GenerationType.SHOW_INCLUDE && !EntityAttributeManager.getInstance(entityAttribute).getIncludeTableList()) ) 
+				continue;
+			
 			
 			if (EntityAttributeManager.getInstance(entityAttribute).asField()!= null )
 			{

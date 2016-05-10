@@ -47,6 +47,7 @@ import it.anggen.utils.annotation.SecurityType;
 import it.anggen.utils.annotation.Tab;
 import it.anggen.model.AnnotationType;
 import it.anggen.model.FieldType;
+import it.anggen.model.GenerationType;
 import it.anggen.model.RelationshipType;
 import it.anggen.model.entity.Entity;
 import it.anggen.model.entity.EntityGroup;
@@ -596,9 +597,10 @@ public class BeanToDBConverter {
 		entity.setDisableViewGeneration(false);
 		entity.setGenerateFrontEnd(false);
 		entity.setIgnoreMenu(false);
+		entity.setGenerationType(GenerationType.SHOW_INCLUDE);
+		entity.setSecurityType(it.anggen.model.SecurityType.ACCESS_WITH_PERMISSION);
+		entity.setDescendantMaxLevel(1);
 		Annotation[] annotationArray=myClass.getAnnotations();
-		Boolean securityTypeFound=false;
-		Boolean maxDescendantLevelFound=false;
 		for (int i=0; i<annotationArray.length;i++)
 		{
 			if (annotationArray[i].annotationType()==SecurityType.class)
@@ -609,7 +611,6 @@ public class BeanToDBConverter {
 					try {
 						value=  method.invoke(annotationArray[i], (Object[])null);
 						entity.setSecurityType((it.anggen.model.SecurityType) value);
-						securityTypeFound=true;
 					} catch (IllegalAccessException
 							| IllegalArgumentException
 							| InvocationTargetException e) {
@@ -618,6 +619,26 @@ public class BeanToDBConverter {
 					}
 				}
 			}
+			
+			
+			if (annotationArray[i].annotationType()==it.anggen.utils.annotation.GenerationType.class)
+				for (Method method : annotationArray[i].annotationType().getDeclaredMethods()) {
+					if (method.getName().equals("type"))
+					{
+						Object value= null;
+						try {
+							value=  method.invoke(annotationArray[i], (Object[])null);
+							entity.setGenerationType((it.anggen.model.GenerationType) value);
+						} catch (IllegalAccessException
+								| IllegalArgumentException
+								| InvocationTargetException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+			
+			
 			if (annotationArray[i].annotationType()==EnableRestrictionData.class)
 			{
 				entity.setEnableRestrictionData(true);
@@ -650,7 +671,6 @@ public class BeanToDBConverter {
 						try {
 							value=  method.invoke(annotationArray[i], (Object[])null);
 							entity.setDescendantMaxLevel((Integer) value);
-							maxDescendantLevelFound=true;
 						} catch (IllegalAccessException
 								| IllegalArgumentException
 								| InvocationTargetException e) {
@@ -660,10 +680,6 @@ public class BeanToDBConverter {
 					}
 				}
 		}
-		if (!securityTypeFound)
-			entity.setSecurityType(it.anggen.model.SecurityType.ACCESS_WITH_PERMISSION);
-		if (!maxDescendantLevelFound)
-			entity.setDescendantMaxLevel(1);
 		entity.setEntityId(getEntityId(entity));
 		entityRepository.save(entity);
 		//System.out.println("Ho salvato "+entity.getName()+" con id "+entity.getEntityId()+ " ma sul db ho "+savedEntity.getEntityId());

@@ -29,17 +29,17 @@ public class Field
     @GeneratedValue
     @it.anggen.utils.annotation.DescriptionField
     private java.lang.Long fieldId;
-    @javax.persistence.Column(name = "mod_date")
-    @UpdateTimestamp
-    private java.util.Date modDate;
-    @javax.persistence.Column(name = "add_date")
-    @CreationTimestamp
-    private java.util.Date addDate;
+    @javax.persistence.Column(name = "priority")
+    private Integer priority;
     @javax.persistence.Column(name = "name")
     @it.anggen.utils.annotation.DescriptionField
     private String name;
-    @javax.persistence.Column(name = "priority")
-    private Integer priority;
+    @javax.persistence.Column(name = "add_date")
+    @CreationTimestamp
+    private java.util.Date addDate;
+    @javax.persistence.Column(name = "mod_date")
+    @UpdateTimestamp
+    private java.util.Date modDate;
     @OneToMany(fetch = javax.persistence.FetchType.LAZY)
     @Type(type = "it.anggen.model.security.RestrictionField")
     @javax.persistence.JoinColumn(name = "field_id_field")
@@ -65,20 +65,12 @@ public class Field
         this.fieldId=fieldId;
     }
 
-    public java.util.Date getModDate() {
-        return this.modDate;
+    public Integer getPriority() {
+        return this.priority;
     }
 
-    public void setModDate(java.util.Date modDate) {
-        this.modDate=modDate;
-    }
-
-    public java.util.Date getAddDate() {
-        return this.addDate;
-    }
-
-    public void setAddDate(java.util.Date addDate) {
-        this.addDate=addDate;
+    public void setPriority(Integer priority) {
+        this.priority=priority;
     }
 
     public String getName() {
@@ -89,12 +81,20 @@ public class Field
         this.name=name;
     }
 
-    public Integer getPriority() {
-        return this.priority;
+    public java.util.Date getAddDate() {
+        return this.addDate;
     }
 
-    public void setPriority(Integer priority) {
-        this.priority=priority;
+    public void setAddDate(java.util.Date addDate) {
+        this.addDate=addDate;
+    }
+
+    public java.util.Date getModDate() {
+        return this.modDate;
+    }
+
+    public void setModDate(java.util.Date modDate) {
+        this.modDate=modDate;
     }
 
     public List<RestrictionField> getRestrictionFieldList() {

@@ -832,10 +832,10 @@ public class JsGenerator {
 		Utility.orderByPriority(entityAttributeList);
 		for (EntityAttribute entityAttribute: entityAttributeList)
 		{
-			if ((EntityAttributeManager.getInstance(entityAttribute).getParent().getGenerationType()==GenerationType.HIDE_IGNORE && EntityAttributeManager.getInstance(entityAttribute).getIgnoreTableList()) ) 
+			if ((EntityAttributeManager.getInstance(entityAttribute).getParent().getGenerationType()==GenerationType.HIDE_IGNORE && (EntityAttributeManager.getInstance(entityAttribute).getIgnoreTableList()) )) 
 				continue;
 			
-			if ((EntityAttributeManager.getInstance(entityAttribute).getParent().getGenerationType()==GenerationType.SHOW_INCLUDE && !EntityAttributeManager.getInstance(entityAttribute).getIncludeTableList()) ) 
+			if ((EntityAttributeManager.getInstance(entityAttribute).getParent().getGenerationType()==GenerationType.SHOW_INCLUDE && !EntityAttributeManager.getInstance(entityAttribute).getIncludeTableList()  && !EntityAttributeManager.getInstance(entityAttribute).getIncludeSearch() ) ) 
 				continue;
 			
 			

@@ -989,5 +989,28 @@ public class BeanToDBConverter {
 		}
 	}
 	
+	
+	public void generateTabForRelationship(Project project)
+	{
+		for (EntityGroup entityGroup : project.getEntityGroupList())
+		{
+			for (Entity entity : entityGroup.getEntityList())
+			{
+				for (Relationship relationship: entity.getRelationshipList())
+					if (relationship.getTab().getName().equals("Detail"))
+					{
+						it.anggen.model.entity.Tab tab = new it.anggen.model.entity.Tab();
+						tab.setEntity(entity);
+						tab.setName(Utility.getFirstUpper(relationship.getName()));
+						List<Relationship> relationshipList = new ArrayList<Relationship>();
+						relationshipList.add(relationship);
+						tab.setRelationshipList(relationshipList);
+						tabRepository.save(tab);
+						
+					}
+			}
+		}
+	}
+	
 
 }

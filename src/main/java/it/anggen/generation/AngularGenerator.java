@@ -10,6 +10,7 @@ import it.anggen.utils.ReflectionManager;
 import it.anggen.utils.Utility;
 import it.anggen.model.AnnotationType;
 import it.anggen.model.FieldType;
+import it.anggen.model.GenerationType;
 import it.anggen.model.entity.Entity;
 import it.anggen.model.entity.Tab;
 import it.anggen.model.field.Annotation;
@@ -472,10 +473,10 @@ public class AngularGenerator {
 
 		html.content(sb.toString(),false);
 		
-		if (!search)
+		/*if (!search)
 		{
 			html.script((new HtmlAttributes()).add("type", "text/javascript")).content("$('#"+entityName+"Tabs a:first').tab('show');");
-		}
+		}*/
 		html.div(CssGenerator.getPanelBody());
 		if (!search)
 		{
@@ -511,10 +512,24 @@ public class AngularGenerator {
 	private void renderField(HtmlCanvas html,EntityAttribute entityAttribute, Boolean search,String style,String baseEntity) throws IOException
 	{
 
-		if (search && EntityAttributeManager.getInstance(entityAttribute).getIgnoreSearch()) return;
-		if (!search && EntityAttributeManager.getInstance(entityAttribute).getIgnoreUpdate()) return;
+		
 		if (search && EntityAttributeManager.getInstance(entityAttribute).getPassword()) return;
 		if (search && EntityAttributeManager.getInstance(entityAttribute).isEmbedded()) return;
+		GenerationType generationType=EntityAttributeManager.getInstance(entityAttribute).getParent().getGenerationType();
+		if (generationType==GenerationType.SHOW_INCLUDE)
+		{
+			if (search && !EntityAttributeManager.getInstance(entityAttribute).getIncludeSearch())
+				return;
+			if (!search && !(EntityAttributeManager.getInstance(entityAttribute).getIncludeSearch() || EntityAttributeManager.getInstance(entityAttribute).getIncludeUpdate()))
+				return;
+		} else
+		{
+			if (search && (EntityAttributeManager.getInstance(entityAttribute).getIgnoreSearch() || EntityAttributeManager.getInstance(entityAttribute).getIgnoreUpdate()))
+				return;
+			if (!search && EntityAttributeManager.getInstance(entityAttribute).getIgnoreUpdate()) 
+				return;
+		}
+		
 		style= style.equals("pull-left")? "pull-right": "pull-left";
 		
 		String securityCondition="true ";

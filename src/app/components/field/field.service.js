@@ -110,6 +110,8 @@ columnDefs: [
 { name: 'fieldId'},
 { name: 'priority'},
 { name: 'name'},
+{ name: 'addDate', cellFilter: "date:'dd-MM-yyyy'"},
+{ name: 'modDate', cellFilter: "date:'dd-MM-yyyy'"},
 { name: 'entity.entityId', displayName: 'entity'},
 { name: 'tab.tabId', displayName: 'tab'} 
 ]

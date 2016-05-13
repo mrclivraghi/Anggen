@@ -6,15 +6,19 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import it.anggen.utils.annotation.DescriptionField;
+import it.anggen.utils.annotation.GenerationType;
+import it.anggen.utils.annotation.IncludeMenu;
 import it.anggen.utils.annotation.MaxDescendantLevel;
 
 @Entity
 @Table(schema = "sso", name = "restriction_entity_group")
 @it.anggen.utils.annotation.SecurityType(type = it.anggen.model.SecurityType.ACCESS_WITH_PERMISSION)
 @MaxDescendantLevel(100)
+@IncludeMenu
+@GenerationType(type=it.anggen.model.GenerationType.HIDE_IGNORE)
 public class RestrictionEntityGroup {
 
-    public final static java.lang.Long staticEntityId = 12L;
+    public final static java.lang.Long staticEntityId = 2L;
     @javax.persistence.Column(name = "restriction_entity_group_id")
     @Id
     @GeneratedValue

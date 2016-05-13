@@ -34,6 +34,24 @@
 </div>
 <div class="pull-left right-input" ng-show="true ">
 	<div class="input-group">
+		<span class="input-group-addon">addDate
+		</span>
+
+		<input class="form-control " aria-describedby="sizing-addon3" type="text" ui-date="{ dateFormat: &#39;dd/mm/yy&#39; }" ng-model="vm.searchBean.addDate" ng-readonly="false" name="addDate" placeholder="addDate"/>
+		
+	</div>
+</div>
+<div class="pull-left right-input" ng-show="true ">
+	<div class="input-group">
+		<span class="input-group-addon">modDate
+		</span>
+
+		<input class="form-control " aria-describedby="sizing-addon3" type="text" ui-date="{ dateFormat: &#39;dd/mm/yy&#39; }" ng-model="vm.searchBean.modDate" ng-readonly="false" name="modDate" placeholder="modDate"/>
+		
+	</div>
+</div>
+<div class="pull-left right-input" ng-show="true ">
+	<div class="input-group">
 		<span class="input-group-addon">relationshipType
 		</span>
 
@@ -57,7 +75,7 @@
 		<span class="input-group-addon">entity
 		</span>
 
-		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.entity.entityId" id="entityTarget" ng-options="entity.entityId as  entity.name+&#39; &#39;+ entity.entityId for entity in vm.entityPreparedData.entityList" enctype="UTF-8">
+		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.entity.entityId" id="entityTarget" ng-options="entity.entityId as  entity.entityId+&#39; &#39;+ entity.name for entity in vm.entityPreparedData.entityList" enctype="UTF-8">
 		</select>
 
 	</div>
@@ -67,7 +85,7 @@
 		<span class="input-group-addon">entity
 		</span>
 
-		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.entity.entityId" id="entity" ng-options="entity.entityId as  entity.name+&#39; &#39;+ entity.entityId for entity in vm.entityPreparedData.entityList" enctype="UTF-8">
+		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.entity.entityId" id="entity" ng-options="entity.entityId as  entity.entityId+&#39; &#39;+ entity.name for entity in vm.entityPreparedData.entityList" enctype="UTF-8">
 		</select>
 
 	</div>
@@ -77,7 +95,7 @@
 		<span class="input-group-addon">tab
 		</span>
 
-		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.tab.tabId" id="tab" ng-options="tab.tabId as  tab.name+&#39; &#39;+ tab.tabId for tab in vm.tabPreparedData.entityList" enctype="UTF-8">
+		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.tab.tabId" id="tab" ng-options="tab.tabId as  tab.tabId+&#39; &#39;+ tab.name for tab in vm.tabPreparedData.entityList" enctype="UTF-8">
 		</select>
 
 	</div>

@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import it.anggen.model.GenerationType;
 import it.anggen.model.entity.EntityGroup;
 import it.anggen.model.entity.EnumEntity;
 import it.anggen.model.generation.GenerationRun;
@@ -23,7 +24,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 @MaxDescendantLevel(100)
 public class Project {
 
-    public final static Long staticEntityId = 5L;
+    public final static Long staticEntityId = 4L;
     @javax.persistence.Column(name = "project_id")
     @it.anggen.utils.annotation.DescriptionField
     @Id
@@ -39,6 +40,10 @@ public class Project {
     @UpdateTimestamp
     private java.util.Date modDate;
     @OneToMany(fetch = FetchType.LAZY)
+    @Type(type = "it.anggen.model.generation.GenerationRun")
+    @JoinColumn(name = "project_id_project")
+    private List<GenerationRun> generationRunList;
+    @OneToMany(fetch = FetchType.LAZY)
     @Type(type = "it.anggen.model.entity.EntityGroup")
     @JoinColumn(name = "project_id_project")
     private List<EntityGroup> entityGroupList;
@@ -46,10 +51,8 @@ public class Project {
     @Type(type = "it.anggen.model.entity.EnumEntity")
     @JoinColumn(name = "project_id_project")
     private List<EnumEntity> enumEntityList;
-    @OneToMany(fetch = FetchType.LAZY)
-    @Type(type = "it.anggen.model.generation.GenerationRun")
-    @JoinColumn(name = "project_id_project")
-    private List<GenerationRun> generationRunList;
+    @javax.persistence.Column(name = "generation_type")
+    private GenerationType generationType;
 
     public Integer getProjectId() {
         return this.projectId;
@@ -83,6 +86,14 @@ public class Project {
         this.modDate=modDate;
     }
 
+    public List<GenerationRun> getGenerationRunList() {
+        return this.generationRunList;
+    }
+
+    public void setGenerationRunList(List<GenerationRun> generationRunList) {
+        this.generationRunList=generationRunList;
+    }
+
     public List<EntityGroup> getEntityGroupList() {
         return this.entityGroupList;
     }
@@ -99,12 +110,12 @@ public class Project {
         this.enumEntityList=enumEntityList;
     }
 
-    public List<GenerationRun> getGenerationRunList() {
-        return this.generationRunList;
+    public GenerationType getGenerationType() {
+        return this.generationType;
     }
 
-    public void setGenerationRunList(List<GenerationRun> generationRunList) {
-        this.generationRunList=generationRunList;
+    public void setGenerationType(GenerationType generationType) {
+        this.generationType=generationType;
     }
 
 }

@@ -21,7 +21,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 @MaxDescendantLevel(100)
 public class Tab {
 
-    public final static java.lang.Long staticEntityId = 8L;
+    public final static java.lang.Long staticEntityId = 15L;
     @javax.persistence.Column(name = "tab_id")
     @Id
     @GeneratedValue

@@ -74,10 +74,48 @@
 </div>
 <div class="pull-left right-input" ng-show="true ">
 	<div class="input-group">
+		<span class="input-group-addon">ignoreMenu
+		</span>
+
+		<select class="form-control " aria-describedby="sizing-addon3" type="checkbox" id="entity-ignoreMenu" ng-model="vm.searchBean.ignoreMenu" ng-readonly="false" name="ignoreMenu" placeholder="ignoreMenu" ng-options="value for value in vm.trueFalseValues">
+		</select>
+
+	</div>
+</div>
+<div class="pull-left right-input" ng-show="true ">
+	<div class="input-group">
+		<span class="input-group-addon">addDate
+		</span>
+
+		<input class="form-control " aria-describedby="sizing-addon3" type="text" ui-date="{ dateFormat: &#39;dd/mm/yy&#39; }" ng-model="vm.searchBean.addDate" ng-readonly="false" name="addDate" placeholder="addDate"/>
+		
+	</div>
+</div>
+<div class="pull-left right-input" ng-show="true ">
+	<div class="input-group">
+		<span class="input-group-addon">modDate
+		</span>
+
+		<input class="form-control " aria-describedby="sizing-addon3" type="text" ui-date="{ dateFormat: &#39;dd/mm/yy&#39; }" ng-model="vm.searchBean.modDate" ng-readonly="false" name="modDate" placeholder="modDate"/>
+		
+	</div>
+</div>
+<div class="pull-left right-input" ng-show="true ">
+	<div class="input-group">
 		<span class="input-group-addon">securityType
 		</span>
 
 		<select class="form-control pull-left" aria-describedby="sizing-addon3" type="text" id="entity-securityType" ng-model="vm.searchBean.securityType" ng-readonly="false" name="securityType" placeholder="securityType" ng-options="securityType as securityType for securityType in vm.securityTypePreparedData.entityList" enctype="UTF-8">
+		</select>
+
+	</div>
+</div>
+<div class="pull-left right-input" ng-show="true ">
+	<div class="input-group">
+		<span class="input-group-addon">generationType
+		</span>
+
+		<select class="form-control pull-left" aria-describedby="sizing-addon3" type="text" id="entity-generationType" ng-model="vm.searchBean.generationType" ng-readonly="false" name="generationType" placeholder="generationType" ng-options="generationType as generationType for generationType in vm.generationTypePreparedData.entityList" enctype="UTF-8">
 		</select>
 
 	</div>
@@ -127,7 +165,7 @@
 		<span class="input-group-addon">tab
 		</span>
 
-		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.tab.tabId" id="tab" ng-options="tab.tabId as  tab.name+&#39; &#39;+ tab.tabId for tab in vm.tabPreparedData.entityList" enctype="UTF-8">
+		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.tab.tabId" id="tab" ng-options="tab.tabId as  tab.tabId+&#39; &#39;+ tab.name for tab in vm.tabPreparedData.entityList" enctype="UTF-8">
 		</select>
 
 	</div>
@@ -137,7 +175,7 @@
 		<span class="input-group-addon">relationship
 		</span>
 
-		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.relationship.relationshipId" id="relationship" ng-options="relationship.relationshipId as  relationship.name+&#39; &#39;+ relationship.relationshipId for relationship in vm.relationshipPreparedData.entityList" enctype="UTF-8">
+		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.relationship.relationshipId" id="relationship" ng-options="relationship.relationshipId as  relationship.relationshipId+&#39; &#39;+ relationship.name for relationship in vm.relationshipPreparedData.entityList" enctype="UTF-8">
 		</select>
 
 	</div>

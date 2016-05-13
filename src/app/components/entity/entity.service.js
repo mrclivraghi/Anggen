@@ -128,6 +128,9 @@ columnDefs: [
 { name: 'disableViewGeneration'},
 { name: 'descendantMaxLevel'},
 { name: 'enableRestrictionData'},
+{ name: 'ignoreMenu'},
+{ name: 'addDate', cellFilter: "date:'dd-MM-yyyy'"},
+{ name: 'modDate', cellFilter: "date:'dd-MM-yyyy'"},
 { name: 'entityGroup.entityGroupId', displayName: 'entityGroup'} 
 ]
  };

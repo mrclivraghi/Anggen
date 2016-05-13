@@ -71,13 +71,6 @@ var promise= $http.post("http://127.0.0.1:8080/ServerTestApp/entityGroup/"+this.
 });
 return promise; 
 }
- this.initProjectList= function()
-{
-var promise= $http
-.post("http://127.0.0.1:8080/ServerTestApp/project/search",
-{});
-return promise;
-};
  this.initRestrictionEntityGroupList= function()
 {
 var promise= $http
@@ -92,6 +85,13 @@ var promise= $http
 {});
 return promise;
 };
+ this.initProjectList= function()
+{
+var promise= $http
+.post("http://127.0.0.1:8080/ServerTestApp/project/search",
+{});
+return promise;
+};
 this.gridOptions = {
 enablePaginationControls: true,
 multiSelect: false,
@@ -102,6 +102,8 @@ enableGridMenu: true,
 columnDefs: [    
 { name: 'entityGroupId'},
 { name: 'name'},
+{ name: 'addDate', cellFilter: "date:'dd-MM-yyyy'"},
+{ name: 'modDate', cellFilter: "date:'dd-MM-yyyy'"},
 { name: 'project.projectId', displayName: 'project'} 
 ]
  };

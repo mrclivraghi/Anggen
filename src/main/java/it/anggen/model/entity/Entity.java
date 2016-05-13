@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import it.anggen.model.GenerationType;
 import it.anggen.model.entity.Tab;
 import it.anggen.model.field.EnumField;
 import it.anggen.model.field.Field;
@@ -23,11 +24,11 @@ import org.hibernate.annotations.UpdateTimestamp;
 @MaxDescendantLevel(100)
 public class Entity {
 
-    public final static java.lang.Long staticEntityId = 9L;
+    public final static java.lang.Long staticEntityId = 3L;
     @javax.persistence.Column(name = "entity_id")
     @it.anggen.utils.annotation.DescriptionField
     @Id
-    @GeneratedValue
+    //@GeneratedValue
     private java.lang.Long entityId;
     @javax.persistence.Column(name = "generate_front_end")
     private java.lang.Boolean generateFrontEnd;
@@ -75,6 +76,8 @@ public class Entity {
     private List<Relationship> relationshipList;
     @javax.persistence.Column(name = "security_type")
     private it.anggen.model.SecurityType securityType;
+    @javax.persistence.Column(name = "generation_type")
+    private GenerationType generationType;
 
     public java.lang.Long getEntityId() {
         return this.entityId;
@@ -210,6 +213,14 @@ public class Entity {
 
     public void setSecurityType(it.anggen.model.SecurityType securityType) {
         this.securityType=securityType;
+    }
+
+    public GenerationType getGenerationType() {
+        return this.generationType;
+    }
+
+    public void setGenerationType(GenerationType generationType) {
+        this.generationType=generationType;
     }
 
 }

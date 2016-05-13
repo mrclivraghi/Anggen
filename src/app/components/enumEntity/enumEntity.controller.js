@@ -489,22 +489,6 @@ $log.debug(response);
 return; 
   }	
 );
-enumValueService.initEnumEntityList().then(function(response) {
-enumEntityService.preparedData.entityList=response.data;
-});
-
-if (enumValueService.selectedEntity.enumValueId!=undefined) enumValueService.searchOne(enumValueService.selectedEntity).then(
-function successCallback(response) {
-$log.debug("response-ok");
-$log.debug(response);
-enumValueService.setSelectedEntity(response.data[0]);
-  }, function errorCallback(response) {
-UtilityService.AlertError.init({selector: "#alertError"});
-UtilityService.AlertError.show("Si è verificato un errore");
-$log.debug(response);
-return; 
-  }	
-);
 projectService.initEnumEntityList().then(function(response) {
 enumEntityService.preparedData.entityList=response.data;
 });
@@ -514,6 +498,22 @@ function successCallback(response) {
 $log.debug("response-ok");
 $log.debug(response);
 projectService.setSelectedEntity(response.data[0]);
+  }, function errorCallback(response) {
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
+  }	
+);
+enumValueService.initEnumEntityList().then(function(response) {
+enumEntityService.preparedData.entityList=response.data;
+});
+
+if (enumValueService.selectedEntity.enumValueId!=undefined) enumValueService.searchOne(enumValueService.selectedEntity).then(
+function successCallback(response) {
+$log.debug("response-ok");
+$log.debug(response);
+enumValueService.setSelectedEntity(response.data[0]);
   }, function errorCallback(response) {
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");

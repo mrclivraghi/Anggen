@@ -42,10 +42,12 @@ public interface EntityRepository
 
     public List<it.anggen.model.entity.Entity> findBySecurityType(java.lang.Integer securityType);
 
+    public List<it.anggen.model.entity.Entity> findByGenerationType(java.lang.Integer generationType);
+
     public List<it.anggen.model.entity.Entity> findByEntityGroup(it.anggen.model.entity.EntityGroup entityGroup);
 
-    @Query("select e from Entity e where  (:entityId is null or cast(:entityId as string)=cast(e.entityId as string)) and (:generateFrontEnd is null or cast(:generateFrontEnd as string)=cast(e.generateFrontEnd as string)) and (:name is null or :name='' or cast(:name as string)=e.name) and (:cache is null or cast(:cache as string)=cast(e.cache as string)) and (:disableViewGeneration is null or cast(:disableViewGeneration as string)=cast(e.disableViewGeneration as string)) and (:descendantMaxLevel is null or cast(:descendantMaxLevel as string)=cast(e.descendantMaxLevel as string)) and (:enableRestrictionData is null or cast(:enableRestrictionData as string)=cast(e.enableRestrictionData as string)) and (:ignoreMenu is null or cast(:ignoreMenu as string)=cast(e.ignoreMenu as string)) and (:addDate is null or cast(:addDate as string)=cast(date(e.addDate) as string)) and (:modDate is null or cast(:modDate as string)=cast(date(e.modDate) as string)) and (:securityType is null or cast(:securityType as string)=cast(e.securityType as string)) and (:restrictionEntity in elements(e.restrictionEntityList)  or :restrictionEntity is null) and (:field in elements(e.fieldList)  or :field is null) and (:enumField in elements(e.enumFieldList)  or :enumField is null) and (:entityGroup=e.entityGroup or :entityGroup is null) and (:tab in elements(e.tabList)  or :tab is null) and (:relationship in elements(e.relationshipList)  or :relationship is null) ")
-    public List<it.anggen.model.entity.Entity> findByEntityIdAndGenerateFrontEndAndNameAndCacheAndDisableViewGenerationAndDescendantMaxLevelAndEnableRestrictionDataAndIgnoreMenuAndAddDateAndModDateAndSecurityTypeAndRestrictionEntityAndFieldAndEnumFieldAndEntityGroupAndTabAndRelationship(
+    @Query("select e from Entity e where  (:entityId is null or cast(:entityId as string)=cast(e.entityId as string)) and (:generateFrontEnd is null or cast(:generateFrontEnd as string)=cast(e.generateFrontEnd as string)) and (:name is null or :name='' or cast(:name as string)=e.name) and (:cache is null or cast(:cache as string)=cast(e.cache as string)) and (:disableViewGeneration is null or cast(:disableViewGeneration as string)=cast(e.disableViewGeneration as string)) and (:descendantMaxLevel is null or cast(:descendantMaxLevel as string)=cast(e.descendantMaxLevel as string)) and (:enableRestrictionData is null or cast(:enableRestrictionData as string)=cast(e.enableRestrictionData as string)) and (:ignoreMenu is null or cast(:ignoreMenu as string)=cast(e.ignoreMenu as string)) and (:addDate is null or cast(:addDate as string)=cast(date(e.addDate) as string)) and (:modDate is null or cast(:modDate as string)=cast(date(e.modDate) as string)) and (:securityType is null or cast(:securityType as string)=cast(e.securityType as string)) and (:generationType is null or cast(:generationType as string)=cast(e.generationType as string)) and (:restrictionEntity in elements(e.restrictionEntityList)  or :restrictionEntity is null) and (:field in elements(e.fieldList)  or :field is null) and (:enumField in elements(e.enumFieldList)  or :enumField is null) and (:entityGroup=e.entityGroup or :entityGroup is null) and (:tab in elements(e.tabList)  or :tab is null) and (:relationship in elements(e.relationshipList)  or :relationship is null) ")
+    public List<it.anggen.model.entity.Entity> findByEntityIdAndGenerateFrontEndAndNameAndCacheAndDisableViewGenerationAndDescendantMaxLevelAndEnableRestrictionDataAndIgnoreMenuAndAddDateAndModDateAndSecurityTypeAndGenerationTypeAndRestrictionEntityAndFieldAndEnumFieldAndEntityGroupAndTabAndRelationship(
         @org.springframework.data.repository.query.Param("entityId")
         java.lang.Long entityId,
         @org.springframework.data.repository.query.Param("generateFrontEnd")
@@ -68,6 +70,8 @@ public interface EntityRepository
         java.lang.String modDate,
         @org.springframework.data.repository.query.Param("securityType")
         java.lang.Integer securityType,
+        @org.springframework.data.repository.query.Param("generationType")
+        java.lang.Integer generationType,
         @org.springframework.data.repository.query.Param("restrictionEntity")
         RestrictionEntity restrictionEntity,
         @org.springframework.data.repository.query.Param("field")

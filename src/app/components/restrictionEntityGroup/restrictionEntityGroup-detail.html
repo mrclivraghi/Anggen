@@ -18,22 +18,22 @@
 		
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !restrictionEntityGroupDetailForm.canUpdate.$valid, &#39;has-success&#39;: restrictionEntityGroupDetailForm.canUpdate.$valid}" style="height:59px" ng-show="true ">
-	<div class="input-group">
-		<span class="input-group-addon">canUpdate
-		</span>
-
-		<select class="form-control " aria-describedby="sizing-addon3" type="checkbox" id="restrictionEntityGroup-canUpdate" ng-model="vm.selectedEntity.canUpdate" ng-readonly="vm.restrictionList.restrictionEntityGroup.restrictionFieldMap.canUpdate" name="canUpdate" placeholder="canUpdate" ng-options="value for value in vm.trueFalseValues">
-		</select>
-
-	</div>
-</div>
 <div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !restrictionEntityGroupDetailForm.canCreate.$valid, &#39;has-success&#39;: restrictionEntityGroupDetailForm.canCreate.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
 		<span class="input-group-addon">canCreate
 		</span>
 
 		<select class="form-control " aria-describedby="sizing-addon3" type="checkbox" id="restrictionEntityGroup-canCreate" ng-model="vm.selectedEntity.canCreate" ng-readonly="vm.restrictionList.restrictionEntityGroup.restrictionFieldMap.canCreate" name="canCreate" placeholder="canCreate" ng-options="value for value in vm.trueFalseValues">
+		</select>
+
+	</div>
+</div>
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !restrictionEntityGroupDetailForm.canSearch.$valid, &#39;has-success&#39;: restrictionEntityGroupDetailForm.canSearch.$valid}" style="height:59px" ng-show="true ">
+	<div class="input-group">
+		<span class="input-group-addon">canSearch
+		</span>
+
+		<select class="form-control " aria-describedby="sizing-addon3" type="checkbox" id="restrictionEntityGroup-canSearch" ng-model="vm.selectedEntity.canSearch" ng-readonly="vm.restrictionList.restrictionEntityGroup.restrictionFieldMap.canSearch" name="canSearch" placeholder="canSearch" ng-options="value for value in vm.trueFalseValues">
 		</select>
 
 	</div>
@@ -48,12 +48,12 @@
 
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !restrictionEntityGroupDetailForm.canSearch.$valid, &#39;has-success&#39;: restrictionEntityGroupDetailForm.canSearch.$valid}" style="height:59px" ng-show="true ">
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !restrictionEntityGroupDetailForm.canUpdate.$valid, &#39;has-success&#39;: restrictionEntityGroupDetailForm.canUpdate.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
-		<span class="input-group-addon">canSearch
+		<span class="input-group-addon">canUpdate
 		</span>
 
-		<select class="form-control " aria-describedby="sizing-addon3" type="checkbox" id="restrictionEntityGroup-canSearch" ng-model="vm.selectedEntity.canSearch" ng-readonly="vm.restrictionList.restrictionEntityGroup.restrictionFieldMap.canSearch" name="canSearch" placeholder="canSearch" ng-options="value for value in vm.trueFalseValues">
+		<select class="form-control " aria-describedby="sizing-addon3" type="checkbox" id="restrictionEntityGroup-canUpdate" ng-model="vm.selectedEntity.canUpdate" ng-readonly="vm.restrictionList.restrictionEntityGroup.restrictionFieldMap.canUpdate" name="canUpdate" placeholder="canUpdate" ng-options="value for value in vm.trueFalseValues">
 		</select>
 
 	</div>
@@ -99,9 +99,6 @@
  </uib-tab></uib-tabset>
 
 				</div>
-
-				<script type="text/javascript">$('#restrictionEntityGroupTabs a:first').tab('show');
-				</script>
 
 				<div class="panel-body">
 					<div class="pull-left">

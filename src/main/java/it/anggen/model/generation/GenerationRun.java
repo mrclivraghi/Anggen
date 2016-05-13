@@ -17,7 +17,7 @@ import it.anggen.utils.annotation.MaxDescendantLevel;
 @MaxDescendantLevel(1)
 public class GenerationRun {
 
-    public final static Long staticEntityId = 17L;
+    public final static Long staticEntityId = 13L;
     @javax.persistence.Column(name = "generation_run_id")
     @Id
     @GeneratedValue

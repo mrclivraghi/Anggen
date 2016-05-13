@@ -87,9 +87,9 @@ paginationPageSize: 10,
 enableGridMenu: true,
 columnDefs: [    
 { name: 'generationRunId'},
+{ name: 'status'},
 { name: 'startDate', cellFilter: "date:'dd-MM-yyyy'"},
 { name: 'endDate', cellFilter: "date:'dd-MM-yyyy'"},
-{ name: 'status'},
 { name: 'project.projectId', displayName: 'project'} 
 ]
  };

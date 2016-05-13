@@ -4,6 +4,7 @@ import it.anggen.utils.Field;
 import it.anggen.utils.ReflectionManager;
 import it.anggen.utils.Utility;
 import it.anggen.generation.frontend.FrontHtmlGenerator;
+import it.anggen.model.GenerationType;
 import it.anggen.model.entity.Entity;
 import it.anggen.model.entity.EntityGroup;
 import it.anggen.model.entity.EnumEntity;
@@ -135,6 +136,10 @@ public class Generator {
 	@Value("${application.db}")
 	private String database;
 	
+	@Value("${application.generation_type}")
+	private Integer generationType;
+	
+	
 	private Project project;
 	
 	private List<Entity> modelEntityList;
@@ -209,6 +214,8 @@ public class Generator {
 	
 	public static Date lastGenerationDate;
 	
+	public static GenerationType generationTypeProperty;
+	
 	private Git git;
 	private String generationBranchName;
 	private String oldGenerationBranchName;
@@ -246,6 +253,7 @@ public class Generator {
 		Generator.restUrlProperty=restUrl;
 		Generator.uploadDirectoryProperty=uploadDirectory;
 		Generator.databaseProperty=database;
+		Generator.generationTypeProperty=generationType==GenerationType.SHOW_INCLUDE.getValue() ? GenerationType.SHOW_INCLUDE:GenerationType.HIDE_IGNORE;
 		
 		List<Project> projectList=projectRepository.findByName(applicationName);
 		if (projectList.size()==0)
@@ -306,7 +314,7 @@ public class Generator {
 				if (entityAttributeManager.getPrimaryKey() && !field.getName().equals(Utility.getFirstLower(entity.getName())+"Id") )
 					throw new Exception(entity.getName()+": primary key name is wrong. it's "+field.getName()+" instead of "+Utility.getFirstLower(entity.getName())+"Id");
 				
-				if (entityAttributeManager.getBetweenFilter() && !entityAttributeManager.getFieldTypeName().equals(null))
+				if (entityAttributeManager.getBetweenFilter() && entityAttributeManager.getFieldTypeName().equals(null))
 					throw new Exception(entity.getName()+": Between annotation is invalid for type "+entityAttributeManager.getFieldTypeName());
 			
 			}	
@@ -434,7 +442,7 @@ public class Generator {
 		generationRunRepository.save(currentGenerationRun);
 		init();
 		generationRunList.add(currentGenerationRun);
-		project.setGenerationRunList(generationRunList);
+		project.setGenerationType(generationTypeProperty);
 		project.setGenerationRunList(generationRunList);
 		projectRepository.save(project);
 		initBranch();

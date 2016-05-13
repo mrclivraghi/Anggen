@@ -21,6 +21,7 @@ public class EntitySearchBean {
     public java.util.Date addDate;
     public java.util.Date modDate;
     public it.anggen.model.SecurityType securityType;
+    public it.anggen.model.GenerationType generationType;
     public List<RestrictionEntity> restrictionEntityList;
     public List<Field> fieldList;
     public List<EnumField> enumFieldList;
@@ -114,6 +115,14 @@ public class EntitySearchBean {
 
     public void setSecurityType(it.anggen.model.SecurityType securityType) {
         this.securityType=securityType;
+    }
+
+    public it.anggen.model.GenerationType getGenerationType() {
+        return this.generationType;
+    }
+
+    public void setGenerationType(it.anggen.model.GenerationType generationType) {
+        this.generationType=generationType;
     }
 
     public List<RestrictionEntity> getRestrictionEntityList() {

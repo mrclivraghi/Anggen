@@ -27,6 +27,34 @@
 		
 	</div>
 </div>
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !projectDetailForm.addDate.$valid, &#39;has-success&#39;: projectDetailForm.addDate.$valid}" style="height:59px" ng-show="true ">
+	<div class="input-group">
+		<span class="input-group-addon">addDate
+		</span>
+
+		<input class="form-control " aria-describedby="sizing-addon3" type="text" ui-date="{ dateFormat: &#39;dd/mm/yy&#39; }" ng-model="vm.selectedEntity.addDate" ng-readonly="vm.restrictionList.project.restrictionFieldMap.addDate" name="addDate" placeholder="addDate"/>
+		
+	</div>
+</div>
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !projectDetailForm.modDate.$valid, &#39;has-success&#39;: projectDetailForm.modDate.$valid}" style="height:59px" ng-show="true ">
+	<div class="input-group">
+		<span class="input-group-addon">modDate
+		</span>
+
+		<input class="form-control " aria-describedby="sizing-addon3" type="text" ui-date="{ dateFormat: &#39;dd/mm/yy&#39; }" ng-model="vm.selectedEntity.modDate" ng-readonly="vm.restrictionList.project.restrictionFieldMap.modDate" name="modDate" placeholder="modDate"/>
+		
+	</div>
+</div>
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !projectDetailForm.generationType.$valid, &#39;has-success&#39;: projectDetailForm.generationType.$valid}" style="height:59px" ng-show="true ">
+	<div class="input-group">
+		<span class="input-group-addon">generationType
+		</span>
+
+		<select class="form-control pull-left" aria-describedby="sizing-addon3" type="text" id="project-generationType" ng-model="vm.selectedEntity.generationType" ng-readonly="vm.restrictionList.project.restrictionFieldMap.generationType" name="generationType" placeholder="generationType" ng-options="generationType as generationType for generationType in vm.generationTypePreparedData.entityList" enctype="UTF-8">
+		</select>
+
+	</div>
+</div>
 <div id="project-entityGroup" class="modal fade" role="dialog" ng-if="!$root.openNode.entityGroup">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -119,7 +147,7 @@
 					<span class="input-group-addon">enumEntity
 					</span>
 
-					<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.enumEntity" id="enumEntity" name="enumEntity" ng-options="enumEntity as  enumEntity.name+&#39; &#39;+ enumEntity.enumEntityId for enumEntity in vm.enumEntityPreparedData.entityList track by enumEntity.enumEntityId" enctype="UTF-8">
+					<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.enumEntity" id="enumEntity" name="enumEntity" ng-options="enumEntity as  enumEntity.enumEntityId+&#39; &#39;+ enumEntity.name for enumEntity in vm.enumEntityPreparedData.entityList track by enumEntity.enumEntityId" enctype="UTF-8">
 					</select>
 
 					<span class="input-group-btn">
@@ -190,7 +218,7 @@
 					<span class="input-group-addon">generationRun
 					</span>
 
-					<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.generationRun" id="generationRun" name="generationRun" ng-options="generationRun as generationRun.generationRunId for generationRun in vm.generationRunPreparedData.entityList track by generationRun.generationRunId" enctype="UTF-8">
+					<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.generationRun" id="generationRun" name="generationRun" ng-options="generationRun as  generationRun.generationRunId for generationRun in vm.generationRunPreparedData.entityList track by generationRun.generationRunId" enctype="UTF-8">
 					</select>
 
 					<span class="input-group-btn">
@@ -243,9 +271,6 @@
  </uib-tab></uib-tabset>
 
 				</div>
-
-				<script type="text/javascript">$('#projectTabs a:first').tab('show');
-				</script>
 
 				<div class="panel-body">
 					<div class="pull-left">

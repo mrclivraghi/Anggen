@@ -23,7 +23,7 @@ public class Field
     extends EntityAttribute
 {
 
-    public final static java.lang.Long staticEntityId = 4L;
+    public final static java.lang.Long staticEntityId = 7L;
     @javax.persistence.Column(name = "field_id")
     @Id
     @GeneratedValue

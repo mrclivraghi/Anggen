@@ -19,7 +19,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class AnnotationAttribute {
 
-    public final static java.lang.Long staticEntityId = 2L;
+    public final static java.lang.Long staticEntityId = 11L;
     @javax.persistence.Column(name = "annotation_attribute_id")
     @Id
     @GeneratedValue

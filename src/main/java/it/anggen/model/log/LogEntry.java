@@ -17,7 +17,7 @@ import it.anggen.utils.annotation.MaxDescendantLevel;
 @MaxDescendantLevel(1)
 public class LogEntry {
 
-    public final static java.lang.Long staticEntityId = 11L;
+    public final static java.lang.Long staticEntityId = 16L;
     @javax.persistence.Column(name = "log_entry_id")
     @Id
     @GeneratedValue

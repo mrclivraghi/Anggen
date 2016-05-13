@@ -21,7 +21,7 @@ public class EnumField
     extends EntityAttribute
 {
 
-    public final static java.lang.Long staticEntityId = 16L;
+    public final static java.lang.Long staticEntityId = 18L;
     @javax.persistence.Column(name = "enum_field_id")
     @Id
     @GeneratedValue

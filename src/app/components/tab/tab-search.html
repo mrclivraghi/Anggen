@@ -23,12 +23,30 @@
 		
 	</div>
 </div>
+<div class="pull-left right-input" ng-show="true ">
+	<div class="input-group">
+		<span class="input-group-addon">addDate
+		</span>
+
+		<input class="form-control " aria-describedby="sizing-addon3" type="text" ui-date="{ dateFormat: &#39;dd/mm/yy&#39; }" ng-model="vm.searchBean.addDate" ng-readonly="false" name="addDate" placeholder="addDate"/>
+		
+	</div>
+</div>
+<div class="pull-left right-input" ng-show="true ">
+	<div class="input-group">
+		<span class="input-group-addon">modDate
+		</span>
+
+		<input class="form-control " aria-describedby="sizing-addon3" type="text" ui-date="{ dateFormat: &#39;dd/mm/yy&#39; }" ng-model="vm.searchBean.modDate" ng-readonly="false" name="modDate" placeholder="modDate"/>
+		
+	</div>
+</div>
 <div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.entity.restrictionItemMap.entity.canSearch==true)">
 	<div class="input-group">
 		<span class="input-group-addon">entity
 		</span>
 
-		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.entity.entityId" id="entity" ng-options="entity.entityId as  entity.name+&#39; &#39;+ entity.entityId for entity in vm.entityPreparedData.entityList" enctype="UTF-8">
+		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.entity.entityId" id="entity" ng-options="entity.entityId as  entity.entityId+&#39; &#39;+ entity.name for entity in vm.entityPreparedData.entityList" enctype="UTF-8">
 		</select>
 
 	</div>
@@ -58,7 +76,7 @@
 		<span class="input-group-addon">relationship
 		</span>
 
-		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.relationship.relationshipId" id="relationship" ng-options="relationship.relationshipId as  relationship.name+&#39; &#39;+ relationship.relationshipId for relationship in vm.relationshipPreparedData.entityList" enctype="UTF-8">
+		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.relationship.relationshipId" id="relationship" ng-options="relationship.relationshipId as  relationship.relationshipId+&#39; &#39;+ relationship.name for relationship in vm.relationshipPreparedData.entityList" enctype="UTF-8">
 		</select>
 
 	</div>

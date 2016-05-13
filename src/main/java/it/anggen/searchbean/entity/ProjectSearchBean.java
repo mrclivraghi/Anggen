@@ -12,6 +12,7 @@ public class ProjectSearchBean {
     public java.lang.String name;
     public java.util.Date addDate;
     public java.util.Date modDate;
+    public it.anggen.model.GenerationType generationType;
     public List<EntityGroup> entityGroupList;
     public List<EnumEntity> enumEntityList;
     public List<GenerationRun> generationRunList;
@@ -46,6 +47,14 @@ public class ProjectSearchBean {
 
     public void setModDate(java.util.Date modDate) {
         this.modDate=modDate;
+    }
+
+    public it.anggen.model.GenerationType getGenerationType() {
+        return this.generationType;
+    }
+
+    public void setGenerationType(it.anggen.model.GenerationType generationType) {
+        this.generationType=generationType;
     }
 
     public List<EntityGroup> getEntityGroupList() {

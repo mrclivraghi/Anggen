@@ -556,38 +556,6 @@ annotationService.selectedEntity.show = row.isSelected;
 });
   };
 function updateParentEntities() { 
-tabService.initEnumFieldList().then(function(response) {
-enumFieldService.preparedData.entityList=response.data;
-});
-
-if (tabService.selectedEntity.tabId!=undefined) tabService.searchOne(tabService.selectedEntity).then(
-function successCallback(response) {
-$log.debug("response-ok");
-$log.debug(response);
-tabService.setSelectedEntity(response.data[0]);
-  }, function errorCallback(response) {
-UtilityService.AlertError.init({selector: "#alertError"});
-UtilityService.AlertError.show("Si è verificato un errore");
-$log.debug(response);
-return; 
-  }	
-);
-entityService.initEnumFieldList().then(function(response) {
-enumFieldService.preparedData.entityList=response.data;
-});
-
-if (entityService.selectedEntity.entityId!=undefined) entityService.searchOne(entityService.selectedEntity).then(
-function successCallback(response) {
-$log.debug("response-ok");
-$log.debug(response);
-entityService.setSelectedEntity(response.data[0]);
-  }, function errorCallback(response) {
-UtilityService.AlertError.init({selector: "#alertError"});
-UtilityService.AlertError.show("Si è verificato un errore");
-$log.debug(response);
-return; 
-  }	
-);
 annotationService.initEnumFieldList().then(function(response) {
 enumFieldService.preparedData.entityList=response.data;
 });
@@ -604,6 +572,22 @@ $log.debug(response);
 return; 
   }	
 );
+tabService.initEnumFieldList().then(function(response) {
+enumFieldService.preparedData.entityList=response.data;
+});
+
+if (tabService.selectedEntity.tabId!=undefined) tabService.searchOne(tabService.selectedEntity).then(
+function successCallback(response) {
+$log.debug("response-ok");
+$log.debug(response);
+tabService.setSelectedEntity(response.data[0]);
+  }, function errorCallback(response) {
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
+  }	
+);
 enumEntityService.initEnumFieldList().then(function(response) {
 enumFieldService.preparedData.entityList=response.data;
 });
@@ -613,6 +597,22 @@ function successCallback(response) {
 $log.debug("response-ok");
 $log.debug(response);
 enumEntityService.setSelectedEntity(response.data[0]);
+  }, function errorCallback(response) {
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
+  }	
+);
+entityService.initEnumFieldList().then(function(response) {
+enumFieldService.preparedData.entityList=response.data;
+});
+
+if (entityService.selectedEntity.entityId!=undefined) entityService.searchOne(entityService.selectedEntity).then(
+function successCallback(response) {
+$log.debug("response-ok");
+$log.debug(response);
+entityService.setSelectedEntity(response.data[0]);
   }, function errorCallback(response) {
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");

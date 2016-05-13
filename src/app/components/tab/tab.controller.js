@@ -586,22 +586,6 @@ $log.debug(response);
 return; 
   }	
 );
-relationshipService.initTabList().then(function(response) {
-tabService.preparedData.entityList=response.data;
-});
-
-if (relationshipService.selectedEntity.relationshipId!=undefined) relationshipService.searchOne(relationshipService.selectedEntity).then(
-function successCallback(response) {
-$log.debug("response-ok");
-$log.debug(response);
-relationshipService.setSelectedEntity(response.data[0]);
-  }, function errorCallback(response) {
-UtilityService.AlertError.init({selector: "#alertError"});
-UtilityService.AlertError.show("Si è verificato un errore");
-$log.debug(response);
-return; 
-  }	
-);
 enumFieldService.initTabList().then(function(response) {
 tabService.preparedData.entityList=response.data;
 });
@@ -611,6 +595,22 @@ function successCallback(response) {
 $log.debug("response-ok");
 $log.debug(response);
 enumFieldService.setSelectedEntity(response.data[0]);
+  }, function errorCallback(response) {
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
+  }	
+);
+relationshipService.initTabList().then(function(response) {
+tabService.preparedData.entityList=response.data;
+});
+
+if (relationshipService.selectedEntity.relationshipId!=undefined) relationshipService.searchOne(relationshipService.selectedEntity).then(
+function successCallback(response) {
+$log.debug("response-ok");
+$log.debug(response);
+relationshipService.setSelectedEntity(response.data[0]);
   }, function errorCallback(response) {
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");

@@ -109,6 +109,8 @@ enableGridMenu: true,
 columnDefs: [    
 { name: 'tabId'},
 { name: 'name'},
+{ name: 'addDate', cellFilter: "date:'dd-MM-yyyy'"},
+{ name: 'modDate', cellFilter: "date:'dd-MM-yyyy'"},
 { name: 'entity.entityId', displayName: 'entity'} 
 ]
  };

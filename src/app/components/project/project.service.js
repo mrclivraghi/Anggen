@@ -9,7 +9,7 @@ function ProjectService($http,MainService,UtilityService)
 this.entityList =		[];
 this.preparedData={};
 this.selectedEntity= 	{show: false 
-,entityGroupList: [],enumEntityList: [],generationRunList: []};
+,generationRunList: [],entityGroupList: [],enumEntityList: []};
 this.hidden= { hiddenFields: []};
 this.isParent=function()
 {
@@ -71,6 +71,13 @@ var promise= $http.post("http://127.0.0.1:8080/ServerTestApp/project/"+this.sele
 });
 return promise; 
 }
+ this.initGenerationRunList= function()
+{
+var promise= $http
+.post("http://127.0.0.1:8080/ServerTestApp/generationRun/search",
+{});
+return promise;
+};
  this.initEntityGroupList= function()
 {
 var promise= $http
@@ -85,13 +92,6 @@ var promise= $http
 {});
 return promise;
 };
- this.initGenerationRunList= function()
-{
-var promise= $http
-.post("http://127.0.0.1:8080/ServerTestApp/generationRun/search",
-{});
-return promise;
-};
 this.gridOptions = {
 enablePaginationControls: true,
 multiSelect: false,
@@ -101,7 +101,9 @@ paginationPageSize: 10,
 enableGridMenu: true,
 columnDefs: [    
 { name: 'projectId'},
-{ name: 'name'} 
+{ name: 'name'},
+{ name: 'addDate', cellFilter: "date:'dd-MM-yyyy'"},
+{ name: 'modDate', cellFilter: "date:'dd-MM-yyyy'"} 
 ]
  };
 }

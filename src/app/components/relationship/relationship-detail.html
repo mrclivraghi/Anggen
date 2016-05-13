@@ -36,6 +36,24 @@
 		
 	</div>
 </div>
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !relationshipDetailForm.addDate.$valid, &#39;has-success&#39;: relationshipDetailForm.addDate.$valid}" style="height:59px" ng-show="true ">
+	<div class="input-group">
+		<span class="input-group-addon">addDate
+		</span>
+
+		<input class="form-control " aria-describedby="sizing-addon3" type="text" ui-date="{ dateFormat: &#39;dd/mm/yy&#39; }" ng-model="vm.selectedEntity.addDate" ng-readonly="vm.restrictionList.relationship.restrictionFieldMap.addDate" name="addDate" placeholder="addDate"/>
+		
+	</div>
+</div>
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !relationshipDetailForm.modDate.$valid, &#39;has-success&#39;: relationshipDetailForm.modDate.$valid}" style="height:59px" ng-show="true ">
+	<div class="input-group">
+		<span class="input-group-addon">modDate
+		</span>
+
+		<input class="form-control " aria-describedby="sizing-addon3" type="text" ui-date="{ dateFormat: &#39;dd/mm/yy&#39; }" ng-model="vm.selectedEntity.modDate" ng-readonly="vm.restrictionList.relationship.restrictionFieldMap.modDate" name="modDate" placeholder="modDate"/>
+		
+	</div>
+</div>
 <div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !relationshipDetailForm.relationshipType.$valid, &#39;has-success&#39;: relationshipDetailForm.relationshipType.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
 		<span class="input-group-addon">relationshipType
@@ -122,7 +140,7 @@
 		<span class="input-group-addon">entity
 		</span>
 
-		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.entity" id="entity" name="entity" ng-options="entity as  entity.name+&#39; &#39;+ entity.entityId for entity in vm.entityPreparedData.entityList track by entity.entityId" enctype="UTF-8">
+		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.entity" id="entity" name="entity" ng-options="entity as  entity.entityId+&#39; &#39;+ entity.name for entity in vm.entityPreparedData.entityList track by entity.entityId" enctype="UTF-8">
 		</select>
 
 		<span class="input-group-btn">
@@ -141,7 +159,7 @@
 		<span class="input-group-addon">entity
 		</span>
 
-		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.entity" id="entity" name="entity" ng-options="entity as  entity.name+&#39; &#39;+ entity.entityId for entity in vm.entityPreparedData.entityList track by entity.entityId" enctype="UTF-8">
+		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.entity" id="entity" name="entity" ng-options="entity as  entity.entityId+&#39; &#39;+ entity.name for entity in vm.entityPreparedData.entityList track by entity.entityId" enctype="UTF-8">
 		</select>
 
 		<span class="input-group-btn">
@@ -160,7 +178,7 @@
 		<span class="input-group-addon">tab
 		</span>
 
-		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.tab" id="tab" name="tab" ng-options="tab as  tab.name+&#39; &#39;+ tab.tabId for tab in vm.tabPreparedData.entityList track by tab.tabId" enctype="UTF-8">
+		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.tab" id="tab" name="tab" ng-options="tab as  tab.tabId+&#39; &#39;+ tab.name for tab in vm.tabPreparedData.entityList track by tab.tabId" enctype="UTF-8">
 		</select>
 
 		<span class="input-group-btn">
@@ -177,9 +195,6 @@
  </uib-tab></uib-tabset>
 
 				</div>
-
-				<script type="text/javascript">$('#relationshipTabs a:first').tab('show');
-				</script>
 
 				<div class="panel-body">
 					<div class="pull-left">

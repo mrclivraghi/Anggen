@@ -565,15 +565,15 @@ annotationService.selectedEntity.show = row.isSelected;
 });
   };
 function updateParentEntities() { 
-tabService.initFieldList().then(function(response) {
+annotationService.initFieldList().then(function(response) {
 fieldService.preparedData.entityList=response.data;
 });
 
-if (tabService.selectedEntity.tabId!=undefined) tabService.searchOne(tabService.selectedEntity).then(
+if (annotationService.selectedEntity.annotationId!=undefined) annotationService.searchOne(annotationService.selectedEntity).then(
 function successCallback(response) {
 $log.debug("response-ok");
 $log.debug(response);
-tabService.setSelectedEntity(response.data[0]);
+annotationService.setSelectedEntity(response.data[0]);
   }, function errorCallback(response) {
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
@@ -597,6 +597,22 @@ $log.debug(response);
 return; 
   }	
 );
+tabService.initFieldList().then(function(response) {
+fieldService.preparedData.entityList=response.data;
+});
+
+if (tabService.selectedEntity.tabId!=undefined) tabService.searchOne(tabService.selectedEntity).then(
+function successCallback(response) {
+$log.debug("response-ok");
+$log.debug(response);
+tabService.setSelectedEntity(response.data[0]);
+  }, function errorCallback(response) {
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
+  }	
+);
 entityService.initFieldList().then(function(response) {
 fieldService.preparedData.entityList=response.data;
 });
@@ -606,22 +622,6 @@ function successCallback(response) {
 $log.debug("response-ok");
 $log.debug(response);
 entityService.setSelectedEntity(response.data[0]);
-  }, function errorCallback(response) {
-UtilityService.AlertError.init({selector: "#alertError"});
-UtilityService.AlertError.show("Si è verificato un errore");
-$log.debug(response);
-return; 
-  }	
-);
-annotationService.initFieldList().then(function(response) {
-fieldService.preparedData.entityList=response.data;
-});
-
-if (annotationService.selectedEntity.annotationId!=undefined) annotationService.searchOne(annotationService.selectedEntity).then(
-function successCallback(response) {
-$log.debug("response-ok");
-$log.debug(response);
-annotationService.setSelectedEntity(response.data[0]);
   }, function errorCallback(response) {
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");

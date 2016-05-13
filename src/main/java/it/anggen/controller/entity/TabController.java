@@ -56,8 +56,8 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 
         List<it.anggen.model.entity.Tab> tabList;
         if (tab.getTabId()!=null)
-         log.info("Searching tab like {}", tab.getName()+' '+ tab.getTabId());
-        logEntryService.addLogEntry( "Searching entity like "+ tab.getName()+' '+ tab.getTabId(),
+         log.info("Searching tab like {}", tab.getTabId()+' '+ tab.getName());
+        logEntryService.addLogEntry( "Searching entity like "+ tab.getTabId()+' '+ tab.getName(),
         it.anggen.model.LogType.INFO, it.anggen.model.OperationType.SEARCH_ENTITY, it.anggen.model.entity.Tab.staticEntityId, securityService.getLoggedUser(),log);
         tabList=tabService.find(tab);
         getSecurityMapping(tabList);
@@ -113,7 +113,7 @@ return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).buil
 return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).build(); 
 
         if (tab.getTabId()!=null)
-        log.info("Inserting tab like "+ tab.getName()+' '+ tab.getTabId());
+        log.info("Inserting tab like "+ tab.getTabId()+' '+ tab.getName());
         it.anggen.model.entity.Tab insertedTab=tabService.insert(tab);
         getRightMapping(insertedTab);
         logEntryService.addLogEntry( "Inserted tab with id "+ insertedTab.getTabId(),

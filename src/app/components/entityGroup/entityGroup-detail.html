@@ -27,6 +27,24 @@
 		
 	</div>
 </div>
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !entityGroupDetailForm.addDate.$valid, &#39;has-success&#39;: entityGroupDetailForm.addDate.$valid}" style="height:59px" ng-show="true ">
+	<div class="input-group">
+		<span class="input-group-addon">addDate
+		</span>
+
+		<input class="form-control " aria-describedby="sizing-addon3" type="text" ui-date="{ dateFormat: &#39;dd/mm/yy&#39; }" ng-model="vm.selectedEntity.addDate" ng-readonly="vm.restrictionList.entityGroup.restrictionFieldMap.addDate" name="addDate" placeholder="addDate"/>
+		
+	</div>
+</div>
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !entityGroupDetailForm.modDate.$valid, &#39;has-success&#39;: entityGroupDetailForm.modDate.$valid}" style="height:59px" ng-show="true ">
+	<div class="input-group">
+		<span class="input-group-addon">modDate
+		</span>
+
+		<input class="form-control " aria-describedby="sizing-addon3" type="text" ui-date="{ dateFormat: &#39;dd/mm/yy&#39; }" ng-model="vm.selectedEntity.modDate" ng-readonly="vm.restrictionList.entityGroup.restrictionFieldMap.modDate" name="modDate" placeholder="modDate"/>
+		
+	</div>
+</div>
 <div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !entityGroupDetailForm.securityType.$valid, &#39;has-success&#39;: entityGroupDetailForm.securityType.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
 		<span class="input-group-addon">securityType
@@ -34,25 +52,6 @@
 
 		<select class="form-control pull-left" aria-describedby="sizing-addon3" type="text" id="entityGroup-securityType" ng-model="vm.selectedEntity.securityType" ng-readonly="vm.restrictionList.entityGroup.restrictionFieldMap.securityType" name="securityType" placeholder="securityType" ng-options="securityType as securityType for securityType in vm.securityTypePreparedData.entityList" enctype="UTF-8">
 		</select>
-
-	</div>
-</div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !entityGroupDetailForm.project.$valid, &#39;has-success&#39;: entityGroupDetailForm.project.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.project">
-	<div class="input-group">
-		<span class="input-group-addon">project
-		</span>
-
-		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.project" id="project" name="project" ng-options="project as  project.projectId+&#39; &#39;+ project.name for project in vm.projectPreparedData.entityList track by project.projectId" enctype="UTF-8">
-		</select>
-
-		<span class="input-group-btn">
-			<button ng-click="vm.showProjectDetail()" class="btn btn-default " id="project" ng-if="vm.selectedEntity.project==null">Add new project
-			</button>
-
-			<button ng-click="vm.showProjectDetail()" class="btn btn-default " id="project" ng-if="vm.selectedEntity.project!=null">Show detail
-			</button>
-
-		</span>
 
 	</div>
 </div>
@@ -148,7 +147,7 @@
 					<span class="input-group-addon">entity
 					</span>
 
-					<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.entity" id="entity" name="entity" ng-options="entity as  entity.name+&#39; &#39;+ entity.entityId for entity in vm.entityPreparedData.entityList track by entity.entityId" enctype="UTF-8">
+					<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.entity" id="entity" name="entity" ng-options="entity as  entity.entityId+&#39; &#39;+ entity.name for entity in vm.entityPreparedData.entityList track by entity.entityId" enctype="UTF-8">
 					</select>
 
 					<span class="input-group-btn">
@@ -198,12 +197,28 @@
 
 	</div>
 </div>
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !entityGroupDetailForm.project.$valid, &#39;has-success&#39;: entityGroupDetailForm.project.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.project">
+	<div class="input-group">
+		<span class="input-group-addon">project
+		</span>
+
+		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.project" id="project" name="project" ng-options="project as  project.projectId+&#39; &#39;+ project.name for project in vm.projectPreparedData.entityList track by project.projectId" enctype="UTF-8">
+		</select>
+
+		<span class="input-group-btn">
+			<button ng-click="vm.showProjectDetail()" class="btn btn-default " id="project" ng-if="vm.selectedEntity.project==null">Add new project
+			</button>
+
+			<button ng-click="vm.showProjectDetail()" class="btn btn-default " id="project" ng-if="vm.selectedEntity.project!=null">Show detail
+			</button>
+
+		</span>
+
+	</div>
+</div>
  </uib-tab></uib-tabset>
 
 				</div>
-
-				<script type="text/javascript">$('#entityGroupTabs a:first').tab('show');
-				</script>
 
 				<div class="panel-body">
 					<div class="pull-left">

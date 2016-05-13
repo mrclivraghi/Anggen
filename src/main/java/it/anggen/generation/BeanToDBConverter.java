@@ -587,7 +587,7 @@ public class BeanToDBConverter {
 		project.setEntityGroupList(entityGroupList);
 		project.setEnumEntityList(enumEntityList);
 		projectRepository.save(project);
-		System.out.println("ok");
+		putAutoAnnotation(project);
 		
 	}
 	
@@ -950,6 +950,44 @@ public class BeanToDBConverter {
 		return firstEntityId;
 	}
 	
+	
+	public void putAutoAnnotation(Project project)
+	{
+		for (EntityGroup entityGroup : project.getEntityGroupList())
+		{
+			for (Entity entity : entityGroup.getEntityList())
+				if (!entity.getIgnoreMenu())
+				{
+					for (Relationship relationship: entity.getRelationshipList())
+						if (relationship.getEntityTarget()!=null && relationship.getEntityTarget().getIgnoreMenu())
+						{
+							Entity target= relationship.getEntityTarget();
+							EntityManager entityManager = new EntityManagerImpl(target);
+							Boolean foundAnnotation=false;
+							for (EntityAttribute entityAttribute: entityManager.getAllAttribute())
+							{
+								if (EntityAttributeManager.getInstance(entityAttribute).getIncludeUpdate())
+								{
+									foundAnnotation=true;
+									break;
+								}
+							}
+							if (!foundAnnotation)
+							{ // add default on field
+								for (Field field: target.getFieldList())
+								{
+									it.anggen.model.field.Annotation annotation = new it.anggen.model.field.Annotation();
+									annotation.setAnnotationType(AnnotationType.INCLUDE_UPDATE);
+									annotation.setField(field);
+									annotationRepository.save(annotation);
+								}
+								target.setGenerationType(GenerationType.SHOW_INCLUDE);
+								entityRepository.save(target);
+							}
+						}
+				}
+		}
+	}
 	
 
 }

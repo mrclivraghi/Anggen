@@ -80,6 +80,7 @@ import it.anggen.repository.security.RestrictionEntityRepository;
 import it.anggen.repository.security.RoleRepository;
 import it.anggen.repository.security.UserRepository;
 
+import org.apache.log4j.Logger;
 import org.hibernate.type.MetaType;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -189,6 +190,8 @@ public class BeanToDBConverter {
 		admin.setRoleList(roleList);
 		userRepository.save(admin);
 	}
+	
+	@Transactional
 	public void convert()
 	{
 		init();
@@ -588,7 +591,7 @@ public class BeanToDBConverter {
 		project.setEnumEntityList(enumEntityList);
 		projectRepository.save(project);
 		putAutoAnnotation(project);
-		
+		generateTabForRelationship(project);
 	}
 	
 	private void initEntity(Class myClass, Map<String, Entity> entityMap)
@@ -974,6 +977,7 @@ public class BeanToDBConverter {
 							}
 							if (!foundAnnotation)
 							{ // add default on field
+								if (target.getFieldList()!=null)
 								for (Field field: target.getFieldList())
 								{
 									it.anggen.model.field.Annotation annotation = new it.anggen.model.field.Annotation();
@@ -989,25 +993,32 @@ public class BeanToDBConverter {
 		}
 	}
 	
-	
 	public void generateTabForRelationship(Project project)
 	{
 		for (EntityGroup entityGroup : project.getEntityGroupList())
 		{
 			for (Entity entity : entityGroup.getEntityList())
 			{
-				for (Relationship relationship: entity.getRelationshipList())
-					if (relationship.getTab().getName().equals("Detail"))
-					{
-						it.anggen.model.entity.Tab tab = new it.anggen.model.entity.Tab();
-						tab.setEntity(entity);
-						tab.setName(Utility.getFirstUpper(relationship.getName()));
+				
+				for (it.anggen.model.entity.Tab tab : entity.getTabList())
+				if (tab.getName().equals("Detail"))
+				{
+				
+				for (Relationship relationship: tab.getRelationshipList())
+				{
+					
+						it.anggen.model.entity.Tab newTab = new it.anggen.model.entity.Tab();
+						newTab.setEntity(entity);
+						newTab.setName(Utility.getFirstUpper(relationship.getName()));
 						List<Relationship> relationshipList = new ArrayList<Relationship>();
 						relationshipList.add(relationship);
-						tab.setRelationshipList(relationshipList);
-						tabRepository.save(tab);
+						newTab.setRelationshipList(relationshipList);
+						tabRepository.save(newTab);
 						
-					}
+				}
+				
+				
+				}
 			}
 		}
 	}

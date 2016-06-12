@@ -24,7 +24,10 @@ public interface UserRepository
 
     public List<it.anggen.model.security.User> findByPassword(java.lang.String password);
 
-    @Query("select u from User u where  (:userId is null or cast(:userId as string)=cast(u.userId as string)) and (:username is null or :username='' or cast(:username as string)=u.username) and (:enabled is null or cast(:enabled as string)=cast(u.enabled as string)) and (:password is null or :password='' or cast(:password as string)=u.password) and (:role in elements(u.roleList)  or :role is null) ")
+    @Query("select u from User u where  (:userId is null or cast(:userId as string)=cast(u.userId as string)) and "
+    		+ "(:username is null or :username='' or cast(:username as string)=u.username) and "
+    		+ "(:enabled is null or cast(:enabled as string)=cast(u.enabled as string) or :enabled=u.enabled) and "
+    		+ "(:password is null or :password='' or cast(:password as string)=u.password) and (:role in elements(u.roleList)  or :role is null) ")
     public List<it.anggen.model.security.User> findByUserIdAndUsernameAndEnabledAndPasswordAndRole(
         @org.springframework.data.repository.query.Param("userId")
         java.lang.Long userId,

@@ -210,10 +210,12 @@ public class EntityManagerImpl implements EntityManager{
 	@Override
 	public List<EntityAttribute> getAttributeList() {
 		List<EntityAttribute> entityAttributeList = new ArrayList<EntityAttribute>();
+		if (getFieldList()!=null)
 		for (Field field: getFieldList())
 		{
 			entityAttributeList.add(field);
 		}
+		if (entity.getRelationshipList()!=null)
 		for (Relationship relationship : entity.getRelationshipList())
 		{
 			entityAttributeList.add(relationship);
@@ -282,7 +284,8 @@ public class EntityManagerImpl implements EntityManager{
 	@Override
 	public List<EntityAttribute> getAllAttribute() {
 		List<EntityAttribute> tempList = getAttributeList();
-		tempList.addAll(entity.getEnumFieldList());
+		if (entity.getEnumFieldList()!=null)
+			tempList.addAll(entity.getEnumFieldList());
 		if (tempList!=null)
 			Utility.orderByPriority(tempList);
 		return tempList;

@@ -1,7 +1,7 @@
 (function() { 
 
 angular
-.module("serverTest")
+.module("serverTestApp")
 .controller("EnumValueController",EnumValueController);
 /** @ngInject */
 function EnumValueController($scope,$http,$rootScope,$log,UtilityService ,enumValueService, SecurityService, MainService ,enumEntityService)

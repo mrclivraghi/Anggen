@@ -54,22 +54,22 @@
 
 	</div>
 </div>
-<div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.security.restrictionItemMap.role.canSearch==true)">
+<div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.field.restrictionItemMap.enumField.canSearch==true)">
 	<div class="input-group">
-		<span class="input-group-addon">role
+		<span class="input-group-addon">enumField
 		</span>
 
-		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.role.roleId" id="role" ng-options="role.roleId as  role.roleId+&#39; &#39;+ role.role for role in vm.rolePreparedData.entityList" enctype="UTF-8">
+		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.enumField.enumFieldId" id="role" ng-options="enumField.enumFieldId as  enumField.enumFieldId+&#39; &#39;+ enumField.name for enumField in vm.enumFieldPreparedData.entityList" enctype="UTF-8">
 		</select>
 
 	</div>
 </div>
-<div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.entity.restrictionItemMap.entityGroup.canSearch==true)">
+<div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.relationship.restrictionItemMap.relationship.canSearch==true)">
 	<div class="input-group">
-		<span class="input-group-addon">entityGroup
+		<span class="input-group-addon">relationship
 		</span>
 
-		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.entityGroup.entityGroupId" id="entityGroup" ng-options="entityGroup.entityGroupId as  entityGroup.entityGroupId+&#39; &#39;+ entityGroup.name for entityGroup in vm.entityGroupPreparedData.entityList" enctype="UTF-8">
+		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.relationship.relationshipId" id="entityGroup" ng-options="relationship.relationshipId as  relationship.relationshipId+&#39; &#39;+ relationship.name for relationship in vm.relationshipPreparedData.entityList" enctype="UTF-8">
 		</select>
 
 	</div>

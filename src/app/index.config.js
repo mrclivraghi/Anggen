@@ -2,7 +2,7 @@
   'use strict'
 
   angular
-    .module('serverTest')
+    .module('serverTestApp')
     .config(config)
     .config(setHttpProvider);
 

@@ -1,7 +1,7 @@
 (function() { 
 
 angular
-.module("serverTest")
+.module("serverTestApp")
 .service("entityGroupService", EntityGroupService);
 /** @ngInject */
 function EntityGroupService($http,MainService,UtilityService)

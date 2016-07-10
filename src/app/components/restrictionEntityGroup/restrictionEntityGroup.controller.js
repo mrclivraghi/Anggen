@@ -1,18 +1,18 @@
 (function() { 
 
 angular
-.module("serverTest")
+.module("serverTestApp")
 .controller("RestrictionEntityGroupController",RestrictionEntityGroupController);
 /** @ngInject */
-function RestrictionEntityGroupController($scope,$http,$rootScope,$log,UtilityService ,restrictionEntityGroupService, SecurityService, MainService ,roleService,entityGroupService)
+function RestrictionEntityGroupController($scope,$http,$rootScope,$log,UtilityService ,restrictionEntityGroupService, SecurityService, MainService ,enumFieldService,relationshipService)
 {
 var vm=this;
 vm.activeTab=1;
 vm.searchBean=restrictionEntityGroupService.searchBean;
 vm.entityList=restrictionEntityGroupService.entityList;
 vm.selectedEntity=restrictionEntityGroupService.selectedEntity;
-vm.rolePreparedData=roleService.preparedData;
-vm.entityGroupPreparedData=entityGroupService.preparedData;
+vm.enumFieldPreparedData=enumFieldService.preparedData;
+vm.relationshipPreparedData=relationshipService.preparedData;
 function reset()
 {
 restrictionEntityGroupService.resetSearchBean();
@@ -22,12 +22,12 @@ restrictionEntityGroupService.selectedEntity.show=false;
 restrictionEntityGroupService.setEntityList(null); 
 if (restrictionEntityGroupService.isParent()) 
 {
-roleService.selectedEntity.show=false;
-delete $rootScope.openNode.role;
-UtilityService.removeObjectFromList($rootScope.parentServices,roleService);
-entityGroupService.selectedEntity.show=false;
-delete $rootScope.openNode.entityGroup;
-UtilityService.removeObjectFromList($rootScope.parentServices,entityGroupService);
+enumFieldService.selectedEntity.show=false;
+delete $rootScope.openNode.enumField;
+UtilityService.removeObjectFromList($rootScope.parentServices,enumFieldService);
+relationshipService.selectedEntity.show=false;
+delete $rootScope.openNode.relationship;
+UtilityService.removeObjectFromList($rootScope.parentServices,relationshipService);
 }
 }
 function addNew()
@@ -38,12 +38,12 @@ restrictionEntityGroupService.setEntityList(null);
 restrictionEntityGroupService.selectedEntity.show=true;
 if (restrictionEntityGroupService.isParent()) 
 {
-roleService.selectedEntity.show=false;
-delete $rootScope.openNode.role;
-UtilityService.removeObjectFromList($rootScope.parentServices,roleService);
-entityGroupService.selectedEntity.show=false;
-delete $rootScope.openNode.entityGroup;
-UtilityService.removeObjectFromList($rootScope.parentServices,entityGroupService);
+enumFieldService.selectedEntity.show=false;
+delete $rootScope.openNode.enumField;
+UtilityService.removeObjectFromList($rootScope.parentServices,enumFieldService);
+relationshipService.selectedEntity.show=false;
+delete $rootScope.openNode.relationship;
+UtilityService.removeObjectFromList($rootScope.parentServices,relationshipService);
 }
 angular.element('#restrictionEntityGroupTabs li:eq(0) a').tab('show');
 }
@@ -100,12 +100,12 @@ if (!$scope.restrictionEntityGroupDetailForm.$valid) return;
 $rootScope.parentServices.pop();
 if ($rootScope.parentServices.length==0) 
 {
-roleService.selectedEntity.show=false;
-delete $rootScope.openNode.role;
-UtilityService.removeObjectFromList($rootScope.parentServices,roleService);
-entityGroupService.selectedEntity.show=false;
-delete $rootScope.openNode.entityGroup;
-UtilityService.removeObjectFromList($rootScope.parentServices,entityGroupService);
+enumFieldService.selectedEntity.show=false;
+delete $rootScope.openNode.enumField;
+UtilityService.removeObjectFromList($rootScope.parentServices,enumFieldService);
+relationshipService.selectedEntity.show=false;
+delete $rootScope.openNode.relationship;
+UtilityService.removeObjectFromList($rootScope.parentServices,relationshipService);
 restrictionEntityGroupService.update().then(function successCallback(response) { 
 $log.debug(response);
 vm.search();
@@ -161,10 +161,10 @@ return;
 }
 function refreshTableDetail() 
 {
-if ($scope.roleGridApi!=undefined && $scope.roleGridApi!=null)
- $scope.roleGridApi.core.handleWindowResize(); 
-if ($scope.entityGroupGridApi!=undefined && $scope.entityGroupGridApi!=null)
- $scope.entityGroupGridApi.core.handleWindowResize(); 
+if ($scope.enumFieldGridApi!=undefined && $scope.enumFieldGridApi!=null)
+ $scope.enumFieldGridApi.core.handleWindowResize(); 
+if ($scope.relationshipGridApi!=undefined && $scope.relationshipGridApi!=null)
+ $scope.relationshipGridApi.core.handleWindowResize(); 
 }
 vm.refreshTableDetail=refreshTableDetail;
 function loadFile(file,field)
@@ -179,16 +179,16 @@ return;
 });
 }
 vm.trueFalseValues=['',true,false];
- function showRoleDetail(index)
+ function showEnumFieldDetail(index)
 {
 if (index!=null)
 {
-roleService.searchOne(restrictionEntityGroupService.selectedEntity.roleList[index]).then(
+enumFieldService.searchOne(restrictionEntityGroupService.selectedEntity.enumFieldList[index]).then(
 function successCallback(response) {
 $log.debug("INDEX!=NULLLLLLLLLLLL");
 $log.debug(response);
-roleService.setSelectedEntity(response.data[0]);
-roleService.selectedEntity.show=true;
+enumFieldService.setSelectedEntity(response.data[0]);
+enumFieldService.selectedEntity.show=true;
   }, function errorCallback(response) {
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
@@ -199,19 +199,19 @@ return;
 }
 else 
 {
-if (restrictionEntityGroupService.selectedEntity.role==null || restrictionEntityGroupService.selectedEntity.role==undefined)
+if (restrictionEntityGroupService.selectedEntity.enumField==null || restrictionEntityGroupService.selectedEntity.enumField==undefined)
 {
-roleService.setSelectedEntity(null); 
-roleService.selectedEntity.show=true; 
-$rootScope.openNode.role=true;
+enumFieldService.setSelectedEntity(null); 
+enumFieldService.selectedEntity.show=true; 
+$rootScope.openNode.enumField=true;
 }
 else
-roleService.searchOne(restrictionEntityGroupService.selectedEntity.role).then(
+enumFieldService.searchOne(restrictionEntityGroupService.selectedEntity.enumField).then(
 function successCallback(response) {
-roleService.setSelectedEntity(response.data[0]);
-roleService.selectedEntity.show=true;
-$rootScope.openNode.role=true;
-$rootScope.parentServices.push(roleService);
+enumFieldService.setSelectedEntity(response.data[0]);
+enumFieldService.selectedEntity.show=true;
+$rootScope.openNode.enumField=true;
+$rootScope.parentServices.push(enumFieldService);
   }, function errorCallback(response) {
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
@@ -220,19 +220,19 @@ return;
   }	
 );
 }
-angular.element('#roleTabs li:eq(0) a').tab('show');
+angular.element('#enumFieldTabs li:eq(0) a').tab('show');
 }
-vm.showRoleDetail=showRoleDetail;
- function showEntityGroupDetail(index)
+vm.showEnumFieldDetail=showEnumFieldDetail;
+ function showRelationshipDetail(index)
 {
 if (index!=null)
 {
-entityGroupService.searchOne(restrictionEntityGroupService.selectedEntity.entityGroupList[index]).then(
+relationshipService.searchOne(restrictionEntityGroupService.selectedEntity.relationshipList[index]).then(
 function successCallback(response) {
 $log.debug("INDEX!=NULLLLLLLLLLLL");
 $log.debug(response);
-entityGroupService.setSelectedEntity(response.data[0]);
-entityGroupService.selectedEntity.show=true;
+relationshipService.setSelectedEntity(response.data[0]);
+relationshipService.selectedEntity.show=true;
   }, function errorCallback(response) {
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
@@ -243,19 +243,19 @@ return;
 }
 else 
 {
-if (restrictionEntityGroupService.selectedEntity.entityGroup==null || restrictionEntityGroupService.selectedEntity.entityGroup==undefined)
+if (restrictionEntityGroupService.selectedEntity.relationship==null || restrictionEntityGroupService.selectedEntity.relationship==undefined)
 {
-entityGroupService.setSelectedEntity(null); 
-entityGroupService.selectedEntity.show=true; 
-$rootScope.openNode.entityGroup=true;
+relationshipService.setSelectedEntity(null); 
+relationshipService.selectedEntity.show=true; 
+$rootScope.openNode.relationship=true;
 }
 else
-entityGroupService.searchOne(restrictionEntityGroupService.selectedEntity.entityGroup).then(
+relationshipService.searchOne(restrictionEntityGroupService.selectedEntity.relationship).then(
 function successCallback(response) {
-entityGroupService.setSelectedEntity(response.data[0]);
-entityGroupService.selectedEntity.show=true;
-$rootScope.openNode.entityGroup=true;
-$rootScope.parentServices.push(entityGroupService);
+relationshipService.setSelectedEntity(response.data[0]);
+relationshipService.selectedEntity.show=true;
+$rootScope.openNode.relationship=true;
+$rootScope.parentServices.push(relationshipService);
   }, function errorCallback(response) {
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
@@ -264,9 +264,9 @@ return;
   }	
 );
 }
-angular.element('#entityGroupTabs li:eq(0) a').tab('show');
+angular.element('#relationshipTabs li:eq(0) a').tab('show');
 }
-vm.showEntityGroupDetail=showEntityGroupDetail;
+vm.showRelationshipDetail=showRelationshipDetail;
 function downloadList()
 {
 var mystyle = {
@@ -275,24 +275,24 @@ column: {style:{Font:{Bold:"1"}}}
 };
 UtilityService.alasql('SELECT * INTO XLSXML("restrictionEntityGroup.xls",?) FROM ?',[mystyle,vm.entityList]);
 }
-function downloadRoleList()
+function downloadEnumFieldList()
 {
 var mystyle = {
  headers:true, 
 column: {style:{Font:{Bold:"1"}}}
 }
-UtilityService.alasql('SELECT * INTO XLSXML("role.xls",?) FROM ?',[mystyle,vm.selectedEntity.roleList]);
+UtilityService.alasql('SELECT * INTO XLSXML("enumField.xls",?) FROM ?',[mystyle,vm.selectedEntity.enumFieldList]);
 }
-vm.downloadRoleList=downloadRoleList;
-function downloadEntityGroupList()
+vm.downloadEnumFieldList=downloadEnumFieldList;
+function downloadRelationshipList()
 {
 var mystyle = {
  headers:true, 
 column: {style:{Font:{Bold:"1"}}}
 }
-UtilityService.alasql('SELECT * INTO XLSXML("entityGroup.xls",?) FROM ?',[mystyle,vm.selectedEntity.entityGroupList]);
+UtilityService.alasql('SELECT * INTO XLSXML("relationship.xls",?) FROM ?',[mystyle,vm.selectedEntity.relationshipList]);
 }
-vm.downloadEntityGroupList=downloadEntityGroupList;
+vm.downloadRelationshipList=downloadRelationshipList;
 vm.restrictionEntityGroupGridOptions={};
 UtilityService.cloneObject(restrictionEntityGroupService.gridOptions,vm.restrictionEntityGroupGridOptions);
 vm.restrictionEntityGroupGridOptions.data=restrictionEntityGroupService.entityList;
@@ -318,89 +318,57 @@ UtilityService.removeObjectFromList($rootScope.parentServices,restrictionEntityG
 restrictionEntityGroupService.selectedEntity.show = row.isSelected;
 });
   };
-vm.roleGridOptions={};
-UtilityService.cloneObject(roleService.gridOptions,vm.roleGridOptions);
-vm.roleGridOptions.data=vm.selectedEntity.roleList;
+vm.enumFieldGridOptions={};
+UtilityService.cloneObject(enumFieldService.gridOptions,vm.enumFieldGridOptions);
+vm.enumFieldGridOptions.data=vm.selectedEntity.enumFieldList;
 vm.initChildrenList = function () { 
 }
-vm.roleGridOptions.onRegisterApi = function(gridApi){
-vm.roleGridApi = gridApi;
+vm.enumFieldGridOptions.onRegisterApi = function(gridApi){
+vm.enumFieldGridApi = gridApi;
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
-roleService.searchOne(row.entity).then(function(response) { 
+enumFieldService.searchOne(row.entity).then(function(response) { 
 $log.debug(response.data);
-$rootScope.openNode.role=true;
-$rootScope.parentServices.push(roleService);
-roleService.setSelectedEntity(response.data[0]);
+$rootScope.openNode.enumField=true;
+$rootScope.parentServices.push(enumFieldService);
+enumFieldService.setSelectedEntity(response.data[0]);
 });
-angular.element('#roleTabs li:eq(0) a').tab('show');
+angular.element('#enumFieldTabs li:eq(0) a').tab('show');
 }
 else 
-roleService.setSelectedEntity(null);
-delete $rootScope.openNode.role;
-UtilityService.removeObjectFromList($rootScope.parentServices,roleService);
-roleService.selectedEntity.show = row.isSelected;
+enumFieldService.setSelectedEntity(null);
+delete $rootScope.openNode.enumField;
+UtilityService.removeObjectFromList($rootScope.parentServices,enumFieldService);
+enumFieldService.selectedEntity.show = row.isSelected;
 });
   };
-vm.entityGroupGridOptions={};
-UtilityService.cloneObject(entityGroupService.gridOptions,vm.entityGroupGridOptions);
-vm.entityGroupGridOptions.data=vm.selectedEntity.entityGroupList;
+vm.relationshipGridOptions={};
+UtilityService.cloneObject(relationshipService.gridOptions,vm.relationshipGridOptions);
+vm.relationshipGridOptions.data=vm.selectedEntity.relationshipList;
 vm.initChildrenList = function () { 
 }
-vm.entityGroupGridOptions.onRegisterApi = function(gridApi){
-vm.entityGroupGridApi = gridApi;
+vm.relationshipGridOptions.onRegisterApi = function(gridApi){
+vm.relationshipGridApi = gridApi;
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
-entityGroupService.searchOne(row.entity).then(function(response) { 
+relationshipService.searchOne(row.entity).then(function(response) { 
 $log.debug(response.data);
-$rootScope.openNode.entityGroup=true;
-$rootScope.parentServices.push(entityGroupService);
-entityGroupService.setSelectedEntity(response.data[0]);
+$rootScope.openNode.relationship=true;
+$rootScope.parentServices.push(relationshipService);
+relationshipService.setSelectedEntity(response.data[0]);
 });
-angular.element('#entityGroupTabs li:eq(0) a').tab('show');
+angular.element('#relationshipTabs li:eq(0) a').tab('show');
 }
 else 
-entityGroupService.setSelectedEntity(null);
-delete $rootScope.openNode.entityGroup;
-UtilityService.removeObjectFromList($rootScope.parentServices,entityGroupService);
-entityGroupService.selectedEntity.show = row.isSelected;
+relationshipService.setSelectedEntity(null);
+delete $rootScope.openNode.relationship;
+UtilityService.removeObjectFromList($rootScope.parentServices,relationshipService);
+relationshipService.selectedEntity.show = row.isSelected;
 });
   };
 function updateParentEntities() { 
-roleService.initRestrictionEntityGroupList().then(function(response) {
-restrictionEntityGroupService.preparedData.entityList=response.data;
-});
-
-if (roleService.selectedEntity.roleId!=undefined) roleService.searchOne(roleService.selectedEntity).then(
-function successCallback(response) {
-$log.debug("response-ok");
-$log.debug(response);
-roleService.setSelectedEntity(response.data[0]);
-  }, function errorCallback(response) {
-UtilityService.AlertError.init({selector: "#alertError"});
-UtilityService.AlertError.show("Si è verificato un errore");
-$log.debug(response);
-return; 
-  }	
-);
-entityGroupService.initRestrictionEntityGroupList().then(function(response) {
-restrictionEntityGroupService.preparedData.entityList=response.data;
-});
-
-if (entityGroupService.selectedEntity.entityGroupId!=undefined) entityGroupService.searchOne(entityGroupService.selectedEntity).then(
-function successCallback(response) {
-$log.debug("response-ok");
-$log.debug(response);
-entityGroupService.setSelectedEntity(response.data[0]);
-  }, function errorCallback(response) {
-UtilityService.AlertError.init({selector: "#alertError"});
-UtilityService.AlertError.show("Si è verificato un errore");
-$log.debug(response);
-return; 
-  }	
-);
 }
 function closeEntityDetail(){ 
 restrictionEntityGroupService.setSelectedEntity(null);

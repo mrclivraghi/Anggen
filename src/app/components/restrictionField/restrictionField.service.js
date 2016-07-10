@@ -1,7 +1,7 @@
 (function() { 
 
 angular
-.module("serverTest")
+.module("serverTestApp")
 .service("restrictionFieldService", RestrictionFieldService);
 /** @ngInject */
 function RestrictionFieldService($http,MainService,UtilityService)
@@ -71,17 +71,17 @@ var promise= $http.post("http://127.0.0.1:8080/ServerTestApp/restrictionField/"+
 });
 return promise; 
 }
- this.initRoleList= function()
+ this.initEnumFieldList= function()
 {
 var promise= $http
-.post("http://127.0.0.1:8080/ServerTestApp/role/search",
+.post("http://127.0.0.1:8080/ServerTestApp/enumField/search",
 {});
 return promise;
 };
- this.initFieldList= function()
+ this.initGenerationRunList= function()
 {
 var promise= $http
-.post("http://127.0.0.1:8080/ServerTestApp/field/search",
+.post("http://127.0.0.1:8080/ServerTestApp/generationRun/search",
 {});
 return promise;
 };

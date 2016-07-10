@@ -1,7 +1,7 @@
 (function() { 
 
 angular
-.module("serverTest")
+.module("serverTestApp")
 .service("restrictionEntityGroupService", RestrictionEntityGroupService);
 /** @ngInject */
 function RestrictionEntityGroupService($http,MainService,UtilityService)
@@ -71,17 +71,17 @@ var promise= $http.post("http://127.0.0.1:8080/ServerTestApp/restrictionEntityGr
 });
 return promise; 
 }
- this.initRoleList= function()
+ this.initEnumFieldList= function()
 {
 var promise= $http
-.post("http://127.0.0.1:8080/ServerTestApp/role/search",
+.post("http://127.0.0.1:8080/ServerTestApp/enumField/search",
 {});
 return promise;
 };
- this.initEntityGroupList= function()
+ this.initRelationshipList= function()
 {
 var promise= $http
-.post("http://127.0.0.1:8080/ServerTestApp/entityGroup/search",
+.post("http://127.0.0.1:8080/ServerTestApp/relationship/search",
 {});
 return promise;
 };

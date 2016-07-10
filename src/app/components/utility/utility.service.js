@@ -1,7 +1,7 @@
 (function() { 
 'use strict'; 
 
-angular.module("serverTest").service("UtilityService", UtilityService);
+angular.module("serverTestApp").service("UtilityService", UtilityService);
 /** @ngInject */
 function UtilityService()
 {
@@ -70,6 +70,7 @@ if (sourceObject[val] != null)
 }
 this.emptyList=function(list)
 {
+if (list!=undefined) 
 	while (list.length>0)
 		list.pop();
 }

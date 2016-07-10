@@ -1,7 +1,7 @@
 (function() { 
 
 angular
-.module("serverTest")
+.module("serverTestApp")
 .controller("FieldController",FieldController);
 /** @ngInject */
 function FieldController($scope,$http,$rootScope,$log,UtilityService ,fieldService, SecurityService, MainService ,restrictionFieldService,entityService,tabService,annotationService)

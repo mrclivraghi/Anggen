@@ -1,18 +1,18 @@
 (function() { 
 
 angular
-.module("serverTest")
+.module("serverTestApp")
 .controller("RestrictionFieldController",RestrictionFieldController);
 /** @ngInject */
-function RestrictionFieldController($scope,$http,$rootScope,$log,UtilityService ,restrictionFieldService, SecurityService, MainService ,roleService,fieldService)
+function RestrictionFieldController($scope,$http,$rootScope,$log,UtilityService ,restrictionFieldService, SecurityService, MainService ,enumFieldService,generationRunService)
 {
 var vm=this;
 vm.activeTab=1;
 vm.searchBean=restrictionFieldService.searchBean;
 vm.entityList=restrictionFieldService.entityList;
 vm.selectedEntity=restrictionFieldService.selectedEntity;
-vm.rolePreparedData=roleService.preparedData;
-vm.fieldPreparedData=fieldService.preparedData;
+vm.enumFieldPreparedData=enumFieldService.preparedData;
+vm.generationRunPreparedData=generationRunService.preparedData;
 function reset()
 {
 restrictionFieldService.resetSearchBean();
@@ -22,12 +22,12 @@ restrictionFieldService.selectedEntity.show=false;
 restrictionFieldService.setEntityList(null); 
 if (restrictionFieldService.isParent()) 
 {
-roleService.selectedEntity.show=false;
-delete $rootScope.openNode.role;
-UtilityService.removeObjectFromList($rootScope.parentServices,roleService);
-fieldService.selectedEntity.show=false;
-delete $rootScope.openNode.field;
-UtilityService.removeObjectFromList($rootScope.parentServices,fieldService);
+enumFieldService.selectedEntity.show=false;
+delete $rootScope.openNode.enumField;
+UtilityService.removeObjectFromList($rootScope.parentServices,enumFieldService);
+generationRunService.selectedEntity.show=false;
+delete $rootScope.openNode.generationRun;
+UtilityService.removeObjectFromList($rootScope.parentServices,generationRunService);
 }
 }
 function addNew()
@@ -38,12 +38,12 @@ restrictionFieldService.setEntityList(null);
 restrictionFieldService.selectedEntity.show=true;
 if (restrictionFieldService.isParent()) 
 {
-roleService.selectedEntity.show=false;
-delete $rootScope.openNode.role;
-UtilityService.removeObjectFromList($rootScope.parentServices,roleService);
-fieldService.selectedEntity.show=false;
-delete $rootScope.openNode.field;
-UtilityService.removeObjectFromList($rootScope.parentServices,fieldService);
+enumFieldService.selectedEntity.show=false;
+delete $rootScope.openNode.enumField;
+UtilityService.removeObjectFromList($rootScope.parentServices,enumFieldService);
+generationRunService.selectedEntity.show=false;
+delete $rootScope.openNode.generationRun;
+UtilityService.removeObjectFromList($rootScope.parentServices,generationRunService);
 }
 angular.element('#restrictionFieldTabs li:eq(0) a').tab('show');
 }
@@ -100,12 +100,12 @@ if (!$scope.restrictionFieldDetailForm.$valid) return;
 $rootScope.parentServices.pop();
 if ($rootScope.parentServices.length==0) 
 {
-roleService.selectedEntity.show=false;
-delete $rootScope.openNode.role;
-UtilityService.removeObjectFromList($rootScope.parentServices,roleService);
-fieldService.selectedEntity.show=false;
-delete $rootScope.openNode.field;
-UtilityService.removeObjectFromList($rootScope.parentServices,fieldService);
+enumFieldService.selectedEntity.show=false;
+delete $rootScope.openNode.enumField;
+UtilityService.removeObjectFromList($rootScope.parentServices,enumFieldService);
+generationRunService.selectedEntity.show=false;
+delete $rootScope.openNode.generationRun;
+UtilityService.removeObjectFromList($rootScope.parentServices,generationRunService);
 restrictionFieldService.update().then(function successCallback(response) { 
 $log.debug(response);
 vm.search();
@@ -161,10 +161,10 @@ return;
 }
 function refreshTableDetail() 
 {
-if ($scope.roleGridApi!=undefined && $scope.roleGridApi!=null)
- $scope.roleGridApi.core.handleWindowResize(); 
-if ($scope.fieldGridApi!=undefined && $scope.fieldGridApi!=null)
- $scope.fieldGridApi.core.handleWindowResize(); 
+if ($scope.enumFieldGridApi!=undefined && $scope.enumFieldGridApi!=null)
+ $scope.enumFieldGridApi.core.handleWindowResize(); 
+if ($scope.generationRunGridApi!=undefined && $scope.generationRunGridApi!=null)
+ $scope.generationRunGridApi.core.handleWindowResize(); 
 }
 vm.refreshTableDetail=refreshTableDetail;
 function loadFile(file,field)
@@ -179,16 +179,16 @@ return;
 });
 }
 vm.trueFalseValues=['',true,false];
- function showRoleDetail(index)
+ function showEnumFieldDetail(index)
 {
 if (index!=null)
 {
-roleService.searchOne(restrictionFieldService.selectedEntity.roleList[index]).then(
+enumFieldService.searchOne(restrictionFieldService.selectedEntity.enumFieldList[index]).then(
 function successCallback(response) {
 $log.debug("INDEX!=NULLLLLLLLLLLL");
 $log.debug(response);
-roleService.setSelectedEntity(response.data[0]);
-roleService.selectedEntity.show=true;
+enumFieldService.setSelectedEntity(response.data[0]);
+enumFieldService.selectedEntity.show=true;
   }, function errorCallback(response) {
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
@@ -199,19 +199,19 @@ return;
 }
 else 
 {
-if (restrictionFieldService.selectedEntity.role==null || restrictionFieldService.selectedEntity.role==undefined)
+if (restrictionFieldService.selectedEntity.enumField==null || restrictionFieldService.selectedEntity.enumField==undefined)
 {
-roleService.setSelectedEntity(null); 
-roleService.selectedEntity.show=true; 
-$rootScope.openNode.role=true;
+enumFieldService.setSelectedEntity(null); 
+enumFieldService.selectedEntity.show=true; 
+$rootScope.openNode.enumField=true;
 }
 else
-roleService.searchOne(restrictionFieldService.selectedEntity.role).then(
+enumFieldService.searchOne(restrictionFieldService.selectedEntity.enumField).then(
 function successCallback(response) {
-roleService.setSelectedEntity(response.data[0]);
-roleService.selectedEntity.show=true;
-$rootScope.openNode.role=true;
-$rootScope.parentServices.push(roleService);
+enumFieldService.setSelectedEntity(response.data[0]);
+enumFieldService.selectedEntity.show=true;
+$rootScope.openNode.enumField=true;
+$rootScope.parentServices.push(enumFieldService);
   }, function errorCallback(response) {
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
@@ -220,19 +220,19 @@ return;
   }	
 );
 }
-angular.element('#roleTabs li:eq(0) a').tab('show');
+angular.element('#enumFieldTabs li:eq(0) a').tab('show');
 }
-vm.showRoleDetail=showRoleDetail;
- function showFieldDetail(index)
+vm.showEnumFieldDetail=showEnumFieldDetail;
+ function showGenerationRunDetail(index)
 {
 if (index!=null)
 {
-fieldService.searchOne(restrictionFieldService.selectedEntity.fieldList[index]).then(
+generationRunService.searchOne(restrictionFieldService.selectedEntity.generationRunList[index]).then(
 function successCallback(response) {
 $log.debug("INDEX!=NULLLLLLLLLLLL");
 $log.debug(response);
-fieldService.setSelectedEntity(response.data[0]);
-fieldService.selectedEntity.show=true;
+generationRunService.setSelectedEntity(response.data[0]);
+generationRunService.selectedEntity.show=true;
   }, function errorCallback(response) {
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
@@ -243,19 +243,19 @@ return;
 }
 else 
 {
-if (restrictionFieldService.selectedEntity.field==null || restrictionFieldService.selectedEntity.field==undefined)
+if (restrictionFieldService.selectedEntity.generationRun==null || restrictionFieldService.selectedEntity.generationRun==undefined)
 {
-fieldService.setSelectedEntity(null); 
-fieldService.selectedEntity.show=true; 
-$rootScope.openNode.field=true;
+generationRunService.setSelectedEntity(null); 
+generationRunService.selectedEntity.show=true; 
+$rootScope.openNode.generationRun=true;
 }
 else
-fieldService.searchOne(restrictionFieldService.selectedEntity.field).then(
+generationRunService.searchOne(restrictionFieldService.selectedEntity.generationRun).then(
 function successCallback(response) {
-fieldService.setSelectedEntity(response.data[0]);
-fieldService.selectedEntity.show=true;
-$rootScope.openNode.field=true;
-$rootScope.parentServices.push(fieldService);
+generationRunService.setSelectedEntity(response.data[0]);
+generationRunService.selectedEntity.show=true;
+$rootScope.openNode.generationRun=true;
+$rootScope.parentServices.push(generationRunService);
   }, function errorCallback(response) {
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
@@ -264,9 +264,9 @@ return;
   }	
 );
 }
-angular.element('#fieldTabs li:eq(0) a').tab('show');
+angular.element('#generationRunTabs li:eq(0) a').tab('show');
 }
-vm.showFieldDetail=showFieldDetail;
+vm.showGenerationRunDetail=showGenerationRunDetail;
 function downloadList()
 {
 var mystyle = {
@@ -275,24 +275,24 @@ column: {style:{Font:{Bold:"1"}}}
 };
 UtilityService.alasql('SELECT * INTO XLSXML("restrictionField.xls",?) FROM ?',[mystyle,vm.entityList]);
 }
-function downloadRoleList()
+function downloadEnumFieldList()
 {
 var mystyle = {
  headers:true, 
 column: {style:{Font:{Bold:"1"}}}
 }
-UtilityService.alasql('SELECT * INTO XLSXML("role.xls",?) FROM ?',[mystyle,vm.selectedEntity.roleList]);
+UtilityService.alasql('SELECT * INTO XLSXML("enumField.xls",?) FROM ?',[mystyle,vm.selectedEntity.enumFieldList]);
 }
-vm.downloadRoleList=downloadRoleList;
-function downloadFieldList()
+vm.downloadEnumFieldList=downloadEnumFieldList;
+function downloadGenerationRunList()
 {
 var mystyle = {
  headers:true, 
 column: {style:{Font:{Bold:"1"}}}
 }
-UtilityService.alasql('SELECT * INTO XLSXML("field.xls",?) FROM ?',[mystyle,vm.selectedEntity.fieldList]);
+UtilityService.alasql('SELECT * INTO XLSXML("generationRun.xls",?) FROM ?',[mystyle,vm.selectedEntity.generationRunList]);
 }
-vm.downloadFieldList=downloadFieldList;
+vm.downloadGenerationRunList=downloadGenerationRunList;
 vm.restrictionFieldGridOptions={};
 UtilityService.cloneObject(restrictionFieldService.gridOptions,vm.restrictionFieldGridOptions);
 vm.restrictionFieldGridOptions.data=restrictionFieldService.entityList;
@@ -318,89 +318,57 @@ UtilityService.removeObjectFromList($rootScope.parentServices,restrictionFieldSe
 restrictionFieldService.selectedEntity.show = row.isSelected;
 });
   };
-vm.roleGridOptions={};
-UtilityService.cloneObject(roleService.gridOptions,vm.roleGridOptions);
-vm.roleGridOptions.data=vm.selectedEntity.roleList;
+vm.enumFieldGridOptions={};
+UtilityService.cloneObject(enumFieldService.gridOptions,vm.enumFieldGridOptions);
+vm.enumFieldGridOptions.data=vm.selectedEntity.enumFieldList;
 vm.initChildrenList = function () { 
 }
-vm.roleGridOptions.onRegisterApi = function(gridApi){
-vm.roleGridApi = gridApi;
+vm.enumFieldGridOptions.onRegisterApi = function(gridApi){
+vm.enumFieldGridApi = gridApi;
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
-roleService.searchOne(row.entity).then(function(response) { 
+enumFieldService.searchOne(row.entity).then(function(response) { 
 $log.debug(response.data);
-$rootScope.openNode.role=true;
-$rootScope.parentServices.push(roleService);
-roleService.setSelectedEntity(response.data[0]);
+$rootScope.openNode.enumField=true;
+$rootScope.parentServices.push(enumFieldService);
+enumFieldService.setSelectedEntity(response.data[0]);
 });
-angular.element('#roleTabs li:eq(0) a').tab('show');
+angular.element('#enumFieldTabs li:eq(0) a').tab('show');
 }
 else 
-roleService.setSelectedEntity(null);
-delete $rootScope.openNode.role;
-UtilityService.removeObjectFromList($rootScope.parentServices,roleService);
-roleService.selectedEntity.show = row.isSelected;
+enumFieldService.setSelectedEntity(null);
+delete $rootScope.openNode.enumField;
+UtilityService.removeObjectFromList($rootScope.parentServices,enumFieldService);
+enumFieldService.selectedEntity.show = row.isSelected;
 });
   };
-vm.fieldGridOptions={};
-UtilityService.cloneObject(fieldService.gridOptions,vm.fieldGridOptions);
-vm.fieldGridOptions.data=vm.selectedEntity.fieldList;
+vm.generationRunGridOptions={};
+UtilityService.cloneObject(generationRunService.gridOptions,vm.generationRunGridOptions);
+vm.generationRunGridOptions.data=vm.selectedEntity.generationRunList;
 vm.initChildrenList = function () { 
 }
-vm.fieldGridOptions.onRegisterApi = function(gridApi){
-vm.fieldGridApi = gridApi;
+vm.generationRunGridOptions.onRegisterApi = function(gridApi){
+vm.generationRunGridApi = gridApi;
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
-fieldService.searchOne(row.entity).then(function(response) { 
+generationRunService.searchOne(row.entity).then(function(response) { 
 $log.debug(response.data);
-$rootScope.openNode.field=true;
-$rootScope.parentServices.push(fieldService);
-fieldService.setSelectedEntity(response.data[0]);
+$rootScope.openNode.generationRun=true;
+$rootScope.parentServices.push(generationRunService);
+generationRunService.setSelectedEntity(response.data[0]);
 });
-angular.element('#fieldTabs li:eq(0) a').tab('show');
+angular.element('#generationRunTabs li:eq(0) a').tab('show');
 }
 else 
-fieldService.setSelectedEntity(null);
-delete $rootScope.openNode.field;
-UtilityService.removeObjectFromList($rootScope.parentServices,fieldService);
-fieldService.selectedEntity.show = row.isSelected;
+generationRunService.setSelectedEntity(null);
+delete $rootScope.openNode.generationRun;
+UtilityService.removeObjectFromList($rootScope.parentServices,generationRunService);
+generationRunService.selectedEntity.show = row.isSelected;
 });
   };
 function updateParentEntities() { 
-roleService.initRestrictionFieldList().then(function(response) {
-restrictionFieldService.preparedData.entityList=response.data;
-});
-
-if (roleService.selectedEntity.roleId!=undefined) roleService.searchOne(roleService.selectedEntity).then(
-function successCallback(response) {
-$log.debug("response-ok");
-$log.debug(response);
-roleService.setSelectedEntity(response.data[0]);
-  }, function errorCallback(response) {
-UtilityService.AlertError.init({selector: "#alertError"});
-UtilityService.AlertError.show("Si è verificato un errore");
-$log.debug(response);
-return; 
-  }	
-);
-fieldService.initRestrictionFieldList().then(function(response) {
-restrictionFieldService.preparedData.entityList=response.data;
-});
-
-if (fieldService.selectedEntity.fieldId!=undefined) fieldService.searchOne(fieldService.selectedEntity).then(
-function successCallback(response) {
-$log.debug("response-ok");
-$log.debug(response);
-fieldService.setSelectedEntity(response.data[0]);
-  }, function errorCallback(response) {
-UtilityService.AlertError.init({selector: "#alertError"});
-UtilityService.AlertError.show("Si è verificato un errore");
-$log.debug(response);
-return; 
-  }	
-);
 }
 function closeEntityDetail(){ 
 restrictionFieldService.setSelectedEntity(null);

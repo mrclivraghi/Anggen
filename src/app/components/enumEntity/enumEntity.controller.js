@@ -1,7 +1,7 @@
 (function() { 
 
 angular
-.module("serverTest")
+.module("serverTestApp")
 .controller("EnumEntityController",EnumEntityController);
 /** @ngInject */
 function EnumEntityController($scope,$http,$rootScope,$log,UtilityService ,enumEntityService, SecurityService, MainService ,projectService,enumValueService,enumFieldService)
@@ -473,22 +473,6 @@ enumFieldService.selectedEntity.show = row.isSelected;
 });
   };
 function updateParentEntities() { 
-enumFieldService.initEnumEntityList().then(function(response) {
-enumEntityService.preparedData.entityList=response.data;
-});
-
-if (enumFieldService.selectedEntity.enumFieldId!=undefined) enumFieldService.searchOne(enumFieldService.selectedEntity).then(
-function successCallback(response) {
-$log.debug("response-ok");
-$log.debug(response);
-enumFieldService.setSelectedEntity(response.data[0]);
-  }, function errorCallback(response) {
-UtilityService.AlertError.init({selector: "#alertError"});
-UtilityService.AlertError.show("Si è verificato un errore");
-$log.debug(response);
-return; 
-  }	
-);
 projectService.initEnumEntityList().then(function(response) {
 enumEntityService.preparedData.entityList=response.data;
 });
@@ -498,6 +482,22 @@ function successCallback(response) {
 $log.debug("response-ok");
 $log.debug(response);
 projectService.setSelectedEntity(response.data[0]);
+  }, function errorCallback(response) {
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
+  }	
+);
+enumFieldService.initEnumEntityList().then(function(response) {
+enumEntityService.preparedData.entityList=response.data;
+});
+
+if (enumFieldService.selectedEntity.enumFieldId!=undefined) enumFieldService.searchOne(enumFieldService.selectedEntity).then(
+function successCallback(response) {
+$log.debug("response-ok");
+$log.debug(response);
+enumFieldService.setSelectedEntity(response.data[0]);
   }, function errorCallback(response) {
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");

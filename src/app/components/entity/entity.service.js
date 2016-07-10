@@ -1,7 +1,7 @@
 (function() { 
 
 angular
-.module("serverTest")
+.module("serverTestApp")
 .service("entityService", EntityService);
 /** @ngInject */
 function EntityService($http,MainService,UtilityService)
@@ -9,7 +9,7 @@ function EntityService($http,MainService,UtilityService)
 this.entityList =		[];
 this.preparedData={};
 this.selectedEntity= 	{show: false 
-,restrictionEntityList: [],fieldList: [],enumFieldList: [],tabList: [],relationshipList: []};
+,projectList: [],generationRunList: [],enumFieldList: [],entityList: [],relationshipList: []};
 this.hidden= { hiddenFields: []};
 this.isParent=function()
 {
@@ -71,17 +71,17 @@ var promise= $http.post("http://127.0.0.1:8080/ServerTestApp/entity/"+this.selec
 });
 return promise; 
 }
- this.initRestrictionEntityList= function()
+ this.initProjectList= function()
 {
 var promise= $http
-.post("http://127.0.0.1:8080/ServerTestApp/restrictionEntity/search",
+.post("http://127.0.0.1:8080/ServerTestApp/project/search",
 {});
 return promise;
 };
- this.initFieldList= function()
+ this.initGenerationRunList= function()
 {
 var promise= $http
-.post("http://127.0.0.1:8080/ServerTestApp/field/search",
+.post("http://127.0.0.1:8080/ServerTestApp/generationRun/search",
 {});
 return promise;
 };
@@ -92,17 +92,17 @@ var promise= $http
 {});
 return promise;
 };
- this.initEntityGroupList= function()
+ this.initRelationshipList= function()
 {
 var promise= $http
-.post("http://127.0.0.1:8080/ServerTestApp/entityGroup/search",
+.post("http://127.0.0.1:8080/ServerTestApp/relationship/search",
 {});
 return promise;
 };
- this.initTabList= function()
+ this.initEntityList= function()
 {
 var promise= $http
-.post("http://127.0.0.1:8080/ServerTestApp/tab/search",
+.post("http://127.0.0.1:8080/ServerTestApp/entity/search",
 {});
 return promise;
 };

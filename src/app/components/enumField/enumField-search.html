@@ -70,12 +70,12 @@
 
 	</div>
 </div>
-<div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.entity.restrictionItemMap.tab.canSearch==true)">
+<div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.entity.restrictionItemMap.entity.canSearch==true)">
 	<div class="input-group">
-		<span class="input-group-addon">tab
+		<span class="input-group-addon">entity
 		</span>
 
-		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.tab.tabId" id="tab" ng-options="tab.tabId as  tab.tabId+&#39; &#39;+ tab.name for tab in vm.tabPreparedData.entityList" enctype="UTF-8">
+		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.entity.entityId" id="tab" ng-options="entity.entityId as  entity.entityId+&#39; &#39;+ entity.name for entity in vm.entityPreparedData.entityList" enctype="UTF-8">
 		</select>
 
 	</div>

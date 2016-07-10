@@ -191,7 +191,6 @@ public class BeanToDBConverter {
 		userRepository.save(admin);
 	}
 	
-	@Transactional
 	public void convert()
 	{
 		init();
@@ -1013,8 +1012,10 @@ public class BeanToDBConverter {
 						List<Relationship> relationshipList = new ArrayList<Relationship>();
 						relationshipList.add(relationship);
 						newTab.setRelationshipList(relationshipList);
+						relationship.setTab(newTab);
+						relationship.setEntity(entity);
 						tabRepository.save(newTab);
-						
+						relationshipRepository.save(relationship);
 				}
 				
 				

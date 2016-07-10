@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('test')
+        .module('serverTestApp')
         .factory('MetricsService', MetricsService);
 
     MetricsService.$inject = ['$rootScope', '$http'];

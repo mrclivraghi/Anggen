@@ -1,7 +1,7 @@
 (function() { 
 
 angular
-.module("serverTest")
+.module("serverTestApp")
 .service("annotationService", AnnotationService);
 /** @ngInject */
 function AnnotationService($http,MainService,UtilityService)
@@ -78,10 +78,10 @@ var promise= $http
 {});
 return promise;
 };
- this.initFieldList= function()
+ this.initGenerationRunList= function()
 {
 var promise= $http
-.post("http://127.0.0.1:8080/ServerTestApp/field/search",
+.post("http://127.0.0.1:8080/ServerTestApp/generationRun/search",
 {});
 return promise;
 };

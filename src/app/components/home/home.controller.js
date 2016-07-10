@@ -2,7 +2,7 @@
   'use strict'
 
   angular
- .module('serverTest')
+ .module('serverTestApp')
  .controller('HomeController', HomeController);
   /** @ngInject */
  function HomeController($element,$timeout,SecurityService,$log,$rootScope,$resource) {

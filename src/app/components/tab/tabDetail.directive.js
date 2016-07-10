@@ -1,7 +1,7 @@
 (function() {
 'use strict';
  angular
- .module('serverTest')
+ .module('serverTestApp')
  .directive('tabDetail', tabDetail);
 /** @ngInject */
   function tabDetail(tabService) {

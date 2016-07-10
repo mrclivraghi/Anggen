@@ -58,38 +58,38 @@
 
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !restrictionEntityGroupDetailForm.role.$valid, &#39;has-success&#39;: restrictionEntityGroupDetailForm.role.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.role">
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !restrictionEntityGroupDetailForm.enumField.$valid, &#39;has-success&#39;: restrictionEntityGroupDetailForm.enumField.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.enumField">
 	<div class="input-group">
-		<span class="input-group-addon">role
+		<span class="input-group-addon">enumField
 		</span>
 
-		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.role" id="role" name="role" ng-options="role as  role.roleId+&#39; &#39;+ role.role for role in vm.rolePreparedData.entityList track by role.roleId" enctype="UTF-8">
+		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.enumField" id="enumField" name="enumField" ng-options="enumField as  enumField.enumFieldId+&#39; &#39;+ enumField.name for enumField in vm.enumFieldPreparedData.entityList track by enumField.enumFieldId" enctype="UTF-8">
 		</select>
 
 		<span class="input-group-btn">
-			<button ng-click="vm.showRoleDetail()" class="btn btn-default " id="role" ng-if="vm.selectedEntity.role==null">Add new role
+			<button ng-click="vm.showEnumFieldDetail()" class="btn btn-default " id="enumField" ng-if="vm.selectedEntity.enumField==null">Add new role
 			</button>
 
-			<button ng-click="vm.showRoleDetail()" class="btn btn-default " id="role" ng-if="vm.selectedEntity.role!=null">Show detail
+			<button ng-click="vm.showEnumFieldDetail()" class="btn btn-default " id="enumField" ng-if="vm.selectedEntity.enumField!=null">Show detail
 			</button>
 
 		</span>
 
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !restrictionEntityGroupDetailForm.entityGroup.$valid, &#39;has-success&#39;: restrictionEntityGroupDetailForm.entityGroup.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.entityGroup">
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !restrictionEntityGroupDetailForm.relationship.$valid, &#39;has-success&#39;: restrictionEntityGroupDetailForm.relationship.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.relationship">
 	<div class="input-group">
-		<span class="input-group-addon">entityGroup
+		<span class="input-group-addon">relationship
 		</span>
 
-		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.entityGroup" id="entityGroup" name="entityGroup" ng-options="entityGroup as  entityGroup.entityGroupId+&#39; &#39;+ entityGroup.name for entityGroup in vm.entityGroupPreparedData.entityList track by entityGroup.entityGroupId" enctype="UTF-8">
+		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.relationship" id="relationship" name="relationship" ng-options="relationship as  relationship.relationshipId+&#39; &#39;+ relationship.name for relationship in vm.relationshipPreparedData.entityList track by relationship.relationshipId" enctype="UTF-8">
 		</select>
 
 		<span class="input-group-btn">
-			<button ng-click="vm.showEntityGroupDetail()" class="btn btn-default " id="entityGroup" ng-if="vm.selectedEntity.entityGroup==null">Add new entityGroup
+			<button ng-click="vm.showRelationshipDetail()" class="btn btn-default " id="relationship" ng-if="vm.selectedEntity.relationship==null">Add new entityGroup
 			</button>
 
-			<button ng-click="vm.showEntityGroupDetail()" class="btn btn-default " id="entityGroup" ng-if="vm.selectedEntity.entityGroup!=null">Show detail
+			<button ng-click="vm.showRelationshipDetail()" class="btn btn-default " id="relationship" ng-if="vm.selectedEntity.relationship!=null">Show detail
 			</button>
 
 		</span>

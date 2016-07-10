@@ -47,10 +47,12 @@ public class Relationship
     @org.hibernate.annotations.Type(type = "it.anggen.model.entity.Entity")
     @javax.persistence.JoinColumn(name = "entity_id_entity_target")
     private it.anggen.model.entity.Entity entityTarget;
+    
     @javax.persistence.OneToOne(fetch = javax.persistence.FetchType.LAZY)
     @org.hibernate.annotations.Type(type = "it.anggen.model.entity.Entity")
     @javax.persistence.JoinColumn(name = "entity_id_entity")
     private it.anggen.model.entity.Entity entity;
+    
     @ManyToOne(fetch = javax.persistence.FetchType.LAZY)
     @javax.persistence.JoinColumn(name = "tab_id_tab")
     private it.anggen.model.entity.Tab tab;

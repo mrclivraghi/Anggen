@@ -1,7 +1,7 @@
 (function() {
 'use strict';
  angular
- .module('serverTest')
+ .module('serverTestApp')
  .directive('userDetail', userDetail);
 /** @ngInject */
   function userDetail(userService) {

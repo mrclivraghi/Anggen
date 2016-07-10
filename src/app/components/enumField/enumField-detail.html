@@ -92,19 +92,19 @@
 
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !enumFieldDetailForm.tab.$valid, &#39;has-success&#39;: enumFieldDetailForm.tab.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.tab">
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !enumFieldDetailForm.entity.$valid, &#39;has-success&#39;: enumFieldDetailForm.entity.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.entity">
 	<div class="input-group">
-		<span class="input-group-addon">tab
+		<span class="input-group-addon">entity
 		</span>
 
-		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.tab" id="tab" name="tab" ng-options="tab as  tab.tabId+&#39; &#39;+ tab.name for tab in vm.tabPreparedData.entityList track by tab.tabId" enctype="UTF-8">
+		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.entity" id="entity" name="entity" ng-options="entity as  entity.entityId+&#39; &#39;+ entity.name for entity in vm.entityPreparedData.entityList track by entity.entityId" enctype="UTF-8">
 		</select>
 
 		<span class="input-group-btn">
-			<button ng-click="vm.showTabDetail()" class="btn btn-default " id="tab" ng-if="vm.selectedEntity.tab==null">Add new tab
+			<button ng-click="vm.showEntityDetail()" class="btn btn-default " id="entity" ng-if="vm.selectedEntity.entity==null">Add new tab
 			</button>
 
-			<button ng-click="vm.showTabDetail()" class="btn btn-default " id="tab" ng-if="vm.selectedEntity.tab!=null">Show detail
+			<button ng-click="vm.showEntityDetail()" class="btn btn-default " id="entity" ng-if="vm.selectedEntity.entity!=null">Show detail
 			</button>
 
 		</span>

@@ -1,7 +1,7 @@
 (function() { 
 
 angular
-.module("serverTest")
+.module("serverTestApp")
 .controller("EntityGroupController",EntityGroupController);
 /** @ngInject */
 function EntityGroupController($scope,$http,$rootScope,$log,UtilityService ,entityGroupService, SecurityService, MainService ,restrictionEntityGroupService,entityService,projectService)

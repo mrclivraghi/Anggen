@@ -51,12 +51,22 @@
 
 	</div>
 </div>
-<div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.entity.restrictionItemMap.entityGroup.canSearch==true)">
+<div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.generation.restrictionItemMap.generationRun.canSearch==true)">
 	<div class="input-group">
-		<span class="input-group-addon">entityGroup
+		<span class="input-group-addon">generationRun
 		</span>
 
-		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.entityGroup.entityGroupId" id="entityGroup" ng-options="entityGroup.entityGroupId as  entityGroup.entityGroupId+&#39; &#39;+ entityGroup.name for entityGroup in vm.entityGroupPreparedData.entityList" enctype="UTF-8">
+		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.generationRun.generationRunId" id="generationRun" ng-options="generationRun.generationRunId as  generationRun.generationRunId for generationRun in vm.generationRunPreparedData.entityList" enctype="UTF-8">
+		</select>
+
+	</div>
+</div>
+<div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.relationship.restrictionItemMap.relationship.canSearch==true)">
+	<div class="input-group">
+		<span class="input-group-addon">relationship
+		</span>
+
+		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.relationship.relationshipId" id="entityGroup" ng-options="relationship.relationshipId as  relationship.relationshipId+&#39; &#39;+ relationship.name for relationship in vm.relationshipPreparedData.entityList" enctype="UTF-8">
 		</select>
 
 	</div>
@@ -67,16 +77,6 @@
 		</span>
 
 		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.enumEntity.enumEntityId" id="enumEntity" ng-options="enumEntity.enumEntityId as  enumEntity.enumEntityId+&#39; &#39;+ enumEntity.name for enumEntity in vm.enumEntityPreparedData.entityList" enctype="UTF-8">
-		</select>
-
-	</div>
-</div>
-<div class="pull-left right-input" style="height: 59px;" ng-show="true  && ($root.restrictionList.generation.restrictionItemMap.generationRun.canSearch==true)">
-	<div class="input-group">
-		<span class="input-group-addon">generationRun
-		</span>
-
-		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.vm.searchBean.generationRun.generationRunId" id="generationRun" ng-options="generationRun.generationRunId as  generationRun.generationRunId for generationRun in vm.generationRunPreparedData.entityList" enctype="UTF-8">
 		</select>
 
 	</div>

@@ -1,7 +1,7 @@
 (function() { 
 
 angular
-.module("serverTest")
+.module("serverTestApp")
 .service("userService", UserService);
 /** @ngInject */
 function UserService($http,MainService,UtilityService)
@@ -9,7 +9,7 @@ function UserService($http,MainService,UtilityService)
 this.entityList =		[];
 this.preparedData={};
 this.selectedEntity= 	{show: false 
-,roleList: []};
+,enumFieldList: []};
 this.hidden= { hiddenFields: []};
 this.isParent=function()
 {
@@ -71,10 +71,10 @@ var promise= $http.post("http://127.0.0.1:8080/ServerTestApp/user/"+this.selecte
 });
 return promise; 
 }
- this.initRoleList= function()
+ this.initEnumFieldList= function()
 {
 var promise= $http
-.post("http://127.0.0.1:8080/ServerTestApp/role/search",
+.post("http://127.0.0.1:8080/ServerTestApp/enumField/search",
 {});
 return promise;
 };

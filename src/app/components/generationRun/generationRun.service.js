@@ -1,7 +1,7 @@
 (function() { 
 
 angular
-.module("serverTest")
+.module("serverTestApp")
 .service("generationRunService", GenerationRunService);
 /** @ngInject */
 function GenerationRunService($http,MainService,UtilityService)

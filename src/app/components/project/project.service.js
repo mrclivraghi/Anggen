@@ -1,7 +1,7 @@
 (function() { 
 
 angular
-.module("serverTest")
+.module("serverTestApp")
 .service("projectService", ProjectService);
 /** @ngInject */
 function ProjectService($http,MainService,UtilityService)
@@ -9,7 +9,7 @@ function ProjectService($http,MainService,UtilityService)
 this.entityList =		[];
 this.preparedData={};
 this.selectedEntity= 	{show: false 
-,generationRunList: [],entityGroupList: [],enumEntityList: []};
+,generationRunList: [],relationshipList: [],enumEntityList: []};
 this.hidden= { hiddenFields: []};
 this.isParent=function()
 {
@@ -78,10 +78,10 @@ var promise= $http
 {});
 return promise;
 };
- this.initEntityGroupList= function()
+ this.initRelationshipList= function()
 {
 var promise= $http
-.post("http://127.0.0.1:8080/ServerTestApp/entityGroup/search",
+.post("http://127.0.0.1:8080/ServerTestApp/relationship/search",
 {});
 return promise;
 };

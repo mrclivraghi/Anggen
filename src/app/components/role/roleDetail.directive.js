@@ -1,7 +1,7 @@
 (function() {
 'use strict';
  angular
- .module('serverTest')
+ .module('serverTestApp')
  .directive('roleDetail', roleDetail);
 /** @ngInject */
   function roleDetail(roleService) {

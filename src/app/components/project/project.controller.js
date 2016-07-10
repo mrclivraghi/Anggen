@@ -1,10 +1,10 @@
 (function() { 
 
 angular
-.module("serverTest")
+.module("serverTestApp")
 .controller("ProjectController",ProjectController);
 /** @ngInject */
-function ProjectController($scope,$http,$rootScope,$log,UtilityService ,projectService, SecurityService, MainService ,generationRunService,entityGroupService,enumEntityService)
+function ProjectController($scope,$http,$rootScope,$log,UtilityService ,projectService, SecurityService, MainService ,generationRunService,relationshipService,enumEntityService)
 {
 var vm=this;
 vm.activeTab=1;
@@ -12,7 +12,7 @@ vm.searchBean=projectService.searchBean;
 vm.entityList=projectService.entityList;
 vm.selectedEntity=projectService.selectedEntity;
 vm.generationRunPreparedData=generationRunService.preparedData;
-vm.entityGroupPreparedData=entityGroupService.preparedData;
+vm.relationshipPreparedData=relationshipService.preparedData;
 vm.enumEntityPreparedData=enumEntityService.preparedData;
 vm.generationTypePreparedData={};
 vm.generationTypePreparedData.entityList=["SHOW_INCLUDE","HIDE_IGNORE" ];
@@ -28,9 +28,9 @@ if (projectService.isParent())
 generationRunService.selectedEntity.show=false;
 delete $rootScope.openNode.generationRun;
 UtilityService.removeObjectFromList($rootScope.parentServices,generationRunService);
-entityGroupService.selectedEntity.show=false;
-delete $rootScope.openNode.entityGroup;
-UtilityService.removeObjectFromList($rootScope.parentServices,entityGroupService);
+relationshipService.selectedEntity.show=false;
+delete $rootScope.openNode.relationship;
+UtilityService.removeObjectFromList($rootScope.parentServices,relationshipService);
 enumEntityService.selectedEntity.show=false;
 delete $rootScope.openNode.enumEntity;
 UtilityService.removeObjectFromList($rootScope.parentServices,enumEntityService);
@@ -47,9 +47,9 @@ if (projectService.isParent())
 generationRunService.selectedEntity.show=false;
 delete $rootScope.openNode.generationRun;
 UtilityService.removeObjectFromList($rootScope.parentServices,generationRunService);
-entityGroupService.selectedEntity.show=false;
-delete $rootScope.openNode.entityGroup;
-UtilityService.removeObjectFromList($rootScope.parentServices,entityGroupService);
+relationshipService.selectedEntity.show=false;
+delete $rootScope.openNode.relationship;
+UtilityService.removeObjectFromList($rootScope.parentServices,relationshipService);
 enumEntityService.selectedEntity.show=false;
 delete $rootScope.openNode.enumEntity;
 UtilityService.removeObjectFromList($rootScope.parentServices,enumEntityService);
@@ -65,9 +65,9 @@ UtilityService.removeObjectFromList($rootScope.parentServices,projectService);
 projectService.searchBean.generationRunList=[];
 projectService.searchBean.generationRunList.push(projectService.searchBean.generationRun);
 delete projectService.searchBean.generationRun; 
-projectService.searchBean.entityGroupList=[];
-projectService.searchBean.entityGroupList.push(projectService.searchBean.entityGroup);
-delete projectService.searchBean.entityGroup; 
+projectService.searchBean.relationshipList=[];
+projectService.searchBean.relationshipList.push(projectService.searchBean.relationship);
+delete projectService.searchBean.relationship; 
 projectService.searchBean.enumEntityList=[];
 projectService.searchBean.enumEntityList.push(projectService.searchBean.enumEntity);
 delete projectService.searchBean.enumEntity; 
@@ -121,9 +121,9 @@ if ($rootScope.parentServices.length==0)
 generationRunService.selectedEntity.show=false;
 delete $rootScope.openNode.generationRun;
 UtilityService.removeObjectFromList($rootScope.parentServices,generationRunService);
-entityGroupService.selectedEntity.show=false;
-delete $rootScope.openNode.entityGroup;
-UtilityService.removeObjectFromList($rootScope.parentServices,entityGroupService);
+relationshipService.selectedEntity.show=false;
+delete $rootScope.openNode.relationship;
+UtilityService.removeObjectFromList($rootScope.parentServices,relationshipService);
 enumEntityService.selectedEntity.show=false;
 delete $rootScope.openNode.enumEntity;
 UtilityService.removeObjectFromList($rootScope.parentServices,enumEntityService);
@@ -184,8 +184,8 @@ function refreshTableDetail()
 {
 if ($scope.generationRunGridApi!=undefined && $scope.generationRunGridApi!=null)
  $scope.generationRunGridApi.core.handleWindowResize(); 
-if ($scope.entityGroupGridApi!=undefined && $scope.entityGroupGridApi!=null)
- $scope.entityGroupGridApi.core.handleWindowResize(); 
+if ($scope.relationshipGridApi!=undefined && $scope.relationshipGridApi!=null)
+ $scope.relationshipGridApi.core.handleWindowResize(); 
 if ($scope.enumEntityGridApi!=undefined && $scope.enumEntityGridApi!=null)
  $scope.enumEntityGridApi.core.handleWindowResize(); 
 }
@@ -246,16 +246,16 @@ return;
 angular.element('#generationRunTabs li:eq(0) a').tab('show');
 }
 vm.showGenerationRunDetail=showGenerationRunDetail;
- function showEntityGroupDetail(index)
+ function showRelationshipDetail(index)
 {
 if (index!=null)
 {
-entityGroupService.searchOne(projectService.selectedEntity.entityGroupList[index]).then(
+relationshipService.searchOne(projectService.selectedEntity.relationshipList[index]).then(
 function successCallback(response) {
 $log.debug("INDEX!=NULLLLLLLLLLLL");
 $log.debug(response);
-entityGroupService.setSelectedEntity(response.data[0]);
-entityGroupService.selectedEntity.show=true;
+relationshipService.setSelectedEntity(response.data[0]);
+relationshipService.selectedEntity.show=true;
   }, function errorCallback(response) {
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
@@ -266,19 +266,19 @@ return;
 }
 else 
 {
-if (projectService.selectedEntity.entityGroup==null || projectService.selectedEntity.entityGroup==undefined)
+if (projectService.selectedEntity.relationship==null || projectService.selectedEntity.relationship==undefined)
 {
-entityGroupService.setSelectedEntity(null); 
-entityGroupService.selectedEntity.show=true; 
-$rootScope.openNode.entityGroup=true;
+relationshipService.setSelectedEntity(null); 
+relationshipService.selectedEntity.show=true; 
+$rootScope.openNode.relationship=true;
 }
 else
-entityGroupService.searchOne(projectService.selectedEntity.entityGroup).then(
+relationshipService.searchOne(projectService.selectedEntity.relationship).then(
 function successCallback(response) {
-entityGroupService.setSelectedEntity(response.data[0]);
-entityGroupService.selectedEntity.show=true;
-$rootScope.openNode.entityGroup=true;
-$rootScope.parentServices.push(entityGroupService);
+relationshipService.setSelectedEntity(response.data[0]);
+relationshipService.selectedEntity.show=true;
+$rootScope.openNode.relationship=true;
+$rootScope.parentServices.push(relationshipService);
   }, function errorCallback(response) {
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
@@ -287,9 +287,9 @@ return;
   }	
 );
 }
-angular.element('#entityGroupTabs li:eq(0) a').tab('show');
+angular.element('#relationshipTabs li:eq(0) a').tab('show');
 }
-vm.showEntityGroupDetail=showEntityGroupDetail;
+vm.showRelationshipDetail=showRelationshipDetail;
  function showEnumEntityDetail(index)
 {
 if (index!=null)
@@ -355,19 +355,19 @@ column: {style:{Font:{Bold:"1"}}}
 UtilityService.alasql('SELECT * INTO XLSXML("generationRun.xls",?) FROM ?',[mystyle,vm.selectedEntity.generationRunList]);
 }
 vm.downloadGenerationRunList=downloadGenerationRunList;
-function saveLinkedEntityGroup() {
-projectService.selectedEntity.entityGroupList.push(projectService.selectedEntity.entityGroup);
+function saveLinkedRelationship() {
+projectService.selectedEntity.relationshipList.push(projectService.selectedEntity.relationship);
 }
-vm.saveLinkedEntityGroup=saveLinkedEntityGroup;
-function downloadEntityGroupList()
+vm.saveLinkedRelationship=saveLinkedRelationship;
+function downloadRelationshipList()
 {
 var mystyle = {
  headers:true, 
 column: {style:{Font:{Bold:"1"}}}
 }
-UtilityService.alasql('SELECT * INTO XLSXML("entityGroup.xls",?) FROM ?',[mystyle,vm.selectedEntity.entityGroupList]);
+UtilityService.alasql('SELECT * INTO XLSXML("relationship.xls",?) FROM ?',[mystyle,vm.selectedEntity.relationshipList]);
 }
-vm.downloadEntityGroupList=downloadEntityGroupList;
+vm.downloadRelationshipList=downloadRelationshipList;
 function saveLinkedEnumEntity() {
 projectService.selectedEntity.enumEntityList.push(projectService.selectedEntity.enumEntity);
 }
@@ -431,29 +431,29 @@ UtilityService.removeObjectFromList($rootScope.parentServices,generationRunServi
 generationRunService.selectedEntity.show = row.isSelected;
 });
   };
-vm.entityGroupGridOptions={};
-UtilityService.cloneObject(entityGroupService.gridOptions,vm.entityGroupGridOptions);
-vm.entityGroupGridOptions.data=vm.selectedEntity.entityGroupList;
+vm.relationshipGridOptions={};
+UtilityService.cloneObject(relationshipService.gridOptions,vm.relationshipGridOptions);
+vm.relationshipGridOptions.data=vm.selectedEntity.relationshipList;
 vm.initChildrenList = function () { 
 }
-vm.entityGroupGridOptions.onRegisterApi = function(gridApi){
-vm.entityGroupGridApi = gridApi;
+vm.relationshipGridOptions.onRegisterApi = function(gridApi){
+vm.relationshipGridApi = gridApi;
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
-entityGroupService.searchOne(row.entity).then(function(response) { 
+relationshipService.searchOne(row.entity).then(function(response) { 
 $log.debug(response.data);
-$rootScope.openNode.entityGroup=true;
-$rootScope.parentServices.push(entityGroupService);
-entityGroupService.setSelectedEntity(response.data[0]);
+$rootScope.openNode.relationship=true;
+$rootScope.parentServices.push(relationshipService);
+relationshipService.setSelectedEntity(response.data[0]);
 });
-angular.element('#entityGroupTabs li:eq(0) a').tab('show');
+angular.element('#relationshipTabs li:eq(0) a').tab('show');
 }
 else 
-entityGroupService.setSelectedEntity(null);
-delete $rootScope.openNode.entityGroup;
-UtilityService.removeObjectFromList($rootScope.parentServices,entityGroupService);
-entityGroupService.selectedEntity.show = row.isSelected;
+relationshipService.setSelectedEntity(null);
+delete $rootScope.openNode.relationship;
+UtilityService.removeObjectFromList($rootScope.parentServices,relationshipService);
+relationshipService.selectedEntity.show = row.isSelected;
 });
   };
 vm.enumEntityGridOptions={};
@@ -482,6 +482,22 @@ enumEntityService.selectedEntity.show = row.isSelected;
 });
   };
 function updateParentEntities() { 
+entityService.initProjectList().then(function(response) {
+projectService.preparedData.entityList=response.data;
+});
+
+if (entityService.selectedEntity.entityId!=undefined) entityService.searchOne(entityService.selectedEntity).then(
+function successCallback(response) {
+$log.debug("response-ok");
+$log.debug(response);
+entityService.setSelectedEntity(response.data[0]);
+  }, function errorCallback(response) {
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
+  }	
+);
 enumEntityService.initProjectList().then(function(response) {
 projectService.preparedData.entityList=response.data;
 });
@@ -507,22 +523,6 @@ function successCallback(response) {
 $log.debug("response-ok");
 $log.debug(response);
 generationRunService.setSelectedEntity(response.data[0]);
-  }, function errorCallback(response) {
-UtilityService.AlertError.init({selector: "#alertError"});
-UtilityService.AlertError.show("Si è verificato un errore");
-$log.debug(response);
-return; 
-  }	
-);
-entityGroupService.initProjectList().then(function(response) {
-projectService.preparedData.entityList=response.data;
-});
-
-if (entityGroupService.selectedEntity.entityGroupId!=undefined) entityGroupService.searchOne(entityGroupService.selectedEntity).then(
-function successCallback(response) {
-$log.debug("response-ok");
-$log.debug(response);
-entityGroupService.setSelectedEntity(response.data[0]);
   }, function errorCallback(response) {
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");

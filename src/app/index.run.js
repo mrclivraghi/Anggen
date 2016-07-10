@@ -2,11 +2,11 @@
   'use strict'
 
   angular
-    .module('serverTest')
+    .module('serverTestApp')
     .run(runBlock);
 
   /** @ngInject */
-  function runBlock($log,SecurityService,UtilityService,$rootScope,$uibModal,restrictionEntityGroupService,userService,restrictionFieldService,restrictionEntityService,roleService,entityService,projectService,tabService,enumEntityService,entityGroupService,enumValueService,annotationService,enumFieldService,fieldService,annotationAttributeService,generationRunService,logEntryService,relationshipService) { 
+  function runBlock($log,SecurityService,UtilityService,$rootScope,$uibModal,userService,restrictionFieldService,restrictionEntityGroupService,enumEntityService,projectService,entityService,enumFieldService,enumValueService,annotationAttributeService,annotationService,generationRunService,relationshipService) { 
 var deregistrationsCallbacks=[];
 deregistrationsCallbacks[0] = $rootScope.$on('security:loginRequired', function() {
 showLogin();
@@ -64,15 +64,6 @@ $rootScope.openNode= {};
 $rootScope.parentServices=[];
 function initList() {
 $log.debug("inizio init");
-restrictionEntityGroupService.searchBean={};
-restrictionEntityGroupService.search().then(function successCallback(response) {
-restrictionEntityGroupService.preparedData.entityList=response.data;
-},function errorCallback(response) { 
-UtilityService.AlertError.init({selector: "#alertError"});
-UtilityService.AlertError.show("Si è verificato un errore");
-$log.debug(response);
-return; 
-});
 userService.searchBean={};
 userService.search().then(function successCallback(response) {
 userService.preparedData.entityList=response.data;
@@ -91,45 +82,9 @@ UtilityService.AlertError.show("Si è verificato un errore");
 $log.debug(response);
 return; 
 });
-restrictionEntityService.searchBean={};
-restrictionEntityService.search().then(function successCallback(response) {
-restrictionEntityService.preparedData.entityList=response.data;
-},function errorCallback(response) { 
-UtilityService.AlertError.init({selector: "#alertError"});
-UtilityService.AlertError.show("Si è verificato un errore");
-$log.debug(response);
-return; 
-});
-roleService.searchBean={};
-roleService.search().then(function successCallback(response) {
-roleService.preparedData.entityList=response.data;
-},function errorCallback(response) { 
-UtilityService.AlertError.init({selector: "#alertError"});
-UtilityService.AlertError.show("Si è verificato un errore");
-$log.debug(response);
-return; 
-});
-entityService.searchBean={};
-entityService.search().then(function successCallback(response) {
-entityService.preparedData.entityList=response.data;
-},function errorCallback(response) { 
-UtilityService.AlertError.init({selector: "#alertError"});
-UtilityService.AlertError.show("Si è verificato un errore");
-$log.debug(response);
-return; 
-});
-projectService.searchBean={};
-projectService.search().then(function successCallback(response) {
-projectService.preparedData.entityList=response.data;
-},function errorCallback(response) { 
-UtilityService.AlertError.init({selector: "#alertError"});
-UtilityService.AlertError.show("Si è verificato un errore");
-$log.debug(response);
-return; 
-});
-tabService.searchBean={};
-tabService.search().then(function successCallback(response) {
-tabService.preparedData.entityList=response.data;
+restrictionEntityGroupService.searchBean={};
+restrictionEntityGroupService.search().then(function successCallback(response) {
+restrictionEntityGroupService.preparedData.entityList=response.data;
 },function errorCallback(response) { 
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
@@ -145,27 +100,18 @@ UtilityService.AlertError.show("Si è verificato un errore");
 $log.debug(response);
 return; 
 });
-entityGroupService.searchBean={};
-entityGroupService.search().then(function successCallback(response) {
-entityGroupService.preparedData.entityList=response.data;
+projectService.searchBean={};
+projectService.search().then(function successCallback(response) {
+projectService.preparedData.entityList=response.data;
 },function errorCallback(response) { 
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
 $log.debug(response);
 return; 
 });
-enumValueService.searchBean={};
-enumValueService.search().then(function successCallback(response) {
-enumValueService.preparedData.entityList=response.data;
-},function errorCallback(response) { 
-UtilityService.AlertError.init({selector: "#alertError"});
-UtilityService.AlertError.show("Si è verificato un errore");
-$log.debug(response);
-return; 
-});
-annotationService.searchBean={};
-annotationService.search().then(function successCallback(response) {
-annotationService.preparedData.entityList=response.data;
+entityService.searchBean={};
+entityService.search().then(function successCallback(response) {
+entityService.preparedData.entityList=response.data;
 },function errorCallback(response) { 
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
@@ -181,9 +127,9 @@ UtilityService.AlertError.show("Si è verificato un errore");
 $log.debug(response);
 return; 
 });
-fieldService.searchBean={};
-fieldService.search().then(function successCallback(response) {
-fieldService.preparedData.entityList=response.data;
+enumValueService.searchBean={};
+enumValueService.search().then(function successCallback(response) {
+enumValueService.preparedData.entityList=response.data;
 },function errorCallback(response) { 
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
@@ -199,18 +145,18 @@ UtilityService.AlertError.show("Si è verificato un errore");
 $log.debug(response);
 return; 
 });
-generationRunService.searchBean={};
-generationRunService.search().then(function successCallback(response) {
-generationRunService.preparedData.entityList=response.data;
+annotationService.searchBean={};
+annotationService.search().then(function successCallback(response) {
+annotationService.preparedData.entityList=response.data;
 },function errorCallback(response) { 
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
 $log.debug(response);
 return; 
 });
-logEntryService.searchBean={};
-logEntryService.search().then(function successCallback(response) {
-logEntryService.preparedData.entityList=response.data;
+generationRunService.searchBean={};
+generationRunService.search().then(function successCallback(response) {
+generationRunService.preparedData.entityList=response.data;
 },function errorCallback(response) { 
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");

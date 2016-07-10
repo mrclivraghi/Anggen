@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('test')
+        .module('serverTestApp')
         .controller('MetricsController', MetricsController);
 
     MetricsController.$inject = ['$scope','MetricsService', '$uibModal'];

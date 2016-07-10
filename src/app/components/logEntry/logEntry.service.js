@@ -1,7 +1,7 @@
 (function() { 
 
 angular
-.module("serverTest")
+.module("serverTestApp")
 .service("logEntryService", LogEntryService);
 /** @ngInject */
 function LogEntryService($http,MainService,UtilityService)

@@ -1,7 +1,7 @@
 (function() { 
 'use strict'; 
 
-angular.module("serverTest").controller("MainController",MainController);
+angular.module("serverTestApp").controller("MainController",MainController);
 
 /** @ngInject */
 function MainController(){

@@ -1,7 +1,7 @@
 (function() { 
 'use strict'; 
 
-angular.module("serverTest").service("MainService", MainService);
+angular.module("serverTestApp").service("MainService", MainService);
 /** @ngInject */
 function MainService()
 {

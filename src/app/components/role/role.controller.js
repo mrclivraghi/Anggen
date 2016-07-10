@@ -1,7 +1,7 @@
 (function() { 
 
 angular
-.module("serverTest")
+.module("serverTestApp")
 .controller("RoleController",RoleController);
 /** @ngInject */
 function RoleController($scope,$http,$rootScope,$log,UtilityService ,roleService, SecurityService, MainService ,restrictionEntityService,restrictionFieldService,userService,restrictionEntityGroupService)

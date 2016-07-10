@@ -156,7 +156,7 @@ public  class CssGenerator {
 		sb.append("@CHARSET \"ISO-8859-1\";\n");
 		sb.append(".default-panel{\n");
 		sb.append("	width: 90%;\n");
-		sb.append("	margin-left: 5%;AAAAAAAAAAAAAAAAAAA\n");
+		sb.append("	margin-left: 5%;\n");
 		sb.append("}\n");
 		sb.append(".right-input{\n");
 		sb.append("	width:45%;\n");

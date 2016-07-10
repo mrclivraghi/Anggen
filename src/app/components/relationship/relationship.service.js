@@ -1,7 +1,7 @@
 (function() { 
 
 angular
-.module("serverTest")
+.module("serverTestApp")
 .service("relationshipService", RelationshipService);
 /** @ngInject */
 function RelationshipService($http,MainService,UtilityService)
@@ -92,10 +92,10 @@ var promise= $http
 {});
 return promise;
 };
- this.initTabList= function()
+ this.initEntityList= function()
 {
 var promise= $http
-.post("http://127.0.0.1:8080/ServerTestApp/tab/search",
+.post("http://127.0.0.1:8080/ServerTestApp/entity/search",
 {});
 return promise;
 };

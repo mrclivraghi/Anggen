@@ -1,7 +1,7 @@
 (function() { 
 
 angular
-.module("serverTest")
+.module("serverTestApp")
 .service("restrictionEntityService", RestrictionEntityService);
 /** @ngInject */
 function RestrictionEntityService($http,MainService,UtilityService)

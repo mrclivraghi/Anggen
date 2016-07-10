@@ -2,10 +2,10 @@
   'use strict'
 
   angular
-.module('serverTest')
-.directive('serverTestNavbar', serverTestNavbar);
+.module('serverTestApp')
+.directive('serverTestAppNavbar', serverTestAppNavbar);
 /** @ngInject */
-function serverTestNavbar() {
+function serverTestAppNavbar() {
  var directive = {
     restrict: 'E',
     templateUrl: 'app/components/navbar/navbar.html',

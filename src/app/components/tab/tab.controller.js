@@ -1,7 +1,7 @@
 (function() { 
 
 angular
-.module("serverTest")
+.module("serverTestApp")
 .controller("TabController",TabController);
 /** @ngInject */
 function TabController($scope,$http,$rootScope,$log,UtilityService ,tabService, SecurityService, MainService ,entityService,fieldService,enumFieldService,relationshipService)

@@ -1,7 +1,7 @@
 (function() {
 'use strict';
  angular
- .module('serverTest')
+ .module('serverTestApp')
  .directive('logEntrySearch', logEntrySearch);
 /** @ngInject */
   function logEntrySearch(logEntryService) {

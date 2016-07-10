@@ -55,14 +55,14 @@
 
 	</div>
 </div>
-<div id="project-entityGroup" class="modal fade" role="dialog" ng-if="!$root.openNode.entityGroup">
+<div id="project-generationRun" class="modal fade" role="dialog" ng-if="!$root.openNode.generationRun">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;
 				</button>
 
-				<h4 class="modal-title">Link existing entityGroup
+				<h4 class="modal-title">Link existing generationRun
 				</h4>
 
 			</div>
@@ -73,14 +73,14 @@
 				</p>
 
 				<div class="input-group">
-					<span class="input-group-addon">entityGroup
+					<span class="input-group-addon">generationRun
 					</span>
 
-					<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.entityGroup" id="entityGroup" name="entityGroup" ng-options="entityGroup as  entityGroup.entityGroupId+&#39; &#39;+ entityGroup.name for entityGroup in vm.entityGroupPreparedData.entityList track by entityGroup.entityGroupId" enctype="UTF-8">
+					<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.generationRun" id="generationRun" name="generationRun" ng-options="generationRun as  generationRun.generationRunId for generationRun in vm.generationRunPreparedData.entityList track by generationRun.generationRunId" enctype="UTF-8">
 					</select>
 
 					<span class="input-group-btn">
-						<button ng-click="vm.saveLinkedEntityGroup()" class="btn btn-default " id="entityGroup">Save
+						<button ng-click="vm.saveLinkedGenerationRun()" class="btn btn-default " id="generationRun">Save
 						</button>
 
 					</span>
@@ -101,23 +101,94 @@
 </div>
 <br/>
 <br/>
-<div class="pull-left" style="width: 100%" ng-show="true  && ($root.restrictionList.entity.restrictionItemMap.entityGroup.canSearch==true)" ng-if="!$root.openNode.entityGroup">
+<div class="pull-left" style="width: 100%" ng-show="true  && ($root.restrictionList.generation.restrictionItemMap.generationRun.canSearch==true)" ng-if="!$root.openNode.generationRun">
 	<div class="panel panel-default default-panel">
-		<div class="panel-heading">entityGroup<button ng-click="vm.showEntityGroupDetail()" class="btn btn-default  pull-right" style="margin-top: -7px" ng-show="($root.restrictionList.entity.restrictionItemMap.entityGroup.canCreate==true)">Add new entityGroup</button>
-<button type="button" class="btn btn-default pull-right" style="margin-top: -7px" data-toggle="modal" data-target="#project-entityGroup">Link existing</button>
-<button ng-click="vm.downloadEntityGroupList()" class="btn btn-default pull-right" style="margin-top:-7px">
+		<div class="panel-heading">generationRun<button ng-click="vm.showGenerationRunDetail()" class="btn btn-default  pull-right" style="margin-top: -7px" ng-show="($root.restrictionList.generation.restrictionItemMap.generationRun.canCreate==true)">Add new generationRun</button>
+<button type="button" class="btn btn-default pull-right" style="margin-top: -7px" data-toggle="modal" data-target="#project-generationRun">Link existing</button>
+<button ng-click="vm.downloadGenerationRunList()" class="btn btn-default pull-right" style="margin-top:-7px">
 	<span class="glyphicon glyphicon-download-alt" aria-hidden="true">
 	</span>
 </button>
 
 		</div>
 
-		<div class="panel-body" ng-class="{&#39;has-error&#39;: !vm.projectDetailForm.entityGroup.$valid, &#39;has-success&#39;: vm.projectDetailForm.entityGroup.$valid}">
-			<label id="entityGroup">entityGroup
+		<div class="panel-body" ng-class="{&#39;has-error&#39;: !vm.projectDetailForm.generationRun.$valid, &#39;has-success&#39;: vm.projectDetailForm.generationRun.$valid}">
+			<label id="generationRun">generationRun
 			</label>
 
-			<div id="entityGroup" ng-if="vm.selectedEntity.entityGroupList.length&gt;0">
-				<div style="top: 100px" ui-grid="vm.entityGroupGridOptions" ui-grid-pagination="" ui-grid-selection="">
+			<div id="generationRun" ng-if="vm.selectedEntity.generationRunList.length&gt;0">
+				<div style="top: 100px" ui-grid="vm.generationRunGridOptions" ui-grid-pagination="" ui-grid-selection="">
+				</div>
+
+			</div>
+
+		</div>
+
+	</div>
+</div>
+<div id="project-relationship" class="modal fade" role="dialog" ng-if="!$root.openNode.relationship">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;
+				</button>
+
+				<h4 class="modal-title">Link existing relationship
+				</h4>
+
+			</div>
+
+			<div class="modal-body">
+				<p>
+
+				</p>
+
+				<div class="input-group">
+					<span class="input-group-addon">relationship
+					</span>
+
+					<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.relationship" id="relationship" name="relationship" ng-options="relationship as  relationship.relationshipId+&#39; &#39;+ relationship.name for relationship in vm.relationshipPreparedData.entityList track by relationship.relationshipId" enctype="UTF-8">
+					</select>
+
+					<span class="input-group-btn">
+						<button ng-click="vm.saveLinkedRelationship()" class="btn btn-default " id="relationship">Save
+						</button>
+
+					</span>
+
+				</div>
+
+			</div>
+
+			<div class="modal-footer">
+				<button ng-click="close()" class="btn btn-default " data-dismiss="modal">close
+				</button>
+
+			</div>
+
+		</div>
+
+	</div>
+</div>
+<br/>
+<br/>
+<div class="pull-left" style="width: 100%" ng-show="true  && ($root.restrictionList.relationship.restrictionItemMap.relationship.canSearch==true)" ng-if="!$root.openNode.relationship">
+	<div class="panel panel-default default-panel">
+		<div class="panel-heading">relationship<button ng-click="vm.showRelationshipDetail()" class="btn btn-default  pull-right" style="margin-top: -7px" ng-show="($root.restrictionList.relationship.restrictionItemMap.relationship.canCreate==true)">Add new relationship</button>
+<button type="button" class="btn btn-default pull-right" style="margin-top: -7px" data-toggle="modal" data-target="#project-relationship">Link existing</button>
+<button ng-click="vm.downloadRelationshipList()" class="btn btn-default pull-right" style="margin-top:-7px">
+	<span class="glyphicon glyphicon-download-alt" aria-hidden="true">
+	</span>
+</button>
+
+		</div>
+
+		<div class="panel-body" ng-class="{&#39;has-error&#39;: !vm.projectDetailForm.entityGroup.$valid, &#39;has-success&#39;: vm.projectDetailForm.relationship.$valid}">
+			<label id="relationship">entityGroup
+			</label>
+
+			<div id="relationship" ng-if="vm.selectedEntity.relationshipList.length&gt;0">
+				<div style="top: 100px" ui-grid="vm.relationshipGridOptions" ui-grid-pagination="" ui-grid-selection="">
 				</div>
 
 			</div>
@@ -189,77 +260,6 @@
 
 			<div id="enumEntity" ng-if="vm.selectedEntity.enumEntityList.length&gt;0">
 				<div style="top: 100px" ui-grid="vm.enumEntityGridOptions" ui-grid-pagination="" ui-grid-selection="">
-				</div>
-
-			</div>
-
-		</div>
-
-	</div>
-</div>
-<div id="project-generationRun" class="modal fade" role="dialog" ng-if="!$root.openNode.generationRun">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;
-				</button>
-
-				<h4 class="modal-title">Link existing generationRun
-				</h4>
-
-			</div>
-
-			<div class="modal-body">
-				<p>
-
-				</p>
-
-				<div class="input-group">
-					<span class="input-group-addon">generationRun
-					</span>
-
-					<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.generationRun" id="generationRun" name="generationRun" ng-options="generationRun as  generationRun.generationRunId for generationRun in vm.generationRunPreparedData.entityList track by generationRun.generationRunId" enctype="UTF-8">
-					</select>
-
-					<span class="input-group-btn">
-						<button ng-click="vm.saveLinkedGenerationRun()" class="btn btn-default " id="generationRun">Save
-						</button>
-
-					</span>
-
-				</div>
-
-			</div>
-
-			<div class="modal-footer">
-				<button ng-click="close()" class="btn btn-default " data-dismiss="modal">close
-				</button>
-
-			</div>
-
-		</div>
-
-	</div>
-</div>
-<br/>
-<br/>
-<div class="pull-left" style="width: 100%" ng-show="true  && ($root.restrictionList.generation.restrictionItemMap.generationRun.canSearch==true)" ng-if="!$root.openNode.generationRun">
-	<div class="panel panel-default default-panel">
-		<div class="panel-heading">generationRun<button ng-click="vm.showGenerationRunDetail()" class="btn btn-default  pull-right" style="margin-top: -7px" ng-show="($root.restrictionList.generation.restrictionItemMap.generationRun.canCreate==true)">Add new generationRun</button>
-<button type="button" class="btn btn-default pull-right" style="margin-top: -7px" data-toggle="modal" data-target="#project-generationRun">Link existing</button>
-<button ng-click="vm.downloadGenerationRunList()" class="btn btn-default pull-right" style="margin-top:-7px">
-	<span class="glyphicon glyphicon-download-alt" aria-hidden="true">
-	</span>
-</button>
-
-		</div>
-
-		<div class="panel-body" ng-class="{&#39;has-error&#39;: !vm.projectDetailForm.generationRun.$valid, &#39;has-success&#39;: vm.projectDetailForm.generationRun.$valid}">
-			<label id="generationRun">generationRun
-			</label>
-
-			<div id="generationRun" ng-if="vm.selectedEntity.generationRunList.length&gt;0">
-				<div style="top: 100px" ui-grid="vm.generationRunGridOptions" ui-grid-pagination="" ui-grid-selection="">
 				</div>
 
 			</div>

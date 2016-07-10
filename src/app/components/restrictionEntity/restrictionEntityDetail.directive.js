@@ -1,7 +1,7 @@
 (function() {
 'use strict';
  angular
- .module('serverTest')
+ .module('serverTestApp')
  .directive('restrictionEntityDetail', restrictionEntityDetail);
 /** @ngInject */
   function restrictionEntityDetail(restrictionEntityService) {

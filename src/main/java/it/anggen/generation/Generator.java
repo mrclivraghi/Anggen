@@ -445,7 +445,7 @@ public class Generator {
 		project.setGenerationType(generationTypeProperty);
 		project.setGenerationRunList(generationRunList);
 		projectRepository.save(project);
-		initBranch();
+		//initBranch();
 		EntityManager entityManager = new EntityManagerImpl(null);
 		if (generateRest)
 		{
@@ -532,7 +532,7 @@ public class Generator {
 			}
 		}
 		
-		closeBranch();
+		//closeBranch();
 		
 		currentGenerationRun.setEndDate(new Date());
 		currentGenerationRun.setStatus(1);

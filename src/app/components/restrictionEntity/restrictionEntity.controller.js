@@ -1,7 +1,7 @@
 (function() { 
 
 angular
-.module("serverTest")
+.module("serverTestApp")
 .controller("RestrictionEntityController",RestrictionEntityController);
 /** @ngInject */
 function RestrictionEntityController($scope,$http,$rootScope,$log,UtilityService ,restrictionEntityService, SecurityService, MainService ,roleService,entityService)

@@ -1,10 +1,10 @@
 (function() { 
 
 angular
-.module("serverTest")
+.module("serverTestApp")
 .controller("EnumFieldController",EnumFieldController);
 /** @ngInject */
-function EnumFieldController($scope,$http,$rootScope,$log,UtilityService ,enumFieldService, SecurityService, MainService ,entityService,enumEntityService,tabService,annotationService)
+function EnumFieldController($scope,$http,$rootScope,$log,UtilityService ,enumFieldService, SecurityService, MainService ,entityService,enumEntityService,entityService,annotationService)
 {
 var vm=this;
 vm.activeTab=1;
@@ -13,7 +13,7 @@ vm.entityList=enumFieldService.entityList;
 vm.selectedEntity=enumFieldService.selectedEntity;
 vm.entityPreparedData=entityService.preparedData;
 vm.enumEntityPreparedData=enumEntityService.preparedData;
-vm.tabPreparedData=tabService.preparedData;
+vm.entityPreparedData=entityService.preparedData;
 vm.annotationPreparedData=annotationService.preparedData;
 function reset()
 {
@@ -30,9 +30,9 @@ UtilityService.removeObjectFromList($rootScope.parentServices,entityService);
 enumEntityService.selectedEntity.show=false;
 delete $rootScope.openNode.enumEntity;
 UtilityService.removeObjectFromList($rootScope.parentServices,enumEntityService);
-tabService.selectedEntity.show=false;
-delete $rootScope.openNode.tab;
-UtilityService.removeObjectFromList($rootScope.parentServices,tabService);
+entityService.selectedEntity.show=false;
+delete $rootScope.openNode.entity;
+UtilityService.removeObjectFromList($rootScope.parentServices,entityService);
 annotationService.selectedEntity.show=false;
 delete $rootScope.openNode.annotation;
 UtilityService.removeObjectFromList($rootScope.parentServices,annotationService);
@@ -52,9 +52,9 @@ UtilityService.removeObjectFromList($rootScope.parentServices,entityService);
 enumEntityService.selectedEntity.show=false;
 delete $rootScope.openNode.enumEntity;
 UtilityService.removeObjectFromList($rootScope.parentServices,enumEntityService);
-tabService.selectedEntity.show=false;
-delete $rootScope.openNode.tab;
-UtilityService.removeObjectFromList($rootScope.parentServices,tabService);
+entityService.selectedEntity.show=false;
+delete $rootScope.openNode.entity;
+UtilityService.removeObjectFromList($rootScope.parentServices,entityService);
 annotationService.selectedEntity.show=false;
 delete $rootScope.openNode.annotation;
 UtilityService.removeObjectFromList($rootScope.parentServices,annotationService);
@@ -123,9 +123,9 @@ UtilityService.removeObjectFromList($rootScope.parentServices,entityService);
 enumEntityService.selectedEntity.show=false;
 delete $rootScope.openNode.enumEntity;
 UtilityService.removeObjectFromList($rootScope.parentServices,enumEntityService);
-tabService.selectedEntity.show=false;
-delete $rootScope.openNode.tab;
-UtilityService.removeObjectFromList($rootScope.parentServices,tabService);
+entityService.selectedEntity.show=false;
+delete $rootScope.openNode.entity;
+UtilityService.removeObjectFromList($rootScope.parentServices,entityService);
 annotationService.selectedEntity.show=false;
 delete $rootScope.openNode.annotation;
 UtilityService.removeObjectFromList($rootScope.parentServices,annotationService);
@@ -188,8 +188,8 @@ if ($scope.entityGridApi!=undefined && $scope.entityGridApi!=null)
  $scope.entityGridApi.core.handleWindowResize(); 
 if ($scope.enumEntityGridApi!=undefined && $scope.enumEntityGridApi!=null)
  $scope.enumEntityGridApi.core.handleWindowResize(); 
-if ($scope.tabGridApi!=undefined && $scope.tabGridApi!=null)
- $scope.tabGridApi.core.handleWindowResize(); 
+if ($scope.entityGridApi!=undefined && $scope.entityGridApi!=null)
+ $scope.entityGridApi.core.handleWindowResize(); 
 if ($scope.annotationGridApi!=undefined && $scope.annotationGridApi!=null)
  $scope.annotationGridApi.core.handleWindowResize(); 
 }
@@ -294,16 +294,16 @@ return;
 angular.element('#enumEntityTabs li:eq(0) a').tab('show');
 }
 vm.showEnumEntityDetail=showEnumEntityDetail;
- function showTabDetail(index)
+ function showEntityDetail(index)
 {
 if (index!=null)
 {
-tabService.searchOne(enumFieldService.selectedEntity.tabList[index]).then(
+entityService.searchOne(enumFieldService.selectedEntity.entityList[index]).then(
 function successCallback(response) {
 $log.debug("INDEX!=NULLLLLLLLLLLL");
 $log.debug(response);
-tabService.setSelectedEntity(response.data[0]);
-tabService.selectedEntity.show=true;
+entityService.setSelectedEntity(response.data[0]);
+entityService.selectedEntity.show=true;
   }, function errorCallback(response) {
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
@@ -314,19 +314,19 @@ return;
 }
 else 
 {
-if (enumFieldService.selectedEntity.tab==null || enumFieldService.selectedEntity.tab==undefined)
+if (enumFieldService.selectedEntity.entity==null || enumFieldService.selectedEntity.entity==undefined)
 {
-tabService.setSelectedEntity(null); 
-tabService.selectedEntity.show=true; 
-$rootScope.openNode.tab=true;
+entityService.setSelectedEntity(null); 
+entityService.selectedEntity.show=true; 
+$rootScope.openNode.entity=true;
 }
 else
-tabService.searchOne(enumFieldService.selectedEntity.tab).then(
+entityService.searchOne(enumFieldService.selectedEntity.entity).then(
 function successCallback(response) {
-tabService.setSelectedEntity(response.data[0]);
-tabService.selectedEntity.show=true;
-$rootScope.openNode.tab=true;
-$rootScope.parentServices.push(tabService);
+entityService.setSelectedEntity(response.data[0]);
+entityService.selectedEntity.show=true;
+$rootScope.openNode.entity=true;
+$rootScope.parentServices.push(entityService);
   }, function errorCallback(response) {
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
@@ -335,9 +335,9 @@ return;
   }	
 );
 }
-angular.element('#tabTabs li:eq(0) a').tab('show');
+angular.element('#entityTabs li:eq(0) a').tab('show');
 }
-vm.showTabDetail=showTabDetail;
+vm.showEntityDetail=showEntityDetail;
  function showAnnotationDetail(index)
 {
 if (index!=null)
@@ -408,15 +408,15 @@ column: {style:{Font:{Bold:"1"}}}
 UtilityService.alasql('SELECT * INTO XLSXML("enumEntity.xls",?) FROM ?',[mystyle,vm.selectedEntity.enumEntityList]);
 }
 vm.downloadEnumEntityList=downloadEnumEntityList;
-function downloadTabList()
+function downloadEntityList()
 {
 var mystyle = {
  headers:true, 
 column: {style:{Font:{Bold:"1"}}}
 }
-UtilityService.alasql('SELECT * INTO XLSXML("tab.xls",?) FROM ?',[mystyle,vm.selectedEntity.tabList]);
+UtilityService.alasql('SELECT * INTO XLSXML("entity.xls",?) FROM ?',[mystyle,vm.selectedEntity.entityList]);
 }
-vm.downloadTabList=downloadTabList;
+vm.downloadEntityList=downloadEntityList;
 function saveLinkedAnnotation() {
 enumFieldService.selectedEntity.annotationList.push(enumFieldService.selectedEntity.annotation);
 }
@@ -505,29 +505,29 @@ UtilityService.removeObjectFromList($rootScope.parentServices,enumEntityService)
 enumEntityService.selectedEntity.show = row.isSelected;
 });
   };
-vm.tabGridOptions={};
-UtilityService.cloneObject(tabService.gridOptions,vm.tabGridOptions);
-vm.tabGridOptions.data=vm.selectedEntity.tabList;
+vm.entityGridOptions={};
+UtilityService.cloneObject(entityService.gridOptions,vm.entityGridOptions);
+vm.entityGridOptions.data=vm.selectedEntity.entityList;
 vm.initChildrenList = function () { 
 }
-vm.tabGridOptions.onRegisterApi = function(gridApi){
-vm.tabGridApi = gridApi;
+vm.entityGridOptions.onRegisterApi = function(gridApi){
+vm.entityGridApi = gridApi;
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
-tabService.searchOne(row.entity).then(function(response) { 
+entityService.searchOne(row.entity).then(function(response) { 
 $log.debug(response.data);
-$rootScope.openNode.tab=true;
-$rootScope.parentServices.push(tabService);
-tabService.setSelectedEntity(response.data[0]);
+$rootScope.openNode.entity=true;
+$rootScope.parentServices.push(entityService);
+entityService.setSelectedEntity(response.data[0]);
 });
-angular.element('#tabTabs li:eq(0) a').tab('show');
+angular.element('#entityTabs li:eq(0) a').tab('show');
 }
 else 
-tabService.setSelectedEntity(null);
-delete $rootScope.openNode.tab;
-UtilityService.removeObjectFromList($rootScope.parentServices,tabService);
-tabService.selectedEntity.show = row.isSelected;
+entityService.setSelectedEntity(null);
+delete $rootScope.openNode.entity;
+UtilityService.removeObjectFromList($rootScope.parentServices,entityService);
+entityService.selectedEntity.show = row.isSelected;
 });
   };
 vm.annotationGridOptions={};
@@ -556,6 +556,54 @@ annotationService.selectedEntity.show = row.isSelected;
 });
   };
 function updateParentEntities() { 
+userService.initEnumFieldList().then(function(response) {
+enumFieldService.preparedData.entityList=response.data;
+});
+
+if (userService.selectedEntity.userId!=undefined) userService.searchOne(userService.selectedEntity).then(
+function successCallback(response) {
+$log.debug("response-ok");
+$log.debug(response);
+userService.setSelectedEntity(response.data[0]);
+  }, function errorCallback(response) {
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
+  }	
+);
+restrictionFieldService.initEnumFieldList().then(function(response) {
+enumFieldService.preparedData.entityList=response.data;
+});
+
+if (restrictionFieldService.selectedEntity.restrictionFieldId!=undefined) restrictionFieldService.searchOne(restrictionFieldService.selectedEntity).then(
+function successCallback(response) {
+$log.debug("response-ok");
+$log.debug(response);
+restrictionFieldService.setSelectedEntity(response.data[0]);
+  }, function errorCallback(response) {
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
+  }	
+);
+restrictionEntityGroupService.initEnumFieldList().then(function(response) {
+enumFieldService.preparedData.entityList=response.data;
+});
+
+if (restrictionEntityGroupService.selectedEntity.restrictionEntityGroupId!=undefined) restrictionEntityGroupService.searchOne(restrictionEntityGroupService.selectedEntity).then(
+function successCallback(response) {
+$log.debug("response-ok");
+$log.debug(response);
+restrictionEntityGroupService.setSelectedEntity(response.data[0]);
+  }, function errorCallback(response) {
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
+  }	
+);
 annotationService.initEnumFieldList().then(function(response) {
 enumFieldService.preparedData.entityList=response.data;
 });
@@ -565,22 +613,6 @@ function successCallback(response) {
 $log.debug("response-ok");
 $log.debug(response);
 annotationService.setSelectedEntity(response.data[0]);
-  }, function errorCallback(response) {
-UtilityService.AlertError.init({selector: "#alertError"});
-UtilityService.AlertError.show("Si è verificato un errore");
-$log.debug(response);
-return; 
-  }	
-);
-tabService.initEnumFieldList().then(function(response) {
-enumFieldService.preparedData.entityList=response.data;
-});
-
-if (tabService.selectedEntity.tabId!=undefined) tabService.searchOne(tabService.selectedEntity).then(
-function successCallback(response) {
-$log.debug("response-ok");
-$log.debug(response);
-tabService.setSelectedEntity(response.data[0]);
   }, function errorCallback(response) {
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");

@@ -101,7 +101,12 @@ entityService.searchBean.relationshipList=[];
 entityService.searchBean.relationshipList.push(entityService.searchBean.relationship);
 delete entityService.searchBean.relationship; 
 entityService.search().then(function successCallback(response) {
+console.log(response.data);
+
 entityService.setEntityList(response.data);
+vm.entityGridOptions.data=entityService.entityList;
+console.log(vm.entityGridOptions.data);
+
 },function errorCallback(response) { 
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");

@@ -198,6 +198,7 @@ public class EntityGenerator {
 			Field field=EntityAttributeManager.getInstance(entityAttribute).asField();
 			JClass fieldClass = EntityAttributeManager.getInstance(field).getFieldClass();
 			String fieldName= field.getName();
+			System.out.println("Writint "+field.getName()+" for "+entity.getName());
 			JVar classField = myClass.field(JMod.PRIVATE, fieldClass, field.getName());
 			JAnnotationUse columnAnnotation = classField.annotate(Column.class);
 			columnAnnotation.param("name", namingStrategy.classToTableName(field.getName()));
@@ -285,6 +286,7 @@ public class EntityGenerator {
 			}
 			addValidationAnnotation(relationship,listField);
 		}
+		if (entity.getEnumFieldList()!=null)
 		for (EnumField enumField: entity.getEnumFieldList())
 		{
 			JClass fieldClass = EntityAttributeManager.getInstance(enumField).getFieldClass();
@@ -300,6 +302,7 @@ public class EntityGenerator {
 
 
 	private void addValidationAnnotation(EntityAttribute entityAttribute, JVar classField) {
+		if (entityAttribute.getAnnotationList()!=null)
 		for (Annotation annotation : entityAttribute.getAnnotationList())
 		{
 			JAnnotationUse annotationUse;

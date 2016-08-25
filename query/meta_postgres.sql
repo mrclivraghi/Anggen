@@ -1,20 +1,35 @@
 -- list table
-select * from pg_class where relname !~ '^(pg_|sql_)' and relkind='r';
+select * from information_schema.tables
+where table_type='BASE TABLE' and table_schema not in ('pg_catalog','information_schema')
 
 -- list table fields
-select a.* from pg_class c 
-inner join pg_attribute a on c.oid=a.attrelid
-inner join pg_type t on t.oid=a.atttypid
-where c.relname='risorsa' and a.attnum>0;
+select * from 
+information_schema.columns
+where table_name='field';
 
--- list coplumn attribute
-select a.attnum as ordinal_position,
-a.attname AS column_name,
-t.typname AS data_type,a.attlen AS character_maximum_length,
-a.atttypmod AS modifier,
-a.attnotnull AS notnull,
-a.atthasdef AS hasdefault
-from pg_class c 
-inner join pg_attribute a on c.oid=a.attrelid
-inner join pg_type t on t.oid=a.atttypid
-where c.relname='risorsa' and a.attnum>0;
+-- list constraints
+SELECT tc.constraint_name,
+tc.constraint_type,
+tc.table_name,
+kcu.column_name,
+tc.is_deferrable,
+tc.initially_deferred,
+rc.match_option AS match_type,
+rc.update_rule AS on_update,
+rc.delete_rule AS on_delete,
+ccu.table_name AS references_table,
+ccu.column_name AS references_field
+FROM information_schema.table_constraints tc
+LEFT JOIN information_schema.key_column_usage kcu
+ON tc.constraint_catalog = kcu.constraint_catalog
+AND tc.constraint_schema = kcu.constraint_schema
+AND tc.constraint_name = kcu.constraint_name
+LEFT JOIN information_schema.referential_constraints rc
+ON tc.constraint_catalog = rc.constraint_catalog
+AND tc.constraint_schema = rc.constraint_schema
+AND tc.constraint_name = rc.constraint_name
+LEFT JOIN information_schema.constraint_column_usage ccu
+ON rc.unique_constraint_catalog = ccu.constraint_catalog
+AND rc.unique_constraint_schema = ccu.constraint_schema
+AND rc.unique_constraint_name = ccu.constraint_name
+WHERE tc.table_name = 'field'

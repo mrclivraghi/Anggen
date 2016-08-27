@@ -1,14 +1,17 @@
 -- list table
 select * from information_schema.tables
 where table_type='BASE TABLE' and table_schema not in ('pg_catalog','information_schema')
+and table_schema='meta'
 
 -- list table fields
 select * from 
 information_schema.columns
-where table_name='field';
+where table_name='annotation_type' or column_name like '%value%'
 
 -- list constraints
-SELECT tc.constraint_name,
+SELECT 
+tc.constraint_schema
+,tc.constraint_name,
 tc.constraint_type,
 tc.table_name,
 kcu.column_name,
@@ -32,4 +35,4 @@ LEFT JOIN information_schema.constraint_column_usage ccu
 ON rc.unique_constraint_catalog = ccu.constraint_catalog
 AND rc.unique_constraint_schema = ccu.constraint_schema
 AND rc.unique_constraint_name = ccu.constraint_name
-WHERE tc.table_name = 'field'
+WHERE tc.table_name = 'relationship'

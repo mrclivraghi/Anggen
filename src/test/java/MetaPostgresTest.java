@@ -40,6 +40,8 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.base.CaseFormat;
+
 import it.Application;
 import it.anggen.generation.BeanToDBConverter;
 import it.anggen.generation.Generator;
@@ -48,6 +50,7 @@ import it.anggen.model.entity.Entity;
 import it.anggen.model.relationship.Relationship;
 import it.anggen.repository.relationship.RelationshipRepository;
 import it.anggen.service.relationship.RelationshipService;
+import it.anggen.utils.OracleNamingStrategy;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes=Application.class)
@@ -65,12 +68,21 @@ public class MetaPostgresTest {
 
 	}
 
+	
+	@Test
+	public void testOracleNaming(){
+		OracleNamingStrategy s = new OracleNamingStrategy();
+		System.out.println(s.tableName("nomeTabella"));
+		System.out.println(CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, "nome_tabella"));
+	}
+	
+	
 	@Test
 	public void testAfter()
 	{
 		try {
 			generator.init();
-			postgresMetaService.generateFromSchema("meta");
+			postgresMetaService.generateFromSchema("sp");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

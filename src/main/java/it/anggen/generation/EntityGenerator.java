@@ -166,14 +166,14 @@ public class EntityGenerator {
 		if (!Generator.databaseProperty.equals("mysql"))
 			annotationTable.param("schema", schema);
 		
-		JAnnotationUse securityType= myClass.annotate(SecurityType.class);
+		//JAnnotationUse securityType= myClass.annotate(SecurityType.class);
 		it.anggen.model.SecurityType secType = entity.getSecurityType();
 		if (secType==null)
 			secType=it.anggen.model.SecurityType.ACCESS_WITH_PERMISSION;
-		securityType.param("type", secType);
+		//securityType.param("type", secType);
 		
-		JAnnotationUse maxDescendantLevel= myClass.annotate(MaxDescendantLevel.class);
-		maxDescendantLevel.param("value", entity.getDescendantMaxLevel());
+		//JAnnotationUse maxDescendantLevel= myClass.annotate(MaxDescendantLevel.class);
+		//maxDescendantLevel.param("value", entity.getDescendantMaxLevel());
 		
 		if (entity.getCache()!=null && entity.getCache())
 		{
@@ -216,7 +216,13 @@ public class EntityGenerator {
 			if (EntityAttributeManager.getInstance(relationship).isList())
 			{
 				JClass listClass = codeModel.ref(List.class).narrow(ReflectionManager.getJDefinedClass(relationship.getEntityTarget()));
-				listField = myClass.field(JMod.PRIVATE, listClass, relationship.getName()+"List");
+				try{
+					listField = myClass.field(JMod.PRIVATE, listClass, relationship.getName()+"List");
+				}catch(IllegalArgumentException e)
+				{
+					relationship.setName(relationship.getName()+"1");
+					listField = myClass.field(JMod.PRIVATE, listClass, relationship.getName()+"List");
+				}
 				generateGetterAndSetter(myClass, relationship.getName()+"List", listClass);
 				if (relationship.getRelationshipType()==RelationshipType.ONE_TO_MANY)
 				{
@@ -263,7 +269,13 @@ public class EntityGenerator {
 			}
 			else
 			{
+				try{
 				listField = myClass.field(JMod.PRIVATE, ReflectionManager.getJDefinedClass(relationship.getEntityTarget()), relationship.getName());
+				}catch(IllegalArgumentException e)
+				{
+					relationship.setName(relationship.getName()+"1");
+					listField = myClass.field(JMod.PRIVATE, ReflectionManager.getJDefinedClass(relationship.getEntityTarget()), relationship.getName());
+				}
 				if (relationship.getRelationshipType()==RelationshipType.MANY_TO_ONE)
 				{
 					JAnnotationUse manyToOne = listField.annotate(ManyToOne.class);
@@ -333,7 +345,7 @@ public class EntityGenerator {
 			//generatedValue.param("strategy", GenerationType.SEQUENCE);
 			if (!EntityAttributeManager.getInstance(entityAttribute).getDescriptionField())
 			{
-				classField.annotate(DescriptionField.class);
+				//classField.annotate(DescriptionField.class);
 			}
 			break;
 			case SIZE:	annotationUse=classField.annotate(Size.class);

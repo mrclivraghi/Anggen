@@ -463,7 +463,7 @@ public class JsGenerator {
 		sb.append("{\n");
 		changeChildrenVisibility(sb, false);
 		sb.append("}\n");
-		sb.append("angular.element('#"+entityName+"Tabs li:eq(0) a').tab('show');\n");
+		sb.append("//angular.element('#"+entityName+"Tabs li:eq(0) a').tab('show');\n");
 		sb.append("}\n");
 		sb.append("		\n");
 
@@ -689,7 +689,7 @@ public class JsGenerator {
 
 
 					sb.append("}\n");
-					sb.append("angular.element('#"+relationship.getEntityTarget().getName()+"Tabs li:eq(0) a').tab('show');\n");
+					sb.append("//angular.element('#"+relationship.getEntityTarget().getName()+"Tabs li:eq(0) a').tab('show');\n");
 					sb.append("}\n");
 
 					
@@ -918,7 +918,7 @@ if (entity.getEntityGroup()!=null)
 			sb.append("});\n");
 }
 			//}
-			sb.append("angular.element('#"+entityName+"Tabs li:eq(0) a').tab('show');\n");
+			sb.append("//angular.element('#"+entityName+"Tabs li:eq(0) a').tab('show');\n");
 			sb.append("}\n");
 			sb.append("else \n");
 			sb.append(Utility.getEntityCallName(entityName)+"Service.setSelectedEntity(null);\n");

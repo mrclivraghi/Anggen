@@ -231,7 +231,10 @@ public class EntityGenerator {
 					JAnnotationUse type = listField.annotate(Type.class);
 					type.param("type", ReflectionManager.getJDefinedClass(relationship.getEntityTarget()).fullName());
 					JAnnotationUse joinColumn = listField.annotate(JoinColumn.class);
-					joinColumn.param("name", namingStrategy.classToTableName(entity.getName())+"_id_"+namingStrategy.classToTableName(entity.getName()));
+					if (relationship.getReferencedField()!=null)
+						joinColumn.param("name", relationship.getReferencedField());
+					else
+						joinColumn.param("name", namingStrategy.classToTableName(entity.getName())+"_id_"+namingStrategy.classToTableName(entity.getName()));
 				}
 
 				if (relationship.getRelationshipType()==RelationshipType.MANY_TO_MANY)
@@ -281,7 +284,10 @@ public class EntityGenerator {
 					JAnnotationUse manyToOne = listField.annotate(ManyToOne.class);
 					manyToOne.param("fetch", FetchType.LAZY);
 					JAnnotationUse joinColumn = listField.annotate(JoinColumn.class);
-					joinColumn.param("name", namingStrategy.classToTableName(relationship.getEntityTarget().getName())+"_id_"+namingStrategy.classToTableName(relationship.getName()));
+					if (relationship.getReferencedField()!=null)
+						joinColumn.param("name", relationship.getReferencedField());
+					else
+						joinColumn.param("name", relationship.getEntityTarget().getName()+"_id_"+namingStrategy.classToTableName(relationship.getName()));
 				
 				}
 				if (relationship.getRelationshipType()==RelationshipType.ONE_TO_ONE)

@@ -140,6 +140,7 @@ public class PostgresMetaService {
 						relationship.setEntityTarget(targetEntity);
 						relationship.setName(CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, metaConstraint.getReferencesTable()));
 						relationship.setRelationshipType(RelationshipType.MANY_TO_ONE);
+						relationship.setReferencedField(metaConstraint.getReferencesField());
 						relationshipRepository.save(relationship);
 						relationshipList.add(relationship);
 						

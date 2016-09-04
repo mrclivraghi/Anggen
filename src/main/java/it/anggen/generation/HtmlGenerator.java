@@ -386,7 +386,31 @@ public class HtmlGenerator {
 			}
 			
 			//administration menù
+			
 			HtmlCanvas ulHtml= new HtmlCanvas(new PrettyWriter());
+			ulHtml.li((new HtmlAttributes()).add("uib-dropdown", "").add("on-toggle", "toggled(\"open\")"))
+			.a((new HtmlAttributes()).add("href", "#").add("class", "dropdown-toggle").add("data-toggle", "dropdown").add("role", "button").add("aria-haspopup", "true").add("aria-expanded", "false").add("uib-dropdown-toggle", ""));
+			HtmlCanvas caretHtml = new HtmlCanvas(new PrettyWriter());
+			
+			caretHtml.span((new HtmlAttributes()).add("class", "caret"))
+			._span();
+			ulHtml.content("Administration"+caretHtml.toHtml(),false);
+			ulHtml.ul((new HtmlAttributes()).add("uib-dropdown-menu", "").add("aria-labelledby", "simple-dropdown"));
+			
+			String ulContent="";
+			
+			ulContent=ulContent+"<li>\n<a href=\"#/app/metrics\" role=\"menuitem\">Metrics</a>\n</li>\n";
+			
+			
+			
+			
+			ulHtml.content(ulContent,false);
+			ulHtml._li();
+			sb.append(ulHtml.toHtml());
+			
+			
+			
+			/*HtmlCanvas ulHtml= new HtmlCanvas(new PrettyWriter());
 			ulHtml.li((new HtmlAttributes()).add("class", "dropdown"))
 			.a((new HtmlAttributes()).add("href", "#").add("class", "dropdown-toggle").add("data-toggle", "dropdown").add("role", "button").add("aria-haspopup", "true").add("aria-expanded", "false"));
 			HtmlCanvas caretHtml = new HtmlCanvas(new PrettyWriter());
@@ -403,7 +427,7 @@ public class HtmlGenerator {
 			
 			ulHtml.content(ulContent,false);
 			ulHtml._li();
-			sb.append(ulHtml.toHtml());
+			sb.append(ulHtml.toHtml());*/
 			html.content(sb.toString(),false);
 			html._div() //end real nav menu
 			._div()

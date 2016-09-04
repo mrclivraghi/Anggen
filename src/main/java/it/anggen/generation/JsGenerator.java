@@ -1213,9 +1213,9 @@ if (entity.getEntityGroup()!=null)
 		.append("\n")
 		.append("  angular\n")
 		.append("    .module('"+Generator.appName+"',['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize',"
-				+ " 'ngMessages', 'ngAria', 'ngResource',/*'ngRoute',*/ 'ui.router',"
+				+ " 'ngMessages', 'ngAria', 'ngResource','ui.router',"
 				+ "'ui.bootstrap', 'toastr','ui.grid', 'ui.grid.pagination','ui.grid.selection',"
-				+ "'ui.date', 'ui.grid.exporter','ngFileUpload']);\n")
+				+ "'ui.date', 'ui.grid.exporter','ngFileUpload','swaggerUi']);\n")
 		.append("\n");
 		
 		sb.append("})();\n");
@@ -2013,7 +2013,8 @@ MainService.parentService.childrenList.roleList=response.data;
 		sb.append("  \"angular-ui-date\": \"^1.0.0\",\n");
 		sb.append("  \"bootstrap\": \"^3.3.6\",\n");
 		sb.append("  \"main\": \"./src/app/components/customLib/main.css\",\n");
-		sb.append("\"alasql\": \"^0.2.5\"\n");
+		sb.append("\"alasql\": \"^0.2.5\",\n");
+		sb.append("\"angular-swagger-ui\": \"^0.3.1\"\n");
 		sb.append(" },\n");
 		sb.append("  \"devDependencies\": {\n");
 		sb.append(" \"angular-mocks\": \"~1.5.3\"\n");

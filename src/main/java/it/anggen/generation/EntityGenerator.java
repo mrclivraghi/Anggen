@@ -77,6 +77,8 @@ import com.sun.codemodel.JMethod;
 import com.sun.codemodel.JMod;
 import com.sun.codemodel.JVar;
 
+import io.swagger.annotations.ApiModel;
+
 @Service
 public class EntityGenerator {
 	
@@ -181,6 +183,7 @@ public class EntityGenerator {
 
 			JAnnotationUse maxDescendantLevel= myClass.annotate(MaxDescendantLevel.class);
 			maxDescendantLevel.param("value", entity.getDescendantMaxLevel());
+			myClass.annotate(ApiModel.class);
 		}
 		
 		if (entity.getCache()!=null && entity.getCache() && includeCustomAnnotation)

@@ -35,7 +35,7 @@ public class MyUserDetailService
     
 
     @Override
-  //  @Transactional(readOnly=false)
+    @Transactional(readOnly=false)
     public UserDetails loadUserByUsername(final String username)
         throws UsernameNotFoundException
     {

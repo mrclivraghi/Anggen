@@ -7,6 +7,7 @@ import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import it.anggen.model.RestrictionType;
 import it.anggen.model.SecurityType;
 import it.anggen.repository.security.UserRepository;
@@ -239,6 +240,7 @@ public class WebappGenerator {
 		genApp.annotate(EnableAutoConfiguration.class);
 		genApp.annotate(SpringBootApplication.class);
 		genApp.annotate(EnableCaching.class);
+		genApp.annotate(EnableSwagger2.class);
 		
 		JMethod mainMethod = genApp.method(JMod.PUBLIC+JMod.STATIC, void.class, "main");
 		mainMethod.param(String[].class, "args");

@@ -237,7 +237,7 @@ public class Generator {
 	}
 	
 	//@Transactional
-	private void init() throws Exception
+	public void init() throws Exception
 	{
 		Generator.appName=applicationName;
 		Generator.generatedPackage=mainPackage;
@@ -278,12 +278,12 @@ public class Generator {
 			oldGenerationBranchName="refs/heads/generation/gen_"+sdf.format(generationRunDoneList.get(generationRunDoneList.size()-1).getStartDate());
 			Generator.lastGenerationDate=generationRunDoneList.get(generationRunDoneList.size()-1).getStartDate();
 		}
-		if (entityGroupList!=null)
+		/*if (entityGroupList!=null)
 		for (EntityGroup entityGroup: entityGroupList)
 		{
 			this.modelEntityList.addAll(entityGroup.getEntityList());
 		}
-		checkModel();
+		checkModel();*/
 	}
 
 	//@Transactional

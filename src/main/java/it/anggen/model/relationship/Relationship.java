@@ -2,6 +2,8 @@
 package it.anggen.model.relationship;
 
 import java.util.List;
+
+import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -33,6 +35,10 @@ public class Relationship
     @javax.persistence.Column(name = "name")
     @it.anggen.utils.annotation.DescriptionField
     private String name;
+    
+    @Column(name="referenced_field")
+    private String referencedField;
+    
     @javax.persistence.Column(name = "add_date")
     @CreationTimestamp
     private java.util.Date addDate;
@@ -138,5 +144,13 @@ public class Relationship
     public void setRelationshipType(RelationshipType relationshipType) {
         this.relationshipType=relationshipType;
     }
+
+	public String getReferencedField() {
+		return referencedField;
+	}
+
+	public void setReferencedField(String referencedField) {
+		this.referencedField = referencedField;
+	}
 
 }

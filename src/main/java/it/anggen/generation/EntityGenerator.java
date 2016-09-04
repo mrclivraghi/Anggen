@@ -60,6 +60,7 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.sun.codemodel.ClassType;
@@ -84,6 +85,10 @@ public class EntityGenerator {
 	
 	@Autowired
 	private RelationshipRepository relationshipRepository;
+	
+	
+	@Value("{application.annotation.custom.include}")
+	private Boolean includeCustomAnnotation;
 	
 	private Entity entity;
 	
@@ -166,16 +171,19 @@ public class EntityGenerator {
 		if (!Generator.databaseProperty.equals("mysql"))
 			annotationTable.param("schema", schema);
 		
-		JAnnotationUse securityType= myClass.annotate(SecurityType.class);
-		it.anggen.model.SecurityType secType = entity.getSecurityType();
-		if (secType==null)
-			secType=it.anggen.model.SecurityType.ACCESS_WITH_PERMISSION;
-		securityType.param("type", secType);
+		if (includeCustomAnnotation)
+		{
+			JAnnotationUse securityType= myClass.annotate(SecurityType.class);
+			it.anggen.model.SecurityType secType = entity.getSecurityType();
+			if (secType==null)
+				secType=it.anggen.model.SecurityType.ACCESS_WITH_PERMISSION;
+			securityType.param("type", secType);
+
+			JAnnotationUse maxDescendantLevel= myClass.annotate(MaxDescendantLevel.class);
+			maxDescendantLevel.param("value", entity.getDescendantMaxLevel());
+		}
 		
-		JAnnotationUse maxDescendantLevel= myClass.annotate(MaxDescendantLevel.class);
-		maxDescendantLevel.param("value", entity.getDescendantMaxLevel());
-		
-		if (entity.getCache()!=null && entity.getCache())
+		if (entity.getCache()!=null && entity.getCache() && includeCustomAnnotation)
 		{
 			JAnnotationUse cacheAnnotation= myClass.annotate(Cache.class);
 			cacheAnnotation.param("usage", CacheConcurrencyStrategy.NONSTRICT_READ_WRITE);
@@ -198,6 +206,7 @@ public class EntityGenerator {
 			Field field=EntityAttributeManager.getInstance(entityAttribute).asField();
 			JClass fieldClass = EntityAttributeManager.getInstance(field).getFieldClass();
 			String fieldName= field.getName();
+			System.out.println("Writint "+field.getName()+" for "+entity.getName());
 			JVar classField = myClass.field(JMod.PRIVATE, fieldClass, field.getName());
 			JAnnotationUse columnAnnotation = classField.annotate(Column.class);
 			columnAnnotation.param("name", namingStrategy.classToTableName(field.getName()));
@@ -215,7 +224,13 @@ public class EntityGenerator {
 			if (EntityAttributeManager.getInstance(relationship).isList())
 			{
 				JClass listClass = codeModel.ref(List.class).narrow(ReflectionManager.getJDefinedClass(relationship.getEntityTarget()));
-				listField = myClass.field(JMod.PRIVATE, listClass, relationship.getName()+"List");
+				try{
+					listField = myClass.field(JMod.PRIVATE, listClass, relationship.getName()+"List");
+				}catch(IllegalArgumentException e)
+				{
+					relationship.setName(relationship.getName()+"1");
+					listField = myClass.field(JMod.PRIVATE, listClass, relationship.getName()+"List");
+				}
 				generateGetterAndSetter(myClass, relationship.getName()+"List", listClass);
 				if (relationship.getRelationshipType()==RelationshipType.ONE_TO_MANY)
 				{
@@ -224,7 +239,10 @@ public class EntityGenerator {
 					JAnnotationUse type = listField.annotate(Type.class);
 					type.param("type", ReflectionManager.getJDefinedClass(relationship.getEntityTarget()).fullName());
 					JAnnotationUse joinColumn = listField.annotate(JoinColumn.class);
-					joinColumn.param("name", namingStrategy.classToTableName(entity.getName())+"_id_"+namingStrategy.classToTableName(entity.getName()));
+					if (relationship.getReferencedField()!=null)
+						joinColumn.param("name", relationship.getReferencedField());
+					else
+						joinColumn.param("name", namingStrategy.classToTableName(entity.getName())+"_id_"+namingStrategy.classToTableName(entity.getName()));
 				}
 
 				if (relationship.getRelationshipType()==RelationshipType.MANY_TO_MANY)
@@ -262,13 +280,22 @@ public class EntityGenerator {
 			}
 			else
 			{
+				try{
 				listField = myClass.field(JMod.PRIVATE, ReflectionManager.getJDefinedClass(relationship.getEntityTarget()), relationship.getName());
+				}catch(IllegalArgumentException e)
+				{
+					relationship.setName(relationship.getName()+"1");
+					listField = myClass.field(JMod.PRIVATE, ReflectionManager.getJDefinedClass(relationship.getEntityTarget()), relationship.getName());
+				}
 				if (relationship.getRelationshipType()==RelationshipType.MANY_TO_ONE)
 				{
 					JAnnotationUse manyToOne = listField.annotate(ManyToOne.class);
 					manyToOne.param("fetch", FetchType.LAZY);
 					JAnnotationUse joinColumn = listField.annotate(JoinColumn.class);
-					joinColumn.param("name", namingStrategy.classToTableName(relationship.getEntityTarget().getName())+"_id_"+namingStrategy.classToTableName(relationship.getName()));
+					if (relationship.getReferencedField()!=null)
+						joinColumn.param("name", relationship.getReferencedField());
+					else
+						joinColumn.param("name", relationship.getEntityTarget().getName()+"_id_"+namingStrategy.classToTableName(relationship.getName()));
 				
 				}
 				if (relationship.getRelationshipType()==RelationshipType.ONE_TO_ONE)
@@ -285,6 +312,7 @@ public class EntityGenerator {
 			}
 			addValidationAnnotation(relationship,listField);
 		}
+		if (entity.getEnumFieldList()!=null)
 		for (EnumField enumField: entity.getEnumFieldList())
 		{
 			JClass fieldClass = EntityAttributeManager.getInstance(enumField).getFieldClass();
@@ -300,6 +328,7 @@ public class EntityGenerator {
 
 
 	private void addValidationAnnotation(EntityAttribute entityAttribute, JVar classField) {
+		if (entityAttribute.getAnnotationList()!=null)
 		for (Annotation annotation : entityAttribute.getAnnotationList())
 		{
 			JAnnotationUse annotationUse;
@@ -327,8 +356,9 @@ public class EntityGenerator {
 			break;
 			case PRIMARY_KEY: 	annotationUse=classField.annotate(Id.class);
 			JAnnotationUse generatedValue= classField.annotate(GeneratedValue.class);
-			//generatedValue.param("strategy", GenerationType.SEQUENCE);
-			if (!EntityAttributeManager.getInstance(entityAttribute).getDescriptionField())
+			if (includeCustomAnnotation)
+				generatedValue.param("strategy", GenerationType.SEQUENCE);
+			if (!EntityAttributeManager.getInstance(entityAttribute).getDescriptionField() && includeCustomAnnotation)
 			{
 				classField.annotate(DescriptionField.class);
 			}

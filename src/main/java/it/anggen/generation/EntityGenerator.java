@@ -60,6 +60,7 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.sun.codemodel.ClassType;
@@ -84,6 +85,10 @@ public class EntityGenerator {
 	
 	@Autowired
 	private RelationshipRepository relationshipRepository;
+	
+	
+	@Value("{application.annotation.custom.include}")
+	private Boolean includeCustomAnnotation;
 	
 	private Entity entity;
 	
@@ -166,16 +171,19 @@ public class EntityGenerator {
 		if (!Generator.databaseProperty.equals("mysql"))
 			annotationTable.param("schema", schema);
 		
-		//JAnnotationUse securityType= myClass.annotate(SecurityType.class);
-		it.anggen.model.SecurityType secType = entity.getSecurityType();
-		if (secType==null)
-			secType=it.anggen.model.SecurityType.ACCESS_WITH_PERMISSION;
-		//securityType.param("type", secType);
+		if (includeCustomAnnotation)
+		{
+			JAnnotationUse securityType= myClass.annotate(SecurityType.class);
+			it.anggen.model.SecurityType secType = entity.getSecurityType();
+			if (secType==null)
+				secType=it.anggen.model.SecurityType.ACCESS_WITH_PERMISSION;
+			securityType.param("type", secType);
+
+			JAnnotationUse maxDescendantLevel= myClass.annotate(MaxDescendantLevel.class);
+			maxDescendantLevel.param("value", entity.getDescendantMaxLevel());
+		}
 		
-		//JAnnotationUse maxDescendantLevel= myClass.annotate(MaxDescendantLevel.class);
-		//maxDescendantLevel.param("value", entity.getDescendantMaxLevel());
-		
-		if (entity.getCache()!=null && entity.getCache())
+		if (entity.getCache()!=null && entity.getCache() && includeCustomAnnotation)
 		{
 			JAnnotationUse cacheAnnotation= myClass.annotate(Cache.class);
 			cacheAnnotation.param("usage", CacheConcurrencyStrategy.NONSTRICT_READ_WRITE);
@@ -348,10 +356,11 @@ public class EntityGenerator {
 			break;
 			case PRIMARY_KEY: 	annotationUse=classField.annotate(Id.class);
 			JAnnotationUse generatedValue= classField.annotate(GeneratedValue.class);
-			//generatedValue.param("strategy", GenerationType.SEQUENCE);
-			if (!EntityAttributeManager.getInstance(entityAttribute).getDescriptionField())
+			if (includeCustomAnnotation)
+				generatedValue.param("strategy", GenerationType.SEQUENCE);
+			if (!EntityAttributeManager.getInstance(entityAttribute).getDescriptionField() && includeCustomAnnotation)
 			{
-				//classField.annotate(DescriptionField.class);
+				classField.annotate(DescriptionField.class);
 			}
 			break;
 			case SIZE:	annotationUse=classField.annotate(Size.class);

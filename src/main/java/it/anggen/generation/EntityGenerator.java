@@ -87,7 +87,7 @@ public class EntityGenerator {
 	private RelationshipRepository relationshipRepository;
 	
 	
-	@Value("{application.annotation.custom.include}")
+	@Value("${application.annotation.custom.include}")
 	private Boolean includeCustomAnnotation;
 	
 	private Entity entity;

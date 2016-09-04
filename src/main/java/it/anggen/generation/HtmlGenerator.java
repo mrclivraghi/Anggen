@@ -401,6 +401,7 @@ public class HtmlGenerator {
 			
 			ulContent=ulContent+"<li>\n<a href=\"#/app/metrics\" role=\"menuitem\">Metrics</a>\n</li>\n";
 			
+			ulContent=ulContent+"<li>\n<a href=\"#/app/swagger\" role=\"menuitem\">Documentation</a>\n</li>\n";
 			
 			
 			
@@ -537,6 +538,9 @@ public class HtmlGenerator {
 		generateLoginModal();
 	}
 	
+	
+	
+	
 	private void generateLoginModal()
 	{
 		File myFile=new File(directoryViewPages+"login/login-modal.html");
@@ -552,6 +556,34 @@ public class HtmlGenerator {
 	}
 	
 
+	public void generateSwaggerTemplate(){
+		HtmlCanvas html = new HtmlCanvas(new PrettyWriter());
+		
+		try {
+			html.div((new HtmlAttributes()).add("class", "swagger-section"))
+			.div((new HtmlAttributes()).add("class", "swagger-ui-wrap"))
+			.div((new HtmlAttributes()).add("swagger-ui", "").add("url", "vm.url").add("validator-url", "false"))
+			._div()
+			._div()
+			._div();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		
+		File myFile=new File(directoryViewPages+"swagger/swagger.html");
+		PrintWriter writer;
+		try {
+			System.out.println("Written "+myFile.getAbsolutePath());
+			writer = new PrintWriter(myFile, "UTF-8");
+			writer.write(html.toHtml());
+			writer.close();
+		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+	}
+	
 
 	
 }

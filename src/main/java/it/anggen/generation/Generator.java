@@ -492,6 +492,7 @@ public class Generator {
 			htmlGenerator.generateHomePage();
 			htmlGenerator.generateMain();
 			htmlGenerator.generateLogin();
+			htmlGenerator.generateSwaggerTemplate();
 			
 			CssGenerator.generateMain(angularDirectory);
 			CssGenerator.generateLoginSCSS(angularDirectory);

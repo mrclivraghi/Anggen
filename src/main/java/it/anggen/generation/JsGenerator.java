@@ -103,6 +103,8 @@ public class JsGenerator {
 		generateMainService();
 		generateMainController();
 		generateHomeController();
+		generateSwaggerService();
+		generateSwaggerController();
 		
 		generateIndexRoute();
 		generateIndexRun();
@@ -2052,6 +2054,81 @@ MainService.parentService.childrenList.roleList=response.data;
 	}
 	
 	
+	
+	public void generateSwaggerService()
+	{
+
+		StringBuilder sb = new StringBuilder();	
+		
+		sb.append("(function() { \n")
+		.append("'use strict'; \n")
+		.append("\n");
+		
+		
+		sb.append("angular.module(\""+Generator.appName+"\").service(\"SwaggerService\", SwaggerService);\n");
+		
+		sb.append("/** @ngInject */\n");
+		sb.append("function SwaggerService($http,$log)\n");
+		sb.append("{\n");
+		sb.append("this.swaggerObject={};\n");
+		sb.append(" this.getSwaggerJson = function() \n");
+		sb.append(" { \n");
+		sb.append(" var promise= $http.get(\""+Generator.restUrlProperty+"v2/api-docs/\"); \n");
+		sb.append(" return promise; \n");
+		sb.append(" } \n");
+		sb.append("}\n");
+		
+		sb.append("})();\n");
+		
+		File file = new File("");
+		String directoryAngularFiles=file.getAbsolutePath()+Generator.generateAngularDirectory+"components/swagger/";
+		saveAsJsFile(directoryAngularFiles, "swagger.service", sb.toString());
+
+	
+	}
+	
+	public void generateSwaggerController()
+	{
+		StringBuilder sb = new StringBuilder();	
+		
+		sb.append("(function() { \n")
+		.append("'use strict'; \n")
+		.append("\n");
+		
+		sb.append("angular.module(\""+Generator.appName+"\").controller(\"SwaggerController\",SwaggerController);\n\n");
+		
+		
+		sb.append("/** @ngInject */\n");
+		sb.append("function SwaggerController($scope,$http,$rootScope,$log,UtilityService,SwaggerService){\n");
+		
+		sb.append("var vm = this;\n");
+		sb.append("vm.swaggerObject=SwaggerService.swaggerObject;\n");
+		sb.append("vm.url=\""+Generator.restUrlProperty+"v2/api-docs/\";\n");
+		sb.append("function getJson()\n");
+		sb.append("{\n");
+		
+		sb.append("SwaggerService.getSwaggerJson().then(function successCallback(response) {\n");
+		sb.append("UtilityService.cloneObject(response.data,SwaggerService.swaggerObject);\n");
+		sb.append("},function errorCallback(response) { \n");
+		sb.append("UtilityService.AlertError.init({selector: \"#alertError\"});\n");
+		sb.append("UtilityService.AlertError.show(\"Si è verificato un errore\");\n");
+		sb.append("return; \n");
+		sb.append("});\n");
+		
+		
+		sb.append("}\n");
+		sb.append("getJson();\n");
+		sb.append("vm.getJson=getJson;\n");
+		
+		
+		sb.append("}\n");
+		sb.append("})();\n");
+		
+		File file = new File("");
+		String directoryAngularFiles=file.getAbsolutePath()+Generator.generateAngularDirectory+"main/";
+		saveAsJsFile(directoryAngularFiles, "main.controller", sb.toString());
+
+	}
 	
 	
 	/*

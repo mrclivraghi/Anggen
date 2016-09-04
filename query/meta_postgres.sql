@@ -49,3 +49,5 @@ WHERE tc.table_name = 'assignment_bay'
 
 
 
+COMMENT ON TABLE sp.assignment_bay
+  IS 'packages';

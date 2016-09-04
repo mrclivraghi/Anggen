@@ -6,10 +6,6 @@ angular.module("serverTestApp").service("SecurityService",SecurityService);
 function SecurityService($http,$log)
 {
 this.restrictionList={};
-this.init= function() {
-var promise= $http.get("http://127.0.0.1:8080/ServerTestApp/authentication/");
-return promise; 
-};
 this.isLoggedIn = function()
 {
 var promise= $http.post("http://127.0.0.1:8080/ServerTestApp/authentication/username/");

@@ -18,14 +18,18 @@ public class MetaTableRepository {
 
 	public List<MetaTable> findAll()
 	{
-		return jdbcTemplate.query("select * from information_schema.tables "
-				+" where table_type='BASE TABLE' and table_schema not in ('pg_catalog','information_schema') ",new BeanPropertyRowMapper(MetaTable.class));
+		return jdbcTemplate.query("select t.*,pgd.description as comment from information_schema.tables t "
+				+ "left join pg_class pgc on t.table_name=pgc.relname "
+				+ " left join pg_description pgd on pgd.objoid = pgc.oid "
+				+" where t.table_type='BASE TABLE' and t.table_schema not in ('pg_catalog','information_schema') ",new BeanPropertyRowMapper(MetaTable.class));
 	}
 
 	public List<MetaTable> findByTableSchema(String tableSchema)
 	{
-		return jdbcTemplate.query("select * from information_schema.tables "
-				+" where table_type='BASE TABLE' and table_schema not in ('pg_catalog','information_schema')"
-				+ " and table_schema= ? ",new BeanPropertyRowMapper(MetaTable.class),tableSchema);
+		return jdbcTemplate.query("select t.*,pgd.description as comment from information_schema.tables t "
+				+ " left join pg_class pgc on t.table_name=pgc.relname "
+				+ " left join pg_description pgd on pgd.objoid = pgc.oid "
+				+" where t.table_type='BASE TABLE' and t.table_schema not in ('pg_catalog','information_schema')"
+				+ " and t.table_schema= ? ",new BeanPropertyRowMapper(MetaTable.class),tableSchema);
 	}
 }

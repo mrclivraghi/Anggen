@@ -1,7 +1,15 @@
 -- list table
-select * from information_schema.tables
-where table_type='BASE TABLE' and table_schema not in ('pg_catalog','information_schema')
-and table_schema='meta'
+select t.*,pgd.description as comment from information_schema.tables t
+inner join pg_class pgc on t.table_name=pgc.relname
+inner join pg_description pgd on pgd.objoid = pgc.oid
+where t.table_type='BASE TABLE' and t.table_schema not in ('pg_catalog','information_schema')
+and t.table_schema='sp'
+
+-- get comment
+select * from pg_description
+join pg_class on pg_description.objoid = pg_class.oid
+where relname = 'assignment_bay'
+
 
 -- list table fields
 select * from 
@@ -35,4 +43,9 @@ LEFT JOIN information_schema.constraint_column_usage ccu
 ON rc.unique_constraint_catalog = ccu.constraint_catalog
 AND rc.unique_constraint_schema = ccu.constraint_schema
 AND rc.unique_constraint_name = ccu.constraint_name
-WHERE tc.table_name = 'relationship'
+WHERE tc.table_name = 'assignment_bay'
+
+
+
+
+

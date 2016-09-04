@@ -85,15 +85,22 @@ public class PostgresMetaService {
 		project.setGenerationType(GenerationType.HIDE_IGNORE);
 		projectRepository.save(project);
 		
-		EntityGroup entityGroup = new EntityGroup();
-		entityGroup.setName(schemaName);
-		entityGroup.setProject(project);
-		entityGroupRepository.save(entityGroup);
+		
 		
 		
 		List<MetaTable> metaTableList = metaTableRepository.findByTableSchema(schemaName);
+		Map<String,EntityGroup> entityGroupMap = new HashMap<>();
 		Map<String, Entity> entityMap = new HashMap<>();
+		List<EntityGroup> entityGroupList = new ArrayList<>();
 		List<Entity> entityList = new ArrayList<>();
+		
+		
+		EntityGroup entityGroup = new EntityGroup();
+		entityGroup.setName(schemaName);
+		entityGroup.setProject(project);
+		entityGroup.setEntityList(new ArrayList<>());
+		entityGroupRepository.save(entityGroup);
+		entityGroupList.add(entityGroup);
 		
 		for (MetaTable metaTable : metaTableList)
 		{
@@ -101,6 +108,33 @@ public class PostgresMetaService {
 			entity.setEntityGroup(entityGroup);
 			entity.setName(CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, metaTable.getTableName()));
 			entity.setDescendantMaxLevel(99);
+			
+			if (metaTable.getComment()!=null && !metaTable.getComment().equals(""))
+			{
+				EntityGroup tempEntityGroup=null;
+				if (entityGroupMap.get(metaTable.getComment())!=null)
+				{
+					tempEntityGroup=entityGroupMap.get(metaTable.getComment());
+				} else
+				{
+					tempEntityGroup = new EntityGroup();
+					tempEntityGroup.setProject(project);
+					tempEntityGroup.setName(metaTable.getComment());
+					tempEntityGroup.setEntityList(new ArrayList<>());
+					entityGroupRepository.save(tempEntityGroup);
+					entityGroupList.add(entityGroup);
+					
+				}
+				entity.setEntityGroup(tempEntityGroup);
+				tempEntityGroup.getEntityList().add(entity);
+			} else
+			{
+				entity.setEntityGroup(entityGroup);
+				entityGroup.getEntityList().add(entity);
+				
+			}
+			
+			
 			entityRepository.save(entity);
 			entityMap.put(metaTable.getTableName(), entity);
 		}
@@ -209,11 +243,15 @@ public class PostgresMetaService {
 			
 		}
 		
-		entityGroup.setEntityList(entityList);
+		//entityGroup.setEntityList(entityList);
 		
-		List<EntityGroup> entityGroupList = new ArrayList<>();
-		entityGroupList.add(entityGroup);
-		entityGroupRepository.save(entityGroup);
+		
+		//entityGroupRepository.save(entityGroup);
+		
+		for (EntityGroup entityGroup2: entityGroupList)
+		{
+			entityGroupRepository.save(entityGroup2);
+		}
 		
 		
 		project.setEntityGroupList(entityGroupList);

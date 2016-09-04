@@ -14,6 +14,8 @@ public class MetaTable {
 	private String isTyped;
 	private String commitAction;
 	
+	private String comment;
+	
 	public MetaTable(){
 		
 	}
@@ -89,6 +91,14 @@ public class MetaTable {
 	}
 	public void setCommitAction(String commitAction) {
 		this.commitAction = commitAction;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 	
 }

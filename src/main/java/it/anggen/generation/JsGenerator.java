@@ -1257,8 +1257,7 @@ if (entity.getEntityGroup()!=null)
 		.append(" })\n")
 		
 		
-.append(".state('main.home',{\n")
-		
+		.append(".state('main.home',{\n")
 		.append(" url:'/home',\n")
 		.append("views:{\n")
 		.append("'search': {\n")
@@ -1270,13 +1269,24 @@ if (entity.getEntityGroup()!=null)
 		.append("})\n")
 
 		
-.append(".state('main.metrics',{\n")
-		
+		.append(".state('main.metrics',{\n")
 		.append(" url:'/metrics',\n")
 		.append("views:{\n")
 		.append("'pageContent': {\n")
 		.append("templateUrl:'app/components/metrics/metrics.html',\n")
 		.append(" controller:'MetricsController', \n")
+		.append("controllerAs: 'vm' \n")
+		.append(" }\n")
+		.append("}\n")
+		.append("})\n")
+		
+		.append(".state('main.swagger',{\n")
+		
+		.append(" url:'/swagger',\n")
+		.append("views:{\n")
+		.append("'pageContent': {\n")
+		.append("templateUrl:'app/components/swagger/swagger.html',\n")
+		.append(" controller:'SwaggerController', \n")
 		.append("controllerAs: 'vm' \n")
 		.append(" }\n")
 		.append("}\n")

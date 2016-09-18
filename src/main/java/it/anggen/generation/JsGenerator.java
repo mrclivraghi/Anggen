@@ -1094,13 +1094,10 @@ if (entity.getEntityGroup()!=null)
 		sb.append("{\n");
 		sb.append("this.restrictionList={};\n");
 
-		if (Generator.enableSecurity)
-		{
-			sb.append("this.init= function() {\n");
-			sb.append("var promise= $http.get(\""+Generator.restUrlProperty+"authentication/\");\n");
-			sb.append("return promise; \n");
-			sb.append("};\n");
-		}
+		sb.append("this.init= function() {\n");
+		sb.append("var promise= $http.get(\""+Generator.restUrlProperty+"authentication/\");\n");
+		sb.append("return promise; \n");
+		sb.append("};\n");
 
 		sb.append("this.isLoggedIn = function()\n")
 		.append("{\n")
@@ -1616,9 +1613,17 @@ if (entity.getEntityGroup()!=null)
 		sb.append("	while (targetObject[val].length > 0)\n");
 		sb.append("		targetObject[val].pop();\n");
 		sb.append("if (sourceObject[val] != null)\n");
+		sb.append("{\n");
+		sb.append(" if (!targetObject[val])\n");
+		sb.append("targetObject[val]=[];\n");
+
+
 		sb.append("		for (var j = 0; j < sourceObject[val].length; j++)\n");
 		sb.append("				targetObject[val]\n");
 		sb.append("			.push(sourceObject[val][j]);\n");
+		
+		sb.append("}\n");
+		
 		sb.append("	} else \n");
 		sb.append("			this.emptyList(targetObject[val]);\n");
 		sb.append("	} else {\n");

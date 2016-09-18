@@ -52,9 +52,15 @@ if (targetObject[val]!=undefined)
 	while (targetObject[val].length > 0)
 		targetObject[val].pop();
 if (sourceObject[val] != null)
+{
+	if (!targetObject[val])
+		targetObject[val]=[];
 		for (var j = 0; j < sourceObject[val].length; j++)
 				targetObject[val]
 			.push(sourceObject[val][j]);
+
+	
+	}
 	} else 
 			this.emptyList(targetObject[val]);
 	} else {

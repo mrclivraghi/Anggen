@@ -135,7 +135,7 @@ public  class CssGenerator {
 			htmlAttributes.add("class", style+" right-input");
 		if (!search)
 		{
-			htmlAttributes.add("ng-class","{'has-error': !"+entityName+"DetailForm."+entityAttributeName+".$valid, 'has-success': "+entityName+"DetailForm."+entityAttributeName+".$valid}");
+			htmlAttributes.add("ng-class","{'has-error': !vm."+entityName+"DetailForm."+entityAttributeName+".$valid, 'has-success': vm."+entityName+"DetailForm."+entityAttributeName+".$valid}");
 			htmlAttributes.add("style", "height:59px");
 		}
 		

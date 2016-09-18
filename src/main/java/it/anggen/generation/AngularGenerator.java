@@ -130,7 +130,7 @@ public class AngularGenerator {
 		html.div(mainControllerAttributes);
 		
 		//detail
-		html.form((new HtmlAttributes()).add("id", entityName+"DetailForm").add("name", entityName+"DetailForm").add("ng-if", "vm.selectedEntity.show"));
+		html.form((new HtmlAttributes()).add("id", "vm."+entityName+"DetailForm").add("name", "vm."+entityName+"DetailForm").add("ng-if", "vm.selectedEntity.show"));
 		renderTabForm(html, false);
 		html._form();
 		html._div();

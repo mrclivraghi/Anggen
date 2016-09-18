@@ -413,7 +413,7 @@ public class HtmlGenerator {
 			
 			/*HtmlCanvas ulHtml= new HtmlCanvas(new PrettyWriter());
 			ulHtml.li((new HtmlAttributes()).add("class", "dropdown"))
-			.a((new HtmlAttributes()).add("href", "#").add("class", "dropdown-toggle").add("data-toggle", "dropdown").add("role", "button").add("aria-haspopup", "true").add("aria-expanded", "false"));
+			.a((new HtmlAttributes()).add("class", "dropdown-toggle").add("data-toggle", "dropdown").add("role", "button").add("aria-haspopup", "true").add("aria-expanded", "false"));
 			HtmlCanvas caretHtml = new HtmlCanvas(new PrettyWriter());
 			
 			caretHtml.span((new HtmlAttributes()).add("class", "caret"))

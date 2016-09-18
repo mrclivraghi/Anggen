@@ -498,7 +498,7 @@ public class JsGenerator {
 		//INSERT
 		sb.append("function insert()\n");
 		sb.append("{\n");
-		sb.append("if (!$scope."+entityName+"DetailForm.$valid) return; \n");
+		sb.append("if (!vm."+entityName+"DetailForm.$valid) return; \n");
 		
 		sb.append("$rootScope.parentServices.pop();\n");
 		sb.append("if ($rootScope.parentServices.length==0) \n");
@@ -537,7 +537,7 @@ public class JsGenerator {
 		//UPDATE
 		sb.append("function update()\n");
 		sb.append("{\n");
-		sb.append("if (!$scope."+entityName+"DetailForm.$valid) return; \n");
+		sb.append("if (!vm."+entityName+"DetailForm.$valid) return; \n");
 		
 		sb.append("$rootScope.parentServices.pop();\n");
 		sb.append("if ($rootScope.parentServices.length==0) \n");

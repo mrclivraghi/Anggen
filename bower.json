@@ -19,7 +19,7 @@
  "angular": "~1.5.3",
  "ng-file-upload": "^12.0.4",
  "angular-ui-grid": "^3.1.1",
-  "angular-ui-date": "^1.0.0",
+  "angular-ui-date": "^1.0.1",
   "bootstrap": "^3.3.6",
   "main": "./src/app/components/customLib/main.css",
 "alasql": "^0.2.5",

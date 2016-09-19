@@ -417,7 +417,7 @@ public class AngularGenerator {
 			
 			if (!search)
 			{
-				sbTab.append(" <uib-tab index=\""+(i+1)+"\" heading=\""+tab.getName()+"\" ng-click=\"vm.active="+(i+1)+"\">");
+				sbTab.append(" <uib-tab index=\""+(i+1)+"\" heading=\""+tab.getName()+"\" ng-click=\"vm.activeTab="+(i+1)+"\">");
 			}
 			 //<div role="tabpanel" class="tab-pane fade in active" id="home">
 			/*if (!search)
@@ -434,11 +434,11 @@ public class AngularGenerator {
 				if (EntityAttributeManager.getInstance(entityAttribute).getBetweenFilter() && (search))
 				{
 					entityAttribute.setName(entityAttribute.getName()+"From");
-					filled= filled || renderField(htmlTab, entityAttribute, search, style, baseEntity);
+					filled= renderField(htmlTab, entityAttribute, search, style, baseEntity,i+1) || filled;
 					entityAttribute.setName(entityAttribute.getName().replace("From","To"));
-					filled= filled || renderField(htmlTab, entityAttribute, search, style, baseEntity);
+					filled= renderField(htmlTab, entityAttribute, search, style, baseEntity,i+1)  || filled;
 				}else
-					filled= filled || renderField(htmlTab, entityAttribute, search, style, baseEntity);
+					filled= renderField(htmlTab, entityAttribute, search, style, baseEntity,i+1) || filled;
 				
 				if (search)
 				{
@@ -448,7 +448,7 @@ public class AngularGenerator {
 							String oldfieldName=filterField.getName();
 							String filterFieldName=EntityAttributeManager.getInstance(filterField).getParent().getName()+Utility.getFirstUpper(filterField.getName());
 							filterField.setName(filterFieldName);
-							filled= filled || renderField(htmlTab, filterField, search, style, baseEntity);
+							filled= renderField(htmlTab, filterField, search, style, baseEntity,i+1) || filled;
 							filterField.setName(oldfieldName);
 						}
 				}
@@ -515,7 +515,7 @@ public class AngularGenerator {
 	}
 
 	
-	private Boolean renderField(HtmlCanvas html,EntityAttribute entityAttribute, Boolean search,String style,String baseEntity) throws IOException
+	private Boolean renderField(HtmlCanvas html,EntityAttribute entityAttribute, Boolean search,String style,String baseEntity,Integer tabIndex) throws IOException
 	{
 
 		
@@ -668,11 +668,11 @@ public class AngularGenerator {
 								._button();
 							}
 							style="pull-left";
-							renderModalInsertExistingPanel(html,entityAttribute);
+							renderModalInsertExistingPanel(html,entityAttribute,tabIndex);
 							html.br().br();
 							html.div((new HtmlAttributes()).add("class", style)
 									.add("style", "width: 100%").add("ng-show", securityCondition+(securityCondition.equals("")?"":" && ")+checkSecurity(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget(),"search"),false)
-									.add("ng-if", "!$root.openNode."+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()+""));
+									.add("ng-if", "!$root.openNode."+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()+" && vm.activeTab=="+tabIndex));
 							//html._div();
 							html.div(CssGenerator.getPanel())
 							.div(CssGenerator.getPanelHeader())
@@ -726,7 +726,7 @@ public class AngularGenerator {
 	
 	
 	
-	private void renderModalInsertExistingPanel(HtmlCanvas html, EntityAttribute entityAttribute)
+	private void renderModalInsertExistingPanel(HtmlCanvas html, EntityAttribute entityAttribute,Integer tabIndex)
 	{
 		/*<!-- Modal -->
       <div class="modal-body">
@@ -744,7 +744,7 @@ public class AngularGenerator {
 			html.div((new HtmlAttributes()).add("id", entityName+"-"+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName())
 					.add("class", "modal fade")
 					.add("role", "dialog")
-					.add("ng-if", "!$root.openNode."+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()+"")
+					.add("ng-if", "!$root.openNode."+EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget().getName()+" && vm.activeTab=="+tabIndex)
 					)
 			.div((new HtmlAttributes()).add("class", "modal-dialog"))
 			.div((new HtmlAttributes()).add("class", "modal-content"))

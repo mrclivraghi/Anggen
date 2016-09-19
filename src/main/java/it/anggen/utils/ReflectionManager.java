@@ -63,7 +63,7 @@ public class ReflectionManager {
 			this.obj=this.classClass.newInstance();
 		} catch (InstantiationException | IllegalAccessException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 	

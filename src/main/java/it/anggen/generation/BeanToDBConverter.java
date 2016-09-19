@@ -234,6 +234,7 @@ public class BeanToDBConverter {
 		project.setName(temp.parseName(projectName));
 		projectRepository.save(project);
 		EntityGroup restrictionDataGroup = null;
+		List<EntityGroup> entityGroupList = new ArrayList<EntityGroup>();
 		if (enableRestrictionData)
 		{
 			restrictionDataGroup= new EntityGroup();
@@ -248,10 +249,12 @@ public class BeanToDBConverter {
 			restrictionEntityGroup.setEntityGroup(restrictionDataGroup);
 			restrictionEntityGroup.setRole(adminRole);
 			restrictionEntityGroupRepository.save(restrictionEntityGroup);
+			entityGroupList.add(restrictionDataGroup);
 		}
 		
-		List<EntityGroup> entityGroupList = new ArrayList<EntityGroup>();
+		
 		List<EnumEntity> enumEntityList= new ArrayList<EnumEntity>();
+		int k=0;
 		for (String myPackage: packageList)
 		{
 				EntityGroup entityGroup= new EntityGroup();
@@ -273,10 +276,14 @@ public class BeanToDBConverter {
 				
 				Set<Class<?>> packageClassSet = ReflectionManager.getClassInPackage(myPackage);
 				List<Entity> packageEntityList = new ArrayList<Entity>();
+				
 				for (Class myClass: packageClassSet)
 				{
-					if (myClass.isEnum()) continue;
 					
+					
+					
+					if (myClass.isEnum()) continue;
+					System.out.println("CLASS"+myClass.getName()+"---"+k++);
 					ReflectionManager reflectionManager = new ReflectionManager(myClass);
 					
 					Entity entity = entityMap.get(reflectionManager.parseName());
@@ -589,7 +596,7 @@ public class BeanToDBConverter {
 		project.setEntityGroupList(entityGroupList);
 		project.setEnumEntityList(enumEntityList);
 		projectRepository.save(project);
-		putAutoAnnotation(project);
+		//putAutoAnnotation(project);
 		generateTabForRelationship(project);
 	}
 	
@@ -690,6 +697,7 @@ public class BeanToDBConverter {
 				}
 		}
 		entity.setEntityId(getEntityId(entity));
+		System.out.println("Saving entity" + entity.getEntityId()+" with name "+entity.getName());	
 		entityRepository.save(entity);
 		//System.out.println("Ho salvato "+entity.getName()+" con id "+entity.getEntityId()+ " ma sul db ho "+savedEntity.getEntityId());
 		entityMap.put(reflectionManager.parseName(), entity);
@@ -910,7 +918,7 @@ public class BeanToDBConverter {
 	
 	private Boolean isAngGenSecurity(Entity entity)
 	{
-		if (projectName.equals("serverTest"))
+		if (projectName.contains("serverTest"))
 			return false;
 		if (entity.getName().equals("restrictionField") || 
 				entity.getName().equals("restrictionEntityGroup") || 
@@ -957,6 +965,7 @@ public class BeanToDBConverter {
 	{
 		for (EntityGroup entityGroup : project.getEntityGroupList())
 		{
+			if (entityGroup.getEntityList()!=null)
 			for (Entity entity : entityGroup.getEntityList())
 				if (!entity.getIgnoreMenu())
 				{
@@ -996,16 +1005,17 @@ public class BeanToDBConverter {
 	{
 		for (EntityGroup entityGroup : project.getEntityGroupList())
 		{
+			if (entityGroup.getEntityList()!=null)
 			for (Entity entity : entityGroup.getEntityList())
 			{
 				
 				for (it.anggen.model.entity.Tab tab : entity.getTabList())
 				if (tab.getName().equals("Detail"))
 				{
-				
-				for (Relationship relationship: tab.getRelationshipList())
-				{
-					
+
+					for (Relationship relationship: tab.getRelationshipList())
+					{
+
 						it.anggen.model.entity.Tab newTab = new it.anggen.model.entity.Tab();
 						newTab.setEntity(entity);
 						newTab.setName(Utility.getFirstUpper(relationship.getName()));
@@ -1016,9 +1026,9 @@ public class BeanToDBConverter {
 						relationship.setEntity(entity);
 						tabRepository.save(newTab);
 						relationshipRepository.save(relationship);
-				}
-				
-				
+					}
+
+
 				}
 			}
 		}

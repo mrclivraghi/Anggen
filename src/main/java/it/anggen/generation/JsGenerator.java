@@ -608,12 +608,12 @@ public class JsGenerator {
 		
 		for (Tab tab: entityManager.getTabList())
 		{
-			sb.append("function refreshTable"+Utility.getFirstUpper(tab.getName().replaceAll(" ", ""))+"() \n");
-			sb.append("{\n");
-			sb.append(resetTableTab(tab.getName(),entity));
-			sb.append("}\n");
+			//sb.append("function refreshTable"+Utility.getFirstUpper(tab.getName().replaceAll(" ", ""))+"() \n");
+			//sb.append("{\n");
+			//sb.append(resetTableTab(tab.getName(),entity));
+			//sb.append("}\n");
 			
-			sb.append("vm.refreshTable"+Utility.getFirstUpper(tab.getName().replaceAll(" ", ""))+"=refreshTable"+Utility.getFirstUpper(tab.getName().replaceAll(" ", ""))+";\n");
+			//sb.append("vm.refreshTable"+Utility.getFirstUpper(tab.getName().replaceAll(" ", ""))+"=refreshTable"+Utility.getFirstUpper(tab.getName().replaceAll(" ", ""))+";\n");
 		}
 
 
@@ -902,6 +902,7 @@ public class JsGenerator {
 		
 		sb.append("if (row.isSelected)\n");
 		sb.append("{\n");
+		sb.append("vm.activeTab=1;\n");
 		//if (isParent)
 		//{
 			//sb.append(Utility.getEntityCallName(entityName)+"Service.setSelectedEntity(row.entity);\n");
@@ -2140,8 +2141,8 @@ MainService.parentService.childrenList.roleList=response.data;
 		sb.append("})();\n");
 		
 		File file = new File("");
-		String directoryAngularFiles=file.getAbsolutePath()+Generator.generateAngularDirectory+"main/";
-		saveAsJsFile(directoryAngularFiles, "main.controller", sb.toString());
+		String directoryAngularFiles=file.getAbsolutePath()+Generator.generateAngularDirectory+"components/swagger/";
+		saveAsJsFile(directoryAngularFiles, "swagger.controller", sb.toString());
 
 	}
 	

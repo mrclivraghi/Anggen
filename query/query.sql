@@ -1,5 +1,7 @@
 select * from meta.project;
 select * from meta.generation_run;
+delete from meta.generation_run;
+select * from meta.entity order by entity_id asc
 
 truncate table meta.project cascade;
 truncate table sso.role cascade;
@@ -9,7 +11,7 @@ truncate table log.log_entry cascade;
 select * from meta.project
 select * from meta.entity_group where project_id_project=710
 select * from meta.entity where entity_group_id_entity_group is null
-select * from meta.field where field_id in (7187,7188,7190)
+select * from meta.field where entity_id_entity=17     where field_id in (7187,7188,7190)
 update meta.field set entity_id_entity=2 where field_id in (7187,7188,7190)
 select * from meta.tab where entity_id_entity=2
 select * from meta.enum_entity 

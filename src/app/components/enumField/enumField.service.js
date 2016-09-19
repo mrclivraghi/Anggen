@@ -71,6 +71,13 @@ var promise= $http.post("http://127.0.0.1:8080/ServerTestApp/enumField/"+this.se
 });
 return promise; 
 }
+ this.initAnnotationList= function()
+{
+var promise= $http
+.post("http://127.0.0.1:8080/ServerTestApp/annotation/search",
+{});
+return promise;
+};
  this.initEntityList= function()
 {
 var promise= $http
@@ -85,17 +92,10 @@ var promise= $http
 {});
 return promise;
 };
- this.initEntityList= function()
+ this.initTabList= function()
 {
 var promise= $http
-.post("http://127.0.0.1:8080/ServerTestApp/entity/search",
-{});
-return promise;
-};
- this.initAnnotationList= function()
-{
-var promise= $http
-.post("http://127.0.0.1:8080/ServerTestApp/annotation/search",
+.post("http://127.0.0.1:8080/ServerTestApp/tab/search",
 {});
 return promise;
 };

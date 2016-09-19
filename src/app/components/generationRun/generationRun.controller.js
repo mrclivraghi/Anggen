@@ -38,7 +38,7 @@ projectService.selectedEntity.show=false;
 delete $rootScope.openNode.project;
 UtilityService.removeObjectFromList($rootScope.parentServices,projectService);
 }
-angular.element('#generationRunTabs li:eq(0) a').tab('show');
+//angular.element('#generationRunTabs li:eq(0) a').tab('show');
 }
 		
 function search()
@@ -57,7 +57,7 @@ return;
 }
 function insert()
 {
-if (!$scope.generationRunDetailForm.$valid) return; 
+if (!vm.generationRunDetailForm.$valid) return; 
 $rootScope.parentServices.pop();
 if ($rootScope.parentServices.length==0) 
 {
@@ -89,7 +89,7 @@ return;
 }
 function update()
 {
-if (!$scope.generationRunDetailForm.$valid) return; 
+if (!vm.generationRunDetailForm.$valid) return; 
 $rootScope.parentServices.pop();
 if ($rootScope.parentServices.length==0) 
 {
@@ -149,12 +149,6 @@ $log.debug(response);
 return; 
 });
 }
-function refreshTableDetail() 
-{
-if ($scope.projectGridApi!=undefined && $scope.projectGridApi!=null)
- $scope.projectGridApi.core.handleWindowResize(); 
-}
-vm.refreshTableDetail=refreshTableDetail;
 function loadFile(file,field)
 {
 generationRunService.loadFile(file,field).then(function successCallback(response) {
@@ -208,7 +202,7 @@ return;
   }	
 );
 }
-angular.element('#projectTabs li:eq(0) a').tab('show');
+//angular.element('#projectTabs li:eq(0) a').tab('show');
 }
 vm.showProjectDetail=showProjectDetail;
 function downloadList()
@@ -238,13 +232,14 @@ vm.generationRunGridApi = gridApi;
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
+vm.activeTab=1;
 generationRunService.searchOne(row.entity).then(function(response) { 
 $log.debug(response.data);
 $rootScope.openNode.generationRun=true;
 $rootScope.parentServices.push(generationRunService);
 generationRunService.setSelectedEntity(response.data[0]);
 });
-angular.element('#generationRunTabs li:eq(0) a').tab('show');
+//angular.element('#generationRunTabs li:eq(0) a').tab('show');
 }
 else 
 generationRunService.setSelectedEntity(null);
@@ -263,13 +258,14 @@ vm.projectGridApi = gridApi;
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
+vm.activeTab=1;
 projectService.searchOne(row.entity).then(function(response) { 
 $log.debug(response.data);
 $rootScope.openNode.project=true;
 $rootScope.parentServices.push(projectService);
 projectService.setSelectedEntity(response.data[0]);
 });
-angular.element('#projectTabs li:eq(0) a').tab('show');
+//angular.element('#projectTabs li:eq(0) a').tab('show');
 }
 else 
 projectService.setSelectedEntity(null);
@@ -288,54 +284,6 @@ function successCallback(response) {
 $log.debug("response-ok");
 $log.debug(response);
 projectService.setSelectedEntity(response.data[0]);
-  }, function errorCallback(response) {
-UtilityService.AlertError.init({selector: "#alertError"});
-UtilityService.AlertError.show("Si è verificato un errore");
-$log.debug(response);
-return; 
-  }	
-);
-restrictionFieldService.initGenerationRunList().then(function(response) {
-generationRunService.preparedData.entityList=response.data;
-});
-
-if (restrictionFieldService.selectedEntity.restrictionFieldId!=undefined) restrictionFieldService.searchOne(restrictionFieldService.selectedEntity).then(
-function successCallback(response) {
-$log.debug("response-ok");
-$log.debug(response);
-restrictionFieldService.setSelectedEntity(response.data[0]);
-  }, function errorCallback(response) {
-UtilityService.AlertError.init({selector: "#alertError"});
-UtilityService.AlertError.show("Si è verificato un errore");
-$log.debug(response);
-return; 
-  }	
-);
-annotationService.initGenerationRunList().then(function(response) {
-generationRunService.preparedData.entityList=response.data;
-});
-
-if (annotationService.selectedEntity.annotationId!=undefined) annotationService.searchOne(annotationService.selectedEntity).then(
-function successCallback(response) {
-$log.debug("response-ok");
-$log.debug(response);
-annotationService.setSelectedEntity(response.data[0]);
-  }, function errorCallback(response) {
-UtilityService.AlertError.init({selector: "#alertError"});
-UtilityService.AlertError.show("Si è verificato un errore");
-$log.debug(response);
-return; 
-  }	
-);
-entityService.initGenerationRunList().then(function(response) {
-generationRunService.preparedData.entityList=response.data;
-});
-
-if (entityService.selectedEntity.entityId!=undefined) entityService.searchOne(entityService.selectedEntity).then(
-function successCallback(response) {
-$log.debug("response-ok");
-$log.debug(response);
-entityService.setSelectedEntity(response.data[0]);
   }, function errorCallback(response) {
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");

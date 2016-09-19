@@ -53,14 +53,12 @@ if (targetObject[val]!=undefined)
 		targetObject[val].pop();
 if (sourceObject[val] != null)
 {
-	if (!targetObject[val])
-		targetObject[val]=[];
+ if (!targetObject[val])
+targetObject[val]=[];
 		for (var j = 0; j < sourceObject[val].length; j++)
 				targetObject[val]
 			.push(sourceObject[val][j]);
-
-	
-	}
+}
 	} else 
 			this.emptyList(targetObject[val]);
 	} else {

@@ -92,10 +92,10 @@ var promise= $http
 {});
 return promise;
 };
- this.initEntityList= function()
+ this.initTabList= function()
 {
 var promise= $http
-.post("http://127.0.0.1:8080/ServerTestApp/entity/search",
+.post("http://127.0.0.1:8080/ServerTestApp/tab/search",
 {});
 return promise;
 };
@@ -110,6 +110,7 @@ columnDefs: [
 { name: 'relationshipId'},
 { name: 'priority'},
 { name: 'name'},
+{ name: 'referencedField'},
 { name: 'addDate', cellFilter: "date:'dd-MM-yyyy'"},
 { name: 'modDate', cellFilter: "date:'dd-MM-yyyy'"},
 { name: 'entityTarget.entityTargetId', displayName: 'entityTarget'},

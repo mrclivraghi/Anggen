@@ -1,5 +1,5 @@
 <div>
-	<form id="annotationDetailForm" name="annotationDetailForm" ng-show="vm.selectedEntity.show">
+	<form id="vm.annotationDetailForm" name="vm.annotationDetailForm" ng-if="vm.selectedEntity.show">
 		<div class="panel panel-default default-panel">
 			<div class="panel-heading">Detail annotation {{ vm.selectedEntity.annotationId }} <button type="button" class="close" aria-label="Close" ng-click="vm.closeEntityDetail()">
 	<span aria-hidden="true">&times;
@@ -9,7 +9,7 @@
 			</div>
 
 			<div class="panel-body">
-				<uib-tabset active="vm.activeTab"> <uib-tab index="1" heading="Detail" ng-click="vm.active=1"><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !annotationDetailForm.annotationId.$valid, &#39;has-success&#39;: annotationDetailForm.annotationId.$valid}" style="height:59px" ng-show="true ">
+				<uib-tabset active="vm.activeTab"> <uib-tab index="1" heading="Detail" ng-click="vm.activeTab=1"><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.annotationDetailForm.annotationId.$valid, &#39;has-success&#39;: vm.annotationDetailForm.annotationId.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
 		<span class="input-group-addon">annotationId
 		</span>
@@ -18,7 +18,7 @@
 		
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !annotationDetailForm.annotationType.$valid, &#39;has-success&#39;: annotationDetailForm.annotationType.$valid}" style="height:59px" ng-show="true ">
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.annotationDetailForm.annotationType.$valid, &#39;has-success&#39;: vm.annotationDetailForm.annotationType.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
 		<span class="input-group-addon">annotationType
 		</span>
@@ -28,7 +28,7 @@
 
 	</div>
 </div>
-<div id="annotation-annotationAttribute" class="modal fade" role="dialog" ng-if="!$root.openNode.annotationAttribute">
+ </uib-tab> <uib-tab index="2" heading="AnnotationAttribute" ng-click="vm.activeTab=2"><div id="annotation-annotationAttribute" class="modal fade" role="dialog" ng-if="!$root.openNode.annotationAttribute &amp;&amp; vm.activeTab==2">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -74,7 +74,7 @@
 </div>
 <br/>
 <br/>
-<div class="pull-left" style="width: 100%" ng-show="true  && ($root.restrictionList.field.restrictionItemMap.annotationAttribute.canSearch==true)" ng-if="!$root.openNode.annotationAttribute">
+<div class="pull-left" style="width: 100%" ng-show="true  && ($root.restrictionList.field.restrictionItemMap.annotationAttribute.canSearch==true)" ng-if="!$root.openNode.annotationAttribute &amp;&amp; vm.activeTab==2">
 	<div class="panel panel-default default-panel">
 		<div class="panel-heading">annotationAttribute<button ng-click="vm.showAnnotationAttributeDetail()" class="btn btn-default  pull-right" style="margin-top: -7px" ng-show="($root.restrictionList.field.restrictionItemMap.annotationAttribute.canCreate==true)">Add new annotationAttribute</button>
 <button type="button" class="btn btn-default pull-right" style="margin-top: -7px" data-toggle="modal" data-target="#annotation-annotationAttribute">Link existing</button>
@@ -99,26 +99,26 @@
 
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !annotationDetailForm.generationRun.$valid, &#39;has-success&#39;: annotationDetailForm.generationRun.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.generationRun">
+ </uib-tab> <uib-tab index="3" heading="Field" ng-click="vm.activeTab=3"><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.annotationDetailForm.field.$valid, &#39;has-success&#39;: vm.annotationDetailForm.field.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.field">
 	<div class="input-group">
-		<span class="input-group-addon">generationRun
+		<span class="input-group-addon">field
 		</span>
 
-		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.generationRun" id="generationRun" name="generationRun" ng-options="generationRun as  generationRun.generationRunId for generationRun in vm.generationRunPreparedData.entityList track by generationRun.generationRunId" enctype="UTF-8">
+		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.field" id="field" name="field" ng-options="field as  field.fieldId+&#39; &#39;+ field.name for field in vm.fieldPreparedData.entityList track by field.fieldId" enctype="UTF-8">
 		</select>
 
 		<span class="input-group-btn">
-			<button ng-click="vm.showGenerationRunDetail()" class="btn btn-default " id="generationRun" ng-if="vm.selectedEntity.generationRun==null">Add new field
+			<button ng-click="vm.showFieldDetail()" class="btn btn-default " id="field" ng-if="vm.selectedEntity.field==null">Add new field
 			</button>
 
-			<button ng-click="vm.showGenerationRunDetail()" class="btn btn-default " id="generationRun" ng-if="vm.selectedEntity.generationRun!=null">Show detail
+			<button ng-click="vm.showFieldDetail()" class="btn btn-default " id="field" ng-if="vm.selectedEntity.field!=null">Show detail
 			</button>
 
 		</span>
 
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !annotationDetailForm.enumField.$valid, &#39;has-success&#39;: annotationDetailForm.enumField.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.enumField">
+ </uib-tab> <uib-tab index="4" heading="EnumField" ng-click="vm.activeTab=4"><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.annotationDetailForm.enumField.$valid, &#39;has-success&#39;: vm.annotationDetailForm.enumField.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.enumField">
 	<div class="input-group">
 		<span class="input-group-addon">enumField
 		</span>
@@ -137,7 +137,7 @@
 
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !annotationDetailForm.relationship.$valid, &#39;has-success&#39;: annotationDetailForm.relationship.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.relationship">
+ </uib-tab> <uib-tab index="5" heading="Relationship" ng-click="vm.activeTab=5"><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.annotationDetailForm.relationship.$valid, &#39;has-success&#39;: vm.annotationDetailForm.relationship.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.relationship">
 	<div class="input-group">
 		<span class="input-group-addon">relationship
 		</span>

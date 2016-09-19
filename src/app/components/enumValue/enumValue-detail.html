@@ -1,5 +1,5 @@
 <div>
-	<form id="enumValueDetailForm" name="enumValueDetailForm" ng-show="vm.selectedEntity.show">
+	<form id="vm.enumValueDetailForm" name="vm.enumValueDetailForm" ng-if="vm.selectedEntity.show">
 		<div class="panel panel-default default-panel">
 			<div class="panel-heading">Detail enumValue {{ vm.selectedEntity.enumValueId }} <button type="button" class="close" aria-label="Close" ng-click="vm.closeEntityDetail()">
 	<span aria-hidden="true">&times;
@@ -9,7 +9,7 @@
 			</div>
 
 			<div class="panel-body">
-				<uib-tabset active="vm.activeTab"> <uib-tab index="1" heading="Detail" ng-click="vm.active=1"><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !enumValueDetailForm.enumValueId.$valid, &#39;has-success&#39;: enumValueDetailForm.enumValueId.$valid}" style="height:59px" ng-show="true ">
+				<uib-tabset active="vm.activeTab"> <uib-tab index="1" heading="Detail" ng-click="vm.activeTab=1"><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.enumValueDetailForm.enumValueId.$valid, &#39;has-success&#39;: vm.enumValueDetailForm.enumValueId.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
 		<span class="input-group-addon">enumValueId
 		</span>
@@ -18,7 +18,7 @@
 		
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !enumValueDetailForm.value.$valid, &#39;has-success&#39;: enumValueDetailForm.value.$valid}" style="height:59px" ng-show="true ">
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.enumValueDetailForm.value.$valid, &#39;has-success&#39;: vm.enumValueDetailForm.value.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
 		<span class="input-group-addon">value
 		</span>
@@ -27,7 +27,7 @@
 		
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !enumValueDetailForm.name.$valid, &#39;has-success&#39;: enumValueDetailForm.name.$valid}" style="height:59px" ng-show="true ">
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.enumValueDetailForm.name.$valid, &#39;has-success&#39;: vm.enumValueDetailForm.name.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
 		<span class="input-group-addon">name
 		</span>
@@ -36,7 +36,7 @@
 		
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !enumValueDetailForm.enumEntity.$valid, &#39;has-success&#39;: enumValueDetailForm.enumEntity.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.enumEntity">
+ </uib-tab> <uib-tab index="2" heading="EnumEntity" ng-click="vm.activeTab=2"><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.enumValueDetailForm.enumEntity.$valid, &#39;has-success&#39;: vm.enumValueDetailForm.enumEntity.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.enumEntity">
 	<div class="input-group">
 		<span class="input-group-addon">enumEntity
 		</span>

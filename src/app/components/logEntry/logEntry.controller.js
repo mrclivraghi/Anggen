@@ -35,7 +35,7 @@ logEntryService.selectedEntity.show=true;
 if (logEntryService.isParent()) 
 {
 }
-angular.element('#logEntryTabs li:eq(0) a').tab('show');
+//angular.element('#logEntryTabs li:eq(0) a').tab('show');
 }
 		
 function search()
@@ -54,7 +54,7 @@ return;
 }
 function insert()
 {
-if (!$scope.logEntryDetailForm.$valid) return; 
+if (!vm.logEntryDetailForm.$valid) return; 
 $rootScope.parentServices.pop();
 if ($rootScope.parentServices.length==0) 
 {
@@ -86,7 +86,7 @@ return;
 }
 function update()
 {
-if (!$scope.logEntryDetailForm.$valid) return; 
+if (!vm.logEntryDetailForm.$valid) return; 
 $rootScope.parentServices.pop();
 if ($rootScope.parentServices.length==0) 
 {
@@ -143,10 +143,6 @@ $log.debug(response);
 return; 
 });
 }
-function refreshTableDetail() 
-{
-}
-vm.refreshTableDetail=refreshTableDetail;
 function loadFile(file,field)
 {
 logEntryService.loadFile(file,field).then(function successCallback(response) {
@@ -177,13 +173,14 @@ vm.logEntryGridApi = gridApi;
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
+vm.activeTab=1;
 logEntryService.searchOne(row.entity).then(function(response) { 
 $log.debug(response.data);
 $rootScope.openNode.logEntry=true;
 $rootScope.parentServices.push(logEntryService);
 logEntryService.setSelectedEntity(response.data[0]);
 });
-angular.element('#logEntryTabs li:eq(0) a').tab('show');
+//angular.element('#logEntryTabs li:eq(0) a').tab('show');
 }
 else 
 logEntryService.setSelectedEntity(null);

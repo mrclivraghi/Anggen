@@ -54,7 +54,7 @@ projectService.selectedEntity.show=false;
 delete $rootScope.openNode.project;
 UtilityService.removeObjectFromList($rootScope.parentServices,projectService);
 }
-angular.element('#entityGroupTabs li:eq(0) a').tab('show');
+//angular.element('#entityGroupTabs li:eq(0) a').tab('show');
 }
 		
 function search()
@@ -79,7 +79,7 @@ return;
 }
 function insert()
 {
-if (!$scope.entityGroupDetailForm.$valid) return; 
+if (!vm.entityGroupDetailForm.$valid) return; 
 $rootScope.parentServices.pop();
 if ($rootScope.parentServices.length==0) 
 {
@@ -111,7 +111,7 @@ return;
 }
 function update()
 {
-if (!$scope.entityGroupDetailForm.$valid) return; 
+if (!vm.entityGroupDetailForm.$valid) return; 
 $rootScope.parentServices.pop();
 if ($rootScope.parentServices.length==0) 
 {
@@ -177,16 +177,6 @@ $log.debug(response);
 return; 
 });
 }
-function refreshTableDetail() 
-{
-if ($scope.restrictionEntityGroupGridApi!=undefined && $scope.restrictionEntityGroupGridApi!=null)
- $scope.restrictionEntityGroupGridApi.core.handleWindowResize(); 
-if ($scope.entityGridApi!=undefined && $scope.entityGridApi!=null)
- $scope.entityGridApi.core.handleWindowResize(); 
-if ($scope.projectGridApi!=undefined && $scope.projectGridApi!=null)
- $scope.projectGridApi.core.handleWindowResize(); 
-}
-vm.refreshTableDetail=refreshTableDetail;
 function loadFile(file,field)
 {
 entityGroupService.loadFile(file,field).then(function successCallback(response) {
@@ -240,7 +230,7 @@ return;
   }	
 );
 }
-angular.element('#restrictionEntityGroupTabs li:eq(0) a').tab('show');
+//angular.element('#restrictionEntityGroupTabs li:eq(0) a').tab('show');
 }
 vm.showRestrictionEntityGroupDetail=showRestrictionEntityGroupDetail;
  function showEntityDetail(index)
@@ -284,7 +274,7 @@ return;
   }	
 );
 }
-angular.element('#entityTabs li:eq(0) a').tab('show');
+//angular.element('#entityTabs li:eq(0) a').tab('show');
 }
 vm.showEntityDetail=showEntityDetail;
  function showProjectDetail(index)
@@ -328,7 +318,7 @@ return;
   }	
 );
 }
-angular.element('#projectTabs li:eq(0) a').tab('show');
+//angular.element('#projectTabs li:eq(0) a').tab('show');
 }
 vm.showProjectDetail=showProjectDetail;
 function downloadList()
@@ -384,13 +374,14 @@ vm.entityGroupGridApi = gridApi;
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
+vm.activeTab=1;
 entityGroupService.searchOne(row.entity).then(function(response) { 
 $log.debug(response.data);
 $rootScope.openNode.entityGroup=true;
 $rootScope.parentServices.push(entityGroupService);
 entityGroupService.setSelectedEntity(response.data[0]);
 });
-angular.element('#entityGroupTabs li:eq(0) a').tab('show');
+//angular.element('#entityGroupTabs li:eq(0) a').tab('show');
 }
 else 
 entityGroupService.setSelectedEntity(null);
@@ -409,13 +400,14 @@ vm.restrictionEntityGroupGridApi = gridApi;
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
+vm.activeTab=1;
 restrictionEntityGroupService.searchOne(row.entity).then(function(response) { 
 $log.debug(response.data);
 $rootScope.openNode.restrictionEntityGroup=true;
 $rootScope.parentServices.push(restrictionEntityGroupService);
 restrictionEntityGroupService.setSelectedEntity(response.data[0]);
 });
-angular.element('#restrictionEntityGroupTabs li:eq(0) a').tab('show');
+//angular.element('#restrictionEntityGroupTabs li:eq(0) a').tab('show');
 }
 else 
 restrictionEntityGroupService.setSelectedEntity(null);
@@ -434,13 +426,14 @@ vm.entityGridApi = gridApi;
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
+vm.activeTab=1;
 entityService.searchOne(row.entity).then(function(response) { 
 $log.debug(response.data);
 $rootScope.openNode.entity=true;
 $rootScope.parentServices.push(entityService);
 entityService.setSelectedEntity(response.data[0]);
 });
-angular.element('#entityTabs li:eq(0) a').tab('show');
+//angular.element('#entityTabs li:eq(0) a').tab('show');
 }
 else 
 entityService.setSelectedEntity(null);
@@ -459,13 +452,14 @@ vm.projectGridApi = gridApi;
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
+vm.activeTab=1;
 projectService.searchOne(row.entity).then(function(response) { 
 $log.debug(response.data);
 $rootScope.openNode.project=true;
 $rootScope.parentServices.push(projectService);
 projectService.setSelectedEntity(response.data[0]);
 });
-angular.element('#projectTabs li:eq(0) a').tab('show');
+//angular.element('#projectTabs li:eq(0) a').tab('show');
 }
 else 
 projectService.setSelectedEntity(null);
@@ -475,15 +469,15 @@ projectService.selectedEntity.show = row.isSelected;
 });
   };
 function updateParentEntities() { 
-restrictionEntityGroupService.initEntityGroupList().then(function(response) {
+projectService.initEntityGroupList().then(function(response) {
 entityGroupService.preparedData.entityList=response.data;
 });
 
-if (restrictionEntityGroupService.selectedEntity.restrictionEntityGroupId!=undefined) restrictionEntityGroupService.searchOne(restrictionEntityGroupService.selectedEntity).then(
+if (projectService.selectedEntity.projectId!=undefined) projectService.searchOne(projectService.selectedEntity).then(
 function successCallback(response) {
 $log.debug("response-ok");
 $log.debug(response);
-restrictionEntityGroupService.setSelectedEntity(response.data[0]);
+projectService.setSelectedEntity(response.data[0]);
   }, function errorCallback(response) {
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
@@ -507,15 +501,15 @@ $log.debug(response);
 return; 
   }	
 );
-projectService.initEntityGroupList().then(function(response) {
+restrictionEntityGroupService.initEntityGroupList().then(function(response) {
 entityGroupService.preparedData.entityList=response.data;
 });
 
-if (projectService.selectedEntity.projectId!=undefined) projectService.searchOne(projectService.selectedEntity).then(
+if (restrictionEntityGroupService.selectedEntity.restrictionEntityGroupId!=undefined) restrictionEntityGroupService.searchOne(restrictionEntityGroupService.selectedEntity).then(
 function successCallback(response) {
 $log.debug("response-ok");
 $log.debug(response);
-projectService.setSelectedEntity(response.data[0]);
+restrictionEntityGroupService.setSelectedEntity(response.data[0]);
   }, function errorCallback(response) {
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");

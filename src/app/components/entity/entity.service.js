@@ -9,7 +9,7 @@ function EntityService($http,MainService,UtilityService)
 this.entityList =		[];
 this.preparedData={};
 this.selectedEntity= 	{show: false 
-,projectList: [],generationRunList: [],enumFieldList: [],entityList: [],relationshipList: []};
+,fieldList: [],enumFieldList: [],tabList: [],relationshipList: [],restrictionEntityList: []};
 this.hidden= { hiddenFields: []};
 this.isParent=function()
 {
@@ -71,17 +71,10 @@ var promise= $http.post("http://127.0.0.1:8080/ServerTestApp/entity/"+this.selec
 });
 return promise; 
 }
- this.initProjectList= function()
+ this.initFieldList= function()
 {
 var promise= $http
-.post("http://127.0.0.1:8080/ServerTestApp/project/search",
-{});
-return promise;
-};
- this.initGenerationRunList= function()
-{
-var promise= $http
-.post("http://127.0.0.1:8080/ServerTestApp/generationRun/search",
+.post("http://127.0.0.1:8080/ServerTestApp/field/search",
 {});
 return promise;
 };
@@ -92,6 +85,20 @@ var promise= $http
 {});
 return promise;
 };
+ this.initEntityGroupList= function()
+{
+var promise= $http
+.post("http://127.0.0.1:8080/ServerTestApp/entityGroup/search",
+{});
+return promise;
+};
+ this.initTabList= function()
+{
+var promise= $http
+.post("http://127.0.0.1:8080/ServerTestApp/tab/search",
+{});
+return promise;
+};
  this.initRelationshipList= function()
 {
 var promise= $http
@@ -99,17 +106,10 @@ var promise= $http
 {});
 return promise;
 };
- this.initEntityList= function()
+ this.initRestrictionEntityList= function()
 {
 var promise= $http
-.post("http://127.0.0.1:8080/ServerTestApp/entity/search",
-{});
-return promise;
-};
- this.initRelationshipList= function()
-{
-var promise= $http
-.post("http://127.0.0.1:8080/ServerTestApp/relationship/search",
+.post("http://127.0.0.1:8080/ServerTestApp/restrictionEntity/search",
 {});
 return promise;
 };

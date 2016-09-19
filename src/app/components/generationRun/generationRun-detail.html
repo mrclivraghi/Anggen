@@ -1,5 +1,5 @@
 <div>
-	<form id="generationRunDetailForm" name="generationRunDetailForm" ng-show="vm.selectedEntity.show">
+	<form id="vm.generationRunDetailForm" name="vm.generationRunDetailForm" ng-if="vm.selectedEntity.show">
 		<div class="panel panel-default default-panel">
 			<div class="panel-heading">Detail generationRun {{ vm.selectedEntity.generationRunId }} <button type="button" class="close" aria-label="Close" ng-click="vm.closeEntityDetail()">
 	<span aria-hidden="true">&times;
@@ -9,7 +9,7 @@
 			</div>
 
 			<div class="panel-body">
-				<uib-tabset active="vm.activeTab"> <uib-tab index="1" heading="Detail" ng-click="vm.active=1"><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !generationRunDetailForm.generationRunId.$valid, &#39;has-success&#39;: generationRunDetailForm.generationRunId.$valid}" style="height:59px" ng-show="true ">
+				<uib-tabset active="vm.activeTab"> <uib-tab index="1" heading="Detail" ng-click="vm.activeTab=1"><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.generationRunDetailForm.generationRunId.$valid, &#39;has-success&#39;: vm.generationRunDetailForm.generationRunId.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
 		<span class="input-group-addon">generationRunId
 		</span>
@@ -18,7 +18,7 @@
 		
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !generationRunDetailForm.status.$valid, &#39;has-success&#39;: generationRunDetailForm.status.$valid}" style="height:59px" ng-show="true ">
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.generationRunDetailForm.status.$valid, &#39;has-success&#39;: vm.generationRunDetailForm.status.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
 		<span class="input-group-addon">status
 		</span>
@@ -27,7 +27,7 @@
 		
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !generationRunDetailForm.startDate.$valid, &#39;has-success&#39;: generationRunDetailForm.startDate.$valid}" style="height:59px" ng-show="true ">
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.generationRunDetailForm.startDate.$valid, &#39;has-success&#39;: vm.generationRunDetailForm.startDate.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
 		<span class="input-group-addon">startDate
 		</span>
@@ -36,7 +36,7 @@
 		
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !generationRunDetailForm.endDate.$valid, &#39;has-success&#39;: generationRunDetailForm.endDate.$valid}" style="height:59px" ng-show="true ">
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.generationRunDetailForm.endDate.$valid, &#39;has-success&#39;: vm.generationRunDetailForm.endDate.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
 		<span class="input-group-addon">endDate
 		</span>
@@ -45,7 +45,7 @@
 		
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !generationRunDetailForm.project.$valid, &#39;has-success&#39;: generationRunDetailForm.project.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.project">
+ </uib-tab> <uib-tab index="2" heading="Project" ng-click="vm.activeTab=2"><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.generationRunDetailForm.project.$valid, &#39;has-success&#39;: vm.generationRunDetailForm.project.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.project">
 	<div class="input-group">
 		<span class="input-group-addon">project
 		</span>

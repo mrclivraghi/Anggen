@@ -52,7 +52,7 @@ enumFieldService.selectedEntity.show=false;
 delete $rootScope.openNode.enumField;
 UtilityService.removeObjectFromList($rootScope.parentServices,enumFieldService);
 }
-angular.element('#enumEntityTabs li:eq(0) a').tab('show');
+//angular.element('#enumEntityTabs li:eq(0) a').tab('show');
 }
 		
 function search()
@@ -77,7 +77,7 @@ return;
 }
 function insert()
 {
-if (!$scope.enumEntityDetailForm.$valid) return; 
+if (!vm.enumEntityDetailForm.$valid) return; 
 $rootScope.parentServices.pop();
 if ($rootScope.parentServices.length==0) 
 {
@@ -109,7 +109,7 @@ return;
 }
 function update()
 {
-if (!$scope.enumEntityDetailForm.$valid) return; 
+if (!vm.enumEntityDetailForm.$valid) return; 
 $rootScope.parentServices.pop();
 if ($rootScope.parentServices.length==0) 
 {
@@ -175,16 +175,6 @@ $log.debug(response);
 return; 
 });
 }
-function refreshTableDetail() 
-{
-if ($scope.projectGridApi!=undefined && $scope.projectGridApi!=null)
- $scope.projectGridApi.core.handleWindowResize(); 
-if ($scope.enumValueGridApi!=undefined && $scope.enumValueGridApi!=null)
- $scope.enumValueGridApi.core.handleWindowResize(); 
-if ($scope.enumFieldGridApi!=undefined && $scope.enumFieldGridApi!=null)
- $scope.enumFieldGridApi.core.handleWindowResize(); 
-}
-vm.refreshTableDetail=refreshTableDetail;
 function loadFile(file,field)
 {
 enumEntityService.loadFile(file,field).then(function successCallback(response) {
@@ -238,7 +228,7 @@ return;
   }	
 );
 }
-angular.element('#projectTabs li:eq(0) a').tab('show');
+//angular.element('#projectTabs li:eq(0) a').tab('show');
 }
 vm.showProjectDetail=showProjectDetail;
  function showEnumValueDetail(index)
@@ -282,7 +272,7 @@ return;
   }	
 );
 }
-angular.element('#enumValueTabs li:eq(0) a').tab('show');
+//angular.element('#enumValueTabs li:eq(0) a').tab('show');
 }
 vm.showEnumValueDetail=showEnumValueDetail;
  function showEnumFieldDetail(index)
@@ -326,7 +316,7 @@ return;
   }	
 );
 }
-angular.element('#enumFieldTabs li:eq(0) a').tab('show');
+//angular.element('#enumFieldTabs li:eq(0) a').tab('show');
 }
 vm.showEnumFieldDetail=showEnumFieldDetail;
 function downloadList()
@@ -382,13 +372,14 @@ vm.enumEntityGridApi = gridApi;
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
+vm.activeTab=1;
 enumEntityService.searchOne(row.entity).then(function(response) { 
 $log.debug(response.data);
 $rootScope.openNode.enumEntity=true;
 $rootScope.parentServices.push(enumEntityService);
 enumEntityService.setSelectedEntity(response.data[0]);
 });
-angular.element('#enumEntityTabs li:eq(0) a').tab('show');
+//angular.element('#enumEntityTabs li:eq(0) a').tab('show');
 }
 else 
 enumEntityService.setSelectedEntity(null);
@@ -407,13 +398,14 @@ vm.projectGridApi = gridApi;
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
+vm.activeTab=1;
 projectService.searchOne(row.entity).then(function(response) { 
 $log.debug(response.data);
 $rootScope.openNode.project=true;
 $rootScope.parentServices.push(projectService);
 projectService.setSelectedEntity(response.data[0]);
 });
-angular.element('#projectTabs li:eq(0) a').tab('show');
+//angular.element('#projectTabs li:eq(0) a').tab('show');
 }
 else 
 projectService.setSelectedEntity(null);
@@ -432,13 +424,14 @@ vm.enumValueGridApi = gridApi;
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
+vm.activeTab=1;
 enumValueService.searchOne(row.entity).then(function(response) { 
 $log.debug(response.data);
 $rootScope.openNode.enumValue=true;
 $rootScope.parentServices.push(enumValueService);
 enumValueService.setSelectedEntity(response.data[0]);
 });
-angular.element('#enumValueTabs li:eq(0) a').tab('show');
+//angular.element('#enumValueTabs li:eq(0) a').tab('show');
 }
 else 
 enumValueService.setSelectedEntity(null);
@@ -457,13 +450,14 @@ vm.enumFieldGridApi = gridApi;
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
+vm.activeTab=1;
 enumFieldService.searchOne(row.entity).then(function(response) { 
 $log.debug(response.data);
 $rootScope.openNode.enumField=true;
 $rootScope.parentServices.push(enumFieldService);
 enumFieldService.setSelectedEntity(response.data[0]);
 });
-angular.element('#enumFieldTabs li:eq(0) a').tab('show');
+//angular.element('#enumFieldTabs li:eq(0) a').tab('show');
 }
 else 
 enumFieldService.setSelectedEntity(null);
@@ -473,6 +467,22 @@ enumFieldService.selectedEntity.show = row.isSelected;
 });
   };
 function updateParentEntities() { 
+enumValueService.initEnumEntityList().then(function(response) {
+enumEntityService.preparedData.entityList=response.data;
+});
+
+if (enumValueService.selectedEntity.enumValueId!=undefined) enumValueService.searchOne(enumValueService.selectedEntity).then(
+function successCallback(response) {
+$log.debug("response-ok");
+$log.debug(response);
+enumValueService.setSelectedEntity(response.data[0]);
+  }, function errorCallback(response) {
+UtilityService.AlertError.init({selector: "#alertError"});
+UtilityService.AlertError.show("Si è verificato un errore");
+$log.debug(response);
+return; 
+  }	
+);
 projectService.initEnumEntityList().then(function(response) {
 enumEntityService.preparedData.entityList=response.data;
 });
@@ -498,22 +508,6 @@ function successCallback(response) {
 $log.debug("response-ok");
 $log.debug(response);
 enumFieldService.setSelectedEntity(response.data[0]);
-  }, function errorCallback(response) {
-UtilityService.AlertError.init({selector: "#alertError"});
-UtilityService.AlertError.show("Si è verificato un errore");
-$log.debug(response);
-return; 
-  }	
-);
-enumValueService.initEnumEntityList().then(function(response) {
-enumEntityService.preparedData.entityList=response.data;
-});
-
-if (enumValueService.selectedEntity.enumValueId!=undefined) enumValueService.searchOne(enumValueService.selectedEntity).then(
-function successCallback(response) {
-$log.debug("response-ok");
-$log.debug(response);
-enumValueService.setSelectedEntity(response.data[0]);
   }, function errorCallback(response) {
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");

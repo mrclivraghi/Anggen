@@ -71,17 +71,17 @@ var promise= $http.post("http://127.0.0.1:8080/ServerTestApp/restrictionEntityGr
 });
 return promise; 
 }
- this.initEnumFieldList= function()
+ this.initRoleList= function()
 {
 var promise= $http
-.post("http://127.0.0.1:8080/ServerTestApp/enumField/search",
+.post("http://127.0.0.1:8080/ServerTestApp/role/search",
 {});
 return promise;
 };
- this.initRelationshipList= function()
+ this.initEntityGroupList= function()
 {
 var promise= $http
-.post("http://127.0.0.1:8080/ServerTestApp/relationship/search",
+.post("http://127.0.0.1:8080/ServerTestApp/entityGroup/search",
 {});
 return promise;
 };

@@ -9,7 +9,7 @@ function UserService($http,MainService,UtilityService)
 this.entityList =		[];
 this.preparedData={};
 this.selectedEntity= 	{show: false 
-,enumFieldList: []};
+,roleList: []};
 this.hidden= { hiddenFields: []};
 this.isParent=function()
 {
@@ -71,10 +71,10 @@ var promise= $http.post("http://127.0.0.1:8080/ServerTestApp/user/"+this.selecte
 });
 return promise; 
 }
- this.initEnumFieldList= function()
+ this.initRoleList= function()
 {
 var promise= $http
-.post("http://127.0.0.1:8080/ServerTestApp/enumField/search",
+.post("http://127.0.0.1:8080/ServerTestApp/role/search",
 {});
 return promise;
 };

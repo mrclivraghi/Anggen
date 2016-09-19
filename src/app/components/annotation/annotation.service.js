@@ -71,6 +71,13 @@ var promise= $http.post("http://127.0.0.1:8080/ServerTestApp/annotation/"+this.s
 });
 return promise; 
 }
+ this.initRelationshipList= function()
+{
+var promise= $http
+.post("http://127.0.0.1:8080/ServerTestApp/relationship/search",
+{});
+return promise;
+};
  this.initAnnotationAttributeList= function()
 {
 var promise= $http
@@ -78,10 +85,10 @@ var promise= $http
 {});
 return promise;
 };
- this.initGenerationRunList= function()
+ this.initFieldList= function()
 {
 var promise= $http
-.post("http://127.0.0.1:8080/ServerTestApp/generationRun/search",
+.post("http://127.0.0.1:8080/ServerTestApp/field/search",
 {});
 return promise;
 };
@@ -89,13 +96,6 @@ return promise;
 {
 var promise= $http
 .post("http://127.0.0.1:8080/ServerTestApp/enumField/search",
-{});
-return promise;
-};
- this.initRelationshipList= function()
-{
-var promise= $http
-.post("http://127.0.0.1:8080/ServerTestApp/relationship/search",
 {});
 return promise;
 };

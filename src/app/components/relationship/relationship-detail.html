@@ -1,5 +1,5 @@
 <div>
-	<form id="relationshipDetailForm" name="relationshipDetailForm" ng-show="vm.selectedEntity.show">
+	<form id="vm.relationshipDetailForm" name="vm.relationshipDetailForm" ng-if="vm.selectedEntity.show">
 		<div class="panel panel-default default-panel">
 			<div class="panel-heading">Detail relationship {{ vm.selectedEntity.relationshipId }} <button type="button" class="close" aria-label="Close" ng-click="vm.closeEntityDetail()">
 	<span aria-hidden="true">&times;
@@ -9,7 +9,7 @@
 			</div>
 
 			<div class="panel-body">
-				<uib-tabset active="vm.activeTab"> <uib-tab index="1" heading="Detail" ng-click="vm.active=1"><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !relationshipDetailForm.relationshipId.$valid, &#39;has-success&#39;: relationshipDetailForm.relationshipId.$valid}" style="height:59px" ng-show="true ">
+				<uib-tabset active="vm.activeTab"> <uib-tab index="1" heading="Detail" ng-click="vm.activeTab=1"><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.relationshipDetailForm.relationshipId.$valid, &#39;has-success&#39;: vm.relationshipDetailForm.relationshipId.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
 		<span class="input-group-addon">relationshipId
 		</span>
@@ -18,7 +18,7 @@
 		
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !relationshipDetailForm.priority.$valid, &#39;has-success&#39;: relationshipDetailForm.priority.$valid}" style="height:59px" ng-show="true ">
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.relationshipDetailForm.priority.$valid, &#39;has-success&#39;: vm.relationshipDetailForm.priority.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
 		<span class="input-group-addon">priority
 		</span>
@@ -27,7 +27,7 @@
 		
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !relationshipDetailForm.name.$valid, &#39;has-success&#39;: relationshipDetailForm.name.$valid}" style="height:59px" ng-show="true ">
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.relationshipDetailForm.name.$valid, &#39;has-success&#39;: vm.relationshipDetailForm.name.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
 		<span class="input-group-addon">name
 		</span>
@@ -36,7 +36,16 @@
 		
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !relationshipDetailForm.addDate.$valid, &#39;has-success&#39;: relationshipDetailForm.addDate.$valid}" style="height:59px" ng-show="true ">
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.relationshipDetailForm.referencedField.$valid, &#39;has-success&#39;: vm.relationshipDetailForm.referencedField.$valid}" style="height:59px" ng-show="true ">
+	<div class="input-group">
+		<span class="input-group-addon">referencedField
+		</span>
+
+		<input class="form-control " aria-describedby="sizing-addon3" type="text" id="relationship-referencedField" ng-model="vm.selectedEntity.referencedField" ng-readonly="vm.restrictionList.relationship.restrictionFieldMap.referencedField" name="referencedField" placeholder="referencedField"/>
+		
+	</div>
+</div>
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.relationshipDetailForm.addDate.$valid, &#39;has-success&#39;: vm.relationshipDetailForm.addDate.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
 		<span class="input-group-addon">addDate
 		</span>
@@ -45,7 +54,7 @@
 		
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !relationshipDetailForm.modDate.$valid, &#39;has-success&#39;: relationshipDetailForm.modDate.$valid}" style="height:59px" ng-show="true ">
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.relationshipDetailForm.modDate.$valid, &#39;has-success&#39;: vm.relationshipDetailForm.modDate.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
 		<span class="input-group-addon">modDate
 		</span>
@@ -54,7 +63,7 @@
 		
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !relationshipDetailForm.relationshipType.$valid, &#39;has-success&#39;: relationshipDetailForm.relationshipType.$valid}" style="height:59px" ng-show="true ">
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.relationshipDetailForm.relationshipType.$valid, &#39;has-success&#39;: vm.relationshipDetailForm.relationshipType.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
 		<span class="input-group-addon">relationshipType
 		</span>
@@ -64,7 +73,7 @@
 
 	</div>
 </div>
-<div id="relationship-annotation" class="modal fade" role="dialog" ng-if="!$root.openNode.annotation">
+ </uib-tab> <uib-tab index="2" heading="Annotation" ng-click="vm.activeTab=2"><div id="relationship-annotation" class="modal fade" role="dialog" ng-if="!$root.openNode.annotation &amp;&amp; vm.activeTab==2">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -110,7 +119,7 @@
 </div>
 <br/>
 <br/>
-<div class="pull-left" style="width: 100%" ng-show="true  && ($root.restrictionList.field.restrictionItemMap.annotation.canSearch==true)" ng-if="!$root.openNode.annotation">
+<div class="pull-left" style="width: 100%" ng-show="true  && ($root.restrictionList.field.restrictionItemMap.annotation.canSearch==true)" ng-if="!$root.openNode.annotation &amp;&amp; vm.activeTab==2">
 	<div class="panel panel-default default-panel">
 		<div class="panel-heading">annotation<button ng-click="vm.showAnnotationDetail()" class="btn btn-default  pull-right" style="margin-top: -7px" ng-show="($root.restrictionList.field.restrictionItemMap.annotation.canCreate==true)">Add new annotation</button>
 <button type="button" class="btn btn-default pull-right" style="margin-top: -7px" data-toggle="modal" data-target="#relationship-annotation">Link existing</button>
@@ -135,7 +144,7 @@
 
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !relationshipDetailForm.entity.$valid, &#39;has-success&#39;: relationshipDetailForm.entity.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.entity">
+ </uib-tab> <uib-tab index="3" heading="EntityTarget" ng-click="vm.activeTab=3"><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.relationshipDetailForm.entity.$valid, &#39;has-success&#39;: vm.relationshipDetailForm.entity.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.entity">
 	<div class="input-group">
 		<span class="input-group-addon">entity
 		</span>
@@ -154,7 +163,7 @@
 
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !relationshipDetailForm.entity.$valid, &#39;has-success&#39;: relationshipDetailForm.entity.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.entity">
+ </uib-tab> <uib-tab index="4" heading="Entity" ng-click="vm.activeTab=4"><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.relationshipDetailForm.entity.$valid, &#39;has-success&#39;: vm.relationshipDetailForm.entity.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.entity">
 	<div class="input-group">
 		<span class="input-group-addon">entity
 		</span>
@@ -173,19 +182,19 @@
 
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !relationshipDetailForm.entity.$valid, &#39;has-success&#39;: relationshipDetailForm.entity.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.entity">
+ </uib-tab> <uib-tab index="5" heading="Tab" ng-click="vm.activeTab=5"><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.relationshipDetailForm.tab.$valid, &#39;has-success&#39;: vm.relationshipDetailForm.tab.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.tab">
 	<div class="input-group">
-		<span class="input-group-addon">entity
+		<span class="input-group-addon">tab
 		</span>
 
-		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.entity" id="entity" name="entity" ng-options="entity as  entity.entityId+&#39; &#39;+ entity.name for entity in vm.entityPreparedData.entityList track by entity.entityId" enctype="UTF-8">
+		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.tab" id="tab" name="tab" ng-options="tab as  tab.tabId+&#39; &#39;+ tab.name for tab in vm.tabPreparedData.entityList track by tab.tabId" enctype="UTF-8">
 		</select>
 
 		<span class="input-group-btn">
-			<button ng-click="vm.showEntityDetail()" class="btn btn-default " id="entity" ng-if="vm.selectedEntity.entity==null">Add new tab
+			<button ng-click="vm.showTabDetail()" class="btn btn-default " id="tab" ng-if="vm.selectedEntity.tab==null">Add new tab
 			</button>
 
-			<button ng-click="vm.showEntityDetail()" class="btn btn-default " id="entity" ng-if="vm.selectedEntity.entity!=null">Show detail
+			<button ng-click="vm.showTabDetail()" class="btn btn-default " id="tab" ng-if="vm.selectedEntity.tab!=null">Show detail
 			</button>
 
 		</span>

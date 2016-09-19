@@ -38,7 +38,7 @@ annotationService.selectedEntity.show=false;
 delete $rootScope.openNode.annotation;
 UtilityService.removeObjectFromList($rootScope.parentServices,annotationService);
 }
-angular.element('#annotationAttributeTabs li:eq(0) a').tab('show');
+//angular.element('#annotationAttributeTabs li:eq(0) a').tab('show');
 }
 		
 function search()
@@ -57,7 +57,7 @@ return;
 }
 function insert()
 {
-if (!$scope.annotationAttributeDetailForm.$valid) return; 
+if (!vm.annotationAttributeDetailForm.$valid) return; 
 $rootScope.parentServices.pop();
 if ($rootScope.parentServices.length==0) 
 {
@@ -89,7 +89,7 @@ return;
 }
 function update()
 {
-if (!$scope.annotationAttributeDetailForm.$valid) return; 
+if (!vm.annotationAttributeDetailForm.$valid) return; 
 $rootScope.parentServices.pop();
 if ($rootScope.parentServices.length==0) 
 {
@@ -149,12 +149,6 @@ $log.debug(response);
 return; 
 });
 }
-function refreshTableDetail() 
-{
-if ($scope.annotationGridApi!=undefined && $scope.annotationGridApi!=null)
- $scope.annotationGridApi.core.handleWindowResize(); 
-}
-vm.refreshTableDetail=refreshTableDetail;
 function loadFile(file,field)
 {
 annotationAttributeService.loadFile(file,field).then(function successCallback(response) {
@@ -208,7 +202,7 @@ return;
   }	
 );
 }
-angular.element('#annotationTabs li:eq(0) a').tab('show');
+//angular.element('#annotationTabs li:eq(0) a').tab('show');
 }
 vm.showAnnotationDetail=showAnnotationDetail;
 function downloadList()
@@ -238,13 +232,14 @@ vm.annotationAttributeGridApi = gridApi;
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
+vm.activeTab=1;
 annotationAttributeService.searchOne(row.entity).then(function(response) { 
 $log.debug(response.data);
 $rootScope.openNode.annotationAttribute=true;
 $rootScope.parentServices.push(annotationAttributeService);
 annotationAttributeService.setSelectedEntity(response.data[0]);
 });
-angular.element('#annotationAttributeTabs li:eq(0) a').tab('show');
+//angular.element('#annotationAttributeTabs li:eq(0) a').tab('show');
 }
 else 
 annotationAttributeService.setSelectedEntity(null);
@@ -263,13 +258,14 @@ vm.annotationGridApi = gridApi;
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
+vm.activeTab=1;
 annotationService.searchOne(row.entity).then(function(response) { 
 $log.debug(response.data);
 $rootScope.openNode.annotation=true;
 $rootScope.parentServices.push(annotationService);
 annotationService.setSelectedEntity(response.data[0]);
 });
-angular.element('#annotationTabs li:eq(0) a').tab('show');
+//angular.element('#annotationTabs li:eq(0) a').tab('show');
 }
 else 
 annotationService.setSelectedEntity(null);

@@ -1,5 +1,5 @@
 <div>
-	<form id="tabDetailForm" name="tabDetailForm" ng-show="vm.selectedEntity.show">
+	<form id="vm.tabDetailForm" name="vm.tabDetailForm" ng-if="vm.selectedEntity.show">
 		<div class="panel panel-default default-panel">
 			<div class="panel-heading">Detail tab {{ vm.selectedEntity.tabId }} <button type="button" class="close" aria-label="Close" ng-click="vm.closeEntityDetail()">
 	<span aria-hidden="true">&times;
@@ -9,7 +9,7 @@
 			</div>
 
 			<div class="panel-body">
-				<uib-tabset active="vm.activeTab"> <uib-tab index="1" heading="Detail" ng-click="vm.active=1"><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !tabDetailForm.tabId.$valid, &#39;has-success&#39;: tabDetailForm.tabId.$valid}" style="height:59px" ng-show="true ">
+				<uib-tabset active="vm.activeTab"> <uib-tab index="1" heading="Detail" ng-click="vm.activeTab=1"><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.tabDetailForm.tabId.$valid, &#39;has-success&#39;: vm.tabDetailForm.tabId.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
 		<span class="input-group-addon">tabId
 		</span>
@@ -18,7 +18,7 @@
 		
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !tabDetailForm.name.$valid, &#39;has-success&#39;: tabDetailForm.name.$valid}" style="height:59px" ng-show="true ">
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.tabDetailForm.name.$valid, &#39;has-success&#39;: vm.tabDetailForm.name.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
 		<span class="input-group-addon">name
 		</span>
@@ -27,7 +27,7 @@
 		
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !tabDetailForm.addDate.$valid, &#39;has-success&#39;: tabDetailForm.addDate.$valid}" style="height:59px" ng-show="true ">
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.tabDetailForm.addDate.$valid, &#39;has-success&#39;: vm.tabDetailForm.addDate.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
 		<span class="input-group-addon">addDate
 		</span>
@@ -36,7 +36,7 @@
 		
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !tabDetailForm.modDate.$valid, &#39;has-success&#39;: tabDetailForm.modDate.$valid}" style="height:59px" ng-show="true ">
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.tabDetailForm.modDate.$valid, &#39;has-success&#39;: vm.tabDetailForm.modDate.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
 		<span class="input-group-addon">modDate
 		</span>
@@ -45,7 +45,7 @@
 		
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !tabDetailForm.entity.$valid, &#39;has-success&#39;: tabDetailForm.entity.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.entity">
+ </uib-tab> <uib-tab index="2" heading="Entity" ng-click="vm.activeTab=2"><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.tabDetailForm.entity.$valid, &#39;has-success&#39;: vm.tabDetailForm.entity.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.entity">
 	<div class="input-group">
 		<span class="input-group-addon">entity
 		</span>
@@ -64,7 +64,7 @@
 
 	</div>
 </div>
-<div id="tab-field" class="modal fade" role="dialog" ng-if="!$root.openNode.field">
+ </uib-tab> <uib-tab index="3" heading="Field" ng-click="vm.activeTab=3"><div id="tab-field" class="modal fade" role="dialog" ng-if="!$root.openNode.field &amp;&amp; vm.activeTab==3">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -110,7 +110,7 @@
 </div>
 <br/>
 <br/>
-<div class="pull-left" style="width: 100%" ng-show="true  && ($root.restrictionList.field.restrictionItemMap.field.canSearch==true)" ng-if="!$root.openNode.field">
+<div class="pull-left" style="width: 100%" ng-show="true  && ($root.restrictionList.field.restrictionItemMap.field.canSearch==true)" ng-if="!$root.openNode.field &amp;&amp; vm.activeTab==3">
 	<div class="panel panel-default default-panel">
 		<div class="panel-heading">field<button ng-click="vm.showFieldDetail()" class="btn btn-default  pull-right" style="margin-top: -7px" ng-show="($root.restrictionList.field.restrictionItemMap.field.canCreate==true)">Add new field</button>
 <button type="button" class="btn btn-default pull-right" style="margin-top: -7px" data-toggle="modal" data-target="#tab-field">Link existing</button>
@@ -135,7 +135,7 @@
 
 	</div>
 </div>
-<div id="tab-enumField" class="modal fade" role="dialog" ng-if="!$root.openNode.enumField">
+ </uib-tab> <uib-tab index="4" heading="EnumField" ng-click="vm.activeTab=4"><div id="tab-enumField" class="modal fade" role="dialog" ng-if="!$root.openNode.enumField &amp;&amp; vm.activeTab==4">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -181,7 +181,7 @@
 </div>
 <br/>
 <br/>
-<div class="pull-left" style="width: 100%" ng-show="true  && ($root.restrictionList.field.restrictionItemMap.enumField.canSearch==true)" ng-if="!$root.openNode.enumField">
+<div class="pull-left" style="width: 100%" ng-show="true  && ($root.restrictionList.field.restrictionItemMap.enumField.canSearch==true)" ng-if="!$root.openNode.enumField &amp;&amp; vm.activeTab==4">
 	<div class="panel panel-default default-panel">
 		<div class="panel-heading">enumField<button ng-click="vm.showEnumFieldDetail()" class="btn btn-default  pull-right" style="margin-top: -7px" ng-show="($root.restrictionList.field.restrictionItemMap.enumField.canCreate==true)">Add new enumField</button>
 <button type="button" class="btn btn-default pull-right" style="margin-top: -7px" data-toggle="modal" data-target="#tab-enumField">Link existing</button>
@@ -206,7 +206,7 @@
 
 	</div>
 </div>
-<div id="tab-relationship" class="modal fade" role="dialog" ng-if="!$root.openNode.relationship">
+ </uib-tab> <uib-tab index="5" heading="Relationship" ng-click="vm.activeTab=5"><div id="tab-relationship" class="modal fade" role="dialog" ng-if="!$root.openNode.relationship &amp;&amp; vm.activeTab==5">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -252,7 +252,7 @@
 </div>
 <br/>
 <br/>
-<div class="pull-left" style="width: 100%" ng-show="true  && ($root.restrictionList.relationship.restrictionItemMap.relationship.canSearch==true)" ng-if="!$root.openNode.relationship">
+<div class="pull-left" style="width: 100%" ng-show="true  && ($root.restrictionList.relationship.restrictionItemMap.relationship.canSearch==true)" ng-if="!$root.openNode.relationship &amp;&amp; vm.activeTab==5">
 	<div class="panel panel-default default-panel">
 		<div class="panel-heading">relationship<button ng-click="vm.showRelationshipDetail()" class="btn btn-default  pull-right" style="margin-top: -7px" ng-show="($root.restrictionList.relationship.restrictionItemMap.relationship.canCreate==true)">Add new relationship</button>
 <button type="button" class="btn btn-default pull-right" style="margin-top: -7px" data-toggle="modal" data-target="#tab-relationship">Link existing</button>

@@ -45,7 +45,7 @@ entityService.selectedEntity.show=false;
 delete $rootScope.openNode.entity;
 UtilityService.removeObjectFromList($rootScope.parentServices,entityService);
 }
-angular.element('#restrictionEntityTabs li:eq(0) a').tab('show');
+//angular.element('#restrictionEntityTabs li:eq(0) a').tab('show');
 }
 		
 function search()
@@ -64,7 +64,7 @@ return;
 }
 function insert()
 {
-if (!$scope.restrictionEntityDetailForm.$valid) return; 
+if (!vm.restrictionEntityDetailForm.$valid) return; 
 $rootScope.parentServices.pop();
 if ($rootScope.parentServices.length==0) 
 {
@@ -96,7 +96,7 @@ return;
 }
 function update()
 {
-if (!$scope.restrictionEntityDetailForm.$valid) return; 
+if (!vm.restrictionEntityDetailForm.$valid) return; 
 $rootScope.parentServices.pop();
 if ($rootScope.parentServices.length==0) 
 {
@@ -159,14 +159,6 @@ $log.debug(response);
 return; 
 });
 }
-function refreshTableDetail() 
-{
-if ($scope.roleGridApi!=undefined && $scope.roleGridApi!=null)
- $scope.roleGridApi.core.handleWindowResize(); 
-if ($scope.entityGridApi!=undefined && $scope.entityGridApi!=null)
- $scope.entityGridApi.core.handleWindowResize(); 
-}
-vm.refreshTableDetail=refreshTableDetail;
 function loadFile(file,field)
 {
 restrictionEntityService.loadFile(file,field).then(function successCallback(response) {
@@ -220,7 +212,7 @@ return;
   }	
 );
 }
-angular.element('#roleTabs li:eq(0) a').tab('show');
+//angular.element('#roleTabs li:eq(0) a').tab('show');
 }
 vm.showRoleDetail=showRoleDetail;
  function showEntityDetail(index)
@@ -264,7 +256,7 @@ return;
   }	
 );
 }
-angular.element('#entityTabs li:eq(0) a').tab('show');
+//angular.element('#entityTabs li:eq(0) a').tab('show');
 }
 vm.showEntityDetail=showEntityDetail;
 function downloadList()
@@ -303,13 +295,14 @@ vm.restrictionEntityGridApi = gridApi;
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
+vm.activeTab=1;
 restrictionEntityService.searchOne(row.entity).then(function(response) { 
 $log.debug(response.data);
 $rootScope.openNode.restrictionEntity=true;
 $rootScope.parentServices.push(restrictionEntityService);
 restrictionEntityService.setSelectedEntity(response.data[0]);
 });
-angular.element('#restrictionEntityTabs li:eq(0) a').tab('show');
+//angular.element('#restrictionEntityTabs li:eq(0) a').tab('show');
 }
 else 
 restrictionEntityService.setSelectedEntity(null);
@@ -328,13 +321,14 @@ vm.roleGridApi = gridApi;
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
+vm.activeTab=1;
 roleService.searchOne(row.entity).then(function(response) { 
 $log.debug(response.data);
 $rootScope.openNode.role=true;
 $rootScope.parentServices.push(roleService);
 roleService.setSelectedEntity(response.data[0]);
 });
-angular.element('#roleTabs li:eq(0) a').tab('show');
+//angular.element('#roleTabs li:eq(0) a').tab('show');
 }
 else 
 roleService.setSelectedEntity(null);
@@ -353,13 +347,14 @@ vm.entityGridApi = gridApi;
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
+vm.activeTab=1;
 entityService.searchOne(row.entity).then(function(response) { 
 $log.debug(response.data);
 $rootScope.openNode.entity=true;
 $rootScope.parentServices.push(entityService);
 entityService.setSelectedEntity(response.data[0]);
 });
-angular.element('#entityTabs li:eq(0) a').tab('show');
+//angular.element('#entityTabs li:eq(0) a').tab('show');
 }
 else 
 entityService.setSelectedEntity(null);

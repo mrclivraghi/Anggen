@@ -1,7 +1,7 @@
 <div>
-	<form id="projectDetailForm" name="projectDetailForm" ng-show="vm.selectedEntity.show">
+	<form id="vm.projectDetailForm" name="vm.projectDetailForm" ng-if="vm.selectedEntity.show">
 		<div class="panel panel-default default-panel">
-			<div class="panel-heading">Detail project {{ vm.selectedEntity.projectId }} <button type="button" class="close" aria-label="Close" ng-click="vm.closeEntityDetail()">
+			<div class="panel-heading">Detail project {{ vm.selectedEntity.projectId }} {{vm.projectDetailForm.addDate | date : 'ddMMyyyy'}}<button type="button" class="close" aria-label="Close" ng-click="vm.closeEntityDetail()">
 	<span aria-hidden="true">&times;
 	</span>
 </button>
@@ -9,7 +9,7 @@
 			</div>
 
 			<div class="panel-body">
-				<uib-tabset active="vm.activeTab"> <uib-tab index="1" heading="Detail" ng-click="vm.active=1"><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !projectDetailForm.projectId.$valid, &#39;has-success&#39;: projectDetailForm.projectId.$valid}" style="height:59px" ng-show="true ">
+				<uib-tabset active="vm.activeTab"> <uib-tab index="1" heading="Detail" ng-click="vm.activeTab=1"><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.projectDetailForm.projectId.$valid, &#39;has-success&#39;: vm.projectDetailForm.projectId.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
 		<span class="input-group-addon">projectId
 		</span>
@@ -18,7 +18,7 @@
 		
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !projectDetailForm.name.$valid, &#39;has-success&#39;: projectDetailForm.name.$valid}" style="height:59px" ng-show="true ">
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.projectDetailForm.name.$valid, &#39;has-success&#39;: vm.projectDetailForm.name.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
 		<span class="input-group-addon">name
 		</span>
@@ -27,7 +27,7 @@
 		
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !projectDetailForm.addDate.$valid, &#39;has-success&#39;: projectDetailForm.addDate.$valid}" style="height:59px" ng-show="true ">
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.projectDetailForm.addDate.$valid, &#39;has-success&#39;: vm.projectDetailForm.addDate.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
 		<span class="input-group-addon">addDate
 		</span>
@@ -36,7 +36,7 @@
 		
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !projectDetailForm.modDate.$valid, &#39;has-success&#39;: projectDetailForm.modDate.$valid}" style="height:59px" ng-show="true ">
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.projectDetailForm.modDate.$valid, &#39;has-success&#39;: vm.projectDetailForm.modDate.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
 		<span class="input-group-addon">modDate
 		</span>
@@ -45,7 +45,7 @@
 		
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !projectDetailForm.generationType.$valid, &#39;has-success&#39;: projectDetailForm.generationType.$valid}" style="height:59px" ng-show="true ">
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.projectDetailForm.generationType.$valid, &#39;has-success&#39;: vm.projectDetailForm.generationType.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
 		<span class="input-group-addon">generationType
 		</span>
@@ -55,7 +55,7 @@
 
 	</div>
 </div>
-<div id="project-generationRun" class="modal fade" role="dialog" ng-if="!$root.openNode.generationRun">
+ </uib-tab> <uib-tab index="2" heading="GenerationRun" ng-click="vm.activeTab=2"><div id="project-generationRun" class="modal fade" role="dialog" ng-if="!$root.openNode.generationRun &amp;&amp; vm.activeTab==2">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -90,7 +90,7 @@
 			</div>
 
 			<div class="modal-footer">
-				<button ng-click="vm.close()" class="btn btn-default " data-dismiss="modal">close
+				<button ng-click="close()" class="btn btn-default " data-dismiss="modal">close
 				</button>
 
 			</div>
@@ -101,7 +101,7 @@
 </div>
 <br/>
 <br/>
-<div class="pull-left" style="width: 100%" ng-show="true  && ($root.restrictionList.generation.restrictionItemMap.generationRun.canSearch==true)" ng-if="!$root.openNode.generationRun">
+<div class="pull-left" style="width: 100%" ng-show="true  && ($root.restrictionList.generation.restrictionItemMap.generationRun.canSearch==true)" ng-if="!$root.openNode.generationRun &amp;&amp; vm.activeTab==2">
 	<div class="panel panel-default default-panel">
 		<div class="panel-heading">generationRun<button ng-click="vm.showGenerationRunDetail()" class="btn btn-default  pull-right" style="margin-top: -7px" ng-show="($root.restrictionList.generation.restrictionItemMap.generationRun.canCreate==true)">Add new generationRun</button>
 <button type="button" class="btn btn-default pull-right" style="margin-top: -7px" data-toggle="modal" data-target="#project-generationRun">Link existing</button>
@@ -126,14 +126,14 @@
 
 	</div>
 </div>
-<div id="project-relationship" class="modal fade" role="dialog" ng-if="!$root.openNode.relationship">
+ </uib-tab> <uib-tab index="3" heading="EntityGroup" ng-click="vm.activeTab=3"><div id="project-entityGroup" class="modal fade" role="dialog" ng-if="!$root.openNode.entityGroup &amp;&amp; vm.activeTab==3">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;
 				</button>
 
-				<h4 class="modal-title">Link existing relationship
+				<h4 class="modal-title">Link existing entityGroup
 				</h4>
 
 			</div>
@@ -144,14 +144,14 @@
 				</p>
 
 				<div class="input-group">
-					<span class="input-group-addon">relationship
+					<span class="input-group-addon">entityGroup
 					</span>
 
-					<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.relationship" id="relationship" name="relationship" ng-options="relationship as  relationship.relationshipId+&#39; &#39;+ relationship.name for relationship in vm.relationshipPreparedData.entityList track by relationship.relationshipId" enctype="UTF-8">
+					<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.entityGroup" id="entityGroup" name="entityGroup" ng-options="entityGroup as  entityGroup.entityGroupId+&#39; &#39;+ entityGroup.name for entityGroup in vm.entityGroupPreparedData.entityList track by entityGroup.entityGroupId" enctype="UTF-8">
 					</select>
 
 					<span class="input-group-btn">
-						<button ng-click="vm.saveLinkedRelationship()" class="btn btn-default " id="relationship">Save
+						<button ng-click="vm.saveLinkedEntityGroup()" class="btn btn-default " id="entityGroup">Save
 						</button>
 
 					</span>
@@ -172,23 +172,23 @@
 </div>
 <br/>
 <br/>
-<div class="pull-left" style="width: 100%" ng-show="true  && ($root.restrictionList.relationship.restrictionItemMap.relationship.canSearch==true)" ng-if="!$root.openNode.relationship">
+<div class="pull-left" style="width: 100%" ng-show="true  && ($root.restrictionList.entity.restrictionItemMap.entityGroup.canSearch==true)" ng-if="!$root.openNode.entityGroup &amp;&amp; vm.activeTab==3">
 	<div class="panel panel-default default-panel">
-		<div class="panel-heading">relationship<button ng-click="vm.showRelationshipDetail()" class="btn btn-default  pull-right" style="margin-top: -7px" ng-show="($root.restrictionList.relationship.restrictionItemMap.relationship.canCreate==true)">Add new relationship</button>
-<button type="button" class="btn btn-default pull-right" style="margin-top: -7px" data-toggle="modal" data-target="#project-relationship">Link existing</button>
-<button ng-click="vm.downloadRelationshipList()" class="btn btn-default pull-right" style="margin-top:-7px">
+		<div class="panel-heading">entityGroup<button ng-click="vm.showEntityGroupDetail()" class="btn btn-default  pull-right" style="margin-top: -7px" ng-show="($root.restrictionList.entity.restrictionItemMap.entityGroup.canCreate==true)">Add new entityGroup</button>
+<button type="button" class="btn btn-default pull-right" style="margin-top: -7px" data-toggle="modal" data-target="#project-entityGroup">Link existing</button>
+<button ng-click="vm.downloadEntityGroupList()" class="btn btn-default pull-right" style="margin-top:-7px">
 	<span class="glyphicon glyphicon-download-alt" aria-hidden="true">
 	</span>
 </button>
 
 		</div>
 
-		<div class="panel-body" ng-class="{&#39;has-error&#39;: !vm.projectDetailForm.entityGroup.$valid, &#39;has-success&#39;: vm.projectDetailForm.relationship.$valid}">
-			<label id="relationship">entityGroup
+		<div class="panel-body" ng-class="{&#39;has-error&#39;: !vm.projectDetailForm.entityGroup.$valid, &#39;has-success&#39;: vm.projectDetailForm.entityGroup.$valid}">
+			<label id="entityGroup">entityGroup
 			</label>
 
-			<div id="relationship" ng-if="vm.selectedEntity.relationshipList.length&gt;0">
-				<div style="top: 100px" ui-grid="vm.relationshipGridOptions" ui-grid-pagination="" ui-grid-selection="">
+			<div id="entityGroup" ng-if="vm.selectedEntity.entityGroupList.length&gt;0">
+				<div style="top: 100px" ui-grid="vm.entityGroupGridOptions" ui-grid-pagination="" ui-grid-selection="">
 				</div>
 
 			</div>
@@ -197,7 +197,7 @@
 
 	</div>
 </div>
-<div id="project-enumEntity" class="modal fade" role="dialog" ng-if="!$root.openNode.enumEntity">
+ </uib-tab> <uib-tab index="4" heading="EnumEntity" ng-click="vm.activeTab=4"><div id="project-enumEntity" class="modal fade" role="dialog" ng-if="!$root.openNode.enumEntity &amp;&amp; vm.activeTab==4">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -243,7 +243,7 @@
 </div>
 <br/>
 <br/>
-<div class="pull-left" style="width: 100%" ng-show="true  && ($root.restrictionList.entity.restrictionItemMap.enumEntity.canSearch==true)" ng-if="!$root.openNode.enumEntity">
+<div class="pull-left" style="width: 100%" ng-show="true  && ($root.restrictionList.entity.restrictionItemMap.enumEntity.canSearch==true)" ng-if="!$root.openNode.enumEntity &amp;&amp; vm.activeTab==4">
 	<div class="panel panel-default default-panel">
 		<div class="panel-heading">enumEntity<button ng-click="vm.showEnumEntityDetail()" class="btn btn-default  pull-right" style="margin-top: -7px" ng-show="($root.restrictionList.entity.restrictionItemMap.enumEntity.canCreate==true)">Add new enumEntity</button>
 <button type="button" class="btn btn-default pull-right" style="margin-top: -7px" data-toggle="modal" data-target="#project-enumEntity">Link existing</button>

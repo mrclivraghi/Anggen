@@ -38,7 +38,7 @@ enumEntityService.selectedEntity.show=false;
 delete $rootScope.openNode.enumEntity;
 UtilityService.removeObjectFromList($rootScope.parentServices,enumEntityService);
 }
-angular.element('#enumValueTabs li:eq(0) a').tab('show');
+//angular.element('#enumValueTabs li:eq(0) a').tab('show');
 }
 		
 function search()
@@ -57,7 +57,7 @@ return;
 }
 function insert()
 {
-if (!$scope.enumValueDetailForm.$valid) return; 
+if (!vm.enumValueDetailForm.$valid) return; 
 $rootScope.parentServices.pop();
 if ($rootScope.parentServices.length==0) 
 {
@@ -89,7 +89,7 @@ return;
 }
 function update()
 {
-if (!$scope.enumValueDetailForm.$valid) return; 
+if (!vm.enumValueDetailForm.$valid) return; 
 $rootScope.parentServices.pop();
 if ($rootScope.parentServices.length==0) 
 {
@@ -149,12 +149,6 @@ $log.debug(response);
 return; 
 });
 }
-function refreshTableDetail() 
-{
-if ($scope.enumEntityGridApi!=undefined && $scope.enumEntityGridApi!=null)
- $scope.enumEntityGridApi.core.handleWindowResize(); 
-}
-vm.refreshTableDetail=refreshTableDetail;
 function loadFile(file,field)
 {
 enumValueService.loadFile(file,field).then(function successCallback(response) {
@@ -208,7 +202,7 @@ return;
   }	
 );
 }
-angular.element('#enumEntityTabs li:eq(0) a').tab('show');
+//angular.element('#enumEntityTabs li:eq(0) a').tab('show');
 }
 vm.showEnumEntityDetail=showEnumEntityDetail;
 function downloadList()
@@ -238,13 +232,14 @@ vm.enumValueGridApi = gridApi;
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
+vm.activeTab=1;
 enumValueService.searchOne(row.entity).then(function(response) { 
 $log.debug(response.data);
 $rootScope.openNode.enumValue=true;
 $rootScope.parentServices.push(enumValueService);
 enumValueService.setSelectedEntity(response.data[0]);
 });
-angular.element('#enumValueTabs li:eq(0) a').tab('show');
+//angular.element('#enumValueTabs li:eq(0) a').tab('show');
 }
 else 
 enumValueService.setSelectedEntity(null);
@@ -263,13 +258,14 @@ vm.enumEntityGridApi = gridApi;
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
+vm.activeTab=1;
 enumEntityService.searchOne(row.entity).then(function(response) { 
 $log.debug(response.data);
 $rootScope.openNode.enumEntity=true;
 $rootScope.parentServices.push(enumEntityService);
 enumEntityService.setSelectedEntity(response.data[0]);
 });
-angular.element('#enumEntityTabs li:eq(0) a').tab('show');
+//angular.element('#enumEntityTabs li:eq(0) a').tab('show');
 }
 else 
 enumEntityService.setSelectedEntity(null);

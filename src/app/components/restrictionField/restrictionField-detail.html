@@ -1,5 +1,5 @@
 <div>
-	<form id="restrictionFieldDetailForm" name="restrictionFieldDetailForm" ng-show="vm.selectedEntity.show">
+	<form id="vm.restrictionFieldDetailForm" name="vm.restrictionFieldDetailForm" ng-if="vm.selectedEntity.show">
 		<div class="panel panel-default default-panel">
 			<div class="panel-heading">Detail restrictionField {{ vm.selectedEntity.restrictionFieldId }} <button type="button" class="close" aria-label="Close" ng-click="vm.closeEntityDetail()">
 	<span aria-hidden="true">&times;
@@ -9,7 +9,7 @@
 			</div>
 
 			<div class="panel-body">
-				<uib-tabset active="vm.activeTab"> <uib-tab index="1" heading="Detail" ng-click="vm.active=1"><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !restrictionFieldDetailForm.restrictionFieldId.$valid, &#39;has-success&#39;: restrictionFieldDetailForm.restrictionFieldId.$valid}" style="height:59px" ng-show="true ">
+				<uib-tabset active="vm.activeTab"> <uib-tab index="1" heading="Detail" ng-click="vm.activeTab=1"><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.restrictionFieldDetailForm.restrictionFieldId.$valid, &#39;has-success&#39;: vm.restrictionFieldDetailForm.restrictionFieldId.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
 		<span class="input-group-addon">restrictionFieldId
 		</span>
@@ -18,38 +18,38 @@
 		
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !restrictionFieldDetailForm.enumField.$valid, &#39;has-success&#39;: restrictionFieldDetailForm.enumField.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.enumField">
+ </uib-tab> <uib-tab index="2" heading="Role" ng-click="vm.activeTab=2"><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.restrictionFieldDetailForm.role.$valid, &#39;has-success&#39;: vm.restrictionFieldDetailForm.role.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.role">
 	<div class="input-group">
-		<span class="input-group-addon">enumField
+		<span class="input-group-addon">role
 		</span>
 
-		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.enumField" id="enumField" name="enumField" ng-options="enumField as  enumField.enumFieldId+&#39; &#39;+ enumField.name for enumField in vm.enumFieldPreparedData.entityList track by enumField.enumFieldId" enctype="UTF-8">
+		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.role" id="role" name="role" ng-options="role as  role.roleId+&#39; &#39;+ role.role for role in vm.rolePreparedData.entityList track by role.roleId" enctype="UTF-8">
 		</select>
 
 		<span class="input-group-btn">
-			<button ng-click="vm.showEnumFieldDetail()" class="btn btn-default " id="enumField" ng-if="vm.selectedEntity.enumField==null">Add new role
+			<button ng-click="vm.showRoleDetail()" class="btn btn-default " id="role" ng-if="vm.selectedEntity.role==null">Add new role
 			</button>
 
-			<button ng-click="vm.showEnumFieldDetail()" class="btn btn-default " id="enumField" ng-if="vm.selectedEntity.enumField!=null">Show detail
+			<button ng-click="vm.showRoleDetail()" class="btn btn-default " id="role" ng-if="vm.selectedEntity.role!=null">Show detail
 			</button>
 
 		</span>
 
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !restrictionFieldDetailForm.generationRun.$valid, &#39;has-success&#39;: restrictionFieldDetailForm.generationRun.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.generationRun">
+ </uib-tab> <uib-tab index="3" heading="Field" ng-click="vm.activeTab=3"><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.restrictionFieldDetailForm.field.$valid, &#39;has-success&#39;: vm.restrictionFieldDetailForm.field.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.field">
 	<div class="input-group">
-		<span class="input-group-addon">generationRun
+		<span class="input-group-addon">field
 		</span>
 
-		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.generationRun" id="generationRun" name="generationRun" ng-options="generationRun as  generationRun.generationRunId for generationRun in vm.generationRunPreparedData.entityList track by generationRun.generationRunId" enctype="UTF-8">
+		<select class="form-control " aria-describedby="sizing-addon3" ng-model="vm.selectedEntity.field" id="field" name="field" ng-options="field as  field.fieldId+&#39; &#39;+ field.name for field in vm.fieldPreparedData.entityList track by field.fieldId" enctype="UTF-8">
 		</select>
 
 		<span class="input-group-btn">
-			<button ng-click="vm.showGenerationRunDetail()" class="btn btn-default " id="generationRun" ng-if="vm.selectedEntity.generationRun==null">Add new field
+			<button ng-click="vm.showFieldDetail()" class="btn btn-default " id="field" ng-if="vm.selectedEntity.field==null">Add new field
 			</button>
 
-			<button ng-click="vm.showGenerationRunDetail()" class="btn btn-default " id="generationRun" ng-if="vm.selectedEntity.generationRun!=null">Show detail
+			<button ng-click="vm.showFieldDetail()" class="btn btn-default " id="field" ng-if="vm.selectedEntity.field!=null">Show detail
 			</button>
 
 		</span>

@@ -1,5 +1,5 @@
 <div>
-	<form id="restrictionEntityDetailForm" name="restrictionEntityDetailForm" ng-show="vm.selectedEntity.show">
+	<form id="vm.restrictionEntityDetailForm" name="vm.restrictionEntityDetailForm" ng-if="vm.selectedEntity.show">
 		<div class="panel panel-default default-panel">
 			<div class="panel-heading">Detail restrictionEntity {{ vm.selectedEntity.restrictionEntityId }} <button type="button" class="close" aria-label="Close" ng-click="vm.closeEntityDetail()">
 	<span aria-hidden="true">&times;
@@ -9,7 +9,7 @@
 			</div>
 
 			<div class="panel-body">
-				<uib-tabset active="vm.activeTab"> <uib-tab index="1" heading="Detail" ng-click="vm.active=1"><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !restrictionEntityDetailForm.restrictionEntityId.$valid, &#39;has-success&#39;: restrictionEntityDetailForm.restrictionEntityId.$valid}" style="height:59px" ng-show="true ">
+				<uib-tabset active="vm.activeTab"> <uib-tab index="1" heading="Detail" ng-click="vm.activeTab=1"><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.restrictionEntityDetailForm.restrictionEntityId.$valid, &#39;has-success&#39;: vm.restrictionEntityDetailForm.restrictionEntityId.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
 		<span class="input-group-addon">restrictionEntityId
 		</span>
@@ -18,7 +18,7 @@
 		
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !restrictionEntityDetailForm.canDelete.$valid, &#39;has-success&#39;: restrictionEntityDetailForm.canDelete.$valid}" style="height:59px" ng-show="true ">
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.restrictionEntityDetailForm.canDelete.$valid, &#39;has-success&#39;: vm.restrictionEntityDetailForm.canDelete.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
 		<span class="input-group-addon">canDelete
 		</span>
@@ -28,7 +28,7 @@
 
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !restrictionEntityDetailForm.canSearch.$valid, &#39;has-success&#39;: restrictionEntityDetailForm.canSearch.$valid}" style="height:59px" ng-show="true ">
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.restrictionEntityDetailForm.canSearch.$valid, &#39;has-success&#39;: vm.restrictionEntityDetailForm.canSearch.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
 		<span class="input-group-addon">canSearch
 		</span>
@@ -38,7 +38,7 @@
 
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !restrictionEntityDetailForm.canUpdate.$valid, &#39;has-success&#39;: restrictionEntityDetailForm.canUpdate.$valid}" style="height:59px" ng-show="true ">
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.restrictionEntityDetailForm.canUpdate.$valid, &#39;has-success&#39;: vm.restrictionEntityDetailForm.canUpdate.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
 		<span class="input-group-addon">canUpdate
 		</span>
@@ -48,7 +48,7 @@
 
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !restrictionEntityDetailForm.canCreate.$valid, &#39;has-success&#39;: restrictionEntityDetailForm.canCreate.$valid}" style="height:59px" ng-show="true ">
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.restrictionEntityDetailForm.canCreate.$valid, &#39;has-success&#39;: vm.restrictionEntityDetailForm.canCreate.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
 		<span class="input-group-addon">canCreate
 		</span>
@@ -58,7 +58,7 @@
 
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !restrictionEntityDetailForm.role.$valid, &#39;has-success&#39;: restrictionEntityDetailForm.role.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.role">
+ </uib-tab> <uib-tab index="2" heading="Role" ng-click="vm.activeTab=2"><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.restrictionEntityDetailForm.role.$valid, &#39;has-success&#39;: vm.restrictionEntityDetailForm.role.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.role">
 	<div class="input-group">
 		<span class="input-group-addon">role
 		</span>
@@ -77,7 +77,7 @@
 
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !restrictionEntityDetailForm.entity.$valid, &#39;has-success&#39;: restrictionEntityDetailForm.entity.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.entity">
+ </uib-tab> <uib-tab index="3" heading="Entity" ng-click="vm.activeTab=3"><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.restrictionEntityDetailForm.entity.$valid, &#39;has-success&#39;: vm.restrictionEntityDetailForm.entity.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.entity">
 	<div class="input-group">
 		<span class="input-group-addon">entity
 		</span>

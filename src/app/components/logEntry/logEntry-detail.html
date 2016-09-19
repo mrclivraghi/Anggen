@@ -1,5 +1,5 @@
 <div>
-	<form id="logEntryDetailForm" name="logEntryDetailForm" ng-show="vm.selectedEntity.show">
+	<form id="vm.logEntryDetailForm" name="vm.logEntryDetailForm" ng-if="vm.selectedEntity.show">
 		<div class="panel panel-default default-panel">
 			<div class="panel-heading">Detail logEntry {{ vm.selectedEntity.logEntryId }} <button type="button" class="close" aria-label="Close" ng-click="vm.closeEntityDetail()">
 	<span aria-hidden="true">&times;
@@ -9,7 +9,7 @@
 			</div>
 
 			<div class="panel-body">
-				<uib-tabset active="vm.activeTab"> <uib-tab index="1" heading="Detail" ng-click="vm.active=1"><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !logEntryDetailForm.logEntryId.$valid, &#39;has-success&#39;: logEntryDetailForm.logEntryId.$valid}" style="height:59px" ng-show="true ">
+				<uib-tabset active="vm.activeTab"> <uib-tab index="1" heading="Detail" ng-click="vm.activeTab=1"><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.logEntryDetailForm.logEntryId.$valid, &#39;has-success&#39;: vm.logEntryDetailForm.logEntryId.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
 		<span class="input-group-addon">logEntryId
 		</span>
@@ -18,7 +18,7 @@
 		
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !logEntryDetailForm.ipAddress.$valid, &#39;has-success&#39;: logEntryDetailForm.ipAddress.$valid}" style="height:59px" ng-show="true ">
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.logEntryDetailForm.ipAddress.$valid, &#39;has-success&#39;: vm.logEntryDetailForm.ipAddress.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
 		<span class="input-group-addon">ipAddress
 		</span>
@@ -27,7 +27,7 @@
 		
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !logEntryDetailForm.logDate.$valid, &#39;has-success&#39;: logEntryDetailForm.logDate.$valid}" style="height:59px" ng-show="true ">
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.logEntryDetailForm.logDate.$valid, &#39;has-success&#39;: vm.logEntryDetailForm.logDate.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
 		<span class="input-group-addon">logDate
 		</span>
@@ -36,7 +36,7 @@
 		
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !logEntryDetailForm.hostName.$valid, &#39;has-success&#39;: logEntryDetailForm.hostName.$valid}" style="height:59px" ng-show="true ">
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.logEntryDetailForm.hostName.$valid, &#39;has-success&#39;: vm.logEntryDetailForm.hostName.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
 		<span class="input-group-addon">hostName
 		</span>
@@ -45,7 +45,7 @@
 		
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !logEntryDetailForm.entityId.$valid, &#39;has-success&#39;: logEntryDetailForm.entityId.$valid}" style="height:59px" ng-show="true ">
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.logEntryDetailForm.entityId.$valid, &#39;has-success&#39;: vm.logEntryDetailForm.entityId.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
 		<span class="input-group-addon">entityId
 		</span>
@@ -54,7 +54,7 @@
 		
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !logEntryDetailForm.userId.$valid, &#39;has-success&#39;: logEntryDetailForm.userId.$valid}" style="height:59px" ng-show="true ">
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.logEntryDetailForm.userId.$valid, &#39;has-success&#39;: vm.logEntryDetailForm.userId.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
 		<span class="input-group-addon">userId
 		</span>
@@ -63,7 +63,7 @@
 		
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !logEntryDetailForm.info.$valid, &#39;has-success&#39;: logEntryDetailForm.info.$valid}" style="height:59px" ng-show="true ">
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.logEntryDetailForm.info.$valid, &#39;has-success&#39;: vm.logEntryDetailForm.info.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
 		<span class="input-group-addon">info
 		</span>
@@ -72,7 +72,7 @@
 		
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !logEntryDetailForm.logType.$valid, &#39;has-success&#39;: logEntryDetailForm.logType.$valid}" style="height:59px" ng-show="true ">
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.logEntryDetailForm.logType.$valid, &#39;has-success&#39;: vm.logEntryDetailForm.logType.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
 		<span class="input-group-addon">logType
 		</span>
@@ -82,7 +82,7 @@
 
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !logEntryDetailForm.operationType.$valid, &#39;has-success&#39;: logEntryDetailForm.operationType.$valid}" style="height:59px" ng-show="true ">
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.logEntryDetailForm.operationType.$valid, &#39;has-success&#39;: vm.logEntryDetailForm.operationType.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
 		<span class="input-group-addon">operationType
 		</span>

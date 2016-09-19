@@ -35,11 +35,21 @@ controllerAs: 'vm'
  }
 }
 })
-.state('main.user',{
- url:'/user',
+.state('main.swagger',{
+ url:'/swagger',
 views:{
 'pageContent': {
-templateUrl:'app/controller/user/user-template.html',
+templateUrl:'app/components/swagger/swagger.html',
+ controller:'SwaggerController', 
+controllerAs: 'vm' 
+ }
+}
+})
+.state('main.tab',{
+ url:'/tab',
+views:{
+'pageContent': {
+templateUrl:'app/controller/tab/tab-template.html',
  controller:'HomeController', 
 controllerAs: 'vm' 
  }
@@ -47,11 +57,11 @@ controllerAs: 'vm'
 resolve: {
 }
 })
-.state('main.restrictionField',{
- url:'/restrictionField',
+.state('main.entityGroup',{
+ url:'/entityGroup',
 views:{
 'pageContent': {
-templateUrl:'app/controller/restrictionField/restrictionField-template.html',
+templateUrl:'app/controller/entityGroup/entityGroup-template.html',
  controller:'HomeController', 
 controllerAs: 'vm' 
  }
@@ -59,11 +69,11 @@ controllerAs: 'vm'
 resolve: {
 }
 })
-.state('main.restrictionEntityGroup',{
- url:'/restrictionEntityGroup',
+.state('main.entity',{
+ url:'/entity',
 views:{
 'pageContent': {
-templateUrl:'app/controller/restrictionEntityGroup/restrictionEntityGroup-template.html',
+templateUrl:'app/controller/entity/entity-template.html',
  controller:'HomeController', 
 controllerAs: 'vm' 
  }
@@ -95,11 +105,83 @@ controllerAs: 'vm'
 resolve: {
 }
 })
-.state('main.entity',{
- url:'/entity',
+.state('main.role',{
+ url:'/role',
 views:{
 'pageContent': {
-templateUrl:'app/controller/entity/entity-template.html',
+templateUrl:'app/controller/role/role-template.html',
+ controller:'HomeController', 
+controllerAs: 'vm' 
+ }
+},
+resolve: {
+}
+})
+.state('main.user',{
+ url:'/user',
+views:{
+'pageContent': {
+templateUrl:'app/controller/user/user-template.html',
+ controller:'HomeController', 
+controllerAs: 'vm' 
+ }
+},
+resolve: {
+}
+})
+.state('main.restrictionEntity',{
+ url:'/restrictionEntity',
+views:{
+'pageContent': {
+templateUrl:'app/controller/restrictionEntity/restrictionEntity-template.html',
+ controller:'HomeController', 
+controllerAs: 'vm' 
+ }
+},
+resolve: {
+}
+})
+.state('main.restrictionField',{
+ url:'/restrictionField',
+views:{
+'pageContent': {
+templateUrl:'app/controller/restrictionField/restrictionField-template.html',
+ controller:'HomeController', 
+controllerAs: 'vm' 
+ }
+},
+resolve: {
+}
+})
+.state('main.restrictionEntityGroup',{
+ url:'/restrictionEntityGroup',
+views:{
+'pageContent': {
+templateUrl:'app/controller/restrictionEntityGroup/restrictionEntityGroup-template.html',
+ controller:'HomeController', 
+controllerAs: 'vm' 
+ }
+},
+resolve: {
+}
+})
+.state('main.annotation',{
+ url:'/annotation',
+views:{
+'pageContent': {
+templateUrl:'app/controller/annotation/annotation-template.html',
+ controller:'HomeController', 
+controllerAs: 'vm' 
+ }
+},
+resolve: {
+}
+})
+.state('main.field',{
+ url:'/field',
+views:{
+'pageContent': {
+templateUrl:'app/controller/field/field-template.html',
  controller:'HomeController', 
 controllerAs: 'vm' 
  }
@@ -143,11 +225,11 @@ controllerAs: 'vm'
 resolve: {
 }
 })
-.state('main.annotation',{
- url:'/annotation',
+.state('main.generationRun',{
+ url:'/generationRun',
 views:{
 'pageContent': {
-templateUrl:'app/controller/annotation/annotation-template.html',
+templateUrl:'app/controller/generationRun/generationRun-template.html',
  controller:'HomeController', 
 controllerAs: 'vm' 
  }
@@ -155,11 +237,11 @@ controllerAs: 'vm'
 resolve: {
 }
 })
-.state('main.generationRun',{
- url:'/generationRun',
+.state('main.logEntry',{
+ url:'/logEntry',
 views:{
 'pageContent': {
-templateUrl:'app/controller/generationRun/generationRun-template.html',
+templateUrl:'app/controller/logEntry/logEntry-template.html',
  controller:'HomeController', 
 controllerAs: 'vm' 
  }

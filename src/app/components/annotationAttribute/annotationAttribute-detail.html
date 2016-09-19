@@ -1,5 +1,5 @@
 <div>
-	<form id="annotationAttributeDetailForm" name="annotationAttributeDetailForm" ng-show="vm.selectedEntity.show">
+	<form id="vm.annotationAttributeDetailForm" name="vm.annotationAttributeDetailForm" ng-if="vm.selectedEntity.show">
 		<div class="panel panel-default default-panel">
 			<div class="panel-heading">Detail annotationAttribute {{ vm.selectedEntity.annotationAttributeId }} <button type="button" class="close" aria-label="Close" ng-click="vm.closeEntityDetail()">
 	<span aria-hidden="true">&times;
@@ -9,7 +9,7 @@
 			</div>
 
 			<div class="panel-body">
-				<uib-tabset active="vm.activeTab"> <uib-tab index="1" heading="Detail" ng-click="vm.active=1"><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !annotationAttributeDetailForm.annotationAttributeId.$valid, &#39;has-success&#39;: annotationAttributeDetailForm.annotationAttributeId.$valid}" style="height:59px" ng-show="true ">
+				<uib-tabset active="vm.activeTab"> <uib-tab index="1" heading="Detail" ng-click="vm.activeTab=1"><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.annotationAttributeDetailForm.annotationAttributeId.$valid, &#39;has-success&#39;: vm.annotationAttributeDetailForm.annotationAttributeId.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
 		<span class="input-group-addon">annotationAttributeId
 		</span>
@@ -18,7 +18,7 @@
 		
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !annotationAttributeDetailForm.value.$valid, &#39;has-success&#39;: annotationAttributeDetailForm.value.$valid}" style="height:59px" ng-show="true ">
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.annotationAttributeDetailForm.value.$valid, &#39;has-success&#39;: vm.annotationAttributeDetailForm.value.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
 		<span class="input-group-addon">value
 		</span>
@@ -27,7 +27,7 @@
 		
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !annotationAttributeDetailForm.property.$valid, &#39;has-success&#39;: annotationAttributeDetailForm.property.$valid}" style="height:59px" ng-show="true ">
+<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.annotationAttributeDetailForm.property.$valid, &#39;has-success&#39;: vm.annotationAttributeDetailForm.property.$valid}" style="height:59px" ng-show="true ">
 	<div class="input-group">
 		<span class="input-group-addon">property
 		</span>
@@ -36,7 +36,7 @@
 		
 	</div>
 </div>
-<div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !annotationAttributeDetailForm.annotation.$valid, &#39;has-success&#39;: annotationAttributeDetailForm.annotation.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.annotation">
+ </uib-tab> <uib-tab index="2" heading="Annotation" ng-click="vm.activeTab=2"><div class="pull-left right-input" ng-class="{&#39;has-error&#39;: !vm.annotationAttributeDetailForm.annotation.$valid, &#39;has-success&#39;: vm.annotationAttributeDetailForm.annotation.$valid}" style="height:59px" ng-show="true " ng-if="!$root.openNode.annotation">
 	<div class="input-group">
 		<span class="input-group-addon">annotation
 		</span>

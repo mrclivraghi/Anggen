@@ -61,7 +61,7 @@ annotationService.selectedEntity.show=false;
 delete $rootScope.openNode.annotation;
 UtilityService.removeObjectFromList($rootScope.parentServices,annotationService);
 }
-angular.element('#fieldTabs li:eq(0) a').tab('show');
+//angular.element('#fieldTabs li:eq(0) a').tab('show');
 }
 		
 function search()
@@ -86,7 +86,7 @@ return;
 }
 function insert()
 {
-if (!$scope.fieldDetailForm.$valid) return; 
+if (!vm.fieldDetailForm.$valid) return; 
 $rootScope.parentServices.pop();
 if ($rootScope.parentServices.length==0) 
 {
@@ -118,7 +118,7 @@ return;
 }
 function update()
 {
-if (!$scope.fieldDetailForm.$valid) return; 
+if (!vm.fieldDetailForm.$valid) return; 
 $rootScope.parentServices.pop();
 if ($rootScope.parentServices.length==0) 
 {
@@ -187,18 +187,6 @@ $log.debug(response);
 return; 
 });
 }
-function refreshTableDetail() 
-{
-if ($scope.restrictionFieldGridApi!=undefined && $scope.restrictionFieldGridApi!=null)
- $scope.restrictionFieldGridApi.core.handleWindowResize(); 
-if ($scope.entityGridApi!=undefined && $scope.entityGridApi!=null)
- $scope.entityGridApi.core.handleWindowResize(); 
-if ($scope.tabGridApi!=undefined && $scope.tabGridApi!=null)
- $scope.tabGridApi.core.handleWindowResize(); 
-if ($scope.annotationGridApi!=undefined && $scope.annotationGridApi!=null)
- $scope.annotationGridApi.core.handleWindowResize(); 
-}
-vm.refreshTableDetail=refreshTableDetail;
 function loadFile(file,field)
 {
 fieldService.loadFile(file,field).then(function successCallback(response) {
@@ -252,7 +240,7 @@ return;
   }	
 );
 }
-angular.element('#restrictionFieldTabs li:eq(0) a').tab('show');
+//angular.element('#restrictionFieldTabs li:eq(0) a').tab('show');
 }
 vm.showRestrictionFieldDetail=showRestrictionFieldDetail;
  function showEntityDetail(index)
@@ -296,7 +284,7 @@ return;
   }	
 );
 }
-angular.element('#entityTabs li:eq(0) a').tab('show');
+//angular.element('#entityTabs li:eq(0) a').tab('show');
 }
 vm.showEntityDetail=showEntityDetail;
  function showTabDetail(index)
@@ -340,7 +328,7 @@ return;
   }	
 );
 }
-angular.element('#tabTabs li:eq(0) a').tab('show');
+//angular.element('#tabTabs li:eq(0) a').tab('show');
 }
 vm.showTabDetail=showTabDetail;
  function showAnnotationDetail(index)
@@ -384,7 +372,7 @@ return;
   }	
 );
 }
-angular.element('#annotationTabs li:eq(0) a').tab('show');
+//angular.element('#annotationTabs li:eq(0) a').tab('show');
 }
 vm.showAnnotationDetail=showAnnotationDetail;
 function downloadList()
@@ -449,13 +437,14 @@ vm.fieldGridApi = gridApi;
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
+vm.activeTab=1;
 fieldService.searchOne(row.entity).then(function(response) { 
 $log.debug(response.data);
 $rootScope.openNode.field=true;
 $rootScope.parentServices.push(fieldService);
 fieldService.setSelectedEntity(response.data[0]);
 });
-angular.element('#fieldTabs li:eq(0) a').tab('show');
+//angular.element('#fieldTabs li:eq(0) a').tab('show');
 }
 else 
 fieldService.setSelectedEntity(null);
@@ -474,13 +463,14 @@ vm.restrictionFieldGridApi = gridApi;
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
+vm.activeTab=1;
 restrictionFieldService.searchOne(row.entity).then(function(response) { 
 $log.debug(response.data);
 $rootScope.openNode.restrictionField=true;
 $rootScope.parentServices.push(restrictionFieldService);
 restrictionFieldService.setSelectedEntity(response.data[0]);
 });
-angular.element('#restrictionFieldTabs li:eq(0) a').tab('show');
+//angular.element('#restrictionFieldTabs li:eq(0) a').tab('show');
 }
 else 
 restrictionFieldService.setSelectedEntity(null);
@@ -499,13 +489,14 @@ vm.entityGridApi = gridApi;
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
+vm.activeTab=1;
 entityService.searchOne(row.entity).then(function(response) { 
 $log.debug(response.data);
 $rootScope.openNode.entity=true;
 $rootScope.parentServices.push(entityService);
 entityService.setSelectedEntity(response.data[0]);
 });
-angular.element('#entityTabs li:eq(0) a').tab('show');
+//angular.element('#entityTabs li:eq(0) a').tab('show');
 }
 else 
 entityService.setSelectedEntity(null);
@@ -524,13 +515,14 @@ vm.tabGridApi = gridApi;
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
+vm.activeTab=1;
 tabService.searchOne(row.entity).then(function(response) { 
 $log.debug(response.data);
 $rootScope.openNode.tab=true;
 $rootScope.parentServices.push(tabService);
 tabService.setSelectedEntity(response.data[0]);
 });
-angular.element('#tabTabs li:eq(0) a').tab('show');
+//angular.element('#tabTabs li:eq(0) a').tab('show');
 }
 else 
 tabService.setSelectedEntity(null);
@@ -549,13 +541,14 @@ vm.annotationGridApi = gridApi;
 gridApi.selection.on.rowSelectionChanged($scope,function(row){
 if (row.isSelected)
 {
+vm.activeTab=1;
 annotationService.searchOne(row.entity).then(function(response) { 
 $log.debug(response.data);
 $rootScope.openNode.annotation=true;
 $rootScope.parentServices.push(annotationService);
 annotationService.setSelectedEntity(response.data[0]);
 });
-angular.element('#annotationTabs li:eq(0) a').tab('show');
+//angular.element('#annotationTabs li:eq(0) a').tab('show');
 }
 else 
 annotationService.setSelectedEntity(null);
@@ -565,15 +558,15 @@ annotationService.selectedEntity.show = row.isSelected;
 });
   };
 function updateParentEntities() { 
-annotationService.initFieldList().then(function(response) {
+entityService.initFieldList().then(function(response) {
 fieldService.preparedData.entityList=response.data;
 });
 
-if (annotationService.selectedEntity.annotationId!=undefined) annotationService.searchOne(annotationService.selectedEntity).then(
+if (entityService.selectedEntity.entityId!=undefined) entityService.searchOne(entityService.selectedEntity).then(
 function successCallback(response) {
 $log.debug("response-ok");
 $log.debug(response);
-annotationService.setSelectedEntity(response.data[0]);
+entityService.setSelectedEntity(response.data[0]);
   }, function errorCallback(response) {
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");
@@ -613,15 +606,15 @@ $log.debug(response);
 return; 
   }	
 );
-entityService.initFieldList().then(function(response) {
+annotationService.initFieldList().then(function(response) {
 fieldService.preparedData.entityList=response.data;
 });
 
-if (entityService.selectedEntity.entityId!=undefined) entityService.searchOne(entityService.selectedEntity).then(
+if (annotationService.selectedEntity.annotationId!=undefined) annotationService.searchOne(annotationService.selectedEntity).then(
 function successCallback(response) {
 $log.debug("response-ok");
 $log.debug(response);
-entityService.setSelectedEntity(response.data[0]);
+annotationService.setSelectedEntity(response.data[0]);
   }, function errorCallback(response) {
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");

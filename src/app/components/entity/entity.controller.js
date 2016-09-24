@@ -101,7 +101,12 @@ entityService.searchBean.restrictionEntityList=[];
 entityService.searchBean.restrictionEntityList.push(entityService.searchBean.restrictionEntity);
 delete entityService.searchBean.restrictionEntity; 
 entityService.search().then(function successCallback(response) {
+console.log(response.data);
+
 entityService.setEntityList(response.data);
+vm.entityGridOptions.data=entityService.entityList;
+console.log(vm.entityGridOptions.data);
+
 },function errorCallback(response) { 
 UtilityService.AlertError.init({selector: "#alertError"});
 UtilityService.AlertError.show("Si è verificato un errore");

@@ -19,13 +19,13 @@ this.addEntity=function (entity)
 {
 this.entityList.push(entity);
 };
-this.setEntityList= function(entityList)
+this.setEntityList= function(_entityList)
 { 
 while (this.entityList.length>0)
 this.entityList.pop();
-if (entityList!=null)
-for (var i=0; i<entityList.length; i++)
-this.entityList.push(entityList[i]);
+if (_entityList!=null)
+for (var i=0; i<_entityList.length; i++)
+this.entityList.push(_entityList[i]);
 };
 this.searchBean = 		new Object();
 this.resetSearchBean= function()

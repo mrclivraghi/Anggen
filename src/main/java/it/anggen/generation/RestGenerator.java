@@ -535,8 +535,13 @@ public class RestGenerator {
 			{
 				if (EntityAttributeManager.getInstance(entityAttribute).asRelationship()!=null && EntityAttributeManager.getInstance(entityAttribute).isList())
 				{
+					try {
 					JVar fieldListRepository = myClass.field(JMod.PUBLIC, ReflectionManager.getJDefinedRepositoryClass(EntityAttributeManager.getInstance(entityAttribute).asRelationship().getEntityTarget()), entityAttribute.getName()+"Repository");
 					fieldListRepository.annotate(Autowired.class);
+					}
+					catch(Exception e)
+					{
+					}
 				}
 			}
 			

@@ -96,7 +96,7 @@ public class PostgresMetaService {
 		
 		
 		EntityGroup entityGroup = new EntityGroup();
-		entityGroup.setName(schemaName);
+		entityGroup.setName("order");
 		entityGroup.setProject(project);
 		entityGroup.setEntityList(new ArrayList<>());
 		entityGroupRepository.save(entityGroup);
@@ -188,13 +188,13 @@ public class PostgresMetaService {
 			
 			for (MetaField metaField: metaFieldList)
 			{
-				if (relationshipNameList.contains(metaField.getColumnName()))
+				if (relationshipNameList.contains(metaField.getColumnName()) && !metaField.getColumnName().equals(primaryKey))
 					continue; // already managed as relationship
 				Field field= new Field();
 				field.setName(CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, metaField.getColumnName()));
 				field.setEntity(entity);
 				field.setPriority(metaField.getOrdinalPosition());
-				if (metaField.getDataType().equals("bigint"))
+				if (metaField.getDataType().equals("bigint") || metaField.getDataType().equals("serial"))
 					field.setFieldType(FieldType.LONG);
 				if (metaField.getDataType().equals("integer") || metaField.getDataType().equals("smallint"))
 					field.setFieldType(FieldType.INTEGER);
@@ -212,7 +212,7 @@ public class PostgresMetaService {
 					field.setFieldType(FieldType.DOUBLE);
 				if (field.getFieldType()==null)
 				{
-					System.out.println("ERORE");
+					throw new RuntimeException();
 					
 				}
 				fieldRepository.save(field);

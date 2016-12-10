@@ -222,18 +222,28 @@ public class EntityGenerator {
 		}
 		for (Relationship relationship : entity.getRelationshipList())
 		{
-			JVar listField;
+			JVar listField = null;
 			
 			if (EntityAttributeManager.getInstance(relationship).isList())
 			{
 				JClass listClass = codeModel.ref(List.class).narrow(ReflectionManager.getJDefinedClass(relationship.getEntityTarget()));
-				try{
-					listField = myClass.field(JMod.PRIVATE, listClass, relationship.getName()+"List");
-				}catch(IllegalArgumentException e)
+				
+				int k=0;
+				Boolean ok = false;
+				while (!ok)
 				{
-					relationship.setName(relationship.getName()+"1");
-					listField = myClass.field(JMod.PRIVATE, listClass, relationship.getName()+"List");
+					try{
+						listField = myClass.field(JMod.PRIVATE, listClass, relationship.getName()+"List");
+						ok=true;
+					}catch(IllegalArgumentException e)
+					{
+						k++;
+						relationship.setName(relationship.getName()+k);
+					}
 				}
+				
+				
+				
 				generateGetterAndSetter(myClass, relationship.getName()+"List", listClass);
 				if (relationship.getRelationshipType()==RelationshipType.ONE_TO_MANY)
 				{

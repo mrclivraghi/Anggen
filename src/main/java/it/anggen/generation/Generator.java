@@ -127,6 +127,9 @@ public class Generator {
 	@Value("${generate.view}")
 	private Boolean generateView;
 	
+	@Value("${generate.simplified}")
+	private Boolean generateSimplified;
+	
 	@Value("${application.rest.url}")
 	private String restUrl;
 	
@@ -216,6 +219,8 @@ public class Generator {
 	
 	public static GenerationType generationTypeProperty;
 	
+	public static Boolean generateSimplifiedProperty;
+	
 	private Git git;
 	private String generationBranchName;
 	private String oldGenerationBranchName;
@@ -236,7 +241,7 @@ public class Generator {
 		
 	}
 	
-	//@Transactional
+	@Transactional
 	public void init() throws Exception
 	{
 		Generator.appName=applicationName;
@@ -254,6 +259,7 @@ public class Generator {
 		Generator.uploadDirectoryProperty=uploadDirectory;
 		Generator.databaseProperty=database;
 		Generator.generationTypeProperty=generationType==GenerationType.SHOW_INCLUDE.getValue() ? GenerationType.SHOW_INCLUDE:GenerationType.HIDE_IGNORE;
+		Generator.generateSimplifiedProperty=generateSimplified;
 		
 		List<Project> projectList=projectRepository.findByName(applicationName);
 		if (projectList.size()==0)
@@ -453,7 +459,8 @@ public class Generator {
 			if (enumEntity.getModDate().after(Generator.lastGenerationDate) || project.getModDate().after(Generator.lastGenerationDate))
 			{
 				enumClassGenerator.init(enumEntity);
-				enumClassGenerator.getModelClass();
+				if (!generateSimplified)
+					enumClassGenerator.getModelClass();
 			}
 			for (Entity modelEntity: modelEntityList)
 			if (entityManager.needToGenerate(modelEntity))
@@ -461,7 +468,8 @@ public class Generator {
 				if (!isAngGenSecurity(modelEntity))
 				{
 					entityGenerator.init(modelEntity);
-					entityGenerator.getModelClass();
+					if (!generateSimplified)
+						entityGenerator.getModelClass();
 				}
 			}
 
